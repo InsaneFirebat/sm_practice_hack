@@ -598,7 +598,7 @@ MiscMenu:
     dw #misc_fanfare_toggle
     dw #misc_music_toggle
     dw #misc_transparent
-    dw #misc_preset_cateory
+    dw #misc_preset_category
     dw #$0000
     %cm_header("MISC")
 
@@ -644,7 +644,7 @@ misc_music_toggle:
 misc_transparent:
     %cm_toggle_bit("Transparency", !ram_sprite_prio_flag, #$3000, #0)
 
-misc_preset_cateory:
+misc_preset_category:
     dw !ACTION_CHOICE
     dl #!sram_preset_category
     dw #$0000
