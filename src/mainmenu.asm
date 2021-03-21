@@ -333,7 +333,7 @@ cat_rbo:
     %cm_jsr("RBO", action_category, #$0006)
 
 cat_any_glitched:
-    %cm_jsr("Any% glitched", action_category, #$0007)
+    %cm_jsr("Any% Glitched", action_category, #$0007)
 
 cat_cf_anywhere:
     %cm_jsr("Crystal Flash", action_category, #$0008)
@@ -600,7 +600,7 @@ MiscMenu:
     dw #misc_transparent
     dw #misc_preset_category
     dw #$0000
-    %cm_header("MISC")
+    %cm_header("MISC OPTIONS")
 
 misc_bluesuit:
     %cm_toggle("Blue Suit", $7E0B3F, #$0004, #0)
@@ -642,7 +642,7 @@ misc_music_toggle:
     RTS
 
 misc_transparent:
-    %cm_toggle_bit("Transparency", !ram_sprite_prio_flag, #$3000, #0)
+    %cm_toggle_bit("Samus on top", !ram_sprite_prio_flag, #$3000, #0)
 
 misc_preset_category:
     dw !ACTION_CHOICE
@@ -682,7 +682,7 @@ EventsMenu:
     dw #events_zebesexploding
     dw #events_animals
     dw #$0000
-    %cm_header("EVENTS")
+    %cm_header("EVENT FLAGS")
 
 events_goto_bosses:
     %cm_submenu("Bosses", #BossesMenu)
@@ -884,7 +884,7 @@ GameMenu:
     dw #game_iconcancel
     dw #game_debugmode
     dw #$0000
-    %cm_header("GAME")
+    %cm_header("GAME OPTIONS")
 
 game_japanesetext:
     %cm_toggle("Japanese Text", $7E09E2, #$0001, #0)
