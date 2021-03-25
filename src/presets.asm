@@ -165,18 +165,17 @@ preset_to_memory:
 
 preset_banks:
 {
-  dw preset_spazer_crateria_ship>>16
-  dw preset_gtclassic_crateria_ship>>16
   dw preset_kpdr21_crateria_ship>>16
-  dw preset_ngplasma_ceres_station_ceres_elevator>>16
   dw preset_prkd_crateria_ship>>16
   dw preset_kpdr25_bombs_ceres_elevator>>16
-  dw preset_14ice_crateria_ceres_elevator>>16
-  dw preset_14speed_crateria_ceres_elevator>>16
-  dw preset_nghyper_ceres_station_ceres_elevator>>16
+  dw preset_gtclassic_crateria_ship>>16
   dw preset_100early_crateria_ceres_elevator>>16
   dw preset_hundo_bombs_ceres_elevator>>16
+  dw preset_14ice_crateria_ceres_elevator>>16
+  dw preset_14speed_crateria_ceres_elevator>>16
   dw preset_rbo_bombs_ceres_elevator>>16
+  dw preset_ngplasma_ceres_station_ceres_elevator>>16
+  dw preset_nghyper_ceres_station_ceres_elevator>>16
   dw preset_allbosskpdr_crateria_ceres_elevator>>16
   dw preset_allbosspkdr_crateria_ceres_elevator>>16
   dw preset_allbossprkd_crateria_ceres_elevator>>16
@@ -317,11 +316,6 @@ org $E48000
   print pc, " 100early data start"
   incsrc presets/100early_data.asm
   print pc, " 100early data end"
-
-  ; 3024 (length in hex)
-  print pc, " spazer data start"
-  incsrc presets/spazer_data.asm
-  print pc, " spazer data end"
 
 org $E58000
   

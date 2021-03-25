@@ -87,18 +87,17 @@ action_presets_submenu:
 
 preset_category_submenus:
 {
-    dw #PresetsMenuSpazer
-    dw #PresetsMenuGtclassic
     dw #PresetsMenuKpdr21
-    dw #PresetsMenuNgplasma
     dw #PresetsMenuPrkd
     dw #PresetsMenuKpdr25
-    dw #PresetsMenu14ice
-    dw #PresetsMenu14speed
-    dw #PresetsMenuNghyper
+    dw #PresetsMenuGtclassic
     dw #PresetsMenu100early
     dw #PresetsMenuHundo
+    dw #PresetsMenu14ice
+    dw #PresetsMenu14speed
     dw #PresetsMenuRbo
+    dw #PresetsMenuNgplasma
+    dw #PresetsMenuNghyper
     dw #PresetsMenuAllbosskpdr
     dw #PresetsMenuAllbosspkdr
     dw #PresetsMenuAllbossprkd    
@@ -107,18 +106,17 @@ preset_category_submenus:
 
 preset_category_banks:
 {
-    dw #PresetsMenuSpazer>>16
-    dw #PresetsMenuGtclassic>>16
     dw #PresetsMenuKpdr21>>16
-    dw #PresetsMenuNgplasma>>16
     dw #PresetsMenuPrkd>>16
     dw #PresetsMenuKpdr25>>16
-    dw #PresetsMenu14ice>>16
-    dw #PresetsMenu14speed>>16
-    dw #PresetsMenuNghyper>>16
+    dw #PresetsMenuGtclassic>>16
     dw #PresetsMenu100early>>16
     dw #PresetsMenuHundo>>16
+    dw #PresetsMenu14ice>>16
+    dw #PresetsMenu14speed>>16
     dw #PresetsMenuRbo>>16
+    dw #PresetsMenuNgplasma>>16
+    dw #PresetsMenuNghyper>>16
     dw #PresetsMenuAllbosskpdr>>16
     dw #PresetsMenuAllbosspkdr>>16
     dw #PresetsMenuAllbossprkd>>16
@@ -141,7 +139,7 @@ MainMenu:
     dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_header("INSANEFIREBAT V2.1.7")
+    %cm_header("CUSTOM INFOHUD V2.1.7")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -191,7 +189,6 @@ org $ff8000
 incsrc presets/allbosskpdr_menu.asm   ; 942 (length in hex)
 incsrc presets/allbosspkdr_menu.asm   ; 9B0 (length in hex)
 incsrc presets/allbossprkd_menu.asm   ; 9BE (length in hex)
-incsrc presets/spazer_menu.asm   ; F91 (length in hex)
 incsrc presets/ngplasma_menu.asm   ; 85C (length in hex)
 incsrc presets/nghyper_menu.asm   ; 864 (length in hex)
 
@@ -649,18 +646,17 @@ misc_preset_category:
     dl #!sram_preset_category
     dw #$0000
     db #$28, "Preset Category", #$FF
-        db #$28, "y    SPAZER", #$FF ; Note the "y" ;)
-        db #$28, "y GTCLASSIC", #$FF
         db #$28, "y  ANY KPDR", #$FF
-        db #$28, "y NG PLASMA", #$FF
         db #$28, "y  ANY PRKD", #$FF
         db #$28, "y  KPDR ICE", #$FF
-        db #$28, "y    14 ICE", #$FF
-        db #$28, "y  14 SPEED", #$FF
-        db #$28, "y  NG HYPER", #$FF
+        db #$28, "y GTCLASSIC", #$FF
         db #$28, "y 100 EARLY", #$FF
         db #$28, "y  100 LATE", #$FF
+        db #$28, "y    14 ICE", #$FF
+        db #$28, "y  14 SPEED", #$FF
         db #$28, "y       RBO", #$FF
+        db #$28, "y NG PLASMA", #$FF
+        db #$28, "y  NG HYPER", #$FF
         db #$28, "y BOSS KPDR", #$FF
         db #$28, "y BOSS PKDR", #$FF
         db #$28, "y BOSS PRKD", #$FF
