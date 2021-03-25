@@ -845,6 +845,7 @@ ih_display_mode:
     db #$28, " VERT SPEED", #$FF
     db #$28, " JUMP PRESS", #$FF
     db #$28, " SHOT TIMER", #$FF
+    db #$28, "  CPU USAGE", #$FF
     db #$FF
 
 ih_room_strat:
