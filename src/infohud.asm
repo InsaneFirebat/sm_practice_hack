@@ -71,21 +71,19 @@ org $8095fc         ;hijack, end of NMI routine to update realtime frames
 org $9AB800         ;graphics for menu cursor and input display
 incbin ../resources/menugfx.bin
 
-org $828AB0         ; repoint Spare CPU Display code to free space at end of bank
-    JMP $F710
-    RTS
+org $828944         ; skip setting Spare CPU Display flag (debug feature)
+    NOP : NOP : NOP
     
-org $82F710					; hijack, NMI runs when frame processing completes
-; this code comes from PJ who explained how difficult it is to read the vcount register
-; Catador suggested optimizing by using XBA instead of storing in temp ($12)
-    SEP #$20
-    LDA $213F
-    LDA $2137
-    LDA $213D : STA $12
-    LDA $213D : AND #$01 : STA $13
-    REP #$20
-    LDA $12 : STA !ram_scanline					; read current scanline register and store it for IH_status code
-    RTL
+org $828AB0         ; overwriting existing spare CPU code (debug feature) with my own
+; read current scanline register and store it for IH_status code
+    SEP #$20                ; set 8bit mode
+    LDA $213F               ; read from first latch
+    LDA $2137               ; read from second latch
+    LDA $213D : XBA         ; read first byte of vcount, store in unused half of A cause we're in 8bit mode
+    LDA $213D               ; read second byte of vcount
+    REP #$20                ; set 16bit mode, this combines our two reads without temp storage
+    STA !ram_scanline       ; store for HUD
+    RTL                     ; return to subroutine long
 
 ; Main bank stuff
 org $DFE000
@@ -1314,28 +1312,26 @@ status_shottimer:
 status_cpuusage:
 {
 ; multiply current scanline by 100
-    %a8()									; macro, switch to 8bit mode
-    LDA !ram_scanline : STA $4202			; read scanline and store it for ALU-mult
-    LDA #$64 : STA $4203					; store 100 for ALU-mult
-    %a16()									; macro, switch to 16bit mode
-    PHA : PLA								; push pull nonsense waiting (at least 16c) for ALU math
-    LDA $4216								; read result from ALU
+    %a8()                                ; macro, switch to 8bit mode
+    LDA !ram_scanline : STA $4202        ; read scanline and store it for ALU-mult
+    LDA #$64 : STA $4203                 ; store 100 for ALU-mult
+    %a16()                               ; macro, switch to 16bit mode
+    PHA : PLA                            ; push pull nonsense waiting (at least 8c) for ALU math
+    LDA $4216                            ; read result from ALU
 
 ; divide by 225
-    STA $4204								; store scanline*100 for ALU-div
-    %a8()									; macro, switch to 8bit mode
-    LDA #$E1 : STA $4206					; store divisor (225) for ALU-div
-    %a16()									; macro, switch to 16bit mode
-    PHA : PLA : PHA : PLA					; push pull nonsense waiting (at least 8c) for ALU math
-    LDA $4214 : STA !ram_cpu_usage			; read quotient from ALU, store in cpu_usage variable
+    STA $4204                            ; store scanline*100 for ALU-div
+    %a8()                                ; macro, switch to 8bit mode
+    LDA #$E1 : STA $4206                 ; store divisor (225) for ALU-div
+    %a16()                               ; macro, switch to 16bit mode
+    PHA : PLA : PHA : PLA                ; push pull nonsense waiting (at least 16c) for ALU math
+    LDA $4214 : STA !ram_cpu_usage       ; read quotient from ALU, store in cpu_usage variable
 
 ; convert hexidecimal to decimal
-    LDA !ram_cpu_usage : JSR Hex2Dec		; convert to decimal
-    LDX #$008A : JSR Draw3					; load HUD tilemap location (X) and draw
-    LDA #$0C0A : STA $7EC690				; Percent symbol on HUD
-
-.done
-    RTS										; return to subroutine
+    LDA !ram_cpu_usage : JSR Hex2Dec     ; convert to decimal
+    LDX #$008A : JSR Draw3               ; load HUD tilemap location (X) and draw
+    LDA #$0C0A : STA $7EC690             ; Percent symbol on HUD
+    RTS
 }
 
 status_enemyhp:
