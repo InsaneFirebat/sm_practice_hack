@@ -595,6 +595,7 @@ MiscMenu:
     dw #misc_fanfare_toggle
     dw #misc_music_toggle
     dw #misc_transparent
+    dw #misc_invincibility
     dw #misc_preset_category
     dw #$0000
     %cm_header("MISC OPTIONS")
@@ -640,6 +641,9 @@ misc_music_toggle:
 
 misc_transparent:
     %cm_toggle_bit("Samus on top", !ram_sprite_prio_flag, #$3000, #0)
+
+misc_invincibility:
+    %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
 
 misc_preset_category:
     dw !ACTION_CHOICE
