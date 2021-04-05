@@ -36,7 +36,6 @@
 !ram_last_lag_counter = $7FFB98
 !ram_shot_timer = $7FFB9E
 !ram_cpu_usage = $7FFBE4
-!ram_scanline = $7FFBE6
 
 !ram_phantoon_rng_1 = $7FFB82
 !ram_phantoon_rng_2 = $7FFB84
