@@ -1001,4 +1001,4 @@ ctrl_kill_enemies:
     %cm_ctrl_shortcut("Kill Enemies", !sram_ctrl_kill_enemies)
 
 ctrl_reveal_damage:
-    %cm_ctrl_shortcut("Show Boss Damage", !sram_ctrl_reveal_damage)
+    %cm_ctrl_shortcut("Toggle Boss Dmg", !sram_ctrl_reveal_damage)

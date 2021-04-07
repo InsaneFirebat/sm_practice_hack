@@ -114,7 +114,11 @@ gamemode_shortcuts:
     CLC : RTS
 
   .reveal_damage
-    LDA #$0011 : STA !sram_display_mode ; set to status_countdamage
+    LDA !sram_display_mode : CMP #$0011 : BEQ +
+    LDA #$0011 : STA !sram_display_mode
+    CLC : RTS
+
+  + LDA !sram_display_mode : DEC : STA !sram_display_mode
     CLC : RTS
 
   .menu

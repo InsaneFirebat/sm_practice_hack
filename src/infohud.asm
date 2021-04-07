@@ -75,7 +75,12 @@ org $A6A17C         ;Ridley AI init, overwriting a junk LDA (used for Charles' b
     STZ $0B0C
 
 org $A7CE64         ;Phantoon AI init, overwriting a junk? STZ (used for Charles' boss damage thing)
+    JSR $FCC0
+
+org $A7FCC0         ; free space at end of bank for Phantoon hijack above
+    STZ $0F90,X
     STZ $0B0C
+    RTS
 
 org $A0A866         ; hijack damage routine to count total damage dealt
     JSR $F9E0
