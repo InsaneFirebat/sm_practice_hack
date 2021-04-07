@@ -74,7 +74,8 @@ incbin ../resources/menugfx.bin
 org $A6A17C         ;Ridley AI init, overwriting a junk LDA (used for Charles' boss damage thing)
     STZ $0B0C
 
-org $A7CE64         ;Phantoon AI init, overwriting a junk? STZ (used for Charles' boss damage thing)
+
+org $A7CE64         ;Phantoon AI init (used for Charles' boss damage thing)
     JSR $FCC0
 
 org $A7FCC0         ; free space at end of bank for Phantoon hijack above
@@ -1588,6 +1589,7 @@ ih_game_loop_code:
     STA !ram_mb_hp
     STA !ram_enemy_hp
     STA !ram_shine_counter
+    STA !ram_countdamage
     JMP .done
 }
 
