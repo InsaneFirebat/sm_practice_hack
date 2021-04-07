@@ -845,6 +845,7 @@ ih_display_mode:
     db #$28, " VERT SPEED", #$FF
     db #$28, " JUMP PRESS", #$FF
     db #$28, " SHOT TIMER", #$FF
+    db #$28, "DMG COUNTER", #$FF
     db #$FF
 
 ih_room_strat:
@@ -969,6 +970,7 @@ CtrlMenu:
     dw #ctrl_reset_segment_timer
     dw #ctrl_full_equipment
     dw #ctrl_kill_enemies
+    dw #ctrl_reveal_damage
     dw #$0000
     %cm_header("CONTROLLER SHORTCUTS")
 
@@ -993,3 +995,6 @@ ctrl_full_equipment:
 
 ctrl_kill_enemies:
     %cm_ctrl_shortcut("Kill Enemies", !sram_ctrl_kill_enemies)
+
+ctrl_reveal_damage:
+    %cm_ctrl_shortcut("Toggle Boss Dmg", !sram_ctrl_reveal_damage)

@@ -71,6 +71,24 @@ org $8095fc         ;hijack, end of NMI routine to update realtime frames
 org $9AB800         ;graphics for menu cursor and input display
 incbin ../resources/menugfx.bin
 
+org $A6A17C         ;Ridley AI init, overwriting a junk LDA (used for Charles' boss damage thing)
+    STZ $0B0C
+
+org $A7CE64         ;Phantoon AI init (used for Charles' boss damage thing)
+    JSR $FCC0
+
+org $A7FCC0         ; free space at end of bank for Phantoon hijack above
+    STZ $0F90,X
+    STZ $0B0C
+    RTS
+
+org $A0A866         ; hijack damage routine to count total damage dealt
+    JSR $F9E0
+
+org $A0F9E0         ; free space at end of bank
+    CLC : LDA $0B0C : ADC $187A : STA $0B0C
+    LDA $0F8C,X : SEC : SBC $187A : RTS     ; duplicate of existing code
+
 ; Main bank stuff
 org $DFE000
 print pc, " infohud start"
@@ -478,6 +496,7 @@ ih_hud_code:
     dw status_vspeed
     dw status_jumppress
     dw status_shottimer
+    dw status_countdamage
 }
 
 
@@ -953,7 +972,7 @@ status_lagcounter:
     LDA !ram_lag_counter : CMP !ram_last_lag_counter : BEQ .done : STA !ram_last_lag_counter
     %a8() : STA $211B : XBA : STA $211B : LDA #$64 : STA $211C : %a16() : LDA $2134
     STA $4204 : %a8() : LDA #$E1 : STA $4206 : %a16()
-    PHA : PLA : PHA : PLA : LDA $4214 : STA !ram_cpu_usage
+    PHA : PLA : PHA : PLA : LDA $4214
     JSR Hex2Dec : LDX #$008A : JSR Draw3
     LDA #$0C0A : STA $7EC690
 
@@ -1298,6 +1317,15 @@ status_shottimer:
     RTS
 }
 
+status_countdamage:
+{
+    LDA $0B0C : CMP !ram_countdamage : BEQ .done : STA !ram_countdamage
+    JSR Hex2Dec : LDX #$0088 : JSR Draw4
+
+  .done
+    RTS
+}
+
 status_enemyhp:
 {
     LDA $0F8C : CMP !ram_enemy_hp : BEQ .done : STA !ram_enemy_hp
@@ -1560,6 +1588,7 @@ ih_game_loop_code:
     STA !ram_mb_hp
     STA !ram_enemy_hp
     STA !ram_shine_counter
+    STA !ram_countdamage
     JMP .done
 }
 

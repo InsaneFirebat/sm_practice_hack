@@ -61,6 +61,10 @@ gamemode_shortcuts:
     AND !ram_ctrl1_filtered : BEQ +
     JMP .full_equipment
 
+  + LDA !ram_ctrl1 : AND !sram_ctrl_reveal_damage : CMP !sram_ctrl_reveal_damage : BNE +
+    AND !ram_ctrl1_filtered : BEQ +
+    JMP .reveal_damage
+
   + LDA !ram_ctrl1 : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
     AND !ram_ctrl1_filtered : BEQ +
     JMP .menu
@@ -107,6 +111,14 @@ gamemode_shortcuts:
     LDA $7E09CC : STA $7E09CA ; supers
     LDA $7E09D0 : STA $7E09CE ; pbs
     LDA $7E09D4 : STA $7E09D6 ; reserves
+    CLC : RTS
+
+  .reveal_damage
+    LDA !sram_display_mode : CMP #$0011 : BEQ + : STA !sram_display_backup
+    LDA #$0011 : STA !sram_display_mode
+    CLC : RTS
+
+  + LDA !sram_display_backup : STA !sram_display_mode
     CLC : RTS
 
   .menu
