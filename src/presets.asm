@@ -273,9 +273,9 @@ org $E18000
   print pc, " kpdr21 data end"
 
   ; 1E3A (length in hex)
-  print pc, " kpdr25 data start"
-  incsrc presets/kpdr25_data.asm
-  print pc, " kpdr25 data end"
+  print pc, " rbo data start"
+  incsrc presets/rbo_data.asm
+  print pc, " rbo data end"
 
 org $E28000
   ; 2B5E (length in hex)
@@ -321,3 +321,15 @@ org $E48000
   print pc, " kpdr25 data start"
   incsrc presets/kpdr25_data.asm
   print pc, " kpdr25 data end"
+
+org $E58000
+  
+  ; 1B5A (length in hex)
+  print pc, " ngplasma data start"
+  incsrc presets/ngplasma_data.asm
+  print pc, " ngplasma data end"
+
+  ; 1B70 (length in hex)
+  print pc, " nghyper data start"
+  incsrc presets/nghyper_data.asm
+  print pc, " nghyper data end"
