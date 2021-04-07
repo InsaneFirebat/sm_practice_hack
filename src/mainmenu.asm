@@ -87,15 +87,17 @@ action_presets_submenu:
 
 preset_category_submenus:
 {
-    dw #PresetsMenuPrkd
     dw #PresetsMenuKpdr21
-    dw #PresetsMenuHundo
-    dw #PresetsMenu100early
-    dw #PresetsMenuRbo
+    dw #PresetsMenuPrkd
     dw #PresetsMenuKpdr25
     dw #PresetsMenuGtclassic
+    dw #PresetsMenu100early
+    dw #PresetsMenuHundo
     dw #PresetsMenu14ice
     dw #PresetsMenu14speed
+    dw #PresetsMenuRbo
+    dw #PresetsMenuNgplasma
+    dw #PresetsMenuNghyper
     dw #PresetsMenuAllbosskpdr
     dw #PresetsMenuAllbosspkdr
     dw #PresetsMenuAllbossprkd    
@@ -104,15 +106,17 @@ preset_category_submenus:
 
 preset_category_banks:
 {
-    dw #PresetsMenuPrkd>>16
     dw #PresetsMenuKpdr21>>16
-    dw #PresetsMenuHundo>>16
-    dw #PresetsMenu100early>>16
-    dw #PresetsMenuRbo>>16
+    dw #PresetsMenuPrkd>>16
     dw #PresetsMenuKpdr25>>16
     dw #PresetsMenuGtclassic>>16
+    dw #PresetsMenu100early>>16
+    dw #PresetsMenuHundo>>16
     dw #PresetsMenu14ice>>16
     dw #PresetsMenu14speed>>16
+    dw #PresetsMenuRbo>>16
+    dw #PresetsMenuNgplasma>>16
+    dw #PresetsMenuNghyper>>16
     dw #PresetsMenuAllbosskpdr>>16
     dw #PresetsMenuAllbosspkdr>>16
     dw #PresetsMenuAllbossprkd>>16
@@ -135,7 +139,7 @@ MainMenu:
     dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_header("SM PRACTICE HACK 2.1.7")
+    %cm_header("MINIMAP INFOHUD 2.1.8")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -144,19 +148,19 @@ mm_goto_presets:
     %cm_jsr("Category Presets", #action_presets_submenu, #$0000)
 
 mm_goto_teleport:
-    %cm_submenu("Teleport", #TeleportMenu)
+    %cm_submenu("Save Stations", #TeleportMenu)
 
 mm_goto_events:
-    %cm_submenu("Events", #EventsMenu)
+    %cm_submenu("Event Flags", #EventsMenu)
 
 mm_goto_misc:
-    %cm_submenu("Misc", #MiscMenu)
+    %cm_submenu("Misc Options", #MiscMenu)
 
 mm_goto_infohud:
-    %cm_submenu("Infohud", #InfoHudMenu)
+    %cm_submenu("InfoHUD", #InfoHudMenu)
 
 mm_goto_gamemenu:
-    %cm_submenu("Game", #GameMenu)
+    %cm_submenu("Game Options", #GameMenu)
 
 mm_goto_rngmenu:
     %cm_submenu("RNG Control", #RngMenu)
@@ -171,20 +175,22 @@ mm_goto_ctrlsmenu:
 pushpc
 
 org $fe8000
-incsrc presets/prkd_menu.asm
-incsrc presets/kpdr21_menu.asm
-incsrc presets/hundo_menu.asm
-incsrc presets/100early_menu.asm
-incsrc presets/rbo_menu.asm
-incsrc presets/kpdr25_menu.asm
-incsrc presets/gtclassic_menu.asm
+incsrc presets/prkd_menu.asm   ; 960 (length in hex)
+incsrc presets/kpdr21_menu.asm   ; F91 (length in hex)
+incsrc presets/hundo_menu.asm   ; 1226 (length in hex)
+incsrc presets/100early_menu.asm   ; 1320 (length in hex)
+incsrc presets/rbo_menu.asm   ; D97 (length in hex)
+incsrc presets/kpdr25_menu.asm   ; 69F (length in hex)
+incsrc presets/gtclassic_menu.asm   ; 75E (length in hex)
+incsrc presets/14ice_menu.asm   ; 7C6 (length in hex)
+incsrc presets/14speed_menu.asm   ; 7EB (length in hex)
 
 org $ff8000
-incsrc presets/14ice_menu.asm
-incsrc presets/14speed_menu.asm
-incsrc presets/allbosskpdr_menu.asm
-incsrc presets/allbosspkdr_menu.asm
-incsrc presets/allbossprkd_menu.asm
+incsrc presets/allbosskpdr_menu.asm   ; 942 (length in hex)
+incsrc presets/allbosspkdr_menu.asm   ; 9B0 (length in hex)
+incsrc presets/allbossprkd_menu.asm   ; 9BE (length in hex)
+incsrc presets/ngplasma_menu.asm   ; 85C (length in hex)
+incsrc presets/nghyper_menu.asm   ; 864 (length in hex)
 
 pullpc
 
@@ -231,7 +237,7 @@ eq_refill:
     RTS
 
 eq_toggle_category:
-    %cm_submenu("Toggle Category", #ToggleCategoryMenu)
+    %cm_submenu("Category Presets", #ToggleCategoryMenu)
 
 eq_goto_toggleitems:
     %cm_submenu("Toggle Items", #ToggleItemsMenu)
@@ -296,9 +302,10 @@ ToggleCategoryMenu:
     dw #cat_gt_code
     dw #cat_rbo
     dw #cat_any_glitched
+    dw #cat_cf_anywhere
     dw #cat_nothing
     dw #$0000
-    %cm_header("TOGGLE CATEGORY")
+    %cm_header("CATEGORY PRESETS")
 
 
 cat_100:
@@ -323,10 +330,13 @@ cat_rbo:
     %cm_jsr("RBO", action_category, #$0006)
 
 cat_any_glitched:
-    %cm_jsr("Any% glitched", action_category, #$0007)
+    %cm_jsr("Any% Glitched", action_category, #$0007)
+
+cat_cf_anywhere:
+    %cm_jsr("Crystal Flash", action_category, #$0008)
 
 cat_nothing:
-    %cm_jsr("Nothing", action_category, #$0008)
+    %cm_jsr("Nothing", action_category, #$0009)
 
 
 action_category:
@@ -366,14 +376,15 @@ action_category:
 
   .table
     ;  Items,  Beams,  Health, Miss,   Supers, PBs,    Reserv, Dummy
-    dw #$F32F, #$100F, #$05db, #$00E6, #$0032, #$0032, #$0190, #$0000        ;    100%
-    dw #$3125, #$1007, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ;    any% new
+    dw #$F32F, #$100F, #$05DB, #$00E6, #$0032, #$0032, #$0190, #$0000        ;   100%
+    dw #$3125, #$1007, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ;   any% new
     dw #$3325, #$100B, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ;   any% old
-    dw #$1025, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ;    14% ice
-    dw #$3025, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ;    14% speed
+    dw #$1025, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ;   14% ice
+    dw #$3025, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ;   14% speed
     dw #$F32F, #$100F, #$02BC, #$0064, #$0014, #$0014, #$012C, #$0000        ;   gt code
     dw #$710C, #$1001, #$031F, #$001E, #$0019, #$0014, #$0064, #$0000        ;   rbo
-    dw #$9004, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0000, #$0000        ;    any% glitched
+    dw #$9004, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0000, #$0000        ;   any% glitched
+    dw #$F32F, #$100F, #$0031, #$01A4, #$005A, #$0063, #$0000, #$0000        ;   crystal flash
     dw #$0000, #$0000, #$0063, #$0000, #$0000, #$0000, #$0000, #$0000        ;   nothing
 }
 
@@ -487,7 +498,7 @@ TeleportMenu:
     dw #tel_tourianbbyskip
     dw #tel_tourianmb
     dw #$0000
-    %cm_header("TELEPORT")
+    %cm_header("SAVE STATIONS")
 
 tel_crateriaship:
     %cm_jsr("Crateria Ship", #action_teleport, #$0000)
@@ -584,9 +595,10 @@ MiscMenu:
     dw #misc_fanfare_toggle
     dw #misc_music_toggle
     dw #misc_transparent
-    dw #misc_preset_cateory
+    dw #misc_invincibility
+    dw #misc_preset_category
     dw #$0000
-    %cm_header("MISC")
+    %cm_header("MISC OPTIONS")
 
 misc_bluesuit:
     %cm_toggle("Blue Suit", $7E0B3F, #$0004, #0)
@@ -628,25 +640,30 @@ misc_music_toggle:
     RTS
 
 misc_transparent:
-    %cm_toggle_bit("Transparency", !ram_sprite_prio_flag, #$3000, #0)
+    %cm_toggle_bit("Samus on top", !ram_sprite_prio_flag, #$3000, #0)
 
-misc_preset_cateory:
+misc_invincibility:
+    %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
+
+misc_preset_category:
     dw !ACTION_CHOICE
     dl #!sram_preset_category
     dw #$0000
     db #$28, "Preset Category", #$FF
-        db #$28, "y      PRKD", #$FF ; Note the "y" ;)
-        db #$28, "y      KPDR", #$FF
-        db #$28, "y  100 LATE", #$FF
-        db #$28, "y 100 EARLY", #$FF
-        db #$28, "y       RBO", #$FF
-        db #$28, "y    KPDR25", #$FF
+        db #$28, "y  ANY KPDR", #$FF
+        db #$28, "y  ANY PRKD", #$FF
+        db #$28, "y  KPDR ICE", #$FF
         db #$28, "y GTCLASSIC", #$FF
+        db #$28, "y 100 EARLY", #$FF
+        db #$28, "y  100 LATE", #$FF
         db #$28, "y    14 ICE", #$FF
         db #$28, "y  14 SPEED", #$FF
-        db #$28, "y  ALL KPDR", #$FF
-        db #$28, "y  ALL PKDR", #$FF
-        db #$28, "y  ALL PRKD", #$FF
+        db #$28, "y       RBO", #$FF
+        db #$28, "y NG PLASMA", #$FF
+        db #$28, "y  NG HYPER", #$FF
+        db #$28, "y BOSS KPDR", #$FF
+        db #$28, "y BOSS PKDR", #$FF
+        db #$28, "y BOSS PRKD", #$FF
     db #$FF
 
 
@@ -665,7 +682,7 @@ EventsMenu:
     dw #events_zebesexploding
     dw #events_animals
     dw #$0000
-    %cm_header("EVENTS")
+    %cm_header("EVENT FLAGS")
 
 events_goto_bosses:
     %cm_submenu("Bosses", #BossesMenu)
@@ -821,13 +838,14 @@ ih_display_mode:
     db #$28, " SHINE TUNE", #$FF
     db #$28, "    IFRAMES", #$FF
     db #$28, "  SPIKESUIT", #$FF
-    db #$28, "LAG COUNTER", #$FF
+    db #$28, "  CPU USAGE", #$FF
     db #$28, " X POSITION", #$FF
     db #$28, " Y POSITION", #$FF
     db #$28, "HORIZ SPEED", #$FF
     db #$28, " VERT SPEED", #$FF
     db #$28, " JUMP PRESS", #$FF
     db #$28, " SHOT TIMER", #$FF
+    db #$28, "DMG COUNTER", #$FF
     db #$FF
 
 ih_room_strat:
@@ -868,7 +886,7 @@ GameMenu:
     dw #game_iconcancel
     dw #game_debugmode
     dw #$0000
-    %cm_header("GAME")
+    %cm_header("GAME OPTIONS")
 
 game_japanesetext:
     %cm_toggle("Japanese Text", $7E09E2, #$0001, #0)
@@ -952,6 +970,7 @@ CtrlMenu:
     dw #ctrl_reset_segment_timer
     dw #ctrl_full_equipment
     dw #ctrl_kill_enemies
+    dw #ctrl_reveal_damage
     dw #$0000
     %cm_header("CONTROLLER SHORTCUTS")
 
@@ -976,3 +995,6 @@ ctrl_full_equipment:
 
 ctrl_kill_enemies:
     %cm_ctrl_shortcut("Kill Enemies", !sram_ctrl_kill_enemies)
+
+ctrl_reveal_damage:
+    %cm_ctrl_shortcut("Toggle Boss Dmg", !sram_ctrl_reveal_damage)

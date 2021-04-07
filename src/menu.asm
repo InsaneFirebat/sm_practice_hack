@@ -263,42 +263,42 @@ cm_tilemap_bg:
         DEY : BPL -
     }
 
-    ; Interior
-    {
-        LDX.w #$0000
-        LDY.w #$001B
-        LDA.w #$281F
-
-        -
-        STA !ram_tilemap_buffer+$004,X
-        STA !ram_tilemap_buffer+$084,X
-        STA !ram_tilemap_buffer+$0C4,X
-        STA !ram_tilemap_buffer+$104,X
-        STA !ram_tilemap_buffer+$144,X
-        STA !ram_tilemap_buffer+$184,X
-        STA !ram_tilemap_buffer+$1C4,X
-        STA !ram_tilemap_buffer+$204,X
-        STA !ram_tilemap_buffer+$244,X
-        STA !ram_tilemap_buffer+$284,X
-        STA !ram_tilemap_buffer+$2C4,X
-        STA !ram_tilemap_buffer+$304,X
-        STA !ram_tilemap_buffer+$344,X
-        STA !ram_tilemap_buffer+$384,X
-        STA !ram_tilemap_buffer+$3C4,X
-        STA !ram_tilemap_buffer+$404,X
-        STA !ram_tilemap_buffer+$444,X
-        STA !ram_tilemap_buffer+$484,X
-        STA !ram_tilemap_buffer+$4C4,X
-        STA !ram_tilemap_buffer+$504,X
-        STA !ram_tilemap_buffer+$544,X
-        STA !ram_tilemap_buffer+$584,X
-        STA !ram_tilemap_buffer+$5C4,X
-        STA !ram_tilemap_buffer+$604,X
-        STA !ram_tilemap_buffer+$644,X
-
-        INX #2
-        DEY : BPL -
-    }
+;    ; Interior    ; commented out to allow for a transparent background
+;    {             ; text still has its own black background
+;        LDX.w #$0000
+;        LDY.w #$001B
+;        LDA.w #$281F
+;
+;        -
+;        STA !ram_tilemap_buffer+$004,X
+;        STA !ram_tilemap_buffer+$084,X
+;        STA !ram_tilemap_buffer+$0C4,X
+;        STA !ram_tilemap_buffer+$104,X
+;        STA !ram_tilemap_buffer+$144,X
+;        STA !ram_tilemap_buffer+$184,X
+;        STA !ram_tilemap_buffer+$1C4,X
+;        STA !ram_tilemap_buffer+$204,X
+;        STA !ram_tilemap_buffer+$244,X
+;        STA !ram_tilemap_buffer+$284,X
+;        STA !ram_tilemap_buffer+$2C4,X
+;        STA !ram_tilemap_buffer+$304,X
+;        STA !ram_tilemap_buffer+$344,X
+;        STA !ram_tilemap_buffer+$384,X
+;        STA !ram_tilemap_buffer+$3C4,X
+;        STA !ram_tilemap_buffer+$404,X
+;        STA !ram_tilemap_buffer+$444,X
+;        STA !ram_tilemap_buffer+$484,X
+;        STA !ram_tilemap_buffer+$4C4,X
+;        STA !ram_tilemap_buffer+$504,X
+;        STA !ram_tilemap_buffer+$544,X
+;        STA !ram_tilemap_buffer+$584,X
+;        STA !ram_tilemap_buffer+$5C4,X
+;        STA !ram_tilemap_buffer+$604,X
+;        STA !ram_tilemap_buffer+$644,X
+;
+;        INX #2
+;        DEY : BPL -
+;    }
 
     RTS
 }

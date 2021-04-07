@@ -35,6 +35,8 @@
 !ram_lag_counter = $7FFB96
 !ram_last_lag_counter = $7FFB98
 !ram_shot_timer = $7FFB9E
+!sram_display_backup = $7FFBE4
+!ram_countdamage = $7FFBE6
 
 !ram_phantoon_rng_1 = $7FFB82
 !ram_phantoon_rng_2 = $7FFB84
@@ -94,6 +96,7 @@
 !sram_ctrl_load_state = $70200A
 !sram_ctrl_save_state = $70200C
 !sram_ctrl_load_last_preset = $70200E
+!sram_ctrl_reveal_damage = $702024
 
 !sram_artificial_lag = $702010
 !sram_rerandomize = $702012
