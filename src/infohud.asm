@@ -89,8 +89,54 @@ org $A0F9E0         ; free space at end of bank
     CLC : LDA $0B0C : ADC $187A : STA $0B0C
     LDA $0F8C,X : SEC : SBC $187A : RTS     ; duplicate of existing code
 
+org $90A97E
+print pc, " tile counter start"
+    JMP $F63A
+ 
+org $90F63A
+    LDA $07F7,X
+    ORA $AC04,Y
+    CMP $07F7,X
+    BEQ +
+    STA $07F7,X
+    REP #$20
+    LDA !IH_TILE_COUNT
+    INC A
+    STA !IH_TILE_COUNT
+    SEP #$20
+
++   JMP $A987
+
+org $A2AC9A         ;hijack, right after we check the Escape flag
+    JSL ih_escape_draw : NOP : NOP
+
 ; Main bank stuff
 org $DFE000
+print pc, " tile counter pt2 start"
+ih_tile_counter_code:
+{
+    PHB
+    
+    PEA $8080
+    PLB
+    PLB
+    
+    LDA !IH_TILE_COUNT
+    JSR Hex2Dec : LDX $12 : LDA.w NumberGFXTable,X : STA $7EC6B0 : LDX #$008A : JSR Draw4
+; avoid copying more routines for now (CheckLeadZero)
+;    LDX #$00B0 : JSR CheckLeadZero : LDA $7EC6B6 : CMP #$0057 : BNE + : LDA #$0C09 : STA $7EC6B6
+    
++   PLB
+    RTL
+}
+
+ih_escape_draw:
+    JSL ih_tile_counter_code
+
+    LDA #$0000 ;overwritten code
+    LDY #$A379 ;overwritten code
+    RTL
+
 print pc, " infohud start"
 ih_max_etank_code:
 {
@@ -499,6 +545,7 @@ ih_hud_code:
     dw status_jumppress
     dw status_shottimer
     dw status_countdamage
+    dw status_mapcounter
 }
 
 
@@ -1322,6 +1369,15 @@ status_shottimer:
 status_countdamage:
 {
     LDA $0B0C : CMP !ram_countdamage : BEQ .done : STA !ram_countdamage
+    JSR Hex2Dec : LDX #$0088 : JSR Draw4
+
+  .done
+    RTS
+}
+
+status_mapcounter:
+{
+    LDA !IH_TILE_COUNT : CMP !ram_mapcounter : BEQ .done : STA !ram_mapcounter
     JSR Hex2Dec : LDX #$0088 : JSR Draw4
 
   .done
