@@ -37,6 +37,7 @@
 !ram_shot_timer = $7FFB9E
 !sram_display_backup = $7FFBE4
 !ram_countdamage = $7FFBE6
+!ram_ridleygrab = $7FFBE8
 
 !ram_phantoon_rng_1 = $7FFB82
 !ram_phantoon_rng_2 = $7FFB84

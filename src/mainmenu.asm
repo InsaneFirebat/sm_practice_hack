@@ -847,6 +847,7 @@ ih_display_mode:
     db #$28, "  WALL JUMP", #$FF
     db #$28, " SHOT TIMER", #$FF
     db #$28, "DMG COUNTER", #$FF
+    db #$28, "RIDLEY GRAB", #$FF
     db #$FF
 
 ih_room_strat:

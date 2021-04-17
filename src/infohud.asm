@@ -496,6 +496,7 @@ ih_hud_code:
     dw status_walljump
     dw status_shottimer
     dw status_countdamage
+    dw status_ridleygrab
 }
 
 
@@ -1514,6 +1515,15 @@ status_countdamage:
 {
     LDA $0B0C : CMP !ram_countdamage : BEQ .done : STA !ram_countdamage
     JSR Hex2Dec : LDX #$0088 : JSR Draw4
+
+  .done
+    RTS
+}
+
+status_ridleygrab:
+{
+    LDA $7E800A ;: CMP !ram_ridleygrab : BEQ .done : STA !ram_ridleygrab
+    JSR Hex2Dec : LDX #$008A : JSR Draw3
 
   .done
     RTS
