@@ -92,6 +92,7 @@ preset_category_submenus:
     dw #PresetsMenuKpdr21
     dw #PresetsMenuNgplasma
     dw #PresetsMenuPrkd
+    dw #PresetsMenuPkrd
     dw #PresetsMenuKpdr25
     dw #PresetsMenu14ice
     dw #PresetsMenu14speed
@@ -112,6 +113,7 @@ preset_category_banks:
     dw #PresetsMenuKpdr21>>16
     dw #PresetsMenuNgplasma>>16
     dw #PresetsMenuPrkd>>16
+    dw #PresetsMenuPkrd>>16
     dw #PresetsMenuKpdr25>>16
     dw #PresetsMenu14ice>>16
     dw #PresetsMenu14speed>>16
@@ -194,6 +196,7 @@ incsrc presets/allbossprkd_menu.asm   ; 9BE (length in hex)
 incsrc presets/spazer_menu.asm   ; F91 (length in hex)
 incsrc presets/ngplasma_menu.asm   ; 85C (length in hex)
 incsrc presets/nghyper_menu.asm   ; 864 (length in hex)
+incsrc presets/pkrd_menu.asm   ; E6A (length in hex)
 
 pullpc
 
@@ -658,6 +661,7 @@ misc_preset_category:
         db #$28, "y  ANY KPDR", #$FF
         db #$28, "y NG PLASMA", #$FF
         db #$28, "y  ANY PRKD", #$FF
+        db #$28, "y  ANY PKRD", #$FF
         db #$28, "y  KPDR ICE", #$FF
         db #$28, "y    14 ICE", #$FF
         db #$28, "y  14 SPEED", #$FF
