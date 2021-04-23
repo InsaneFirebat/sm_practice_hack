@@ -89,6 +89,12 @@ org $A0F9E0         ; count damage in free space at end of bank
     CLC : LDA $0B0C : ADC $187A : STA $0B0C
     LDA $0F8C,X : SEC : SBC $187A : RTS
 
+org $A98874         ; update seg timer after MB1 fight
+    JSL ih_mb1_update_hud_code
+
+org $A9BE23         ; update seg timer when baby spawns (off-screen) in MB2 fight
+    JSL ih_mb2_update_hud_code
+
 ; Main bank stuff
 org $DFE000
 print pc, " infohud start"
@@ -410,6 +416,93 @@ ih_update_hud_code:
     PLP
     PLY
     PLX
+
+    RTL
+}
+
+; runs during MB1/2 phase change
+ih_mb1_update_hud_code:
+{
+    JSL $90F084    ; overwritten command (unlock Samus)
+    ; copy of ih_update_hud_code with only room/segment/lag timers
+    PHX : PHY : PHP : PHB
+
+    ; Bank 80
+    PEA $8080 : PLB : PLB
+
+    ; Segment timer
+    {
+        LDA !sram_frame_counter_mode : BNE .ingameSeg
+        LDA.w #!ram_seg_rt_frames : STA $00
+        LDA #$007F : STA $02
+        BRA .drawSeg
+
+      .ingameSeg
+        LDA #$09DA : STA $00
+        LDA #$007E : STA $02
+
+      .drawSeg
+        ; Frames
+        LDA [$00] : INC $00 : INC $00 : ASL : TAX
+        LDA HexToNumberGFX1, X : STA $7EC6BC
+        LDA HexToNumberGFX2, X : STA $7EC6BE
+
+        ; Seconds
+        LDA [$00] : INC $00 : INC $00 : ASL : TAX
+        LDA HexToNumberGFX1, X : STA $7EC6B6
+        LDA HexToNumberGFX2, X : STA $7EC6B8
+
+        ; Minutes
+        LDA [$00] : JSR Hex2Dec : LDX #$00AE : JSR Draw3
+
+        ; Draw decimal seperators
+        LDA #$0CCB : STA $7EC6B4 : STA $7EC6BA
+    }
+
+    PLB : PLP : PLY : PLX
+
+    RTL
+}
+
+; runs during baby spawn routine
+ih_mb2_update_hud_code:
+{
+    STA $7E7854    ; we overwrote this instruction to get here
+    PHX : PHY : PHP : PHB
+
+    ; Bank 80
+    PEA $8080 : PLB : PLB
+
+    ; Segment timer
+    {
+        LDA !sram_frame_counter_mode : BNE .ingameSeg
+        LDA.w #!ram_seg_rt_frames : STA $00
+        LDA #$007F : STA $02
+        BRA .drawSeg
+
+      .ingameSeg
+        LDA #$09DA : STA $00
+        LDA #$007E : STA $02
+
+      .drawSeg
+        ; Frames
+        LDA [$00] : INC $00 : INC $00 : ASL : TAX
+        LDA HexToNumberGFX1, X : STA $7EC6BC
+        LDA HexToNumberGFX2, X : STA $7EC6BE
+
+        ; Seconds
+        LDA [$00] : INC $00 : INC $00 : ASL : TAX
+        LDA HexToNumberGFX1, X : STA $7EC6B6
+        LDA HexToNumberGFX2, X : STA $7EC6B8
+
+        ; Minutes
+        LDA [$00] : JSR Hex2Dec : LDX #$00AE : JSR Draw3
+
+        ; Draw decimal seperators
+        LDA #$0CCB : STA $7EC6B4 : STA $7EC6BA
+    }
+
+    PLB : PLP : PLY : PLX
 
     RTL
 }
