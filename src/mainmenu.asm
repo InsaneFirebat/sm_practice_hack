@@ -486,6 +486,7 @@ tb_plasmabeam:
 ; ------------------
 
 SelectPresetCategoryMenu:
+    dw #precat_current
     dw #precat_spazer
     dw #precat_gtclassic
     dw #precat_kpdr21
@@ -504,6 +505,29 @@ SelectPresetCategoryMenu:
     dw #precat_allbossprkd
     dw #$0000
     %cm_header("SELECT PRESET CATEGORY")
+
+precat_current:
+    dw !ACTION_CHOICE
+    dl #!sram_preset_category
+    dw #$0000
+    db #$28, "CURRENT PRESET", #$FF
+        db #$28, "     SPAZER", #$FF ; Note the "y" ;)
+        db #$28, " GT CLASSIC", #$FF
+        db #$28, "   ANY KPDR", #$FF
+        db #$28, "  NG PLASMA", #$FF
+        db #$28, "   ANY PRKD", #$FF
+        db #$28, "   ANY PKRD", #$FF
+        db #$28, "   KPDR ICE", #$FF
+        db #$28, "     14 ICE", #$FF
+        db #$28, "   14 SPEED", #$FF
+        db #$28, "   NG HYPER", #$FF
+        db #$28, "  100 EARLY", #$FF
+        db #$28, "   100 LATE", #$FF
+        db #$28, "        RBO", #$FF
+        db #$28, "  BOSS KPDR", #$FF
+        db #$28, "  BOSS PKDR", #$FF
+        db #$28, "  BOSS PRKD", #$FF
+    db #$FF
 
 precat_spazer:
     %cm_jsr("Spazer Any%", #action_select_preset_category, #$0000)
@@ -686,7 +710,6 @@ MiscMenu:
     dw #misc_music_toggle
     dw #misc_transparent
     dw #misc_invincibility
-    dw #misc_preset_category
     dw #$0000
     %cm_header("MISC OPTIONS")
 
@@ -734,29 +757,6 @@ misc_transparent:
 
 misc_invincibility:
     %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
-
-misc_preset_category:
-    dw !ACTION_CHOICE
-    dl #!sram_preset_category
-    dw #$0000
-    db #$28, "Preset Category", #$FF
-        db #$28, "y    SPAZER", #$FF ; Note the "y" ;)
-        db #$28, "y GTCLASSIC", #$FF
-        db #$28, "y  ANY KPDR", #$FF
-        db #$28, "y NG PLASMA", #$FF
-        db #$28, "y  ANY PRKD", #$FF
-        db #$28, "y  ANY PKRD", #$FF
-        db #$28, "y  KPDR ICE", #$FF
-        db #$28, "y    14 ICE", #$FF
-        db #$28, "y  14 SPEED", #$FF
-        db #$28, "y  NG HYPER", #$FF
-        db #$28, "y 100 EARLY", #$FF
-        db #$28, "y  100 LATE", #$FF
-        db #$28, "y       RBO", #$FF
-        db #$28, "y BOSS KPDR", #$FF
-        db #$28, "y BOSS PKDR", #$FF
-        db #$28, "y BOSS PRKD", #$FF
-    db #$FF
 
 
 ; -----------
@@ -907,7 +907,9 @@ ConfigMenu:
 ; --------------
 
 InfoHudMenu:
+    dw #ih_goto_display_mode
     dw #ih_display_mode
+    dw #ih_goto_room_strat
     dw #ih_room_strat
     dw #ih_room_counter
     dw #ih_lag
@@ -915,11 +917,105 @@ InfoHudMenu:
     dw #$0000
     %cm_header("INFOHUD")
 
+ih_goto_display_mode:
+    %cm_submenu("Select InfoHUD Mode", #DisplayModeMenu)
+
+DisplayModeMenu:
+    dw ihmode_enemyhp
+    dw ihmode_roomstrat
+    dw ihmode_chargetimer
+    dw ihmode_xfactor
+    dw ihmode_cooldowncounter
+    dw ihmode_shinetimer
+    dw ihmode_dashcounter
+    dw ihmode_shinefinetune
+    dw ihmode_iframecounter
+    dw ihmode_spikesuit
+    dw ihmode_lagcounter
+    dw ihmode_xpos
+    dw ihmode_ypos
+    dw ihmode_hspeed
+    dw ihmode_vspeed
+    dw ihmode_quickdrop
+    dw ihmode_walljump
+    dw ihmode_shottimer
+    dw ihmode_countdamage
+    dw ihmode_ridleygrab
+    dw #$0000
+    %cm_header("INFOHUD DISPLAY MODE")
+
+ihmode_enemyhp:
+    %cm_jsr("Enemy HP", #action_select_infohud_mode, #$0000)
+
+ihmode_roomstrat:
+    %cm_jsr("Room Strat", #action_select_infohud_mode, #$0001)
+
+ihmode_chargetimer:
+    %cm_jsr("Charge Timer", #action_select_infohud_mode, #$0002)
+
+ihmode_xfactor:
+    %cm_jsr("X-Factor Timer", #action_select_infohud_mode, #$0003)
+
+ihmode_cooldowncounter:
+    %cm_jsr("Cooldown Timer", #action_select_infohud_mode, #$0004)
+
+ihmode_shinetimer:
+    %cm_jsr("Shinespark Timer", #action_select_infohud_mode, #$0005)
+
+ihmode_dashcounter:
+    %cm_jsr("Dash Counter", #action_select_infohud_mode, #$0006)
+
+ihmode_shinefinetune:
+    %cm_jsr("ShineTune", #action_select_infohud_mode, #$0007)
+
+ihmode_iframecounter:
+    %cm_jsr("I-Frame Counter", #action_select_infohud_mode, #$0008)
+
+ihmode_spikesuit:
+    %cm_jsr("Spikesuit Trainer", #action_select_infohud_mode, #$0009)
+
+ihmode_lagcounter:
+    %cm_jsr("CPU Usage", #action_select_infohud_mode, #$000A)
+
+ihmode_xpos:
+    %cm_jsr("X Position", #action_select_infohud_mode, #$000B)
+
+ihmode_ypos:
+    %cm_jsr("Y Position", #action_select_infohud_mode, #$000C)
+
+ihmode_hspeed:
+    %cm_jsr("Horizontal Speed", #action_select_infohud_mode, #$000D)
+
+ihmode_vspeed:
+    %cm_jsr("Vertical Speed", #action_select_infohud_mode, #$000E)
+
+ihmode_quickdrop:
+    %cm_jsr("Quickdrop Trainer", #action_select_infohud_mode, #$000F)
+
+ihmode_walljump:
+    %cm_jsr("Walljump Trainer", #action_select_infohud_mode, #$0010)
+
+ihmode_shottimer:
+    %cm_jsr("Shot Timer", #action_select_infohud_mode, #$0011)
+
+ihmode_countdamage:
+    %cm_jsr("Boss Damage Counter", #action_select_infohud_mode, #$0012)
+
+ihmode_ridleygrab:
+    %cm_jsr("Ridley Death Grab Attempts", #action_select_infohud_mode, #$0013)
+
+action_select_infohud_mode:
+{
+    TYA : STA !sram_display_mode
+    JSR cm_go_back
+    RTS
+}
+
 ih_display_mode:
     dw !ACTION_CHOICE
     dl #!sram_display_mode
     dw #$0000
-    db #$28, "Infohud Mode", #$FF
+    db #$28, "Current Mode", #$FF
     db #$28, "   ENEMY HP", #$FF
     db #$28, " ROOM STRAT", #$FF
     db #$28, "     CHARGE", #$FF
@@ -942,11 +1038,49 @@ ih_display_mode:
     db #$28, "RIDLEY GRAB", #$FF
     db #$FF
 
+ih_goto_room_strat:
+    %cm_submenu("List Room Strats", #RoomStratMenu)
+
+RoomStratMenu:
+    dw ihstrat_mbhp
+    dw ihstrat_moatcwj
+    dw ihstrat_shinetopb
+    dw ihstrat_botwooncf
+    dw ihstrat_elevatorcf
+    dw ihstrat_robotflush
+    dw #$0000
+    %cm_header("INFOHUD ROOM STRAT")
+
+ihstrat_mbhp:
+    %cm_jsr("Mother Brain HP", #action_select_room_strat, #$0000)
+
+ihstrat_moatcwj:
+    %cm_jsr("Moat CWJ", #action_select_room_strat, #$0001)
+
+ihstrat_shinetopb:
+    %cm_jsr("Shine to PB", #action_select_room_strat, #$0002)
+
+ihstrat_botwooncf:
+    %cm_jsr("Botwoon Crystal Flash", #action_select_room_strat, #$0003)
+
+ihstrat_elevatorcf:
+    %cm_jsr("Elevator Crystal Flash", #action_select_room_strat, #$0004)
+
+ihstrat_robotflush:
+    %cm_jsr("Robot Flush", #action_select_room_strat, #$0005)
+
+action_select_room_strat:
+{
+    TYA : STA !sram_room_strat
+    JSR cm_go_back
+    RTS
+}
+
 ih_room_strat:
     dw !ACTION_CHOICE
     dl #!sram_room_strat
     dw #$0000
-    db #$28, "Room Strat", #$FF
+    db #$28, "Current Strat", #$FF
     db #$28, "      MB HP", #$FF
     db #$28, "   MOAT CWJ", #$FF
     db #$28, "SHINE TO PB", #$FF
