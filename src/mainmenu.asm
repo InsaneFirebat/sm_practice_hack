@@ -144,7 +144,7 @@ MainMenu:
     dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_header("INSANEFIREBAT V2.1.8B")
+    %cm_header("INSANEFIREBAT V2.1.8C")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -1039,7 +1039,7 @@ ih_display_mode:
     db #$FF
 
 ih_goto_room_strat:
-    %cm_submenu("List Room Strats", #RoomStratMenu)
+    %cm_submenu("Select Room Strat", #RoomStratMenu)
 
 RoomStratMenu:
     dw ihstrat_mbhp
