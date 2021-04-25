@@ -135,6 +135,7 @@ preset_category_banks:
 MainMenu:
     dw #mm_goto_equipment
     dw #mm_goto_presets
+    dw #mm_goto_select_preset_category
     dw #mm_goto_teleport
     dw #mm_goto_events
     dw #mm_goto_misc
@@ -150,6 +151,9 @@ mm_goto_equipment:
 
 mm_goto_presets:
     %cm_jsr("Category Presets", #action_presets_submenu, #$0000)
+
+mm_goto_select_preset_category:
+    %cm_submenu("Select Preset Category", #SelectPresetCategoryMenu)
 
 mm_goto_teleport:
     %cm_submenu("Save Stations", #TeleportMenu)
@@ -475,6 +479,86 @@ tb_spazerbeam:
 
 tb_plasmabeam:
     %cm_toggle_bit("Plasma", $7E09A8, #$0008, #0)
+
+
+; ------------------
+; Select Preset Category menu
+; ------------------
+
+SelectPresetCategoryMenu:
+    dw #precat_spazer
+    dw #precat_gtclassic
+    dw #precat_kpdr21
+    dw #precat_ngplasma
+    dw #precat_prkd
+    dw #precat_pkrd
+    dw #precat_kpdr25
+    dw #precat_14ice
+    dw #precat_14speed
+    dw #precat_nghyper
+    dw #precat_100early
+    dw #precat_hundo
+    dw #precat_rbo
+    dw #precat_allbosskpdr
+    dw #precat_allbosspkdr
+    dw #precat_allbossprkd
+    dw #$0000
+    %cm_header("SELECT PRESET CATEGORY")
+
+precat_spazer:
+    %cm_jsr("Spazer Any%", #action_select_preset_category, #$0000)
+
+precat_gtclassic:
+    %cm_jsr("GT Classic", #action_select_preset_category, #$0001)
+
+precat_kpdr21:
+    %cm_jsr("Any% KPDR", #action_select_preset_category, #$0002)
+
+precat_ngplasma:
+    %cm_jsr("NewGamePlus Plasma", #action_select_preset_category, #$0003)
+
+precat_prkd:
+    %cm_jsr("Any% PRKD", #action_select_preset_category, #$0004)
+
+precat_pkrd:
+    %cm_jsr("Any% PKRD", #action_select_preset_category, #$0005)
+
+precat_kpdr25:
+    %cm_jsr("Any% KPDR Early Ice", #action_select_preset_category, #$0006)
+
+precat_14ice:
+    %cm_jsr("Low% Ice", #action_select_preset_category, #$0007)
+
+precat_14speed:
+    %cm_jsr("Low% Speed", #action_select_preset_category, #$0008)
+
+precat_nghyper:
+    %cm_jsr("NewGamePlus Hyper", #action_select_preset_category, #$0009)
+
+precat_100early:
+    %cm_jsr("100% Early Crocomire", #action_select_preset_category, #$000A)
+
+precat_hundo:
+    %cm_jsr("100% Late Crocomire", #action_select_preset_category, #$000B)
+
+precat_rbo:
+    %cm_jsr("Reverse Boss Order", #action_select_preset_category, #$000C)
+
+precat_allbosskpdr:
+    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000D)
+
+precat_allbosspkdr:
+    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000E)
+
+precat_allbossprkd:
+    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000F)
+
+action_select_preset_category:
+{
+    TYA : STA !sram_preset_category
+    JSR cm_go_back
+    RTS
+}
 
 
 ; ---------------
