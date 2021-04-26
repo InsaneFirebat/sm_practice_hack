@@ -1146,7 +1146,7 @@ rng_rerandomize:
 
 rng_botwoon_rng:
     dw !ACTION_CHOICE
-    dl #$7FFB8A
+    dl #!ram_botwoon_rng
     dw #$0000
     db #$28, "Botwoon RNG", #$FF
     db #$28, "     RANDOM", #$FF
