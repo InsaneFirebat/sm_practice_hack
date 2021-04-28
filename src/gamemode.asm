@@ -16,6 +16,9 @@ gamemode_start:
     %ai16()
     PHP
 
+; don't load presets if we're in credits
+    LDA $0998 : CMP #$0027 : BEQ +
+
     LDA !ram_load_preset : BEQ +
 
     JSL preset_load
@@ -64,6 +67,10 @@ gamemode_shortcuts:
   + LDA !ram_ctrl1 : AND !sram_ctrl_reveal_damage : CMP !sram_ctrl_reveal_damage : BNE +
     AND !ram_ctrl1_filtered : BEQ +
     JMP .reveal_damage
+
+  + LDA !ram_ctrl1 : AND !sram_ctrl_force_stand : CMP !sram_ctrl_force_stand : BNE +
+    AND !ram_ctrl1_filtered : BEQ +
+    JMP .force_stand
 
   + LDA !ram_ctrl1 : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
     AND !ram_ctrl1_filtered : BEQ +
@@ -119,6 +126,18 @@ gamemode_shortcuts:
     CLC : RTS
 
   + LDA !sram_display_backup : STA !sram_display_mode
+    CLC : RTS
+
+  .force_stand
+    LDA $0A1E : AND #$00FF : CMP #$0004 : BEQ .poseRight
+    LDA #$00D3 : BRA .elseLeft
+
+      .poseRight
+        LDA #$00D4
+
+      .elseLeft
+        STA $0A1C
+
     CLC : RTS
 
   .menu

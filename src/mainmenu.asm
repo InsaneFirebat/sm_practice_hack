@@ -144,7 +144,7 @@ MainMenu:
     dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_header("INSANEFIREBAT V2.1.8C")
+    %cm_header("INSANEFIREBAT V2.1.9")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -182,18 +182,18 @@ mm_goto_ctrlsmenu:
 ; -------------
 pushpc
 
-org $fe8000
-incsrc presets/prkd_menu.asm   ; 960 (length in hex)
+org $fe8000    ; F49E / B61
+incsrc presets/prkd_menu.asm   ; E6A (length in hex)
 incsrc presets/kpdr21_menu.asm   ; F91 (length in hex)
-incsrc presets/hundo_menu.asm   ; 1226 (length in hex)
+incsrc presets/hundo_menu.asm   ; 1220 (length in hex)
 incsrc presets/100early_menu.asm   ; 1320 (length in hex)
 incsrc presets/rbo_menu.asm   ; D97 (length in hex)
 incsrc presets/kpdr25_menu.asm   ; 69F (length in hex)
-incsrc presets/gtclassic_menu.asm   ; 75E (length in hex)
+incsrc presets/gtclassic_menu.asm   ; D7C (length in hex)
 incsrc presets/14ice_menu.asm   ; 7C6 (length in hex)
 incsrc presets/14speed_menu.asm   ; 7EB (length in hex)
 
-org $ff8000
+org $ff8000    ; BBDA / 4425
 incsrc presets/allbosskpdr_menu.asm   ; 942 (length in hex)
 incsrc presets/allbosspkdr_menu.asm   ; 9B0 (length in hex)
 incsrc presets/allbossprkd_menu.asm   ; 9BE (length in hex)
@@ -572,10 +572,10 @@ precat_allbosskpdr:
     %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000D)
 
 precat_allbosspkdr:
-    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000E)
+    %cm_jsr("All Bosses PKDR", #action_select_preset_category, #$000E)
 
 precat_allbossprkd:
-    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000F)
+    %cm_jsr("All Bosses PRKD", #action_select_preset_category, #$000F)
 
 action_select_preset_category:
 {
@@ -966,7 +966,7 @@ ihmode_dashcounter:
     %cm_jsr("Dash Counter", #action_select_infohud_mode, #$0006)
 
 ihmode_shinefinetune:
-    %cm_jsr("ShineTune", #action_select_infohud_mode, #$0007)
+    %cm_jsr("Shine Tune", #action_select_infohud_mode, #$0007)
 
 ihmode_iframecounter:
     %cm_jsr("I-Frame Counter", #action_select_infohud_mode, #$0008)
@@ -1200,6 +1200,7 @@ CtrlMenu:
     dw #ctrl_full_equipment
     dw #ctrl_kill_enemies
     dw #ctrl_reveal_damage
+    dw #ctrl_force_stand
     dw #ctrl_clear_shortcuts
     dw #$0000
     %cm_header("CONTROLLER SHORTCUTS")
@@ -1229,6 +1230,9 @@ ctrl_kill_enemies:
 ctrl_reveal_damage:
     %cm_ctrl_shortcut("Toggle Boss Dmg", !sram_ctrl_reveal_damage)
 
+ctrl_force_stand:
+    %cm_ctrl_shortcut("Force Stand", !sram_ctrl_force_stand)
+
 ctrl_clear_shortcuts:
     %cm_jsr("Clear Shortcuts", action_clear_shortcuts, #$0000)
 
@@ -1242,6 +1246,7 @@ action_clear_shortcuts:
     STA !sram_ctrl_kill_enemies
     STA !sram_ctrl_reset_segment_timer
     STA !sram_ctrl_reveal_damage
+    STA !sram_ctrl_force_stand
     ; default for menu, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
     RTS

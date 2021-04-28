@@ -99,6 +99,7 @@
 !sram_ctrl_save_state = $70200C
 !sram_ctrl_load_last_preset = $70200E
 !sram_ctrl_reveal_damage = $702024
+!sram_ctrl_force_stand = $702026
 
 !sram_artificial_lag = $702010
 !sram_rerandomize = $702012
