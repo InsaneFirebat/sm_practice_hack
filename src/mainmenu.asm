@@ -142,7 +142,7 @@ MainMenu:
     dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.1.8")
+    %cm_header("CUSTOM INFOHUD V2.1.9")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -180,18 +180,18 @@ mm_goto_ctrlsmenu:
 ; -------------
 pushpc
 
-org $fe8000
-incsrc presets/prkd_menu.asm   ; 960 (length in hex)
+org $fe8000    ; F49E / B61
+incsrc presets/prkd_menu.asm   ; E6A (length in hex)
 incsrc presets/kpdr21_menu.asm   ; F91 (length in hex)
-incsrc presets/hundo_menu.asm   ; 1226 (length in hex)
+incsrc presets/hundo_menu.asm   ; 1220 (length in hex)
 incsrc presets/100early_menu.asm   ; 1320 (length in hex)
 incsrc presets/rbo_menu.asm   ; D97 (length in hex)
 incsrc presets/kpdr25_menu.asm   ; 69F (length in hex)
-incsrc presets/gtclassic_menu.asm   ; 75E (length in hex)
+incsrc presets/gtclassic_menu.asm   ; D7C (length in hex)
 incsrc presets/14ice_menu.asm   ; 7C6 (length in hex)
 incsrc presets/14speed_menu.asm   ; 7EB (length in hex)
 
-org $ff8000
+org $ff8000    ; BBDA / 4425
 incsrc presets/allbosskpdr_menu.asm   ; 942 (length in hex)
 incsrc presets/allbosspkdr_menu.asm   ; 9B0 (length in hex)
 incsrc presets/allbossprkd_menu.asm   ; 9BE (length in hex)
@@ -564,10 +564,10 @@ precat_allbosskpdr:
     %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000C)
 
 precat_allbosspkdr:
-    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000D)
+    %cm_jsr("All Bosses PKDR", #action_select_preset_category, #$000D)
 
 precat_allbossprkd:
-    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000E)
+    %cm_jsr("All Bosses PKDR", #action_select_preset_category, #$000E)
 
 action_select_preset_category:
 {
@@ -957,7 +957,7 @@ ihmode_dashcounter:
     %cm_jsr("Dash Counter", #action_select_infohud_mode, #$0006)
 
 ihmode_shinefinetune:
-    %cm_jsr("ShineTune", #action_select_infohud_mode, #$0007)
+    %cm_jsr("Shine Tune", #action_select_infohud_mode, #$0007)
 
 ihmode_iframecounter:
     %cm_jsr("I-Frame Counter", #action_select_infohud_mode, #$0008)
@@ -1049,7 +1049,7 @@ ihstrat_moatcwj:
     %cm_jsr("Moat CWJ", #action_select_room_strat, #$0001)
 
 ihstrat_shinetopb:
-    %cm_jsr("Shine to PB", #action_select_room_strat, #$0002)
+    %cm_jsr("Shinespark to PB", #action_select_room_strat, #$0002)
 
 ihstrat_botwooncf:
     %cm_jsr("Botwoon Crystal Flash", #action_select_room_strat, #$0003)
