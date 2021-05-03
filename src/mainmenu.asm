@@ -143,6 +143,7 @@ MainMenu:
     dw #mm_goto_gamemenu
     dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
+    dw #mm_goto_about
     dw #$0000
     %cm_header("INSANEFIREBAT V2.1.9")
 
@@ -175,6 +176,9 @@ mm_goto_rngmenu:
 
 mm_goto_ctrlsmenu:
     %cm_submenu("Controller Shortcuts", #CtrlMenu)
+
+mm_goto_about:
+    %cm_submenu("InfoHUD Credits", #AboutMenu)
 
 
 ; -------------
@@ -1249,5 +1253,75 @@ action_clear_shortcuts:
     STA !sram_ctrl_force_stand
     ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
+    RTS
+}
+
+
+; ----------
+; About Menu
+; ----------
+
+AboutMenu:
+    dw #ab_text_orig_author
+    dw #ab_notext
+    dw #ab_text_total
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_text_v2_author
+    dw #ab_notext
+    dw #ab_text_pinkus
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_text_contributors
+    dw #ab_notext
+    dw #ab_text_unhchabo
+    dw #ab_text_idlechild
+    dw #ab_text_insanefirebat
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_text_website_header
+    dw #ab_notext
+    dw #ab_text_website
+    dw #$0000
+    %cm_header("     INFOHUD CREDITS")
+
+
+ab_text_orig_author:
+    %cm_jsr("     ORIGINAL AUTHOR      ", #action_text, #$0000)
+
+ab_text_total:
+    %cm_jsr("          Total           ", #action_text, #$0000)
+
+ab_text_v2_author:
+    %cm_jsr("    V2 REWRITE AUTHOR     ", #action_text, #$0000)
+
+ab_text_pinkus:
+    %cm_jsr("          Pinkus          ", #action_text, #$0000)
+
+ab_text_contributors:
+    %cm_jsr("       CONTRIBUTORS       ", #action_text, #$0000)
+
+ab_text_unhchabo:
+    %cm_jsr("         UNHchabo         ", #action_text, #$0000)
+
+ab_text_idlechild:
+    %cm_jsr("         idlechild        ", #action_text, #$0000)
+
+ab_text_insanefirebat:
+    %cm_jsr("       InsaneFirebat      ", #action_text, #$0000)
+
+ab_text_website_header:
+    %cm_jsr("         WEBSITE          ", #action_text, #$0000)
+
+ab_text_website:
+    %cm_jsr("  smpractice.speedga.me   ", #action_text, #$0000)
+
+ab_notext:
+    %cm_jsr("                          ", #action_text, #$0000)
+
+action_text:
+{
+    ; do nothing
+    JSR cm_go_back
     RTS
 }
