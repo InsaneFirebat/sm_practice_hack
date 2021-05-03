@@ -16,7 +16,7 @@ gamemode_start:
     %ai16()
     PHP
 
-; don't load presets if we're in credits
+    ; don't load presets if we're in credits
     LDA $0998 : CMP #$0027 : BEQ +
 
     LDA !ram_load_preset : BEQ +

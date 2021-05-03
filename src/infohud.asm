@@ -71,6 +71,12 @@ org $91DAD8      ;hijack, runs after a shinespark has been charged
 org $8095fc         ;hijack, end of NMI routine to update realtime frames
     JML ih_nmi_end
 
+org $A98874         ; update seg timer after MB1 fight
+    JSL ih_mb1_segment
+
+org $A9BE23         ; update seg timer when baby spawns (off-screen) in MB2 fight
+    JSL ih_mb2_segment
+
 org $9AB800         ;graphics for menu cursor and input display
 incbin ../resources/menugfx.bin
 
@@ -91,12 +97,6 @@ org $A0A866         ; hijack damage routine to count total damage dealt
 org $A0F9E0         ; count damage in free space at end of bank
     CLC : LDA $0B0C : ADC $187A : STA $0B0C
     LDA $0F8C,X : SEC : SBC $187A : RTS
-
-org $A98874         ; update seg timer after MB1 fight
-    JSL ih_mb1_segment
-
-org $A9BE23         ; update seg timer when baby spawns (off-screen) in MB2 fight
-    JSL ih_mb2_segment
 
 ; Main bank stuff
 org $DFE000
@@ -280,37 +280,35 @@ ih_before_room_transition:
 ih_elevator_activation:
 {
     PHA
-    PHX
-    PHY
-
     ; Only update if we're in a room and activate an elevator.
     ; Otherwise this will also run when you enter a room already riding one.
     LDA $0998 : CMP #$0008 : BNE .done
 
-    ; calculate lag frames
-    LDA !ram_realtime_room : SEC : SBC !ram_transition_counter : STA !ram_last_room_lag
-
-    LDA !ram_gametime_room : STA !ram_last_gametime_room
-    LDA !ram_realtime_room : STA !ram_last_realtime_room
-
-    ; save temp variables
-    LDA $12 : PHA
-    LDA $14 : PHA
-
-    ; Update HUD
-    JSL ih_update_hud_code
-
-    ; restore temp variables
-    PLA : STA $14
-    PLA : STA $12
+    JSL ih_update_hud_early
 
   .done
-    ; Run standard code and return
-    PLY
-    PLX
     PLA
+    ; Run standard code and return
     STZ $0A56
     SEC
+    RTL
+}
+
+ih_mb1_segment:
+{
+    ; runs during MB1 cutscene when you regain control of Samus, just before music change
+    JSL $90F084    ; we overwrote this instruction to get here
+
+    JSL ih_update_hud_early
+    RTL
+}
+
+ih_mb2_segment:
+{
+    ; runs during baby spawn routine for MB2
+    STA $7E7854    ; we overwrote this instruction to get here
+
+    JSL ih_update_hud_early
     RTL
 }
 
@@ -460,58 +458,33 @@ ih_update_hud_code:
     RTL
 }
 
-; runs during MB1/2 phase change
-ih_mb1_segment:
+ih_update_hud_early:
 {
-    JSL $90F084    ; we overwrote this instruction to get here
-	JSR ih_update_seg_hud
-    RTL
-}
+    PHA
+    PHX
+    PHY
 
-; runs during baby spawn routine
-ih_mb2_segment:
-{
-    STA $7E7854    ; we overwrote this instruction to get here
-    JSR ih_update_seg_hud
-    RTL
+    ; calculate lag frames
+    LDA !ram_realtime_room : SEC : SBC !ram_transition_counter : STA !ram_last_room_lag
 
-; segment of code from ih_update_hud_code
-ih_update_seg_hud:
-{
-    PHX : PHY : PHP : PHB
+    LDA !ram_gametime_room : STA !ram_last_gametime_room
+    LDA !ram_realtime_room : STA !ram_last_realtime_room
 
-    ; Bank 80
-    PEA $8080 : PLB : PLB
+    ; save temp variables
+    LDA $12 : PHA
+    LDA $14 : PHA
 
-    ; Segment timer
-    {
-        LDA !sram_frame_counter_mode : BNE .ingameSeg
-        LDA.w #!ram_seg_rt_frames : STA $00
-        LDA #$007F : STA $02
-        BRA .drawSeg
+    ; Update HUD
+    JSL ih_update_hud_code
 
-      .ingameSeg
-        LDA #$09DA : STA $00
-        LDA #$007E : STA $02
+    ; restore temp variables
+    PLA : STA $14
+    PLA : STA $12
 
-      .drawSeg
-        ; Frames
-        LDA [$00] : INC $00 : INC $00 : ASL : TAX
-        LDA HexToNumberGFX1, X : STA $7EC6BC
-        LDA HexToNumberGFX2, X : STA $7EC6BE
-
-        ; Seconds
-        LDA [$00] : INC $00 : INC $00 : ASL : TAX
-        LDA HexToNumberGFX1, X : STA $7EC6B6
-        LDA HexToNumberGFX2, X : STA $7EC6B8
-
-        ; Minutes
-        LDA [$00] : JSR Hex2Dec : LDX #$00AE : JSR Draw3
-    }
-
-    PLB : PLP : PLY : PLX
-
-    RTS
+    ; Run standard code and return
+    PLY
+    PLX
+    PLA
 }
 
 ih_hud_code:

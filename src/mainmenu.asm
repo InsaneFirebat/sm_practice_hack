@@ -1247,7 +1247,7 @@ action_clear_shortcuts:
     STA !sram_ctrl_reset_segment_timer
     STA !sram_ctrl_reveal_damage
     STA !sram_ctrl_force_stand
-    ; default for menu, Start + Select
+    ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
     RTS
 }

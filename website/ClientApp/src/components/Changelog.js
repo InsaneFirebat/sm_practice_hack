@@ -34,7 +34,10 @@ export class Changelog extends Component {
                                                 <li>Replaced Lag Counter with CPU Usage and added Invincibility toggle. (2.1.8)</li>
                                                 <li>Added Quick Drop and Wall Jump (replacing Jump Press) to Infohud Mode options. (2.1.8)</li>
                                                 <li>Added Elevator CF to the Room Strat list and a Infohud Mode/Room Strat help page. (2.1.8)</li>
-                                                <li>Update the room timer on activating an elevator. (2.1.9)</li>
+                                                <li>Update the room timer on activating an elevator and between Mother Brain phases.. (2.1.9)</li>
+                                                <li>Added presets for Any% PKRD. (2.1.9)</li>
+                                                <li>Added submenus for Preset Categories, InfoHUD Display Modes, and Room Strats. (2.1.9)</li>
+                                                <li>Fixed Botwoon RNG Control and endgame cutscene crash. (2.1.9)</li>
                                             </ul>
                                         </CardBody>
                                     </Card>
