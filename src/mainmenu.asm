@@ -142,7 +142,7 @@ MainMenu:
     dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.1.9")
+    %cm_header("CUSTOM INFOHUD V2.1.10")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -749,6 +749,7 @@ misc_transparent:
 
 misc_invincibility:
     %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
+
 
 ; -----------
 ; Events menu
