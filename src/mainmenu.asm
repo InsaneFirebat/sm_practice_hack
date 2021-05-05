@@ -145,7 +145,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_about
     dw #$0000
-    %cm_header("INSANEFIREBAT V2.1.9")
+    %cm_header("INSANEFIREBAT V2.1.9D")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -714,6 +714,7 @@ MiscMenu:
     dw #misc_music_toggle
     dw #misc_transparent
     dw #misc_invincibility
+    dw #misc_infiniteammo
     dw #$0000
     %cm_header("MISC OPTIONS")
 
@@ -761,6 +762,9 @@ misc_transparent:
 
 misc_invincibility:
     %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
+
+misc_infiniteammo:
+    %cm_toggle_bit("Infinite Ammo", !ram_infinite_ammo, #$0001, #0)
 
 
 ; -----------

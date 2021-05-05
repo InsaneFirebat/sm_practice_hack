@@ -80,22 +80,22 @@ org $A9BE23         ; update seg timer when baby spawns (off-screen) in MB2 figh
 org $9AB800         ;graphics for menu cursor and input display
 incbin ../resources/menugfx.bin
 
-org $A6A17C         ;Ridley AI init, overwriting a junk LDA (used for Charles' boss damage thing)
-    STZ $0B0C
+org $A6A17C         ;Ridley AI init, reset !ram_countdamage
+    STZ !ram_countdamage
 
-org $A7CE64         ;Phantoon AI init (used for Charles' boss damage thing)
+org $A7CE64         ;Phantoon AI init, reset !ram_countdamage
     JSR $FCC0
 
-org $A7FCC0         ; free space at end of bank for Phantoon hijack above
-    STZ $0F90,X
-    STZ $0B0C
+org $A7FCC0         ;Phantoon AI init, reset !ram_countdamage
+    STZ $0F90,X     ;we overwrote this instruction to get here
+    STZ !ram_countdamage
     RTS
 
 org $A0A866         ; hijack damage routine to count total damage dealt
     JSR $F9E0
 
 org $A0F9E0         ; count damage in free space at end of bank
-    CLC : LDA $0B0C : ADC $187A : STA $0B0C
+    CLC : LDA !ram_countdamage : ADC $187A : STA !ram_countdamage
     LDA $0F8C,X : SEC : SBC $187A : RTS
 
 ; Main bank stuff
@@ -1586,7 +1586,7 @@ status_shottimer:
 
 status_countdamage:
 {
-    LDA $0B0C : CMP !ram_countdamage : BEQ .done : STA !ram_countdamage
+    LDA !ram_countdamage : CMP !ram_countdamage_hud : BEQ .done : STA !ram_countdamage_hud
     JSR Hex2Dec : LDX #$0088 : JSR Draw4
 
   .done
@@ -1595,7 +1595,7 @@ status_countdamage:
 
 status_ridleygrab:
 {
-    LDA $7E800A ;: CMP !ram_ridleygrab : BEQ .done : STA !ram_ridleygrab
+    LDA $7E800A : CMP !ram_ridleygrab : BEQ .done : STA !ram_ridleygrab
     JSR Hex2Dec : LDX #$008A : JSR Draw3
 
   .done
@@ -1789,6 +1789,9 @@ ih_game_loop_code:
     LDA !ram_magic_pants_1 : BEQ +
     JSR magic_pants
 
++   LDA !ram_infinite_ammo : BEQ +
+    JSR infinite_ammo
+
     ; handle inputs
 +   LDA !IH_CONTROLLER_SEC_NEW : BEQ .done
     CMP !IH_PAUSE : BEQ .toggle_pause
@@ -1864,7 +1867,7 @@ ih_game_loop_code:
     STA !ram_mb_hp
     STA !ram_enemy_hp
     STA !ram_shine_counter
-    STA !ram_countdamage
+    STA !ram_countdamage_hud
     JMP .done
 }
 
@@ -1889,6 +1892,15 @@ magic_pants:
     LDA $7EC196 : STA !ram_magic_pants_4
     LDA $7EC19E : STA !ram_magic_pants_5
 +   LDA #$FFFF : STA $7EC194 : STA $7EC196 : STA $7EC19E : STA !ram_magic_pants_2
+    RTS
+}
+
+infinite_ammo:
+{
+    LDA #$01A4 : STA $7E09C6 ; missiles
+    LDA #$0045 : STA $7E09CA ; supers
+    LDA #$0045 : STA $7E09CE ; pbs
+    LDA #$0011 : STA $7EC662  ; draw a down arrow between missiles/super
     RTS
 }
 
