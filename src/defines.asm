@@ -35,9 +35,15 @@
 !ram_lag_counter = $7FFB96
 !ram_last_lag_counter = $7FFB98
 !ram_shot_timer = $7FFB9E
-!sram_display_backup = $7FFBE4
-!ram_countdamage = $7FFBE6
+!ram_display_backup = $7FFBE4
 !ram_ridleygrab = $7FFBE8
+!ram_infinite_ammo = $7FFBEA
+!ram_infiniteammo_check = $7FFBEE
+!ram_ammo_missiles = $05C9 ; debug mode would use these for roughly the same purpose
+!ram_ammo_supers = $05CB
+!ram_ammo_powerbombs = $05CD
+!ram_countdamage = $0B0C ; 4 bytes, direct page address? reset by some ram clearing routines
+!ram_countdamage_hud = $7FFBEC
 
 !ram_phantoon_rng_1 = $7FFB82
 !ram_phantoon_rng_2 = $7FFB84

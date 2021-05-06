@@ -117,11 +117,11 @@ gamemode_shortcuts:
     CLC : RTS
 
   .reveal_damage
-    LDA !sram_display_mode : CMP #$0012 : BEQ + : STA !sram_display_backup
+    LDA !sram_display_mode : CMP #$0012 : BEQ + : STA !ram_display_backup
     LDA #$0012 : STA !sram_display_mode
     CLC : RTS
 
-  + LDA !sram_display_backup : STA !sram_display_mode
+  + LDA !ram_display_backup : STA !sram_display_mode
     CLC : RTS
 
   .menu

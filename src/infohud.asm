@@ -77,32 +77,26 @@ org $A98874         ; update seg timer after MB1 fight
 org $A9BE23         ; update seg timer when baby spawns (off-screen) in MB2 fight
     JSL ih_mb2_segment
 
-org $9AB800         ;graphics for menu cursor and input display
-incbin ../resources/menugfx.bin
+org $A6A17C         ;Ridley AI init, reset !ram_countdamage
+    STZ !ram_countdamage
 
-org $A6A17C         ;Ridley AI init, overwriting a junk LDA (used for Charles' boss damage thing)
-    STZ $0B0C
-
-org $A7CE64         ;Phantoon AI init (used for Charles' boss damage thing)
+org $A7CE64         ;Phantoon AI init, reset !ram_countdamage
     JSR $FCC0
 
-org $A7FCC0         ; free space at end of bank for Phantoon hijack above
-    STZ $0F90,X
-    STZ $0B0C
+org $A7FCC0         ;Phantoon AI init, reset !ram_countdamage
+    STZ $0F90,X     ;we overwrote this instruction to get here
+    STZ !ram_countdamage
     RTS
 
 org $A0A866         ; hijack damage routine to count total damage dealt
     JSR $F9E0
 
 org $A0F9E0         ; count damage in free space at end of bank
-    CLC : LDA $0B0C : ADC $187A : STA $0B0C
+    CLC : LDA !ram_countdamage : ADC $187A : STA !ram_countdamage
     LDA $0F8C,X : SEC : SBC $187A : RTS
 
-org $A98874         ; update seg timer after MB1 fight
-    JSL ih_mb1_segment
-
-org $A9BE23         ; update seg timer when baby spawns (off-screen) in MB2 fight
-    JSL ih_mb2_segment
+org $9AB800         ;graphics for menu cursor and input display
+incbin ../resources/menugfx.bin
 
 ; Main bank stuff
 org $DFE000
@@ -1146,9 +1140,8 @@ status_lagcounter:
     LDA !ram_lag_counter : CMP !ram_last_lag_counter : BEQ .done : STA !ram_last_lag_counter
     %a8() : STA $211B : XBA : STA $211B : LDA #$64 : STA $211C : %a16() : LDA $2134
     STA $4204 : %a8() : LDA #$E1 : STA $4206 : %a16()
-    PHA : PLA : PHA : PLA : LDA $4214
+    LDA #$0C0A : STA $7EC690 : PHA : PLA : LDA $4214    ; draw % while waiting for math
     JSR Hex2Dec : LDX #$008A : JSR Draw3
-    LDA #$0C0A : STA $7EC690
 
   .done
     RTS
@@ -1591,7 +1584,7 @@ status_shottimer:
 
 status_countdamage:
 {
-    LDA $0B0C : CMP !ram_countdamage : BEQ .done : STA !ram_countdamage
+    LDA !ram_countdamage : CMP !ram_countdamage_hud : BEQ .done : STA !ram_countdamage_hud
     JSR Hex2Dec : LDX #$0088 : JSR Draw4
 
   .done
@@ -1600,7 +1593,7 @@ status_countdamage:
 
 status_ridleygrab:
 {
-    LDA $7E800A ;: CMP !ram_ridleygrab : BEQ .done : STA !ram_ridleygrab
+    LDA $7E800A : CMP !ram_ridleygrab : BEQ .done : STA !ram_ridleygrab
     JSR Hex2Dec : LDX #$008A : JSR Draw3
 
   .done
@@ -1791,11 +1784,24 @@ ih_game_loop_code:
 
     LDA !ram_transition_counter : INC : STA !ram_transition_counter
 
-    LDA !ram_magic_pants_1 : BEQ +
+    LDA !ram_magic_pants_1 : BEQ .infiniteammo
     JSR magic_pants
 
+  .infiniteammo
+    LDA !ram_infinite_ammo : CMP !ram_infiniteammo_check : BMI .reset_ammo_check
+    BEQ .handle_inputs
+    JSR infinite_ammo
+    BRA .handle_inputs
+
+  .reset_ammo_check
+    LDA #$0000 : STA !ram_infiniteammo_check
+    LDA !ram_ammo_missiles : STA $7E09C6
+    LDA !ram_ammo_supers : STA $7E09CA
+    LDA !ram_ammo_powerbombs : STA $7E09CE
+
     ; handle inputs
-+   LDA !IH_CONTROLLER_SEC_NEW : BEQ .done
+  .handle_inputs
+    LDA !IH_CONTROLLER_SEC_NEW : BEQ .done
     CMP !IH_PAUSE : BEQ .toggle_pause
     CMP !IH_SLOWDOWN : BEQ .toggle_slowdown
     CMP !IH_SPEEDUP : BEQ .toggle_speedup
@@ -1869,7 +1875,7 @@ ih_game_loop_code:
     STA !ram_mb_hp
     STA !ram_enemy_hp
     STA !ram_shine_counter
-    STA !ram_countdamage
+    STA !ram_countdamage_hud
     JMP .done
 }
 
@@ -1894,6 +1900,23 @@ magic_pants:
     LDA $7EC196 : STA !ram_magic_pants_4
     LDA $7EC19E : STA !ram_magic_pants_5
 +   LDA #$FFFF : STA $7EC194 : STA $7EC196 : STA $7EC19E : STA !ram_magic_pants_2
+    RTS
+}
+
+infinite_ammo:
+{
+    LDA !ram_infiniteammo_check : BNE + ; 0 if first time it's been run
+    INC : STA !ram_infiniteammo_check
+    ; preserve ammo counts
+    LDA $7E09C6 : STA !ram_ammo_missiles
+    LDA $7E09CA : STA !ram_ammo_supers
+    LDA $7E09CE : STA !ram_ammo_powerbombs
+
+    ; lock ammo to specific values
++   LDA #$01A4 : STA $7E09C6  ; missiles
+    LDA #$0045 : STA $7E09CA  ; supers
+    LDA #$0045 : STA $7E09CE  ; pbs
+    LDA #$0011 : STA $7EC662  ; draw a down arrow between missiles/super
     RTS
 }
 
