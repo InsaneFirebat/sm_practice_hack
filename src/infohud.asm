@@ -1786,14 +1786,24 @@ ih_game_loop_code:
 
     LDA !ram_transition_counter : INC : STA !ram_transition_counter
 
-    LDA !ram_magic_pants_1 : BEQ +
+    LDA !ram_magic_pants_1 : BEQ .infiniteammo
     JSR magic_pants
 
-+   LDA !ram_infinite_ammo : BEQ +
+  .infiniteammo
+    LDA !ram_infinite_ammo : CMP !ram_infiniteammo_check : BMI .reset_ammo_check
+    BEQ .handle_inputs
     JSR infinite_ammo
+    BRA .handle_inputs
+
+  .reset_ammo_check
+    LDA #$0000 : STA !ram_infiniteammo_check
+    LDA !ram_ammo_missiles : STA $7E09C6
+    LDA !ram_ammo_supers : STA $7E09CA
+    LDA !ram_ammo_powerbombs : STA $7E09CE
 
     ; handle inputs
-+   LDA !IH_CONTROLLER_SEC_NEW : BEQ .done
+  .handle_inputs
+    LDA !IH_CONTROLLER_SEC_NEW : BEQ .done
     CMP !IH_PAUSE : BEQ .toggle_pause
     CMP !IH_SLOWDOWN : BEQ .toggle_slowdown
     CMP !IH_SPEEDUP : BEQ .toggle_speedup
@@ -1897,9 +1907,17 @@ magic_pants:
 
 infinite_ammo:
 {
-    LDA #$01A4 : STA $7E09C6 ; missiles
-    LDA #$0045 : STA $7E09CA ; supers
-    LDA #$0045 : STA $7E09CE ; pbs
+    LDA !ram_infiniteammo_check : BNE + ; 0 if first time it's been run
+    INC : STA !ram_infiniteammo_check
+    ; preserve ammo counts
+    LDA $7E09C6 : STA !ram_ammo_missiles
+    LDA $7E09CA : STA !ram_ammo_supers
+    LDA $7E09CE : STA !ram_ammo_powerbombs
+
+    ; lock ammo to specific values
++   LDA #$01A4 : STA $7E09C6  ; missiles
+    LDA #$0045 : STA $7E09CA  ; supers
+    LDA #$0045 : STA $7E09CE  ; pbs
     LDA #$0011 : STA $7EC662  ; draw a down arrow between missiles/super
     RTS
 }

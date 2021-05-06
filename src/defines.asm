@@ -38,6 +38,10 @@
 !ram_display_backup = $7FFBE4
 !ram_ridleygrab = $7FFBE8
 !ram_infinite_ammo = $7FFBEA
+!ram_infiniteammo_check = $7FFBEE
+!ram_ammo_missiles = $05C9 ; debug mode would use these for roughly the same purpose
+!ram_ammo_supers = $05CB
+!ram_ammo_powerbombs = $05CD
 !ram_countdamage = $0B0C ; 4 bytes, direct page address? reset by some ram clearing routines
 !ram_countdamage_hud = $7FFBEC
 
