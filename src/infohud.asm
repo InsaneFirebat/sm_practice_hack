@@ -1918,7 +1918,6 @@ infinite_ammo:
 +   LDA #$01A4 : STA $7E09C6  ; missiles
     LDA #$0045 : STA $7E09CA  ; supers
     LDA #$0045 : STA $7E09CE  ; pbs
-    LDA #$0011 : STA $7EC662  ; draw a down arrow between missiles/super
     RTS
 }
 

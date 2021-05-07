@@ -118,6 +118,7 @@ gamemode_shortcuts:
     LDA $7E09CC : STA $7E09CA ; supers
     LDA $7E09D0 : STA $7E09CE ; pbs
     LDA $7E09D4 : STA $7E09D6 ; reserves
+    STZ $0CD2  ; bomb counter
     CLC : RTS
 
   .reveal_damage

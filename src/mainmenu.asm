@@ -143,9 +143,9 @@ MainMenu:
     dw #mm_goto_gamemenu
     dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
-    dw #mm_goto_about
+    dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("INSANEFIREBAT V2.1.9D")
+    %cm_header("INSANEFIREBAT V2.1.9E")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -177,8 +177,8 @@ mm_goto_rngmenu:
 mm_goto_ctrlsmenu:
     %cm_submenu("Controller Shortcuts", #CtrlMenu)
 
-mm_goto_about:
-    %cm_submenu("InfoHUD Credits", #AboutMenu)
+mm_goto_IFBmenu:
+    %cm_submenu("Firebat Menu", #IFBMenu)
 
 
 ; -------------
@@ -586,6 +586,7 @@ action_select_preset_category:
 {
     TYA : STA !sram_preset_category
     JSR cm_go_back
+    JSR cm_calculate_max
     RTS
 }
 
@@ -1017,6 +1018,7 @@ action_select_infohud_mode:
 {
     TYA : STA !sram_display_mode
     JSR cm_go_back
+    JSR cm_calculate_max
     RTS
 }
 
@@ -1082,6 +1084,7 @@ action_select_room_strat:
 {
     TYA : STA !sram_room_strat
     JSR cm_go_back
+    JSR cm_calculate_max
     RTS
 }
 
@@ -1263,10 +1266,32 @@ action_clear_shortcuts:
 
 
 ; ----------
-; About Menu
+; Firebat Menu
 ; ----------
 
-AboutMenu:
+IFBMenu:
+    dw #ifb_soundtest_numfield
+    dw #ifb_soundtest_playsound
+    dw #ifb_credits
+    dw #$0000
+    %cm_header("INSANEFIREBAT MENU")
+
+ifb_soundtest_numfield:
+    %cm_numfield("Select Sound", !ram_soundtest, 1, 66, 1, #0)
+
+ifb_soundtest_playsound:
+    %cm_jsr("Play Sound", #action_soundtest, #$0000)
+
+action_soundtest:
+{
+    LDA !ram_soundtest : JSL $80903F
+    RTS
+}
+
+ifb_credits:
+    %cm_submenu("InfoHUD Credits", #CreditsMenu)
+
+CreditsMenu:
     dw #ab_text_orig_author
     dw #ab_notext
     dw #ab_text_total
@@ -1328,5 +1353,6 @@ action_text:
 {
     ; do nothing
     JSR cm_go_back
+    JSR cm_calculate_max
     RTS
 }

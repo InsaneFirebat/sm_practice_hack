@@ -44,6 +44,9 @@
 !ram_ammo_powerbombs = $05CD
 !ram_countdamage = $0B0C ; 4 bytes, direct page address? reset by some ram clearing routines
 !ram_countdamage_hud = $7FFBEC
+!ram_soundtest_lib1 = $7FFBF0
+!ram_soundtest_lib2 = $7FFBF2
+!ram_soundtest_lib3 = $7FFBF4
 
 !ram_phantoon_rng_1 = $7FFB82
 !ram_phantoon_rng_2 = $7FFB84
