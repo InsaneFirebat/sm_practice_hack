@@ -1791,7 +1791,7 @@ ih_game_loop_code:
 
   .infiniteammo
     LDA !ram_infinite_ammo : CMP !ram_infiniteammo_check : BMI .reset_ammo_check
-    BEQ .handle_inputs
+    LDA !ram_infinite_ammo : BEQ .handle_inputs
     JSR infinite_ammo
     BRA .handle_inputs
 

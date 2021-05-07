@@ -265,14 +265,19 @@ cm_tilemap_bg:
 
     ; Interior
     {
-        ; check if Ceres
+        ; fill if paused
+        LDA $0998 : CMP #$000C : BMI .check_ceres
+        BEQ .fill_interior : CMP #$0012 : BMI .fill_interior
+        ; fill if Ceres
+      .check_ceres
         LDA $079F : CMP #$0006 : BMI .done
-        ; fill if Ceres, transparent if not
+        ; transparent otherwise ------^
+      .fill_interior
         LDX.w #$0000
         LDY.w #$001B
         LDA.w #$281F
 
-        -
+      .interior_loop
         STA !ram_tilemap_buffer+$004,X
         STA !ram_tilemap_buffer+$084,X
         STA !ram_tilemap_buffer+$0C4,X
@@ -300,7 +305,7 @@ cm_tilemap_bg:
         STA !ram_tilemap_buffer+$644,X
 
         INX #2
-        DEY : BPL -
+        DEY : BPL .interior_loop
 
       .done
         RTS
