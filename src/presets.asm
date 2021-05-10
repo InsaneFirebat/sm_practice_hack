@@ -167,9 +167,6 @@ preset_banks:
 {
   dw preset_kpdr21_crateria_ship>>16
   dw preset_prkd_crateria_ship>>16
-  dw preset_hundo_bombs_ceres_elevator>>16
-  dw preset_100early_crateria_ceres_elevator>>16
-  dw preset_rbo_bombs_ceres_elevator>>16
   dw preset_pkrd_crateria_ship>>16
   dw preset_kpdr25_bombs_ceres_elevator>>16
   dw preset_gtclassic_crateria_ship>>16

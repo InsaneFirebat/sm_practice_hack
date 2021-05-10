@@ -77,6 +77,9 @@ org $A98874         ; update seg timer after MB1 fight
 org $A9BE23         ; update seg timer when baby spawns (off-screen) in MB2 fight
     JSL ih_mb2_segment
 
+org $9AB800         ;graphics for menu cursor and input display
+incbin ../resources/menugfx.bin
+
 org $A6A17C         ;Ridley AI init, reset !ram_countdamage
     STZ !ram_countdamage
 
@@ -94,9 +97,6 @@ org $A0A866         ; hijack damage routine to count total damage dealt
 org $A0F9E0         ; count damage in free space at end of bank
     CLC : LDA !ram_countdamage : ADC $187A : STA !ram_countdamage
     LDA $0F8C,X : SEC : SBC $187A : RTS
-
-org $9AB800         ;graphics for menu cursor and input display
-incbin ../resources/menugfx.bin
 
 ; Main bank stuff
 org $DFE000
@@ -288,6 +288,7 @@ ih_elevator_activation:
 
   .done
     PLA
+    ; Run standard code and return
     STZ $0A56
     SEC
     RTL
@@ -1789,7 +1790,7 @@ ih_game_loop_code:
 
   .infiniteammo
     LDA !ram_infinite_ammo : CMP !ram_infiniteammo_check : BMI .reset_ammo_check
-    BEQ .handle_inputs
+    LDA !ram_infinite_ammo : BEQ .handle_inputs
     JSR infinite_ammo
     BRA .handle_inputs
 
@@ -1916,7 +1917,6 @@ infinite_ammo:
 +   LDA #$01A4 : STA $7E09C6  ; missiles
     LDA #$0045 : STA $7E09CA  ; supers
     LDA #$0045 : STA $7E09CE  ; pbs
-    LDA #$0011 : STA $7EC662  ; draw a down arrow between missiles/super
     RTS
 }
 

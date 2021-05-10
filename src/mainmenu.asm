@@ -53,6 +53,13 @@ macro cm_ctrl_shortcut(title, addr)
     db #$28, "<title>", #$FF
 endmacro
 
+macro cm_jsr_nosound(title, routine, argument)
+    dw !ACTION_JSR_NOSOUND
+    dw <routine>
+    dw <argument>
+    db #$28, "<title>", #$FF
+endmacro
+
 action_submenu:
 {
     ; Increment stack pointer by 2, then store current menu
@@ -60,7 +67,7 @@ action_submenu:
     TYA : STA !ram_cm_menu_stack,X
     LDA #$0000 : STA !ram_cm_cursor_stack,X
 
-    LDA #!SOUND_MENU_MOVE : JSL $80903F
+    LDA #!SOUND_MENU_MOVE : JSL !cm_sfx_lib1
     JSR cm_calculate_max
     JSR cm_draw
 
@@ -78,7 +85,7 @@ action_presets_submenu:
     
     LDA #$0000 : STA !ram_cm_cursor_stack,X
 
-    LDA #!SOUND_MENU_MOVE : JSL $80903F
+    LDA #!SOUND_MENU_MOVE : JSL !cm_sfx_lib1
     JSR cm_calculate_max
     JSR cm_draw
 
@@ -141,6 +148,7 @@ MainMenu:
     dw #mm_goto_gamemenu
     dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
+    dw #mm_goto_IFBmenu
     dw #$0000
     %cm_header("CUSTOM INFOHUD V2.1.10")
 
@@ -173,6 +181,9 @@ mm_goto_rngmenu:
 
 mm_goto_ctrlsmenu:
     %cm_submenu("Controller Shortcuts", #CtrlMenu)
+
+mm_goto_IFBmenu:
+    %cm_submenu("Extras Menu", #IFBMenu)
 
 
 ; -------------
@@ -240,7 +251,8 @@ eq_refill:
     LDA $7E09CC : STA $7E09CA ; supers
     LDA $7E09D0 : STA $7E09CE ; pbs
     LDA $7E09D4 : STA $7E09D6 ; reserves
-    LDA #!SOUND_MENU_JSR : JSL $80903F
+    LDA #$0000 : STA $7E0CD2  ; bomb counter
+    LDA #!SOUND_MENU_REFILL : JSL !cm_sfx_lib2
     RTS
 
 eq_toggle_category:
@@ -378,7 +390,7 @@ action_category:
 
     +
     JSR cm_set_etanks_and_reserve
-    LDA #!SOUND_MENU_JSR : JSL $80903F
+    LDA #!SOUND_MENU_CONFIRM : JSL !cm_sfx_lib2
     RTS
 
   .table
@@ -573,6 +585,7 @@ action_select_preset_category:
 {
     TYA : STA !sram_preset_category
     JSR cm_go_back
+    JSR cm_calculate_max
     RTS
 }
 
@@ -808,7 +821,7 @@ action_reset_events:
     LDA #$0000
     STA $7ED820
     STA $7ED822
-    LDA #!SOUND_MENU_JSR : JSL $80903F
+    LDA #!SOUND_MENU_RESET : JSL !cm_sfx_lib2
     RTS
 }
 
@@ -823,7 +836,7 @@ action_reset_doors:
     CPX #$D0
     BNE -
     PLP
-    LDA #!SOUND_MENU_JSR : JSL $80903F
+    LDA #!SOUND_MENU_RESET : JSL !cm_sfx_lib2
     RTS
 }
 
@@ -838,7 +851,7 @@ action_reset_items:
     CPX #$90
     BNE -
     PLP
-    LDA #!SOUND_MENU_JSR : JSL $80903F
+    LDA #!SOUND_MENU_RESET : JSL !cm_sfx_lib2
     RTS
 }
 
@@ -1004,6 +1017,7 @@ action_select_infohud_mode:
 {
     TYA : STA !sram_display_mode
     JSR cm_go_back
+    JSR cm_calculate_max
     RTS
 }
 
@@ -1069,6 +1083,7 @@ action_select_room_strat:
 {
     TYA : STA !sram_room_strat
     JSR cm_go_back
+    JSR cm_calculate_max
     RTS
 }
 
@@ -1238,7 +1253,350 @@ action_clear_shortcuts:
     STA !sram_ctrl_kill_enemies
     STA !sram_ctrl_reset_segment_timer
     STA !sram_ctrl_reveal_damage
-    ; default for menu, Start + Select
+    ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
+    RTS
+}
+
+
+; ----------
+; Firebat Menu
+; ----------
+
+IFBMenu:
+    dw #ifb_soundtest
+    dw #ifb_credits
+    dw #$0000
+    %cm_header("EXTRAS MENU")
+
+ifb_soundtest:
+    %cm_submenu("Sound Test", #SoundTestMenu)
+
+ifb_credits:
+    %cm_submenu("InfoHUD Credits", #CreditsMenu)
+
+
+; ----------
+; Sound Test
+; ----------
+
+SoundTestMenu:
+    dw #ifb_soundtest_lib1_sound
+    dw #ifb_soundtest_lib1_playsound
+    dw #ifb_soundtest_lib2_sound
+    dw #ifb_soundtest_lib2_playsound
+    dw #ifb_soundtest_lib3_sound
+    dw #ifb_soundtest_lib3_playsound
+    dw #ifb_soundtest_silence
+    dw #ifb_soundtest_goto_music
+    dw #misc_music_toggle
+    dw #$0000
+    %cm_header("AUDIO TEST MENU")
+
+ifb_soundtest_lib1_sound:
+    %cm_numfield("Library One Sound", !ram_soundtest_lib1, 1, 66, 1, #0)
+
+ifb_soundtest_lib1_playsound:
+    %cm_jsr_nosound("   Play Lib1", #action_soundtest_lib1_play, #$0000)
+
+action_soundtest_lib1_play:
+{
+    LDA !ram_soundtest_lib1 : JSL !cm_sfx_lib1
+    RTS
+}
+
+ifb_soundtest_lib2_sound:
+    %cm_numfield("Library Two Sound", !ram_soundtest_lib2, 1, 127, 1, #0)
+
+ifb_soundtest_lib2_playsound:
+    %cm_jsr_nosound("   Play Lib2", #action_soundtest_lib2_play, #$0000)
+
+action_soundtest_lib2_play:
+{
+    LDA !ram_soundtest_lib2 : JSL !cm_sfx_lib2
+    RTS
+}
+
+ifb_soundtest_lib3_sound:
+    %cm_numfield("Library Three Sound", !ram_soundtest_lib3, 1, 47, 1, #0)
+
+ifb_soundtest_lib3_playsound:
+    %cm_jsr_nosound("   Play Lib3", #action_soundtest_lib3_play, #$0000)
+
+action_soundtest_lib3_play:
+{
+    LDA !ram_soundtest_lib3 : JSL !cm_sfx_lib3
+    RTS
+}
+
+ifb_soundtest_silence:
+    %cm_jsr("Silence Sound FX", #action_soundtest_silence, #$0002)
+    
+action_soundtest_silence:
+{
+    ; silence all 3 libs at once
+    TXA : JSL !cm_sfx_lib1
+    LDA #$0071 : JSL !cm_sfx_lib2
+    LDA #$0001 : JSL !cm_sfx_lib3
+    RTS
+}
+
+ifb_soundtest_goto_music:
+    %cm_submenu("Music Selection", #MusicSelectMenu1)
+
+MusicSelectMenu1:
+    dw #ifb_soundtest_music_title1
+    dw #ifb_soundtest_music_title2
+    dw #ifb_soundtest_music_intro
+    dw #ifb_soundtest_music_ceres
+    dw #ifb_soundtest_music_escape
+    dw #ifb_soundtest_music_rainstorm
+    dw #ifb_soundtest_music_spacepirate
+    dw #ifb_soundtest_music_samustheme
+    dw #ifb_soundtest_music_greenbrinstar
+    dw #ifb_soundtest_music_redbrinstar
+    dw #ifb_soundtest_music_uppernorfair
+    dw #ifb_soundtest_music_lowernorfair
+    dw #ifb_soundtest_music_easternmaridia
+    dw #ifb_soundtest_music_westernmaridia
+    dw #ifb_soundtest_music_wreckedshipoff
+    dw #ifb_soundtest_music_wreckedshipon
+    dw #ifb_soundtest_music_hallway
+    dw #ifb_soundtest_music_goldenstatue
+    dw #ifb_soundtest_music_tourian
+    dw #ifb_soundtest_music_goto_2
+    dw #$0000
+    %cm_header("PLAY MUSIC - PAGE ONE")
+
+ifb_soundtest_music_title1:
+    %cm_jsr_nosound("Title Theme Part 1", #action_soundtest_playmusic, #$0305)
+
+ifb_soundtest_music_title2:
+    %cm_jsr_nosound("Title Theme Part 2", #action_soundtest_playmusic, #$0306)
+
+ifb_soundtest_music_intro:
+    %cm_jsr_nosound("Intro", #action_soundtest_playmusic, #$3605)
+
+ifb_soundtest_music_ceres:
+    %cm_jsr_nosound("Ceres Station", #action_soundtest_playmusic, #$2D06)
+
+ifb_soundtest_music_escape:
+    %cm_jsr_nosound("Escape Sequence", #action_soundtest_playmusic, #$2407)
+
+ifb_soundtest_music_rainstorm:
+    %cm_jsr_nosound("Zebes Rainstorm", #action_soundtest_playmusic, #$0605)
+
+ifb_soundtest_music_spacepirate:
+    %cm_jsr_nosound("Space Pirate Theme", #action_soundtest_playmusic, #$0905)
+
+ifb_soundtest_music_samustheme:
+    %cm_jsr_nosound("Samus Theme", #action_soundtest_playmusic, #$0C05)
+
+ifb_soundtest_music_greenbrinstar:
+    %cm_jsr_nosound("Green Brinstar", #action_soundtest_playmusic, #$0F05)
+
+ifb_soundtest_music_redbrinstar:
+    %cm_jsr_nosound("Red Brinstar", #action_soundtest_playmusic, #$1205)
+
+ifb_soundtest_music_uppernorfair:
+    %cm_jsr_nosound("Upper Norfair", #action_soundtest_playmusic, #$1505)
+
+ifb_soundtest_music_lowernorfair:
+    %cm_jsr_nosound("Lower Norfair", #action_soundtest_playmusic, #$1805)
+
+ifb_soundtest_music_easternmaridia:
+    %cm_jsr_nosound("Eastern Maridia", #action_soundtest_playmusic, #$1B05)
+
+ifb_soundtest_music_westernmaridia:
+    %cm_jsr_nosound("Western Maridia", #action_soundtest_playmusic, #$1B06)
+
+ifb_soundtest_music_wreckedshipoff:
+    %cm_jsr_nosound("Wrecked Ship Unpowered", #action_soundtest_playmusic, #$3005)
+
+ifb_soundtest_music_wreckedshipon:
+    %cm_jsr_nosound("Wrecked Ship", #action_soundtest_playmusic, #$3006)
+
+ifb_soundtest_music_hallway:
+    %cm_jsr_nosound("Hallway to Statue", #action_soundtest_playmusic, #$0004)
+
+ifb_soundtest_music_goldenstatue:
+    %cm_jsr_nosound("Golden Statue", #action_soundtest_playmusic, #$0906)
+
+ifb_soundtest_music_tourian:
+    %cm_jsr_nosound("Tourian", #action_soundtest_playmusic, #$1E05)
+
+ifb_soundtest_music_goto_2:
+    %cm_submenu("GOTO PAGE TWO", #MusicSelectMenu2)
+
+MusicSelectMenu2:
+    dw #ifb_soundtest_music_preboss1
+    dw #ifb_soundtest_music_preboss2
+    dw #ifb_soundtest_music_miniboss
+    dw #ifb_soundtest_music_smallboss
+    dw #ifb_soundtest_music_bigboss
+    dw #ifb_soundtest_music_motherbrain
+    dw #ifb_soundtest_music_credits
+    dw #ifb_soundtest_music_itemroom
+    dw #ifb_soundtest_music_itemfanfare
+    dw #ifb_soundtest_music_spacecolony
+    dw #ifb_soundtest_music_zebesexplodes
+    dw #ifb_soundtest_music_loadsave
+    dw #ifb_soundtest_music_death
+    dw #ifb_soundtest_music_lastmetroid
+    dw #ifb_soundtest_music_galaxypeace
+    dw #ifb_soundtest_music_goto_1
+    dw #$0000
+    %cm_header("PLAY MUSIC - PAGE TWO")
+
+ifb_soundtest_music_preboss1:
+    %cm_jsr_nosound("Chozo Statue Awakens", #action_soundtest_playmusic, #$2406)
+
+ifb_soundtest_music_preboss2:
+    %cm_jsr_nosound("Approaching Confrontation", #action_soundtest_playmusic, #$2706)
+
+ifb_soundtest_music_miniboss:
+    %cm_jsr_nosound("Miniboss Fight", #action_soundtest_playmusic, #$2A05)
+
+ifb_soundtest_music_smallboss:
+    %cm_jsr_nosound("Small Boss Confrontation", #action_soundtest_playmusic, #$2705)
+
+ifb_soundtest_music_bigboss:
+    %cm_jsr_nosound("Big Boss Confrontation", #action_soundtest_playmusic, #$2405)
+
+ifb_soundtest_music_motherbrain:
+    %cm_jsr_nosound("Mother Brain Fight", #action_soundtest_playmusic, #$2105)
+
+ifb_soundtest_music_credits:
+    %cm_jsr_nosound("Credits", #action_soundtest_playmusic, #$3C05)
+
+ifb_soundtest_music_itemroom:
+    %cm_jsr_nosound("Item - Elevator Room", #action_soundtest_playmusic, #$0003)
+
+ifb_soundtest_music_itemfanfare:
+    %cm_jsr_nosound("Item Fanfare", #action_soundtest_playmusic, #$0002)
+
+ifb_soundtest_music_spacecolony:
+    %cm_jsr_nosound("Arrival at Space Colony", #action_soundtest_playmusic, #$2D05)
+
+ifb_soundtest_music_zebesexplodes:
+    %cm_jsr_nosound("Zebes Explodes", #action_soundtest_playmusic, #$3305)
+
+ifb_soundtest_music_loadsave:
+    %cm_jsr_nosound("Samus Appears", #action_soundtest_playmusic, #$0001)
+
+ifb_soundtest_music_death:
+    %cm_jsr_nosound("Death", #action_soundtest_playmusic, #$3905)
+
+ifb_soundtest_music_lastmetroid:
+    %cm_jsr_nosound("Last Metroid in Captivity", #action_soundtest_playmusic, #$3F05)
+
+ifb_soundtest_music_galaxypeace:
+    %cm_jsr_nosound("The Galaxy is at Peace", #action_soundtest_playmusic, #$4205)
+
+ifb_soundtest_music_goto_1:
+    %cm_submenu("GOTO PAGE ONE", #MusicSelectMenu1)
+
+action_soundtest_playmusic:
+{
+    PHY
+    LDA #$0000 : JSL !cm_sfx_music                  ; always load silence first
+    PLY : TYA
+    %a8() : STA !ram_soundtest_music
+    XBA : %a16()
+    STA $07CB                                       ; store data index to the room
+    ORA #$FF00 : JSL !cm_sfx_music                  ; play from negative data index
+    LDA !ram_soundtest_music : JSL !cm_sfx_music    ; play from track index
+    RTS
+}
+
+ifb_soundtest_music_toggle:
+    %cm_toggle("Music", !sram_music_toggle, #$0001, MusicToggle)
+
+    MusicToggle:
+    {
+        BIT #$0001 : BEQ .noMusic
+
+        LDA $07F5 : STA $2140
+
+        RTS
+
+  .noMusic
+        LDA #$0000 
+        STA $0629
+        STA $062B
+        STA $062D
+        STA $062F
+        STA $0631
+        STA $0633
+        STA $0635
+        STA $0637
+        STA $063F
+        STA $2140
+        RTS
+}
+
+CreditsMenu:
+    dw #ab_text_orig_author
+    dw #ab_notext
+    dw #ab_text_total
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_text_v2_author
+    dw #ab_notext
+    dw #ab_text_pinkus
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_text_contributors
+    dw #ab_notext
+    dw #ab_text_unhchabo
+    dw #ab_text_idlechild
+    dw #ab_text_insanefirebat
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_text_website_header
+    dw #ab_notext
+    dw #ab_text_website
+    dw #$0000
+    %cm_header("     INFOHUD CREDITS")
+
+
+ab_text_orig_author:
+    %cm_jsr("     ORIGINAL AUTHOR      ", #action_text, #$0000)
+
+ab_text_total:
+    %cm_jsr("          Total           ", #action_text, #$0000)
+
+ab_text_v2_author:
+    %cm_jsr("    V2 REWRITE AUTHOR     ", #action_text, #$0000)
+
+ab_text_pinkus:
+    %cm_jsr("          Pinkus          ", #action_text, #$0000)
+
+ab_text_contributors:
+    %cm_jsr("       CONTRIBUTORS       ", #action_text, #$0000)
+
+ab_text_unhchabo:
+    %cm_jsr("         UNHchabo         ", #action_text, #$0000)
+
+ab_text_idlechild:
+    %cm_jsr("         idlechild        ", #action_text, #$0000)
+
+ab_text_insanefirebat:
+    %cm_jsr("       InsaneFirebat      ", #action_text, #$0000)
+
+ab_text_website_header:
+    %cm_jsr("         WEBSITE          ", #action_text, #$0000)
+
+ab_text_website:
+    %cm_jsr("  smpractice.speedga.me   ", #action_text, #$0000)
+
+ab_notext:
+    %cm_jsr("                          ", #action_text, #$0000)
+
+action_text:
+{
+    ; do nothing
+    JSR cm_go_back
+    JSR cm_calculate_max
     RTS
 }

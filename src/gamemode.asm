@@ -114,14 +114,18 @@ gamemode_shortcuts:
     LDA $7E09CC : STA $7E09CA ; supers
     LDA $7E09D0 : STA $7E09CE ; pbs
     LDA $7E09D4 : STA $7E09D6 ; reserves
+    STZ $0CD2  ; reset bomb counter
+    LDA #!SOUND_MENU_REFILL : JSL !cm_sfx_lib2
     CLC : RTS
 
   .reveal_damage
     LDA !sram_display_mode : CMP #$0012 : BEQ + : STA !ram_display_backup
     LDA #$0012 : STA !sram_display_mode
+    LDA #!SOUND_MENU_CONFIRM : JSL !cm_sfx_lib1
     CLC : RTS
 
   + LDA !ram_display_backup : STA !sram_display_mode
+    LDA #!SOUND_MENU_BACK : JSL !cm_sfx_lib2
     CLC : RTS
 
   .menu

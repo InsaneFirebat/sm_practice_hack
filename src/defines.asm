@@ -44,6 +44,10 @@
 !ram_ammo_powerbombs = $05CD
 !ram_countdamage = $0B0C ; 4 bytes, direct page address? reset by some ram clearing routines
 !ram_countdamage_hud = $7FFBEC
+!ram_soundtest_lib1 = $7FFBF0
+!ram_soundtest_lib2 = $7FFBF2
+!ram_soundtest_lib3 = $7FFBF4
+!ram_soundtest_music = $7FFBF6
 
 !ram_phantoon_rng_1 = $7FFB82
 !ram_phantoon_rng_2 = $7FFB84
@@ -143,9 +147,24 @@
 !ACTION_NUMFIELD        = #$0006
 !ACTION_CHOICE          = #$0008
 !ACTION_CTRL_SHORTCUT   = #$000A
+!ACTION_JSR_NOSOUND     = #$0004
 
-!SOUND_MENU_MOVE = $0039
-!SOUND_MENU_JSR = $0039
+; library may need to be changed (menu/mainmenu/gamemode) when updating sounds
+!SOUND_MENU_CONFIRM     = $0002   ; lib 1 - silence
+!SOUND_MENU_BACK        = $0045   ; lib 2 - ceres text
+!SOUND_MENU_MOVE        = $0037   ; lib 1 - click
+!SOUND_MENU_NUMFIELD    = $0002   ; lib 1 - silence
+!SOUND_MENU_TOGGLE      = $0038   ; lib 1 - equipment toggle
+!SOUND_MENU_CTRL        = $0019   ; lib 2 - statue eye break
+!SOUND_MENU_CHOICE      = $0011   ; lib 2 - bubble
+!SOUND_MENU_RESET       = $001B   ; lib 2 - quake
+!SOUND_MENU_REFILL      = $0002   ; lib 2 - energy drop
+
+; Pointers to single queue soundfx/music
+!cm_sfx_lib1 = $80903F
+!cm_sfx_lib2 = $8090C1
+!cm_sfx_lib3 = $809143
+!cm_sfx_music = $808FC1
 
 ; --------
 ; Infohud
