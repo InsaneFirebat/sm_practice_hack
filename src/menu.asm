@@ -731,13 +731,13 @@ cm_loop:
   .pressedL
     LDX !ram_cm_stack_index
     LDA #$0000 : STA !ram_cm_cursor_stack,X
-    LDA #!SOUND_MENU_MOVE : JSL $80903F
+    LDA #!SOUND_MENU_MOVE : JSL !cm_sfx_lib1
     BRA .redraw
 
   .pressedR
     LDX !ram_cm_stack_index
     LDA !ram_cm_cursor_max : DEC #2 : STA !ram_cm_cursor_stack,X
-    LDA #!SOUND_MENU_MOVE : JSL $80903F
+    LDA #!SOUND_MENU_MOVE : JSL !cm_sfx_lib1
     BRA .redraw
 
   .pressedA
@@ -773,7 +773,7 @@ cm_ctrl_mode:
     LDA !ram_cm_ctrl_timer : INC : STA !ram_cm_ctrl_timer : CMP.w #0060 : BNE .next_frame
 
     LDA $8B : STA [$C5]
-    LDA #!SOUND_MENU_MOVE : JSL $80903F
+    LDA #!SOUND_MENU_CTRL : JSL !cm_sfx_lib2
     BRA .exit
 
   .clear_and_draw
@@ -822,7 +822,7 @@ cm_go_back:
     STA.l !ram_cm_menu_bank
   +
   .end
-    LDA #!SOUND_MENU_MOVE : JSL $80903F
+    LDA #!SOUND_MENU_BACK : JSL !cm_sfx_lib2
     RTS
 }
 
@@ -891,7 +891,7 @@ cm_move:
   .inBounds
     STA !ram_cm_cursor_stack,X
 
-    LDA #!SOUND_MENU_MOVE : JSL $80903F
+    LDA #!SOUND_MENU_MOVE : JSL !cm_sfx_lib1
 
     RTS
 }
@@ -925,6 +925,7 @@ cm_execute_action_table:
     dw execute_numfield
     dw execute_choice
     dw execute_ctrl_shortcut
+    dw execute_jsr_nosound
 
     execute_toggle:
     {
@@ -955,7 +956,7 @@ cm_execute_action_table:
         JSR ($000A,X)
 
       .end
-        LDA #!SOUND_MENU_MOVE : JSL $80903F
+        LDA #!SOUND_MENU_TOGGLE : JSL !cm_sfx_lib1
         RTS
     }
 
@@ -981,7 +982,7 @@ cm_execute_action_table:
         JSR ($000A,X)
 
       .end
-        LDA #!SOUND_MENU_MOVE : JSL $80903F
+        LDA #!SOUND_MENU_TOGGLE : JSL !cm_sfx_lib1
         RTS
     }
 
@@ -1000,6 +1001,26 @@ cm_execute_action_table:
         JSR ($0004,X)
 
       .end
+        LDA #!SOUND_MENU_CONFIRM : JSL !cm_sfx_lib1
+        RTS
+    }
+
+    execute_jsr_nosound:
+    {
+        ; <, > and X should do nothing here
+        LDA !ram_cm_controller : BIT #$0340 : BNE .end
+
+        ; $02 = JSR target
+        LDA [$00] : INC $00 : INC $00 : STA $04
+
+        ; Y = Argument
+        LDA [$00] : TAY
+
+        LDX #$0000
+        JSR ($0004,X)
+
+      .end
+        ;LDA #!SOUND_MENU_CONFIRM : JSL !cm_sfx_lib1
         RTS
     }
 
@@ -1048,7 +1069,7 @@ cm_execute_action_table:
         JSR ($0020,X)
 
       .end
-        LDA #!SOUND_MENU_MOVE : JSL $80903F
+        LDA #!SOUND_MENU_NUMFIELD : JSL !cm_sfx_lib1
         RTS
     }
 
@@ -1114,7 +1135,7 @@ cm_execute_action_table:
         JSR ($0008,X)
 
       .end
-        LDA #!SOUND_MENU_MOVE : JSL $80903F
+        LDA #!SOUND_MENU_CHOICE : JSL !cm_sfx_lib2
         RTS
     }
 
@@ -1134,7 +1155,7 @@ cm_execute_action_table:
 
         .reset_shortcut
         LDA.w #!sram_ctrl_menu : CMP $C5 : BEQ .end
-        LDA #!SOUND_MENU_MOVE : JSL $80903F
+        LDA #!SOUND_MENU_CTRL : JSL !cm_sfx_lib2
 
         LDA #$0000 : STA [$C5]
 
@@ -1176,12 +1197,15 @@ cm_hex2dec:
 }
 
 cm_divide_100:
+{
     STA $4204 : SEP #$20
     LDA #$64 : STA $4206
     PHA : PLA : PHA : PLA : REP #$20
     LDA $4214 : ADC !ram_tmp_1 : STA !ram_tmp_1
     LDA $4214
     RTS
+}
+
 
 ; -----------
 ; Main menu
