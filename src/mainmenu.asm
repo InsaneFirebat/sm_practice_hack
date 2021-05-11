@@ -1277,16 +1277,225 @@ action_clear_shortcuts:
 ; ----------
 
 IFBMenu:
+    dw #ifb_debugteleport
     dw #ifb_soundtest
     dw #ifb_credits
     dw #$0000
     %cm_header("INSANEFIREBAT MENU")
+
+ifb_debugteleport:
+    %cm_submenu("Hidden Dev Load Stations", #DebugTeleportMenu)
 
 ifb_soundtest:
     %cm_submenu("Sound Test", #SoundTestMenu)
 
 ifb_credits:
     %cm_submenu("InfoHUD Credits", #CreditsMenu)
+
+
+
+
+; ----------
+; Debug Teleport Menu
+; ----------
+
+DebugTeleportMenu:
+    dw #mm_goto_debugteleport_goto_crateria
+    dw #mm_goto_debugteleport_goto_brinstar
+    dw #mm_goto_debugteleport_goto_norfair
+    dw #mm_goto_debugteleport_goto_wreckedship
+    dw #mm_goto_debugteleport_goto_maridia
+    dw #mm_goto_debugteleport_goto_tourian
+    dw #mm_goto_debugteleport_goto_extra
+    dw #$0000
+    %cm_header("DEBUG LOAD POINTS")
+
+mm_goto_debugteleport_goto_crateria:
+    %cm_submenu("Crateria", #DebugTeleportCrateriaMenu)
+
+mm_goto_debugteleport_goto_brinstar:
+    %cm_submenu("Brinstar", #DebugTeleportBrinstarMenu)
+
+mm_goto_debugteleport_goto_norfair:
+    %cm_submenu("Norfair", #DebugTeleportNorfairMenu)
+
+mm_goto_debugteleport_goto_wreckedship:
+    %cm_submenu("Wrecked Ship", #DebugTeleportWreckedShipMenu)
+
+mm_goto_debugteleport_goto_maridia:
+    %cm_submenu("Maridia", #DebugTeleportMaridiaMenu)
+
+mm_goto_debugteleport_goto_tourian:
+    %cm_submenu("Tourian", #DebugTeleportTourianMenu)
+
+mm_goto_debugteleport_goto_extra:
+    %cm_submenu("Extras", #DebugTeleportExtraMenu)
+
+DebugTeleportCrateriaMenu:
+    dw #tel_crat_08
+    dw #tel_crat_09
+    dw #tel_crat_0A
+    dw #tel_crat_0B
+    dw #tel_crat_0C
+    dw #tel_crat_10
+    dw #tel_crat_11
+    dw #tel_crat_12
+    dw #$0000
+    %cm_header("CRATERIA DEBUG LOAD")
+
+tel_crat_08:
+    %cm_jsr("Crateria 08", #action_teleport, #$0008)
+
+tel_crat_09:
+    %cm_jsr("Crateria 09", #action_teleport, #$0009)
+
+tel_crat_0A:
+    %cm_jsr("Crateria 0A", #action_teleport, #$000A)
+
+tel_crat_0B:
+    %cm_jsr("Crateria 0B", #action_teleport, #$000B)
+
+tel_crat_0C:
+    %cm_jsr("Crateria 0C", #action_teleport, #$000C)
+
+tel_crat_10:
+    %cm_jsr("Crateria 10", #action_teleport, #$0010)
+
+tel_crat_11:
+    %cm_jsr("Crateria 11", #action_teleport, #$0011)
+
+tel_crat_12:
+    %cm_jsr("Crateria 12", #action_teleport, #$0012)
+
+DebugTeleportBrinstarMenu:
+    dw #tel_brin_08
+    dw #tel_brin_09
+    dw #tel_brin_0A
+    dw #tel_brin_0B
+    dw #tel_brin_11
+    dw #tel_brin_12
+    dw #$0000
+    %cm_header("BRINSTAR DEBUG LOAD")
+
+tel_brin_08:
+    %cm_jsr("Brinstar 08", #action_teleport, #$0108)
+
+tel_brin_09:
+    %cm_jsr("Brinstar 09", #action_teleport, #$0109)
+
+tel_brin_0A:
+    %cm_jsr("Brinstar 0A", #action_teleport, #$010A)
+
+tel_brin_0B:
+    %cm_jsr("Brinstar 0B", #action_teleport, #$010B)
+
+tel_brin_11:
+    %cm_jsr("Brinstar 11", #action_teleport, #$0111)
+
+tel_brin_12:
+    %cm_jsr("Brinstar 12", #action_teleport, #$0112)
+
+DebugTeleportNorfairMenu:
+    dw #tel_norf_08
+    dw #tel_norf_09
+    dw #tel_norf_0A
+    dw #tel_norf_11
+    dw #tel_norf_12
+    dw #tel_norf_13
+    dw #tel_norf_14
+    dw #tel_norf_15
+    dw #tel_norf_16
+    dw #$0000
+    %cm_header("NORFAIR DEBUG LOAD")
+
+tel_norf_08:
+    %cm_jsr("Norfair 08", #action_teleport, #$0208)
+
+tel_norf_09:
+    %cm_jsr("Norfair 09", #action_teleport, #$0209)
+
+tel_norf_0A:
+    %cm_jsr("Norfair 0A", #action_teleport, #$020A)
+
+tel_norf_11:
+    %cm_jsr("Norfair 11", #action_teleport, #$0211)
+
+tel_norf_12:
+    %cm_jsr("Norfair 12", #action_teleport, #$0212)
+
+tel_norf_13:
+    %cm_jsr("Norfair 13", #action_teleport, #$0213)
+
+tel_norf_14:
+    %cm_jsr("Norfair 14", #action_teleport, #$0214)
+
+tel_norf_15:
+    %cm_jsr("Norfair 15", #action_teleport, #$0215)
+
+tel_norf_16:
+    %cm_jsr("Norfair 16", #action_teleport, #$0216)
+
+DebugTeleportWreckedShipMenu:
+    dw #tel_ship_10
+    dw #tel_ship_11
+    dw #$0000
+    %cm_header("WRECKED SHIP DEBUG LOAD")
+
+tel_ship_10:
+    %cm_jsr("Wrecked Ship 10", #action_teleport, #$0310)
+
+tel_ship_11:
+    %cm_jsr("Wrecked Ship 11", #action_teleport, #$0311)
+
+DebugTeleportMaridiaMenu:
+    dw #tel_mari_08
+    dw #tel_mari_10
+    dw #tel_mari_11
+    dw #tel_mari_12
+    dw #tel_mari_13
+    dw #$0000
+    %cm_header("MARIDIA DEBUG LOAD")
+
+tel_mari_08:
+    %cm_jsr("Maridia 08", #action_teleport, #$0408)
+
+tel_mari_10:
+    %cm_jsr("Maridia 10", #action_teleport, #$0410)
+
+tel_mari_11:
+    %cm_jsr("Maridia 11", #action_teleport, #$0411)
+
+tel_mari_12:
+    %cm_jsr("Maridia 12", #action_teleport, #$0412)
+
+tel_mari_13:
+    %cm_jsr("Maridia 13", #action_teleport, #$0413)
+
+
+DebugTeleportTourianMenu:
+    dw #tel_tour_08
+    dw #tel_tour_10
+    dw #tel_tourianbbyskip
+    dw #$0000
+    %cm_header("TOURIAN DEBUG LOAD")
+
+tel_tour_08:
+    %cm_jsr("Tourian 08", #action_teleport, #$0508)
+
+tel_tour_10:
+    %cm_jsr("Tourian 10", #action_teleport, #$0510)
+
+DebugTeleportExtraMenu:
+    dw #tel_ceres
+    dw #tel_debug
+    dw #$0000
+    %cm_header("EXTRA DEBUG LOAD")
+
+tel_ceres:
+    %cm_jsr("Ceres Station", #action_teleport, #$0600)
+
+tel_debug:
+    %cm_jsr("Debug Room CRASH", #action_teleport, #$0700)
 
 
 ; ----------
