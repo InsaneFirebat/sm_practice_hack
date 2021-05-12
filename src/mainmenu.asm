@@ -67,7 +67,7 @@ action_submenu:
     TYA : STA !ram_cm_menu_stack,X
     LDA #$0000 : STA !ram_cm_cursor_stack,X
 
-    LDA #!SOUND_MENU_MOVE : JSL !cm_sfx_lib1
+    %sfxclick()
     JSR cm_calculate_max
     JSR cm_draw
 
@@ -85,7 +85,7 @@ action_presets_submenu:
     
     LDA #$0000 : STA !ram_cm_cursor_stack,X
 
-    LDA #!SOUND_MENU_MOVE : JSL !cm_sfx_lib1
+    %sfxclick()
     JSR cm_calculate_max
     JSR cm_draw
 
@@ -252,7 +252,7 @@ eq_refill:
     LDA $7E09D0 : STA $7E09CE ; pbs
     LDA $7E09D4 : STA $7E09D6 ; reserves
     LDA #$0000 : STA $7E0CD2  ; bomb counter
-    LDA #!SOUND_MENU_REFILL : JSL !cm_sfx_lib2
+    %sfxenergy()
     RTS
 
 eq_toggle_category:
@@ -390,7 +390,7 @@ action_category:
 
     +
     JSR cm_set_etanks_and_reserve
-    LDA #!SOUND_MENU_CONFIRM : JSL !cm_sfx_lib2
+    %sfxmissile()
     RTS
 
   .table
@@ -821,7 +821,7 @@ action_reset_events:
     LDA #$0000
     STA $7ED820
     STA $7ED822
-    LDA #!SOUND_MENU_RESET : JSL !cm_sfx_lib2
+    %sfxquake()
     RTS
 }
 
@@ -836,7 +836,7 @@ action_reset_doors:
     CPX #$D0
     BNE -
     PLP
-    LDA #!SOUND_MENU_RESET : JSL !cm_sfx_lib2
+    %sfxquake()
     RTS
 }
 
@@ -851,7 +851,7 @@ action_reset_items:
     CPX #$90
     BNE -
     PLP
-    LDA #!SOUND_MENU_RESET : JSL !cm_sfx_lib2
+    %sfxquake()
     RTS
 }
 
@@ -1241,7 +1241,7 @@ ctrl_reveal_damage:
     %cm_ctrl_shortcut("Toggle Boss Dmg", !sram_ctrl_reveal_damage)
 
 ctrl_clear_shortcuts:
-    %cm_jsr("Clear Shortcuts", action_clear_shortcuts, #$0000)
+    %cm_jsr_nosound("Clear Shortcuts", action_clear_shortcuts, #$0000)
 
 action_clear_shortcuts:
 {
@@ -1255,6 +1255,7 @@ action_clear_shortcuts:
     STA !sram_ctrl_reveal_damage
     ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
+    %sfxquake()
     RTS
 }
 
@@ -1287,35 +1288,35 @@ ifb_credits:
 ; ----------
 
 DebugTeleportMenu:
-    dw #mm_goto_debugteleport_goto_crateria
-    dw #mm_goto_debugteleport_goto_brinstar
-    dw #mm_goto_debugteleport_goto_norfair
-    dw #mm_goto_debugteleport_goto_wreckedship
-    dw #mm_goto_debugteleport_goto_maridia
-    dw #mm_goto_debugteleport_goto_tourian
-    dw #mm_goto_debugteleport_goto_extra
+    dw #ifb_debugteleport_crateria
+    dw #ifb_debugteleport_brinstar
+    dw #ifb_debugteleport_norfair
+    dw #ifb_debugteleport_wreckedship
+    dw #ifb_debugteleport_maridia
+    dw #ifb_debugteleport_tourian
+    dw #ifb_debugteleport_extra
     dw #$0000
     %cm_header("DEBUG LOAD POINTS")
 
-mm_goto_debugteleport_goto_crateria:
+ifb_debugteleport_crateria:
     %cm_submenu("Crateria", #DebugTeleportCrateriaMenu)
 
-mm_goto_debugteleport_goto_brinstar:
+ifb_debugteleport_brinstar:
     %cm_submenu("Brinstar", #DebugTeleportBrinstarMenu)
 
-mm_goto_debugteleport_goto_norfair:
+ifb_debugteleport_norfair:
     %cm_submenu("Norfair", #DebugTeleportNorfairMenu)
 
-mm_goto_debugteleport_goto_wreckedship:
+ifb_debugteleport_wreckedship:
     %cm_submenu("Wrecked Ship", #DebugTeleportWreckedShipMenu)
 
-mm_goto_debugteleport_goto_maridia:
+ifb_debugteleport_maridia:
     %cm_submenu("Maridia", #DebugTeleportMaridiaMenu)
 
-mm_goto_debugteleport_goto_tourian:
+ifb_debugteleport_tourian:
     %cm_submenu("Tourian", #DebugTeleportTourianMenu)
 
-mm_goto_debugteleport_goto_extra:
+ifb_debugteleport_extra:
     %cm_submenu("Extras", #DebugTeleportExtraMenu)
 
 DebugTeleportCrateriaMenu:
@@ -1510,7 +1511,7 @@ ifb_soundtest_lib1_playsound:
 
 action_soundtest_lib1_play:
 {
-    LDA !ram_soundtest_lib1 : JSL !cm_sfx_lib1
+    LDA !ram_soundtest_lib1 : JSL !SFX_LIB1
     RTS
 }
 
@@ -1522,7 +1523,7 @@ ifb_soundtest_lib2_playsound:
 
 action_soundtest_lib2_play:
 {
-    LDA !ram_soundtest_lib2 : JSL !cm_sfx_lib2
+    LDA !ram_soundtest_lib2 : JSL !SFX_LIB2
     RTS
 }
 
@@ -1534,7 +1535,7 @@ ifb_soundtest_lib3_playsound:
 
 action_soundtest_lib3_play:
 {
-    LDA !ram_soundtest_lib3 : JSL !cm_sfx_lib3
+    LDA !ram_soundtest_lib3 : JSL !SFX_LIB3
     RTS
 }
 
@@ -1544,9 +1545,9 @@ ifb_soundtest_silence:
 action_soundtest_silence:
 {
     ; silence all 3 libs at once
-    TXA : JSL !cm_sfx_lib1
-    LDA #$0071 : JSL !cm_sfx_lib2
-    LDA #$0001 : JSL !cm_sfx_lib3
+    TXA : JSL !SFX_LIB1
+    LDA #$0071 : JSL !SFX_LIB2
+    LDA #$0001 : JSL !SFX_LIB3
     RTS
 }
 
@@ -1708,13 +1709,13 @@ ifb_soundtest_music_goto_1:
 action_soundtest_playmusic:
 {
     PHY
-    LDA #$0000 : JSL !cm_sfx_music                  ; always load silence first
+    LDA #$0000 : JSL !MUSIC_ROUTINE                  ; always load silence first
     PLY : TYA
     %a8() : STA !ram_soundtest_music
     XBA : %a16()
     STA $07CB                                       ; store data index to the room
-    ORA #$FF00 : JSL !cm_sfx_music                  ; play from negative data index
-    LDA !ram_soundtest_music : JSL !cm_sfx_music    ; play from track index
+    ORA #$FF00 : JSL !MUSIC_ROUTINE                  ; play from negative data index
+    LDA !ram_soundtest_music : JSL !MUSIC_ROUTINE    ; play from track index
     RTS
 }
 

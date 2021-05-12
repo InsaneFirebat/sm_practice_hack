@@ -731,13 +731,13 @@ cm_loop:
   .pressedL
     LDX !ram_cm_stack_index
     LDA #$0000 : STA !ram_cm_cursor_stack,X
-    LDA #!SOUND_MENU_MOVE : JSL !cm_sfx_lib1
+    %sfxclick()
     BRA .redraw
 
   .pressedR
     LDX !ram_cm_stack_index
     LDA !ram_cm_cursor_max : DEC #2 : STA !ram_cm_cursor_stack,X
-    LDA #!SOUND_MENU_MOVE : JSL !cm_sfx_lib1
+    %sfxclick()
     BRA .redraw
 
   .pressedA
@@ -773,7 +773,7 @@ cm_ctrl_mode:
     LDA !ram_cm_ctrl_timer : INC : STA !ram_cm_ctrl_timer : CMP.w #0060 : BNE .next_frame
 
     LDA $8B : STA [$C5]
-    LDA #!SOUND_MENU_CTRL : JSL !cm_sfx_lib2
+    %sfxstatue()
     BRA .exit
 
   .clear_and_draw
@@ -822,7 +822,7 @@ cm_go_back:
     STA.l !ram_cm_menu_bank
   +
   .end
-    LDA #!SOUND_MENU_BACK : JSL !cm_sfx_lib2
+    %sfxtype()
     RTS
 }
 
@@ -891,7 +891,7 @@ cm_move:
   .inBounds
     STA !ram_cm_cursor_stack,X
 
-    LDA #!SOUND_MENU_MOVE : JSL !cm_sfx_lib1
+    %sfxclick()
 
     RTS
 }
@@ -956,7 +956,7 @@ cm_execute_action_table:
         JSR ($000A,X)
 
       .end
-        LDA #!SOUND_MENU_TOGGLE : JSL !cm_sfx_lib1
+        %sfxpause()
         RTS
     }
 
@@ -982,7 +982,7 @@ cm_execute_action_table:
         JSR ($000A,X)
 
       .end
-        LDA #!SOUND_MENU_TOGGLE : JSL !cm_sfx_lib1
+        %sfxpause()
         RTS
     }
 
@@ -1001,7 +1001,7 @@ cm_execute_action_table:
         JSR ($0004,X)
 
       .end
-        LDA #!SOUND_MENU_CONFIRM : JSL !cm_sfx_lib1
+        ;%sfxpause()
         RTS
     }
 
@@ -1020,7 +1020,6 @@ cm_execute_action_table:
         JSR ($0004,X)
 
       .end
-        ;LDA #!SOUND_MENU_CONFIRM : JSL !cm_sfx_lib1
         RTS
     }
 
@@ -1069,7 +1068,7 @@ cm_execute_action_table:
         JSR ($0020,X)
 
       .end
-        LDA #!SOUND_MENU_NUMFIELD : JSL !cm_sfx_lib1
+        %sfxbubble()
         RTS
     }
 
@@ -1135,7 +1134,7 @@ cm_execute_action_table:
         JSR ($0008,X)
 
       .end
-        LDA #!SOUND_MENU_CHOICE : JSL !cm_sfx_lib2
+        %sfxbubble()
         RTS
     }
 
@@ -1155,7 +1154,7 @@ cm_execute_action_table:
 
         .reset_shortcut
         LDA.w #!sram_ctrl_menu : CMP $C5 : BEQ .end
-        LDA #!SOUND_MENU_CTRL : JSL !cm_sfx_lib2
+        %sfxstatue()
 
         LDA #$0000 : STA [$C5]
 
