@@ -77,9 +77,6 @@ org $A98874         ; update seg timer after MB1 fight
 org $A9BE23         ; update seg timer when baby spawns (off-screen) in MB2 fight
     JSL ih_mb2_segment
 
-org $9AB800         ;graphics for menu cursor and input display
-incbin ../resources/menugfx.bin
-
 org $A6A17C         ;Ridley AI init, reset !ram_countdamage
     STZ !ram_countdamage
 
@@ -97,6 +94,14 @@ org $A0A866         ; hijack damage routine to count total damage dealt
 org $A0F9E0         ; count damage in free space at end of bank
     CLC : LDA !ram_countdamage : ADC $187A : STA !ram_countdamage
     LDA $0F8C,X : SEC : SBC $187A : RTS
+
+org $948F49        ; RTS this routine to enable walk through walls
+    JSR NoClip
+    RTS
+
+org $9AB800         ;graphics for menu cursor and input display
+incbin ../resources/menugfx.bin
+
 
 ; Main bank stuff
 org $DFE000
@@ -1957,6 +1962,16 @@ ih_shinespark_code:
 }
 
 print pc, " infohud end"
+
+
+org $94DC00
+NoClip:
+    LDA !ram_noclip : BEQ .originalcode
+    RTS
+  .originalcode
+    STZ $14 : LDA $20
+    JMP $8F4D
+
 
 ; Stuff that needs to be placed in bank 80
 org $80D300
