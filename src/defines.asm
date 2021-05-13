@@ -49,6 +49,7 @@
 !ram_soundtest_lib3 = $7FFBF4
 !ram_soundtest_music = $7FFBF6
 !ram_noclip = $7FFBF8
+!ram_steamcollision = $7FFBFA
 
 !ram_phantoon_rng_1 = $7FFB82
 !ram_phantoon_rng_2 = $7FFB84

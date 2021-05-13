@@ -99,6 +99,9 @@ org $948F49        ; RTS this routine to enable walk through walls
     JSR NoClip
     RTS
 
+org $A6F135
+    JSR SteamCollision
+
 org $9AB800         ;graphics for menu cursor and input display
 incbin ../resources/menugfx.bin
 
@@ -1966,11 +1969,22 @@ print pc, " infohud end"
 
 org $94DC00
 NoClip:
+{
     LDA !ram_noclip : BEQ .originalcode
     RTS
   .originalcode
     STZ $14 : LDA $20
     JMP $8F4D
+}
+
+org $A6FFE0
+SteamCollision:
+{
+    LDA !ram_steamcollision : BEQ .originalcode
+    PLA : LDA $0F86,x : JMP $F13B
+  .originalcode
+    LDA $0F86,x : RTS
+}
 
 
 ; Stuff that needs to be placed in bank 80

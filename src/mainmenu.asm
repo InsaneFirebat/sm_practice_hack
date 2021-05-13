@@ -1308,6 +1308,7 @@ IFBMenu:
     dw #ifb_debugteleport
     dw #ifb_soundtest
     dw #ifb_noclip
+    dw #ifb_nosteam
     dw #ifb_credits
     dw #$0000
     %cm_header("INSANEFIREBAT MENU")
@@ -1320,6 +1321,9 @@ ifb_soundtest:
 
 ifb_noclip:
     %cm_toggle("No Clipping Horizontally", !ram_noclip, #$0001, #0)
+
+ifb_nosteam:
+    %cm_toggle("No Steam Collision", !ram_steamcollision, #$0001, #0)
 
 ifb_credits:
     %cm_submenu("InfoHUD Credits", #CreditsMenu)
