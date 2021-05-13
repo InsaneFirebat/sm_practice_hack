@@ -1305,13 +1305,20 @@ action_clear_shortcuts:
 ; ----------
 
 IFBMenu:
-    dw #ifb_debugteleport
-    dw #ifb_soundtest
     dw #ifb_noclip
     dw #ifb_nosteam
+    dw #ifb_debugteleport
+    dw #ifb_soundtest
+    dw #ifb_lockout
     dw #ifb_credits
     dw #$0000
     %cm_header("INSANEFIREBAT MENU")
+
+ifb_noclip:
+    %cm_toggle("Walk Through Walls", !ram_noclip, #$0001, #0)
+
+ifb_nosteam:
+    %cm_toggle("No Steam Collision", !ram_steamcollision, #$0001, #0)
 
 ifb_debugteleport:
     %cm_submenu("Hidden Dev Load Stations", #DebugTeleportMenu)
@@ -1319,14 +1326,33 @@ ifb_debugteleport:
 ifb_soundtest:
     %cm_submenu("Sound Test", #SoundTestMenu)
 
-ifb_noclip:
-    %cm_toggle("No Clipping Horizontally", !ram_noclip, #$0001, #0)
-
-ifb_nosteam:
-    %cm_toggle("No Steam Collision", !ram_steamcollision, #$0001, #0)
+ifb_lockout:
+    %cm_submenu("Trigger Piracy Warning", #LockoutConfirm)
 
 ifb_credits:
     %cm_submenu("InfoHUD Credits", #CreditsMenu)
+
+
+; ----------
+; Lockout Menu
+; ----------
+
+LockoutConfirm:
+    dw #ifb_abort
+    dw #ifb_piracy
+    dw #$0000
+    %cm_header("THIS IS A FORCED RESET")
+
+ifb_abort:
+    %cm_jsr("ABORT", #action_text, #$0000)
+
+ifb_piracy:
+    %cm_jsr("NINTENDO CAUGHT ME", #action_piracy, #$0000)
+
+action_piracy:
+{
+    JSL $8086E3
+}
 
 
 ; ----------
@@ -1851,7 +1877,7 @@ ab_notext:
 
 action_text:
 {
-    ; do nothing
+    ; go back
     JSR cm_go_back
     JSR cm_calculate_max
     RTS
