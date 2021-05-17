@@ -1189,6 +1189,8 @@ RngMenu:
     dw #rng_phan_first_phase
     dw #rng_phan_second_phase
     dw #rng_botwoon_rng
+    dw #rng_draygon_rng_right
+    dw #rng_draygon_rng_left
     dw #$0000
     %cm_header("RNG")
 
@@ -1233,6 +1235,26 @@ rng_phan_second_phase:
     db #$28, " FAST RIGHT", #$FF
     db #$28, "  MID RIGHT", #$FF
     db #$28, " SLOW RIGHT", #$FF
+    db #$FF
+
+rng_draygon_rng_right:
+    dw !ACTION_CHOICE
+    dl #!ram_draygon_rng_right
+    dw #$0000
+    db #$28, "Draygon from Right", #$FF
+    db #$28, "IGHT RANDOM", #$FF
+    db #$28, "IGHT   GOOP", #$FF
+    db #$28, "IGHT  SWOOP", #$FF
+    db #$FF
+
+rng_draygon_rng_left:
+    dw !ACTION_CHOICE
+    dl #!ram_draygon_rng_left
+    dw #$0000
+    db #$28, "Draygon from Left", #$FF
+    db #$28, "EFT  RANDOM", #$FF
+    db #$28, "EFT    GOOP", #$FF
+    db #$28, "EFT   SWOOP", #$FF
     db #$FF
 
 
