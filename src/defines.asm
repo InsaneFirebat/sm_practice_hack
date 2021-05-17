@@ -49,6 +49,8 @@
 !ram_soundtest_lib3 = $7FFBF4
 !ram_soundtest_music = $7FFBF6
 
+!ram_draygon_rng_left = $7FFB7E
+!ram_draygon_rng_right = $7FFB80
 !ram_phantoon_rng_1 = $7FFB82
 !ram_phantoon_rng_2 = $7FFB84
 !ram_botwoon_rng = $7FFB86
