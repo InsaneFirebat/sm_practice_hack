@@ -1183,6 +1183,7 @@ RngMenu:
     dw #rng_botwoon_rng
     dw #rng_draygon_rng_right
     dw #rng_draygon_rng_left
+    dw #rng_crocomire_rng
     dw #$0000
     %cm_header("RNG")
 
@@ -1247,6 +1248,16 @@ rng_draygon_rng_left:
     db #$28, "EFT  RANDOM", #$FF
     db #$28, "EFT    GOOP", #$FF
     db #$28, "EFT   SWOOP", #$FF
+    db #$FF
+
+rng_crocomire_rng:
+    dw !ACTION_CHOICE
+    dl #!ram_crocomire_rng
+    dw #$0000
+    db #$28, "Crocomire RNG", #$FF
+    db #$28, "     RANDOM", #$FF
+    db #$28, "       STEP", #$FF
+    db #$28, "      SWIPE", #$FF
     db #$FF
 
 
