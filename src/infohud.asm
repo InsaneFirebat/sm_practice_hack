@@ -2067,8 +2067,34 @@ org $9AB320  ; HUD graphics table
     dw $FFFC, $FCF3, $F0CF, $C03F, $807F, $807F, $807F, $807F
     dw $837C, $8F73, $BF4F, $FF3F, $FFFF, $FFFF, $FFFF, $FFFF
 
-; Editing Main Menu
+ 
+; Main Menu Tilemap
 org $81B40A
-;		  	    P	   R      A      C      T      I      C      E
+    ;           P      R      A      C      T      I      C      E                
     dw $200F, $200D, $000D, $200A, $200C, $002C, $2022, $200C, $200E, $200F, $FFFE
     dw $200F, $2038, $003A, $201A, $201C, $0011, $2011, $201C, $201E, $200F, $FFFF
+
+
+org $8EDC40
+    ;                         S      M  
+    dw $000F, $000F, $000F, $007C, $0076
+
+org $8EDC80
+    ;    P      R      A      C      T      I      C      E  
+    dw $0079, $007B, $006A, $006C, $007D, $0072, $006C, $006E
+
+org $8EDCC0
+    ;                  H      A      C      K  
+    dw $000F, $000F, $0071, $006A, $006C, $0074
+
+org $8EDC70
+    ;                  S      M         
+    dw $000F, $000F, $007C, $0076
+
+org $8EDCB0
+    ;           レ      ン     シ      ュ      ウ    top half of "renshuu"
+    dw $000F, $00D5, $00D2, $00F8, $0117, $00D1
+
+org $8EDCF0
+    ;           レ      ン     シ      ュ      ウ    bottom half of "renshuu"
+    dw $000F, $00E5, $00E2, $0108, $0127, $00E1
