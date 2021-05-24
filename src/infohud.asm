@@ -77,23 +77,39 @@ org $A98874         ; update seg timer after MB1 fight
 org $A9BE23         ; update seg timer when baby spawns (off-screen) in MB2 fight
     JSL ih_mb2_segment
 
-org $A6A17C         ;Ridley AI init, reset !ram_countdamage
-    STZ !ram_countdamage
+org $A6A17C         ;Ridley AI init, overwrites a junk LDA
+    JSR ResetCountDamageRid
 
-org $A7CE64         ;Phantoon AI init, reset !ram_countdamage
-    JSR $FCC0
-
-org $A7FCC0         ;Phantoon AI init, reset !ram_countdamage
-    STZ $0F90,X     ;we overwrote this instruction to get here
-    STZ !ram_countdamage
+org $A6FEBC          ; free space
+ResetCountDamageRid:
+{
+    LDA #$0000
+    STA !ram_countdamage : STA !sram_countdamage
     RTS
+}
+
+org $A7CE64         ;Phantoon AI init
+    JSR ResetCountDamagePhan
+
+org $A7FF90         ; free space
+ResetCountDamagePhan:
+{
+    LDA #$0000
+    STA $0F90,X     ;we overwrote this instruction (was STZ) to get here
+    STA !ram_countdamage : STA !sram_countdamage
+    RTS
+}
 
 org $A0A866         ; hijack damage routine to count total damage dealt
-    JSR $F9E0
+    JSR CountDamage
 
 org $A0F9E0         ; count damage in free space at end of bank
-    CLC : LDA !ram_countdamage : ADC $187A : STA !ram_countdamage
+CountDamage:
+{
+    CLC : LDA !ram_countdamage : ADC $187A
+    STA !sram_countdamage : STA !ram_countdamage
     LDA $0F8C,X : SEC : SBC $187A : RTS
+}
 
 org $948F49        ; RTS this routine to enable walk through walls
     JSR NoClip
@@ -1785,6 +1801,15 @@ CalcBeams:
 
     PLP
     RTS
+}
+
+ForceCountDamage:
+{
+    PHA : PHX : PHY : PHB
+    LDA !sram_countdamage : STA !ram_countdamage
+    JSR Hex2Dec : LDX #$0088 : JSR Draw4
+    PLB : PLY : PLX : PLA
+    RTL
 }
 
 

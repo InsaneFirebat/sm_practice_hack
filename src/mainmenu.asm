@@ -152,7 +152,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("INSANEFIREBAT V2.1.10")
+    %cm_header("INSANEFIREBAT V2.1.10A")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -1241,7 +1241,7 @@ rng_phan_second_phase:
 
 rng_phan_eyeclose:
     dw !ACTION_CHOICE
-    dl #!ram_phantoon_eyeclose
+    dl #!ram_phantoon_rng_3
     dw #$0000
     db #$28, "Phan Eye Close", #$FF
     db #$28, "     RANDOM", #$FF
