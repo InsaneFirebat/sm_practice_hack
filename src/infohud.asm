@@ -81,21 +81,38 @@ org $9AB800         ;graphics for menu cursor and input display
 incbin ../resources/menugfx.bin
 
 org $A6A17C         ;Ridley AI init, reset !ram_countdamage
-    STZ !ram_countdamage
+    JSR ResetCountDamageRid
 
-org $A7CE64         ;Phantoon AI init, reset !ram_countdamage
-    JSR $FCC0
-
-org $A7FCC0         ;Phantoon AI init, reset !ram_countdamage
-    STZ $0F90,X     ;we overwrote this instruction to get here
-    STZ !ram_countdamage
+org $A6F9F0         ; free space
+ResetCountDamageRid:
+{
+    PHA
+    LDA #$0000
+    STA !ram_countdamage : STA !sram_countdamage
+    PLA
     RTS
+}
+
+org $A7CE64         ;Phantoon AI init
+    JSR ResetCountDamagePhan
+
+org $A7FCC0         ; free space
+ResetCountDamagePhan:
+{
+    PHA
+    LDA #$0000
+    STA $0F90,X     ;we overwrote this instruction to get here
+    STA !ram_countdamage : STA !sram_countdamage
+    PLA
+    RTS
+}
 
 org $A0A866         ; hijack damage routine to count total damage dealt
     JSR $F9E0
 
 org $A0F9E0         ; count damage in free space at end of bank
-    CLC : LDA !ram_countdamage : ADC $187A : STA !ram_countdamage
+    CLC : LDA !ram_countdamage : ADC $187A
+    STA !sram_countdamage : STA !ram_countdamage
     LDA $0F8C,X : SEC : SBC $187A : RTS
 
 ; Main bank stuff
@@ -1776,6 +1793,15 @@ CalcBeams:
 
     PLP
     RTS
+}
+
+ForceCountDamage:
+{
+    LDA !sram_countdamage : STA !ram_countdamage
+    JSR Hex2Dec : LDX #$0088 : JSR Draw4
+    
+  .done
+    RTL
 }
 
 

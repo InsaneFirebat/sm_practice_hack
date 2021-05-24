@@ -122,6 +122,7 @@ gamemode_shortcuts:
   .reveal_damage
     LDA !sram_display_mode : CMP #$0012 : BEQ + : STA !ram_display_backup
     LDA #$0012 : STA !sram_display_mode
+    JSL ForceCountDamage
     %sfxdoor()
     CLC : RTS
 
