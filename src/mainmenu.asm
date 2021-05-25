@@ -1350,6 +1350,7 @@ action_clear_shortcuts:
 ; ----------
 
 IFBMenu:
+    dw #ifb_gamespeed
     dw #ifb_noclip
     dw #ifb_nosteam
     dw #ifb_debugteleport
@@ -1358,6 +1359,9 @@ IFBMenu:
     dw #ifb_credits
     dw #$0000
     %cm_header("INSANEFIREBAT MENU")
+
+ifb_gamespeed:
+    %cm_numfield("Slowdown Frames", !ram_slowdown_mode, 0, 90, 1, #0)
 
 ifb_noclip:
     %cm_toggle("Walk Through Walls", !ram_noclip, #$0001, #0)
