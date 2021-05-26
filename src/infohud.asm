@@ -1164,7 +1164,7 @@ status_lagcounter:
     LDA !ram_lag_counter : CMP !ram_last_lag_counter : BEQ .done : STA !ram_last_lag_counter
     %a8() : STA $211B : XBA : STA $211B : LDA #$64 : STA $211C : %a16() : LDA $2134
     STA $4204 : %a8() : LDA #$E1 : STA $4206 : %a16()
-    LDA #$0C0A : STA $7EC690 : PHA : PLA : LDA $4214    ; draw % while waiting for math
+    LDA #$0C0A : STA $7EC690 : PHA : PLA : LDA $4214    ; draw % while waiting
     JSR Hex2Dec : LDX #$008A : JSR Draw3
 
   .done
