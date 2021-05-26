@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, CardHeader, CardBody } from 'reactstrap';
+import { Row, Col, Card, CardHeader, CardBody, NavLink } from 'reactstrap';
+import { Link } from 'react-router-dom';
 import hudImage from '../files/smhud.png'
 
 export class Help extends Component {
@@ -23,7 +24,7 @@ export class Help extends Component {
                                 <Col>
                                     <ol className="list" style={{fontSize: 1.1 + 'em'}}>
                                         <li>Status display defaults to first enemy's HP, but can be configured to show Charge Timer, X-Factor timer, Shinespark timer and more.</li>
-                                        <li>Item percentage</li>
+                                        <li>Item collection percentage</li>
                                         <li>Number of E-tanks</li>
                                         <li>Current total energy</li>
                                         <li>Segment timer in minutes.seconds.frames. Resets when loading a preset or by controller shortcut</li>
@@ -120,7 +121,7 @@ export class Help extends Component {
                                 <Col md="3" className="offset-md-1">Power Bombs</Col>
                                 <Col>Select your max Power Bombs with left/right or A to increment</Col>
                             </Row>
-							<br />
+                            <br />
                             <Row>
                                 <Col md="4">Category Presets</Col>
                                 <Col>Presets are pre-configured savestates that are specific to a particular category.</Col>
@@ -130,12 +131,12 @@ export class Help extends Component {
                                 <Col md="4">Select Preset Category</Col>
                                 <Col>Select the desired category to be used with Category Presets</Col>
                             </Row>
-							<br />
+                            <br />
                             <Row>
                                 <Col md="4">Teleport</Col>
                                 <Col>Warp to any save station</Col>
                             </Row>
-							<br />
+                            <br />
                             <Row>
                                 <Col md="4">Events</Col>
                                 <Col>Toggle event flags for doors, bosses, items, and other events</Col>
@@ -156,7 +157,7 @@ export class Help extends Component {
                                 <Col md="3" className="offset-md-1">Bosses</Col>
                                 <Col>Toggle boss kills</Col>
                             </Row>
-							<br />
+                            <br />
                             <Row>
                                 <Col md="4">Misc</Col>
                                 <Col>Toggle extra features</Col>
@@ -176,6 +177,10 @@ export class Help extends Component {
                             <Row>
                                 <Col md="3" className="offset-md-1">Baby Slowdown</Col>
                                 <Col>Toggle ultra slow horizontal movement, as if grabbed by the Baby Metroid</Col>
+                            </Row>
+                            <Row>
+                                <Col md="3" className="offset-md-1">Magic Pants</Col>
+                                <Col>Toggle a flashing animation on Samus to show when dash should be held for short charging</Col>
                             </Row>
                             <Row>
                                 <Col md="3" className="offset-md-1">Fanfare</Col>
@@ -199,8 +204,18 @@ export class Help extends Component {
                                 <Col>Configure the HUD</Col>
                             </Row>
                             <Row>
-                                <Col md="3" className="offset-md-1">Infohud Mode</Col>
-                                <Col>Select the value from RAM to be displayed in the bottom-left of the HUD</Col>
+                                <Col md="3" className="offset-md-1">
+                                    <NavLink tag={Link} className="text-dark" to="/infohudmode">Infohud Mode</NavLink>
+                                </Col>
+                                <Col>Select the value from RAM to be displayed in the bottom-left of the HUD.
+                                    <NavLink tag={Link} className="text-dark" to="/infohudmode">Click the link for more details.</NavLink>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md="3" className="offset-md-1">
+                                    <NavLink tag={Link} className="text-dark" to="/infohudmode">Room Strat</NavLink>
+                                </Col>
+                                <Col>Select which Room Strat to be displayed in the bottom-left of the HUD. This only works if "Room Strat" is selected as the above Infohud Mode.</Col>
                             </Row>
                             <Row>
                                 <Col md="3" className="offset-md-1">Frame Counters</Col>
@@ -210,16 +225,12 @@ export class Help extends Component {
                                 <Col md="3" className="offset-md-1">Artificial Lag</Col>
                                 <Col>Select a value to adjust how much lag occurs during normal gameplay. This is to compensate for the lack of a minimap on the HUD which would normally consume CPU cycles.</Col>
                             </Row>
-                            <Row>
-                                <Col md="3" className="offset-md-1">Magic Pants</Col>
-                                <Col>Toggle a flashing animation on Samus to show when dash should be held for short charging</Col>
-                            </Row>
-							<br />
+                            <br />
                             <Row>
                                 <Col md="4">Game</Col>
                                 <Col>Toggle pre-game options and Debug Mode without resetting</Col>
                             </Row>
-							<br />
+                            <br />
                             <Row>
                                 <Col md="4">RNG Control</Col>
                                 <Col>Pre-determine boss patterns for Phantoon or Botwoon</Col>
@@ -237,10 +248,26 @@ export class Help extends Component {
                                 <Col>Choose the direction and eye opening pattern for Phantoon's second and subsequent phases</Col>
                             </Row>
                             <Row>
+                                <Col md="3" className="offset-md-1">Phan Eye Close</Col>
+                                <Col>Choose how long Phantoon's eye will remain open after a ring of flames</Col>
+                            </Row>
+                            <Row>
                                 <Col md="3" className="offset-md-1">Botwoon RNG</Col>
                                 <Col>Choose the opening pattern for Botwoon's first cycle</Col>
                             </Row>
-							<br />
+                            <Row>
+                                <Col md="3" className="offset-md-1">Draygon from Right</Col>
+                                <Col>Choose Draygon's attack type from the right side of the room. Draygon will always 'swoop' after a 'goop'.</Col>
+                            </Row>
+                            <Row>
+                                <Col md="3" className="offset-md-1">Draygon from Left</Col>
+                                <Col>Choose Draygon's attack type from the left side of the room. Draygon will always 'swoop' after a 'goop'.</Col>
+                            </Row>
+                            <Row>
+                                <Col md="3" className="offset-md-1">Crocomire RNG</Col>
+                                <Col>Set Crocomire to always step forward, or always swipe and shoot projectiles.</Col>
+                            </Row>
+                            <br />
                             <Row>
                                 <Col md="4">Controller Shortcuts</Col>
                                 <Col>Set or change button combinations for activating features. Press A to select the shortcut and then hold the desired button combination until it turns pink.</Col>
@@ -267,7 +294,7 @@ export class Help extends Component {
                             </Row>
                             <Row>
                                 <Col md="3" className="offset-md-1">Clear Shortcuts</Col>
-                                <Col>Reset Main Menu shortcut to default and removes button combos for all others.</Col>
+                                <Col>Resets Main Menu shortcut to default and removes button combos for all others.</Col>
                             </Row>
                         </CardBody>
                     </Card>
