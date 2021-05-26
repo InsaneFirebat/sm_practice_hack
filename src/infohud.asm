@@ -108,12 +108,18 @@ ResetCountDamagePhan:
 }
 
 org $A0A866         ; hijack damage routine to count total damage dealt
-    JSR $F9E0
+    JSR CountDamage
 
 org $A0F9E0         ; count damage in free space at end of bank
+CountDamage:
+{
     CLC : LDA !ram_countdamage : ADC $187A
     STA !sram_countdamage : STA !ram_countdamage
     LDA $0F8C,X : SEC : SBC $187A : RTS
+}
+
+org $9AB800         ;graphics for HUD
+incbin ../resources/hudgfx.bin
 
 ; Main bank stuff
 org $DFE000
@@ -1722,6 +1728,10 @@ Draw4:
 
 Draw4Hex:
 {
+    PHA
+    LDA !sram_hexstyle : BNE .ABCDEF
+    PLA
+
     STA $12 : AND #$000F : ASL A : TAY : LDA.w NumberGFXTable,Y : STA $7EC606,X
     LDA $12 : LSR A : LSR A : LSR A
     STA $12 : AND #$001E : TAY : LDA.w NumberGFXTable,Y : STA $7EC604,X
@@ -1730,6 +1740,29 @@ Draw4Hex:
     LDA $12 : LSR A : LSR A : LSR A : LSR A
     AND #$001E : TAY : LDA.w NumberGFXTable,Y : STA $7EC600,X
     INX #8
+    RTS
+
+  .ABCDEF
+    PLA
+    STA $12 : AND #$F000              ; get first digit (X000)
+    XBA : LSR #4                      ; move it to last digit (000X)
+    ASL : TAY : LDA.w HexGFXTable,Y   ; load tilemap address with 2x digit as index
+    STA $7EC600,X                     ; draw digit to HUD
+
+    LDA $12 : AND #$0F00              ; (0X00)
+    XBA
+    ASL : TAY : LDA.w HexGFXTable,Y
+    STA $7EC602,X
+
+    LDA $12 : AND #$00F0              ; (00X0)
+    LSR #4
+    ASL : TAY : LDA.w HexGFXTable,Y
+    STA $7EC604,X
+
+    LDA $12 : AND #$000F              ; (000X)
+    ASL : TAY : LDA.w HexGFXTable,Y
+    STA $7EC606,X
+
     RTS
 }
 
@@ -1799,8 +1832,6 @@ ForceCountDamage:
 {
     LDA !sram_countdamage : STA !ram_countdamage
     JSR Hex2Dec : LDX #$0088 : JSR Draw4
-    
-  .done
     RTL
 }
 
@@ -1989,6 +2020,9 @@ print pc, " infohud bank80 start"
 NumberGFXTable:
     dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
     dw #$0C45, #$0C3C, #$0C3D, #$0C3E, #$0C3F, #$0C40, #$0C41, #$0C42, #$0C43, #$0C44
+
+HexGFXTable:
+    dw #$0C70, #$0C71, #$0C72, #$0C73, #$0C74, #$0C75, #$0C76, #$0C77, #$0C78, #$0C79, #$0C7A, #$0C7B, #$0C7C, #$0C7D, #$0C7E, #$0C7F
 
 ControllerTable1:
     dw $0020, $0800, $0010, $4000, $0040, $2000
