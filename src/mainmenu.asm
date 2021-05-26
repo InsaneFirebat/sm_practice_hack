@@ -719,6 +719,7 @@ MiscMenu:
     dw #misc_flashsuit
     dw #misc_hyperbeam
     dw #misc_babyslowdown
+    dw #misc_magicpants
     dw #misc_fanfare_toggle
     dw #misc_music_toggle
     dw #misc_transparent
@@ -738,6 +739,9 @@ misc_hyperbeam:
 
 misc_babyslowdown:
     %cm_toggle("Baby Slowdown", $7E0A66, #$0002, #0)
+
+misc_magicpants:
+    %cm_toggle_bit("Magic Pants", !ram_magic_pants_1, #$0001, #0)
 
 misc_fanfare_toggle:
     %cm_toggle("Fanfare", !sram_fanfare_toggle, #$0001, #0)
@@ -963,7 +967,6 @@ InfoHudMenu:
     dw #ih_room_counter
     dw #ih_hex_style
     dw #ih_lag
-    dw #ih_magicpants
     dw #$0000
     %cm_header("INFOHUD")
 
@@ -1123,6 +1126,7 @@ ihstrat_robotflush:
 action_select_room_strat:
 {
     TYA : STA !sram_room_strat
+    LDA #$0001 : STA !sram_display_mode
     JSR cm_go_back
     JSR cm_calculate_max
     RTS
@@ -1161,9 +1165,6 @@ ih_hex_style:
 
 ih_lag:
     %cm_numfield("Artificial lag", !sram_artificial_lag, 0, 64, 1, #0)
-
-ih_magicpants:
-    %cm_toggle_bit("Magic Pants", $7FFB64, #$0001, #0)
 
 
 ; ----------
@@ -1268,16 +1269,20 @@ rng_draygon_rng_right:
     db #$28, "IGHT RANDOM", #$FF
     db #$28, "IGHT   GOOP", #$FF
     db #$28, "IGHT  SWOOP", #$FF
+    db #$28, "Draygon from R", #$FF
+    db #$28, "ight RANDOM", #$FF
+    db #$28, "ight   GOOP", #$FF
+    db #$28, "ight  SWOOP", #$FF
     db #$FF
 
 rng_draygon_rng_left:
     dw !ACTION_CHOICE
     dl #!ram_draygon_rng_left
     dw #$0000
-    db #$28, "Draygon from Left", #$FF
-    db #$28, "EFT  RANDOM", #$FF
-    db #$28, "EFT    GOOP", #$FF
-    db #$28, "EFT   SWOOP", #$FF
+    db #$28, "Draygon from L", #$FF
+    db #$28, "eft  RANDOM", #$FF
+    db #$28, "eft    GOOP", #$FF
+    db #$28, "eft   SWOOP", #$FF
     db #$FF
 
 rng_crocomire_rng:

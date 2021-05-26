@@ -118,7 +118,7 @@ org $948F49        ; RTS this routine to enable walk through walls
 org $A6F135
     JSR SteamCollision
 
-org $9AB800         ;graphics for HUD
+org $9AB800         ; graphics for HUD
 incbin ../resources/hudgfx.bin
 
 
@@ -312,7 +312,6 @@ ih_elevator_activation:
 
   .done
     PLA
-    ; Run standard code and return
     STZ $0A56
     SEC
     RTL
@@ -1029,6 +1028,7 @@ status_hspeed:
     LDX #$0092 : JSR Draw4Hex
 
   .done
+    LDA #$0C6E : STA $7EC690 ; decimal
     RTS
 }
 
@@ -1046,6 +1046,7 @@ status_vspeed:
     STA !ram_subpixel_pos : LDX #$0092 : JSR Draw4Hex
 
   .done
+    LDA #$0C6E : STA $7EC690 ; decimal
     RTS
 }
 
@@ -1186,6 +1187,7 @@ status_xpos:
     STA !ram_subpixel_pos : LDX #$0092 : JSR Draw4Hex
 
   .done
+    LDA #$0C6E : STA $7EC690 ; decimal
     RTS
 }
 
@@ -1203,6 +1205,7 @@ status_ypos:
     STA !ram_subpixel_pos : LDX #$0092 : JSR Draw4Hex
 
   .done
+    LDA #$0C6E : STA $7EC690 ; decimal
     RTS
 }
 
@@ -1729,11 +1732,10 @@ Draw4:
 
 Draw4Hex:
 {
-    PHA
+    STA $12
     LDA !sram_hexstyle : BNE .ABCDEF
-    PLA
 
-    STA $12 : AND #$000F : ASL A : TAY : LDA.w NumberGFXTable,Y : STA $7EC606,X
+    LDA $12 : AND #$000F : ASL A : TAY : LDA.w NumberGFXTable,Y : STA $7EC606,X
     LDA $12 : LSR A : LSR A : LSR A
     STA $12 : AND #$001E : TAY : LDA.w NumberGFXTable,Y : STA $7EC604,X
     LDA $12 : LSR A : LSR A : LSR A : LSR A
@@ -1744,8 +1746,7 @@ Draw4Hex:
     RTS
 
   .ABCDEF
-    PLA
-    STA $12 : AND #$F000              ; get first digit (X000)
+    LDA $12 : AND #$F000              ; get first digit (X000)
     XBA : LSR #4                      ; move it to last digit (000X)
     ASL : TAY : LDA.w HexGFXTable,Y   ; load tilemap address with 2x digit as index
     STA $7EC600,X                     ; draw digit to HUD
