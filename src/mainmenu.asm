@@ -1477,18 +1477,19 @@ action_clear_shortcuts:
 ; ----------
 
 IFBMenu:
-    dw #ifb_gamespeed
+    dw #ifb_menubackground
     dw #ifb_noclip
     dw #ifb_nosteam
     dw #ifb_debugteleport
+    dw #ifb_gamespeed
     dw #ifb_soundtest
     dw #ifb_lockout
     dw #ifb_credits
     dw #$0000
     %cm_header("INSANEFIREBAT MENU")
 
-ifb_gamespeed:
-    %cm_numfield("Slowdown Frames", !ram_slowdown_mode, 0, 90, 1, #0)
+ifb_menubackground:
+    %cm_toggle("Menu Background", !sram_menu_background, #$0001, #0)
 
 ifb_noclip:
     %cm_toggle("Walk Through Walls", !ram_noclip, #$0001, #0)
@@ -1498,6 +1499,9 @@ ifb_nosteam:
 
 ifb_debugteleport:
     %cm_submenu("Hidden Dev Load Stations", #DebugTeleportMenu)
+
+ifb_gamespeed:
+    %cm_numfield("Slowdown Frames", !ram_slowdown_mode, 0, 30, 1, #0)
 
 ifb_soundtest:
     %cm_submenu("Sound Test", #SoundTestMenu)

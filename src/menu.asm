@@ -265,6 +265,8 @@ cm_tilemap_bg:
 
     ; Interior
     {
+        ; background is optional
+        LDA !sram_menu_background : BNE .fill_interior
         ; fill if paused
         LDA $0998 : CMP #$000C : BMI .check_ceres
         BEQ .fill_interior : CMP #$0012 : BMI .fill_interior
