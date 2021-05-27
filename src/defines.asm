@@ -139,6 +139,7 @@
 !sram_room_strat = $702022
 !sram_countdamage = $702026
 !sram_hexstyle = $702028
+!sram_menu_background = $70202A
 
 ; -------------
 ; Menu

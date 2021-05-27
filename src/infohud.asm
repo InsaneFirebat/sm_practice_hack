@@ -77,9 +77,6 @@ org $A98874         ; update seg timer after MB1 fight
 org $A9BE23         ; update seg timer when baby spawns (off-screen) in MB2 fight
     JSL ih_mb2_segment
 
-org $9AB800         ;graphics for menu cursor and input display
-incbin ../resources/menugfx.bin
-
 org $A6A17C         ;Ridley AI init, reset !ram_countdamage
     JSR ResetCountDamageRid
 
