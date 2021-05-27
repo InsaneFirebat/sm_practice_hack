@@ -60,6 +60,14 @@ macro cm_jsr_nosound(title, routine, argument)
     db #$28, "<title>", #$FF
 endmacro
 
+macro cm_numfield_hex(title, addr, start, end, increment, jsrtarget)
+    dw !ACTION_NUMFIELD_HEX
+    dl <addr>
+    db <start>, <end>, <increment>
+    dw <jsrtarget>
+    db #$28, "<title>", #$FF
+endmacro
+
 action_submenu:
 {
     ; Increment stack pointer by 2, then store current menu
@@ -964,8 +972,9 @@ InfoHudMenu:
     dw #ih_display_mode
     dw #ih_goto_room_strat
     dw #ih_room_strat
-    dw #ih_room_counter
+    dw #ih_ram_watch
     dw #ih_hex_style
+    dw #ih_room_counter
     dw #ih_lag
     dw #$0000
     %cm_header("INFOHUD")
@@ -993,7 +1002,14 @@ DisplayModeMenu:
     dw ihmode_walljump
     dw ihmode_shottimer
     dw ihmode_countdamage
+    dw ihmode_GOTO_PAGE_TWO
+    dw #$0000
+    %cm_header("INFOHUD DISPLAY MODE")
+
+DisplayModeMenu2:
     dw ihmode_ridleygrab
+    dw ihmode_ramwatch
+    dw ihmode_GOTO_PAGE_ONE
     dw #$0000
     %cm_header("INFOHUD DISPLAY MODE")
 
@@ -1057,6 +1073,16 @@ ihmode_countdamage:
 ihmode_ridleygrab:
     %cm_jsr("Ridley Death Grab Attempts", #action_select_infohud_mode, #$0013)
 
+ihmode_ramwatch:
+    %cm_jsr("Custom RAM Watch", #action_select_infohud_mode, #$0014)
+
+ihmode_GOTO_PAGE_ONE:
+    %cm_submenu("GOTO PAGE ONE", #DisplayModeMenu)
+
+ihmode_GOTO_PAGE_TWO:
+    %cm_submenu("GOTO PAGE TWO", #DisplayModeMenu2)
+    
+
 action_select_infohud_mode:
 {
     TYA : STA !sram_display_mode
@@ -1090,6 +1116,7 @@ ih_display_mode:
     db #$28, " SHOT TIMER", #$FF
     db #$28, "DMG COUNTER", #$FF
     db #$28, "RIDLEY GRAB", #$FF
+    db #$28, "  RAM WATCH", #$FF
     db #$FF
 
 ih_goto_room_strat:
@@ -1145,14 +1172,45 @@ ih_room_strat:
     db #$28, "ROBOT FLUSH", #$FF
     db #$FF
 
-ih_room_counter:
-    dw !ACTION_CHOICE
-    dl #!sram_frame_counter_mode
+ih_ram_watch:
+    %cm_submenu("Customize RAM Watch", #RAMWatchMenu)
+
+RAMWatchMenu:
+    dw ramwatch_left_hi
+    dw ramwatch_left_lo
+    dw ramwatch_right_hi
+    dw ramwatch_right_lo
+    dw ramwatch_combine
     dw #$0000
-    db #$28, "Frame Counters", #$FF
-    db #$28, "   REALTIME", #$FF
-    db #$28, "     INGAME", #$FF
-    db #$FF
+    %cm_header("CUSTOM RAM WATCH")
+
+ramwatch_left_hi:
+    %cm_numfield_hex("Left-Watch High Byte", !ram_watch_left_hi, 0, 255, 1, #0)
+
+ramwatch_left_lo:
+    %cm_numfield_hex("Left-Watch Low Byte", !ram_watch_left_lo, 0, 255, 1, #0)
+
+ramwatch_right_hi:
+    %cm_numfield_hex("Right-Watch High Byte", !ram_watch_right_hi, 0, 255, 1, #0)
+
+ramwatch_right_lo:
+    %cm_numfield_hex("Right-Watch Low Byte", !ram_watch_right_lo, 0, 255, 1, #0)
+
+ramwatch_combine:
+    %cm_jsr("CONFIRM", #action_ramwatch_combine, #$0014)
+
+action_ramwatch_combine:
+{
+    TYA : STA !sram_display_mode
+    %a8()
+    LDA !ram_watch_left_hi : XBA : LDA !ram_watch_left_lo
+    %a16() : STA !ram_watch_left
+    %a8()
+    LDA !ram_watch_right_hi : XBA : LDA !ram_watch_right_lo
+    %a16() : STA !ram_watch_right
+    %sfxpause()
+    RTS
+}
 
 ih_hex_style:
     dw !ACTION_CHOICE
@@ -1161,6 +1219,15 @@ ih_hex_style:
     db #$28, "Hex Number Sty", #$FF
     db #$28, "le ORIGINAL", #$FF
     db #$28, "le TRUE O-F", #$FF
+    db #$FF
+
+ih_room_counter:
+    dw !ACTION_CHOICE
+    dl #!sram_frame_counter_mode
+    dw #$0000
+    db #$28, "Frame Counters", #$FF
+    db #$28, "   REALTIME", #$FF
+    db #$28, "     INGAME", #$FF
     db #$FF
 
 ih_lag:

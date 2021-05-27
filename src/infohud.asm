@@ -593,8 +593,8 @@ ih_hud_code:
     dw status_shottimer
     dw status_countdamage
     dw status_ridleygrab
+    dw status_ramwatch
 }
-
 
 status_roomstrat:
 {
@@ -1627,6 +1627,23 @@ status_ridleygrab:
   .done
     RTS
 }
+
+status_ramwatch:
+{
+    LDA $09C2 : STA !ram_last_hp
+    LDA !ram_watch_left : CMP !ram_watch_left_hud : BNE .refreshLeft
+-   LDA !ram_watch_right : CMP !ram_watch_right_hud : BNE .refreshRight : BRA .done
+
+  .refreshLeft
+    LDA !ram_watch_left : TAX : LDA $7E0000,X : STA !ram_watch_left_hud
+    LDX #$0088 : JSR Draw4Hex : BRA -
+
+  .refreshRight
+    LDA !ram_watch_right : TAX : LDA $7E0000,X : STA !ram_watch_right_hud
+    LDX #$0092 : JSR Draw4Hex
+
+  .done
+    RTS
 
 status_enemyhp:
 {
