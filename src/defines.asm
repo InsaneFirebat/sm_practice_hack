@@ -49,6 +49,15 @@
 !ram_soundtest_lib3 = $7FFBF4
 !ram_soundtest_music = $7FFBF6
 
+!ram_watch_left = $7FFC10
+!ram_watch_left_hud = $7FFC12
+!ram_watch_left_hi = $7FFC14
+!ram_watch_left_lo = $7FFC16
+!ram_watch_right = $7FFC18
+!ram_watch_right_hud = $7FFC1A
+!ram_watch_right_hi = $7FFC1C
+!ram_watch_right_lo = $7FFC1E
+
 !ram_phantoon_rng_3 = $7FFB7A
 !ram_crocomire_rng = $7FFB7C
 !ram_draygon_rng_left = $7FFB7E
@@ -154,6 +163,7 @@
 !ACTION_CHOICE          = #$0008
 !ACTION_CTRL_SHORTCUT   = #$000A
 !ACTION_JSR_NOSOUND     = #$0004
+!ACTION_NUMFIELD_HEX    = #$000C
 
 ; using macros instead of these in custom builds
 !SOUND_MENU_MOVE = $0039
