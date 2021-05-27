@@ -59,6 +59,10 @@
 !ram_watch_right_hud = $7FFC1A
 !ram_watch_right_hi = $7FFC1C
 !ram_watch_right_lo = $7FFC1E
+!ram_watch_write = $7FFC20
+!ram_watch_write_lock = $7FFC22
+!ram_watch_write_hi = $7FFC24
+!ram_watch_write_lo = $7FFC26
 
 !ram_phantoon_rng_3 = $7FFB7A
 !ram_crocomire_rng = $7FFB7C

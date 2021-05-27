@@ -1632,7 +1632,7 @@ status_ramwatch:
 {
     LDA $09C2 : STA !ram_last_hp
     LDA !ram_watch_left : CMP !ram_watch_left_hud : BNE .refreshLeft
--   LDA !ram_watch_right : CMP !ram_watch_right_hud : BNE .refreshRight : BRA .done
+-   LDA !ram_watch_right : CMP !ram_watch_right_hud : BNE .refreshRight : BRA .write
 
   .refreshLeft
     LDA !ram_watch_left : TAX : LDA $7E0000,X : STA !ram_watch_left_hud
@@ -1641,6 +1641,11 @@ status_ramwatch:
   .refreshRight
     LDA !ram_watch_right : TAX : LDA $7E0000,X : STA !ram_watch_right_hud
     LDX #$0092 : JSR Draw4Hex
+
+  .write
+    LDA !ram_watch_write_lock : BEQ .done
+    LDA !ram_watch_left : TAX
+    LDA !ram_watch_write : STA $7E0000,X
 
   .done
     RTS
