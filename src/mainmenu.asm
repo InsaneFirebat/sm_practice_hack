@@ -1173,6 +1173,7 @@ RAMWatchMenu:
     dw ramwatch_right_hi
     dw ramwatch_right_lo
     dw ramwatch_combine
+    dw ramwatch_write
     dw #$0000
     %cm_header("CUSTOM RAM WATCH")
 
@@ -1189,9 +1190,12 @@ ramwatch_right_lo:
     %cm_numfield_hex("Right-Watch Low Byte", !ram_watch_right_lo, 0, 255, 1, #0)
 
 ramwatch_combine:
-    %cm_jsr("CONFIRM", #action_ramwatch_combine, #$0014)
+    %cm_jsr("CONFIRM", #action_ramwatch_read, #$0014)
 
-action_ramwatch_combine:
+ramwatch_write:
+    %cm_submenu("Memory Editor", #RAMWatchWriteMenu)
+
+action_ramwatch_read:
 {
     TYA : STA !sram_display_mode
     %a8()
@@ -1201,6 +1205,47 @@ action_ramwatch_combine:
     LDA !ram_watch_right_hi : XBA : LDA !ram_watch_right_lo
     %a16() : STA !ram_watch_right
     %sfxpause()
+    RTS
+}
+
+RAMWatchWriteMenu:
+    dw ramwatch_write_left_hi
+    dw ramwatch_write_left_lo
+    dw ramwatch_write_value_hi
+    dw ramwatch_write_value_lo
+    dw ramwatch_write_execute
+    dw ramwatch_write_lock
+    dw #$0000
+    %cm_header("EDIT MEMORY VALUES")
+
+ramwatch_write_left_hi:
+    %cm_numfield_hex("Left-Watch High", !ram_watch_left_hi, 0, 255, 1, #0)
+
+ramwatch_write_left_lo:
+    %cm_numfield_hex("Left-Watch Low", !ram_watch_left_lo, 0, 255, 1, #0)
+
+ramwatch_write_value_hi:
+    %cm_numfield_hex("Write Value High", !ram_watch_write_hi, 0, 255, 1, #0)
+
+ramwatch_write_value_lo:
+    %cm_numfield_hex("Write Value Low", !ram_watch_write_lo, 0, 255, 1, #0)
+
+ramwatch_write_execute:
+    %cm_jsr("EXECUTE", #action_ramwatch_write, #$0000)
+
+ramwatch_write_lock:
+    %cm_toggle("Write Every Frame", !ram_watch_write_lock, #$0001, #0)
+
+action_ramwatch_write:
+{
+    LDA !ram_watch_left_hi : XBA
+    %a8() : LDA !ram_watch_left_lo
+    %a16() : STA !ram_watch_left : TAX
+    %a8()
+    LDA !ram_watch_write_hi : XBA
+    LDA !ram_watch_write_lo : %a16()
+    STA !ram_watch_write : STA $7E0000,X
+    %sfxgrapple()
     RTS
 }
 
