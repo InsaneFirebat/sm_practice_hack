@@ -587,7 +587,7 @@ precat_allbosspkdr:
     %cm_jsr("All Bosses PKDR", #action_select_preset_category, #$000D)
 
 precat_allbossprkd:
-    %cm_jsr("All Bosses PKDR", #action_select_preset_category, #$000E)
+    %cm_jsr("All Bosses PRKD", #action_select_preset_category, #$000E)
 
 action_select_preset_category:
 {

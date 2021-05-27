@@ -80,7 +80,7 @@ org $A9BE23         ; update seg timer when baby spawns (off-screen) in MB2 figh
 org $A6A17C         ;Ridley AI init, reset !ram_countdamage
     JSR ResetCountDamageRid
 
-org $A6F9F0         ; free space
+org $A6FEBC         ; free space
 ResetCountDamageRid:
 {
     PHA
