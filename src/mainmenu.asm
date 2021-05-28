@@ -1312,8 +1312,8 @@ RngMenu:
         dw #rng_rerandomize
     endif
     dw #rng_phan_first_direction
-    dw #rng_phan_second_direction
     dw #rng_phan_first_pattern
+    dw #rng_phan_second_direction
     dw #rng_phan_second_pattern
     dw #rng_phan_eyeclose
     dw #rng_botwoon_rng
@@ -1340,7 +1340,7 @@ rng_botwoon_rng:
 
 rng_phan_first_direction:
     dw !ACTION_CHOICE
-    dl #!ram_phantoon_rng_4
+    dl #!ram_phantoon_rng_dir1
     dw #$0000
     db #$28, "Phan 1st Direc", #$FF
     db #$28, "tion RANDOM", #$FF
@@ -1350,7 +1350,7 @@ rng_phan_first_direction:
 
 rng_phan_first_pattern:
     dw !ACTION_CHOICE
-    dl #!ram_phantoon_rng_1
+    dl #!ram_phantoon_rng_pat1
     dw #$0000
     db #$28, "Phan 1st Patte", #$FF
     db #$28, "rn   RANDOM", #$FF
@@ -1361,7 +1361,7 @@ rng_phan_first_pattern:
 
 rng_phan_second_direction:
     dw !ACTION_CHOICE
-    dl #!ram_phantoon_rng_5
+    dl #!ram_phantoon_rng_dir2
     dw #$0000
     db #$28, "Phan 2nd Direc", #$FF
     db #$28, "tion RANDOM", #$FF
@@ -1371,7 +1371,7 @@ rng_phan_second_direction:
 
 rng_phan_second_pattern:
     dw !ACTION_CHOICE
-    dl #!ram_phantoon_rng_2
+    dl #!ram_phantoon_rng_pat2
     dw #$0000
     db #$28, "Phan 2nd Patte", #$FF
     db #$28, "rn   RANDOM", #$FF
@@ -1382,7 +1382,7 @@ rng_phan_second_pattern:
 
 rng_phan_eyeclose:
     dw !ACTION_CHOICE
-    dl #!ram_phantoon_rng_3
+    dl #!ram_phantoon_rng_eyeclose
     dw #$0000
     db #$28, "Phan Eye Close", #$FF
     db #$28, "     RANDOM", #$FF
