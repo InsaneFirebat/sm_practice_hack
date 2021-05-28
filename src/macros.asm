@@ -81,3 +81,7 @@ endmacro
 macro sfxmissile() ; play missile sound lib2
     LDA #$0003 : JSL !SFX_LIB2
 endmacro
+
+macro sfxshot() ; play credits shot sound lib1
+    LDA #$0022 : JSL !SFX_LIB1
+endmacro

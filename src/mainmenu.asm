@@ -160,7 +160,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("INSANEFIREBAT V2.1.10A")
+    %cm_header("INSANEFIREBAT V2.1.10B")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -1484,6 +1484,7 @@ IFBMenu:
     dw #ifb_gamespeed
     dw #ifb_soundtest
     dw #ifb_lockout
+    dw #ifb_fixcontrols
     dw #ifb_credits
     dw #$0000
     %cm_header("INSANEFIREBAT MENU")
@@ -1509,6 +1510,9 @@ ifb_soundtest:
 ifb_lockout:
     %cm_submenu("Trigger Piracy Warning", #LockoutConfirm)
 
+ifb_fixcontrols:
+    %cm_jsr_nosound("Fix My Controls", #action_fixcontrols, #$4000)
+
 ifb_credits:
     %cm_submenu("InfoHUD Credits", #CreditsMenu)
 
@@ -1518,18 +1522,39 @@ ifb_credits:
 ; ----------
 
 LockoutConfirm:
-    dw #ifb_abort
-    dw #ifb_piracy
+    dw #ifb_lockout_abort
+    dw #ifb_lockout_piracy
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_text_lockout
     dw #$0000
     %cm_header("THIS IS A FORCED RESET")
 
-ifb_abort:
+ifb_lockout_abort:
     %cm_jsr("ABORT", #action_text, #$0000)
 
-ifb_piracy:
-    %cm_jsr("NINTENDO CAUGHT ME", #action_piracy, #$0000)
+ifb_lockout_piracy:
+    %cm_jsr("NINTENDO CAUGHT ME", #action_lockout, #$0000)
 
-action_piracy:
+ab_text_lockout:
+    %cm_jsr_nosound("REMEMBER TO CENTER CAMERA!", #action_text, #$0000)
+
+action_lockout:
 {
     JSL $8086E3
 }
@@ -1997,6 +2022,14 @@ ifb_soundtest_music_toggle:
         RTS
 }
 
+action_fixcontrols:
+{
+    TYA : STA $09B2           ; Y for Shot
+    LDA #$0040 : STA $09B8    ; X for Item Cancel
+    %sfxshot()
+    RTS
+}
+
 CreditsMenu:
     dw #ab_text_orig_author
     dw #ab_notext
@@ -2057,8 +2090,6 @@ ab_notext:
 
 action_text:
 {
-    ; go back
-    JSR cm_go_back
-    JSR cm_calculate_max
+    ; do nothing
     RTS
 }
