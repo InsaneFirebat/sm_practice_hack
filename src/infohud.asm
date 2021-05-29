@@ -407,6 +407,7 @@ ih_update_hud_code:
     ; Draw Item percent
     .pct
     {
+        LDA !sram_display_mode : DEC : BEQ .skipPercent
         LDA #$0000 : STA !ram_pct_1
 
         ; Max HP (E tanks)
@@ -434,6 +435,7 @@ ih_update_hud_code:
     ; E-tanks
     LDA !ram_etanks : JSR Hex2Dec : LDX #$0054 : JSR Draw3
 
+    .skipPercent
     ; Lag
     LDA !ram_last_room_lag : JSR Hex2Dec : LDX #$0082 : JSR Draw3
 
@@ -610,6 +612,7 @@ status_roomstrat:
     dw status_botwooncf
     dw status_elevatorcf
     dw status_robotflush
+    dw status_kihuntermanip
 }
 
 status_shinetimer:
@@ -1650,6 +1653,112 @@ status_ramwatch:
 
   .done
     RTS
+}
+
+status_kihuntermanip:
+{
+    LDA $079B : CMP #$B585 : BEQ .roomStairs
+;    LDA $079B : CMP #$B656 : BEQ .jumpMusketeers
+    JMP .done
+;  .jumpMusketeers
+;    JMP .roomMusketeers
+
+; Kihunter Stairs
+  .roomStairs
+    LDA #$0C0E : STA $7EC68C : STA $7EC68E          ; draw blank spaces
+    STA $7EC690 : STA $7EC692 : STA $7EC694
+    STA $7EC696 : STA $7EC698 : STA $7EC614
+
+; top kihunter
+    LDX #$0000                                      ; top kihunter, enemy0
+    
+    ; Y position
+    LDA $0F7E,X : CMP #$01F4 : BPL .topYSuccess     ; check if below (greater than) Y = 500d
+    LDA #$0C6D : STA $7EC688 : STA $7EC68A          ; draw N's and return
+    STA $7EC68E : BRA .movementEnemy0
+
+  .topYSuccess
+    LDA #$0C67 : STA $7EC688                        ; draw Y
+    LDA #$0C6D : STA $7EC68A                        ; draw N and continue to Xpos
+    
+    ; X position
+    LDA $0F7A,X : CMP #$00A8 : BMI .topXSuccess     ; check if left of (less than) X = 168d
+    LDA #$0C6D : STA $7EC68A : BRA .movementEnemy0  ; draw N and return
+    
+  .topXSuccess
+    LDA #$0C67 : STA $7EC68A                        ; draw Y
+
+    ; movement arrows
+  .movementEnemy0
+    ; X position
+    LDA $0F7A,X : CMP !ram_enemy0_last_xpos         ; check enemy xpos
+    BEQ .FinishX0 : BMI .LeftX0                     ; next enemy if no change, left if xpos decreased
+    LDA #$0C62 : STA $7EC616                        ; draw right arrow
+    BRA .FinishX0
+
+  .LeftX0
+    LDA #$0C60 : STA $7EC616                        ; draw left arrow
+
+  .FinishX0
+    LDA $0F7A,X : STA !ram_enemy0_last_xpos         ; store last_xpos for next frame
+    
+    ; Y position
+    LDA $0F7E,X : CMP !ram_enemy0_last_ypos         ; check enemy ypos
+    BEQ .FinishY0 : BMI .UpY0                       ; next enemy if no change, left if ypos decreased
+    LDA #$0C63 : STA $7EC618                        ; draw down arrow
+    BRA .FinishY0
+
+  .UpY0
+    LDA #$0C61 : STA $7EC618                        ; draw up arrow
+
+  .FinishY0
+    LDA $0F7E,X : STA !ram_enemy0_last_ypos         ; store last_ypos for next frame
+    
+; bottom kihunter
+    LDX #$0100                                      ; bottom kihunter, enemy4
+    
+    ; Y position
+    LDA $0FFE,X : CMP #$0316 : BPL .botYSuccess     ; check if below (greater than) Y = 790d
+    LDA #$0C6D : STA $7EC68A : BRA .movementEnemy4  ; draw N and return
+    
+  .botYSuccess
+    LDA #$0C67 : STA $7EC68E                        ; draw Y
+
+    ; movement arrows
+  .movementEnemy4
+    ; X position
+    LDA $0F7A,X : CMP !ram_enemy4_last_xpos         ; check enemy xpos
+    BEQ .FinishX4 : BMI .LeftX4                     ; next enemy if no change, left if xpos decreased
+    LDA #$0C62 : STA $7EC656                        ; draw right arrow
+    BRA .FinishX4
+
+  .LeftX4
+    LDA #$0C60 : STA $7EC656                        ; draw left arrow
+
+  .FinishX4
+    LDA $0F7A,X : STA !ram_enemy4_last_xpos         ; store last_xpos for next frame
+
+    ; Y position
+    LDA $0F7E,X : CMP !ram_enemy4_last_ypos         ; check enemy xpos
+    BEQ .FinishY4 : BMI .UpY4                       ; next enemy if no change, left if xpos decreased
+    LDA #$0C63 : STA $7EC658                        ; draw down arrow
+    BRA .FinishY4
+
+  .UpY4
+    LDA #$0C61 : STA $7EC658                        ; draw up arrow
+
+  .FinishY4
+    LDA $0F7E,X : STA !ram_enemy2_last_ypos         ; store last_ypos for next frame
+
+
+
+; Not doing anything here yet
+  .roomMusketeers
+    LDX #$0100                                      ; start with first enemy (enemy4)
+    
+  .done
+    RTS
+}
 
 status_enemyhp:
 {

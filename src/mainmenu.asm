@@ -1129,6 +1129,7 @@ RoomStratMenu:
     dw ihstrat_botwooncf
     dw ihstrat_elevatorcf
     dw ihstrat_robotflush
+    dw ihstrat_kihuntermanip
     dw #$0000
     %cm_header("INFOHUD ROOM STRAT")
 
@@ -1150,6 +1151,9 @@ ihstrat_elevatorcf:
 ihstrat_robotflush:
     %cm_jsr("Robot Flush", #action_select_room_strat, #$0005)
 
+ihstrat_kihuntermanip:
+    %cm_jsr("Kihunter Manipulation", #action_select_room_strat, #$0006)
+
 action_select_room_strat:
 {
     TYA : STA !sram_room_strat
@@ -1170,6 +1174,7 @@ ih_room_strat:
     db #$28, " BOTWOON CF", #$FF
     db #$28, "ELEVATOR CF", #$FF
     db #$28, "ROBOT FLUSH", #$FF
+    db #$28, "   KIHUNTER", #$FF
     db #$FF
 
 ih_ram_watch:
