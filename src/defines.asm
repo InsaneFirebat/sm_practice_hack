@@ -73,6 +73,25 @@
 !ram_botwoon_rng = $7FFB86
 !ram_room_has_set_rng = $7FFB88
 
+!ram_enemy0_last_xpos = $7FFC40
+!ram_enemy0_last_ypos = $7FFC42
+;!ram_enemy1_last_xpos = $7FFC44
+;!ram_enemy1_last_ypos = $7FFC46
+!ram_enemy2_last_xpos = $7FFC48
+!ram_enemy2_last_ypos = $7FFC4A
+;!ram_enemy3_last_xpos = $7FFC4C
+;!ram_enemy3_last_ypos = $7FFC4E
+!ram_enemy4_last_xpos = $7FFC50
+!ram_enemy4_last_ypos = $7FFC52
+;!ram_enemy5_last_xpos = $7FFC54
+;!ram_enemy5_last_ypos = $7FFC56
+!ram_enemy6_last_xpos = $7FFC58
+!ram_enemy6_last_ypos = $7FFC5A
+;!ram_enemy7_last_xpos = $7FFC5C
+;!ram_enemy7_last_ypos = $7FFC5E
+!ram_enemy8_last_xpos = $7FFC60
+!ram_enemy8_last_ypos = $7FFC62
+
 !ram_tmp_1 = $7FFB4C
 !ram_tmp_2 = $7FFB4E
 !ram_tmp_3 = $7FFB08
