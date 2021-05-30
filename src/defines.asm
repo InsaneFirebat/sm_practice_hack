@@ -129,7 +129,7 @@
 !sram_ctrl_load_state = $70200A
 !sram_ctrl_save_state = $70200C
 !sram_ctrl_load_last_preset = $70200E
-!sram_ctrl_reveal_damage = $702024
+!sram_ctrl_reveal_damage = $702040
 
 !sram_artificial_lag = $702010
 !sram_rerandomize = $702012
@@ -141,9 +141,9 @@
 !sram_save_has_set_rng = $70201E
 !sram_preset_category = $702020
 !sram_room_strat = $702022
-!sram_countdamage = $702026
-!sram_hexstyle = $702028
-!sram_menu_background = $70202A
+!sram_hexstyle = $702024
+!sram_countdamage = $702042
+!sram_menu_background = $702044
 
 ; -------------
 ; Menu
