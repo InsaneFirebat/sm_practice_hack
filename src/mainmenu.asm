@@ -965,7 +965,6 @@ InfoHudMenu:
     dw #ih_goto_room_strat
     dw #ih_room_strat
     dw #ih_ram_watch
-    dw #ih_hex_style
     dw #ih_room_counter
     dw #ih_lag
     dw #$0000
@@ -1253,15 +1252,6 @@ action_ramwatch_write:
     %sfxgrapple()
     RTS
 }
-
-ih_hex_style:
-    dw !ACTION_CHOICE
-    dl #!sram_hexstyle
-    dw #$0000
-    db #$28, "Hex Number Sty", #$FF
-    db #$28, "le ORIGINAL", #$FF
-    db #$28, "le TRUE O-F", #$FF
-    db #$FF
 
 ih_room_counter:
     dw !ACTION_CHOICE
