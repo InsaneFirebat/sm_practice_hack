@@ -158,9 +158,8 @@
 !sram_save_has_set_rng = $70201E
 !sram_preset_category = $702020
 !sram_room_strat = $702022
-!sram_hexstyle = $702024
-!sram_countdamage = $702042
-!sram_menu_background = $702044
+!sram_countdamage = $702024
+!sram_menu_background = $702026
 
 ; -------------
 ; Menu

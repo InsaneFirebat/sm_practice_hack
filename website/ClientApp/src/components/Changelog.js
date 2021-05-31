@@ -22,11 +22,10 @@ export class Changelog extends Component {
                                             <ul>
                                                 <li>Added submenus for Preset Categories, InfoHUD Display Modes, and Room Strats. (2.2)</li>
                                                 <li>Update room timers between Mother Brain phases. (2.2)</li>
-                                                <li>Added presets for Any% PKRD. (2.2)</li>
-                                                <li>Added Phantoon's eye close timer to RNG Controls. (2.2)</li>
-                                                <li>Added Draygon and Crocomire RNG Control. (2.2)</li>
-                                                <li>Added Phantoon eye close, Draygon, and Crocomire RNG Control. (2.2)</li>
+                                                <li>Added support for five digit decimal numbers and hexidecimal. (2.2)</li>
+                                                <li>Added RNG Controls for Phantoon, Draygon, and Crocomire. (2.2)</li>
                                                 <li>Fixed Botwoon RNG Control and endgame cutscene crash. (2.2)</li>
+                                                <li>Added presets for Any% PKRD. (2.2)</li>
                                             </ul>
                                         </CardBody>
                                     </Card>
