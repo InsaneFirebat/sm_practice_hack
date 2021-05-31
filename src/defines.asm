@@ -62,10 +62,9 @@
 !ram_watch_write_hi = $7FFC24
 !ram_watch_write_lo = $7FFC26
 
-!ram_phantoon_rng_pat1 = $7FFB82
-!ram_phantoon_rng_pat2 = $7FFB84
-!ram_phantoon_rng_dir1 = $7FFB76
-!ram_phantoon_rng_dir2 = $7FFB78
+!ram_phantoon_rng_1 = $7FFB84
+!ram_phantoon_rng_2 = $7FFB76
+!ram_phantoon_rng_3 = $7FFB78
 !ram_phantoon_rng_eyeclose = $7FFB7A
 !ram_crocomire_rng = $7FFB7C
 !ram_draygon_rng_left = $7FFB7E

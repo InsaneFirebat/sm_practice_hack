@@ -158,7 +158,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.1.10")
+    %cm_header("CUSTOM INFOHUD V2.2")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -1298,10 +1298,8 @@ RngMenu:
     if !FEATURE_SD2SNES
         dw #rng_rerandomize
     endif
-    dw #rng_phan_first_direction
-    dw #rng_phan_first_pattern
-    dw #rng_phan_second_direction
-    dw #rng_phan_second_pattern
+    dw #rng_phan_first_phase
+    dw #rng_phan_second_phase
     dw #rng_phan_eyeclose
     dw #rng_botwoon_rng
     dw #rng_draygon_rng_right
@@ -1325,51 +1323,37 @@ rng_botwoon_rng:
     db #$28, "       LEFT", #$FF
     db #$FF
 
-rng_phan_first_direction:
+rng_phan_first_phase:
     dw !ACTION_CHOICE
-    dl #!ram_phantoon_rng_dir1
+    dl #!ram_phantoon_rng_1
     dw #$0000
-    db #$28, "Phan 1st Direc", #$FF
-    db #$28, "tion RANDOM", #$FF
-    db #$28, "tion   LEFT", #$FF
-    db #$28, "tion  RIGHT", #$FF
+    db #$28, "Phan 1st Phase", #$FF
+    db #$28, "     RANDOM", #$FF
+    db #$28, "  FAST LEFT", #$FF
+    db #$28, "   MID LEFT", #$FF
+    db #$28, "  SLOW LEFT", #$FF
+    db #$28, " FAST RIGHT", #$FF
+    db #$28, "  MID RIGHT", #$FF
+    db #$28, " SLOW RIGHT", #$FF
     db #$FF
 
-rng_phan_first_pattern:
+rng_phan_second_phase:
     dw !ACTION_CHOICE
-    dl #!ram_phantoon_rng_pat1
+    dl #!ram_phantoon_rng_2
     dw #$0000
-    db #$28, "Phan 1st Patte", #$FF
-    db #$28, "rn   RANDOM", #$FF
-    db #$28, "rn     FAST", #$FF
-    db #$28, "rn      MID", #$FF
-    db #$28, "rn     SLOW", #$FF
-    db #$FF
-
-rng_phan_second_direction:
-    dw !ACTION_CHOICE
-    dl #!ram_phantoon_rng_dir2
-    dw #$0000
-    db #$28, "Phan 2nd Direc", #$FF
-    db #$28, "tion RANDOM", #$FF
-    db #$28, "tion   LEFT", #$FF
-    db #$28, "tion  RIGHT", #$FF
-    db #$FF
-
-rng_phan_second_pattern:
-    dw !ACTION_CHOICE
-    dl #!ram_phantoon_rng_pat2
-    dw #$0000
-    db #$28, "Phan 2nd Patte", #$FF
-    db #$28, "rn   RANDOM", #$FF
-    db #$28, "rn     FAST", #$FF
-    db #$28, "rn      MID", #$FF
-    db #$28, "rn     SLOW", #$FF
+    db #$28, "Phan 2nd Phase", #$FF
+    db #$28, "     RANDOM", #$FF
+    db #$28, "  FAST LEFT", #$FF
+    db #$28, "   MID LEFT", #$FF
+    db #$28, "  SLOW LEFT", #$FF
+    db #$28, " FAST RIGHT", #$FF
+    db #$28, "  MID RIGHT", #$FF
+    db #$28, " SLOW RIGHT", #$FF
     db #$FF
 
 rng_phan_eyeclose:
     dw !ACTION_CHOICE
-    dl #!ram_phantoon_rng_eyeclose
+    dl #!ram_phantoon_rng_3
     dw #$0000
     db #$28, "Phan Eye Close", #$FF
     db #$28, "     RANDOM", #$FF
@@ -1382,6 +1366,10 @@ rng_draygon_rng_right:
     dw !ACTION_CHOICE
     dl #!ram_draygon_rng_right
     dw #$0000
+    db #$28, "Draygon from Right", #$FF
+    db #$28, "IGHT RANDOM", #$FF
+    db #$28, "IGHT   GOOP", #$FF
+    db #$28, "IGHT  SWOOP", #$FF
     db #$28, "Draygon from R", #$FF
     db #$28, "ight RANDOM", #$FF
     db #$28, "ight   GOOP", #$FF
