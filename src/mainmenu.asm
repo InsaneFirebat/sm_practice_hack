@@ -1366,10 +1366,6 @@ rng_draygon_rng_right:
     dw !ACTION_CHOICE
     dl #!ram_draygon_rng_right
     dw #$0000
-    db #$28, "Draygon from Right", #$FF
-    db #$28, "IGHT RANDOM", #$FF
-    db #$28, "IGHT   GOOP", #$FF
-    db #$28, "IGHT  SWOOP", #$FF
     db #$28, "Draygon from R", #$FF
     db #$28, "ight RANDOM", #$FF
     db #$28, "ight   GOOP", #$FF
