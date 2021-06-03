@@ -88,9 +88,6 @@ ResetCountDamageRid:
     RTS
 }
 
-org $9AB200         ; graphics for HUD
-incbin ../resources/hudgfx.bin
-
 org $A7CE64         ;Phantoon AI init
     JSR ResetCountDamagePhan
 
@@ -120,6 +117,9 @@ org $948F49        ; RTS this routine to enable walk through walls
 
 org $A6F135
     JSR SteamCollision
+
+org $9AB200         ; graphics for HUD
+incbin ../resources/hudgfx.bin
 
 
 ; Main bank stuff

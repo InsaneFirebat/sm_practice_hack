@@ -46,8 +46,9 @@ init_sram:
     LDA #$06F0 : STA !sram_ctrl_load_last_preset       ; Down + Left + L + R + A + X
     LDA #$0000 : STA !sram_ctrl_full_equipment
     LDA #$0000 : STA !sram_ctrl_kill_enemies
-    LDA #$C930 : STA !sram_ctrl_reset_segment_timer    ; Up + Right + L + R + B + Y
+    LDA #$0000 : STA !sram_ctrl_reset_segment_timer
     LDA #$8070 : STA !sram_ctrl_reveal_damage          ; L + R + B + X
+    LDA #$C930 : STA !sram_ctrl_random_preset          ; Up + Right + L + R + B + Y
 
     ; Input Cheat Sheet  (#$XXYY)
     ; $4218  (YY)
@@ -77,9 +78,20 @@ init_sram:
     LDA #$0000 : STA !sram_save_has_set_rng
     LDA #$0000 : STA !sram_preset_category
     LDA #$0000 : STA !sram_room_strat
-    LDA #$0000 : STA !sram_menu_background
+    LDA #$0000 : STA !sram_countdamage
+    LDA #$0001 : STA !sram_menu_background
     
+    LDA #$0000 : STA !sram_presetrando
+    LDA #$0001 : STA !sram_presetrando_morph
+    LDA #$000E : STA !sram_presetrando_max_etanks
+    LDA #$0004 : STA !sram_presetrando_max_reserves
+    LDA #$002E : STA !sram_presetrando_max_missiles
+    LDA #$000A : STA !sram_presetrando_max_supers
+    LDA #$000A : STA !sram_presetrando_max_pbs
+    LDA #$0000 : STA !sram_presetrando_beampref
+
     LDA #!SRAM_VERSION : STA !sram_initialized
+
     RTS
 }
 

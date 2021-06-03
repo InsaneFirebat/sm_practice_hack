@@ -146,7 +146,8 @@
 !sram_ctrl_load_state = $70200A
 !sram_ctrl_save_state = $70200C
 !sram_ctrl_load_last_preset = $70200E
-!sram_ctrl_reveal_damage = $702040
+!sram_ctrl_reveal_damage = $7020E0
+!sram_ctrl_random_preset = $7020E2
 
 !sram_artificial_lag = $702010
 !sram_rerandomize = $702012
@@ -158,8 +159,17 @@
 !sram_save_has_set_rng = $70201E
 !sram_preset_category = $702020
 !sram_room_strat = $702022
-!sram_countdamage = $702024
-!sram_menu_background = $702026
+!sram_countdamage = $702080
+!sram_menu_background = $702082
+
+!sram_presetrando = $7020A4
+!sram_presetrando_morph = $7020A6
+!sram_presetrando_max_etanks = $7020A8
+!sram_presetrando_max_reserves = $7020AA
+!sram_presetrando_max_missiles = $7020AC
+!sram_presetrando_max_supers = $7020AE
+!sram_presetrando_max_pbs = $7020B0
+!sram_presetrando_beampref = $7020B2
 
 ; -------------
 ; Menu

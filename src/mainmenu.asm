@@ -160,7 +160,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("INSANEFIREBAT V2.1.10B")
+    %cm_header("INSANEFIREBAT V2.2.0.1")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -1372,10 +1372,6 @@ rng_draygon_rng_right:
     dw !ACTION_CHOICE
     dl #!ram_draygon_rng_right
     dw #$0000
-    db #$28, "Draygon from Right", #$FF
-    db #$28, "IGHT RANDOM", #$FF
-    db #$28, "IGHT   GOOP", #$FF
-    db #$28, "IGHT  SWOOP", #$FF
     db #$28, "Draygon from R", #$FF
     db #$28, "ight RANDOM", #$FF
     db #$28, "ight   GOOP", #$FF
@@ -1418,6 +1414,7 @@ CtrlMenu:
     dw #ctrl_full_equipment
     dw #ctrl_kill_enemies
     dw #ctrl_reveal_damage
+    dw #ctrl_random_preset
     dw #ctrl_clear_shortcuts
     dw #$0000
     %cm_header("CONTROLLER SHORTCUTS")
@@ -1446,6 +1443,9 @@ ctrl_kill_enemies:
 
 ctrl_reveal_damage:
     %cm_ctrl_shortcut("Toggle Boss Dmg", !sram_ctrl_reveal_damage)
+
+ctrl_random_preset:
+    %cm_ctrl_shortcut("Random Preset", !sram_ctrl_random_preset)
 
 ctrl_clear_shortcuts:
     %cm_jsr_nosound("Clear Shortcuts", action_clear_shortcuts, #$0000)
@@ -1476,6 +1476,7 @@ IFBMenu:
     dw #ifb_noclip
     dw #ifb_nosteam
     dw #ifb_debugteleport
+    dw #ifb_presetrando
     dw #ifb_gamespeed
     dw #ifb_soundtest
     dw #ifb_lockout
@@ -1495,6 +1496,9 @@ ifb_nosteam:
 
 ifb_debugteleport:
     %cm_submenu("Hidden Dev Load Stations", #DebugTeleportMenu)
+
+ifb_presetrando:
+    %cm_submenu("Preset Randomizer", #PresetRandoMenu)
 
 ifb_gamespeed:
     %cm_numfield("Slowdown Frames", !ram_slowdown_mode, 0, 30, 1, #0)
@@ -1756,6 +1760,53 @@ tel_ceres:
 
 tel_debug:
     %cm_jsr("Debug Room CRASH", #action_teleport, #$0700)
+
+
+; ------------
+; Preset Rando
+; ------------
+
+PresetRandoMenu:
+    dw #presetrando_enable
+    dw #presetrando_morph
+    dw #presetrando_beampref
+    dw #presetrando_etanks
+    dw #presetrando_reserves
+    dw #presetrando_missiles
+    dw #presetrando_supers
+    dw #presetrando_pbs
+    dw #$0000
+    %cm_header("RANDOMIZE PRESET EQUIP")
+
+presetrando_enable: 
+    %cm_toggle("Equipment Rando", !sram_presetrando, #$0001, #0)
+
+presetrando_morph:
+    %cm_toggle("Force Morph Ball", !sram_presetrando_morph, #$0001, #0)
+
+presetrando_beampref:
+    dw !ACTION_CHOICE
+    dl #!sram_presetrando_beampref
+    dw #$0000
+    db #$28, "Beam Preferenc", #$FF
+        db #$28, "e    SPAZER", #$FF
+        db #$28, "e    PLASMA", #$FF
+    db #$FF
+
+presetrando_etanks: 
+    %cm_numfield("Max Energy Tanks", !sram_presetrando_max_etanks, 0, 14, 1, #0)
+
+presetrando_reserves: 
+    %cm_numfield("Max Reserve Tanks", !sram_presetrando_max_reserves, 0, 4, 1, #0)
+
+presetrando_missiles: 
+    %cm_numfield("Max Missile Pickups", !sram_presetrando_max_missiles, 0, 50, 1, #0)
+
+presetrando_supers: 
+    %cm_numfield("Max Super Pickups", !sram_presetrando_max_supers, 0, 50, 1, #0)
+
+presetrando_pbs: 
+    %cm_numfield("Max Power Bomb Pickups", !sram_presetrando_max_pbs, 0, 50, 1, #0)
 
 
 ; ----------
