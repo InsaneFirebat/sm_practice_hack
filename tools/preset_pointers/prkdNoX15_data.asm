@@ -246,8 +246,8 @@ preset_prkd_crateria_parlor_downback:
     dl $7E0AFA : db $02 : dw $035B ; Samus Y
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_crateria_climb_down:
     dw #preset_prkd_crateria_parlor_downback ; Crateria: Parlor Downback
     dl $7E090F : db $02 : dw $3000 ; Screen subpixel X position.
@@ -259,8 +259,8 @@ preset_prkd_crateria_climb_down:
     dl $7E0AFA : db $02 : dw $04BB ; Samus Y
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_crateria_pit_room:
     dw #preset_prkd_crateria_climb_down ; Crateria: Climb Down
     dl $7E078D : db $02 : dw $898E ; DDB
@@ -278,8 +278,8 @@ preset_prkd_crateria_pit_room:
     dl $7E0AFA : db $02 : dw $088B ; Samus Y
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_crateria_morph:
     dw #preset_prkd_crateria_pit_room ; Crateria: Pit Room
     dl $7E078D : db $02 : dw $8B9E ; DDB
@@ -301,8 +301,8 @@ preset_prkd_crateria_morph:
     dl $7ED91A : db $02 : dw $0001 ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_crateria_construction_zone_down:
     dw #preset_prkd_crateria_morph ; Crateria: Morph
     dl $7E078F : db $02 : dw $0003 ; DoorOut Index
@@ -357,8 +357,8 @@ preset_prkd_crateria_pit_room_revisit:
     dl $7ED91A : db $02 : dw $0003 ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_crateria_climb_up:
     dw #preset_prkd_crateria_pit_room_revisit ; Crateria: Pit Room Revisit
     dl $7E078D : db $02 : dw $8B92 ; DDB
@@ -409,8 +409,8 @@ preset_prkd_crateria_flyway:
     dl $7E0AFA : db $02 : dw $026B ; Samus Y
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_crateria_bomb_torizo:
     dw #preset_prkd_crateria_flyway ; Crateria: Flyway
     dl $7E078D : db $02 : dw $8982 ; DDB
@@ -429,8 +429,8 @@ preset_prkd_crateria_bomb_torizo:
     dl $7ED8B2 : db $02 : dw $2400 ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_crateria_alcatraz:
     dw #preset_prkd_crateria_bomb_torizo ; Crateria: Bomb Torizo
     dl $7E078D : db $02 : dw $8BAA ; DDB
@@ -465,8 +465,8 @@ preset_prkd_crateria_terminator:
     dl $7E0B3F : db $02 : dw $0104 ; Blue suit
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_crateria_green_pirate_shaft:
     dw #preset_prkd_crateria_terminator ; Crateria: Terminator
     dl $7E078D : db $02 : dw $895E ; DDB
@@ -547,8 +547,8 @@ preset_prkd_brinstar_dachora_room:
     dl $7ED91A : db $02 : dw $000C ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_brinstar_big_pink:
     dw #preset_prkd_brinstar_dachora_room ; Brinstar: Dachora Room
     dl $7E078D : db $02 : dw $8CE2 ; DDB
@@ -587,8 +587,8 @@ preset_prkd_brinstar_green_hill_zone:
     dl $7ED91A : db $02 : dw $000F ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_brinstar_noob_bridge:
     dw #preset_prkd_brinstar_green_hill_zone ; Brinstar: Green Hill Zone
     dl $7E078D : db $02 : dw $8DEA ; DDB
@@ -604,8 +604,8 @@ preset_prkd_brinstar_noob_bridge:
     dl $7ED91A : db $02 : dw $0010 ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_brinstar_red_tower:
     dw #preset_prkd_brinstar_noob_bridge ; Brinstar: Noob Bridge
     dl $7E078D : db $02 : dw $8E92 ; DDB
@@ -639,8 +639,8 @@ preset_prkd_brinstar_hellway:
     dl $7E0AF6 : db $02 : dw $0094 ; Samus X
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_brinstar_caterpillars_down:
     dw #preset_prkd_brinstar_hellway ; Brinstar: Hellway
     dl $7E078D : db $02 : dw $901E ; DDB
@@ -654,8 +654,8 @@ preset_prkd_brinstar_caterpillars_down:
     dl $7E0AF6 : db $02 : dw $0286 ; Samus X
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_brinstar_alpha_power_bombs:
     dw #preset_prkd_brinstar_caterpillars_down ; Brinstar: Caterpillars Down
     dl $7E078D : db $02 : dw $908A ; DDB
@@ -673,8 +673,8 @@ preset_prkd_brinstar_alpha_power_bombs:
     dl $7ED8B6 : db $02 : dw $2008 ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_brinstar_caterpillars_up:
     dw #preset_prkd_brinstar_alpha_power_bombs ; Brinstar: Alpha Power Bombs
     dl $7E078D : db $02 : dw $9096 ; DDB
@@ -761,8 +761,8 @@ preset_prkd_brinstar_horizontal_bomb_jump:
     dl $7ED91A : db $02 : dw $0013 ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_brinstar_ocean:
     dw #preset_prkd_brinstar_horizontal_bomb_jump ; Brinstar: Horizontal Bomb Jump
     dl $7E090F : db $02 : dw $8000 ; Screen subpixel X position.
@@ -824,8 +824,8 @@ preset_prkd_wrecked_ship_phantoon:
     dl $7ED8C0 : db $02 : dw $0030 ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_wrecked_ship_leaving_phantoon:
     dw #preset_prkd_wrecked_ship_phantoon ; Wrecked Ship: Phantoon
     dl $7E078D : db $02 : dw $A2C4 ; DDB
@@ -846,8 +846,8 @@ preset_prkd_wrecked_ship_leaving_phantoon:
     dl $7ED8C0 : db $02 : dw $0070 ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_wrecked_ship_shaft_to_supers:
     dw #preset_prkd_wrecked_ship_leaving_phantoon ; Wrecked Ship: Leaving Phantoon
     dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
@@ -915,8 +915,8 @@ preset_prkd_wrecked_ship_upper_west_ocean:
     dl $7ED8C0 : db $02 : dw $0174 ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_wrecked_ship_pancakes_and_wavers:
     dw #preset_prkd_wrecked_ship_upper_west_ocean ; Wrecked Ship: Upper West Ocean
     dl $7E078D : db $02 : dw $A1E0 ; DDB
@@ -956,8 +956,8 @@ preset_prkd_wrecked_ship_bowling_alley:
     dl $7E0AFA : db $02 : dw $0090 ; Samus Y
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_wrecked_ship_leaving_gravity:
     dw #preset_prkd_wrecked_ship_bowling_alley ; Wrecked Ship: Bowling Alley
     dl $7E078D : db $02 : dw $A1A4 ; DDB
@@ -982,8 +982,8 @@ preset_prkd_wrecked_ship_leaving_gravity:
     dl $7ED91A : db $02 : dw $0020 ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_wrecked_ship_reverse_moat:
     dw #preset_prkd_wrecked_ship_leaving_gravity ; Wrecked Ship: Leaving Gravity
     dl $7E078D : db $02 : dw $A300 ; DDB
@@ -1019,8 +1019,8 @@ preset_prkd_wrecked_ship_crateria_kihunters_return:
     dl $7ED91A : db $02 : dw $0024 ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_red_brinstar_revisit_red_brinstar_elevator:
     dw #preset_prkd_wrecked_ship_crateria_kihunters_return ; Wrecked Ship: Crateria Kihunters Return
     dl $7E078D : db $02 : dw $8A42 ; DDB
@@ -1079,8 +1079,8 @@ preset_prkd_red_brinstar_revisit_red_tower_down:
     dl $7E0AFA : db $02 : dw $008B ; Samus Y
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_red_brinstar_revisit_skree_boost:
     dw #preset_prkd_red_brinstar_revisit_red_tower_down ; Red Brinstar Revisit: Red Tower Down
     dl $7E078D : db $02 : dw $907E ; DDB
@@ -1095,8 +1095,8 @@ preset_prkd_red_brinstar_revisit_skree_boost:
     dl $7E0AFA : db $02 : dw $098B ; Samus Y
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_red_brinstar_revisit_below_spazer:
     dw #preset_prkd_red_brinstar_revisit_skree_boost ; Red Brinstar Revisit: Skree Boost
     dl $7E078D : db $02 : dw $9042 ; DDB
@@ -1133,8 +1133,8 @@ preset_prkd_red_brinstar_revisit_leaving_spazer:
     dl $7ED91A : db $02 : dw $0025 ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_red_brinstar_revisit_breaking_tube:
     dw #preset_prkd_red_brinstar_revisit_leaving_spazer ; Red Brinstar Revisit: Leaving Spazer
     dl $7E078D : db $02 : dw $9132 ; DDB
@@ -1152,44 +1152,41 @@ preset_prkd_red_brinstar_revisit_breaking_tube:
     dl $7E0AFA : db $02 : dw $018B ; Samus Y
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_upper_norfair_business_center:
     dw #preset_prkd_red_brinstar_revisit_breaking_tube ; Red Brinstar Revisit: Breaking Tube
-    dl $7E078D : db $02 : dw $A384 ; DDB
-    dl $7E078F : db $02 : dw $0003 ; DoorOut Index
-    dl $7E079B : db $02 : dw $A6A1 ; MDB
-    dl $7E07F5 : db $02 : dw $0003 ; Music Track
-    dl $7E090F : db $02 : dw $8000 ; Screen subpixel X position.
-    dl $7E0911 : db $02 : dw $0000 ; Screen X position in pixels
-    dl $7E0913 : db $02 : dw $2001 ; Screen subpixel Y position
-    dl $7E0915 : db $02 : dw $0000 ; Screen Y position in pixels
-    dl $7E09CE : db $02 : dw $0002 ; Pbs
-    dl $7E0AF6 : db $02 : dw $0080 ; Samus X
-    dl $7E0AFA : db $02 : dw $008B ; Samus Y
-    dl $7ED820 : db $02 : dw $0801 ; Events, Items, Doors
-    dw #$FFFF
-.after
-print pc, " <-- preset"
-
-preset_prkd_upper_norfair_hi_jump_etank:
-    dw #preset_prkd_upper_norfair_business_center ; Upper Norfair: Business Center
     dl $7E078D : db $02 : dw $9246 ; DDB
-    dl $7E078F : db $02 : dw $0005 ; DoorOut Index
+    dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $A7DE ; MDB
     dl $7E079F : db $02 : dw $0002 ; Region
     dl $7E07C3 : db $02 : dw $C3F9 ; GFX Pointers
     dl $7E07C5 : db $02 : dw $BBBD ; GFX Pointers
     dl $7E07C7 : db $02 : dw $C2B6 ; GFX Pointers
     dl $7E07F3 : db $02 : dw $0015 ; Music Bank
-    dl $7E07F5 : db $02 : dw $0005 ; Music Track
-    dl $7E090F : db $02 : dw $FFFF ; Screen subpixel X position.
+    dl $7E090F : db $02 : dw $8000 ; Screen subpixel X position.
+    dl $7E0911 : db $02 : dw $0000 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $0000 ; Screen subpixel Y position
+    dl $7E0915 : db $02 : dw $0238 ; Screen Y position in pixels
+    dl $7E09CE : db $02 : dw $0002 ; Pbs
+    dl $7E0A1C : db $02 : dw $009B ; Samus position/state
+    dl $7E0A1E : db $02 : dw $0000 ; More position/state
+    dl $7E0AF6 : db $02 : dw $0080 ; Samus X
+    dl $7E0AFA : db $02 : dw $02A8 ; Samus Y
+    dl $7ED820 : db $02 : dw $0801 ; Events, Items, Doors
+    dw #$FFFF
+.after
+
+print pc, " <-- preset"
+preset_prkd_upper_norfair_hi_jump_etank:
+    dw #preset_prkd_upper_norfair_business_center ; Upper Norfair: Business Center
+    dl $7E078F : db $02 : dw $0005 ; DoorOut Index
+    dl $7E090F : db $02 : dw $2000 ; Screen subpixel X position.
     dl $7E0915 : db $02 : dw $051B ; Screen Y position in pixels
     dl $7E09CA : db $02 : dw $0007 ; Supers
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
-    dl $7E0AF6 : db $02 : dw $0049 ; Samus X
+    dl $7E0AF6 : db $02 : dw $0048 ; Samus X
     dl $7E0AFA : db $02 : dw $058B ; Samus Y
     dl $7ED8B8 : db $02 : dw $2000 ; Events, Items, Doors
     dw #$FFFF
@@ -1363,8 +1360,8 @@ preset_prkd_upper_norfair_rising_tide:
     dl $7ED91A : db $02 : dw $002C ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_upper_norfair_bubble_mountain:
     dw #preset_prkd_upper_norfair_rising_tide ; Upper Norfair: Rising Tide
     dl $7E078D : db $02 : dw $929A ; DDB
@@ -1415,8 +1412,8 @@ preset_prkd_upper_norfair_leaving_speedbooster:
     dl $7ED91A : db $02 : dw $002F ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_upper_norfair_single_chamber:
     dw #preset_prkd_upper_norfair_leaving_speedbooster ; Upper Norfair: Leaving Speedbooster
     dl $7E078D : db $02 : dw $97AA ; DDB
@@ -1438,8 +1435,8 @@ preset_prkd_upper_norfair_single_chamber:
     dl $7ED91A : db $02 : dw $0031 ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_upper_norfair_double_chamber:
     dw #preset_prkd_upper_norfair_single_chamber ; Upper Norfair: Single Chamber
     dl $7E078D : db $02 : dw $9582 ; DDB
@@ -1454,8 +1451,8 @@ preset_prkd_upper_norfair_double_chamber:
     dl $7ED8BA : db $02 : dw $0071 ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_upper_norfair_double_chamber_revisited:
     dw #preset_prkd_upper_norfair_double_chamber ; Upper Norfair: Double Chamber
     dl $7E078D : db $02 : dw $961E ; DDB
@@ -1478,8 +1475,8 @@ preset_prkd_upper_norfair_double_chamber_revisited:
     dl $7ED91A : db $02 : dw $0033 ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_upper_norfair_single_chamber_revisited:
     dw #preset_prkd_upper_norfair_double_chamber_revisited ; Upper Norfair: Double Chamber Revisited
     dl $7E078D : db $02 : dw $962A ; DDB
@@ -1495,8 +1492,8 @@ preset_prkd_upper_norfair_single_chamber_revisited:
     dl $7ED91A : db $02 : dw $0034 ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_upper_norfair_volcano_room:
     dw #preset_prkd_upper_norfair_single_chamber_revisited ; Upper Norfair: Single Chamber Revisited
     dl $7E078D : db $02 : dw $95EE ; DDB
@@ -1540,7 +1537,7 @@ preset_prkd_upper_norfair_lava_spark:
     dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
     dl $7E0911 : db $02 : dw $0100 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $C000 ; Screen subpixel Y position
-    dl $7E09C6 : db $02 : dw $000B ; Missiles
+    dl $7E09C6 : db $02 : dw $000A ; Missiles
     dl $7E09CE : db $02 : dw $0005 ; Pbs
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
@@ -1548,8 +1545,8 @@ preset_prkd_upper_norfair_lava_spark:
     dl $7ED8BA : db $02 : dw $01F1 ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_lower_norfair_ln_main_hall:
     dw #preset_prkd_upper_norfair_lava_spark ; Upper Norfair: Lava Spark
     dl $7E078D : db $02 : dw $96F6 ; DDB
@@ -1558,7 +1555,6 @@ preset_prkd_lower_norfair_ln_main_hall:
     dl $7E090F : db $02 : dw $1000 ; Screen subpixel X position.
     dl $7E0911 : db $02 : dw $0400 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $0000 ; Screen subpixel Y position
-    dl $7E09A6 : db $02 : dw $1001 ; Beams
     dl $7E09C2 : db $02 : dw $00B4 ; Health
     dl $7E0A1C : db $02 : dw $009B ; Samus position/state
     dl $7E0A1E : db $02 : dw $0000 ; More position/state
@@ -1566,8 +1562,8 @@ preset_prkd_lower_norfair_ln_main_hall:
     dl $7E0AFA : db $02 : dw $0288 ; Samus Y
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_lower_norfair_prepillars:
     dw #preset_prkd_lower_norfair_ln_main_hall ; Lower Norfair: LN Main Hall
     dl $7E078F : db $02 : dw $0003 ; DoorOut Index
@@ -1580,8 +1576,8 @@ preset_prkd_lower_norfair_prepillars:
     dl $7E0AFA : db $02 : dw $028B ; Samus Y
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_lower_norfair_worst_room_in_the_game:
     dw #preset_prkd_lower_norfair_prepillars ; Lower Norfair: Pre-Pillars
     dl $7E078D : db $02 : dw $9912 ; DDB
@@ -1596,8 +1592,8 @@ preset_prkd_lower_norfair_worst_room_in_the_game:
     dl $7E0AFA : db $02 : dw $008B ; Samus Y
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_lower_norfair_amphitheatre:
     dw #preset_prkd_lower_norfair_worst_room_in_the_game ; Lower Norfair: Worst Room in the Game
     dl $7E078D : db $02 : dw $994E ; DDB
@@ -1612,8 +1608,8 @@ preset_prkd_lower_norfair_amphitheatre:
     dl $7E0AFA : db $02 : dw $018B ; Samus Y
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_lower_norfair_kihunter_stairs_down:
     dw #preset_prkd_lower_norfair_amphitheatre ; Lower Norfair: Amphitheatre
     dl $7E078D : db $02 : dw $997E ; DDB
@@ -1625,8 +1621,8 @@ preset_prkd_lower_norfair_kihunter_stairs_down:
     dl $7E0AFA : db $02 : dw $00BB ; Samus Y
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_lower_norfair_wasteland:
     dw #preset_prkd_lower_norfair_kihunter_stairs_down ; Lower Norfair: Kihunter Stairs Down
     dl $7E078D : db $02 : dw $99A2 ; DDB
@@ -1644,8 +1640,8 @@ preset_prkd_lower_norfair_wasteland:
     dl $7ED8BA : db $02 : dw $41F1 ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_lower_norfair_metal_ninja_pirates:
     dw #preset_prkd_lower_norfair_wasteland ; Lower Norfair: Wasteland
     dl $7E078D : db $02 : dw $99EA ; DDB
@@ -1666,8 +1662,8 @@ preset_prkd_lower_norfair_metal_ninja_pirates:
     dl $7ED91A : db $02 : dw $0035 ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_lower_norfair_plowerhouse:
     dw #preset_prkd_lower_norfair_metal_ninja_pirates ; Lower Norfair: Metal Ninja Pirates
     dl $7E078D : db $02 : dw $9A1A ; DDB
@@ -1683,8 +1679,8 @@ preset_prkd_lower_norfair_plowerhouse:
     dl $7ED8BC : db $02 : dw $0001 ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_lower_norfair_ridley_farming_room:
     dw #preset_prkd_lower_norfair_plowerhouse ; Lower Norfair: Plowerhouse
     dl $7E078D : db $02 : dw $9A32 ; DDB
@@ -1697,8 +1693,8 @@ preset_prkd_lower_norfair_ridley_farming_room:
     dl $7E0AFA : db $02 : dw $008B ; Samus Y
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_lower_norfair_ridley:
     dw #preset_prkd_lower_norfair_ridley_farming_room ; Lower Norfair: Ridley Farming Room
     dl $7E078D : db $02 : dw $995A ; DDB
@@ -1706,14 +1702,14 @@ preset_prkd_lower_norfair_ridley:
     dl $7E090F : db $02 : dw $1000 ; Screen subpixel X position.
     dl $7E0913 : db $02 : dw $7C00 ; Screen subpixel Y position
     dl $7E09C2 : db $02 : dw $00F2 ; Health
-    dl $7E09C6 : db $02 : dw $0006 ; Missiles
+    dl $7E09C6 : db $02 : dw $000A ; Missiles
     dl $7E09CE : db $02 : dw $0004 ; Pbs
     dl $7E0AF6 : db $02 : dw $0024 ; Samus X
     dl $7ED8BA : db $02 : dw $D1F1 ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_lower_norfair_leaving_ridley:
     dw #preset_prkd_lower_norfair_ridley ; Lower Norfair: Ridley
     dl $7E078D : db $02 : dw $98CA ; DDB
@@ -1723,6 +1719,7 @@ preset_prkd_lower_norfair_leaving_ridley:
     dl $7E090F : db $02 : dw $C000 ; Screen subpixel X position.
     dl $7E0913 : db $02 : dw $C400 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $011F ; Screen Y position in pixels
+    dl $7E09A6 : db $02 : dw $1001 ; Beams
     dl $7E09C6 : db $02 : dw $0004 ; Missiles
     dl $7E09CA : db $02 : dw $0003 ; Supers
     dl $7E09CE : db $02 : dw $0005 ; Pbs
@@ -1733,8 +1730,8 @@ preset_prkd_lower_norfair_leaving_ridley:
     dl $7ED82A : db $02 : dw $0101 ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_lower_norfair_reverse_plowerhouse:
     dw #preset_prkd_lower_norfair_leaving_ridley ; Lower Norfair: Leaving Ridley
     dl $7E078D : db $02 : dw $98BE ; DDB
@@ -1795,8 +1792,8 @@ preset_prkd_lower_norfair_fire_flea_room:
     dl $7E0AFA : db $02 : dw $008B ; Samus Y
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_lower_norfair_springball_maze:
     dw #preset_prkd_lower_norfair_fire_flea_room ; Lower Norfair: Fire Flea Room
     dl $7E078D : db $02 : dw $9A02 ; DDB
@@ -1845,8 +1842,8 @@ preset_prkd_lower_norfair_single_chamber_final:
     dl $7ED91A : db $02 : dw $0039 ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_lower_norfair_bubble_mountain_final:
     dw #preset_prkd_lower_norfair_single_chamber_final ; Lower Norfair: Single Chamber Final
     dl $7E078D : db $02 : dw $9A4A ; DDB
@@ -1860,8 +1857,8 @@ preset_prkd_lower_norfair_bubble_mountain_final:
     dl $7E0AF6 : db $02 : dw $007D ; Samus X
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_lower_norfair_frog_speedway:
     dw #preset_prkd_lower_norfair_bubble_mountain_final ; Lower Norfair: Bubble Mountain Final
     dl $7E078D : db $02 : dw $956A ; DDB
@@ -1878,8 +1875,8 @@ preset_prkd_lower_norfair_frog_speedway:
     dl $7ED91A : db $02 : dw $003A ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_lower_norfair_business_center_final:
     dw #preset_prkd_lower_norfair_frog_speedway ; Lower Norfair: Frog Speedway
     dl $7E078D : db $02 : dw $97DA ; DDB
@@ -1917,8 +1914,8 @@ preset_prkd_kraid_entering_kraids_lair:
     dl $7E0AFA : db $02 : dw $0086 ; Samus Y
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_kraid_kraid_kihunters:
     dw #preset_prkd_kraid_entering_kraids_lair ; Kraid: Entering Kraids Lair
     dl $7E078D : db $02 : dw $923A ; DDB
@@ -1937,8 +1934,8 @@ preset_prkd_kraid_kraid_kihunters:
     dl $7E0AFA : db $02 : dw $018B ; Samus Y
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_kraid_mini_kraid:
     dw #preset_prkd_kraid_kraid_kihunters ; Kraid: Kraid Kihunters
     dl $7E078D : db $02 : dw $9156 ; DDB
@@ -1950,8 +1947,8 @@ preset_prkd_kraid_mini_kraid:
     dl $7ED91A : db $02 : dw $003B ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_kraid_kraid_2:
     dw #preset_prkd_kraid_mini_kraid ; Kraid: Mini Kraid
     dl $7E078D : db $02 : dw $919E ; DDB
@@ -1996,8 +1993,8 @@ preset_prkd_kraid_leaving_varia:
     dl $7ED91A : db $02 : dw $003C ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_kraid_mini_kraid_revisit:
     dw #preset_prkd_kraid_leaving_varia ; Kraid: Leaving Varia
     dl $7E078D : db $02 : dw $91CE ; DDB
@@ -2050,23 +2047,24 @@ preset_prkd_kraid_leaving_kraids_lair:
     dl $7ED91A : db $02 : dw $003D ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_maridia_maridia_tube_revisit:
     dw #preset_prkd_kraid_leaving_kraids_lair ; Kraid: Leaving Kraids Lair
     dl $7E078D : db $02 : dw $913E ; DDB
+    dl $7E078F : db $02 : dw $0003 ; DoorOut Index
     dl $7E079B : db $02 : dw $A6A1 ; MDB
     dl $7E07F5 : db $02 : dw $0003 ; Music Track
-    dl $7E090F : db $02 : dw $C000 ; Screen subpixel X position.
-    dl $7E0911 : db $02 : dw $0200 ; Screen X position in pixels
-    dl $7E0913 : db $02 : dw $2400 ; Screen subpixel Y position
-    dl $7E0915 : db $02 : dw $001D ; Screen Y position in pixels
-    dl $7E0AF6 : db $02 : dw $02D9 ; Samus X
-    dl $7E0AFA : db $02 : dw $009B ; Samus Y
+    dl $7E090F : db $02 : dw $E000 ; Screen subpixel X position.
+    dl $7E0911 : db $02 : dw $001B ; Screen X position in pixels
+    dl $7E0913 : db $02 : dw $A7FF ; Screen subpixel Y position
+    dl $7E0915 : db $02 : dw $0000 ; Screen Y position in pixels
+    dl $7E09CA : db $02 : dw $0009 ; Supers
+    dl $7E0AF6 : db $02 : dw $0077 ; Samus X
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_maridia_fish_tank:
     dw #preset_prkd_maridia_maridia_tube_revisit ; Maridia: Maridia Tube Revisit
     dl $7E078D : db $02 : dw $A330 ; DDB
@@ -2089,8 +2087,8 @@ preset_prkd_maridia_fish_tank:
     dl $7ED91A : db $02 : dw $003F ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_maridia_mt_everest:
     dw #preset_prkd_maridia_fish_tank ; Maridia: Fish Tank
     dl $7E078D : db $02 : dw $A3F0 ; DDB
@@ -2104,8 +2102,8 @@ preset_prkd_maridia_mt_everest:
     dl $7E0AFA : db $02 : dw $03BB ; Samus Y
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_maridia_crab_shaft:
     dw #preset_prkd_maridia_mt_everest ; Maridia: Mt Everest
     dl $7E090F : db $02 : dw $6000 ; Screen subpixel X position.
@@ -2119,8 +2117,8 @@ preset_prkd_maridia_crab_shaft:
     dl $7E0AFA : db $02 : dw $008B ; Samus Y
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_maridia_aqueduct:
     dw #preset_prkd_maridia_crab_shaft ; Maridia: Crab Shaft
     dl $7E078D : db $02 : dw $A468 ; DDB
@@ -2161,8 +2159,8 @@ preset_prkd_maridia_botwoon_hallway:
     dl $7ED91A : db $02 : dw $0041 ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_maridia_botwoon:
     dw #preset_prkd_maridia_botwoon_hallway ; Maridia: Botwoon Hallway
     dl $7E078D : db $02 : dw $A72C ; DDB
@@ -2178,8 +2176,8 @@ preset_prkd_maridia_botwoon:
     dl $7E0AFA : db $02 : dw $008B ; Samus Y
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_maridia_botwoon_etank:
     dw #preset_prkd_maridia_botwoon ; Maridia: Botwoon
     dl $7E078D : db $02 : dw $A774 ; DDB
@@ -2220,8 +2218,8 @@ preset_prkd_maridia_halfie_setup:
     dl $7ED91A : db $02 : dw $0042 ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_maridia_draygon:
     dw #preset_prkd_maridia_halfie_setup ; Maridia: Halfie Setup
     dl $7E078D : db $02 : dw $A7F8 ; DDB
@@ -2251,7 +2249,7 @@ preset_prkd_maridia_spikesuit_reverse_halfie:
     dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
     dl $7E0915 : db $02 : dw $0000 ; Screen Y position in pixels
     dl $7E09C2 : db $02 : dw $00D8 ; Health
-    dl $7E09C6 : db $02 : dw $000A ; Missiles
+    dl $7E09C6 : db $02 : dw $0009 ; Missiles
     dl $7E09CA : db $02 : dw $0003 ; Supers
     dl $7E0A68 : db $02 : dw $0001 ; Flash suit
     dl $7E0AF6 : db $02 : dw $003F ; Samus X
@@ -2261,8 +2259,8 @@ preset_prkd_maridia_spikesuit_reverse_halfie:
     dl $7ED91A : db $02 : dw $0044 ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_maridia_reverse_colosseum:
     dw #preset_prkd_maridia_spikesuit_reverse_halfie ; Maridia: Spikesuit Reverse Halfie
     dl $7E0A68 : db $02 : dw $0000 ; Flash suit
@@ -2325,8 +2323,8 @@ preset_prkd_maridia_reverse_crab_shaft:
     dl $7ED91A : db $02 : dw $0047 ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_maridia_mt_everest_revisit:
     dw #preset_prkd_maridia_reverse_crab_shaft ; Maridia: Reverse Crab Shaft
     dl $7E078D : db $02 : dw $A708 ; DDB
@@ -2359,8 +2357,8 @@ preset_prkd_backtracking_red_brinstar_green_gate:
     dl $7E0AFA : db $02 : dw $008B ; Samus Y
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_backtracking_crateria_kihunters_final:
     dw #preset_prkd_backtracking_red_brinstar_green_gate ; Backtracking: Red Brinstar Green Gate
     dl $7E078D : db $02 : dw $90BA ; DDB
@@ -2397,15 +2395,15 @@ preset_prkd_backtracking_parlor_return:
     dl $7E0911 : db $02 : dw $05E3 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $0000 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $0400 ; Screen Y position in pixels
-    dl $7E09C6 : db $02 : dw $000A ; Missiles
+    dl $7E09C6 : db $02 : dw $000E ; Missiles
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
     dl $7E0AF6 : db $02 : dw $0683 ; Samus X
     dl $7E0AFA : db $02 : dw $04BB ; Samus Y
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_backtracking_terminator_revisit:
     dw #preset_prkd_backtracking_parlor_return ; Backtracking: Parlor Return
     dl $7E078D : db $02 : dw $8916 ; DDB
@@ -2443,8 +2441,8 @@ preset_prkd_backtracking_green_pirate_shaft_revisit:
     dl $7ED91A : db $02 : dw $0048 ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_backtracking_g4_hallway:
     dw #preset_prkd_backtracking_green_pirate_shaft_revisit ; Backtracking: Green Pirate Shaft Revisit
     dl $7E078D : db $02 : dw $8BE6 ; DDB
@@ -2461,8 +2459,8 @@ preset_prkd_backtracking_g4_hallway:
     dl $7ED91A : db $02 : dw $004A ; Events, Items, Doors
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_backtracking_g4_elevator:
     dw #preset_prkd_backtracking_g4_hallway ; Backtracking: G4 Hallway
     dl $7E078D : db $02 : dw $91F2 ; DDB
@@ -2559,8 +2557,8 @@ preset_prkd_tourian_metroids_3:
     dl $7ED8C4 : db $02 : dw $0003 ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_tourian_metroids_4:
     dw #preset_prkd_tourian_metroids_3 ; Tourian: Metroids 3
     dl $7E078D : db $02 : dw $A9CC ; DDB
@@ -2577,8 +2575,8 @@ preset_prkd_tourian_metroids_4:
     dl $7ED8C4 : db $02 : dw $0007 ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_tourian_giant_hoppers:
     dw #preset_prkd_tourian_metroids_4 ; Tourian: Metroids 4
     dl $7E078D : db $02 : dw $A9E4 ; DDB
@@ -2634,8 +2632,8 @@ preset_prkd_tourian_gedora_room:
     dl $7ED8C4 : db $02 : dw $00AF ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_tourian_rinka_shaft:
     dw #preset_prkd_tourian_gedora_room ; Tourian: Gedora Room
     dl $7E078D : db $02 : dw $AA5C ; DDB
@@ -2652,8 +2650,8 @@ preset_prkd_tourian_rinka_shaft:
     dl $7ED8C4 : db $02 : dw $01AF ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_tourian_zeb_skip:
     dw #preset_prkd_tourian_rinka_shaft ; Tourian: Rinka Shaft
     dl $7E078D : db $02 : dw $AAA4 ; DDB
@@ -2668,8 +2666,8 @@ preset_prkd_tourian_zeb_skip:
     dl $7ED8C4 : db $02 : dw $03AF ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_tourian_escape_room_3:
     dw #preset_prkd_tourian_zeb_skip ; Tourian: Zeb Skip
     dl $7E078D : db $02 : dw $AAEC ; DDB
@@ -2693,8 +2691,8 @@ preset_prkd_tourian_escape_room_3:
     dl $7ED82C : db $02 : dw $0203 ; Events, Items, Doors
     dw #$FFFF
 .after
-
 print pc, " <-- preset"
+
 preset_prkd_tourian_climb_spark:
     dw #preset_prkd_tourian_escape_room_3 ; Tourian: Escape Room 3
     dl $7E078D : db $02 : dw $AB1C ; DDB
@@ -2707,8 +2705,8 @@ preset_prkd_tourian_climb_spark:
     dl $7E0AF6 : db $02 : dw $0151 ; Samus X
     dw #$FFFF
 .after
-print pc, " <-- preset"
 
+print pc, " <-- preset"
 preset_prkd_tourian_escape_parlor:
     dw #preset_prkd_tourian_climb_spark ; Tourian: Climb Spark
     dl $7E078D : db $02 : dw $AB34 ; DDB

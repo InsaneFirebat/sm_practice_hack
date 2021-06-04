@@ -81,3 +81,7 @@ endmacro
 macro sfxmissile() ; play missile sound lib2
     LDA #$0003 : JSL !SFX_LIB2
 endmacro
+
+macro sfxdisengage() ; play refill disengage sound lib2
+    LDA #$0038 : JSL !SFX_LIB2
+endmacro
