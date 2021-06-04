@@ -1654,6 +1654,7 @@ status_ramwatch:
 
 status_kihuntermanip:
 {
+print pc, " <-- break here for kihunter manip"     ; DFF4AD
     LDA $079B : CMP #$B585 : BEQ .roomStairs
     LDA $079B : CMP #$B656 : BEQ .jumpMusketeers
     JMP .done
@@ -1715,8 +1716,8 @@ status_kihuntermanip:
     LDX #$0100                                      ; change to bottom kihunter, enemy4
     
     ; Y position
-    LDA $0FFE,X : CMP #$0316 : BPL .botYSuccess     ; check if below (greater than) Y = 790d
-    LDA #$0C6D : STA $7EC68A : BRA .movementEnemy4  ; draw N and return
+    LDA $0F7E,X : CMP #$0316 : BPL .botYSuccess     ; check if below (greater than) Y = 790d
+    LDA #$0C6D : STA $7EC68E : BRA .movementEnemy4  ; draw N and return
     
   .botYSuccess
     LDA #$0C67 : STA $7EC68E                        ; draw Y
@@ -1745,7 +1746,7 @@ status_kihuntermanip:
     LDA #$0C61 : STA $7EC658                        ; draw up arrow
 
   .FinishY4
-    LDA $0F7E,X : STA !ram_enemy2_last_ypos         ; store last_ypos for next frame
+    LDA $0F7E,X : STA !ram_enemy4_last_ypos         ; store last_ypos for next frame
 
     JMP .done
 
