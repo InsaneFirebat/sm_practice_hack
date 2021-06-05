@@ -85,3 +85,7 @@ endmacro
 macro sfxshot() ; play credits shot sound lib1
     LDA #$0022 : JSL !SFX_LIB1
 endmacro
+
+macro sfxdisengage() ; play refill disengage sound lib2
+    LDA #$0038 : JSL !SFX_LIB2
+endmacro
