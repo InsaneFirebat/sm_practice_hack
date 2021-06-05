@@ -162,8 +162,9 @@
 !sram_countdamage = $702080
 !sram_menu_background = $702082
 
-!sram_presetrando = $7020A4
-!sram_presetrando_morph = $7020A6
+!sram_presetrando = $7020A2
+!sram_presetrando_morph = $7020A4
+!sram_presetrando_charge = $7020A6
 !sram_presetrando_max_etanks = $7020A8
 !sram_presetrando_max_reserves = $7020AA
 !sram_presetrando_max_missiles = $7020AC

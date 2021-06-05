@@ -83,6 +83,7 @@ init_sram:
     
     LDA #$0000 : STA !sram_presetrando
     LDA #$0001 : STA !sram_presetrando_morph
+    LDA #$0001 : STA !sram_presetrando_charge
     LDA #$000E : STA !sram_presetrando_max_etanks
     LDA #$0004 : STA !sram_presetrando_max_reserves
     LDA #$002E : STA !sram_presetrando_max_missiles
