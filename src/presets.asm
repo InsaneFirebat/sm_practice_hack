@@ -262,66 +262,86 @@ Randomize_Preset_Equipment:
     ; beams
 +   JSL $808111                                                        ; get new random number
     AND #$100F : STA $09A8                                             ; collected beams
-    AND #$000C : CMP #$000C : BNE .beams_ok                            ; check for Spazer+Plasma
-    LDA !sram_presetrando_beampref : BEQ .spazer                       ; check beam preference, 0 = spazer, 1 = plasma
-    LDA $09A8 : SBC #$0004 : STA $09A6 : BRA +                         ; unequip Spazer
+    AND #$000C : CMP #$000C : BNE .beams_done                          ; check for Spazer+Plasma
+    LDA !sram_presetrando_beampref : BEQ .random_pref                  ; check beam preference, 0 = random
+    DEC : BEQ .spazer                                                  ; after decrement, 0 = spazer, 1 = plasma
+  .plasma
+    LDA $09A8 : AND #$100B : STA $09A6 : BRA +                         ; unequip Spazer
   .spazer
-    LDA $09A8 : SBC #$0008 : STA $09A6 : BRA +                         ; unequip Plasma
-  .beams_ok
-    LDA $09A8 : STA $09A6                                              ; store equipped beams
+    LDA $09A8 : AND #$1007 : STA $09A6 : BRA +                         ; unequip Plasma
+  .random_pref
+    LDA $05B6 : AND #$0001 : BEQ .spazer                               ; get random bit
+    BRA .plasma
+  .beams_done
+    LDA $09A8 : STA $09A6
+    
+    ; charge
++   LDA !sram_presetrando_charge : BEQ +                               ; check if charge forced
+    LDA $09A8 : ORA #$1000 : STA $09A8                                 ; equip charge beam and store equipped beams
+    LDA $09A6 : ORA #$1000 : STA $09A6                                 ; store equipped beams
 
     ; reserves
 +   LDA $05E5 : AND #$F000 : LSR #4 : XBA                              ; reuse random number
-    CMP !sram_presetrando_max_reserves : BPL .cap_reserves : ASL       ; check if capped
-    TAX : LDA presetrando_reservetable,X                               ; load value from table
+    CMP !sram_presetrando_max_reserves : BPL .cap_reserves             ; check if capped
+    ASL : TAX : LDA presetrando_reservetable,X                         ; load value from table
     STA $09D4 : STA $09D6 : BRA +                                      ; store reserves
   .cap_reserves
-    SEC : SBC !sram_presetrando_max_reserves
-    CMP !sram_presetrando_max_reserves : BPL .cap_reserves
-    ASL : TAX : LDA presetrando_reservetable,X                         ; 
+    BEQ .reserves_done                                                 ; check for 0 condition (value is equal to max)
+    SEC : SBC !sram_presetrando_max_reserves                           ; subtract max from random number
+    CMP !sram_presetrando_max_reserves : BPL .cap_reserves             ; check if capped again (loop)
+  .reserves_done
+    ASL : TAX : LDA presetrando_reservetable,X                         ; load a proper value from table
     STA $09D4 : STA $09D6                                              ; store capped reserves
 
     ; missiles
 +   LDA $05E5 : AND #$0FF0 : LSR #4                                    ; reuse random number
-    CMP !sram_presetrando_max_missiles : BPL .cap_missiles : ASL       ; check if capped
-    TAX : LDA presetrando_missiletable,X
+    CMP !sram_presetrando_max_missiles : BPL .cap_missiles             ; check if capped
+    ASL : TAX : LDA presetrando_missiletable,X                         ; load a proper value from table
     STA $09C6 : STA $09C8 : BRA +                                      ; store random missiles
   .cap_missiles
+    BEQ .missiles_done                                                 ; check for 0 condition (value is equal to max)
     SEC : SBC !sram_presetrando_max_missiles
     CMP !sram_presetrando_max_missiles : BPL .cap_missiles
+  .missiles_done
     ASL : TAX : LDA presetrando_missiletable,X
     STA $09C6 : STA $09C8                                              ; store capped missiles
 
     ; supers
 +   JSL $808111 : AND #$00FF                                           ; get new random number
-    CMP !sram_presetrando_max_supers : BPL .cap_supers : ASL           ; check if capped
-    TAX : LDA presetrando_supertable,X
+    CMP !sram_presetrando_max_supers : BPL .cap_supers                 ; check if capped
+    ASL : TAX : LDA presetrando_supertable,X
     STA $09CA : STA $09CC : BRA +                                      ; store random supers
   .cap_supers
+    BEQ .supers_done                                                   ; check for 0 condition (value is equal to max)
     SEC : SBC !sram_presetrando_max_supers
     CMP !sram_presetrando_max_supers : BPL .cap_supers
+  .supers_done
     ASL : TAX : LDA presetrando_pbtable,X
     STA $09CA : STA $09CC                                              ; store capped supers
 
     ; pbs
 +   LDA $05E5 : XBA : AND #$00FF                                       ; get new random number
-    CMP !sram_presetrando_max_pbs : BPL .cap_pbs : ASL                 ; check if capped
-    TAX : LDA presetrando_pbtable,X
+    CMP !sram_presetrando_max_pbs : BPL .cap_pbs                       ; check if capped
+    ASL : TAX : LDA presetrando_pbtable,X
     STA $09CE : STA $09D0 : BRA +                                      ; store random pbs
   .cap_pbs
+    BEQ .pbs_done                                                      ; check for 0 condition (value is equal to max)
     SEC : SBC !sram_presetrando_max_pbs
     CMP !sram_presetrando_max_pbs : BPL .cap_pbs
+  .pbs_done
     ASL : TAX : LDA presetrando_pbtable,X
     STA $09CE : STA $09D0                                              ; store capped pbs
 
     ; etanks
 +   JSL $808111 : AND #$000F                                           ; get new random number
-    CMP !sram_presetrando_max_etanks : BPL .cap_etanks : ASL           ; check if capped
-    TAX : LDA presetrando_etanktable,X                                 ; load value from table
+    CMP !sram_presetrando_max_etanks : BPL .cap_etanks                 ; check if capped
+    ASL : TAX : LDA presetrando_etanktable,X                           ; load value from table
     STA $09C2 : STA $09C4 : BRA .done                                  ; store energy
   .cap_etanks
+    BEQ .etanks_done                                                   ; check for 0 condition (value is equal to max)
     SEC : SBC !sram_presetrando_max_etanks
     CMP !sram_presetrando_max_etanks : BPL .cap_etanks
+  .etanks_done
     ASL : TAX : LDA presetrando_etanktable,X                           ; load value from table
     STA $09C2 : STA $09C4                                              ; store energy
 

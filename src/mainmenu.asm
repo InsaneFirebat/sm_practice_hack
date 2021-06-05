@@ -158,7 +158,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.2.0.2")
+    %cm_header("CUSTOM INFOHUD V2.2.0.4")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -1707,6 +1707,7 @@ tel_debug:
 PresetRandoMenu:
     dw #presetrando_enable
     dw #presetrando_morph
+    dw #presetrando_charge
     dw #presetrando_beampref
     dw #presetrando_etanks
     dw #presetrando_reserves
@@ -1722,11 +1723,15 @@ presetrando_enable:
 presetrando_morph:
     %cm_toggle("Force Morph Ball", !sram_presetrando_morph, #$0001, #0)
 
+presetrando_charge:
+    %cm_toggle("Force Charge Beam", !sram_presetrando_charge, #$0001, #0)
+
 presetrando_beampref:
     dw !ACTION_CHOICE
     dl #!sram_presetrando_beampref
     dw #$0000
     db #$28, "Beam Preferenc", #$FF
+        db #$28, "e    RANDOM", #$FF
         db #$28, "e    SPAZER", #$FF
         db #$28, "e    PLASMA", #$FF
     db #$FF
