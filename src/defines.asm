@@ -49,23 +49,9 @@
 !ram_soundtest_lib3 = $7FFBF4
 !ram_soundtest_music = $7FFBF6
 
-!ram_watch_left = $7FFC10
-!ram_watch_left_hud = $7FFC12
-!ram_watch_left_hi = $7FFC14
-!ram_watch_left_lo = $7FFC16
-!ram_watch_right = $7FFC18
-!ram_watch_right_hud = $7FFC1A
-!ram_watch_right_hi = $7FFC1C
-!ram_watch_right_lo = $7FFC1E
-!ram_watch_write = $7FFC20
-!ram_watch_write_lock = $7FFC22
-!ram_watch_write_hi = $7FFC24
-!ram_watch_write_lo = $7FFC26
-
-!ram_phantoon_rng_1 = $7FFB84
-!ram_phantoon_rng_2 = $7FFB76
-!ram_phantoon_rng_3 = $7FFB78
-!ram_phantoon_rng_eyeclose = $7FFB7A
+!ram_phantoon_rng_1 = $7FFB76
+!ram_phantoon_rng_2 = $7FFB78
+!ram_phantoon_rng_3 = $7FFB7A
 !ram_crocomire_rng = $7FFB7C
 !ram_draygon_rng_left = $7FFB7E
 !ram_draygon_rng_right = $7FFB80
@@ -90,6 +76,19 @@
 ;!ram_enemy7_last_ypos = $7FFC5E
 !ram_enemy8_last_xpos = $7FFC60
 !ram_enemy8_last_ypos = $7FFC62
+
+!ram_watch_left = $7FFC70
+!ram_watch_left_hud = $7FFC72
+!ram_watch_left_hi = $7FFC74
+!ram_watch_left_lo = $7FFC76
+!ram_watch_right = $7FFC78
+!ram_watch_right_hud = $7FFC7A
+!ram_watch_right_hi = $7FFC7C
+!ram_watch_right_lo = $7FFC7E
+!ram_watch_write = $7FFC80
+!ram_watch_write_lock = $7FFC82
+!ram_watch_write_hi = $7FFC84
+!ram_watch_write_lo = $7FFC86
 
 !ram_tmp_1 = $7FFB4C
 !ram_tmp_2 = $7FFB4E
