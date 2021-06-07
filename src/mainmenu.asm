@@ -1414,7 +1414,6 @@ CtrlMenu:
     dw #ctrl_full_equipment
     dw #ctrl_kill_enemies
     dw #ctrl_reveal_damage
-    dw #ctrl_random_preset
     dw #ctrl_clear_shortcuts
     dw #$0000
     %cm_header("CONTROLLER SHORTCUTS")
@@ -1444,9 +1443,6 @@ ctrl_kill_enemies:
 ctrl_reveal_damage:
     %cm_ctrl_shortcut("Toggle Boss Dmg", !sram_ctrl_reveal_damage)
 
-ctrl_random_preset:
-    %cm_ctrl_shortcut("Random Preset", !sram_ctrl_random_preset)
-
 ctrl_clear_shortcuts:
     %cm_jsr_nosound("Clear Shortcuts", action_clear_shortcuts, #$0000)
 
@@ -1460,7 +1456,6 @@ action_clear_shortcuts:
     STA !sram_ctrl_kill_enemies
     STA !sram_ctrl_reset_segment_timer
     STA !sram_ctrl_reveal_damage
-    STA !sram_ctrl_random_preset
     ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
     %sfxquake()
