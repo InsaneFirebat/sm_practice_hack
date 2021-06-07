@@ -217,6 +217,7 @@ preset_gtclassic_crateria_ship:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_crateria_parlor:
     dw #preset_gtclassic_crateria_ship ; Crateria: Ship
     dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
@@ -230,6 +231,7 @@ preset_gtclassic_crateria_parlor:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_crateria_parlor_downback:
     dw #preset_gtclassic_crateria_parlor ; Crateria: Parlor
     dl $7E078D : db $02 : dw $8916 ; DDB
@@ -245,6 +247,7 @@ preset_gtclassic_crateria_parlor_downback:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_crateria_climb_down:
     dw #preset_gtclassic_crateria_parlor_downback ; Crateria: Parlor Downback
     dl $7E090F : db $02 : dw $3000 ; Screen subpixel X position.
@@ -257,6 +260,7 @@ preset_gtclassic_crateria_climb_down:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_crateria_pit_room:
     dw #preset_gtclassic_crateria_climb_down ; Crateria: Climb Down
     dl $7E078D : db $02 : dw $898E ; DDB
@@ -275,6 +279,7 @@ preset_gtclassic_crateria_pit_room:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_crateria_morph:
     dw #preset_gtclassic_crateria_pit_room ; Crateria: Pit Room
     dl $7E078D : db $02 : dw $8B9E ; DDB
@@ -297,6 +302,7 @@ preset_gtclassic_crateria_morph:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_crateria_construction_zone_down:
     dw #preset_gtclassic_crateria_morph ; Crateria: Morph
     dl $7E078F : db $02 : dw $0003 ; DoorOut Index
@@ -313,6 +319,7 @@ preset_gtclassic_crateria_construction_zone_down:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_crateria_construction_zone_up:
     dw #preset_gtclassic_crateria_construction_zone_down ; Crateria: Construction Zone Down
     dl $7E078D : db $02 : dw $8EDA ; DDB
@@ -331,6 +338,7 @@ preset_gtclassic_crateria_construction_zone_up:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_crateria_pit_room_revisit:
     dw #preset_gtclassic_crateria_construction_zone_up ; Crateria: Construction Zone Up
     dl $7E078D : db $02 : dw $8EB6 ; DDB
@@ -350,6 +358,7 @@ preset_gtclassic_crateria_pit_room_revisit:
     dw #$FFFF
 .after
 
+print pc, " <-- preset climb"
 preset_gtclassic_crateria_climb_up:
     dw #preset_gtclassic_crateria_pit_room_revisit ; Crateria: Pit Room Revisit
     dl $7E078D : db $02 : dw $8B92 ; DDB
@@ -369,6 +378,7 @@ preset_gtclassic_crateria_climb_up:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_crateria_parlor_revisit:
     dw #preset_gtclassic_crateria_climb_up ; Crateria: Climb Up
     dl $7E078D : db $02 : dw $8B7A ; DDB
@@ -380,6 +390,7 @@ preset_gtclassic_crateria_parlor_revisit:
     dl $7E0AFA : db $02 : dw $005B ; Samus Y
     dw #$FFFF
 .after
+print pc, " <-- preset"
 
 preset_gtclassic_crateria_flyway:
     dw #preset_gtclassic_crateria_parlor_revisit ; Crateria: Parlor Revisit
@@ -399,6 +410,7 @@ preset_gtclassic_crateria_flyway:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_crateria_bomb_torizo:
     dw #preset_gtclassic_crateria_flyway ; Crateria: Flyway
     dl $7E078D : db $02 : dw $8982 ; DDB
@@ -418,6 +430,7 @@ preset_gtclassic_crateria_bomb_torizo:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_crateria_alcatraz:
     dw #preset_gtclassic_crateria_bomb_torizo ; Crateria: Bomb Torizo
     dl $7E078D : db $02 : dw $8BAA ; DDB
@@ -436,6 +449,7 @@ preset_gtclassic_crateria_alcatraz:
     dl $7ED91A : db $02 : dw $0005 ; Events, Items, Doors
     dw #$FFFF
 .after
+print pc, " <-- preset"
 
 preset_gtclassic_crateria_terminator:
     dw #preset_gtclassic_crateria_alcatraz ; Crateria: Alcatraz
@@ -452,6 +466,7 @@ preset_gtclassic_crateria_terminator:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_crateria_green_pirate_shaft:
     dw #preset_gtclassic_crateria_terminator ; Crateria: Terminator
     dl $7E078D : db $02 : dw $895E ; DDB
@@ -473,6 +488,7 @@ preset_gtclassic_crateria_green_pirate_shaft:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_brinstar_green_brinstar_elevator:
     dw #preset_gtclassic_crateria_green_pirate_shaft ; Crateria: Green Pirate Shaft
     dl $7E078D : db $02 : dw $8C22 ; DDB
@@ -490,6 +506,7 @@ preset_gtclassic_brinstar_green_brinstar_elevator:
     dl $7ED91A : db $02 : dw $0008 ; Events, Items, Doors
     dw #$FFFF
 .after
+print pc, " <-- preset"
 
 preset_gtclassic_brinstar_early_supers:
     dw #preset_gtclassic_brinstar_green_brinstar_elevator ; Brinstar: Green Brinstar Elevator
@@ -515,6 +532,7 @@ preset_gtclassic_brinstar_early_supers:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_brinstar_dachora_room:
     dw #preset_gtclassic_brinstar_early_supers ; Brinstar: Early Supers
     dl $7E078D : db $02 : dw $8D4E ; DDB
@@ -533,6 +551,7 @@ preset_gtclassic_brinstar_dachora_room:
     dw #$FFFF
 .after
 
+print pc, " <-- preset big pink"
 preset_gtclassic_brinstar_big_pink:
     dw #preset_gtclassic_brinstar_dachora_room ; Brinstar: Dachora Room
     dl $7E078D : db $02 : dw $8CE2 ; DDB
@@ -553,6 +572,7 @@ preset_gtclassic_brinstar_big_pink:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_brinstar_green_hill_zone:
     dw #preset_gtclassic_brinstar_big_pink ; Brinstar: Big Pink
     dl $7E078D : db $02 : dw $8DAE ; DDB
@@ -570,6 +590,7 @@ preset_gtclassic_brinstar_green_hill_zone:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_brinstar_noob_bridge:
     dw #preset_gtclassic_brinstar_green_hill_zone ; Brinstar: Green Hill Zone
     dl $7E078D : db $02 : dw $8DEA ; DDB
@@ -587,6 +608,7 @@ preset_gtclassic_brinstar_noob_bridge:
     dw #$FFFF
 .after
 
+print pc, " <-- preset red tower"
 preset_gtclassic_brinstar_red_tower:
     dw #preset_gtclassic_brinstar_noob_bridge ; Brinstar: Noob Bridge
     dl $7E078D : db $02 : dw $8E92 ; DDB
@@ -604,6 +626,7 @@ preset_gtclassic_brinstar_red_tower:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_brinstar_hellway:
     dw #preset_gtclassic_brinstar_red_tower ; Brinstar: Red Tower
     dl $7E078D : db $02 : dw $8F0A ; DDB
@@ -620,6 +643,7 @@ preset_gtclassic_brinstar_hellway:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_brinstar_caterpillars_down:
     dw #preset_gtclassic_brinstar_hellway ; Brinstar: Hellway
     dl $7E078D : db $02 : dw $901E ; DDB
@@ -633,6 +657,7 @@ preset_gtclassic_brinstar_caterpillars_down:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_brinstar_alpha_power_bombs:
     dw #preset_gtclassic_brinstar_caterpillars_down ; Brinstar: Caterpillars Down
     dl $7E078D : db $02 : dw $908A ; DDB
@@ -651,6 +676,7 @@ preset_gtclassic_brinstar_alpha_power_bombs:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_brinstar_caterpillars_up:
     dw #preset_gtclassic_brinstar_alpha_power_bombs ; Brinstar: Alpha Power Bombs
     dl $7E078D : db $02 : dw $9096 ; DDB
@@ -673,6 +699,7 @@ preset_gtclassic_brinstar_caterpillars_up:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_brinstar_reverse_hellway:
     dw #preset_gtclassic_brinstar_caterpillars_up ; Brinstar: Caterpillars Up
     dl $7E078D : db $02 : dw $90EA ; DDB
@@ -691,6 +718,7 @@ preset_gtclassic_brinstar_reverse_hellway:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_brinstar_red_tower_down:
     dw #preset_gtclassic_brinstar_reverse_hellway ; Brinstar: Reverse Hellway
     dl $7E078D : db $02 : dw $90AE ; DDB
@@ -705,6 +733,7 @@ preset_gtclassic_brinstar_red_tower_down:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_brinstar_skree_boost:
     dw #preset_gtclassic_brinstar_red_tower_down ; Brinstar: Red Tower Down
     dl $7E078D : db $02 : dw $907E ; DDB
@@ -720,6 +749,7 @@ preset_gtclassic_brinstar_skree_boost:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_brinstar_below_spazer:
     dw #preset_gtclassic_brinstar_skree_boost ; Brinstar: Skree Boost
     dl $7E078D : db $02 : dw $9042 ; DDB
@@ -735,6 +765,7 @@ preset_gtclassic_brinstar_below_spazer:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_brinstar_breaking_tube:
     dw #preset_gtclassic_brinstar_below_spazer ; Brinstar: Below Spazer
     dl $7E078D : db $02 : dw $9102 ; DDB
@@ -749,6 +780,7 @@ preset_gtclassic_brinstar_breaking_tube:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_kraid_entering_kraids_lair:
     dw #preset_gtclassic_brinstar_breaking_tube ; Brinstar: Breaking Tube
     dl $7E078D : db $02 : dw $A348 ; DDB
@@ -767,6 +799,7 @@ preset_gtclassic_kraid_entering_kraids_lair:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_kraid_kraid_kihunters:
     dw #preset_gtclassic_kraid_entering_kraids_lair ; Kraid: Entering Kraid's Lair
     dl $7E078D : db $02 : dw $923A ; DDB
@@ -784,6 +817,7 @@ preset_gtclassic_kraid_kraid_kihunters:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_kraid_mini_kraid:
     dw #preset_gtclassic_kraid_kraid_kihunters ; Kraid: Kraid Kihunters
     dl $7E078D : db $02 : dw $9156 ; DDB
@@ -797,6 +831,7 @@ preset_gtclassic_kraid_mini_kraid:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_kraid_kraid_2:
     dw #preset_gtclassic_kraid_mini_kraid ; Kraid: Mini Kraid
     dl $7E078D : db $02 : dw $919E ; DDB
@@ -814,6 +849,7 @@ preset_gtclassic_kraid_kraid_2:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_kraid_leaving_varia:
     dw #preset_gtclassic_kraid_kraid_2 ; Kraid: Kraid
     dl $7E078D : db $02 : dw $91DA ; DDB
@@ -840,6 +876,7 @@ preset_gtclassic_kraid_leaving_varia:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_kraid_mini_kraid_revisit:
     dw #preset_gtclassic_kraid_leaving_varia ; Kraid: Leaving Varia
     dl $7E078D : db $02 : dw $91CE ; DDB
@@ -856,6 +893,7 @@ preset_gtclassic_kraid_mini_kraid_revisit:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_kraid_kraid_kihunters_revisit:
     dw #preset_gtclassic_kraid_mini_kraid_revisit ; Kraid: Mini Kraid Revisit
     dl $7E078D : db $02 : dw $91AA ; DDB
@@ -873,6 +911,7 @@ preset_gtclassic_kraid_kraid_kihunters_revisit:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_kraid_kraid_etank:
     dw #preset_gtclassic_kraid_kraid_kihunters_revisit ; Kraid: Kraid Kihunters Revisit
     dl $7E078D : db $02 : dw $916E ; DDB
@@ -890,6 +929,7 @@ preset_gtclassic_kraid_kraid_etank:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_kraid_leaving_kraids_lair:
     dw #preset_gtclassic_kraid_kraid_etank ; Kraid: Kraid E-tank
     dl $7E078D : db $02 : dw $9162 ; DDB
@@ -908,6 +948,7 @@ preset_gtclassic_kraid_leaving_kraids_lair:
     dw #$FFFF
 .after
 
+print pc, " <-- preset bootless"
 preset_gtclassic_bootless_upper_norfair_business_center:
     dw #preset_gtclassic_kraid_leaving_kraids_lair ; Kraid: Leaving Kraids Lair
     dl $7E078D : db $02 : dw $9246 ; DDB
@@ -928,6 +969,7 @@ preset_gtclassic_bootless_upper_norfair_business_center:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_bootless_upper_norfair_cathedral:
     dw #preset_gtclassic_bootless_upper_norfair_business_center ; Bootless Upper Norfair: Business Center
     dl $7E078D : db $02 : dw $92CA ; DDB
@@ -949,6 +991,7 @@ preset_gtclassic_bootless_upper_norfair_cathedral:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_bootless_upper_norfair_rising_tide:
     dw #preset_gtclassic_bootless_upper_norfair_cathedral ; Bootless Upper Norfair: Cathedral
     dl $7E078D : db $02 : dw $92B2 ; DDB
@@ -964,6 +1007,7 @@ preset_gtclassic_bootless_upper_norfair_rising_tide:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_bootless_upper_norfair_bubble_mountain:
     dw #preset_gtclassic_bootless_upper_norfair_rising_tide ; Bootless Upper Norfair: Rising Tide
     dl $7E078D : db $02 : dw $929A ; DDB
@@ -978,6 +1022,7 @@ preset_gtclassic_bootless_upper_norfair_bubble_mountain:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_bootless_upper_norfair_magdollite_tunnel:
     dw #preset_gtclassic_bootless_upper_norfair_bubble_mountain ; Bootless Upper Norfair: Bubble Mountain
     dl $7E078D : db $02 : dw $9576 ; DDB
@@ -994,6 +1039,7 @@ preset_gtclassic_bootless_upper_norfair_magdollite_tunnel:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_bootless_upper_norfair_kronic_room:
     dw #preset_gtclassic_bootless_upper_norfair_magdollite_tunnel ; Bootless Upper Norfair: Magdollite Tunnel
     dl $7E078D : db $02 : dw $96BA ; DDB
@@ -1006,6 +1052,7 @@ preset_gtclassic_bootless_upper_norfair_kronic_room:
     dw #$FFFF
 .after
 
+print pc, " <-- preset dive"
 preset_gtclassic_bootless_upper_norfair_lava_dive:
     dw #preset_gtclassic_bootless_upper_norfair_kronic_room ; Bootless Upper Norfair: Kronic Room
     dl $7E078D : db $02 : dw $96A2 ; DDB
@@ -1024,6 +1071,7 @@ preset_gtclassic_bootless_upper_norfair_lava_dive:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_bootless_upper_norfair_ln_main_hall:
     dw #preset_gtclassic_bootless_upper_norfair_lava_dive ; Bootless Upper Norfair: Lava Dive
     dl $7E078D : db $02 : dw $96F6 ; DDB
@@ -1040,6 +1088,7 @@ preset_gtclassic_bootless_upper_norfair_ln_main_hall:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_bootless_upper_norfair_prepillars:
     dw #preset_gtclassic_bootless_upper_norfair_ln_main_hall ; Bootless Upper Norfair: LN Main Hall
     dl $7E078F : db $02 : dw $0003 ; DoorOut Index
@@ -1053,6 +1102,7 @@ preset_gtclassic_bootless_upper_norfair_prepillars:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_bootless_upper_norfair_green_gate_glitch:
     dw #preset_gtclassic_bootless_upper_norfair_prepillars ; Bootless Upper Norfair: Pre-Pillars
     dl $7E078D : db $02 : dw $985E ; DDB
@@ -1069,6 +1119,7 @@ preset_gtclassic_bootless_upper_norfair_green_gate_glitch:
     dw #$FFFF
 .after
 
+print pc, " <-- preset gt code"
 preset_gtclassic_bootless_upper_norfair_gt_code:
     dw #preset_gtclassic_bootless_upper_norfair_green_gate_glitch ; Bootless Upper Norfair: Green Gate Glitch
     dl $7E078D : db $02 : dw $988E ; DDB
@@ -1337,6 +1388,7 @@ preset_gtclassic_hi_jump_upper_norfair_gt_code:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_lower_norfair_leaving_golden_torizo:
     dw #preset_gtclassic_bootless_upper_norfair_gt_code ; Bootless Upper Norfair: GT Code
     dl $7E078D : db $02 : dw $9A86 ; DDB
@@ -1369,6 +1421,7 @@ preset_gtclassic_lower_norfair_leaving_golden_torizo:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_lower_norfair_green_gate_revisit:
     dw #preset_gtclassic_lower_norfair_leaving_golden_torizo ; Lower Norfair: Leaving Golden Torizo
     dl $7E078D : db $02 : dw $9882 ; DDB
@@ -1387,6 +1440,7 @@ preset_gtclassic_lower_norfair_green_gate_revisit:
     dw #$FFFF
 .after
 
+print pc, " <-- preset writg"
 preset_gtclassic_lower_norfair_worst_room_in_the_game:
     dw #preset_gtclassic_lower_norfair_green_gate_revisit ; Lower Norfair: Green Gate Revisit
     dl $7E078D : db $02 : dw $9912 ; DDB
@@ -1404,6 +1458,7 @@ preset_gtclassic_lower_norfair_worst_room_in_the_game:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_lower_norfair_amphitheatre:
     dw #preset_gtclassic_lower_norfair_worst_room_in_the_game ; Lower Norfair: Worst Room in the Game
     dl $7E078D : db $02 : dw $994E ; DDB
@@ -1418,6 +1473,7 @@ preset_gtclassic_lower_norfair_amphitheatre:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_lower_norfair_kihunter_stairs_down:
     dw #preset_gtclassic_lower_norfair_amphitheatre ; Lower Norfair: Amphitheatre
     dl $7E078D : db $02 : dw $997E ; DDB
@@ -1432,6 +1488,7 @@ preset_gtclassic_lower_norfair_kihunter_stairs_down:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_lower_norfair_wasteland:
     dw #preset_gtclassic_lower_norfair_kihunter_stairs_down ; Lower Norfair: Kihunter Stairs Down
     dl $7E078D : db $02 : dw $99A2 ; DDB
@@ -1448,6 +1505,7 @@ preset_gtclassic_lower_norfair_wasteland:
     dw #$FFFF
 .after
 
+print pc, " <-- preset ninja pirates"
 preset_gtclassic_lower_norfair_metal_ninja_pirates:
     dw #preset_gtclassic_lower_norfair_wasteland ; Lower Norfair: Wasteland
     dl $7E078D : db $02 : dw $99EA ; DDB
@@ -1469,6 +1527,7 @@ preset_gtclassic_lower_norfair_metal_ninja_pirates:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_lower_norfair_plowerhouse:
     dw #preset_gtclassic_lower_norfair_metal_ninja_pirates ; Lower Norfair: Metal Ninja Pirates
     dl $7E078D : db $02 : dw $9A1A ; DDB
@@ -1486,6 +1545,7 @@ preset_gtclassic_lower_norfair_plowerhouse:
     dw #$FFFF
 .after
 
+print pc, " <-- preset ridley"
 preset_gtclassic_lower_norfair_ridley:
     dw #preset_gtclassic_lower_norfair_plowerhouse ; Lower Norfair: Plowerhouse
     dl $7E078D : db $02 : dw $995A ; DDB
@@ -1500,6 +1560,7 @@ preset_gtclassic_lower_norfair_ridley:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_lower_norfair_leaving_ridley:
     dw #preset_gtclassic_lower_norfair_ridley ; Lower Norfair: Ridley
     dl $7E078D : db $02 : dw $98CA ; DDB
@@ -1518,6 +1579,7 @@ preset_gtclassic_lower_norfair_leaving_ridley:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_lower_norfair_reverse_plowerhouse:
     dw #preset_gtclassic_lower_norfair_leaving_ridley ; Lower Norfair: Leaving Ridley
     dl $7E078D : db $02 : dw $98BE ; DDB
@@ -1536,6 +1598,7 @@ preset_gtclassic_lower_norfair_reverse_plowerhouse:
     dw #$FFFF
 .after
 
+print pc, " <-- preset wasteland revisit"
 preset_gtclassic_lower_norfair_wasteland_revisit:
     dw #preset_gtclassic_lower_norfair_reverse_plowerhouse ; Lower Norfair: Reverse Plowerhouse
     dl $7E078D : db $02 : dw $9966 ; DDB
@@ -1547,6 +1610,7 @@ preset_gtclassic_lower_norfair_wasteland_revisit:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_lower_norfair_kihunter_stairs_up:
     dw #preset_gtclassic_lower_norfair_wasteland_revisit ; Lower Norfair: Wasteland Revisit
     dl $7E078D : db $02 : dw $9A3E ; DDB
@@ -1564,6 +1628,7 @@ preset_gtclassic_lower_norfair_kihunter_stairs_up:
     dw #$FFFF
 .after
 
+print pc, " <-- preset fireflea"
 preset_gtclassic_lower_norfair_fireflea_room:
     dw #preset_gtclassic_lower_norfair_kihunter_stairs_up ; Lower Norfair: Kihunter Stairs Up
     dl $7E078D : db $02 : dw $9A26 ; DDB
@@ -1580,6 +1645,7 @@ preset_gtclassic_lower_norfair_fireflea_room:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_lower_norfair_springball_maze:
     dw #preset_gtclassic_lower_norfair_fireflea_room ; Lower Norfair: Fireflea Room
     dl $7E078D : db $02 : dw $9A02 ; DDB
@@ -1598,6 +1664,7 @@ preset_gtclassic_lower_norfair_springball_maze:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_lower_norfair_three_musketeers:
     dw #preset_gtclassic_lower_norfair_springball_maze ; Lower Norfair: Springball Maze
     dl $7E078D : db $02 : dw $9A92 ; DDB
@@ -1613,6 +1680,7 @@ preset_gtclassic_lower_norfair_three_musketeers:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_lower_norfair_single_chamber_final:
     dw #preset_gtclassic_lower_norfair_three_musketeers ; Lower Norfair: Three Musketeers
     dl $7E078D : db $02 : dw $99AE ; DDB
@@ -1626,6 +1694,7 @@ preset_gtclassic_lower_norfair_single_chamber_final:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_lower_norfair_bubble_mountain_final:
     dw #preset_gtclassic_lower_norfair_single_chamber_final ; Lower Norfair: Single Chamber Final
     dl $7E078D : db $02 : dw $9A4A ; DDB
@@ -1640,6 +1709,7 @@ preset_gtclassic_lower_norfair_bubble_mountain_final:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_lower_norfair_frog_speedway:
     dw #preset_gtclassic_lower_norfair_bubble_mountain_final ; Lower Norfair: Bubble Mountain Final
     dl $7E078D : db $02 : dw $956A ; DDB
@@ -1658,6 +1728,7 @@ preset_gtclassic_lower_norfair_frog_speedway:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_lower_norfair_business_center_final:
     dw #preset_gtclassic_lower_norfair_frog_speedway ; Lower Norfair: Frog Speedway
     dl $7E078D : db $02 : dw $97DA ; DDB
@@ -1673,6 +1744,7 @@ preset_gtclassic_lower_norfair_business_center_final:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_maridia_maridia_tube_revisit:
     dw #preset_gtclassic_lower_norfair_business_center_final ; Lower Norfair: Business Center Final
     dl $7E078D : db $02 : dw $92EE ; DDB
@@ -1693,6 +1765,7 @@ preset_gtclassic_maridia_maridia_tube_revisit:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_maridia_fish_tank:
     dw #preset_gtclassic_maridia_maridia_tube_revisit ; Maridia: Maridia Tube Revisit
     dl $7E078D : db $02 : dw $A330 ; DDB
@@ -1716,6 +1789,7 @@ preset_gtclassic_maridia_fish_tank:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_maridia_mt_everest:
     dw #preset_gtclassic_maridia_fish_tank ; Maridia: Fish Tank
     dl $7E078D : db $02 : dw $A3F0 ; DDB
@@ -1730,6 +1804,7 @@ preset_gtclassic_maridia_mt_everest:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_maridia_crab_shaft:
     dw #preset_gtclassic_maridia_mt_everest ; Maridia: Mt Everest
     dl $7E090F : db $02 : dw $0800 ; Screen subpixel X position.
@@ -1742,6 +1817,7 @@ preset_gtclassic_maridia_crab_shaft:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_maridia_aqueduct:
     dw #preset_gtclassic_maridia_crab_shaft ; Maridia: Crab Shaft
     dl $7E078D : db $02 : dw $A468 ; DDB
@@ -1756,6 +1832,7 @@ preset_gtclassic_maridia_aqueduct:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_maridia_botwoon_hallway:
     dw #preset_gtclassic_maridia_aqueduct ; Maridia: Aqueduct
     dl $7E078D : db $02 : dw $A4C8 ; DDB
@@ -1780,6 +1857,7 @@ preset_gtclassic_maridia_botwoon_hallway:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_maridia_botwoon:
     dw #preset_gtclassic_maridia_botwoon_hallway ; Maridia: Botwoon Hallway
     dl $7E078D : db $02 : dw $A72C ; DDB
@@ -1796,6 +1874,7 @@ preset_gtclassic_maridia_botwoon:
     dw #$FFFF
 .after
 
+print pc, " <-- preset halfie"
 preset_gtclassic_maridia_halfie_setup:
     dw #preset_gtclassic_maridia_botwoon ; Maridia: Botwoon
     dl $7E078D : db $02 : dw $A918 ; DDB
@@ -1815,6 +1894,7 @@ preset_gtclassic_maridia_halfie_setup:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_maridia_draygon:
     dw #preset_gtclassic_maridia_halfie_setup ; Maridia: Halfie Setup
     dl $7E078D : db $02 : dw $A7F8 ; DDB
@@ -1835,6 +1915,7 @@ preset_gtclassic_maridia_draygon:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_maridia_reverse_halfie_spikesuit:
     dw #preset_gtclassic_maridia_draygon ; Maridia: Draygon
     dl $7E078D : db $02 : dw $A96C ; DDB
@@ -1853,12 +1934,14 @@ preset_gtclassic_maridia_reverse_halfie_spikesuit:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_maridia_womple_jump:
     dw #preset_gtclassic_maridia_reverse_halfie_spikesuit ; Maridia: Reverse Halfie (Spikesuit)
     dl $7E0A68 : db $02 : dw $0000 ; Flash suit
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_maridia_reverse_halfie_climb:
     dw #preset_gtclassic_maridia_womple_jump ; Maridia: Womple Jump
     dl $7E078D : db $02 : dw $A834 ; DDB
@@ -1870,6 +1953,7 @@ preset_gtclassic_maridia_reverse_halfie_climb:
     dw #$FFFF
 .after
 
+print pc, " <-- preset reverse botwoon"
 preset_gtclassic_maridia_reverse_botwoon_etank:
     dw #preset_gtclassic_maridia_reverse_halfie_climb ; Maridia: Reverse Halfie Climb
     dl $7E078D : db $02 : dw $A7E0 ; DDB
@@ -1883,6 +1967,7 @@ preset_gtclassic_maridia_reverse_botwoon_etank:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_maridia_reverse_botwoon_hallway:
     dw #preset_gtclassic_maridia_reverse_botwoon_etank ; Maridia: Reverse Botwoon E-tank
     dl $7E078D : db $02 : dw $A84C ; DDB
@@ -1898,6 +1983,7 @@ preset_gtclassic_maridia_reverse_botwoon_hallway:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_maridia_aqueduct_revisit:
     dw #preset_gtclassic_maridia_reverse_botwoon_hallway ; Maridia: Reverse Botwoon Hallway
     dl $7E078D : db $02 : dw $A90C ; DDB
@@ -1912,6 +1998,7 @@ preset_gtclassic_maridia_aqueduct_revisit:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_maridia_reverse_crab_shaft:
     dw #preset_gtclassic_maridia_aqueduct_revisit ; Maridia: Aqueduct Revisit
     dl $7E078D : db $02 : dw $A768 ; DDB
@@ -1925,6 +2012,7 @@ preset_gtclassic_maridia_reverse_crab_shaft:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_maridia_mt_everest_revisit:
     dw #preset_gtclassic_maridia_reverse_crab_shaft ; Maridia: Reverse Crab Shaft
     dl $7E078D : db $02 : dw $A708 ; DDB
@@ -1941,6 +2029,7 @@ preset_gtclassic_maridia_mt_everest_revisit:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_maridia_red_brinstar_green_gate:
     dw #preset_gtclassic_maridia_mt_everest_revisit ; Maridia: Mt Everest Revisit
     dl $7E078D : db $02 : dw $A42C ; DDB
@@ -1954,6 +2043,7 @@ preset_gtclassic_maridia_red_brinstar_green_gate:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_wrecked_ship_crateria_kihunters:
     dw #preset_gtclassic_maridia_red_brinstar_green_gate ; Maridia: Red Brinstar Green Gate
     dl $7E078D : db $02 : dw $90BA ; DDB
@@ -1976,6 +2066,7 @@ preset_gtclassic_wrecked_ship_crateria_kihunters:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_wrecked_ship_moat:
     dw #preset_gtclassic_wrecked_ship_crateria_kihunters ; Wrecked Ship: Crateria Kihunters
     dl $7E078D : db $02 : dw $8AF6 ; DDB
@@ -1998,6 +2089,7 @@ preset_gtclassic_wrecked_ship_moat:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_wrecked_ship_ocean:
     dw #preset_gtclassic_wrecked_ship_moat ; Wrecked Ship: Moat
     dl $7E078D : db $02 : dw $8A36 ; DDB
@@ -2010,6 +2102,7 @@ preset_gtclassic_wrecked_ship_ocean:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_wrecked_ship_wrecked_ship_shaft:
     dw #preset_gtclassic_wrecked_ship_ocean ; Wrecked Ship: Ocean
     dl $7E078D : db $02 : dw $89D6 ; DDB
@@ -2029,6 +2122,7 @@ preset_gtclassic_wrecked_ship_wrecked_ship_shaft:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_wrecked_ship_basement:
     dw #preset_gtclassic_wrecked_ship_wrecked_ship_shaft ; Wrecked Ship: Wrecked Ship Shaft
     dl $7E078D : db $02 : dw $A1BC ; DDB
@@ -2045,6 +2139,7 @@ preset_gtclassic_wrecked_ship_basement:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_wrecked_ship_phantoon:
     dw #preset_gtclassic_wrecked_ship_basement ; Wrecked Ship: Basement
     dl $7E078D : db $02 : dw $A21C ; DDB
@@ -2061,6 +2156,7 @@ preset_gtclassic_wrecked_ship_phantoon:
     dw #$FFFF
 .after
 
+print pc, " <-- preset ws shaft up"
 preset_gtclassic_wrecked_ship_shaft_climb:
     dw #preset_gtclassic_wrecked_ship_phantoon ; Wrecked Ship: Phantoon
     dl $7E078D : db $02 : dw $A2C4 ; DDB
@@ -2082,6 +2178,7 @@ preset_gtclassic_wrecked_ship_shaft_climb:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_wrecked_ship_ocean_revisit:
     dw #preset_gtclassic_wrecked_ship_shaft_climb ; Wrecked Ship: Shaft Climb
     dl $7E078D : db $02 : dw $A294 ; DDB
@@ -2097,6 +2194,7 @@ preset_gtclassic_wrecked_ship_ocean_revisit:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_wrecked_ship_crateria_kihunters_revisit:
     dw #preset_gtclassic_wrecked_ship_ocean_revisit ; Wrecked Ship: Ocean Revisit
     dl $7E078D : db $02 : dw $89CA ; DDB
@@ -2117,6 +2215,7 @@ preset_gtclassic_wrecked_ship_crateria_kihunters_revisit:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_wrecked_ship_parlor_return:
     dw #preset_gtclassic_wrecked_ship_crateria_kihunters_revisit ; Wrecked Ship: Crateria Kihunters Revisit
     dl $7E078D : db $02 : dw $8AC6 ; DDB
@@ -2130,6 +2229,7 @@ preset_gtclassic_wrecked_ship_parlor_return:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_wrecked_ship_terminator_revisit:
     dw #preset_gtclassic_wrecked_ship_parlor_return ; Wrecked Ship: Parlor Return
     dl $7E078D : db $02 : dw $8916 ; DDB
@@ -2147,6 +2247,7 @@ preset_gtclassic_wrecked_ship_terminator_revisit:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_wrecked_ship_green_pirate_shaft_2:
     dw #preset_gtclassic_wrecked_ship_terminator_revisit ; Wrecked Ship: Terminator Revisit
     dl $7E078D : db $02 : dw $895E ; DDB
@@ -2167,6 +2268,7 @@ preset_gtclassic_wrecked_ship_green_pirate_shaft_2:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_wrecked_ship_g4_elevator:
     dw #preset_gtclassic_wrecked_ship_green_pirate_shaft_2 ; Wrecked Ship: Green Pirate Shaft
     dl $7E078D : db $02 : dw $91F2 ; DDB
@@ -2192,6 +2294,7 @@ preset_gtclassic_wrecked_ship_g4_elevator:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_tourian_tourian_elevator_room:
     dw #preset_gtclassic_wrecked_ship_g4_elevator ; Wrecked Ship: G4 Elevator
     dl $7E078D : db $02 : dw $9222 ; DDB
@@ -2211,6 +2314,7 @@ preset_gtclassic_tourian_tourian_elevator_room:
     dl $7ED90C : db $02 : dw $0100 ; Events, Items, Doors
     dw #$FFFF
 .after
+print pc, " <-- preset metroids 1"
 
 preset_gtclassic_tourian_metroids_1:
     dw #preset_gtclassic_tourian_tourian_elevator_room ; Tourian: Tourian Elevator Room
@@ -2225,6 +2329,7 @@ preset_gtclassic_tourian_metroids_1:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_tourian_metroids_2:
     dw #preset_gtclassic_tourian_metroids_1 ; Tourian: Metroids 1
     dl $7E078D : db $02 : dw $A984 ; DDB
@@ -2245,6 +2350,7 @@ preset_gtclassic_tourian_metroids_2:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_tourian_metroids_3:
     dw #preset_gtclassic_tourian_metroids_2 ; Tourian: Metroids 2
     dl $7E078D : db $02 : dw $A9B4 ; DDB
@@ -2265,6 +2371,7 @@ preset_gtclassic_tourian_metroids_3:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_tourian_metroids_4:
     dw #preset_gtclassic_tourian_metroids_3 ; Tourian: Metroids 3
     dl $7E078D : db $02 : dw $A9CC ; DDB
@@ -2282,6 +2389,7 @@ preset_gtclassic_tourian_metroids_4:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_tourian_giant_hoppers:
     dw #preset_gtclassic_tourian_metroids_4 ; Tourian: Metroids 4
     dl $7E078D : db $02 : dw $A9E4 ; DDB
@@ -2299,6 +2407,7 @@ preset_gtclassic_tourian_giant_hoppers:
     dw #$FFFF
 .after
 
+print pc, " <-- preset baby skip"
 preset_gtclassic_tourian_baby_skip:
     dw #preset_gtclassic_tourian_giant_hoppers ; Tourian: Giant Hoppers
     dl $7E078D : db $02 : dw $AA14 ; DDB
@@ -2316,6 +2425,7 @@ preset_gtclassic_tourian_baby_skip:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_tourian_gedora_room:
     dw #preset_gtclassic_tourian_baby_skip ; Tourian: Baby Skip
     dl $7E078D : db $02 : dw $AA44 ; DDB
@@ -2335,6 +2445,7 @@ preset_gtclassic_tourian_gedora_room:
     dw #$FFFF
 .after
 
+print pc, " <-- preset mother brain"
 preset_gtclassic_tourian_zeb_skip:
     dw #preset_gtclassic_tourian_gedora_room ; Tourian: Gedora Room
     dl $7E078D : db $02 : dw $AAA4 ; DDB
@@ -2351,6 +2462,7 @@ preset_gtclassic_tourian_zeb_skip:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_tourian_escape_room_3:
     dw #preset_gtclassic_tourian_zeb_skip ; Tourian: Zeb Skip
     dl $7E078D : db $02 : dw $AAEC ; DDB
@@ -2374,6 +2486,7 @@ preset_gtclassic_tourian_escape_room_3:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_tourian_escape_room_4:
     dw #preset_gtclassic_tourian_escape_room_3 ; Tourian: Escape Room 3
     dl $7E078D : db $02 : dw $AB04 ; DDB
@@ -2386,6 +2499,7 @@ preset_gtclassic_tourian_escape_room_4:
     dl $7E0AFA : db $02 : dw $008B ; Samus Y
     dw #$FFFF
 .after
+print pc, " <-- preset"
 
 preset_gtclassic_tourian_climb_spark:
     dw #preset_gtclassic_tourian_escape_room_4 ; Tourian: Escape Room 4
@@ -2400,6 +2514,7 @@ preset_gtclassic_tourian_climb_spark:
     dw #$FFFF
 .after
 
+print pc, " <-- preset"
 preset_gtclassic_tourian_escape_parlor:
     dw #preset_gtclassic_tourian_climb_spark ; Tourian: Climb Spark
     dl $7E078D : db $02 : dw $AB34 ; DDB

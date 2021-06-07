@@ -1663,7 +1663,6 @@ status_ramwatch:
 
 status_kihuntermanip:
 {
-print pc, " <-- break here for kihunter manip"     ; DFF4AD
     LDA $079B : CMP #$B585 : BEQ .roomStairs
     LDA $079B : CMP #$B656 : BEQ .jumpMusketeers
     JMP .done
