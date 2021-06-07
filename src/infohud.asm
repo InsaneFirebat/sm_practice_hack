@@ -510,6 +510,8 @@ ih_update_hud_early:
     PLY
     PLX
     PLA
+
+    RTL
 }
 
 ih_hud_code:
