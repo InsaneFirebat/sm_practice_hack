@@ -48,7 +48,6 @@ init_sram:
     LDA #$0000 : STA !sram_ctrl_kill_enemies
     LDA #$0000 : STA !sram_ctrl_reset_segment_timer
     LDA #$0000 : STA !sram_ctrl_reveal_damage
-    LDA #$0000 : STA !sram_ctrl_random_preset
 
     ; Input Cheat Sheet  (#$XXYY)
     ; $4218  (YY)

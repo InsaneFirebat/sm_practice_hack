@@ -68,10 +68,6 @@ gamemode_shortcuts:
     AND !ram_ctrl1_filtered : BEQ +
     JMP .reveal_damage
 
-  + LDA !ram_ctrl1 : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
-    AND !ram_ctrl1_filtered : BEQ +
-    JMP .random_preset
-
   + LDA !ram_ctrl1 : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
     AND !ram_ctrl1_filtered : BEQ +
     JMP .menu
@@ -132,10 +128,6 @@ gamemode_shortcuts:
 
   + LDA !ram_display_backup : STA !sram_display_mode
     %sfxship()
-    CLC : RTS
-
-  .random_preset
-    JSL LoadRandomPreset
     CLC : RTS
 
   .menu
