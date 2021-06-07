@@ -77,7 +77,6 @@ preset_load:
   .load_music_track
     LDA !MUSIC_TRACK
     JSL !MUSIC_ROUTINE
-print pc, " <-- break for reset_all_counters"
     JSL reset_all_counters
 
     ; Clear enemies (8000 = solid to Samus, 0400 = Ignore Samus projectiles)
@@ -416,6 +415,7 @@ transfer_cgram_long:
     PLP
     RTL
 }
+print pc, " preset_start_gameplay end"
 
 org $85B000
 print pc, " Randomize presets start"
@@ -640,7 +640,6 @@ Cat14speedRandoTable:
 print pc, " Randomize presets end"
 
 
-print pc, " preset_start_gameplay end"
 org $E08000 
   ; 42A2 (length in hex)
   print pc, " hundo data start"
