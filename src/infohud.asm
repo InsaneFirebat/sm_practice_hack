@@ -2072,8 +2072,12 @@ ih_game_loop_code:
 
     LDA !ram_transition_counter : INC : STA !ram_transition_counter
 
-    LDA !ram_magic_pants_1 : BEQ .infiniteammo
+    LDA !ram_magic_pants_1 : BEQ .spacepants
     JSR magic_pants
+
+  .spacepants
+    LDA !ram_space_pants : BEQ .infiniteammo
+    JSR space_pants
 
   .infiniteammo
     LDA !ram_infinite_ammo : CMP !ram_infiniteammo_check : BMI .reset_ammo_check
@@ -2188,6 +2192,58 @@ magic_pants:
     LDA $7EC196 : STA !ram_magic_pants_4
     LDA $7EC19E : STA !ram_magic_pants_5
 +   LDA #$FFFF : STA $7EC194 : STA $7EC196 : STA $7EC19E : STA !ram_magic_pants_2
+    RTS
+}
+
+space_pants:
+{
+    LDA $0A1C : CMP #$001B : BEQ .checkFalling
+    CMP #$001C : BEQ .checkFalling
+    CMP #$0081 : BEQ .checkSJ
+    CMP #$0082 : BEQ .checkSJ
+  .reset
+    ; restore palettes if needed
+    LDA !ram_space_pants_state : BEQ .RTS
+    LDA !ram_space_pants_pal1 : STA $7EC194
+    LDA !ram_space_pants_pal2 : STA $7EC196
+    LDA !ram_space_pants_pal3 : STA $7EC198
+    LDA #$0000 : STA !ram_space_pants_state
+    %sfxtype()
+  .RTS
+    RTS
+
+  .checkSJ
+    ; check if space jump is equipped
+    LDA $09A2 : AND #$0008 : CMP #$0008 : BEQ .done
+
+  .checkFalling
+    LDA $0B36 : CMP #$0002 : BNE .reset    ; check if falling
+    
+  .SJair
+    LDA $0B2D : CMP $909E97 : BPL +       ; check against min SJ vspeed for air
+    BRA .reset
++   CMP $909E99 : BPL .reset              ; check against max SJ vspeed for air
+    BRA .flash
+
+  .SJliquid
+    LDA $0B2D : CMP $909E9B : BPL +       ; check against min SJ vspeed for liquids
+    BRA .reset
++   CMP $909E9D : BEQ .reset              ; check against max SJ vspeed for liquids
+
+; Screw Attack seems to write new palette data every frame, which overwrites the flash
+  .flash
+    LDA !ram_space_pants_state : BNE .done
+    ; preserve palettes first
+    LDA $7EC194 : STA !ram_space_pants_pal1
+    LDA $7EC196 : STA !ram_space_pants_pal2
+    LDA $7EC198 : STA !ram_space_pants_pal3
+    ; then flash
+    LDA #$FFFF
+    STA $7EC194 : STA $7EC196 : STA $7EC198
+    STA !ram_space_pants_state
+    %sfxtype()
+
+  .done
     RTS
 }
 

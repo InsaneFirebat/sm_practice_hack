@@ -85,3 +85,7 @@ endmacro
 macro sfxdisengage() ; play refill disengage sound lib2
     LDA #$0038 : JSL !SFX_LIB2
 endmacro
+
+macro sfxbeep() ; play minimap movement beep sound lib1
+    LDA #$0036 : JSL !SFX_LIB1
+endmacro
