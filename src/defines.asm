@@ -96,6 +96,12 @@
 !ram_watch_edit_lock_left = $7FFC8C
 !ram_watch_edit_lock_right = $7FFC8E
 
+!ram_space_pants = $7FFC90
+!ram_space_pants_state = $7FFC92
+!ram_space_pants_pal1 = $7FFC94
+!ram_space_pants_pal2 = $7FFC96
+!ram_space_pants_pal3 = $7FFC98
+
 !ram_tmp_1 = $7FFB4C
 !ram_tmp_2 = $7FFB4E
 !ram_tmp_3 = $7FFB08
