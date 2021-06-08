@@ -313,7 +313,8 @@ Randomize_Preset_Equipment:
     LDA $09A6 : ORA #$1000 : STA $09A6                                 ; store equipped beams
 
     ; reserves
-+   LDA $05E5 : AND #$F000 : LSR #4 : XBA                              ; reuse random number
++   LDA !sram_presetrando_max_reserves : BEQ .no_reserves              ; check if max = 0
+    LDA $05E5 : AND #$F000 : LSR #4 : XBA                              ; reuse random number
     CMP !sram_presetrando_max_reserves : BPL .cap_reserves             ; check if capped
     ASL : TAX : LDA presetrando_reservetable,X                         ; load value from table
     STA $09D4 : STA $09D6 : BRA +                                      ; store reserves
@@ -324,9 +325,13 @@ Randomize_Preset_Equipment:
   .reserves_done
     ASL : TAX : LDA presetrando_reservetable,X                         ; load a proper value from table
     STA $09D4 : STA $09D6                                              ; store capped reserves
+    BRA +
+  .no_reserves
+    STZ $09D4 : STZ $09D6                                              ; capped at zero
 
     ; missiles
-+   LDA $05E5 : AND #$0FF0 : LSR #4                                    ; reuse random number
++   LDA !sram_presetrando_max_missiles : BEQ .no_missiles              ; check if max = 0
+    LDA $05E5 : AND #$0FF0 : LSR #4                                    ; reuse random number
     CMP !sram_presetrando_max_missiles : BPL .cap_missiles             ; check if capped
     ASL : TAX : LDA presetrando_missiletable,X                         ; load a proper value from table
     STA $09C6 : STA $09C8 : BRA +                                      ; store random missiles
@@ -337,9 +342,13 @@ Randomize_Preset_Equipment:
   .missiles_done
     ASL : TAX : LDA presetrando_missiletable,X
     STA $09C6 : STA $09C8                                              ; store capped missiles
+    BRA +
+  .no_missiles
+    STZ $09C6 : STZ $09C8                                              ; capped at zero
 
     ; supers
-+   JSL $808111 : AND #$00FF                                           ; get new random number
++   LDA !sram_presetrando_max_supers : BEQ .no_supers                  ; check if max = 0
+    JSL $808111 : AND #$00FF                                           ; get new random number
     CMP !sram_presetrando_max_supers : BPL .cap_supers                 ; check if capped
     ASL : TAX : LDA presetrando_supertable,X
     STA $09CA : STA $09CC : BRA +                                      ; store random supers
@@ -350,9 +359,13 @@ Randomize_Preset_Equipment:
   .supers_done
     ASL : TAX : LDA presetrando_pbtable,X
     STA $09CA : STA $09CC                                              ; store capped supers
+    BRA +
+  .no_supers
+    STZ $09CA : STZ $09CC                                              ; capped at zero
 
     ; pbs
-+   LDA $05E5 : XBA : AND #$00FF                                       ; get new random number
++   LDA !sram_presetrando_max_pbs : BEQ .no_pbs                        ; check if max = 0
+    LDA $05E5 : XBA : AND #$00FF                                       ; get new random number
     CMP !sram_presetrando_max_pbs : BPL .cap_pbs                       ; check if capped
     ASL : TAX : LDA presetrando_pbtable,X
     STA $09CE : STA $09D0 : BRA +                                      ; store random pbs
@@ -363,9 +376,13 @@ Randomize_Preset_Equipment:
   .pbs_done
     ASL : TAX : LDA presetrando_pbtable,X
     STA $09CE : STA $09D0                                              ; store capped pbs
+    BRA +
+  .no_pbs
+    STZ $09CE : STZ $09D0                                              ; capped at zero
 
     ; etanks
-+   JSL $808111 : AND #$000F                                           ; get new random number
++   LDA !sram_presetrando_max_etanks : BEQ .no_etanks                  ; check if max = 0
+    JSL $808111 : AND #$000F                                           ; get new random number
     CMP !sram_presetrando_max_etanks : BPL .cap_etanks                 ; check if capped
     ASL : TAX : LDA presetrando_etanktable,X                           ; load value from table
     STA $09C2 : STA $09C4 : BRA .done                                  ; store energy
@@ -376,6 +393,9 @@ Randomize_Preset_Equipment:
   .etanks_done
     ASL : TAX : LDA presetrando_etanktable,X                           ; load value from table
     STA $09C2 : STA $09C4                                              ; store energy
+    BRA .done
+  .no_etanks
+    LDA #$0063 : STA $09C2 : STA $09C4                                 ; capped at zero (99)
 
   .done
     PLX
