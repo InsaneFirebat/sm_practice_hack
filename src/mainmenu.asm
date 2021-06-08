@@ -160,7 +160,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("INSANEFIREBAT V2.2.0.4")
+    %cm_header("INSANEFIREBAT V2.2.0.7")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -1269,42 +1269,79 @@ action_ramwatch_read:
 }
 
 RAMWatchWriteMenu:
-    dw ramwatch_write_left_hi
-    dw ramwatch_write_left_lo
-    dw ramwatch_write_value_hi
-    dw ramwatch_write_value_lo
-    dw ramwatch_write_execute
-    dw ramwatch_write_lock
+    dw ramwatch_edit_left_hi
+    dw ramwatch_edit_left_lo
+    dw ramwatch_edit_left_value_hi
+    dw ramwatch_edit_left_value_lo
+    dw ramwatch_edit_right_hi
+    dw ramwatch_edit_right_lo
+    dw ramwatch_edit_right_value_hi
+    dw ramwatch_edit_right_value_lo
+    dw ramwatch_edit_execute_left
+    dw ramwatch_edit_lock_left
+    dw ramwatch_edit_execute_right
+    dw ramwatch_edit_lock_right
     dw #$0000
     %cm_header("EDIT MEMORY VALUES")
 
-ramwatch_write_left_hi:
+ramwatch_edit_left_hi:
     %cm_numfield_hex("Left-Watch High", !ram_watch_left_hi, 0, 255, 1, #0)
 
-ramwatch_write_left_lo:
+ramwatch_edit_left_lo:
     %cm_numfield_hex("Left-Watch Low", !ram_watch_left_lo, 0, 255, 1, #0)
 
-ramwatch_write_value_hi:
-    %cm_numfield_hex("Write Value High", !ram_watch_write_hi, 0, 255, 1, #0)
+ramwatch_edit_left_value_hi:
+    %cm_numfield_hex("Write Value High", !ram_watch_edit_left_hi, 0, 255, 1, #0)
 
-ramwatch_write_value_lo:
-    %cm_numfield_hex("Write Value Low", !ram_watch_write_lo, 0, 255, 1, #0)
+ramwatch_edit_left_value_lo:
+    %cm_numfield_hex("Write Value Low", !ram_watch_edit_left_lo, 0, 255, 1, #0)
 
-ramwatch_write_execute:
-    %cm_jsr("EXECUTE", #action_ramwatch_write, #$0000)
+ramwatch_edit_right_hi:
+    %cm_numfield_hex("Left-Watch High", !ram_watch_right_hi, 0, 255, 1, #0)
 
-ramwatch_write_lock:
-    %cm_toggle("Write Every Frame", !ram_watch_write_lock, #$0001, #0)
+ramwatch_edit_right_lo:
+    %cm_numfield_hex("Left-Watch Low", !ram_watch_right_lo, 0, 255, 1, #0)
 
-action_ramwatch_write:
+ramwatch_edit_right_value_hi:
+    %cm_numfield_hex("Write Value High", !ram_watch_edit_right_hi, 0, 255, 1, #0)
+
+ramwatch_edit_right_value_lo:
+    %cm_numfield_hex("Write Value Low", !ram_watch_edit_right_lo, 0, 255, 1, #0)
+
+ramwatch_edit_execute_left:
+    %cm_jsr("Write Left Value", #action_ramwatch_edit_left, #$0000)
+
+ramwatch_edit_lock_left:
+    %cm_toggle("Write Every Frame (Left)", !ram_watch_edit_lock_left, #$0001, #0)
+
+ramwatch_edit_execute_right:
+    %cm_jsr("Write Right Value", #action_ramwatch_edit_right, #$0000)
+
+ramwatch_edit_lock_right:
+    %cm_toggle("Write Every Frame (Right)", !ram_watch_edit_lock_right, #$0001, #0)
+
+action_ramwatch_edit_left:
 {
     LDA !ram_watch_left_hi : XBA
     %a8() : LDA !ram_watch_left_lo
     %a16() : STA !ram_watch_left : TAX
     %a8()
-    LDA !ram_watch_write_hi : XBA
-    LDA !ram_watch_write_lo : %a16()
+    LDA !ram_watch_edit_left_hi : XBA
+    LDA !ram_watch_edit_left_lo : %a16()
     STA !ram_watch_write : STA $7E0000,X
+    %sfxgrapple()
+    RTS
+}
+
+action_ramwatch_edit_right:
+{
+    LDA !ram_watch_right_hi : XBA
+    %a8() : LDA !ram_watch_right_lo
+    %a16() : STA !ram_watch_right : TAX
+    %a8()
+    LDA !ram_watch_edit_right_hi : XBA
+    LDA !ram_watch_edit_right_lo : %a16()
+    STA !ram_watch_write_right : STA $7E0000,X
     %sfxgrapple()
     RTS
 }
