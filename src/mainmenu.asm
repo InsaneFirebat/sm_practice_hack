@@ -1233,7 +1233,7 @@ RAMWatchMenu:
     dw ramwatch_right_hi
     dw ramwatch_right_lo
     dw ramwatch_combine
-    dw ramwatch_write
+    dw ramwatch_edit
     dw #$0000
     %cm_header("CUSTOM RAM WATCH")
 
@@ -1252,8 +1252,8 @@ ramwatch_right_lo:
 ramwatch_combine:
     %cm_jsr("CONFIRM", #action_ramwatch_read, #$0014)
 
-ramwatch_write:
-    %cm_submenu("Memory Editor", #RAMWatchWriteMenu)
+ramwatch_edit:
+    %cm_submenu("Memory Editor", #RAMWatchEditMenu)
 
 action_ramwatch_read:
 {
@@ -1268,7 +1268,7 @@ action_ramwatch_read:
     RTS
 }
 
-RAMWatchWriteMenu:
+RAMWatchEditMenu:
     dw ramwatch_edit_left_hi
     dw ramwatch_edit_left_lo
     dw ramwatch_edit_left_value_hi
@@ -1278,8 +1278,8 @@ RAMWatchWriteMenu:
     dw ramwatch_edit_right_value_hi
     dw ramwatch_edit_right_value_lo
     dw ramwatch_edit_execute_left
-    dw ramwatch_edit_lock_left
     dw ramwatch_edit_execute_right
+    dw ramwatch_edit_lock_left
     dw ramwatch_edit_lock_right
     dw #$0000
     %cm_header("EDIT MEMORY VALUES")
@@ -1311,14 +1311,14 @@ ramwatch_edit_right_value_lo:
 ramwatch_edit_execute_left:
     %cm_jsr("Write Left Value", #action_ramwatch_edit_left, #$0000)
 
-ramwatch_edit_lock_left:
-    %cm_toggle("Write Every Frame (Left)", !ram_watch_edit_lock_left, #$0001, #0)
-
 ramwatch_edit_execute_right:
     %cm_jsr("Write Right Value", #action_ramwatch_edit_right, #$0000)
 
+ramwatch_edit_lock_left:
+    %cm_toggle("Lock Left Value", !ram_watch_edit_lock_left, #$0001, #0)
+
 ramwatch_edit_lock_right:
-    %cm_toggle("Write Every Frame (Right)", !ram_watch_edit_lock_right, #$0001, #0)
+    %cm_toggle("Lock Right Value", !ram_watch_edit_lock_right, #$0001, #0)
 
 action_ramwatch_edit_left:
 {
@@ -1328,7 +1328,7 @@ action_ramwatch_edit_left:
     %a8()
     LDA !ram_watch_edit_left_hi : XBA
     LDA !ram_watch_edit_left_lo : %a16()
-    STA !ram_watch_write : STA $7E0000,X
+    STA !ram_watch_edit_left : STA $7E0000,X
     %sfxgrapple()
     RTS
 }
@@ -1341,7 +1341,7 @@ action_ramwatch_edit_right:
     %a8()
     LDA !ram_watch_edit_right_hi : XBA
     LDA !ram_watch_edit_right_lo : %a16()
-    STA !ram_watch_write_right : STA $7E0000,X
+    STA !ram_watch_edit_right : STA $7E0000,X
     %sfxgrapple()
     RTS
 }
