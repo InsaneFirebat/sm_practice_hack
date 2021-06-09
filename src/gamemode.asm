@@ -130,13 +130,13 @@ gamemode_shortcuts:
     %sfxdoor()
     CLC : RTS
 
-  .random_preset
-    JSL LoadRandomPreset
-    SEC : RTS
-
   + LDA !ram_display_backup : STA !sram_display_mode
     %sfxship()
     CLC : RTS
+
+  .random_preset
+    JSL LoadRandomPreset
+    SEC : RTS
 
   .menu
     ; Set IRQ vector
