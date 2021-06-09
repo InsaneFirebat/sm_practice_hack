@@ -115,10 +115,10 @@ gamemode_shortcuts:
 
   .full_equipment
     LDA $7E09C4 : STA $7E09C2 ; health
-    LDA $7E09C8 : STA $7E09C6 ; missiles
-    LDA $7E09CC : STA $7E09CA ; supers
-    LDA $7E09D0 : STA $7E09CE ; pbs
-    LDA $7E09D4 : STA $7E09D6 ; reserves
+    LDA $7E09C8 : CMP $7E09C6 : BCC + : STA $7E09C6 ; missiles
++   LDA $7E09CC : CMP $7E09CA : BCC + : STA $7E09CA ; supers
++   LDA $7E09D0 : CMP $7E09CE : BCC + : STA $7E09CE ; pbs
++   LDA $7E09D4 : STA $7E09D6 ; reserves
     STZ $0CD2  ; reset bomb counter
     %sfxenergy() ; play sound effect
     CLC : RTS
