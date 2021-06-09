@@ -132,7 +132,7 @@ gamemode_shortcuts:
 
   .random_preset
     JSL LoadRandomPreset
-    CLC : RTS
+    SEC : RTS
 
   + LDA !ram_display_backup : STA !sram_display_mode
     %sfxship()

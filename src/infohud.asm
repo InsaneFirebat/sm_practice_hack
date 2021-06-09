@@ -2211,8 +2211,6 @@ magic_pants:
 
 space_pants:
 {
-    LDA !ram_space_pants_speed : BEQ + STA !ram_space_pants_speed_last
-    LDA $0B2D : STA !ram_space_pants_speed
 +   LDA $0A1C : CMP #$001B : BEQ .checkFalling
     CMP #$001C : BEQ .checkFalling
     CMP #$0081 : BEQ .checkSJ

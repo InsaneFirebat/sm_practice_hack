@@ -1232,97 +1232,56 @@ ih_ram_watch:
     %cm_submenu("Customize RAM Watch", #RAMWatchMenu)
 
 RAMWatchMenu:
-    dw ramwatch_left_hi
-    dw ramwatch_left_lo
-    dw ramwatch_right_hi
-    dw ramwatch_right_lo
-    dw ramwatch_combine
-    dw ramwatch_edit
-    dw #$0000
-    %cm_header("CUSTOM RAM WATCH")
-
-ramwatch_left_hi:
-    %cm_numfield_hex("Left-Watch High Byte", !ram_watch_left_hi, 0, 255, 1, #0)
-
-ramwatch_left_lo:
-    %cm_numfield_hex("Left-Watch Low Byte", !ram_watch_left_lo, 0, 255, 1, #0)
-
-ramwatch_right_hi:
-    %cm_numfield_hex("Right-Watch High Byte", !ram_watch_right_hi, 0, 255, 1, #0)
-
-ramwatch_right_lo:
-    %cm_numfield_hex("Right-Watch Low Byte", !ram_watch_right_lo, 0, 255, 1, #0)
-
-ramwatch_combine:
-    %cm_jsr("CONFIRM", #action_ramwatch_read, #$0014)
-
-ramwatch_edit:
-    %cm_submenu("Memory Editor", #RAMWatchEditMenu)
-
-action_ramwatch_read:
-{
-    TYA : STA !sram_display_mode
-    %a8()
-    LDA !ram_watch_left_hi : XBA : LDA !ram_watch_left_lo
-    %a16() : STA !ram_watch_left
-    %a8()
-    LDA !ram_watch_right_hi : XBA : LDA !ram_watch_right_lo
-    %a16() : STA !ram_watch_right
-    %sfxpause()
-    RTS
-}
-
-RAMWatchEditMenu:
     dw ramwatch_edit_left_hi
     dw ramwatch_edit_left_lo
     dw ramwatch_edit_left_value_hi
     dw ramwatch_edit_left_value_lo
+    dw ramwatch_edit_execute_left
+    dw ramwatch_edit_lock_left
     dw ramwatch_edit_right_hi
     dw ramwatch_edit_right_lo
     dw ramwatch_edit_right_value_hi
     dw ramwatch_edit_right_value_lo
-    dw ramwatch_edit_execute_left
     dw ramwatch_edit_execute_right
-    dw ramwatch_edit_lock_left
     dw ramwatch_edit_lock_right
     dw #$0000
-    %cm_header("EDIT MEMORY VALUES")
+    %cm_header("READ AND WRITE TO MEMORY")
 
 ramwatch_edit_left_hi:
-    %cm_numfield_hex("Left-Watch High", !ram_watch_left_hi, 0, 255, 1, #0)
+    %cm_numfield_hex("Address 1 High", !ram_watch_left_hi, 0, 255, 1, #0)
 
 ramwatch_edit_left_lo:
-    %cm_numfield_hex("Left-Watch Low", !ram_watch_left_lo, 0, 255, 1, #0)
+    %cm_numfield_hex("Address 1 Low", !ram_watch_left_lo, 0, 255, 1, #0)
 
 ramwatch_edit_left_value_hi:
-    %cm_numfield_hex("Write Value High", !ram_watch_edit_left_hi, 0, 255, 1, #0)
+    %cm_numfield_hex("Value 1 High", !ram_watch_edit_left_hi, 0, 255, 1, #0)
 
 ramwatch_edit_left_value_lo:
-    %cm_numfield_hex("Write Value Low", !ram_watch_edit_left_lo, 0, 255, 1, #0)
+    %cm_numfield_hex("Value 1 Low", !ram_watch_edit_left_lo, 0, 255, 1, #0)
 
 ramwatch_edit_right_hi:
-    %cm_numfield_hex("Left-Watch High", !ram_watch_right_hi, 0, 255, 1, #0)
+    %cm_numfield_hex("Address 2 High", !ram_watch_right_hi, 0, 255, 1, #0)
 
 ramwatch_edit_right_lo:
-    %cm_numfield_hex("Left-Watch Low", !ram_watch_right_lo, 0, 255, 1, #0)
+    %cm_numfield_hex("Address 2 Low", !ram_watch_right_lo, 0, 255, 1, #0)
 
 ramwatch_edit_right_value_hi:
-    %cm_numfield_hex("Write Value High", !ram_watch_edit_right_hi, 0, 255, 1, #0)
+    %cm_numfield_hex("Value 2 High", !ram_watch_edit_right_hi, 0, 255, 1, #0)
 
 ramwatch_edit_right_value_lo:
-    %cm_numfield_hex("Write Value Low", !ram_watch_edit_right_lo, 0, 255, 1, #0)
+    %cm_numfield_hex("Value 2 Low", !ram_watch_edit_right_lo, 0, 255, 1, #0)
 
 ramwatch_edit_execute_left:
-    %cm_jsr("Write Left Value", #action_ramwatch_edit_left, #$0000)
+    %cm_jsr("Write to Address 1", #action_ramwatch_edit_left, #$0000)
 
 ramwatch_edit_execute_right:
-    %cm_jsr("Write Right Value", #action_ramwatch_edit_right, #$0000)
+    %cm_jsr("Write to Address 2", #action_ramwatch_edit_right, #$0000)
 
 ramwatch_edit_lock_left:
-    %cm_toggle("Lock Left Value", !ram_watch_edit_lock_left, #$0001, #0)
+    %cm_toggle("Lock Value 1", !ram_watch_edit_lock_left, #$0001, #action_HUD_ramwatch)
 
 ramwatch_edit_lock_right:
-    %cm_toggle("Lock Right Value", !ram_watch_edit_lock_right, #$0001, #0)
+    %cm_toggle("Lock Value 2", !ram_watch_edit_lock_right, #$0001, #action_HUD_ramwatch)
 
 action_ramwatch_edit_left:
 {
@@ -1347,6 +1306,12 @@ action_ramwatch_edit_right:
     LDA !ram_watch_edit_right_lo : %a16()
     STA !ram_watch_edit_right : STA $7E0000,X
     %sfxgrapple()
+    RTS
+}
+
+action_HUD_ramwatch:
+{
+    LDA #$0014 : STA !sram_display_mode
     RTS
 }
 
@@ -1549,6 +1514,7 @@ action_clear_shortcuts:
     STA !sram_ctrl_kill_enemies
     STA !sram_ctrl_reset_segment_timer
     STA !sram_ctrl_reveal_damage
+    STA !sram_ctrl_random_preset
     ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
     %sfxquake()
@@ -1566,7 +1532,6 @@ IFBMenu:
     dw #ifb_nosteam
     dw #ifb_debugteleport
     dw #ifb_presetrando
-    dw #ifb_gamespeed
     dw #ifb_soundtest
     dw #ifb_lockout
     dw #ifb_fixcontrols
@@ -1588,9 +1553,6 @@ ifb_debugteleport:
 
 ifb_presetrando:
     %cm_submenu("Preset Randomizer", #PresetRandoMenu)
-
-ifb_gamespeed:
-    %cm_numfield("Slowdown Frames", !ram_slowdown_mode, 0, 30, 1, #0)
 
 ifb_soundtest:
     %cm_submenu("Sound Test", #SoundTestMenu)
