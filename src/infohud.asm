@@ -72,19 +72,43 @@ org $84889F      ;hijack, runs every time an item is picked up
 org $91DAD8      ;hijack, runs after a shinespark has been charged
     JSL ih_shinespark_code
 
-org $8095fc         ;hijack, end of NMI routine to update realtime frames
+org $8095fc      ;hijack, end of NMI routine to update realtime frames
     JML ih_nmi_end
 
-org $A98874         ; update seg timer after MB1 fight
+org $A98874      ; update timers after MB1 fight
     JSL ih_mb1_segment
 
-org $A9BE23         ; update seg timer when baby spawns (off-screen) in MB2 fight
+org $A9BE23      ; update timers when baby spawns (off-screen) in MB2 fight
     JSL ih_mb2_segment
 
-org $A6A17C         ;Ridley AI init, overwrites a junk LDA
+org $90D340      ; update timers when shinespark bonk sound plays
+    JSL ih_shinespark_segment
+
+org $A0B9AE      ; update timers when Ridley drops spawn
+    JSL ih_drops_segment
+
+org $A0B9E1      ; update timers when Crocomire drops spawn
+    JSL ih_drops_segment
+
+org $A0BA14      ; update timers when Phantoon drops spawn
+    JSL ih_drops_segment
+
+org $A0BA47      ; update timers when Botwoon drops spawn
+    JSL ih_drops_segment
+
+org $A0BA7A      ; update timers when Kraid drops spawn
+    JSL ih_drops_segment
+
+org $A0BB13      ; update timers when Spore Spawn drops spawn
+    JSL ih_drops_segment
+
+org $A0BB46      ; update timers when Draygon drops spawn
+    JSL ih_drops_segment
+
+org $A6A17C      ; Ridley AI init, overwrites a junk LDA
     JSR ResetCountDamageRid
 
-org $A6FEBC          ; free space
+org $A6FEBC      ; free space
 ResetCountDamageRid:
 {
     LDA #$0000
@@ -339,6 +363,22 @@ ih_mb2_segment:
     STA $7E7854    ; we overwrote this instruction to get here
 
     JSL ih_update_hud_early
+    RTL
+}
+
+ih_shinespark_segment:
+{
+    ; runs when shinespark bonk sound plays
+    JSL $80914D ; overwritten code
+    JSL ih_update_hud_early
+    RTL
+}
+
+ih_drops_segment:
+{
+    ; runs when boss drops spawn (except Torizos)
+    JSL ih_update_hud_early
+    JSL $808111 ; overwritten code
     RTL
 }
 
