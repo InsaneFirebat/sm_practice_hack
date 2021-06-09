@@ -2197,7 +2197,7 @@ magic_pants:
 
 space_pants:
 {
-    LDA $0A1C : CMP #$001B : BEQ .checkFalling
++   LDA $0A1C : CMP #$001B : BEQ .checkFalling
     CMP #$001C : BEQ .checkFalling
     CMP #$0081 : BEQ .checkSJ
     CMP #$0082 : BEQ .checkSJ

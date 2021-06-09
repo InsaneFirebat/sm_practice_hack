@@ -136,7 +136,7 @@ gamemode_shortcuts:
 
   .random_preset
     JSL LoadRandomPreset
-    CLC : RTS
+    SEC : RTS
 
   .menu
     ; Set IRQ vector
