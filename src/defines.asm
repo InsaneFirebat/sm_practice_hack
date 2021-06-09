@@ -85,10 +85,14 @@
 !ram_watch_right_hud = $7FFC7A
 !ram_watch_right_hi = $7FFC7C
 !ram_watch_right_lo = $7FFC7E
-!ram_watch_write = $7FFC80
-!ram_watch_write_lock = $7FFC82
-!ram_watch_write_hi = $7FFC84
-!ram_watch_write_lo = $7FFC86
+!ram_watch_edit_left = $7FFC80
+!ram_watch_edit_left_hi = $7FFC82
+!ram_watch_edit_left_lo = $7FFC84
+!ram_watch_edit_right = $7FFC86
+!ram_watch_edit_right_hi = $7FFC88
+!ram_watch_edit_right_lo = $7FFC8A
+!ram_watch_edit_lock_left = $7FFC8C
+!ram_watch_edit_lock_right = $7FFC8E
 
 !ram_space_pants = $7FFC90
 !ram_space_pants_state = $7FFC92

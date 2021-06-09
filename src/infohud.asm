@@ -1653,9 +1653,18 @@ status_ramwatch:
     LDX #$0092 : JSR Draw4Hex
 
   .write
-    LDA !ram_watch_write_lock : BEQ .done
+    LDA !ram_watch_edit_lock_left : BNE .lock_left
+-   LDA !ram_watch_edit_lock_right : BNE .lock_right
+    BRA .done
+
+  .lock_left
     LDA !ram_watch_left : TAX
-    LDA !ram_watch_write : STA $7E0000,X
+    LDA !ram_watch_edit_left : STA $7E0000,X
+    BRA -
+
+  .lock_right
+    LDA !ram_watch_right : TAX
+    LDA !ram_watch_edit_right : STA $7E0000,X
 
   .done
     RTS
@@ -2200,7 +2209,7 @@ magic_pants:
 
 space_pants:
 {
-+   LDA $0A1C : CMP #$001B : BEQ .checkFalling
+    LDA $0A1C : CMP #$001B : BEQ .checkFalling
     CMP #$001C : BEQ .checkFalling
     CMP #$0081 : BEQ .checkSJ
     CMP #$0082 : BEQ .checkSJ

@@ -1270,10 +1270,10 @@ ramwatch_edit_execute_right:
     %cm_jsr("Write to Address 2", #action_ramwatch_edit_right, #$0000)
 
 ramwatch_edit_lock_left:
-    %cm_toggle("Lock Value 1", !ram_watch_edit_lock_left, #$0001, #action_HUD_ramwatch)
+    %cm_toggle("Write-Lock Value 1", !ram_watch_edit_lock_left, #$0001, #action_HUD_ramwatch)
 
 ramwatch_edit_lock_right:
-    %cm_toggle("Lock Value 2", !ram_watch_edit_lock_right, #$0001, #action_HUD_ramwatch)
+    %cm_toggle("Write-Lock Value 2", !ram_watch_edit_lock_right, #$0001, #action_HUD_ramwatch)
 
 action_ramwatch_edit_left:
 {
@@ -1281,9 +1281,22 @@ action_ramwatch_edit_left:
     %a8() : LDA !ram_watch_left_lo
     %a16() : STA !ram_watch_left : TAX
     %a8()
-    LDA !ram_watch_write_hi : XBA
-    LDA !ram_watch_write_lo : %a16()
-    STA !ram_watch_write : STA $7E0000,X
+    LDA !ram_watch_edit_left_hi : XBA
+    LDA !ram_watch_edit_left_lo : %a16()
+    STA !ram_watch_edit_left : STA $7E0000,X
+    %sfxgrapple()
+    RTS
+}
+
+action_ramwatch_edit_right:
+{
+    LDA !ram_watch_right_hi : XBA
+    %a8() : LDA !ram_watch_right_lo
+    %a16() : STA !ram_watch_right : TAX
+    %a8()
+    LDA !ram_watch_edit_right_hi : XBA
+    LDA !ram_watch_edit_right_lo : %a16()
+    STA !ram_watch_edit_right : STA $7E0000,X
     %sfxgrapple()
     RTS
 }
