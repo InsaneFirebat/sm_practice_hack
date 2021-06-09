@@ -2218,8 +2218,10 @@ space_pants:
 
   .checkFalling
     LDA $0B36 : CMP #$0002 : BNE .reset    ; check if falling
-    
-  .SJair
+
+  .checkLiquid
+    LDA $0AD2 : BNE .SJliquid             ; check if air
+
     LDA $0B2D : CMP $909E97 : BPL +       ; check against min SJ vspeed for air
     BRA .reset
 +   CMP $909E99 : BPL .reset              ; check against max SJ vspeed for air
@@ -2228,7 +2230,7 @@ space_pants:
   .SJliquid
     LDA $0B2D : CMP $909E9B : BPL +       ; check against min SJ vspeed for liquids
     BRA .reset
-+   CMP $909E9D : BEQ .reset              ; check against max SJ vspeed for liquids
++   CMP $909E9D : BPL .reset              ; check against max SJ vspeed for liquids
 
 ; Screw Attack seems to write new palette data every frame, which overwrites the flash
   .flash
