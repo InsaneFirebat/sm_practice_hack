@@ -122,6 +122,9 @@ org $948F49        ; RTS this routine to enable walk through walls
 org $A6F135
     JSR SteamCollision
 
+org $91DA31
+    JSL space_pants_helper
+
 org $9AB200         ; graphics for HUD
 incbin ../resources/hudgfx.bin
 
@@ -2227,7 +2230,7 @@ space_pants:
 
   .checkSJ
     ; check if space jump is equipped
-    LDA $09A2 : AND #$0008 : CMP #$0008 : BEQ .done
+    LDA $09A2 : AND #$0008 : CMP #$0008 : BNE .done
 
   .checkFalling
     LDA $0B36 : CMP #$0002 : BNE .reset    ; check if falling
@@ -2245,7 +2248,6 @@ space_pants:
     BRA .reset
 +   CMP $909E9D : BPL .reset              ; check against max SJ vspeed for liquids
 
-; Screw Attack seems to write new palette data every frame, which overwrites the flash
   .flash
     LDA !ram_space_pants_state : BNE .done
     ; preserve palettes first
@@ -2259,6 +2261,14 @@ space_pants:
 
   .done
     RTS
+}
+
+space_pants_helper:
+{
+    LDA !ram_space_pants_state : BEQ +
+    STA $7EC194 : STA $7EC196 : STA $7EC198 : STA $7EC19A : STA $7EC19C : STA $7EC19E
++   LDA $0ACE : INC ; overwritten code
+    RTL
 }
 
 infinite_ammo:
