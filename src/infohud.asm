@@ -98,6 +98,12 @@ org $A0BA47      ; update timers when Botwoon drops spawn
 org $A0BA7A      ; update timers when Kraid drops spawn
     JSL ih_drops_segment
 
+org $A0BAAD      ; update timers when Bomb Torizo drops spawn
+    JSL ih_drops_segment
+
+org $A0BAE0      ; update timers when Golden Torizo drops spawn
+    JSL ih_drops_segment
+
 org $A0BB13      ; update timers when Spore Spawn drops spawn
     JSL ih_drops_segment
 
