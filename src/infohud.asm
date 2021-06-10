@@ -2271,7 +2271,7 @@ space_pants:
 
   .checkSJ
     ; check if space jump is equipped
-    LDA $09A2 : AND #$0008 : CMP #$0008 : BNE .done
+    LDA $09A2 : AND #$0200 : CMP #$0008 : BNE .done
 
   .checkFalling
     LDA $0B36 : CMP #$0002 : BNE .reset    ; check if falling
