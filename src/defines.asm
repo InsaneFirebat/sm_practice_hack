@@ -165,6 +165,13 @@
 !sram_room_strat = $702022
 !sram_countdamage = $702080
 !sram_menu_background = $702082
+!sram_custompalette = $702084
+!sram_custompalette_hudoutline = $702086
+!sram_custompalette_hudoutline_hi = $702088
+!sram_custompalette_hudoutline_lo = $70208A
+!sram_custompalette_hudfill = $70208C
+!sram_custompalette_hudfill_hi = $70208E
+!sram_custompalette_hudfill_lo = $702090
 
 !sram_presetrando = $7020A2
 !sram_presetrando_morph = $7020A4

@@ -79,7 +79,15 @@ init_sram:
     LDA #$0000 : STA !sram_preset_category
     LDA #$0000 : STA !sram_room_strat
     LDA #$0000 : STA !sram_countdamage
+
     LDA #$0000 : STA !sram_menu_background
+    LDA #$0000 : STA !sram_custompalette
+    LDA #$0000 : STA !sram_custompalette_hudoutline
+    LDA #$0000 : STA !sram_custompalette_hudoutline_hi
+    LDA #$0000 : STA !sram_custompalette_hudoutline_lo
+    LDA #$0000 : STA !sram_custompalette_hudfill
+    LDA #$0000 : STA !sram_custompalette_hudfill_hi
+    LDA #$0000 : STA !sram_custompalette_hudfill_lo
     
     LDA #$0000 : STA !sram_presetrando
     LDA #$0001 : STA !sram_presetrando_morph

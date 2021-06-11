@@ -157,11 +157,12 @@ org $828AB0       ; hijack spare CPU usage routine
     ; This vanilla routine wastes 34 CPU cycles and runs near the
     ; end of the main game loop. Useless instructions are added
     ; after our code to simulate the remaining waste on fast exit
-    LDA !ram_magic_pants_state : BEQ .done    ; 8 cycles
-    JSL space_pants_helper      
-    PHA : PLP : PHA : PLP                     ; 14 cycles
-    PHA : PLP : NOP : NOP                     ; 11 cycles
-  .done
+    LDA !ram_magic_pants_state : BEQ +        ; 8 cycles
+    JSL space_pants_helper
++   LDA !sram_custompalette : BEQ +           ; 8 cycles
+    JSL CustomizePalettes
++   PHA : PLA : PHA : PLA                     ; 14 cycles
+    NOP : NOP                                 ; 4 cycles
     RTL
 }
 
@@ -2343,6 +2344,11 @@ infinite_ammo:
     LDA #$0045 : STA $7E09CE  ; pbs
     RTS
 }
+
+CustomizePalettes:
+    LDA !sram_custompalette_hudoutline : STA $7EC01A
+    LDA !sram_custompalette_hudfill : STA $7EC01C
+    RTL
 
 ih_get_item_code:
 {
