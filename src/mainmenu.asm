@@ -1174,6 +1174,7 @@ RoomStratMenu:
     dw ihstrat_shinetopb
     dw ihstrat_elevatorcf
     dw ihstrat_botwooncf
+    dw ihstrat_kihuntermanip
     dw #$0000
     %cm_header("INFOHUD ROOM STRAT")
 
@@ -1200,6 +1201,9 @@ ihstrat_elevatorcf:
 
 ihstrat_botwooncf:
     %cm_jsr("Botwoon Crystal Flash", #action_select_room_strat, #$0007)
+
+ihstrat_kihuntermanip:
+    %cm_jsr("Kihunter Manipulation", #action_select_room_strat, #$0008)
 
 action_select_room_strat:
 {
@@ -1530,8 +1534,8 @@ action_clear_shortcuts:
 
 IFBMenu:
     dw #ifb_menubackground
-    dw #ifb_debugteleport
     dw #ifb_presetrando
+    dw #ifb_debugteleport
     dw #ifb_soundtest
     dw #ifb_credits
     dw #$0000
