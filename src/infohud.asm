@@ -80,6 +80,7 @@ org $A98874      ; update timers after MB1 fight
 
 org $A9BE23      ; update timers when baby spawns (off-screen) in MB2 fight
     JSL ih_mb2_segment
+
 org $90D340      ; update timers when shinespark bonk sound plays
     JSL ih_shinespark_segment
 
@@ -148,8 +149,20 @@ CountDamage:
     LDA $0F8C,X : SEC : SBC $187A : RTS
 }
 
-org $91DA31
-    JSL space_pants_helper
+org $828AB0       ; hijack spare CPU usage routine
+{
+    ; This vanilla routine wastes 34 CPU cycles and runs near the
+    ; end of the main game loop. Useless instructions are added
+    ; after our code to simulate the remaining waste on fast exit
+    LDA !ram_magic_pants_state : BEQ .done    ; 8 cycles
+    JSL space_pants_helper      
+    PHA : PLP : PHA : PLP                     ; 14 cycles
+    PHA : PLP : NOP : NOP                     ; 11 cycles
+  .done
+    RTL
+}
+
+warnpc $828AE3
 
 org $9AB200         ; graphics for HUD
 incbin ../resources/hudgfx.bin
