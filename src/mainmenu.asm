@@ -158,7 +158,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.2.0.9")
+    %cm_header("CUSTOM INFOHUD V2.2.0.9A")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -790,10 +790,10 @@ misc_babyslowdown:
     %cm_toggle("Baby Slowdown", $7E0A66, #$0002, #0)
 
 misc_magicpants:
-    %cm_toggle_bit("Magic Pants", !ram_magic_pants_1, #$0001, #0)
+    %cm_toggle_bit("Magic Pants", !ram_magic_pants_enabled, #$0001, #0)
 
 misc_spacepants:
-    %cm_toggle_bit("Space Pants", !ram_space_pants, #$0001, #0)
+    %cm_toggle_bit("Space Pants", !ram_magic_pants_enabled, #$0002, #0)
 
 misc_fanfare_toggle:
     %cm_toggle("Fanfare", !sram_fanfare_toggle, #$0001, #0)

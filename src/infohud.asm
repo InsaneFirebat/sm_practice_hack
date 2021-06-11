@@ -2129,18 +2129,22 @@ ih_game_loop_code:
 
     LDA !ram_transition_counter : INC : STA !ram_transition_counter
 
-    LDA !ram_magic_pants_1 : BEQ .spacepants
+    LDA !ram_magic_pants_enabled : BEQ .infiniteammo
+    DEC : BEQ .magicpants
+    LDA $0B36 : CMP #$0002 : BEQ .spacepants    ; check if falling
+
+  .magicpants
     JSR magic_pants
+    BRA .infiniteammo
 
   .spacepants
-    LDA !ram_space_pants : BEQ .infiniteammo
     JSR space_pants
 
   .infiniteammo
     LDA !ram_infinite_ammo : CMP !ram_infiniteammo_check : BMI .reset_ammo_check
-    LDA !ram_infinite_ammo : BEQ .handle_inputs
+    BEQ .handleinputs
     JSR infinite_ammo
-    BRA .handle_inputs
+    BRA .handleinputs
 
   .reset_ammo_check
     LDA #$0000 : STA !ram_infiniteammo_check
@@ -2148,8 +2152,7 @@ ih_game_loop_code:
     LDA !ram_ammo_supers : STA $7E09CA
     LDA !ram_ammo_powerbombs : STA $7E09CE
 
-    ; handle inputs
-  .handle_inputs
+  .handleinputs
     LDA !IH_CONTROLLER_SEC_NEW : BEQ .done
     CMP !IH_PAUSE : BEQ .toggle_pause
     CMP !IH_SLOWDOWN : BEQ .toggle_slowdown
@@ -2231,11 +2234,11 @@ ih_game_loop_code:
 magic_pants:
 {
     LDA $0A96 : CMP #$0009 : BEQ .check
-    LDA !ram_magic_pants_2 : BEQ +
-    LDA !ram_magic_pants_3 : STA $7EC194
-    LDA !ram_magic_pants_4 : STA $7EC196
-    LDA !ram_magic_pants_5 : STA $7EC19E
-    LDA #$0000 : STA !ram_magic_pants_2
+    LDA !ram_magic_pants_state : BEQ +
+    LDA !ram_magic_pants_pal1 : STA $7EC194
+    LDA !ram_magic_pants_pal2 : STA $7EC196
+    LDA !ram_magic_pants_pal3 : STA $7EC19E
+    LDA #$0000 : STA !ram_magic_pants_state
 +   RTS
 
   .check
@@ -2244,11 +2247,11 @@ magic_pants:
     RTS
 
   .flash
-    LDA !ram_magic_pants_2 : BNE +
-    LDA $7EC194 : STA !ram_magic_pants_3
-    LDA $7EC196 : STA !ram_magic_pants_4
-    LDA $7EC19E : STA !ram_magic_pants_5
-+   LDA #$FFFF : STA $7EC194 : STA $7EC196 : STA $7EC19E : STA !ram_magic_pants_2
+    LDA !ram_magic_pants_state : BNE +
+    LDA $7EC194 : STA !ram_magic_pants_pal1
+    LDA $7EC196 : STA !ram_magic_pants_pal2
+    LDA $7EC19E : STA !ram_magic_pants_pal3
++   LDA #$FFFF : STA $7EC194 : STA $7EC196 : STA $7EC19E : STA !ram_magic_pants_state
     RTS
 }
 
@@ -2256,22 +2259,17 @@ space_pants:
 {
     LDA $0A1C : CMP #$001B : BEQ .checkFalling
     CMP #$001C : BEQ .checkFalling
-    CMP #$0081 : BEQ .checkSJ
-    CMP #$0082 : BEQ .checkSJ
+    CMP #$0081 : BEQ .checkFalling
+    CMP #$0082 : BEQ .checkFalling
   .reset
     ; restore palettes if needed
-    LDA !ram_space_pants_state : BEQ .RTS
-    LDA !ram_space_pants_pal1 : STA $7EC194
-    LDA !ram_space_pants_pal2 : STA $7EC196
-    LDA !ram_space_pants_pal3 : STA $7EC198
-    LDA #$0000 : STA !ram_space_pants_state
-    %sfxtype()
+    LDA !ram_magic_pants_state : BEQ .RTS
+    LDA !ram_magic_pants_pal1 : STA $7EC194
+    LDA !ram_magic_pants_pal2 : STA $7EC196
+    LDA !ram_magic_pants_pal3 : STA $7EC198
+    LDA #$0000 : STA !ram_magic_pants_state
   .RTS
     RTS
-
-  .checkSJ
-    ; check if space jump is equipped
-    LDA $09A2 : AND #$0200 : CMP #$0008 : BNE .done
 
   .checkFalling
     LDA $0B36 : CMP #$0002 : BNE .reset    ; check if falling
@@ -2290,16 +2288,15 @@ space_pants:
 +   CMP $909E9D : BPL .reset              ; check against max SJ vspeed for liquids
 
   .flash
-    LDA !ram_space_pants_state : BNE .done
+    LDA !ram_magic_pants_state : BNE .done
     ; preserve palettes first
-    LDA $7EC194 : STA !ram_space_pants_pal1
-    LDA $7EC196 : STA !ram_space_pants_pal2
-    LDA $7EC198 : STA !ram_space_pants_pal3
+    LDA $7EC194 : STA !ram_magic_pants_pal1
+    LDA $7EC196 : STA !ram_magic_pants_pal2
+    LDA $7EC198 : STA !ram_magic_pants_pal3
     ; then flash
     LDA #$FFFF
     STA $7EC194 : STA $7EC196 : STA $7EC198
-    STA !ram_space_pants_state
-    %sfxtype()
+    STA !ram_magic_pants_state
 
   .done
     RTS
@@ -2307,7 +2304,7 @@ space_pants:
 
 space_pants_helper:
 {
-    LDA !ram_space_pants_state : BEQ +
+    LDA !ram_magic_pants_state : BEQ +
     STA $7EC194 : STA $7EC196 : STA $7EC198 : STA $7EC19A : STA $7EC19C : STA $7EC19E
 +   LDA $0ACE : INC ; overwritten code
     RTL
