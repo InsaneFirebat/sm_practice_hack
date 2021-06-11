@@ -1,7 +1,8 @@
-; $82:8963 AD 98 09    LDA $0998  [$7E:0998]  ;\
-; $82:8966 29 FF 00    AND #$00FF             ;|
+; $82:8963 AD 98 09    LDA $0998  [$7E:0998]
+; $82:8966 29 FF 00    AND #$00FF
 org $828963
     JSL gamemode_start : BCS end_of_normal_gameplay
+
 org $82896E
     end_of_normal_gameplay:
 
@@ -151,5 +152,6 @@ gamemode_shortcuts:
 
     SEC : RTS
 }
+
 print pc, " gamemode end"
 warnpc $85FF00

@@ -436,6 +436,7 @@ transfer_cgram_long:
     RTL
 }
 print pc, " preset_start_gameplay end"
+warnpc $80FFC0
 
 
 org $E08000 
@@ -444,6 +445,7 @@ org $E08000
   incsrc presets/hundo_data.asm
   print pc, " hundo data end"
 
+org $E18000
   ; 2EAA (length in hex)
   print pc, " prkd data start"
   incsrc presets/prkd_data.asm
@@ -460,7 +462,7 @@ org $E18000
   incsrc presets/kpdr25_data.asm
   print pc, " kpdr25 data end"
 
-org $E28000
+org $E38000
   ; 2B5E (length in hex)
   print pc, " gtclassic data start"
   incsrc presets/gtclassic_data.asm
@@ -476,8 +478,7 @@ org $E28000
   incsrc presets/14speed_data.asm
   print pc, " 14speed data end"
 
-org $E38000
-  
+org $E48000
   ; 2400 (length in hex)
   print pc, " allbosskpdr data start"
   incsrc presets/allbosskpdr_data.asm
@@ -494,7 +495,7 @@ org $E38000
   print pc, " allbossprkd data end"
 
 org $E48000
-  
+
   ; 423C (length in hex)
   print pc, " 100early data start"
   incsrc presets/100early_data.asm

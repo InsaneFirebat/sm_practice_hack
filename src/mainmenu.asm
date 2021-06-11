@@ -158,7 +158,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.2.0.9A")
+    %cm_header("CUSTOM INFOHUD V2.2.1")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -220,6 +220,54 @@ incsrc presets/pkrd_menu.asm   ; E6A (length in hex)
 
 pullpc
 
+LoadRandomPreset:
+{
+    PHY : PHX
+    JSL $808111 : STA $12     ; random number
+
+    LDA #$00B8 : STA $18      ; this routine lives in bank B8
+    LDA !sram_preset_category : ASL : TAY
+    LDA #preset_category_submenus : STA $16
+    LDA [$16],Y : TAX         ; preset category submenu table
+    LDA #preset_category_banks : STA $16
+    LDA [$16],Y : STA $18     ; preset category menu bank
+
+    STX $16 : LDY #$0000
+  .toploop
+    INY #2
+    LDA [$16],Y : BNE .toploop
+    TYA : LSR : TAY           ; Y = size of preset category submenu table
+
+    LDA $12 : XBA : AND #$00FF : STA $4204
+    %a8()
+    STY $4206                 ; divide top half of random number by Y
+    %a16()
+    PEA $0000 : PLA
+    LDA $4216 : ASL : TAY     ; randomly selected subcategory
+    LDA [$16],Y : STA $16     ; increment four bytes to get the subcategory table
+    LDY #$0004 : LDA [$16],Y : STA $16
+
+    LDY #$0000
+  .subloop
+    INY #2
+    LDA [$16],Y : BNE .subloop
+    TYA : LSR : TAY           ; Y = size of subcategory table
+
+    LDA $12 : AND #$00FF : STA $4204
+    %a8()
+    STY $4206                 ; divide bottom half of random number by Y
+    %a16()
+    PEA $0000 : PLA
+    LDA $4216 : ASL : TAY     ; randomly selected preset
+    LDA [$16],Y : STA $16     ; increment four bytes to get the data
+    LDY #$0004 : LDA [$16],Y
+
+    STA !ram_load_preset
+
+    PLX : PLY
+    RTL
+}
+
 action_load_preset:
 {
     PHB
@@ -230,54 +278,6 @@ action_load_preset:
 
     PLB
     RTS
-}
-
-LoadRandomPreset:
-{
-    PHY : PHX
-    JSL $808111 : STA $12
-
-    LDA #$00B8 : STA $18                       ; bank in $18
-    LDA !sram_preset_category : ASL : TAY      ; selected category index in Y
-    LDA #preset_category_submenus : STA $16    ; pointer to category list in $16
-    LDA [$16],Y : TAX                          ; pointer to submenu table in X
-    LDA #preset_category_banks : STA $16       ; bank of submenu table in $16
-    LDA [$16],Y : STA $18                      ; pointer to category grouping table in $18
-
-    STX $16 : LDY #$0000                       ; pointer to submenu table in $16, reset Y
-  .toploop                                     ; count number of preset groups in Y
-    INY #2
-    LDA [$16],Y : BNE .toploop
-    TYA : LSR : TAY
-
-    LDA $12 : XBA : AND #$00FF : STA $4204     ; divide random number...
-    %a8()
-    STY $4206                                  ; by number of preset groups
-    %a16()
-    PEA $0000 : PLA
-    LDA $4216 : ASL : TAY                      ; random preset group index in Y
-    LDA [$16],Y : STA $16                      ; random preset group macro pointer in $16
-    LDY #$0004 : LDA [$16],Y : STA $16         ; preset group table pointer in $16
-
-    LDY #$0000
-  .subloop                                     ; counter number of presets in the group in Y
-    INY #2
-    LDA [$16],Y : BNE .subloop
-    TYA : LSR : TAY
-
-    LDA $12 : XBA : AND #$00FF : STA $4204     ; divide random number...
-    %a8()
-    STY $4206                                  ; by number of preset in the group
-    %a16()
-    PEA $0000 : PLA
-    LDA $4216 : ASL : TAY                      ; random preset index in Y
-    LDA [$16],Y : STA $16                      ; random preset macro pointer in $16
-    LDY #$0004 : LDA [$16],Y                   ; finally reached the pointer to the preset
-
-    STA !ram_load_preset
-
-    PLX : PLY
-    RTL
 }
 
 
@@ -1033,7 +1033,7 @@ DisplayModeMenu:
     dw ihmode_cooldowncounter
     dw ihmode_shinetimer
     dw ihmode_dashcounter
-    dw ihmode_shinefinetune
+    dw ihmode_shinetune
     dw ihmode_iframecounter
     dw ihmode_spikesuit
     dw ihmode_lagcounter
@@ -1077,7 +1077,7 @@ ihmode_shinetimer:
 ihmode_dashcounter:
     %cm_jsr("Dash Counter", #action_select_infohud_mode, #$0006)
 
-ihmode_shinefinetune:
+ihmode_shinetune:
     %cm_jsr("Shine Tune", #action_select_infohud_mode, #$0007)
 
 ihmode_iframecounter:
@@ -1168,11 +1168,12 @@ ih_goto_room_strat:
 RoomStratMenu:
     dw ihstrat_mbhp
     dw ihstrat_moatcwj
-    dw ihstrat_shinetopb
-    dw ihstrat_botwooncf
-    dw ihstrat_elevatorcf
+    dw ihstrat_gateglitch
+    dw ihstrat_tacotank
     dw ihstrat_robotflush
-    dw ihstrat_kihuntermanip
+    dw ihstrat_shinetopb
+    dw ihstrat_elevatorcf
+    dw ihstrat_botwooncf
     dw #$0000
     %cm_header("INFOHUD ROOM STRAT")
 
@@ -1182,20 +1183,23 @@ ihstrat_mbhp:
 ihstrat_moatcwj:
     %cm_jsr("Moat CWJ", #action_select_room_strat, #$0001)
 
-ihstrat_shinetopb:
-    %cm_jsr("Shinespark to PB", #action_select_room_strat, #$0002)
+ihstrat_gateglitch:
+    %cm_jsr("Gate Glitch", #action_select_room_strat, #$0002)
 
-ihstrat_botwooncf:
-    %cm_jsr("Botwoon Crystal Flash", #action_select_room_strat, #$0003)
-
-ihstrat_elevatorcf:
-    %cm_jsr("Elevator Crystal Flash", #action_select_room_strat, #$0004)
+ihstrat_tacotank:
+    %cm_jsr("Taco Tank", #action_select_room_strat, #$0003)
 
 ihstrat_robotflush:
-    %cm_jsr("Robot Flush", #action_select_room_strat, #$0005)
+    %cm_jsr("Robot Flush", #action_select_room_strat, #$0004)
 
-ihstrat_kihuntermanip:
-    %cm_jsr("Kihunter Manipulation", #action_select_room_strat, #$0006)
+ihstrat_shinetopb:
+    %cm_jsr("Shine to PB", #action_select_room_strat, #$0005)
+
+ihstrat_elevatorcf:
+    %cm_jsr("Elevator Crystal Flash", #action_select_room_strat, #$0006)
+
+ihstrat_botwooncf:
+    %cm_jsr("Botwoon Crystal Flash", #action_select_room_strat, #$0007)
 
 action_select_room_strat:
 {
@@ -1213,7 +1217,11 @@ ih_room_strat:
     db #$28, "Current Strat", #$FF
     db #$28, "      MB HP", #$FF
     db #$28, "   MOAT CWJ", #$FF
+    db #$28, "GATE GLITCH", #$FF
+    db #$28, "  TACO TANK", #$FF
+    db #$28, "ROBOT FLUSH", #$FF
     db #$28, "SHINE TO PB", #$FF
+    db #$28, "ELEVATOR CF", #$FF
     db #$28, " BOTWOON CF", #$FF
     db #$28, "ELEVATOR CF", #$FF
     db #$28, "ROBOT FLUSH", #$FF
