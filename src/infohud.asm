@@ -855,12 +855,14 @@ ih_game_loop_code:
     PHA
 
     LDA !ram_transition_counter : INC : STA !ram_transition_counter
-
     LDA !ram_magic_pants_enabled : BEQ .infiniteammo
-    DEC : BEQ .magicpants
+    CMP #$0001 : BEQ .magicpants
+    CMP #$0002 : BEQ .spacepants
 
-    ; decides if magic pants or space pants when both enabled
-    LDA $0B36 : CMP #$0002 : BEQ .spacepants    ; check if falling
+    ; both are enabled, check Samus movement type to decide
+    LDA $0A1F : AND #$00FF : CMP #$0003 : BEQ .spacepants    ; check if spin jumping
+    LDA $0A1F : AND #$00FF : CMP #$0001 : BEQ .magicpants    ; check if running
+    BRA .infiniteammo
 
   .magicpants
     JSR magic_pants
@@ -971,8 +973,7 @@ magic_pants:
 +   RTS
 
   .check
-    LDA $0A1C : CMP #$0009 : BEQ .flash
-    CMP #$000A : BEQ .flash
+    LDA $0A1F : AND #$00FF : CMP #$0001 : BEQ .flash
     RTS
 
   .flash

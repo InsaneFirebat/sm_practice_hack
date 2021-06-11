@@ -1228,7 +1228,6 @@ ih_room_strat:
     db #$28, "ELEVATOR CF", #$FF
     db #$28, " BOTWOON CF", #$FF
     db #$28, "ELEVATOR CF", #$FF
-    db #$28, "ROBOT FLUSH", #$FF
     db #$28, "   KIHUNTER", #$FF
     db #$FF
 
