@@ -1211,7 +1211,7 @@ ihstrat_botwooncf:
     %cm_jsr("Botwoon Crystal Flash", #action_select_room_strat, #$0007)
 
 ihstrat_kihuntermanip:
-    %cm_jsr("Kihunter Manipulation", #action_select_room_strat, #$0006)
+    %cm_jsr("Kihunter Manipulation", #action_select_room_strat, #$0008)
 
 action_select_room_strat:
 {
@@ -1542,8 +1542,8 @@ IFBMenu:
     dw #ifb_custompalettes
     dw #ifb_noclip
     dw #ifb_nosteam
-    dw #ifb_debugteleport
     dw #ifb_presetrando
+    dw #ifb_debugteleport
     dw #ifb_soundtest
     dw #ifb_lockout
     dw #ifb_fixcontrols
@@ -1592,6 +1592,7 @@ CustomPalettes:
     dw #custompalettes_hudoutline_lo
     dw #custompalettes_hudfill_hi
     dw #custompalettes_hudfill_lo
+    dw #$0000
     %cm_header("CUSTOMIZE HUD PALETTES")
 
 custompalettes_enable:
@@ -1625,6 +1626,7 @@ custompalettes_hudfill_hi:
 custompalettes_hudfill_lo:
     %cm_numfield_hex("HUD Fill Low Byte", !sram_custompalette_hudfill_lo, 0, 255, 1, #.routine)
     .routine
+        XBA
         ORA !sram_custompalette_hudfill_hi
         XBA
         STA !sram_custompalette_hudfill
