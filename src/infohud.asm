@@ -1065,8 +1065,12 @@ infinite_ammo:
 }
 
 CustomizePalettes:
+    PHP : %a16()
+    LDA $7E0998 : CMP #$0006 : BMI .done : CMP #$001A : BEQ .done
     LDA !sram_custompalette_hudoutline : STA $7EC01A
     LDA !sram_custompalette_hudfill : STA $7EC01C
+  .done
+    PLP
     RTL
 
 ih_get_item_code:
