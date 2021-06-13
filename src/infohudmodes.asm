@@ -1745,7 +1745,7 @@ status_kihuntermanip:
     JMP .roomMusketeers
 ; Kihunter Stairs
   .roomStairs
-    LDA #$0C0E : STA $7EC68C : STA $7EC68E          ; draw blank spaces
+    LDA !IH_BLANK : STA $7EC68C : STA $7EC68E       ; draw blank spaces
     STA $7EC690 : STA $7EC692 : STA $7EC694
     STA $7EC696 : STA $7EC698 : STA $7EC614
 ; top kihunter
@@ -1830,7 +1830,7 @@ status_kihuntermanip:
 ; Three Musketeers
   .roomMusketeers
     LDA $09C2 : STA !ram_last_hp                    ; prevent SamusHP from overwriting our work later
-    LDA #$0C0E : STA $7EC68C : STA $7EC68E          ; draw blank spaces
+    LDA !IH_BLANK : STA $7EC68C : STA $7EC68E       ; draw blank spaces
     STA $7EC690 : STA $7EC692 : STA $7EC694
     STA $7EC696 : STA $7EC698 : STA $7EC614
 
