@@ -158,7 +158,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.2.2")
+    %cm_header("CUSTOM INFOHUD V2.2.2.1")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -823,7 +823,7 @@ misc_music_toggle:
     RTS
 
 misc_transparent:
-    %cm_toggle_bit("Samus on top", !ram_sprite_prio_flag, #$3000, #0)
+    %cm_toggle_bit("Samus on top", !sram_sprite_prio_flag, #$3000, #0)
 
 misc_invincibility:
     %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)

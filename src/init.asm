@@ -76,10 +76,11 @@ init_sram:
     LDA #$0000 : STA !sram_display_mode
     LDA #$0000 : STA !sram_last_preset
     LDA #$0000 : STA !sram_save_has_set_rng
-    LDA #$0000 : STA !sram_preset_category
+    LDA #$0008 : STA !sram_preset_category
     LDA #$0000 : STA !sram_room_strat
     LDA #$0000 : STA !sram_countdamage
     LDA #$0001 : STA !sram_menu_background
+    LDA #$0000 : STA !sram_sprite_prio_flag
     
     LDA #$0000 : STA !sram_presetrando
     LDA #$0001 : STA !sram_presetrando_morph

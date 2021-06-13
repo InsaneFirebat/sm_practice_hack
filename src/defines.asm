@@ -133,8 +133,6 @@
 !ram_shinetune_early_4 = $7FFBDC
 !ram_shinetune_late_4 = $7FFBDE
 
-!ram_sprite_prio_flag = $7FFBE0
-
 ; -----
 ; SRAM
 ; -----
@@ -163,6 +161,7 @@
 !sram_room_strat = $702022
 !sram_countdamage = $702080
 !sram_menu_background = $702082
+!sram_sprite_prio_flag = $702084
 
 !sram_presetrando = $7020A2
 !sram_presetrando_morph = $7020A4
