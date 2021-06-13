@@ -663,7 +663,7 @@ preset_prkd_brinstar_caterpillars_up:
     dl $7E09C2 : db $02 : dw $0075 ; Health
     dl $7E09CE : db $02 : dw $0005 ; Pbs
     dl $7E09D0 : db $02 : dw $0005 ; Max pbs
-    dl $7E09D2 : db $02 : dw $0003 ; Currently selected item
+    dl $7E09D2 : db $02 : dw $0000 ; Currently selected item
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
     dl $7E0AF6 : db $02 : dw $02AF ; Samus X
@@ -1402,8 +1402,7 @@ preset_prkd_upper_norfair_double_chamber_revisited:
     dl $7E0915 : db $02 : dw $0000 ; Screen Y position in pixels
     dl $7E09A6 : db $02 : dw $1007 ; Beams
     dl $7E09A8 : db $02 : dw $1007 ; Beams
-    dl $7E09C6 : db $02 : dw $0014 ; Missiles
-    dl $7E09C8 : db $02 : dw $0014 ; Max missiles
+    dl $7E09C6 : db $02 : dw $000F ; Missiles
     dl $7E09CA : db $02 : dw $0008 ; Supers
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
@@ -1472,7 +1471,7 @@ preset_prkd_upper_norfair_lava_spark:
     dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
     dl $7E0911 : db $02 : dw $0100 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $C000 ; Screen subpixel Y position
-    dl $7E09C6 : db $02 : dw $0010 ; Missiles
+    dl $7E09C6 : db $02 : dw $000A ; Missiles
     dl $7E09CE : db $02 : dw $0005 ; Pbs
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
@@ -1629,7 +1628,7 @@ preset_prkd_lower_norfair_ridley:
     dl $7E090F : db $02 : dw $1000 ; Screen subpixel X position.
     dl $7E0913 : db $02 : dw $7C00 ; Screen subpixel Y position
     dl $7E09C2 : db $02 : dw $00F2 ; Health
-    dl $7E09C6 : db $02 : dw $000F ; Missiles
+    dl $7E09C6 : db $02 : dw $000A ; Missiles
     dl $7E09CE : db $02 : dw $0004 ; Pbs
     dl $7E0AF6 : db $02 : dw $0024 ; Samus X
     dl $7ED8BA : db $02 : dw $D1F1 ; Events, Items, Doors
@@ -2112,7 +2111,7 @@ preset_prkd_maridia_halfie_setup:
     dl $7E0915 : db $02 : dw $001F ; Screen Y position in pixels
     dl $7E09C2 : db $02 : dw $018F ; Health
     dl $7E09C4 : db $02 : dw $018F ; Max helath
-    dl $7E09C6 : db $02 : dw $0010 ; Missiles
+    dl $7E09C6 : db $02 : dw $000F ; Missiles
     dl $7E0AF6 : db $02 : dw $0099 ; Samus X
     dl $7E0AFA : db $02 : dw $009B ; Samus Y
     dl $7ED882 : db $02 : dw $0100 ; Events, Items, Doors
@@ -2130,7 +2129,7 @@ preset_prkd_maridia_draygon:
     dl $7E0913 : db $02 : dw $0800 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $0200 ; Screen Y position in pixels
     dl $7E09C2 : db $02 : dw $0110 ; Health
-    dl $7E09C6 : db $02 : dw $0014 ; Missiles
+    dl $7E09C6 : db $02 : dw $000F ; Missiles
     dl $7E09CA : db $02 : dw $0002 ; Supers
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
@@ -2148,7 +2147,7 @@ preset_prkd_maridia_spikesuit_reverse_halfie:
     dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
     dl $7E0915 : db $02 : dw $0000 ; Screen Y position in pixels
     dl $7E09C2 : db $02 : dw $00D8 ; Health
-    dl $7E09C6 : db $02 : dw $000F ; Missiles
+    dl $7E09C6 : db $02 : dw $0009 ; Missiles
     dl $7E09CA : db $02 : dw $0003 ; Supers
     dl $7E0A68 : db $02 : dw $0001 ; Flash suit
     dl $7E0AF6 : db $02 : dw $003F ; Samus X
@@ -2243,7 +2242,7 @@ preset_prkd_backtracking_red_brinstar_green_gate:
     dl $7E0913 : db $02 : dw $8800 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $0000 ; Screen Y position in pixels
     dl $7E09C2 : db $02 : dw $008E ; Health
-    dl $7E09C6 : db $02 : dw $0011 ; Missiles
+    dl $7E09C6 : db $02 : dw $000B ; Missiles
     dl $7E09CA : db $02 : dw $0006 ; Supers
     dl $7E0AF6 : db $02 : dw $007F ; Samus X
     dl $7E0AFA : db $02 : dw $008B ; Samus Y
@@ -2285,7 +2284,7 @@ preset_prkd_backtracking_parlor_return:
     dl $7E0911 : db $02 : dw $05E3 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $0000 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $0400 ; Screen Y position in pixels
-    dl $7E09C6 : db $02 : dw $0010 ; Missiles
+    dl $7E09C6 : db $02 : dw $000E ; Missiles
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
     dl $7E0AF6 : db $02 : dw $0683 ; Samus X
@@ -2412,7 +2411,7 @@ preset_prkd_tourian_metroids_2:
     dl $7E0913 : db $02 : dw $A400 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $0000 ; Screen Y position in pixels
     dl $7E09C2 : db $02 : dw $006B ; Health
-    dl $7E09C6 : db $02 : dw $0014 ; Missiles
+    dl $7E09C6 : db $02 : dw $000F ; Missiles
     dl $7E09CA : db $02 : dw $0006 ; Supers
     dl $7E0AF6 : db $02 : dw $0197 ; Samus X
     dl $7E0AFA : db $02 : dw $00AB ; Samus Y

@@ -29,6 +29,7 @@ preset_spazer_crateria_ship:
     dl $7E09CC : db $02 : dw $0000 ; Max supers
     dl $7E09CE : db $02 : dw $0000 ; Pbs
     dl $7E09D0 : db $02 : dw $0000 ; Max pbs
+    dl $7E09D2 : db $02 : dw $0000 ; Currently selected item
     dl $7E09D4 : db $02 : dw $0000 ; Max reserves
     dl $7E09D6 : db $02 : dw $0000 ; Reserves
     dl $7E0A1C : db $02 : dw $0000 ; Samus position/state
@@ -1136,6 +1137,7 @@ preset_spazer_red_brinstar_caterpillars_up:
     dl $7E09C2 : db $02 : dw $0173 ; Health
     dl $7E09CE : db $02 : dw $0005 ; Pbs
     dl $7E09D0 : db $02 : dw $0005 ; Max pbs
+    dl $7E09D2 : db $02 : dw $0003 ; Currently selected item
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
     dl $7E0AF6 : db $02 : dw $02AF ; Samus X
@@ -1160,6 +1162,7 @@ preset_spazer_wrecked_ship_crateria_kihunters:
     dl $7E09C2 : db $02 : dw $0187 ; Health
     dl $7E09CA : db $02 : dw $0005 ; Supers
     dl $7E09CE : db $02 : dw $0003 ; Pbs
+    dl $7E09D2 : db $02 : dw $0000 ; Currently selected item
     dl $7E0A1C : db $02 : dw $0028 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0504 ; More position/state
     dl $7E0AF6 : db $02 : dw $0068 ; Samus X
@@ -1546,6 +1549,7 @@ preset_spazer_maridia_fish_tank:
     dl $7E0913 : db $02 : dw $C000 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $05F4 ; Screen Y position in pixels
     dl $7E09CE : db $02 : dw $0002 ; Pbs
+    dl $7E09D2 : db $02 : dw $0003 ; Currently selected item
     dl $7E0AF6 : db $02 : dw $0167 ; Samus X
     dl $7E0AFA : db $02 : dw $068B ; Samus Y
     dl $7ED820 : db $02 : dw $0801 ; Events, Items, Doors
@@ -1562,6 +1566,7 @@ preset_spazer_maridia_mt_everest:
     dl $7E0911 : db $02 : dw $0100 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $BC00 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $031F ; Screen Y position in pixels
+    dl $7E09D2 : db $02 : dw $0000 ; Currently selected item
     dl $7E0AF6 : db $02 : dw $017C ; Samus X
     dl $7E0AFA : db $02 : dw $03BB ; Samus Y
     dw #$FFFF
@@ -1589,6 +1594,7 @@ preset_spazer_maridia_aqueduct:
     dl $7E0913 : db $02 : dw $83FF ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $0300 ; Screen Y position in pixels
     dl $7E09CA : db $02 : dw $0009 ; Supers
+    dl $7E09D2 : db $02 : dw $0003 ; Currently selected item
     dl $7E0AF6 : db $02 : dw $01AD ; Samus X
     dl $7E0AFA : db $02 : dw $038B ; Samus Y
     dl $7ED8C0 : db $02 : dw $8174 ; Events, Items, Doors
@@ -1609,6 +1615,7 @@ preset_spazer_maridia_botwoon_hallway:
     dl $7E0913 : db $02 : dw $4000 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $0000 ; Screen Y position in pixels
     dl $7E09CE : db $02 : dw $0001 ; Pbs
+    dl $7E09D2 : db $02 : dw $0000 ; Currently selected item
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
     dl $7E0AF6 : db $02 : dw $009D ; Samus X
@@ -2027,6 +2034,7 @@ preset_spazer_lower_norfair_ln_main_hall:
     dl $7E0915 : db $02 : dw $0200 ; Screen Y position in pixels
     dl $7E09C2 : db $02 : dw $011E ; Health
     dl $7E09CE : db $02 : dw $0004 ; Pbs
+    dl $7E09D2 : db $02 : dw $0003 ; Currently selected item
     dl $7E0A1C : db $02 : dw $009B ; Samus position/state
     dl $7E0A1E : db $02 : dw $0000 ; More position/state
     dl $7E0AF6 : db $02 : dw $0480 ; Samus X
@@ -2041,6 +2049,7 @@ preset_spazer_lower_norfair_prepillars:
     dl $7E090F : db $02 : dw $9000 ; Screen subpixel X position.
     dl $7E0911 : db $02 : dw $0700 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $E400 ; Screen subpixel Y position
+    dl $7E09D2 : db $02 : dw $0003 ; Currently selected item
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
     dl $7E0AF6 : db $02 : dw $07A2 ; Samus X
@@ -2076,6 +2085,7 @@ preset_spazer_lower_norfair_amphitheatre:
     dl $7E0915 : db $02 : dw $011D ; Screen Y position in pixels
     dl $7E09C2 : db $02 : dw $00E8 ; Health
     dl $7E09CE : db $02 : dw $0004 ; Pbs
+    dl $7E09D2 : db $02 : dw $0000 ; Currently selected item
     dl $7E0AF6 : db $02 : dw $00A7 ; Samus X
     dl $7E0AFA : db $02 : dw $018B ; Samus Y
     dw #$FFFF
