@@ -79,8 +79,9 @@ init_sram:
     LDA #$0000 : STA !sram_preset_category
     LDA #$0000 : STA !sram_room_strat
     LDA #$0000 : STA !sram_countdamage
-
     LDA #$0000 : STA !sram_menu_background
+    LDA #$0000 : STA !sram_sprite_prio_flag
+
     LDA #$0000 : STA !sram_custompalette
     LDA #$0000 : STA !sram_custompalette_hudoutline
     LDA #$0000 : STA !sram_custompalette_hudoutline_hi
