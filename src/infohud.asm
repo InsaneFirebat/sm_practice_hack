@@ -631,7 +631,7 @@ ih_hud_code:
     JSR (.status_display_table,X)
 
     ; Samus' HP
-    LDA #$0C0E : STA $7EC690 ; erase stale decimal tile
+    LDA !IH_BLANK : STA $7EC690 ; erase stale decimal tile
     LDA $09C2 : CMP !ram_last_hp : BEQ .end : STA !ram_last_hp
     LDX #$0092 : JSR Draw4
     LDA !IH_BLANK : STA $7EC690 ; erase stale decimal tile
@@ -667,7 +667,7 @@ Draw2:
     RTS
 
   .blanktens
-    LDA #$0057 : STA $7EC600,X
+    LDA !IH_BLANK : STA $7EC600,X
     BRA .done
 }
 
@@ -702,11 +702,11 @@ Draw3:
     RTS
 
   .blanktens
-    LDA #$0057 : STA $7EC600,X : STA $7EC602,X
+    LDA !IH_BLANK : STA $7EC600,X : STA $7EC602,X
     BRA .done
 
   .blankhundreds
-    LDA #$0057 : STA $7EC600,X
+    LDA !IH_BLANK : STA $7EC600,X
     BRA .done
 }
 
@@ -752,15 +752,15 @@ Draw4:
     RTS
 
   .blanktens
-    LDA #$0057 : STA $7EC600,X : STA $7EC602,X : STA $7EC604,X
+    LDA !IH_BLANK : STA $7EC600,X : STA $7EC602,X : STA $7EC604,X
     BRA .done
 
   .blankhundreds
-    LDA #$0057 : STA $7EC600,X : STA $7EC602,X
+    LDA !IH_BLANK : STA $7EC600,X : STA $7EC602,X
     BRA .done
 
   .blankthousands
-    LDA #$0057 : STA $7EC600,X
+    LDA !IH_BLANK : STA $7EC600,X
     BRA .done
 }
 
