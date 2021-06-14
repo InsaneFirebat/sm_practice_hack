@@ -148,8 +148,8 @@
 !sram_ctrl_load_state = $70200A
 !sram_ctrl_save_state = $70200C
 !sram_ctrl_load_last_preset = $70200E
-!sram_ctrl_reveal_damage = $7020E0
-!sram_ctrl_random_preset = $7020E2
+!sram_ctrl_reveal_damage = $702062
+!sram_ctrl_random_preset = $702024
 
 !sram_artificial_lag = $702010
 !sram_rerandomize = $702012
@@ -161,29 +161,59 @@
 !sram_save_has_set_rng = $70201E
 !sram_preset_category = $702020
 !sram_room_strat = $702022
+
 !sram_countdamage = $702080
 !sram_menu_background = $702082
 !sram_sprite_prio_flag = $702084
 
-!sram_custompalette = $702086
-!sram_custompalette_hudoutline = $702088
-!sram_custompalette_hudoutline_hi = $70208A
-!sram_custompalette_hudoutline_lo = $70208C
-!sram_custompalette_hudfill = $70208E
-!sram_custompalette_hudfill_hi = $702090
-!sram_custompalette_hudfill_lo = $702092
+!sram_custompalette = $7020A0
+!sram_custompalette_hudoutline = $7020A2
+!sram_custompalette_hudoutline_hi = $7020A4
+!sram_custompalette_hudoutline_lo = $7020A6
+!sram_custompalette_hudfill = $7020A8
+!sram_custompalette_hudfill_hi = $7020AA
+!sram_custompalette_hudfill_lo = $7020AC
+!sram_custompalette_menuborder = $7020AE
+!sram_custompalette_menuborder_hi = $7020B0
+!sram_custompalette_menuborder_lo = $7020B2
+!sram_custompalette_menuheaderoutline = $7020B4
+!sram_custompalette_menuheaderoutline_hi = $7020B6
+!sram_custompalette_menuheaderoutline_lo = $7020B8
+!sram_custompalette_menutext = $7020BA
+!sram_custompalette_menutext_hi = $7020BC
+!sram_custompalette_menutext_lo = $7020BE
+!sram_custompalette_menunumoutline = $7020C0
+!sram_custompalette_menunumoutline_hi = $7020C2
+!sram_custompalette_menunumoutline_lo = $7020C4
+!sram_custompalette_menunumfill = $7020C6
+!sram_custompalette_menunumfill_hi = $7020C8
+!sram_custompalette_menunumfill_lo = $7020CA
+!sram_custompalette_menutoggleoutline = $7020CC
+!sram_custompalette_menutoggleoutline_hi = $7020CE
+!sram_custompalette_menutoggleoutline_lo = $7020D0
+!sram_custompalette_menuseltext = $7020D2
+!sram_custompalette_menuseltext_hi = $7020D4
+!sram_custompalette_menuseltext_lo = $7020D6
+!sram_custompalette_menuseltextbg = $7020D8
+!sram_custompalette_menuseltextbg_hi = $7020DA
+!sram_custompalette_menuseltextbg_lo = $7020DC
+!sram_custompalette_menuunknown2 = $7020DE
+!sram_custompalette_menuunknown2_hi = $7020E0
+!sram_custompalette_menuunknown2_lo = $7020E2
+!sram_custompalette_menuunknown3 = $7020E4
+!sram_custompalette_menuunknown3_hi = $7020E6
+!sram_custompalette_menuunknown3_lo = $7020E8
 
-!sram_presetrando = $7020A2
-!sram_presetrando_morph = $7020A4
-!sram_presetrando_charge = $7020A6
-!sram_presetrando_max_etanks = $7020A8
-!sram_presetrando_max_reserves = $7020AA
-!sram_presetrando_max_missiles = $7020AC
-!sram_presetrando_max_supers = $7020AE
-!sram_presetrando_max_pbs = $7020B0
-!sram_presetrando_beampref = $7020B2
+!sram_presetrando = $70206E
+!sram_presetrando_morph = $702070
+!sram_presetrando_charge = $702072
+!sram_presetrando_max_etanks = $702074
+!sram_presetrando_max_reserves = $702076
+!sram_presetrando_max_missiles = $702078
+!sram_presetrando_max_supers = $70207A
+!sram_presetrando_max_pbs = $70207C
+!sram_presetrando_beampref = $70207E
 
-!sram_ctrl_random_preset = $702024
 
 ; -------------
 ; Menu
