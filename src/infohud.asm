@@ -368,6 +368,7 @@ ih_mb1_segment:
     JSL $90F084    ; we overwrote this instruction to get here
 
     JSL ih_update_hud_early
+    JSL ih_reset_damagecounter
     RTL
 }
 
@@ -377,6 +378,15 @@ ih_mb2_segment:
     STA $7E7854    ; we overwrote this instruction to get here
 
     JSL ih_update_hud_early
+    JSL ih_reset_damagecounter
+    RTL
+}
+
+ih_reset_damagecounter:
+{
+    PHA
+    LDA #$0000 : STA !ram_countdamage : STA !sram_countdamage
+    PLA
     RTL
 }
 
