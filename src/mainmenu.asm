@@ -1616,10 +1616,10 @@ CustomPalettesMenu:
     dw #custompalettes_menuseltext_lo
     dw #custompalettes_menuseltextbg_hi
     dw #custompalettes_menuseltextbg_lo
-;    dw #custompalettes_menunumbg_hi
-;    dw #custompalettes_menunumbg_lo
-;    dw #custompalettes_menuunknown3_hi
-;    dw #custompalettes_menuunknown3_lo
+    dw #custompalettes_menunumbg_hi
+    dw #custompalettes_menunumbg_lo
+    dw #custompalettes_menuunknown3_hi
+    dw #custompalettes_menuunknown3_lo
     dw #$0000
     %cm_header("CUSTOMIZE MENU PALETTES")
 
