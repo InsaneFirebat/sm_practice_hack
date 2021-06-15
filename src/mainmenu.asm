@@ -1533,7 +1533,7 @@ action_clear_shortcuts:
 
 IFBMenu:
     dw #ifb_menubackground
-    dw #ifb_custompalettes_hud
+;    dw #ifb_custompalettes_hud
     dw #ifb_custompalettes_menu
     dw #ifb_presetrando
     dw #ifb_debugteleport
@@ -1545,8 +1545,8 @@ IFBMenu:
 ifb_menubackground:
     %cm_toggle("Menu Background", !sram_menu_background, #$0001, #0)
 
-ifb_custompalettes_hud:
-    %cm_submenu("Customize HUD Palettes", #CustomPalettesHUD)
+;ifb_custompalettes_hud:
+;    %cm_submenu("Customize HUD Palettes", #CustomPalettesHUD)
 
 ifb_custompalettes_menu:
     %cm_submenu("Customize Menu Palettes", #CustomPalettesMenu)
@@ -1568,51 +1568,51 @@ ifb_credits:
 ; Custom Palettes
 ; ----------
 
-CustomPalettesHUD:
-    dw #custompalettes_enableHUD
-    dw #custompalettes_hudoutline_hi
-    dw #custompalettes_hudoutline_lo
-    dw #custompalettes_hudfill_hi
-    dw #custompalettes_hudfill_lo
-    dw #$0000
-    %cm_header("CUSTOMIZE HUD PALETTES")
+;CustomPalettesHUD:
+;    dw #custompalettes_enableHUD
+;    dw #custompalettes_hudoutline_hi
+;    dw #custompalettes_hudoutline_lo
+;    dw #custompalettes_hudfill_hi
+;    dw #custompalettes_hudfill_lo
+;    dw #$0000
+;    %cm_header("CUSTOMIZE HUD PALETTES")
 
-custompalettes_enableHUD:
-    %cm_toggle("Custom HUD Palettes", !sram_custompalette, #$0001, #0)
+;custompalettes_enableHUD:
+;    %cm_toggle("Custom HUD Palettes", !sram_custompalette, #$0001, #0)
 
-custompalettes_hudoutline_hi:
-    %cm_numfield_hex("HUD Outline High Byte", !sram_custompalette_hudoutline_hi, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_hudoutline_lo
-        STA !sram_custompalette_hudoutline
-        RTS
+;custompalettes_hudoutline_hi:
+;    %cm_numfield_hex("HUD Outline High Byte", !sram_custompalette_hudoutline_hi, 0, 255, 1, #.routine)
+;    .routine
+;        XBA
+;        ORA !sram_custompalette_hudoutline_lo
+;        STA !sram_custompalette_hudoutline
+;        RTS
 
-custompalettes_hudoutline_lo:
-    %cm_numfield_hex("HUD Outline Low Byte", !sram_custompalette_hudoutline_lo, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_hudoutline_hi
-        XBA
-        STA !sram_custompalette_hudoutline
-        RTS
+;custompalettes_hudoutline_lo:
+;    %cm_numfield_hex("HUD Outline Low Byte", !sram_custompalette_hudoutline_lo, 0, 255, 1, #.routine)
+;    .routine
+;        XBA
+;        ORA !sram_custompalette_hudoutline_hi
+;        XBA
+;        STA !sram_custompalette_hudoutline
+;        RTS
 
-custompalettes_hudfill_hi:
-    %cm_numfield_hex("HUD Fill High Byte", !sram_custompalette_hudfill_hi, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_hudfill_lo
-        STA !sram_custompalette_hudfill
-        RTS
+;custompalettes_hudfill_hi:
+;    %cm_numfield_hex("HUD Fill High Byte", !sram_custompalette_hudfill_hi, 0, 255, 1, #.routine)
+;    .routine
+;        XBA
+;        ORA !sram_custompalette_hudfill_lo
+;        STA !sram_custompalette_hudfill
+;        RTS
 
-custompalettes_hudfill_lo:
-    %cm_numfield_hex("HUD Fill Low Byte", !sram_custompalette_hudfill_lo, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_hudfill_hi
-        XBA
-        STA !sram_custompalette_hudfill
-        RTS
+;custompalettes_hudfill_lo:
+;    %cm_numfield_hex("HUD Fill Low Byte", !sram_custompalette_hudfill_lo, 0, 255, 1, #.routine)
+;    .routine
+;        XBA
+;        ORA !sram_custompalette_hudfill_hi
+;        XBA
+;        STA !sram_custompalette_hudfill
+;        RTS
 
 CustomPalettesMenu:
     dw #custompalettes_menutext_hi
