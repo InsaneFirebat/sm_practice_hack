@@ -160,7 +160,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("INSANEFIREBAT V2.2.2.3")
+    %cm_header("INSANEFIREBAT V2.2.2.3A")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -1587,7 +1587,7 @@ ifb_credits:
 
 
 ; ----------
-; Custom Palettes Menu
+; Custom Palettes
 ; ----------
 
 CustomPalettesHUD:
@@ -1598,30 +1598,6 @@ CustomPalettesHUD:
     dw #custompalettes_hudfill_lo
     dw #$0000
     %cm_header("CUSTOMIZE HUD PALETTES")
-
-CustomPalettesMenu:
-    dw #custompalettes_menuborder_hi
-    dw #custompalettes_menuborder_lo
-    dw #custompalettes_menuheaderoutline_hi
-    dw #custompalettes_menuheaderoutline_lo
-    dw #custompalettes_menutext_hi
-    dw #custompalettes_menutext_lo
-    dw #custompalettes_menunumoutline_hi
-    dw #custompalettes_menunumoutline_lo
-    dw #custompalettes_menunumfill_hi
-    dw #custompalettes_menunumfill_lo
-    dw #custompalettes_menutoggleoutline_hi
-    dw #custompalettes_menutoggleoutline_lo
-    dw #custompalettes_menuseltext_hi
-    dw #custompalettes_menuseltext_lo
-    dw #custompalettes_menuseltextbg_hi
-    dw #custompalettes_menuseltextbg_lo
-    dw #custompalettes_menunumbg_hi
-    dw #custompalettes_menunumbg_lo
-    dw #custompalettes_menuunknown3_hi
-    dw #custompalettes_menuunknown3_lo
-    dw #$0000
-    %cm_header("CUSTOMIZE MENU PALETTES")
 
 custompalettes_enableHUD:
     %cm_toggle("Custom HUD Palettes", !sram_custompalette, #$0001, #0)
@@ -1660,39 +1636,27 @@ custompalettes_hudfill_lo:
         STA !sram_custompalette_hudfill
         RTS
 
-custompalettes_menuborder_hi:
-    %cm_numfield_hex("Outer Border Hi", !sram_custompalette_menuborder_hi, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menuborder_lo
-        STA !sram_custompalette_menuborder
-        RTS
-
-custompalettes_menuborder_lo:
-    %cm_numfield_hex("Outer Border Lo", !sram_custompalette_menuborder_lo, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menuborder_hi
-        XBA
-        STA !sram_custompalette_menuborder
-        RTS
-
-custompalettes_menuheaderoutline_hi:
-    %cm_numfield_hex("Header Text Outline Hi", !sram_custompalette_menuheaderoutline_hi, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menuheaderoutline_lo
-        STA !sram_custompalette_menuheaderoutline
-        RTS
-
-custompalettes_menuheaderoutline_lo:
-    %cm_numfield_hex("Header Text Outline Lo", !sram_custompalette_menuheaderoutline_lo, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menuheaderoutline_hi
-        XBA
-        STA !sram_custompalette_menuheaderoutline
-        RTS
+CustomPalettesMenu:
+    dw #custompalettes_menutext_hi
+    dw #custompalettes_menutext_lo
+    dw #custompalettes_menuseltext_hi
+    dw #custompalettes_menuseltext_lo
+    dw #custompalettes_menuseltextbg_hi
+    dw #custompalettes_menuseltextbg_lo
+    dw #custompalettes_menuheaderoutline_hi
+    dw #custompalettes_menuheaderoutline_lo
+    dw #custompalettes_menunumfill_hi
+    dw #custompalettes_menunumfill_lo
+    dw #custompalettes_menunumoutline_hi
+    dw #custompalettes_menunumoutline_lo
+    dw #custompalettes_menutoggleoutline_hi
+    dw #custompalettes_menutoggleoutline_lo
+    dw #custompalettes_menuborder_hi
+    dw #custompalettes_menuborder_lo
+    dw #custompalettes_menubackground_hi
+    dw #custompalettes_menubackground_lo
+    dw #$0000
+    %cm_header("CUSTOMIZE MENU PALETTES")
 
 custompalettes_menutext_hi:
     %cm_numfield_hex("Text Hi", !sram_custompalette_menutext_hi, 0, 255, 1, #.routine)
@@ -1709,57 +1673,6 @@ custompalettes_menutext_lo:
         ORA !sram_custompalette_menutext_hi
         XBA
         STA !sram_custompalette_menutext
-        RTS
-
-custompalettes_menunumoutline_hi:
-    %cm_numfield_hex("NumField Outline Hi", !sram_custompalette_menunumoutline_hi, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menunumoutline_lo
-        STA !sram_custompalette_menunumoutline
-        RTS
-
-custompalettes_menunumoutline_lo:
-    %cm_numfield_hex("NumField Outline Lo", !sram_custompalette_menunumoutline_lo, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menunumoutline_hi
-        XBA
-        STA !sram_custompalette_menunumoutline
-        RTS
-
-custompalettes_menunumfill_hi:
-    %cm_numfield_hex("NumField Text Hi", !sram_custompalette_menunumfill_hi, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menunumfill_lo
-        STA !sram_custompalette_menunumfill
-        RTS
-
-custompalettes_menunumfill_lo:
-    %cm_numfield_hex("NumField Text Lo", !sram_custompalette_menunumfill_lo, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menunumfill_hi
-        XBA
-        STA !sram_custompalette_menunumfill
-        RTS
-
-custompalettes_menutoggleoutline_hi:
-    %cm_numfield_hex("Toggle ON Hi", !sram_custompalette_menutoggleoutline_hi, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menutoggleoutline_lo
-        STA !sram_custompalette_menutoggleoutline
-        RTS
-
-custompalettes_menutoggleoutline_lo:
-    %cm_numfield_hex("Toggle ON Lo", !sram_custompalette_menutoggleoutline_lo, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menutoggleoutline_hi
-        XBA
-        STA !sram_custompalette_menutoggleoutline
         RTS
 
 custompalettes_menuseltext_hi:
@@ -1796,38 +1709,106 @@ custompalettes_menuseltextbg_lo:
         STA !sram_custompalette_menuseltextbg
         RTS
 
-custompalettes_menunumbg_hi:
-    %cm_numfield_hex("Menu UNK2 High Byte", !sram_custompalette_menuunknown2_hi, 0, 255, 1, #.routine)
+custompalettes_menuborder_hi:
+    %cm_numfield_hex("Toggle OFF + Border Hi", !sram_custompalette_menuborder_hi, 0, 255, 1, #.routine)
     .routine
         XBA
-        ORA !sram_custompalette_menuunknown2_lo
-        STA !sram_custompalette_menuunknown2
+        ORA !sram_custompalette_menuborder_lo
+        STA !sram_custompalette_menuborder
         RTS
 
-custompalettes_menunumbg_lo:
-    %cm_numfield_hex("Menu UNK2 Low Byte", !sram_custompalette_menuunknown2_lo, 0, 255, 1, #.routine)
+custompalettes_menuborder_lo:
+    %cm_numfield_hex("Toggle OFF + Border Lo", !sram_custompalette_menuborder_lo, 0, 255, 1, #.routine)
     .routine
         XBA
-        ORA !sram_custompalette_menuunknown2_hi
+        ORA !sram_custompalette_menuborder_hi
         XBA
-        STA !sram_custompalette_menuunknown2
+        STA !sram_custompalette_menuborder
         RTS
 
-custompalettes_menuunknown3_hi:
-    %cm_numfield_hex("Menu UNK3 High Byte", !sram_custompalette_menuunknown3_hi, 0, 255, 1, #.routine)
+custompalettes_menuheaderoutline_hi:
+    %cm_numfield_hex("Header Text Outline Hi", !sram_custompalette_menuheaderoutline_hi, 0, 255, 1, #.routine)
     .routine
         XBA
-        ORA !sram_custompalette_menuunknown3_lo
-        STA !sram_custompalette_menuunknown3
+        ORA !sram_custompalette_menuheaderoutline_lo
+        STA !sram_custompalette_menuheaderoutline
         RTS
 
-custompalettes_menuunknown3_lo:
-    %cm_numfield_hex("Menu UNK3 Low Byte", !sram_custompalette_menuunknown3_lo, 0, 255, 1, #.routine)
+custompalettes_menuheaderoutline_lo:
+    %cm_numfield_hex("Header Text Outline Lo", !sram_custompalette_menuheaderoutline_lo, 0, 255, 1, #.routine)
     .routine
         XBA
-        ORA !sram_custompalette_menuunknown3_hi
+        ORA !sram_custompalette_menuheaderoutline_hi
         XBA
-        STA !sram_custompalette_menuunknown3
+        STA !sram_custompalette_menuheaderoutline
+        RTS
+
+custompalettes_menunumfill_hi:
+    %cm_numfield_hex("NumField Text Hi", !sram_custompalette_menunumfill_hi, 0, 255, 1, #.routine)
+    .routine
+        XBA
+        ORA !sram_custompalette_menunumfill_lo
+        STA !sram_custompalette_menunumfill
+        RTS
+
+custompalettes_menunumfill_lo:
+    %cm_numfield_hex("NumField Text Lo", !sram_custompalette_menunumfill_lo, 0, 255, 1, #.routine)
+    .routine
+        XBA
+        ORA !sram_custompalette_menunumfill_hi
+        XBA
+        STA !sram_custompalette_menunumfill
+        RTS
+
+custompalettes_menunumoutline_hi:
+    %cm_numfield_hex("NumField Outline Hi", !sram_custompalette_menunumoutline_hi, 0, 255, 1, #.routine)
+    .routine
+        XBA
+        ORA !sram_custompalette_menunumoutline_lo
+        STA !sram_custompalette_menunumoutline
+        RTS
+
+custompalettes_menunumoutline_lo:
+    %cm_numfield_hex("NumField Outline Lo", !sram_custompalette_menunumoutline_lo, 0, 255, 1, #.routine)
+    .routine
+        XBA
+        ORA !sram_custompalette_menunumoutline_hi
+        XBA
+        STA !sram_custompalette_menunumoutline
+        RTS
+
+custompalettes_menutoggleoutline_hi:
+    %cm_numfield_hex("Toggle ON Hi", !sram_custompalette_menutoggleoutline_hi, 0, 255, 1, #.routine)
+    .routine
+        XBA
+        ORA !sram_custompalette_menutoggleoutline_lo
+        STA !sram_custompalette_menutoggleoutline
+        RTS
+
+custompalettes_menutoggleoutline_lo:
+    %cm_numfield_hex("Toggle ON Lo", !sram_custompalette_menutoggleoutline_lo, 0, 255, 1, #.routine)
+    .routine
+        XBA
+        ORA !sram_custompalette_menutoggleoutline_hi
+        XBA
+        STA !sram_custompalette_menutoggleoutline
+        RTS
+
+custompalettes_menubackground_hi:
+    %cm_numfield_hex("Background Hi", !sram_custompalette_menubackground_hi, 0, 255, 1, #.routine)
+    .routine
+        XBA
+        ORA !sram_custompalette_menubackground_lo
+        STA !sram_custompalette_menubackground
+        RTS
+
+custompalettes_menubackground_lo:
+    %cm_numfield_hex("Background Lo", !sram_custompalette_menubackground_lo, 0, 255, 1, #.routine)
+    .routine
+        XBA
+        ORA !sram_custompalette_menubackground_hi
+        XBA
+        STA !sram_custompalette_menubackground
         RTS
 
 
