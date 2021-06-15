@@ -1318,6 +1318,7 @@ preset_spazer_wrecked_ship_attic:
     dl $7E090F : db $02 : dw $AC00 ; Screen subpixel X position.
     dl $7E0911 : db $02 : dw $0400 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $B000 ; Screen subpixel Y position
+    dl $7E09D2 : db $02 : dw $0003 ; Currently selected item
     dl $7E0AF6 : db $02 : dw $0445 ; Samus X
     dl $7E0AFA : db $02 : dw $006B ; Samus Y
     dl $7ED91A : db $02 : dw $002C ; Events, Items, Doors
@@ -1333,8 +1334,9 @@ preset_spazer_wrecked_ship_upper_west_ocean:
     dl $7E0911 : db $02 : dw $0000 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $C7FD ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $001F ; Screen Y position in pixels
-    dl $7E09C2 : db $02 : dw $0152 ; Health
+    dl $7E09C2 : db $02 : dw $00E9 ; Health
     dl $7E09CA : db $02 : dw $0009 ; Supers
+    dl $7E09D2 : db $02 : dw $0000 ; Currently selected item
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
     dl $7E0AF6 : db $02 : dw $003B ; Samus X
@@ -1358,7 +1360,6 @@ preset_spazer_wrecked_ship_pancakes_and_wavers:
     dl $7E0911 : db $02 : dw $0200 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $F800 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $01FC ; Screen Y position in pixels
-    dl $7E09C2 : db $02 : dw $0166 ; Health
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
     dl $7E0AF6 : db $02 : dw $02C2 ; Samus X
@@ -1395,7 +1396,7 @@ preset_spazer_wrecked_ship_leaving_gravity:
     dl $7E0913 : db $02 : dw $E400 ; Screen subpixel Y position
     dl $7E09A2 : db $02 : dw $3125 ; Equipped Items
     dl $7E09A4 : db $02 : dw $3125 ; Collected Items
-    dl $7E09C2 : db $02 : dw $010D ; Health
+    dl $7E09C2 : db $02 : dw $00C6 ; Health
     dl $7E0A1C : db $02 : dw $009B ; Samus position/state
     dl $7E0A1E : db $02 : dw $0000 ; More position/state
     dl $7E0AF6 : db $02 : dw $0078 ; Samus X
@@ -1454,7 +1455,7 @@ preset_spazer_red_brinstar_final_red_tower_elevator:
     dl $7E07F3 : db $02 : dw $0012 ; Music Bank
     dl $7E090F : db $02 : dw $F000 ; Screen subpixel X position.
     dl $7E0915 : db $02 : dw $0238 ; Screen Y position in pixels
-    dl $7E09C2 : db $02 : dw $0121 ; Health
+    dl $7E09C2 : db $02 : dw $00D1 ; Health
     dl $7E09C6 : db $02 : dw $0012 ; Missiles
     dl $7E09CE : db $02 : dw $0003 ; Pbs
     dl $7E0A1C : db $02 : dw $009B ; Samus position/state
@@ -1484,7 +1485,7 @@ preset_spazer_red_brinstar_final_red_tower_down:
     dl $7E079B : db $02 : dw $A2F7 ; MDB
     dl $7E0913 : db $02 : dw $9000 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $0000 ; Screen Y position in pixels
-    dl $7E09C2 : db $02 : dw $0119 ; Health
+    dl $7E09C2 : db $02 : dw $00C6 ; Health
     dl $7E0AF6 : db $02 : dw $003D ; Samus X
     dl $7E0AFA : db $02 : dw $008B ; Samus Y
     dw #$FFFF
@@ -1514,7 +1515,7 @@ preset_spazer_red_brinstar_final_below_spazer_final:
     dl $7E0911 : db $02 : dw $0100 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $4400 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $0000 ; Screen Y position in pixels
-    dl $7E09C2 : db $02 : dw $0118 ; Health
+    dl $7E09C2 : db $02 : dw $00C6 ; Health
     dl $7E0AF6 : db $02 : dw $01DC ; Samus X
     dl $7E0AFA : db $02 : dw $008B ; Samus Y
     dw #$FFFF
@@ -1532,6 +1533,7 @@ preset_spazer_maridia_breaking_tube:
     dl $7E090F : db $02 : dw $E000 ; Screen subpixel X position.
     dl $7E0911 : db $02 : dw $0000 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $7400 ; Screen subpixel Y position
+    dl $7E09D2 : db $02 : dw $0003 ; Currently selected item
     dl $7E09CA : db $02 : dw $000A ; Supers
     dl $7E0AF6 : db $02 : dw $002D ; Samus X
     dw #$FFFF
@@ -1549,7 +1551,7 @@ preset_spazer_maridia_fish_tank:
     dl $7E0913 : db $02 : dw $C000 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $05F4 ; Screen Y position in pixels
     dl $7E09CE : db $02 : dw $0002 ; Pbs
-    dl $7E09D2 : db $02 : dw $0003 ; Currently selected item
+    dl $7E09D2 : db $02 : dw $0000 ; Currently selected item
     dl $7E0AF6 : db $02 : dw $0167 ; Samus X
     dl $7E0AFA : db $02 : dw $068B ; Samus Y
     dl $7ED820 : db $02 : dw $0801 ; Events, Items, Doors
@@ -1566,7 +1568,6 @@ preset_spazer_maridia_mt_everest:
     dl $7E0911 : db $02 : dw $0100 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $BC00 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $031F ; Screen Y position in pixels
-    dl $7E09D2 : db $02 : dw $0000 ; Currently selected item
     dl $7E0AF6 : db $02 : dw $017C ; Samus X
     dl $7E0AFA : db $02 : dw $03BB ; Samus Y
     dw #$FFFF
@@ -1578,7 +1579,7 @@ preset_spazer_maridia_crab_shaft:
     dl $7E0911 : db $02 : dw $0500 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $9C01 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $0000 ; Screen Y position in pixels
-    dl $7E09C2 : db $02 : dw $00DD ; Health
+    dl $7E09C2 : db $02 : dw $0091 ; Health
     dl $7E0AF6 : db $02 : dw $05C0 ; Samus X
     dl $7E0AFA : db $02 : dw $008B ; Samus Y
     dw #$FFFF
@@ -1649,7 +1650,7 @@ preset_spazer_maridia_botwoon_etank:
     dl $7E090F : db $02 : dw $4000 ; Screen subpixel X position.
     dl $7E0911 : db $02 : dw $0100 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $C000 ; Screen subpixel Y position
-    dl $7E09C2 : db $02 : dw $0105 ; Health
+    dl $7E09C2 : db $02 : dw $00D5 ; Health
     dl $7E09C6 : db $02 : dw $0014 ; Missiles
     dl $7E09CA : db $02 : dw $0003 ; Supers
     dl $7E09CE : db $02 : dw $0002 ; Pbs
