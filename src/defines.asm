@@ -195,12 +195,9 @@
 !sram_custompalette_menuseltextbg = $7020D8
 !sram_custompalette_menuseltextbg_hi = $7020DA
 !sram_custompalette_menuseltextbg_lo = $7020DC
-!sram_custompalette_menuunknown2 = $7020DE
-!sram_custompalette_menuunknown2_hi = $7020E0
-!sram_custompalette_menuunknown2_lo = $7020E2
-!sram_custompalette_menuunknown3 = $7020E4
-!sram_custompalette_menuunknown3_hi = $7020E6
-!sram_custompalette_menuunknown3_lo = $7020E8
+!sram_custompalette_menubackground = $7020DE
+!sram_custompalette_menubackground_hi = $7020E0
+!sram_custompalette_menubackground_lo = $7020E2
 
 !sram_presetrando = $70206E
 !sram_presetrando_morph = $702070
@@ -302,7 +299,7 @@
 ; ------------
 
 !ram_load_preset = $7FFC00
-!ram_cgram_cache = $7FFC02 ; 0x14 bytes
+!ram_cgram_cache = $7FFC02 ; 0x16 bytes
 
 ; ----------
 ; Save/load
