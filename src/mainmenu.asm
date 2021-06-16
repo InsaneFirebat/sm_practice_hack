@@ -1024,9 +1024,9 @@ InfoHudMenu:
     dw #ih_display_mode
     dw #ih_goto_room_strat
     dw #ih_room_strat
-    dw #ih_ram_watch
     dw #ih_room_counter
     dw #ih_lag
+    dw #ih_ram_watch
     dw #$0000
     %cm_header("INFOHUD")
 
@@ -1243,79 +1243,103 @@ ih_ram_watch:
     %cm_submenu("Customize RAM Watch", #RAMWatchMenu)
 
 RAMWatchMenu:
-    dw ramwatch_edit_left_hi
-    dw ramwatch_edit_left_lo
-    dw ramwatch_edit_left_value_hi
-    dw ramwatch_edit_left_value_lo
-    dw ramwatch_edit_execute_left
-    dw ramwatch_edit_lock_left
-    dw ramwatch_edit_right_hi
-    dw ramwatch_edit_right_lo
-    dw ramwatch_edit_right_value_hi
-    dw ramwatch_edit_right_value_lo
-    dw ramwatch_edit_execute_right
-    dw ramwatch_edit_lock_right
+    dw ramwatch_left_hi
+    dw ramwatch_left_lo
+    dw ramwatch_left_edit_hi
+    dw ramwatch_left_edit_lo
+    dw ramwatch_execute_left
+    dw ramwatch_lock_left
+    dw ramwatch_right_hi
+    dw ramwatch_right_lo
+    dw ramwatch_right_edit_hi
+    dw ramwatch_right_edit_lo
+    dw ramwatch_execute_right
+    dw ramwatch_lock_right
     dw #$0000
     %cm_header("READ AND WRITE TO MEMORY")
 
-ramwatch_edit_left_hi:
-    %cm_numfield_hex("Address 1 High", !ram_watch_left_hi, 0, 255, 1, #0)
+ramwatch_left_hi:
+    %cm_numfield_hex("Address 1 High", !ram_watch_left_hi, 0, 255, 1, #.routine)
+    .routine
+        XBA : ORA !ram_watch_left_lo
+        STA !ram_watch_left
+        RTS
 
-ramwatch_edit_left_lo:
-    %cm_numfield_hex("Address 1 Low", !ram_watch_left_lo, 0, 255, 1, #0)
+ramwatch_left_lo:
+    %cm_numfield_hex("Address 1 Low", !ram_watch_left_lo, 0, 255, 1, #.routine)
+    .routine
+        XBA : ORA !ram_watch_left_hi
+        XBA : STA !ram_watch_left
+        RTS
 
-ramwatch_edit_left_value_hi:
-    %cm_numfield_hex("Value 1 High", !ram_watch_edit_left_hi, 0, 255, 1, #0)
+ramwatch_left_edit_hi:
+    %cm_numfield_hex("Value 1 High", !ram_watch_edit_left_hi, 0, 255, 1, #.routine)
+    .routine
+        XBA : ORA !ram_watch_edit_left_lo
+        STA !ram_watch_edit_left
+        RTS
 
-ramwatch_edit_left_value_lo:
-    %cm_numfield_hex("Value 1 Low", !ram_watch_edit_left_lo, 0, 255, 1, #0)
+ramwatch_left_edit_lo:
+    %cm_numfield_hex("Value 1 Low", !ram_watch_edit_left_lo, 0, 255, 1, #.routine)
+    .routine
+        XBA : ORA !ram_watch_edit_left_hi
+        XBA : STA !ram_watch_edit_left
+        RTS
 
-ramwatch_edit_right_hi:
-    %cm_numfield_hex("Address 2 High", !ram_watch_right_hi, 0, 255, 1, #0)
+ramwatch_right_hi:
+    %cm_numfield_hex("Address 2 High", !ram_watch_right_hi, 0, 255, 1, #.routine)
+    .routine
+        XBA : ORA !ram_watch_right_lo
+        STA !ram_watch_right
+        RTS
 
-ramwatch_edit_right_lo:
-    %cm_numfield_hex("Address 2 Low", !ram_watch_right_lo, 0, 255, 1, #0)
+ramwatch_right_lo:
+    %cm_numfield_hex("Address 2 Low", !ram_watch_right_lo, 0, 255, 1, #.routine)
+    .routine
+        XBA : ORA !ram_watch_right_hi
+        XBA : STA !ram_watch_right
+        RTS
 
-ramwatch_edit_right_value_hi:
-    %cm_numfield_hex("Value 2 High", !ram_watch_edit_right_hi, 0, 255, 1, #0)
+ramwatch_right_edit_hi:
+    %cm_numfield_hex("Value 2 High", !ram_watch_edit_right_hi, 0, 255, 1, #.routine)
+    .routine
+        XBA : ORA !ram_watch_edit_right_lo
+        STA !ram_watch_edit_right
+        RTS
 
-ramwatch_edit_right_value_lo:
-    %cm_numfield_hex("Value 2 Low", !ram_watch_edit_right_lo, 0, 255, 1, #0)
+ramwatch_right_edit_lo:
+    %cm_numfield_hex("Value 2 Low", !ram_watch_edit_right_lo, 0, 255, 1, #.routine)
+    .routine
+        XBA : ORA !ram_watch_edit_right_hi
+        XBA : STA !ram_watch_edit_right
+        RTS
 
-ramwatch_edit_execute_left:
+ramwatch_execute_left:
     %cm_jsr("Write to Address 1", #action_ramwatch_edit_left, #$0000)
 
-ramwatch_edit_execute_right:
+ramwatch_execute_right:
     %cm_jsr("Write to Address 2", #action_ramwatch_edit_right, #$0000)
 
-ramwatch_edit_lock_left:
+ramwatch_lock_left:
     %cm_toggle("Lock Value 1", !ram_watch_edit_lock_left, #$0001, #action_HUD_ramwatch)
 
-ramwatch_edit_lock_right:
+ramwatch_lock_right:
     %cm_toggle("Lock Value 2", !ram_watch_edit_lock_right, #$0001, #action_HUD_ramwatch)
 
 action_ramwatch_edit_left:
 {
-    LDA !ram_watch_left_hi : XBA
-    %a8() : LDA !ram_watch_left_lo
-    %a16() : STA !ram_watch_left : TAX
-    %a8()
-    LDA !ram_watch_edit_left_hi : XBA
-    LDA !ram_watch_edit_left_lo : %a16()
-    STA !ram_watch_edit_left : STA $7E0000,X
+    LDA !ram_watch_left : TAX
+    LDA !ram_watch_edit_left : STA $7E0000,X
+    LDA #$0014 : STA !sram_display_mode
     %sfxgrapple()
     RTS
 }
 
 action_ramwatch_edit_right:
 {
-    LDA !ram_watch_right_hi : XBA
-    %a8() : LDA !ram_watch_right_lo
-    %a16() : STA !ram_watch_right : TAX
-    %a8()
-    LDA !ram_watch_edit_right_hi : XBA
-    LDA !ram_watch_edit_right_lo : %a16()
-    STA !ram_watch_edit_right : STA $7E0000,X
+    LDA !ram_watch_right : TAX
+    LDA !ram_watch_edit_right : STA $7E0000,X
+    LDA #$0014 : STA !sram_display_mode
     %sfxgrapple()
     RTS
 }
@@ -2124,6 +2148,7 @@ SoundTestMenu:
     dw #ifb_soundtest_silence
     dw #ifb_soundtest_goto_music
     dw #misc_music_toggle
+    dw #ifb_soundtest_roommusic_toggle
     dw #$0000
     %cm_header("AUDIO TEST MENU")
 
@@ -2177,6 +2202,21 @@ action_soundtest_silence:
 
 ifb_soundtest_goto_music:
     %cm_submenu("Music Selection", #MusicSelectMenu1)
+
+ifb_soundtest_roommusic_toggle:
+    %cm_toggle("Doors Ignore Music", !ram_soundtest_roommusic, #$0001, #0)
+
+SuppressRoomMusic:
+{
+    LDA !ram_soundtest_roommusic : BNE .done
+    LDA $07CB : BEQ .done ; overwritten code
+    JML $82E082 ; back on track
+
+  .done ; skip music load
+    PLB
+    PLP
+    RTL
+}
 
 MusicSelectMenu1:
     dw #ifb_soundtest_music_title1

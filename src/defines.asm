@@ -42,14 +42,15 @@
 !ram_ammo_missiles = $05C9 ; debug mode would use these for roughly the same purpose
 !ram_ammo_supers = $05CB
 !ram_ammo_powerbombs = $05CD
-!ram_countdamage = $0B0C ; 2 bytes, direct page address? reset by some ram clearing routines
+!ram_countdamage = $0B0C
 !ram_countdamage_hud = $7FFBEC
 !ram_soundtest_lib1 = $7FFBF0
 !ram_soundtest_lib2 = $7FFBF2
 !ram_soundtest_lib3 = $7FFBF4
 !ram_soundtest_music = $7FFBF6
-!ram_noclip = $7FFBF8
-!ram_steamcollision = $7FFBFA
+!ram_soundtest_roommusic = $7FFBF8
+!ram_noclip = $7FFBFA
+!ram_steamcollision = $7FFBFC
 
 !ram_phantoon_rng_3 = $7FFB7A
 !ram_crocomire_rng = $7FFB7C

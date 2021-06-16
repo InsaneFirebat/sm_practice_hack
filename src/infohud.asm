@@ -165,8 +165,11 @@ org $828AB0       ; hijack spare CPU usage routine
     NOP : NOP                                 ; 4 cycles
     RTL
 }
-
 warnpc $828AE3
+
+org $82E07D       ; hijack load room music
+    JML SuppressRoomMusic
+    NOP
 
 org $9AB200         ; graphics for HUD
 incbin ../resources/hudgfx.bin
