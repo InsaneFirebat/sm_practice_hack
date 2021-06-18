@@ -446,7 +446,6 @@ org $E08000
   incsrc presets/hundo_data.asm
   print pc, " hundo data end"
 
-org $E18000
   ; 2EAA (length in hex)
   print pc, " prkd data start"
   incsrc presets/prkd_data.asm

@@ -634,7 +634,6 @@ ih_hud_code:
     JSR (.status_display_table,X)
 
     ; Samus' HP
-    LDA !IH_BLANK : STA $7EC690 ; erase stale decimal tile
     LDA $09C2 : CMP !ram_last_hp : BEQ .end : STA !ram_last_hp
     LDX #$0092 : JSR Draw4
     LDA !IH_BLANK : STA $7EC690 ; erase stale decimal tile
