@@ -280,8 +280,44 @@ print pc, " <------------------------- break here"
     STA $7EC692 : STA $7EC694 : STA $7EC696
     STA $7EC698
 
-; Detect enemies
+; Detect and draw Samus first
 
+    LDY $0AF6 : CPY #$004B : BEQ .greenSamus
+    LDA #$00C9 : BRA .checkX0
+
+  .greenSamus
+    LDA #$10C9
+
+  .checkX0
+    CPY #$0030 : BPL .samusX1
+    STA $7EC68C : BRA .checkEnemies
+
+  .samusX1
+    CPY #$0040 : BPL .samusX2
+    STA $7EC68E : BRA .checkEnemies
+
+  .samusX2
+    CPY #$0050 : BPL .samusX3
+    STA $7EC690 : BRA .checkEnemies
+
+  .samusX3
+    CPY #$0060 : BPL .samusX4
+    STA $7EC692 : BRA .checkEnemies
+
+  .samusX4
+    CPY #$0070 : BPL .samusX5
+    STA $7EC694 : BRA .checkEnemies
+
+  .samusX5
+    CPY #$0080 : BPL .samusX6
+    STA $7EC696 : BRA .checkEnemies
+
+  .samusX6
+    STA $7EC698
+
+; Detect stuff
+
+  .checkEnemies
     LDX #$0180 ; Enemy 6
     LDA $7E0F7E,X : CMP #$0270 : BCC .checkEnemy6      ; check if Y <270h
     LDA #$F000 : STA !ram_radar1 : BRL .skipEnemy6
@@ -425,32 +461,25 @@ print pc, " <------------------------- break here"
     LSR : BEQ .R1P1
     
   .R1P8
-    LDX #$000E
-    BRA +
+    LDX #$000E : BRA +
     
   .R1P7
-    LDX #$000C
-    BRA +
+    LDX #$000C : BRA +
     
   .R1P6
-    LDX #$000A
-    BRA +
+    LDX #$000A : BRA +
     
   .R1P5
-    LDX #$0008
-    BRA +
+    LDX #$0008 : BRA +
     
   .R1P4
-    LDX #$0006
-    BRA +
+    LDX #$0006 : BRA +
     
   .R1P3
-    LDX #$0004
-    BRA +
+    LDX #$0004 : BRA +
     
   .R1P2
-    LDX #$0002
-    BRA +
+    LDX #$0002 : BRA +
     
   .R1P1
     LDX #$0000
@@ -482,32 +511,25 @@ print pc, " <------------------------- break here"
     LSR : BEQ .R2P1
     
   .R2P8
-    LDX #$000E
-    BRA +
+    LDX #$000E : BRA +
     
   .R2P7
-    LDX #$000C
-    BRA +
+    LDX #$000C : BRA +
     
   .R2P6
-    LDX #$000A
-    BRA +
+    LDX #$000A : BRA +
     
   .R2P5
-    LDX #$0008
-    BRA +
+    LDX #$0008 : BRA +
     
   .R2P4
-    LDX #$0006
-    BRA +
+    LDX #$0006 : BRA +
     
   .R2P3
-    LDX #$0004
-    BRA +
+    LDX #$0004 : BRA +
     
   .R2P2
-    LDX #$0002
-    BRA +
+    LDX #$0002 : BRA +
     
   .R2P1
     LDX #$0000
