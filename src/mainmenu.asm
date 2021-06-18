@@ -1183,6 +1183,7 @@ RoomStratMenu:
     dw ihstrat_elevatorcf
     dw ihstrat_botwooncf
     dw ihstrat_kihuntermanip
+    dw ihstrat_kraidradar
     dw #$0000
     %cm_header("INFOHUD ROOM STRAT")
 
@@ -1213,6 +1214,9 @@ ihstrat_botwooncf:
 ihstrat_kihuntermanip:
     %cm_jsr("Kihunter Manipulation", #action_select_room_strat, #$0008)
 
+ihstrat_kraidradar:
+    %cm_jsr("Kraid Nail Radar", #action_select_room_strat, #$0009)
+
 action_select_room_strat:
 {
     TYA : STA !sram_room_strat
@@ -1235,8 +1239,8 @@ ih_room_strat:
     db #$28, "SHINE TO PB", #$FF
     db #$28, "ELEVATOR CF", #$FF
     db #$28, " BOTWOON CF", #$FF
-    db #$28, "ELEVATOR CF", #$FF
     db #$28, "   KIHUNTER", #$FF
+    db #$28, "KRAID RADAR", #$FF
     db #$FF
 
 ih_ram_watch:

@@ -35,22 +35,19 @@
 !ram_lag_counter = $7FFB96
 !ram_last_lag_counter = $7FFB98
 !ram_shot_timer = $7FFB9E
-!ram_display_backup = $7FFBE4
-!ram_ridleygrab = $7FFBE8
-!ram_infinite_ammo = $7FFBEA
-!ram_infiniteammo_check = $7FFBEE
+
 !ram_ammo_missiles = $05C9 ; debug mode would use these for roughly the same purpose
 !ram_ammo_supers = $05CB
 !ram_ammo_powerbombs = $05CD
 !ram_countdamage = $0B0C
-!ram_countdamage_hud = $7FFBEC
-!ram_soundtest_lib1 = $7FFBF0
-!ram_soundtest_lib2 = $7FFBF2
-!ram_soundtest_lib3 = $7FFBF4
-!ram_soundtest_music = $7FFBF6
-!ram_soundtest_roommusic = $7FFBF8
-!ram_noclip = $7FFBFA
-!ram_steamcollision = $7FFBFC
+
+!ram_display_backup = $7FFBE0
+!ram_ridleygrab = $7FFBE2
+!ram_infinite_ammo = $7FFBE4
+!ram_infiniteammo_check = $7FFBE6
+!ram_countdamage_hud = $7FFBE8
+!ram_noclip = $7FFBEA
+!ram_steamcollision = $7FFBEC
 
 !ram_phantoon_rng_3 = $7FFB7A
 !ram_crocomire_rng = $7FFB7C
@@ -75,10 +72,12 @@
 ;!ram_enemy5_last_ypos = $7FFC56
 !ram_enemy6_last_xpos = $7FFC58
 !ram_enemy6_last_ypos = $7FFC5A
-;!ram_enemy7_last_xpos = $7FFC5C
-;!ram_enemy7_last_ypos = $7FFC5E
+!ram_enemy7_last_xpos = $7FFC5C
+!ram_enemy7_last_ypos = $7FFC5E
 !ram_enemy8_last_xpos = $7FFC60
 !ram_enemy8_last_ypos = $7FFC62
+!ram_radar1 = $7FFC64
+!ram_radar2 = $7FFC66
 
 !ram_watch_left = $7FFC70
 !ram_watch_left_hud = $7FFC72
@@ -96,6 +95,12 @@
 !ram_watch_edit_right_lo = $7FFC8A
 !ram_watch_edit_lock_left = $7FFC8C
 !ram_watch_edit_lock_right = $7FFC8E
+
+!ram_soundtest_lib1 = $7FFC92
+!ram_soundtest_lib2 = $7FFC94
+!ram_soundtest_lib3 = $7FFC96
+!ram_soundtest_music = $7FFC98
+!ram_soundtest_roommusic = $7FFC9A
 
 !ram_tmp_1 = $7FFB4C
 !ram_tmp_2 = $7FFB4E
@@ -149,8 +154,9 @@
 !sram_ctrl_load_state = $70200A
 !sram_ctrl_save_state = $70200C
 !sram_ctrl_load_last_preset = $70200E
-!sram_ctrl_reveal_damage = $702062
 !sram_ctrl_random_preset = $702024
+
+!sram_ctrl_reveal_damage = $702062
 
 !sram_artificial_lag = $702010
 !sram_rerandomize = $702012
@@ -296,6 +302,10 @@
 !IH_LETTER_X = #$0C66
 !IH_LETTER_Y = #$0C67
 !IH_PERCENT = #$0C0A
+!IH_ARROW_LEFT = #$0C60
+!IH_ARROW_UP = #$0C61
+!IH_ARROW_RIGHT = #$0C62
+!IH_ARROW_DOWN = #$0C63
 
 ; ------------
 ; Presets
