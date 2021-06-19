@@ -160,7 +160,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("INSANEFIREBAT V2.2.2.3A")
+    %cm_header("INSANEFIREBAT V2.2.2.3B")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)

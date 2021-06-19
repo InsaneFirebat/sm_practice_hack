@@ -476,7 +476,7 @@ ih_update_hud_code:
     ; Draw Item percent
     .pct
     {
-        LDA !sram_display_mode : DEC : BEQ .skipPercent
+        LDA !sram_display_mode : CMP #$0014 : BEQ .skipPercent : DEC : BEQ .skipPercent
         LDA #$0000 : STA !ram_pct_1
 
         ; Max HP (E tanks)
