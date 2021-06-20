@@ -7,13 +7,10 @@ IFBMenu:
     dw #ifb_custompalettes_hud
     dw #ifb_custompalettes_menu
     dw #ifb_paletteprofile
-    dw #ifb_noclip
-    dw #ifb_nosteam
     dw #ifb_presetrando
     dw #ifb_debugteleport
     dw #ifb_soundtest
     dw #ifb_lockout
-    dw #ifb_fixcontrols
     dw #ifb_credits
     dw #$0000
     %cm_header("INSANEFIREBAT MENU")
@@ -38,12 +35,6 @@ ifb_paletteprofile:
         db #$28, "    FIREBAT", #$FF
     db #$FF
 
-ifb_noclip:
-    %cm_toggle("Walk Through Walls", !ram_noclip, #$0001, #0)
-
-ifb_nosteam:
-    %cm_toggle("No Steam Collision", !ram_steamcollision, #$0001, #0)
-
 ifb_debugteleport:
     %cm_submenu("Hidden Dev Load Stations", #DebugTeleportMenu)
 
@@ -55,9 +46,6 @@ ifb_soundtest:
 
 ifb_lockout:
     %cm_submenu("Trigger Piracy Warning", #LockoutConfirm)
-
-ifb_fixcontrols:
-    %cm_jsr_nosound("Fix My Controls", #action_fixcontrols, #$4000)
 
 ifb_credits:
     %cm_submenu("InfoHUD Credits", #CreditsMenu)
@@ -912,14 +900,6 @@ ifb_soundtest_music_toggle:
         STA $063F
         STA $2140
         RTS
-}
-
-action_fixcontrols:
-{
-    TYA : STA $09B2           ; Y for Shot
-    LDA #$0040 : STA $09B8    ; X for Item Cancel
-    %sfxshot()
-    RTS
 }
 
 CreditsMenu:
