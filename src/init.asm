@@ -89,9 +89,9 @@ init_sram:
     LDA #$0000 : STA !sram_custompalette_hudfill
     LDA #$0000 : STA !sram_custompalette_hudfill_hi
     LDA #$0000 : STA !sram_custompalette_hudfill_lo
-    LDA #$8000 : STA !sram_custompalette_menuborder
-    LDA #$0080 : STA !sram_custompalette_menuborder_hi
-    LDA #$0000 : STA !sram_custompalette_menuborder_lo
+    LDA #$000E : STA !sram_custompalette_menuborder
+    LDA #$0000 : STA !sram_custompalette_menuborder_hi
+    LDA #$000E : STA !sram_custompalette_menuborder_lo
     LDA #$000E : STA !sram_custompalette_menuheaderoutline
     LDA #$0000 : STA !sram_custompalette_menuheaderoutline_hi
     LDA #$000E : STA !sram_custompalette_menuheaderoutline_lo
