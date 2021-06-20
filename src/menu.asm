@@ -177,42 +177,23 @@ cm_transfer_custom_cgram:
     LDA $7EC03A : STA !ram_cgram_cache+18
     LDA $7EC03C : STA !ram_cgram_cache+20
 
-    LDA !sram_custompalette_menuborder : STA $7EC00A
-    LDA !sram_custompalette_menuheaderoutline : STA $7EC012
-    LDA !sram_custompalette_menutext : STA $7EC014
-    LDA !sram_custompalette_menubackground : STA $7EC016
-    LDA !sram_custompalette_menunumoutline : STA $7EC01A
-    LDA !sram_custompalette_menunumfill : STA $7EC01C
-    LDA !sram_custompalette_menutoggleoutline : STA $7EC032
-    LDA !sram_custompalette_menuseltext : STA $7EC034
-    LDA !sram_custompalette_menuseltextbg : STA $7EC036
-    LDA !sram_custompalette_menunumseloutline : STA $7EC03A
-    LDA !sram_custompalette_menunumsel : STA $7EC03C
+    JSR PrepMenuPalette
+
+    LDA !ram_custompalette_menuborder : STA $7EC00A
+    LDA !ram_custompalette_menuheaderoutline : STA $7EC012
+    LDA !ram_custompalette_menutext : STA $7EC014
+    LDA !ram_custompalette_menubackground : STA $7EC016
+    LDA !ram_custompalette_menunumoutline : STA $7EC01A
+    LDA !ram_custompalette_menunumfill : STA $7EC01C
+    LDA !ram_custompalette_menutoggleoutline : STA $7EC032
+    LDA !ram_custompalette_menuseltext : STA $7EC034
+    LDA !ram_custompalette_menuseltextbg : STA $7EC036
+    LDA !ram_custompalette_menunumseloutline : STA $7EC03A
+    LDA !ram_custompalette_menunumsel : STA $7EC03C
 
     JSL transfer_cgram_long
     PLP
     RTS
-}
-
-cm_refresh_custom_cgram:
-{
-    PHP
-    %a16()
-    LDA !sram_custompalette_menuborder : STA $7EC00A
-    LDA !sram_custompalette_menuheaderoutline : STA $7EC012
-    LDA !sram_custompalette_menutext : STA $7EC014
-    LDA !sram_custompalette_menubackground : STA $7EC016
-    LDA !sram_custompalette_menunumoutline : STA $7EC01A
-    LDA !sram_custompalette_menunumfill : STA $7EC01C
-    LDA !sram_custompalette_menutoggleoutline : STA $7EC032
-    LDA !sram_custompalette_menuseltext : STA $7EC034
-    LDA !sram_custompalette_menuseltextbg : STA $7EC036
-    LDA !sram_custompalette_menubackground : STA $7EC03A
-    LDA !sram_custompalette_menunumsel : STA $7EC03C
-
-;    JSL transfer_cgram_long
-    PLP
-
 }
 
 cm_transfer_original_cgram:
@@ -234,6 +215,71 @@ cm_transfer_original_cgram:
     JSL transfer_cgram_long
     PLP
     RTS
+}
+
+PrepMenuPalette:
+{
+    LDA !sram_custompalette_profile : ASL : TAX
+    BEQ .customPalette
+    LDA.w PaletteProfileTables,X : STA $12
+
+    LDY #$0000 : LDA ($12),Y : STA !ram_custompalette_menuborder
+    LDY #$0002 : LDA ($12),Y : STA !ram_custompalette_menuheaderoutline
+    LDY #$0004 : LDA ($12),Y : STA !ram_custompalette_menutext
+    LDY #$0006 : LDA ($12),Y : STA !ram_custompalette_menubackground
+    LDY #$0008 : LDA ($12),Y : STA !ram_custompalette_menunumoutline
+    LDY #$000A : LDA ($12),Y : STA !ram_custompalette_menunumfill
+    LDY #$000C : LDA ($12),Y : STA !ram_custompalette_menutoggleoutline
+    LDY #$000E : LDA ($12),Y : STA !ram_custompalette_menuseltext
+    LDY #$0010 : LDA ($12),Y : STA !ram_custompalette_menuseltextbg
+    LDY #$0012 : LDA ($12),Y : STA !ram_custompalette_menunumseloutline
+    LDY #$0014 : LDA ($12),Y : STA !ram_custompalette_menunumsel
+    RTS
+    
+  .customPalette
+    LDA !sram_custompalette_menuborder : STA !ram_custompalette_menuborder
+    LDA !sram_custompalette_menuheaderoutline : STA !ram_custompalette_menuheaderoutline
+    LDA !sram_custompalette_menutext : STA !ram_custompalette_menutext
+    LDA !sram_custompalette_menubackground : STA !ram_custompalette_menubackground
+    LDA !sram_custompalette_menunumoutline : STA !ram_custompalette_menunumoutline
+    LDA !sram_custompalette_menunumfill : STA !ram_custompalette_menunumfill
+    LDA !sram_custompalette_menutoggleoutline : STA !ram_custompalette_menutoggleoutline
+    LDA !sram_custompalette_menuseltext : STA !ram_custompalette_menuseltext
+    LDA !sram_custompalette_menuseltextbg : STA !ram_custompalette_menuseltextbg
+    LDA !sram_custompalette_menunumseloutline : STA !ram_custompalette_menunumseloutline
+    LDA !sram_custompalette_menunumsel : STA !ram_custompalette_menunumsel
+    RTS
+
+PaletteProfileTables:
+    dw #CustomProfileTable
+    dw #DefaultProfileTable
+    dw #HUDProfileTable
+    dw #FirebatProfileTable
+    dw #wardrinkerProfileTable
+;    #mm2ProfileTable
+;    #PurpleProfileTable
+    dw #$0000
+
+CustomProfileTable: ; custom always first
+    dw $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000
+
+DefaultProfileTable:
+    dw $7277, $48F3, $7FFF, $0000, $0000, $7FFF, $4376, $761F, $0000, $0000, $761F
+
+HUDProfileTable:
+    dw $3D46, $48FB, $7FFF, $0000, $44E5, $7FFF, $4A52, $318C, $0000, $02DF, $001F
+
+FirebatProfileTable:
+    dw $000E, $000E, $0A20, $0000, $0A20, $0002, $0680, $000f, $0005, $0A20, $000F
+
+wardrinkerProfileTable:
+    dw $7277, $7FFF, $7A02, $0000, $0000, $7B00, $7277, $7F29, $0000, $0000, $7F29
+
+mm2ProfileTable:
+    dw $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000
+
+PurpleProfileTable:
+    dw $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000
 }
 
 cm_draw:
@@ -271,7 +317,7 @@ cm_tilemap_bg:
     ; Vertical edges
     {
         LDX #$0000
-        LDY #$0017
+        LDY #$0019
 
         -
         LDA.w #$647A : STA !ram_tilemap_buffer+$082,X
@@ -287,7 +333,7 @@ cm_tilemap_bg:
 
         -
         LDA.w #$A47B : STA !ram_tilemap_buffer+$044,X
-        LDA.w #$247B : STA !ram_tilemap_buffer+$684,X
+        LDA.w #$247B : STA !ram_tilemap_buffer+$704,X
 
         INX #2
         DEY : BPL -
@@ -335,6 +381,8 @@ cm_tilemap_bg:
         STA !ram_tilemap_buffer+$5C4,X
         STA !ram_tilemap_buffer+$604,X
         STA !ram_tilemap_buffer+$644,X
+        STA !ram_tilemap_buffer+$684,X
+        STA !ram_tilemap_buffer+$6C4,X
 
         INX #2
         DEY : BPL .interior_loop
@@ -830,7 +878,7 @@ cm_loop:
 
   .refresh
     LDA !ram_cm_cursor_stack : CMP #$0014 : BNE +
-    LDA !ram_cm_cursor_stack+2 : CMP #$0004 : BNE +
+;    LDA !ram_cm_cursor_stack+2 : CMP #$0004 : BNE +
     JSR action_custompalettes_refresh
 +   JMP .inputLoop
 }
