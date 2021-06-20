@@ -883,8 +883,8 @@ cm_loop:
 
   .refresh
     LDA !ram_cm_cursor_stack : CMP #$0014 : BNE +
-;    LDA !ram_cm_cursor_stack+2 : CMP #$0004 : BNE +
-    JSR action_custompalettes_refresh
+    JSR cm_transfer_original_cgram
+    JSR cm_transfer_custom_cgram
 +   JMP .inputLoop
 }
 

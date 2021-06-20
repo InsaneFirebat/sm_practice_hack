@@ -28,7 +28,7 @@ ifb_paletteprofile:
     dw !ACTION_CHOICE
     dl #!sram_custompalette_profile
     dw #$0000
-    db #$28, "MENU PALETTE", #$FF
+    db #$28, "Menu Palette", #$FF
         db #$28, "     CUSTOM", #$FF ; CUSTOM should always be first
         db #$28, "    DEFAULT", #$FF
         db #$28, "        HUD", #$FF
@@ -328,6 +328,7 @@ action_custompalettes_refresh:
     %ai16()
     JSR cm_transfer_original_cgram
     JSR cm_transfer_custom_cgram
+    LDA #$0000 : STA !sram_custompalette_profile
     PLP
     RTS
 }
