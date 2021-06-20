@@ -187,11 +187,32 @@ cm_transfer_custom_cgram:
     LDA !sram_custompalette_menuseltext : STA $7EC034
     LDA !sram_custompalette_menuseltextbg : STA $7EC036
     LDA !sram_custompalette_menubackground : STA $7EC03A
-    LDA #$761F : STA $7EC03C
+    LDA !sram_custompalette_menunumsel : STA $7EC03C
 
     JSL transfer_cgram_long
     PLP
     RTS
+}
+
+cm_refresh_custom_cgram:
+{
+    PHP
+    %a16()
+    LDA !sram_custompalette_menuborder : STA $7EC00A
+    LDA !sram_custompalette_menuheaderoutline : STA $7EC012
+    LDA !sram_custompalette_menutext : STA $7EC014
+    LDA !sram_custompalette_menubackground : STA $7EC016
+    LDA !sram_custompalette_menunumoutline : STA $7EC01A
+    LDA !sram_custompalette_menunumfill : STA $7EC01C
+    LDA !sram_custompalette_menutoggleoutline : STA $7EC032
+    LDA !sram_custompalette_menuseltext : STA $7EC034
+    LDA !sram_custompalette_menuseltextbg : STA $7EC036
+    LDA !sram_custompalette_menubackground : STA $7EC03A
+    LDA !sram_custompalette_menunumsel : STA $7EC03C
+
+;    JSL transfer_cgram_long
+    PLP
+
 }
 
 cm_transfer_original_cgram:
@@ -748,7 +769,7 @@ cm_loop:
     BIT #$0080 : BNE .pressedA
     BIT #$8000 : BNE .pressedB
     BIT #$0040 : BNE .pressedX
-    ; BIT #$4000 : BNE .pressedY
+    BIT #$4000 : BNE .pressedY
     BIT #$2000 : BNE .pressedSelect
     BIT #$1000 : BNE .pressedStart
     BIT #$0800 : BNE .pressedUp
@@ -765,9 +786,8 @@ cm_loop:
     JSR cm_calculate_max
     BRA .redraw
 
-  ; .pressedY
-  ; .pressedX
-  ;   BRA .inputLoop
+  .pressedY
+    JMP .refresh
 
   .pressedDown
     LDA #$0002
@@ -808,6 +828,12 @@ cm_loop:
 
   .done
     RTS
+
+  .refresh
+    LDA !ram_cm_cursor_stack : CMP #$0014 : BNE +
+    LDA !ram_cm_cursor_stack+2 : CMP #$0004 : BNE +
+    JSR action_custompalettes_refresh
++   JMP .inputLoop
 }
 
 cm_ctrl_mode:

@@ -89,34 +89,37 @@ init_sram:
 ;    LDA #$0000 : STA !sram_custompalette_hudfill
 ;    LDA #$0000 : STA !sram_custompalette_hudfill_hi
 ;    LDA #$0000 : STA !sram_custompalette_hudfill_lo
-    LDA #$000E : STA !sram_custompalette_menuborder
-    LDA #$0000 : STA !sram_custompalette_menuborder_hi
-    LDA #$000E : STA !sram_custompalette_menuborder_lo
-    LDA #$000E : STA !sram_custompalette_menuheaderoutline
-    LDA #$0000 : STA !sram_custompalette_menuheaderoutline_hi
-    LDA #$000E : STA !sram_custompalette_menuheaderoutline_lo
-    LDA #$0A20 : STA !sram_custompalette_menutext
-    LDA #$000A : STA !sram_custompalette_menutext_hi
-    LDA #$0020 : STA !sram_custompalette_menutext_lo
-    LDA #$0A20 : STA !sram_custompalette_menunumoutline
-    LDA #$000A : STA !sram_custompalette_menunumoutline_hi
-    LDA #$0020 : STA !sram_custompalette_menunumoutline_lo
-    LDA #$0002 : STA !sram_custompalette_menunumfill
-    LDA #$0000 : STA !sram_custompalette_menunumfill_hi
-    LDA #$0002 : STA !sram_custompalette_menunumfill_lo
-    LDA #$0680 : STA !sram_custompalette_menutoggleoutline
-    LDA #$0006 : STA !sram_custompalette_menutoggleoutline_hi
-    LDA #$0080 : STA !sram_custompalette_menutoggleoutline_lo
-    LDA #$000F : STA !sram_custompalette_menuseltext
-    LDA #$0000 : STA !sram_custompalette_menuseltext_hi
-    LDA #$000F : STA !sram_custompalette_menuseltext_lo
-    LDA #$0005 : STA !sram_custompalette_menuseltextbg
+    LDA #$7277 : STA !sram_custompalette_menuborder
+    LDA #$0072 : STA !sram_custompalette_menuborder_hi
+    LDA #$0077 : STA !sram_custompalette_menuborder_lo
+    LDA #$48F3 : STA !sram_custompalette_menuheaderoutline
+    LDA #$0048 : STA !sram_custompalette_menuheaderoutline_hi
+    LDA #$00F3 : STA !sram_custompalette_menuheaderoutline_lo
+    LDA #$7FFF : STA !sram_custompalette_menutext
+    LDA #$007F : STA !sram_custompalette_menutext_hi
+    LDA #$00FF : STA !sram_custompalette_menutext_lo
+    LDA #$0000 : STA !sram_custompalette_menunumoutline
+    LDA #$0000 : STA !sram_custompalette_menunumoutline_hi
+    LDA #$0000 : STA !sram_custompalette_menunumoutline_lo
+    LDA #$7FFF : STA !sram_custompalette_menunumfill
+    LDA #$007F : STA !sram_custompalette_menunumfill_hi
+    LDA #$00FF : STA !sram_custompalette_menunumfill_lo
+    LDA #$4376 : STA !sram_custompalette_menutoggleoutline
+    LDA #$0043 : STA !sram_custompalette_menutoggleoutline_hi
+    LDA #$0076 : STA !sram_custompalette_menutoggleoutline_lo
+    LDA #$761F : STA !sram_custompalette_menuseltext
+    LDA #$0076 : STA !sram_custompalette_menuseltext_hi
+    LDA #$001F : STA !sram_custompalette_menuseltext_lo
+    LDA #$0000 : STA !sram_custompalette_menuseltextbg
     LDA #$0000 : STA !sram_custompalette_menuseltextbg_hi
     LDA #$0000 : STA !sram_custompalette_menuseltextbg_lo
     LDA #$0000 : STA !sram_custompalette_menubackground
     LDA #$0000 : STA !sram_custompalette_menubackground_hi
     LDA #$0000 : STA !sram_custompalette_menubackground_lo
-    
+    LDA #$761F : STA !sram_custompalette_menunumsel
+    LDA #$0076 : STA !sram_custompalette_menunumsel_hi
+    LDA #$001F : STA !sram_custompalette_menunumsel_lo
+
     LDA #$0000 : STA !sram_presetrando
     LDA #$0001 : STA !sram_presetrando_morph
     LDA #$0001 : STA !sram_presetrando_charge
