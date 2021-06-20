@@ -116,6 +116,9 @@ init_sram:
     LDA #$0000 : STA !sram_custompalette_menubackground
     LDA #$0000 : STA !sram_custompalette_menubackground_hi
     LDA #$0000 : STA !sram_custompalette_menubackground_lo
+    LDA #$000F : STA !sram_custompalette_menunumsel
+    LDA #$0000 : STA !sram_custompalette_menunumsel_hi
+    LDA #$000F : STA !sram_custompalette_menunumsel_lo
     
     LDA #$0000 : STA !sram_presetrando
     LDA #$0001 : STA !sram_presetrando_morph

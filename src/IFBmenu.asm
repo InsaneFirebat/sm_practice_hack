@@ -114,12 +114,15 @@ CustomPalettesMenu:
     dw #custompalettes_menunumfill_lo
     dw #custompalettes_menunumoutline_hi
     dw #custompalettes_menunumoutline_lo
+    dw #custompalettes_menunumsel_hi
+    dw #custompalettes_menunumsel_lo
     dw #custompalettes_menutoggleoutline_hi
     dw #custompalettes_menutoggleoutline_lo
     dw #custompalettes_menuborder_hi
     dw #custompalettes_menuborder_lo
     dw #custompalettes_menubackground_hi
     dw #custompalettes_menubackground_lo
+    dw #custompalettes_refresh
     dw #$0000
     %cm_header("CUSTOMIZE MENU PALETTES")
 
@@ -242,6 +245,23 @@ custompalettes_menunumoutline_lo:
         STA !sram_custompalette_menunumoutline
         RTS
 
+custompalettes_menunumsel_hi:
+    %cm_numfield_hex("Selected NumField Hi", !sram_custompalette_menunumsel_hi, 0, 255, 1, #.routine)
+    .routine
+        XBA
+        ORA !sram_custompalette_menunumsel_lo
+        STA !sram_custompalette_menunumsel
+        RTS
+
+custompalettes_menunumsel_lo:
+    %cm_numfield_hex("Selected NumField Lo", !sram_custompalette_menunumsel_lo, 0, 255, 1, #.routine)
+    .routine
+        XBA
+        ORA !sram_custompalette_menunumsel_hi
+        XBA
+        STA !sram_custompalette_menunumsel
+        RTS
+
 custompalettes_menutoggleoutline_hi:
     %cm_numfield_hex("Toggle ON Hi", !sram_custompalette_menutoggleoutline_hi, 0, 255, 1, #.routine)
     .routine
@@ -275,6 +295,19 @@ custompalettes_menubackground_lo:
         XBA
         STA !sram_custompalette_menubackground
         RTS
+
+custompalettes_refresh:
+    %cm_jsr_nosound("Press Y to Refresh", action_custompalettes_refresh, #$0000)
+
+action_custompalettes_refresh:
+{
+    PHP
+    %ai16()
+    JSR cm_transfer_original_cgram
+    JSR cm_transfer_custom_cgram
+    PLP
+    RTS
+}
 
 
 ; ----------
