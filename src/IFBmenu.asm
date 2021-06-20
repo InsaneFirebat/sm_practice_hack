@@ -31,15 +31,17 @@ ifb_paletteprofile:
     dw !ACTION_CHOICE
     dl #!sram_custompalette_profile
     dw #$0000
-    db #$28, "MENU PALETTE", #$FF
+    db #$28, "Menu Palette", #$FF
         db #$28, "     CUSTOM", #$FF ; CUSTOM should always be first
         db #$28, "    DEFAULT", #$FF
         db #$28, "        HUD", #$FF
         db #$28, "    FIREBAT", #$FF
         db #$28, " WARDRINKER", #$FF
         db #$28, "        MM2", #$FF
-        db #$28, "     PURPLE", #$FF
         db #$28, "       GREY", #$FF
+        db #$28, "        RED", #$FF
+        db #$28, "     PURPLE", #$FF
+        db #$28, "     YELLOW", #$FF
     db #$FF
 
 ifb_noclip:
@@ -340,6 +342,7 @@ action_custompalettes_refresh:
     %ai16()
     JSR cm_transfer_original_cgram
     JSR cm_transfer_custom_cgram
+    LDA #$0000 : STA !sram_custompalette_profile
     PLP
     RTS
 }

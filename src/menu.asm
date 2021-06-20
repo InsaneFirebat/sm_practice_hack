@@ -257,8 +257,10 @@ PaletteProfileTables:
     dw #FirebatProfileTable
     dw #wardrinkerProfileTable
     dw #mm2ProfileTable
-    dw #PurpleProfileTable
     dw #GreyProfileTable
+    dw #RedProfileTable
+    dw #PurpleProfileTable
+    dw #YellowProfileTable
     dw #$0000
 
 ; border, headeroutline, text, background, numoutline, numfill, toggleoutline, seltext, seltextbg, numseloutline, numsel
@@ -280,11 +282,17 @@ wardrinkerProfileTable:
 mm2ProfileTable:
     dw $0418, $0000, $60E2, $0000, $0000, $7FFF, $03E0, $7F8C, $0842, $03E0, $0000
 
+GreyProfileTable:
+    dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $1CE7, $3DEF, $1CE7, $3DEF
+
+RedProfileTable:
+    dw $0010, $000C, $001F, $0009, $001F, $000D, $041F, $0010, $0009, $0009, $001F
+
 PurpleProfileTable:
     dw $4012, $480E, $6032, $4009, $4009, $6032, $4277, $761F, $4009, $6000, $061F
 
-GreyProfileTable:
-    dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $1CE7, $3DEF, $1CE7, $3DEF
+YellowProfileTable:
+    dw $7100, $7100, $3779, $7100, $7100, $3779, $01C0, $7100, $3738, $3779, $7100
 }
 
 cm_draw:
@@ -883,8 +891,8 @@ cm_loop:
 
   .refresh
     LDA !ram_cm_cursor_stack : CMP #$0014 : BNE +
-;    LDA !ram_cm_cursor_stack+2 : CMP #$0004 : BNE +
-    JSR action_custompalettes_refresh
+    JSR cm_transfer_original_cgram
+    JSR cm_transfer_custom_cgram
 +   JMP .inputLoop
 }
 
