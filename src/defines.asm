@@ -102,6 +102,18 @@
 !ram_soundtest_music = $7FFC98
 !ram_soundtest_roommusic = $7FFC9A
 
+!ram_custompalette_menuborder = $7FFC9C
+!ram_custompalette_menuheaderoutline = $7FFC9E
+!ram_custompalette_menutext = $7FFCA0
+!ram_custompalette_menubackground = $7FFCA2
+!ram_custompalette_menunumoutline = $7FFCA4
+!ram_custompalette_menunumfill = $7FFCA6
+!ram_custompalette_menutoggleoutline = $7FFCA8
+!ram_custompalette_menuseltext = $7FFCAA
+!ram_custompalette_menuseltextbg = $7FFCAC
+!ram_custompalette_menunumseloutline = $7FFCAE
+!ram_custompalette_menunumsel = $7FFCB0
+
 !ram_tmp_1 = $7FFB4C
 !ram_tmp_2 = $7FFB4E
 !ram_tmp_3 = $7FFB08

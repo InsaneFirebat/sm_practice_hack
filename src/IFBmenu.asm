@@ -6,6 +6,7 @@ IFBMenu:
     dw #ifb_menubackground
     dw #ifb_custompalettes_hud
     dw #ifb_custompalettes_menu
+    dw #ifb_paletteprofile
     dw #ifb_noclip
     dw #ifb_nosteam
     dw #ifb_presetrando
@@ -21,10 +22,21 @@ ifb_menubackground:
     %cm_toggle("Menu Background", !sram_menu_background, #$0001, #0)
 
 ifb_custompalettes_hud:
-    %cm_submenu("Customize HUD Palettes", #CustomPalettesHUD)
+    %cm_submenu("Customize HUD Palette", #CustomPalettesHUD)
 
 ifb_custompalettes_menu:
-    %cm_submenu("Customize Menu Palettes", #CustomPalettesMenu)
+    %cm_submenu("Customize Menu Palette", #CustomPalettesMenu)
+
+ifb_paletteprofile:
+    dw !ACTION_CHOICE
+    dl #!sram_custompalette_profile
+    dw #$0000
+    db #$28, "MENU PALETTE", #$FF
+        db #$28, "     CUSTOM", #$FF ; CUSTOM should always be first
+        db #$28, "    DEFAULT", #$FF
+        db #$28, "        HUD", #$FF
+        db #$28, "    FIREBAT", #$FF
+    db #$FF
 
 ifb_noclip:
     %cm_toggle("Walk Through Walls", !ram_noclip, #$0001, #0)
@@ -124,7 +136,7 @@ CustomPalettesMenu:
     dw #custompalettes_menuborder_lo
     dw #custompalettes_menubackground_hi
     dw #custompalettes_menubackground_lo
-;    dw #custompalettes_refresh
+    dw #custompalettes_refresh
     dw #$0000
     %cm_header("PRESS Y TO REFRESH")
 

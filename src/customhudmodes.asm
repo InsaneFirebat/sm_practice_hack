@@ -266,7 +266,6 @@ status_kihuntermanip:
 
 status_kraidradar:
 {
-print pc, " <------------------------- break here"
     LDA $079B : CMP #$A59F : BNE .skip              ; check for Kraid's room
     LDA $0F8C : CMP #$03E8 : BEQ .setup             ; stop tracking when Kraid takes damage
 
