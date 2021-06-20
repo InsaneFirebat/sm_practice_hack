@@ -256,10 +256,12 @@ PaletteProfileTables:
     dw #HUDProfileTable
     dw #FirebatProfileTable
     dw #wardrinkerProfileTable
-;    #mm2ProfileTable
-;    #PurpleProfileTable
+    dw #mm2ProfileTable
+    dw #PurpleProfileTable
+    dw #GreyProfileTable
     dw #$0000
 
+; border, headeroutline, text, background, numoutline, numfill, toggleoutline, seltext, seltextbg, numseloutline, numsel
 CustomProfileTable: ; custom always first
     dw $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000
 
@@ -273,13 +275,16 @@ FirebatProfileTable:
     dw $000E, $000E, $0A20, $0000, $0A20, $0002, $0680, $000f, $0005, $0A20, $000F
 
 wardrinkerProfileTable:
-    dw $7277, $7FFF, $7A02, $0000, $0000, $7B00, $7277, $7F29, $0000, $0000, $7F29
+    dw $7277, $7FFF, $7A02, $0000, $0000, $9200, $7277, $7F29, $0000, $0000, $7F29
 
 mm2ProfileTable:
-    dw $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000
+    dw $0418, $0000, $60E2, $0000, $0000, $7FFF, $03E0, $7F8C, $0842, $03E0, $0000
 
 PurpleProfileTable:
-    dw $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000
+    dw $4012, $480E, $6032, $4009, $4009, $6032, $4277, $761F, $4009, $6000, $061F
+
+GreyProfileTable:
+    dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $1CE7, $3DEF, $1CE7, $3DEF
 }
 
 cm_draw:

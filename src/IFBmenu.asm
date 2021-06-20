@@ -33,6 +33,10 @@ ifb_paletteprofile:
         db #$28, "    DEFAULT", #$FF
         db #$28, "        HUD", #$FF
         db #$28, "    FIREBAT", #$FF
+        db #$28, " WARDRINKER", #$FF
+        db #$28, "        MM2", #$FF
+        db #$28, "     PURPLE", #$FF
+        db #$28, "       GREY", #$FF
     db #$FF
 
 ifb_debugteleport:
