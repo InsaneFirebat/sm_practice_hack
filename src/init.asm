@@ -82,13 +82,6 @@ init_sram:
     LDA #$0001 : STA !sram_menu_background
     LDA #$0000 : STA !sram_sprite_prio_flag
 
-;    LDA #$0000 : STA !sram_custompalette
-;    LDA #$9748 : STA !sram_custompalette_hudoutline
-;    LDA #$0097 : STA !sram_custompalette_hudoutline_hi
-;    LDA #$0048 : STA !sram_custompalette_hudoutline_lo
-;    LDA #$0000 : STA !sram_custompalette_hudfill
-;    LDA #$0000 : STA !sram_custompalette_hudfill_hi
-;    LDA #$0000 : STA !sram_custompalette_hudfill_lo
     LDA #$7277 : STA !sram_custompalette_menuborder
     LDA #$0072 : STA !sram_custompalette_menuborder_hi
     LDA #$0077 : STA !sram_custompalette_menuborder_lo
@@ -116,12 +109,13 @@ init_sram:
     LDA #$0000 : STA !sram_custompalette_menubackground
     LDA #$0000 : STA !sram_custompalette_menubackground_hi
     LDA #$0000 : STA !sram_custompalette_menubackground_lo
-    LDA #$0A20 : STA !sram_custompalette_menunumseloutline
-    LDA #$000A : STA !sram_custompalette_menunumseloutline_hi
-    LDA #$0020 : STA !sram_custompalette_menunumseloutline_lo
+    LDA #$0000 : STA !sram_custompalette_menunumseloutline
+    LDA #$0000 : STA !sram_custompalette_menunumseloutline_hi
+    LDA #$0000 : STA !sram_custompalette_menunumseloutline_lo
     LDA #$761F : STA !sram_custompalette_menunumsel
     LDA #$0076 : STA !sram_custompalette_menunumsel_hi
     LDA #$001F : STA !sram_custompalette_menunumsel_lo
+    LDA #$0001 : STA !sram_custompalette_profile
     
     LDA #$0000 : STA !sram_presetrando
     LDA #$0001 : STA !sram_presetrando_morph
