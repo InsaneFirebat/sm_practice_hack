@@ -31,8 +31,10 @@ ifb_paletteprofile:
         db #$28, "    FIREBAT", #$FF
         db #$28, " WARDRINKER", #$FF
         db #$28, "        MM2", #$FF
-        db #$28, "     PURPLE", #$FF
         db #$28, "       GREY", #$FF
+        db #$28, "        RED", #$FF
+        db #$28, "     PURPLE", #$FF
+        db #$28, "     YELLOW", #$FF
     db #$FF
 
 ifb_debugteleport:
