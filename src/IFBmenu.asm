@@ -116,15 +116,17 @@ CustomPalettesMenu:
     dw #custompalettes_menunumoutline_lo
     dw #custompalettes_menunumsel_hi
     dw #custompalettes_menunumsel_lo
+    dw #custompalettes_menunumseloutline_hi
+    dw #custompalettes_menunumseloutline_lo
     dw #custompalettes_menutoggleoutline_hi
     dw #custompalettes_menutoggleoutline_lo
     dw #custompalettes_menuborder_hi
     dw #custompalettes_menuborder_lo
     dw #custompalettes_menubackground_hi
     dw #custompalettes_menubackground_lo
-    dw #custompalettes_refresh
+;    dw #custompalettes_refresh
     dw #$0000
-    %cm_header("CUSTOMIZE MENU PALETTES")
+    %cm_header("PRESS Y TO REFRESH")
 
 custompalettes_menutext_hi:
     %cm_numfield_hex("Text Hi", !sram_custompalette_menutext_hi, 0, 255, 1, #.routine)
@@ -260,6 +262,23 @@ custompalettes_menunumsel_lo:
         ORA !sram_custompalette_menunumsel_hi
         XBA
         STA !sram_custompalette_menunumsel
+        RTS
+
+custompalettes_menunumseloutline_hi:
+    %cm_numfield_hex("Selected NumField OL Hi", !sram_custompalette_menunumseloutline_hi, 0, 255, 1, #.routine)
+    .routine
+        XBA
+        ORA !sram_custompalette_menunumseloutline_lo
+        STA !sram_custompalette_menunumseloutline
+        RTS
+
+custompalettes_menunumseloutline_lo:
+    %cm_numfield_hex("Selected NumField OL Lo", !sram_custompalette_menunumseloutline_lo, 0, 255, 1, #.routine)
+    .routine
+        XBA
+        ORA !sram_custompalette_menunumseloutline_hi
+        XBA
+        STA !sram_custompalette_menunumseloutline
         RTS
 
 custompalettes_menutoggleoutline_hi:

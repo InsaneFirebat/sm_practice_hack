@@ -205,9 +205,13 @@
 !sram_custompalette_menubackground = $7020DE
 !sram_custompalette_menubackground_hi = $7020E0
 !sram_custompalette_menubackground_lo = $7020E2
-!sram_custompalette_menunumsel = $7020E4
-!sram_custompalette_menunumsel_hi = $7020E6
-!sram_custompalette_menunumsel_lo = $7020E8
+!sram_custompalette_menunumseloutline = $7020E4
+!sram_custompalette_menunumseloutline_hi = $7020E6
+!sram_custompalette_menunumseloutline_lo = $7020E8
+!sram_custompalette_menunumsel = $7020EA
+!sram_custompalette_menunumsel_hi = $7020EC
+!sram_custompalette_menunumsel_lo = $7020EE
+!sram_custompalette_profile = $7020F0
 
 !sram_presetrando = $70206E
 !sram_presetrando_morph = $702070

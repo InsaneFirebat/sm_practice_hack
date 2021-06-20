@@ -186,7 +186,7 @@ cm_transfer_custom_cgram:
     LDA !sram_custompalette_menutoggleoutline : STA $7EC032
     LDA !sram_custompalette_menuseltext : STA $7EC034
     LDA !sram_custompalette_menuseltextbg : STA $7EC036
-    LDA !sram_custompalette_menubackground : STA $7EC03A
+    LDA !sram_custompalette_menunumseloutline : STA $7EC03A
     LDA !sram_custompalette_menunumsel : STA $7EC03C
 
     JSL transfer_cgram_long
@@ -593,8 +593,7 @@ cm_draw_action_table:
         LDA [$08] : AND #$00FF : STA !ram_tmp_2
 
         ; Clear out the area (black tile)
-        LDA #$281F : STA !ram_tilemap_buffer+0,X
-                     STA !ram_tilemap_buffer+2,X
+        LDA #$281F : STA !ram_tilemap_buffer+2,X
                      STA !ram_tilemap_buffer+4,X
 
         ; Set palette
