@@ -83,6 +83,7 @@ init_sram:
     LDA #$0000 : STA !sram_sprite_prio_flag
 
     LDA #$0000 : STA !sram_custompalette
+    LDA #$0000 : STA !sram_custompalette_profile
     LDA #$9748 : STA !sram_custompalette_hudoutline
     LDA #$0097 : STA !sram_custompalette_hudoutline_hi
     LDA #$0048 : STA !sram_custompalette_hudoutline_lo
@@ -116,6 +117,9 @@ init_sram:
     LDA #$0000 : STA !sram_custompalette_menubackground
     LDA #$0000 : STA !sram_custompalette_menubackground_hi
     LDA #$0000 : STA !sram_custompalette_menubackground_lo
+    LDA #$0A20 : STA !sram_custompalette_menunumseloutline
+    LDA #$000A : STA !sram_custompalette_menunumseloutline_hi
+    LDA #$0020 : STA !sram_custompalette_menunumseloutline_lo
     LDA #$000F : STA !sram_custompalette_menunumsel
     LDA #$0000 : STA !sram_custompalette_menunumsel_hi
     LDA #$000F : STA !sram_custompalette_menunumsel_lo
