@@ -847,7 +847,7 @@ cm_loop:
     BRA .redraw
 
   .pressedY
-    JMP .refresh
+    JMP .Ypressed
 
   .pressedDown
     LDA #$0002
@@ -889,11 +889,23 @@ cm_loop:
   .done
     RTS
 
+  .Ypressed
+    LDA !ram_cm_cursor_stack : CMP #$0014 : BNE .failed
+    LDA $7E0998 : CMP #$000C : BMI .refresh
+    CMP #$0012 : BPL .refresh
+
+  .failed
+    %sfxdamage()
+    JMP .inputLoop
+
   .refresh
-    LDA !ram_cm_cursor_stack : CMP #$0014 : BNE +
     JSR cm_transfer_original_cgram
     JSR cm_transfer_custom_cgram
-+   JMP .inputLoop
+    sfxbubble()
+    
+
+  .restartLoop
+    JMP .inputLoop
 }
 
 cm_ctrl_mode:
