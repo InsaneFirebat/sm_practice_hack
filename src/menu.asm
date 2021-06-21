@@ -280,7 +280,7 @@ wardrinkerProfileTable:
     dw $7277, $7FFF, $7A02, $0000, $0000, $9200, $7277, $7F29, $0000, $0000, $7F29
 
 mm2ProfileTable:
-    dw $0418, $0000, $60E2, $0000, $0000, $7FFF, $03E0, $7F8C, $0842, $03E0, $0000
+    dw $0418, $0000, $60E2, $0000, $0000, $7FFF, $03E0, $7F8C, $0842, $0000, $7FFF
 
 GreyProfileTable:
     dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $1CE7, $3DEF, $1CE7, $3DEF
@@ -847,7 +847,7 @@ cm_loop:
     BRA .redraw
 
   .pressedY
-    JMP .refresh
+    JMP .Ypressed
 
   .pressedDown
     LDA #$0002
@@ -889,11 +889,23 @@ cm_loop:
   .done
     RTS
 
+  .Ypressed
+    LDA !ram_cm_cursor_stack : CMP #$0014 : BNE .failed
+    LDA $7E0998 : CMP #$000C : BMI .refresh
+    CMP #$0012 : BPL .refresh
+
+  .failed
+    %sfxdamage()
+    JMP .inputLoop
+
   .refresh
-    LDA !ram_cm_cursor_stack : CMP #$0014 : BNE +
     JSR cm_transfer_original_cgram
     JSR cm_transfer_custom_cgram
-+   JMP .inputLoop
+    sfxbubble()
+    
+
+  .restartLoop
+    JMP .inputLoop
 }
 
 cm_ctrl_mode:
