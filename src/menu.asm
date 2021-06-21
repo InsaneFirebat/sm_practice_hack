@@ -280,7 +280,7 @@ wardrinkerProfileTable:
     dw $7277, $7FFF, $7A02, $0000, $0000, $9200, $7277, $7F29, $0000, $0000, $7F29
 
 mm2ProfileTable:
-    dw $0418, $0000, $60E2, $0000, $0000, $7FFF, $03E0, $7F8C, $0842, $03E0, $0000
+    dw $0418, $0000, $60E2, $0000, $0000, $7FFF, $03E0, $7F8C, $0842, $0000, $7FFF
 
 GreyProfileTable:
     dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $1CE7, $3DEF, $1CE7, $3DEF

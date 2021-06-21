@@ -97,3 +97,7 @@ endmacro
 macro sfxdamage() ; play damage boost sound lib1
     LDA #$0033 : JSL !SFX_LIB1
 endmacro
+
+macro sfxshot() ; play credits shot sound lib1
+    LDA #$0022 : JSL !SFX_LIB1
+endmacro
