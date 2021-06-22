@@ -73,6 +73,10 @@ gamemode_shortcuts:
     AND !ram_ctrl1_filtered : BEQ +
     JMP .random_preset
 
+  + LDA !ram_ctrl1 : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
+    AND !ram_ctrl1_filtered : BEQ +
+    JMP .cycle_rng
+
   + LDA !ram_ctrl1 : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
     AND !ram_ctrl1_filtered : BEQ +
     JMP .menu
@@ -138,6 +142,14 @@ gamemode_shortcuts:
   .random_preset
     JSL LoadRandomPreset
     SEC : RTS
+
+  .cycle_rng
+    LDA $7E1842 : AND #$00FF : XBA : STA $12
+    LDA $7E05E5 : AND #$0FF0 : LSR #4
+    ORA $12 : STA $7E05E5
+    JSL $808111
+    CLC : RTS
+    
 
   .menu
     ; Set IRQ vector
