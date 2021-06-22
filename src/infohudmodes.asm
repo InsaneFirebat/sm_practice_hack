@@ -29,7 +29,12 @@
 
 status_enemyhp:
 {
+    LDA $079D : CMP #$DD58 : BEQ .mbhp
     LDA $0F8C : CMP !ram_enemy_hp : BEQ .done : STA !ram_enemy_hp
+    LDX #$0088 : JSR Draw4
+
+  .mbhp
+    LDA $0FCC : CMP !ram_mb_hp : BEQ .done : STA !ram_mb_hp
     LDX #$0088 : JSR Draw4
 
   .done
@@ -43,7 +48,6 @@ status_roomstrat:
     RTS
 
   .status_room_table
-    dw status_mbhp
     dw status_moatcwj
     dw status_gateglitch
     dw status_tacotank
@@ -1715,15 +1719,6 @@ status_botwooncf:
   .frameperfect
     LDA !IH_LETTER_Y : STA $7EC68C : STA $7EC68E
     BRA .reset
-}
-
-status_mbhp:
-{
-    LDA $0FCC : CMP !ram_mb_hp : BEQ .done : STA !ram_mb_hp
-    LDX #$0088 : JSR Draw4
-
-  .done
-    RTS
 }
 
 incsrc customhudmodes.asm

@@ -1174,7 +1174,6 @@ ih_goto_room_strat:
     %cm_submenu("Select Room Strat", #RoomStratMenu)
 
 RoomStratMenu:
-    dw ihstrat_mbhp
     dw ihstrat_moatcwj
     dw ihstrat_gateglitch
     dw ihstrat_tacotank
@@ -1187,35 +1186,32 @@ RoomStratMenu:
     dw #$0000
     %cm_header("INFOHUD ROOM STRAT")
 
-ihstrat_mbhp:
-    %cm_jsr("Mother Brain HP", #action_select_room_strat, #$0000)
-
 ihstrat_moatcwj:
-    %cm_jsr("Moat CWJ", #action_select_room_strat, #$0001)
+    %cm_jsr("Moat CWJ", #action_select_room_strat, #$0000)
 
 ihstrat_gateglitch:
-    %cm_jsr("Gate Glitch", #action_select_room_strat, #$0002)
+    %cm_jsr("Gate Glitch", #action_select_room_strat, #$0001)
 
 ihstrat_tacotank:
-    %cm_jsr("Taco Tank", #action_select_room_strat, #$0003)
+    %cm_jsr("Taco Tank", #action_select_room_strat, #$0002)
 
 ihstrat_robotflush:
-    %cm_jsr("Robot Flush", #action_select_room_strat, #$0004)
+    %cm_jsr("Robot Flush", #action_select_room_strat, #$0003)
 
 ihstrat_shinetopb:
-    %cm_jsr("Shine to PB", #action_select_room_strat, #$0005)
+    %cm_jsr("Shine to PB", #action_select_room_strat, #$0004)
 
 ihstrat_elevatorcf:
-    %cm_jsr("Elevator Crystal Flash", #action_select_room_strat, #$0006)
+    %cm_jsr("Elevator Crystal Flash", #action_select_room_strat, #$0005)
 
 ihstrat_botwooncf:
-    %cm_jsr("Botwoon Crystal Flash", #action_select_room_strat, #$0007)
+    %cm_jsr("Botwoon Crystal Flash", #action_select_room_strat, #$0006)
 
 ihstrat_kihuntermanip:
-    %cm_jsr("Kihunter Manipulation", #action_select_room_strat, #$0008)
+    %cm_jsr("Kihunter Manipulation", #action_select_room_strat, #$0007)
 
 ihstrat_kraidradar:
-    %cm_jsr("Kraid Nail Radar", #action_select_room_strat, #$0009)
+    %cm_jsr("Kraid Nail Radar", #action_select_room_strat, #$0008)
 
 action_select_room_strat:
 {
@@ -1231,7 +1227,6 @@ ih_room_strat:
     dl #!sram_room_strat
     dw #$0000
     db #$28, "Current Strat", #$FF
-    db #$28, "      MB HP", #$FF
     db #$28, "   MOAT CWJ", #$FF
     db #$28, "GATE GLITCH", #$FF
     db #$28, "  TACO TANK", #$FF
