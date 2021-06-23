@@ -6,6 +6,7 @@ IFBMenu:
     dw #ifb_menubackground
     dw #ifb_custompalettes_menu
     dw #ifb_paletteprofile
+    dw #ifb_palette2custom
     dw #ifb_presetrando
     dw #ifb_debugteleport
     dw #ifb_soundtest
@@ -36,6 +37,9 @@ ifb_paletteprofile:
         db #$28, "     PURPLE", #$FF
         db #$28, "     YELLOW", #$FF
     db #$FF
+
+ifb_palette2custom:
+    %cm_jsr_nosound("Copy Palette to Custom", action_copy_palette, #$0000)
 
 ifb_debugteleport:
     %cm_submenu("Hidden Dev Load Stations", #DebugTeleportMenu)
@@ -281,6 +285,55 @@ action_custompalettes_refresh:
     JSR cm_transfer_original_cgram
     JSR cm_transfer_custom_cgram
     LDA #$0000 : STA !sram_custompalette_profile
+    PLP
+    RTS
+}
+
+action_copy_palette:
+{
+    PHP
+    %ai16()
+    LDA !sram_custompalette_profile : BNE + : BRL .fail
++   ASL : TAX : LDA PaletteProfileTables,X : STA $16
+
+    ; copy table to SRAM, Y is already zero from JSR menu macro
+    LDA ($16),Y : STA !sram_custompalette_menuborder : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menuheaderoutline : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menutext : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menubackground : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menunumoutline : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menunumfill : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menutoggleoutline : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menuseltext : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menuseltextbg : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menunumseloutline : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menunumsel : INY #2
+
+    ; split hi and lo bytes into separate addresses
+    %ai8()
+    LDX #$00
+
+  .loop
+    ; load lo, then hi
+    LDA !sram_custompalette_menuborder,X : XBA
+    INX : LDA !sram_custompalette_menuborder,X
+    ; store hi, then lo
+    INX : STA !sram_custompalette_menuborder,X
+    INX #2 : XBA : STA !sram_custompalette_menuborder,X
+    ; next word
+    INX #2 : CPX #$42 : BNE .loop
+
+    ; play a happy sound and refresh current profile
+    %ai16()
+    JSR action_custompalettes_refresh
+    %sfxbubble()
+    BRA .done
+
+  .fail
+    ; make the animals cry cause we couldn't do anything
+    %sfxetecoon()
+
+  .done
     PLP
     RTS
 }
