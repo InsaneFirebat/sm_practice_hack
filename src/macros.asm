@@ -95,9 +95,29 @@ macro sfxetecoon() ; play etecoon cry (required instrument) sound lib2
 endmacro
 
 macro sfxdamage() ; play damage boost sound lib1
-    LDA #$0033 : JSL !SFX_LIB1
+    LDA #$0035 : JSL !SFX_LIB1
 endmacro
 
 macro sfxshot() ; play credits shot sound lib1
     LDA #$0022 : JSL !SFX_LIB1
+endmacro
+
+macro sfxmove() ; Move Cursor
+    LDA !sram_customsfx_move : JSL !SFX_LIB1
+endmacro
+
+macro sfxconfirm() ; Confirm Selection
+    LDA !sram_customsfx_confirm : JSL !SFX_LIB1
+endmacro
+
+macro sfxtoggle() ; Toggle
+    LDA !sram_customsfx_toggle : JSL !SFX_LIB1
+endmacro
+
+macro sfxnumber() ; Number Selection
+    LDA !sram_customsfx_number : JSL !SFX_LIB1
+endmacro
+
+macro sfxgoback() ; Go Back
+    LDA !sram_customsfx_goback : JSL !SFX_LIB1
 endmacro

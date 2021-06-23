@@ -862,13 +862,13 @@ cm_loop:
   .pressedL
     LDX !ram_cm_stack_index
     LDA #$0000 : STA !ram_cm_cursor_stack,X
-    %sfxclick()
+    %sfxmove()
     BRA .redraw
 
   .pressedR
     LDX !ram_cm_stack_index
     LDA !ram_cm_cursor_max : DEC #2 : STA !ram_cm_cursor_stack,X
-    %sfxclick()
+    %sfxmove()
     BRA .redraw
 
   .pressedA
@@ -971,7 +971,7 @@ cm_go_back:
     STA.l !ram_cm_menu_bank
   +
   .end
-    %sfxtype()
+    %sfxgoback()
     RTS
 }
 
@@ -1040,7 +1040,7 @@ cm_move:
   .inBounds
     STA !ram_cm_cursor_stack,X
 
-    %sfxclick()
+    %sfxmove()
 
     RTS
 }
@@ -1106,7 +1106,7 @@ cm_execute_action_table:
         JSR ($000A,X)
 
       .end
-        %sfxpause()
+        %sfxtoggle()
         RTS
     }
 
@@ -1132,7 +1132,7 @@ cm_execute_action_table:
         JSR ($000A,X)
 
       .end
-        %sfxpause()
+        %sfxtoggle()
         RTS
     }
 
@@ -1218,7 +1218,7 @@ cm_execute_action_table:
         JSR ($0020,X)
 
       .end
-        %sfxbubble()
+        %sfxnumber()
         RTS
     }
 
@@ -1267,7 +1267,7 @@ cm_execute_action_table:
         JSR ($0020,X)
 
       .end
-        %sfxbubble()
+        %sfxnumber()
         RTS
     }
 
@@ -1333,7 +1333,7 @@ cm_execute_action_table:
         JSR ($0008,X)
 
       .end
-        %sfxbubble()
+        %sfxtoggle()
         RTS
     }
 
@@ -1353,7 +1353,7 @@ cm_execute_action_table:
 
         .reset_shortcut
         LDA.w #!sram_ctrl_menu : CMP $C5 : BEQ .end
-        %sfxstatue()
+        %sfxconfirm()
 
         LDA #$0000 : STA [$C5]
 
