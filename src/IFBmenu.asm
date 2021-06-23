@@ -185,7 +185,7 @@ custompalettes_menuseltext_lo:
         RTS
 
 custompalettes_menuseltextbg_hi:
-    %cm_numfield_hex("Selected Text BG Hi", !sram_custompalette_menuseltextbg_hi, 0, 255, 1, #.routine)
+    %cm_numfield_hex("Selected Text + ON BG Hi", !sram_custompalette_menuseltextbg_hi, 0, 255, 1, #.routine)
     .routine
         XBA
         ORA !sram_custompalette_menuseltextbg_lo
@@ -193,7 +193,7 @@ custompalettes_menuseltextbg_hi:
         RTS
 
 custompalettes_menuseltextbg_lo:
-    %cm_numfield_hex("Selected Text BG Lo", !sram_custompalette_menuseltextbg_lo, 0, 255, 1, #.routine)
+    %cm_numfield_hex("Selected Text + ON BG Lo", !sram_custompalette_menuseltextbg_lo, 0, 255, 1, #.routine)
     .routine
         XBA
         ORA !sram_custompalette_menuseltextbg_hi
