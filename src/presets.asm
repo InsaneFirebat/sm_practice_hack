@@ -104,6 +104,18 @@ reset_all_counters:
     RTL
 }
 
+startgame_seg_timer:
+{
+    ; seg timer will be 1:50 (1 second, 50 frames) behind by the time it appears
+    ; 20 frames more if the file was new
+    ; initializing to 1:50 for now
+    LDA #$0032 : STA !ram_seg_rt_frames
+    LDA #$0001 : STA !ram_seg_rt_seconds
+    LDA #$0000 : STA !ram_seg_rt_minutes
+    JSL $808924    ; overwritten code
+    RTL
+}
+
 post_ceres_timers:
 {   ; don't reset segment timer after Ceres
     LDA #$0000
@@ -124,17 +136,6 @@ post_ceres_timers:
   .done
     RTL
 }
-
-startgame_seg_timer:
-{
-    ; seg timer will be 1:50 (1 second, 50 frames) behind by the time it appears
-    ; 20 frames more if the file was new
-    ; initializing to 1:50 for now
-    LDA #$0032 : STA !ram_seg_rt_frames
-    LDA #$0001 : STA !ram_seg_rt_seconds
-    LDA #$0000 : STA !ram_seg_rt_minutes
-    JSL $808924    ; overwritten code
-    RTL
 
 
 preset_load_preset:

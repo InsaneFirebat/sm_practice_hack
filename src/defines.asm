@@ -77,22 +77,22 @@
 !ram_radar1 = $7FFC64
 !ram_radar2 = $7FFC66
 
-!ram_watch_left = $7FFC70
-!ram_watch_left_hud = $7FFC72
-!ram_watch_left_hi = $7FFC74
-!ram_watch_left_lo = $7FFC76
-!ram_watch_right = $7FFC78
-!ram_watch_right_hud = $7FFC7A
-!ram_watch_right_hi = $7FFC7C
-!ram_watch_right_lo = $7FFC7E
-!ram_watch_edit_left = $7FFC80
-!ram_watch_edit_left_hi = $7FFC82
-!ram_watch_edit_left_lo = $7FFC84
-!ram_watch_edit_right = $7FFC86
-!ram_watch_edit_right_hi = $7FFC88
-!ram_watch_edit_right_lo = $7FFC8A
-!ram_watch_edit_lock_left = $7FFC8C
-!ram_watch_edit_lock_right = $7FFC8E
+!ram_watch_left = $7FFC30
+!ram_watch_left_hud = $7FFC32
+!ram_watch_left_hi = $7FFC34
+!ram_watch_left_lo = $7FFC36
+!ram_watch_right = $7FFC38
+!ram_watch_right_hud = $7FFC3A
+!ram_watch_right_hi = $7FFC3C
+!ram_watch_right_lo = $7FFC3E
+!ram_watch_edit_left = $7FFC40
+!ram_watch_edit_left_hi = $7FFC42
+!ram_watch_edit_left_lo = $7FFC44
+!ram_watch_edit_right = $7FFC46
+!ram_watch_edit_right_hi = $7FFC48
+!ram_watch_edit_right_lo = $7FFC4A
+!ram_watch_edit_lock_left = $7FFC4C
+!ram_watch_edit_lock_right = $7FFC4E
 
 !ram_soundtest_lib1 = $7FFC92
 !ram_soundtest_lib2 = $7FFC94
@@ -178,6 +178,8 @@
 !sram_save_has_set_rng = $70201E
 !sram_preset_category = $702020
 !sram_room_strat = $702022
+!sram_sprite_prio_flag = $702026
+
 
 !sram_countdamage = $702080
 !sram_menu_background = $702082
@@ -262,8 +264,8 @@
 !ACTION_NUMFIELD        = #$0006
 !ACTION_CHOICE          = #$0008
 !ACTION_CTRL_SHORTCUT   = #$000A
-!ACTION_JSR_NOSOUND     = #$0004
 !ACTION_NUMFIELD_HEX    = #$000C
+!ACTION_JSR_NOSOUND     = #$0004
 
 ; using macros instead of these in custom builds
 !SOUND_MENU_MOVE = $0039

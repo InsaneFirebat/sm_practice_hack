@@ -397,7 +397,7 @@ ih_shinespark_segment:
 
 ih_drops_segment:
 {
-    ; runs when boss drops spawn (except Torizos)
+    ; runs when boss drops spawn
     JSL ih_update_hud_early
     JSL $808111 ; overwritten code
     RTL

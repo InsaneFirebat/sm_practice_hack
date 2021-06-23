@@ -23,38 +23,6 @@ status_ridleygrab:
     RTS
 }
 
-status_ramwatch:
-{
-    LDA $09C2 : STA !ram_last_hp
-    LDA !ram_watch_left : CMP !ram_watch_left_hud : BNE .refreshLeft
--   LDA !ram_watch_right : CMP !ram_watch_right_hud : BNE .refreshRight : BRA .write
-
-  .refreshLeft
-    LDA !ram_watch_left : TAX : LDA $7E0000,X : STA !ram_watch_left_hud
-    LDX #$0088 : JSR Draw4Hex : BRA -
-
-  .refreshRight
-    LDA !ram_watch_right : TAX : LDA $7E0000,X : STA !ram_watch_right_hud
-    LDX #$0092 : JSR Draw4Hex
-
-  .write
-    LDA !ram_watch_edit_lock_left : BNE .lock_left
--   LDA !ram_watch_edit_lock_right : BNE .lock_right
-    BRA .done
-
-  .lock_left
-    LDA !ram_watch_left : TAX
-    LDA !ram_watch_edit_left : STA $7E0000,X
-    BRA -
-
-  .lock_right
-    LDA !ram_watch_right : TAX
-    LDA !ram_watch_edit_right : STA $7E0000,X
-
-  .done
-    RTS
-}
-
 ; ===========
 ; ROOM STRATS
 ; ===========
