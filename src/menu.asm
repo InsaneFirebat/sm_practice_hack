@@ -676,51 +676,6 @@ cm_draw_action_table:
         RTS
     }
 
-    draw_numfield_hex:
-    {
-        ; grab the memory address (long)
-        LDA [$04] : INC $04 : INC $04 : STA $08
-        LDA [$04] : INC $04 : STA $0A
-
-        ; skip bounds and increment value
-        INC $04 : INC $04 : INC $04
-
-        ; increment past JSR
-        INC $04 : INC $04
-
-        ; Draw the text
-        %item_index_to_vram_index()
-        PHX : JSR cm_draw_text : PLX
-
-        ; set position for the number
-        TXA : CLC : ADC #$002C : TAX
-
-        LDA [$08] : AND #$00FF : STA !ram_tmp_2
-
-        ; Clear out the area (black tile)
-        LDA #$281F : STA !ram_tilemap_buffer+0,X
-                     STA !ram_tilemap_buffer+2,X
-                     STA !ram_tilemap_buffer+4,X
-
-        ; Set palette
-        %a8()
-        LDA.b #$24 : ORA $0E : STA $0F
-        LDA.b #$70 : STA $0E
-
-        ; Draw numbers
-        %a16()
-        ; (00X0)
-        LDA !ram_tmp_2 : AND #$00F0 : LSR #3 : TAY
-        LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X 
-        
-        ; (000X)
-        LDA !ram_tmp_2 : AND #$000F : ASL : TAY
-        LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+4,X
-
-      .done
-        RTS
-    }
-
     draw_choice:
     {
         ; $04[0x3] = address
@@ -1313,54 +1268,6 @@ cm_execute_action_table:
 
       .end
         %sfxbubble()
-        RTS
-    }
-
-    execute_numfield_hex:
-    {
-        ; $02[0x3] = memory address to manipulate
-        ; $06[0x1] = min
-        ; $08[0x1] = max
-        ; $0A[0x1] = increment
-        ; $0C[0x2] = JSR target
-        LDA [$00] : INC $00 : INC $00 : STA $04
-        LDA [$00] : INC $00 : STA $06
-
-        LDA [$00] : INC $00 : AND #$00FF : STA $08
-        LDA [$00] : INC $00 : AND #$00FF : INC : STA $0A ; INC for convenience
-        LDA [$00] : INC $00 : AND #$00FF : STA $0C
-
-        LDA [$00] : INC $00 : INC $00 : STA $20
-
-        LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
-
-        LDA [$04] : CLC : ADC $0C
-
-        CMP $0A : BCS .set_to_min
-
-        STA [$04] : BRA .jsr
-
-      .pressed_left
-        LDA [$04] : SEC : SBC $0C : BMI .set_to_max
-
-        CMP $0A : BCS .set_to_max
-
-        STA [$04] : BRA .jsr
-
-      .set_to_min
-        LDA $08 : STA [$04] : CLC : BRA .jsr
-
-      .set_to_max
-        LDA $0A : DEC : STA [$04] : CLC
-
-      .jsr
-        LDA $20 : BEQ .end
-
-        LDA [$04]
-        LDX #$0000
-        JSR ($0020,X)
-
-      .end
         RTS
     }
 
