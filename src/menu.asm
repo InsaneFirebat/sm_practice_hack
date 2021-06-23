@@ -901,7 +901,7 @@ cm_loop:
   .refresh
     JSR cm_transfer_original_cgram
     JSR cm_transfer_custom_cgram
-    sfxbubble()
+    %sfxbubble()
     
 
   .restartLoop
