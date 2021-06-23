@@ -182,10 +182,11 @@
 !sram_room_strat = $702022
 !sram_sprite_prio_flag = $702026
 
-
 !sram_countdamage = $702080
 !sram_menu_background = $702082
-!sram_sprite_prio_flag = $702084
+!sram_dummy_on = $702084
+!sram_dummy_off = $702086
+!sram_dummy_num = $702188
 
 !sram_custompalette = $7020A0
 !sram_custompalette_hudoutline = $7020A2
@@ -228,6 +229,12 @@
 !sram_custompalette_menunumsel_hi = $7020EC
 !sram_custompalette_menunumsel_lo = $7020EE
 !sram_custompalette_profile = $7020F0
+
+!sram_customsfx_move = $7020F2
+!sram_customsfx_toggle = $7020F4
+!sram_customsfx_number = $7020F6
+!sram_customsfx_confirm = $7020F8
+!sram_customsfx_goback = $7020FA
 
 !sram_presetrando = $70206E
 !sram_presetrando_morph = $702070

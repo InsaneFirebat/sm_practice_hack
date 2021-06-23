@@ -124,6 +124,12 @@ init_sram:
     LDA #$0000 : STA !sram_custompalette_menubackground_hi
     LDA #$0000 : STA !sram_custompalette_menubackground_lo
 
+    LDA #$0037 : STA !sram_customsfx_move
+    LDA #$0038 : STA !sram_customsfx_toggle
+    LDA #$002A : STA !sram_customsfx_number
+    LDA #$0028 : STA !sram_customsfx_confirm
+    LDA #$0007 : STA !sram_customsfx_goback
+
     LDA #$0000 : STA !sram_presetrando
     LDA #$0001 : STA !sram_presetrando_morph
     LDA #$0000 : STA !sram_presetrando_charge
@@ -133,6 +139,10 @@ init_sram:
     LDA #$0005 : STA !sram_presetrando_max_supers
     LDA #$0002 : STA !sram_presetrando_max_pbs
     LDA #$0000 : STA !sram_presetrando_beampref
+
+    LDA #$0001 : STA !sram_dummy_on
+    LDA #$0000 : STA !sram_dummy_off
+    LDA #$FFFF : STA !sram_dummy_num
 
     LDA #!SRAM_VERSION : STA !sram_initialized
 

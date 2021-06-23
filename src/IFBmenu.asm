@@ -8,14 +8,24 @@ IFBMenu:
     dw #ifb_custompalettes_menu
     dw #ifb_paletteprofile
     dw #ifb_palette2custom
+    dw #ifb_customsfx
+    dw #ifb_soundtest
     dw #ifb_noclip
     dw #ifb_nosteam
     dw #ifb_presetrando
     dw #ifb_debugteleport
-    dw #ifb_soundtest
     dw #ifb_lockout
     dw #ifb_fixcontrols
     dw #ifb_credits
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_notext
+    dw #ab_notext
+    dw #ifb_dummy_on
+    dw #ifb_dummy_off
+    dw #ifb_dummy_hexnum
+    dw #ifb_dummy_num
     dw #$0000
     %cm_header("INSANEFIREBAT MENU")
 
@@ -48,6 +58,12 @@ ifb_paletteprofile:
 ifb_palette2custom:
     %cm_jsr_nosound("Copy Palette to Custom", action_copy_palette, #$0000)
 
+ifb_customsfx:
+    %cm_submenu("Customize Menu Sounds", #CustomMenuSFXMenu)
+
+ifb_soundtest:
+    %cm_submenu("Sound Test", #SoundTestMenu)
+
 ifb_noclip:
     %cm_toggle("Walk Through Walls", !ram_noclip, #$0001, #0)
 
@@ -60,9 +76,6 @@ ifb_debugteleport:
 ifb_presetrando:
     %cm_submenu("Preset Randomizer", #PresetRandoMenu)
 
-ifb_soundtest:
-    %cm_submenu("Sound Test", #SoundTestMenu)
-
 ifb_lockout:
     %cm_submenu("Trigger Piracy Warning", #LockoutConfirm)
 
@@ -71,6 +84,18 @@ ifb_fixcontrols:
 
 ifb_credits:
     %cm_submenu("InfoHUD Credits", #CreditsMenu)
+
+ifb_dummy_on:
+    %cm_toggle("Example Toggle", !sram_dummy_on, #$0001, #0)
+
+ifb_dummy_off:
+    %cm_toggle("Example Toggle", !sram_dummy_off, #$0001, #0)
+
+ifb_dummy_hexnum:
+    %cm_numfield_hex("Example Hex Number", !sram_dummy_num, 0, 255, 1, #0)
+
+ifb_dummy_num:
+    %cm_numfield("Example Number", !sram_dummy_num, 0, 255, 1, #0)
 
 
 ; ----------
@@ -700,6 +725,35 @@ presetrando_pbs:
 
 
 ; ----------
+; Custom Sound FX
+; ----------
+
+CustomMenuSFXMenu:
+    dw #ifb_sfx_move
+    dw #ifb_sfx_toggle
+    dw #ifb_sfx_number
+    dw #ifb_sfx_confirm
+    dw #ifb_sfx_goback
+    dw #$0000
+    %cm_header("CHOOSE SFX FROM LIB 1")
+
+ifb_sfx_move:
+    %cm_numfield_hex("Move Cursor", !sram_customsfx_move, 1, 63, 1, #0)
+
+ifb_sfx_toggle:
+    %cm_numfield_hex("Toggle", !sram_customsfx_toggle, 1, 63, 1, #0)
+
+ifb_sfx_number:
+    %cm_numfield_hex("Number Select", !sram_customsfx_number, 1, 63, 1, #0)
+
+ifb_sfx_goback:
+    %cm_numfield_hex("Go Back", !sram_customsfx_goback, 1, 63, 1, #0)
+
+ifb_sfx_confirm:
+    %cm_numfield_hex("Confirm Selection", !sram_customsfx_confirm, 1, 63, 1, #0)
+
+
+; ----------
 ; Sound Test
 ; ----------
 
@@ -718,7 +772,7 @@ SoundTestMenu:
     %cm_header("AUDIO TEST MENU")
 
 ifb_soundtest_lib1_sound:
-    %cm_numfield("Library One Sound", !ram_soundtest_lib1, 1, 66, 1, #0)
+    %cm_numfield_hex("Library One Sound", !ram_soundtest_lib1, 1, 66, 1, #0)
 
 ifb_soundtest_lib1_playsound:
     %cm_jsr_nosound("   Play Lib1", #action_soundtest_lib1_play, #$0000)
@@ -730,7 +784,7 @@ action_soundtest_lib1_play:
 }
 
 ifb_soundtest_lib2_sound:
-    %cm_numfield("Library Two Sound", !ram_soundtest_lib2, 1, 127, 1, #0)
+    %cm_numfield_hex("Library Two Sound", !ram_soundtest_lib2, 1, 127, 1, #0)
 
 ifb_soundtest_lib2_playsound:
     %cm_jsr_nosound("   Play Lib2", #action_soundtest_lib2_play, #$0000)
@@ -742,7 +796,7 @@ action_soundtest_lib2_play:
 }
 
 ifb_soundtest_lib3_sound:
-    %cm_numfield("Library Three Sound", !ram_soundtest_lib3, 1, 47, 1, #0)
+    %cm_numfield_hex("Library Three Sound", !ram_soundtest_lib3, 1, 47, 1, #0)
 
 ifb_soundtest_lib3_playsound:
     %cm_jsr_nosound("   Play Lib3", #action_soundtest_lib3_play, #$0000)

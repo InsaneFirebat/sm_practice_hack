@@ -612,7 +612,7 @@ ih_hud_code:
     CPX #$00C
     BNE -
 
-    LDX #$0000;
+    LDX #$0000
 
 -   TYA
     AND ControllerTable2, X
