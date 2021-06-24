@@ -260,7 +260,7 @@ PaletteProfileTables:
     dw #GreyProfileTable
     dw #RedProfileTable
     dw #PurpleProfileTable
-    dw #YellowProfileTable
+;    dw #YellowProfileTable
     dw #$0000
 
 ; border, headeroutline, text, background, numoutline, numfill, toggleoutline, seltext, seltextbg, numseloutline, numsel

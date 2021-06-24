@@ -52,7 +52,7 @@ ifb_paletteprofile:
         db #$28, "       GREY", #$FF
         db #$28, "        RED", #$FF
         db #$28, "     PURPLE", #$FF
-        db #$28, "     YELLOW", #$FF
+;        db #$28, "     YELLOW", #$FF
     db #$FF
 
 ifb_palette2custom:
