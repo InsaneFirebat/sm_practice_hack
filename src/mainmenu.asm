@@ -1497,6 +1497,7 @@ CtrlMenu:
     dw #ctrl_kill_enemies
     dw #ctrl_reveal_damage
     dw #ctrl_random_preset
+    dw #ctrl_randomize_rng
     dw #ctrl_clear_shortcuts
     dw #$0000
     %cm_header("CONTROLLER SHORTCUTS")
@@ -1529,6 +1530,9 @@ ctrl_reveal_damage:
 ctrl_random_preset:
     %cm_ctrl_shortcut("Random Preset", !sram_ctrl_random_preset)
 
+ctrl_randomize_rng:
+    %cm_ctrl_shortcut("Randomize RNG", !sram_ctrl_randomize_rng)
+
 ctrl_clear_shortcuts:
     %cm_jsr_nosound("Clear Shortcuts", action_clear_shortcuts, #$0000)
 
@@ -1543,6 +1547,7 @@ action_clear_shortcuts:
     STA !sram_ctrl_reset_segment_timer
     STA !sram_ctrl_reveal_damage
     STA !sram_ctrl_random_preset
+    STA !sram_ctrl_randomize_rng
     ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
     %sfxquake()
