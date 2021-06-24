@@ -169,6 +169,7 @@
 !sram_ctrl_random_preset = $702024
 
 !sram_ctrl_reveal_damage = $702062
+!sram_ctrl_randomize_rng = $702064
 
 !sram_artificial_lag = $702010
 !sram_rerandomize = $702012

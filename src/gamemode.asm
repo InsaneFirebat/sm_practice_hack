@@ -73,6 +73,10 @@ gamemode_shortcuts:
     AND !ram_ctrl1_filtered : BEQ +
     JMP .random_preset
 
+  + LDA !ram_ctrl1 : AND !sram_ctrl_randomize_rng : CMP !sram_ctrl_randomize_rng : BNE +
+    AND !ram_ctrl1_filtered : BEQ +
+    JMP .randomize_rng
+
   + LDA !ram_ctrl1 : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
     AND !ram_ctrl1_filtered : BEQ +
     JMP .menu
@@ -139,6 +143,15 @@ gamemode_shortcuts:
     JSL LoadRandomPreset
     SEC : RTS
 
+  .randomize_rng
+    LDA $7E1842 : AND #$00FF : STA $12
+    LDA $05B6 : AND #$FF00 : ORA $12 : STA $05B5 ; little extra for Phantoon
+    LDA $7E05E5 : AND #$0FF0 : ASL #4
+    ORA $12 : STA $7E05E5
+    JSL $808111
+    %sfxbeep()
+    CLC : RTS
+    
   .menu
     ; Set IRQ vector
     LDA $AB : PHA

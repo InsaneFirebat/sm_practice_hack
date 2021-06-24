@@ -47,8 +47,9 @@ init_sram:
     LDA #$0000 : STA !sram_ctrl_full_equipment
     LDA #$0000 : STA !sram_ctrl_kill_enemies
     LDA #$0000 : STA !sram_ctrl_reset_segment_timer
-    LDA #$8070 : STA !sram_ctrl_reveal_damage          ; L + R + B + X
+    LDA #$8470 : STA !sram_ctrl_reveal_damage          ; Down + L + R + B + X
     LDA #$09F0 : STA !sram_ctrl_random_preset          ; Up + Right + L + R + Y + B
+    LDA #$0000 : STA !sram_ctrl_randomize_rng
 
     ; Input Cheat Sheet  (#$XXYY)
     ; $4218  (YY)
