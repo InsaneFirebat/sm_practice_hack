@@ -47,6 +47,11 @@
 !ram_infiniteammo_check = $7FFBE6
 !ram_countdamage_hud = $7FFBE8
 
+if !FEATURE_EXTRAS
+    !ram_noclip = $7FFBFC
+    !ram_steamcollision = $7FFBFE
+endif
+
 !ram_phantoon_rng_1 = $7FFB76
 !ram_phantoon_rng_2 = $7FFB78
 !ram_phantoon_rng_3 = $7FFB7A
@@ -187,13 +192,13 @@
 !sram_dummy_off = $702086
 !sram_dummy_num = $702188
 
-;!sram_custompalette = $7020A0
-;!sram_custompalette_hudoutline = $7020A2
-;!sram_custompalette_hudoutline_hi = $7020A4
-;!sram_custompalette_hudoutline_lo = $7020A6
-;!sram_custompalette_hudfill = $7020A8
-;!sram_custompalette_hudfill_hi = $7020AA
-;!sram_custompalette_hudfill_lo = $7020AC
+!sram_custompalette = $7020A0
+!sram_custompalette_hudoutline = $7020A2
+!sram_custompalette_hudoutline_hi = $7020A4
+!sram_custompalette_hudoutline_lo = $7020A6
+!sram_custompalette_hudfill = $7020A8
+!sram_custompalette_hudfill_hi = $7020AA
+!sram_custompalette_hudfill_lo = $7020AC
 !sram_custompalette_menuborder = $7020AE
 !sram_custompalette_menuborder_hi = $7020B0
 !sram_custompalette_menuborder_lo = $7020B2
