@@ -211,6 +211,7 @@ preset_banks:
   dw preset_rbo_bombs_ceres_elevator>>16
   dw preset_ngplasma_ceres_station_ceres_elevator>>16
   dw preset_nghyper_ceres_station_ceres_elevator>>16
+  dw preset_nintendopower_crateria_ship>>16
   dw preset_allbosskpdr_crateria_ceres_elevator>>16
   dw preset_allbosspkdr_crateria_ceres_elevator>>16
   dw preset_allbossprkd_crateria_ceres_elevator>>16
@@ -525,3 +526,8 @@ org $E68000
   print pc, " pkrd data start"
   incsrc presets/pkrd_data.asm
   print pc, " pkrd data end"
+
+  ; ???? (length in hex)
+  print pc, " nintendopower data start"
+  incsrc presets/nintendopower_data.asm
+  print pc, " nintendopower data end"

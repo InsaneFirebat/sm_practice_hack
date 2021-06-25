@@ -1,4 +1,4 @@
-local CAT = "pkrd" -- prkd, hundo, rbo, kpdr25, gtclassic, kpdr21, 14ice, 14speed, allbosskpdr, allbosspkdr, allbossprkd, 100early, pkrd
+local CAT = "nintendopower" -- prkd, hundo, rbo, kpdr25, gtclassic, kpdr21, 14ice, 14speed, allbosskpdr, allbosspkdr, allbossprkd, 100early, pkrd, nintendopower
 
 local last_state = {} -- holds all state that has been changed up untill last save
 
@@ -234,6 +234,15 @@ local SEGMENTS = {
         { ["name"] = "Lower Norfair", ["steps"] = {} },
         { ["name"] = "Maridia", ["steps"] = {} },
         { ["name"] = "Backtracking", ["steps"] = {} },
+        { ["name"] = "Tourian", ["steps"] = {} },
+    },
+    ["nintendopower"] = {
+        { ["name"] = "Crateria", ["steps"] = {} },
+        { ["name"] = "Brinstar", ["steps"] = {} },
+        { ["name"] = "Norfair", ["steps"] = {} },
+        { ["name"] = "Wrecked Ship", ["steps"] = {} },
+        { ["name"] = "Maridia", ["steps"] = {} },
+        { ["name"] = "Norfair 2", ["steps"] = {} },
         { ["name"] = "Tourian", ["steps"] = {} },
     },
 }
@@ -1805,6 +1814,85 @@ local STEPS = {
         [177500] = { ["segment_no"] = 10, ["name"] = "Escape Room 3" },
         [179500] = { ["segment_no"] = 10, ["name"] = "Climb Spark" },
         [180150] = { ["segment_no"] = 10, ["name"] = "Escape Parlor" },
+    },
+    ["nintendopower"] = {
+        -- Crateria
+        [9566] = { ["segment_no"] = 1, ["name"] = "Ship" },
+        [12978] = { ["segment_no"] = 1, ["name"] = "Morph" },
+        [19526] = { ["segment_no"] = 1, ["name"] = "Climb" },
+        [24090] = { ["segment_no"] = 1, ["name"] = "Bomb Torizo" },
+        [29350] = { ["segment_no"] = 1, ["name"] = "Terminator" },
+        -- Brinstar
+        [33077] = { ["segment_no"] = 2, ["name"] = "Green Brinstar Elevator" },
+        [37456] = { ["segment_no"] = 2, ["name"] = "Big Pink" },
+        [43814] = { ["segment_no"] = 2, ["name"] = "Spore Spawn" },
+        [54577] = { ["segment_no"] = 2, ["name"] = "Spore Fall" },
+        [63384] = { ["segment_no"] = 2, ["name"] = "Red Tower" },
+        -- Upper Norfair
+        [68322] = { ["segment_no"] = 3, ["name"] = "Business Center" },
+        [75015] = { ["segment_no"] = 3, ["name"] = "Kraid Warehouse" },
+        [80718] = { ["segment_no"] = 3, ["name"] = "Kraid Fight" },
+        [94742] = { ["segment_no"] = 3, ["name"] = "Rising Tide" },
+        [114618] = { ["segment_no"] = 3, ["name"] = "Reserve Tank" },
+        [121870] = { ["segment_no"] = 3, ["name"] = "Ice Beam" },
+        [126647] = { ["segment_no"] = 3, ["name"] = "Ice Escape" },
+        [130104] = { ["segment_no"] = 3, ["name"] = "Shinespark to Power Bombs" },
+        [146286] = { ["segment_no"] = 3, ["name"] = "Business Center 2" },
+        [150525] = { ["segment_no"] = 3, ["name"] = "Crocomire" },
+        [159243] = { ["segment_no"] = 3, ["name"] = "Grapple Beam" },
+        [162044] = { ["segment_no"] = 3, ["name"] = "Exit Grapple Beam" },
+        [164094] = { ["segment_no"] = 3, ["name"] = "Power Bombs Post Croc" },
+        [167678] = { ["segment_no"] = 3, ["name"] = "Red Pirate Shaft" },
+        [171848] = { ["segment_no"] = 3, ["name"] = "Bubble Mountain" },
+        [174808] = { ["segment_no"] = 3, ["name"] = "Wave Beam" },
+        [183673] = { ["segment_no"] = 3, ["name"] = "Shinespark 2" },
+        [187346] = { ["segment_no"] = 3, ["name"] = "X-Ray Beam" },
+        [190382] = { ["segment_no"] = 3, ["name"] = "X-Ray Beam 2" },
+        [192127] = { ["segment_no"] = 3, ["name"] = "X-Ray Beam 3" },
+        -- Wrecked Ship
+        [198387] = { ["segment_no"] = 4, ["name"] = "Red Brinstar Elevator" },  -- 197526/198387
+        [199796] = { ["segment_no"] = 4, ["name"] = "Moat Missiles" },
+        [205313] = { ["segment_no"] = 4, ["name"] = "Shinespark to Phantoon" },
+        [209100] = { ["segment_no"] = 4, ["name"] = "Phantoon" },
+        [224575] = { ["segment_no"] = 4, ["name"] = "Movement before Attic" },
+        [227071] = { ["segment_no"] = 4, ["name"] = "Attic" },
+        [234176] = { ["segment_no"] = 4, ["name"] = "Bowling Alley" },
+        [239102] = { ["segment_no"] = 4, ["name"] = "Gravity Suit Room" },
+        [244914] = { ["segment_no"] = 4, ["name"] = "Red Tower 3" },
+        -- Maridia
+        [251395] = { ["segment_no"] = 5, ["name"] = "Mainstreet" },
+        [256525] = { ["segment_no"] = 5, ["name"] = "Pants Room" },
+        [264210] = { ["segment_no"] = 5, ["name"] = "East Pants Room" },
+        [272958] = { ["segment_no"] = 5, ["name"] = "Super Door" },
+        [278032] = { ["segment_no"] = 5, ["name"] = "Fish Tank" },
+        [279447] = { ["segment_no"] = 5, ["name"] = "Mama Turtle" },
+        [282227] = { ["segment_no"] = 5, ["name"] = "Crab Supers" },
+        [289226] = { ["segment_no"] = 5, ["name"] = "Aqueduct" },
+        [292625] = { ["segment_no"] = 5, ["name"] = "Botwoon" },
+        [299959] = { ["segment_no"] = 5, ["name"] = "Full Halfie" },
+        [309647] = { ["segment_no"] = 5, ["name"] = "Draygon" },
+        [331747] = { ["segment_no"] = 5, ["name"] = "Going to Plasma Beam" },
+        [335308] = { ["segment_no"] = 5, ["name"] = "Plasma Beam" },
+        [339157] = { ["segment_no"] = 5, ["name"] = "Long Tube" },
+        -- Norfair 2
+        [344558] = { ["segment_no"] = 6, ["name"] = "Pre GT Fight" },
+        [351212] = { ["segment_no"] = 6, ["name"] = "Elevator Menu" },
+        [358746] = { ["segment_no"] = 6, ["name"] = "Golden Torizo" },
+        [365389] = { ["segment_no"] = 6, ["name"] = "On Route to Ridley" },
+        [368595] = { ["segment_no"] = 6, ["name"] = "Worst Room in the Game" },
+        [376208] = { ["segment_no"] = 6, ["name"] = "Metal Ninja Pirates" },
+        [382429] = { ["segment_no"] = 6, ["name"] = "Ridley" },
+        [388736] = { ["segment_no"] = 6, ["name"] = "Escape from Ridley" },
+        [413679] = { ["segment_no"] = 6, ["name"] = "Landing Site" },
+        -- Tourian
+        [421410] = { ["segment_no"] = 7, ["name"] = "Metroids 1" },
+        [423467] = { ["segment_no"] = 7, ["name"] = "Metroids 2" },
+        [430378] = { ["segment_no"] = 7, ["name"] = "Metroids 3" },
+        [432211] = { ["segment_no"] = 7, ["name"] = "Metroids 4" },
+        [434690] = { ["segment_no"] = 7, ["name"] = "Baby Skip" },
+        [440129] = { ["segment_no"] = 7, ["name"] = "Zeb Skip" },
+        [457680] = { ["segment_no"] = 7, ["name"] = "Escape Room 2" },
+        [461449] = { ["segment_no"] = 7, ["name"] = "Escape Parlor" },
     },
 }
 

@@ -114,6 +114,7 @@ preset_category_submenus:
     dw #PresetsMenuRbo
     dw #PresetsMenuNgplasma
     dw #PresetsMenuNghyper
+    dw #PresetsMenuNintendopower
     dw #PresetsMenuAllbosskpdr
     dw #PresetsMenuAllbosspkdr
     dw #PresetsMenuAllbossprkd    
@@ -134,6 +135,7 @@ preset_category_banks:
     dw #PresetsMenuRbo>>16
     dw #PresetsMenuNgplasma>>16
     dw #PresetsMenuNghyper>>16
+    dw #PresetsMenuNintendopower>>16
     dw #PresetsMenuAllbosskpdr>>16
     dw #PresetsMenuAllbosspkdr>>16
     dw #PresetsMenuAllbossprkd>>16
@@ -158,7 +160,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.2.3")
+    %cm_header("CUSTOM INFOHUD V2.2.3.1")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -217,6 +219,9 @@ incsrc presets/allbossprkd_menu.asm   ; 9BE (length in hex)
 incsrc presets/ngplasma_menu.asm   ; 85C (length in hex)
 incsrc presets/nghyper_menu.asm   ; 864 (length in hex)
 incsrc presets/pkrd_menu.asm   ; E6A (length in hex)
+print pc, " <---    NINTENDO POWER menu start"
+incsrc presets/nintendopower_menu.asm   ; ??? (length in hex)
+print pc, " <---    NINTENDO POWER menu end"
 
 pullpc
 
@@ -564,6 +569,7 @@ SelectPresetCategoryMenu:
     dw #precat_rbo
     dw #precat_ngplasma
     dw #precat_nghyper
+    dw #precat_nintendopower
     dw #precat_allbosskpdr
     dw #precat_allbosspkdr
     dw #precat_allbossprkd
@@ -587,6 +593,7 @@ precat_current:
         db #$28, "        RBO", #$FF
         db #$28, "  NG PLASMA", #$FF
         db #$28, "   NG HYPER", #$FF
+        db #$28, " NIN POWER%", #$FF
         db #$28, "  BOSS KPDR", #$FF
         db #$28, "  BOSS PKDR", #$FF
         db #$28, "  BOSS PRKD", #$FF
@@ -628,14 +635,17 @@ precat_ngplasma:
 precat_nghyper:
     %cm_jsr("NewGamePlus Hyper", #action_select_preset_category, #$000B)
 
+precat_nintendopower:
+    %cm_jsr("Nintendo Power%", #action_select_preset_category, #$000C)
+
 precat_allbosskpdr:
-    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000C)
+    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000D)
 
 precat_allbosspkdr:
-    %cm_jsr("All Bosses PKDR", #action_select_preset_category, #$000D)
+    %cm_jsr("All Bosses PKDR", #action_select_preset_category, #$000E)
 
 precat_allbossprkd:
-    %cm_jsr("All Bosses PRKD", #action_select_preset_category, #$000E)
+    %cm_jsr("All Bosses PRKD", #action_select_preset_category, #$000F)
 
 action_select_preset_category:
 {
