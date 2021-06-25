@@ -115,6 +115,7 @@ preset_category_submenus:
     dw #PresetsMenu100early
     dw #PresetsMenuHundo
     dw #PresetsMenuRbo
+    dw #PresetsMenuNintendopower
     dw #PresetsMenuAllbosskpdr
     dw #PresetsMenuAllbosspkdr
     dw #PresetsMenuAllbossprkd    
@@ -136,6 +137,7 @@ preset_category_banks:
     dw #PresetsMenu100early>>16
     dw #PresetsMenuHundo>>16
     dw #PresetsMenuRbo>>16
+    dw #PresetsMenuNintendopower>>16
     dw #PresetsMenuAllbosskpdr>>16
     dw #PresetsMenuAllbosspkdr>>16
     dw #PresetsMenuAllbossprkd>>16
@@ -160,7 +162,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("INSANEFIREBAT V2.2.3")
+    %cm_header("INSANEFIREBAT V2.2.3.1")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -220,6 +222,9 @@ incsrc presets/spazer_menu.asm   ; F91 (length in hex)
 incsrc presets/ngplasma_menu.asm   ; 85C (length in hex)
 incsrc presets/nghyper_menu.asm   ; 864 (length in hex)
 incsrc presets/pkrd_menu.asm   ; E6A (length in hex)
+print pc, " <---    NINTENDO POWER menu start"
+incsrc presets/nintendopower_menu.asm   ; ??? (length in hex)
+print pc, " <---    NINTENDO POWER menu end"
 
 pullpc
 
@@ -568,6 +573,7 @@ SelectPresetCategoryMenu:
     dw #precat_100early
     dw #precat_hundo
     dw #precat_rbo
+    dw #precat_nintendopower
     dw #precat_allbosskpdr
     dw #precat_allbosspkdr
     dw #precat_allbossprkd
@@ -592,6 +598,7 @@ precat_current:
         db #$28, "  100 EARLY", #$FF
         db #$28, "   100 LATE", #$FF
         db #$28, "        RBO", #$FF
+        db #$28, " NIN POWER%", #$FF
         db #$28, "  BOSS KPDR", #$FF
         db #$28, "  BOSS PKDR", #$FF
         db #$28, "  BOSS PRKD", #$FF
@@ -635,6 +642,9 @@ precat_hundo:
 
 precat_rbo:
     %cm_jsr("Reverse Boss Order", #action_select_preset_category, #$000C)
+
+precat_nintendopower:
+    %cm_jsr("Nintendo Power%", #action_select_preset_category, #$000C)
 
 precat_allbosskpdr:
     %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000D)
