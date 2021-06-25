@@ -145,27 +145,22 @@ CountDamage:
     LDA $0F8C,X : SEC : SBC $187A : RTS
 }
 
-org $948F49        ; RTS this routine to enable walk through walls
-    JSR NoClip
-    RTS
+if !FEATURE_EXTRAS
+    org $948F49        ; RTS this routine to enable walk through walls
+        JSR NoClip
+        RTS
 
-org $A6F135
-    JSR SteamCollision
+    org $A6F135
+        JSR SteamCollision
 
-org $828AB0       ; hijack spare CPU usage routine
-{
-    ; This vanilla routine wastes 34 CPU cycles and runs near the
-    ; end of the main game loop. Useless instructions are added
-    ; after our code to simulate the remaining waste on fast exit
-    LDA !ram_magic_pants_state : BEQ +        ; 8 cycles
-    JSL space_pants_helper
-+   LDA !sram_custompalette : BEQ +           ; 8 cycles
-    JSL CustomizePalettes
-+   PHA : PLA : PHA : PLA                     ; 14 cycles
-    NOP : NOP                                 ; 4 cycles
-    RTL
-}
-warnpc $828AE3
+    org $828AB0       ; hijack spare CPU usage routine
+        LDA !ram_magic_pants_state : BEQ +
+        JSL space_pants_helper
++       LDA !sram_custompalette : BEQ +
+        JSL CustomizePalettes
++       RTL
+    warnpc $828AE3
+endif
 
 org $82E07D       ; hijack load room music
     JML SuppressRoomMusic
@@ -403,6 +398,19 @@ ih_drops_segment:
     JSL $808111 ; overwritten code
     RTL
 }
+
+if !FEATURE_EXTRAS
+    CustomizePalettes:
+    {
+        PHP : %a16()
+        LDA $7E0998 : CMP #$0006 : BMI .done : CMP #$001A : BEQ .done
+        LDA !sram_custompalette_hudoutline : STA $7EC01A
+        LDA !sram_custompalette_hudfill : STA $7EC01C
+      .done
+        PLP
+        RTL
+    }
+endif
 
 ih_update_hud_code:
 {
@@ -914,19 +922,27 @@ ih_game_loop_code:
     LDA !ram_magic_pants_enabled : BEQ .infiniteammo
     CMP #$0001 : BEQ .magicpants
     CMP #$0002 : BEQ .spacepants
-
     ; both are enabled, check Samus movement type to decide
     LDA $0A1F : AND #$00FF : CMP #$0003 : BEQ .spacepants    ; check if spin jumping
     LDA $0A1F : AND #$00FF : CMP #$0001 : BEQ .magicpants    ; check if running
-    BRA .infiniteammo
+    if !FEATURE_EXTRAS
+        BRA .infiniteammo
+    else
+        BRA .handleinputs
+    endif
 
   .magicpants
     JSR magic_pants
-    BRA .infiniteammo
+    if !FEATURE_EXTRAS
+        BRA .infiniteammo
+    else
+        BRA .handleinputs
+    endif
 
   .spacepants
     JSR space_pants
 
+if !FEATURE_EXTRAS
   .infiniteammo
     LDA !ram_infinite_ammo : CMP !ram_infiniteammo_check : BMI .reset_ammo_check
     BEQ .handleinputs
@@ -938,6 +954,7 @@ ih_game_loop_code:
     LDA !ram_ammo_missiles : STA $7E09C6
     LDA !ram_ammo_supers : STA $7E09CA
     LDA !ram_ammo_powerbombs : STA $7E09CE
+endif
 
   .handleinputs
     LDA !IH_CONTROLLER_SEC_NEW : BEQ .done
@@ -1090,38 +1107,30 @@ space_pants:
     RTS
 }
 
-space_pants_helper:
-{
-    LDA !ram_magic_pants_state : BEQ +
-    STA $7EC194 : STA $7EC196 : STA $7EC198 : STA $7EC19A : STA $7EC19C : STA $7EC19E
-+   LDA $0ACE : INC ; overwritten code
-    RTL
-}
+if !FEATURE_EXTRAS
+    space_pants_helper:
+    {
+        LDA !ram_magic_pants_state : BEQ +
+        STA $7EC194 : STA $7EC196 : STA $7EC198 : STA $7EC19A : STA $7EC19C : STA $7EC19E
+        RTL
+    }
 
-infinite_ammo:
-{
-    LDA !ram_infiniteammo_check : BNE + ; 0 if first time it's been run
-    INC : STA !ram_infiniteammo_check
-    ; preserve ammo counts
-    LDA $7E09C6 : STA !ram_ammo_missiles
-    LDA $7E09CA : STA !ram_ammo_supers
-    LDA $7E09CE : STA !ram_ammo_powerbombs
+    infinite_ammo:
+    {
+        LDA !ram_infiniteammo_check : BNE + ; 0 if first time it's been run
+        INC : STA !ram_infiniteammo_check
+        ; preserve ammo counts
+        LDA $7E09C6 : STA !ram_ammo_missiles
+        LDA $7E09CA : STA !ram_ammo_supers
+        LDA $7E09CE : STA !ram_ammo_powerbombs
 
-    ; lock ammo to specific values
-+   LDA #$01A4 : STA $7E09C6  ; missiles
-    LDA #$0045 : STA $7E09CA  ; supers
-    LDA #$0045 : STA $7E09CE  ; pbs
-    RTS
-}
-
-CustomizePalettes:
-    PHP : %a16()
-    LDA $7E0998 : CMP #$0006 : BMI .done : CMP #$001A : BEQ .done
-    LDA !sram_custompalette_hudoutline : STA $7EC01A
-    LDA !sram_custompalette_hudfill : STA $7EC01C
-  .done
-    PLP
-    RTL
+        ; lock ammo to specific values
++       LDA #$01A4 : STA $7E09C6  ; missiles
+        LDA #$0045 : STA $7E09CA  ; supers
+        LDA #$0045 : STA $7E09CE  ; pbs
+        RTS
+    }
+endif
 
 ih_get_item_code:
 {
@@ -1160,25 +1169,26 @@ ih_shinespark_code:
 
 print pc, " infohud end"
 
+if !FEATURE_EXTRAS
+    org $94DC00
+    NoClip:
+    {
+        LDA !ram_noclip : BEQ .originalcode
+        RTS
+      .originalcode
+        STZ $14 : LDA $20
+        JMP $8F4D
+    }
 
-org $94DC00
-NoClip:
-{
-    LDA !ram_noclip : BEQ .originalcode
-    RTS
-  .originalcode
-    STZ $14 : LDA $20
-    JMP $8F4D
-}
-
-org $A6FFE0
-SteamCollision:
-{
-    LDA !ram_steamcollision : BEQ .originalcode
-    PLA : LDA $0F86,x : JMP $F13B
-  .originalcode
-    LDA $0F86,x : RTS
-}
+    org $A6FFE0
+    SteamCollision:
+    {
+        LDA !ram_steamcollision : BEQ .originalcode
+        PLA : LDA $0F86,x : JMP $F13B
+      .originalcode
+        LDA $0F86,x : RTS
+    }
+endif
 
 
 ; Stuff that needs to be placed in bank 80

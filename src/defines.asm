@@ -46,8 +46,11 @@
 !ram_infinite_ammo = $7FFBE4
 !ram_infiniteammo_check = $7FFBE6
 !ram_countdamage_hud = $7FFBE8
-!ram_noclip = $7FFBEA
-!ram_steamcollision = $7FFBEC
+
+if !FEATURE_EXTRAS
+    !ram_noclip = $7FFBFC
+    !ram_steamcollision = $7FFBFE
+endif
 
 !ram_phantoon_rng_3 = $7FFB7A
 !ram_crocomire_rng = $7FFB7C

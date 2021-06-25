@@ -781,7 +781,9 @@ MiscMenu:
     dw #misc_music_toggle
     dw #misc_transparent
     dw #misc_invincibility
-    dw #misc_infiniteammo
+    if !FEATURE_EXTRAS
+        dw #misc_infiniteammo
+    endif
     dw #$0000
     %cm_header("MISC OPTIONS")
 
@@ -836,8 +838,10 @@ misc_transparent:
 misc_invincibility:
     %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
 
-misc_infiniteammo:
-    %cm_toggle_bit("Infinite Ammo", !ram_infinite_ammo, #$0001, #0)
+if !FEATURE_EXTRAS
+    misc_infiniteammo:
+        %cm_toggle_bit("Infinite Ammo", !ram_infinite_ammo, #$0001, #0)
+endif
 
 
 ; -----------
