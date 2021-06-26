@@ -111,7 +111,10 @@ org $A0BB13      ; update timers when Spore Spawn drops spawn
 org $A0BB46      ; update timers when Draygon drops spawn
     JSL ih_drops_segment
 
-org $A6A17C         ;Ridley AI init, reset !ram_countdamage
+org $AAE582      ; update timers when statue grabs Samus
+    JSL ih_chozo_segment
+
+org $A6A17C      ; Ridley AI init, reset !ram_countdamage
     JSR ResetCountDamageRid
 
 org $A6FEBC         ; free space
@@ -409,6 +412,13 @@ ih_drops_segment:
     ; runs when boss drops spawn
     JSL ih_update_hud_early
     JSL $808111 ; overwritten code
+    RTL
+}
+
+ih_chozo_segment:
+{
+    JSL $8090CB ; overwritten code
+    JSL ih_update_hud_early
     RTL
 }
 
