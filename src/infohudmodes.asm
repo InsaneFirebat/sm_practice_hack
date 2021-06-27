@@ -747,7 +747,7 @@ status_vspeed:
     ; Print initial jump speed over item%
     LDA $0B1A : BNE +
     LDA $7EC612 : STA $14
-    LDA $0B1A : AND #$0FFF
+    LDA $0B2D : AND #$0FFF
     LDX #$0012 : JSR Draw4Hex
     INC $0B1A
     LDA $14 : STA $7EC612

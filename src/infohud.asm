@@ -942,7 +942,11 @@ ih_game_loop_code:
     PHA
 
     LDA !ram_transition_counter : INC : STA !ram_transition_counter
-    LDA !ram_magic_pants_enabled : BEQ .infiniteammo
+    if !FEATURE_EXTRAS
+        LDA !ram_magic_pants_enabled : BEQ .infiniteammo
+    else
+        LDA !ram_magic_pants_enabled : BEQ .handleinputs
+    endif
     CMP #$0001 : BEQ .magicpants
     CMP #$0002 : BEQ .spacepants
     ; both are enabled, check Samus movement type to decide

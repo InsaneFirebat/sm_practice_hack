@@ -249,91 +249,42 @@ status_kraidradar:
 
 ; Detect and draw Samus first
 
-    LDY $0AF6 : CPY #$004B : BEQ .greenSamus
-    LDA #$00C9 : BRA .checkX0
+    ; check if sweet spot (2 missile KQK)
+    LDY $0AF6 : CPY #$004B : BEQ .greenSamus ; just the popular bomb setup atm
+    LDA #$00C9 : BRA .checkSamusX
 
   .greenSamus
     LDA #$10C9
 
-  .checkX0
-    CPY #$0030 : BPL .samusX1
-    STA $7EC68C : BRA .checkEnemies
-
-  .samusX1
-    CPY #$0040 : BPL .samusX2
-    STA $7EC68E : BRA .checkEnemies
-
-  .samusX2
-    CPY #$0050 : BPL .samusX3
-    STA $7EC690 : BRA .checkEnemies
-
-  .samusX3
-    CPY #$0060 : BPL .samusX4
-    STA $7EC692 : BRA .checkEnemies
-
-  .samusX4
-    CPY #$0070 : BPL .samusX5
-    STA $7EC694 : BRA .checkEnemies
-
-  .samusX5
-    CPY #$0080 : BPL .samusX6
-    STA $7EC696 : BRA .checkEnemies
-
-  .samusX6
-    STA $7EC698
+  .checkSamusX
+    CPY #$0030 : BPL + : STA $7EC68C : BRA .checkEnemies
++   CPY #$0040 : BPL + : STA $7EC68E : BRA .checkEnemies
++   CPY #$0050 : BPL + : STA $7EC690 : BRA .checkEnemies
++   CPY #$0060 : BPL + : STA $7EC692 : BRA .checkEnemies
++   CPY #$0070 : BPL + : STA $7EC694 : BRA .checkEnemies
++   CPY #$0080 : BPL + : STA $7EC696 : BRA .checkEnemies
++   STA $7EC698
 
 ; Detect stuff
 
+    ; Enemy 6
   .checkEnemies
-    LDX #$0180 ; Enemy 6
-    LDA $7E0F7E,X : CMP #$0270 : BCC .checkEnemy6      ; check if Y <270h
-    LDA #$F000 : STA !ram_radar1 : BRL .skipEnemy6
+    LDX #$0180
+    LDA $7E0F7E,X : CMP #$0270 : BCC .Enemy6X         ; check if Y <270h
+    LDA #$F000 : STA !ram_radar1 : BRL .skipEnemy6    ; set skip flag
 
-  .checkEnemy6
     ; X Position
+  .Enemy6X
+    ; check X position, set position bit on radar
     LDA $7E0F7A,X
-    CMP #$0020 : BPL .Enemy6X2
-    LDA #$0080 : STA !ram_radar1
-    BRA .Enemy6Y
-
-  .Enemy6X2
-    LDA $7E0F7A,X
-    CMP #$0030 : BPL .Enemy6X3
-    LDA #$0040 : STA !ram_radar1
-    BRA .Enemy6Y
-
-  .Enemy6X3
-    LDA $7E0F7A,X
-    CMP #$0040 : BPL .Enemy6X4
-    LDA #$0020 : STA !ram_radar1
-    BRA .Enemy6Y
-
-  .Enemy6X4
-    LDA $7E0F7A,X
-    CMP #$0050 : BPL .Enemy6X5
-    LDA #$0010 : STA !ram_radar1
-    BRA .Enemy6Y
-
-  .Enemy6X5
-    LDA $7E0F7A,X
-    CMP #$0060 : BPL .Enemy6X6
-    LDA #$0008 : STA !ram_radar1
-    BRA .Enemy6Y
-
-  .Enemy6X6
-    LDA $7E0F7A,X
-    CMP #$0070 : BPL .Enemy6X7
-    LDA #$0004 : STA !ram_radar1
-    BRA .Enemy6Y
-
-  .Enemy6X7
-    LDA $7E0F7A,X
-    CMP #$0080 : BPL .Enemy6X8
-    LDA #$0002 : STA !ram_radar1
-    BRA .Enemy6Y
-
-  .Enemy6X8
-    LDA #$0001 : STA !ram_radar1
+    CMP #$0020 : BPL + : LDA #$0080 : STA !ram_radar1 : BRA .Enemy6Y
++   CMP #$0030 : BPL + : LDA #$0040 : STA !ram_radar1 : BRA .Enemy6Y
++   CMP #$0040 : BPL + : LDA #$0020 : STA !ram_radar1 : BRA .Enemy6Y
++   CMP #$0050 : BPL + : LDA #$0010 : STA !ram_radar1 : BRA .Enemy6Y
++   CMP #$0060 : BPL + : LDA #$0008 : STA !ram_radar1 : BRA .Enemy6Y
++   CMP #$0070 : BPL + : LDA #$0004 : STA !ram_radar1 : BRA .Enemy6Y
++   CMP #$0080 : BPL + : LDA #$0002 : STA !ram_radar1 : BRA .Enemy6Y
++   LDA #$0001 : STA !ram_radar1
 
   .Enemy6Y
     ; Y Position
@@ -356,44 +307,19 @@ status_kraidradar:
 
   .checkEnemy7
     LDX #$01C0
-    LDA $7E0F7E,X : CMP #$0270 : BCC +      ; check if Y <270h
+    LDA $7E0F7E,X : CMP #$0270 : BCC .Enemy7X      ; check if Y <270h
     LDA #$FFFF : STA !ram_radar2 : BRL .drawEnemy6
+
     ; X Position
-+   LDA $7E0F7A,X
-    CMP #$0020 : BPL +
-    LDA #$0080 : STA !ram_radar2
-    BRA .Enemy7Y
-
-+   LDA $7E0F7A,X
-    CMP #$0030 : BPL +
-    LDA #$0040 : STA !ram_radar2
-    BRA .Enemy7Y
-
-+   LDA $7E0F7A,X
-    CMP #$0040 : BPL +
-    LDA #$0020 : STA !ram_radar2
-    BRA .Enemy7Y
-
-+   LDA $7E0F7A,X
-    CMP #$0050 : BPL +
-    LDA #$0010 : STA !ram_radar2
-    BRA .Enemy7Y
-
-+   LDA $7E0F7A,X
-    CMP #$0060 : BPL +
-    LDA #$0008 : STA !ram_radar2
-    BRA .Enemy7Y
-
-+   LDA $7E0F7A,X
-    CMP #$0070 : BPL +
-    LDA #$0004 : STA !ram_radar2
-    BRA .Enemy7Y
-
-+   LDA $7E0F7A,X
-    CMP #$0080 : BPL +
-    LDA #$0002 : STA !ram_radar2
-    BRA .Enemy7Y
-
+  .Enemy7X
+    LDA $7E0F7A,X
++   CMP #$0020 : BPL + : LDA #$0080 : STA !ram_radar2 : BRA .Enemy7Y
++   CMP #$0030 : BPL + : LDA #$0040 : STA !ram_radar2 : BRA .Enemy7Y
++   CMP #$0040 : BPL + : LDA #$0020 : STA !ram_radar2 : BRA .Enemy7Y
++   CMP #$0050 : BPL + : LDA #$0010 : STA !ram_radar2 : BRA .Enemy7Y
++   CMP #$0060 : BPL + : LDA #$0008 : STA !ram_radar2 : BRA .Enemy7Y
++   CMP #$0070 : BPL + : LDA #$0004 : STA !ram_radar2 : BRA .Enemy7Y
++   CMP #$0080 : BPL + : LDA #$0002 : STA !ram_radar2 : BRA .Enemy7Y
 +   LDA #$0001 : STA !ram_radar2
 
   .Enemy7Y
@@ -414,6 +340,12 @@ status_kraidradar:
 
 
 ; Draw stuff
+; Don't draw the enemy if first nibble is non-zero
+; Second bit determines arrow direction and color:
+; 8 = far away moving down, 4 = close moving up
+; 2 = far away moving up, 1 = close moving up
+; Low byte contains one non-zero bit to mark its position
+; The bottom-left tile of the HUD is unused
   .drawEnemy6
     ; Enemy 6
     LDA !ram_radar1 : AND #$F000 : BNE .drawEnemy7

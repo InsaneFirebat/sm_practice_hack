@@ -111,7 +111,7 @@ endif
 !ram_custompalette_menubackground = $7FFCA2
 !ram_custompalette_menunumoutline = $7FFCA4
 !ram_custompalette_menunumfill = $7FFCA6
-!ram_custompalette_menutoggleoutline = $7FFCA8
+!ram_custompalette_menutoggleon = $7FFCA8
 !ram_custompalette_menuseltext = $7FFCAA
 !ram_custompalette_menuseltextbg = $7FFCAC
 !ram_custompalette_menunumseloutline = $7FFCAE
@@ -200,6 +200,7 @@ endif
 !sram_custompalette_hudfill_hi = $7020AA
 !sram_custompalette_hudfill_lo = $7020AC
 !sram_custompalette_menuborder = $7020AE
+; the rest of custompalette must be in this order
 !sram_custompalette_menuborder_hi = $7020B0
 !sram_custompalette_menuborder_lo = $7020B2
 !sram_custompalette_menuheaderoutline = $7020B4
@@ -214,9 +215,9 @@ endif
 !sram_custompalette_menunumfill = $7020C6
 !sram_custompalette_menunumfill_hi = $7020C8
 !sram_custompalette_menunumfill_lo = $7020CA
-!sram_custompalette_menutoggleoutline = $7020CC
-!sram_custompalette_menutoggleoutline_hi = $7020CE
-!sram_custompalette_menutoggleoutline_lo = $7020D0
+!sram_custompalette_menutoggleon = $7020CC
+!sram_custompalette_menutoggleon_hi = $7020CE
+!sram_custompalette_menutoggleon_lo = $7020D0
 !sram_custompalette_menuseltext = $7020D2
 !sram_custompalette_menuseltext_hi = $7020D4
 !sram_custompalette_menuseltext_lo = $7020D6
