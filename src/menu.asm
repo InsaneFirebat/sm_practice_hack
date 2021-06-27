@@ -185,7 +185,7 @@ cm_transfer_custom_cgram:
     LDA !ram_custompalette_menubackground : STA $7EC016
     LDA !ram_custompalette_menunumoutline : STA $7EC01A
     LDA !ram_custompalette_menunumfill : STA $7EC01C
-    LDA !ram_custompalette_menutoggleoutline : STA $7EC032
+    LDA !ram_custompalette_menutoggleon : STA $7EC032
     LDA !ram_custompalette_menuseltext : STA $7EC034
     LDA !ram_custompalette_menuseltextbg : STA $7EC036
     LDA !ram_custompalette_menunumseloutline : STA $7EC03A
@@ -229,7 +229,7 @@ PrepMenuPalette:
     LDY #$0006 : LDA ($12),Y : STA !ram_custompalette_menubackground
     LDY #$0008 : LDA ($12),Y : STA !ram_custompalette_menunumoutline
     LDY #$000A : LDA ($12),Y : STA !ram_custompalette_menunumfill
-    LDY #$000C : LDA ($12),Y : STA !ram_custompalette_menutoggleoutline
+    LDY #$000C : LDA ($12),Y : STA !ram_custompalette_menutoggleon
     LDY #$000E : LDA ($12),Y : STA !ram_custompalette_menuseltext
     LDY #$0010 : LDA ($12),Y : STA !ram_custompalette_menuseltextbg
     LDY #$0012 : LDA ($12),Y : STA !ram_custompalette_menunumseloutline
@@ -243,7 +243,7 @@ PrepMenuPalette:
     LDA !sram_custompalette_menubackground : STA !ram_custompalette_menubackground
     LDA !sram_custompalette_menunumoutline : STA !ram_custompalette_menunumoutline
     LDA !sram_custompalette_menunumfill : STA !ram_custompalette_menunumfill
-    LDA !sram_custompalette_menutoggleoutline : STA !ram_custompalette_menutoggleoutline
+    LDA !sram_custompalette_menutoggleon : STA !ram_custompalette_menutoggleon
     LDA !sram_custompalette_menuseltext : STA !ram_custompalette_menuseltext
     LDA !sram_custompalette_menuseltextbg : STA !ram_custompalette_menuseltextbg
     LDA !sram_custompalette_menunumseloutline : STA !ram_custompalette_menunumseloutline
@@ -263,7 +263,7 @@ PaletteProfileTables:
 ;    dw #YellowProfileTable
     dw #$0000
 
-; border, headeroutline, text, background, numoutline, numfill, toggleoutline, seltext, seltextbg, numseloutline, numsel
+; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
 CustomProfileTable: ; custom always first
     dw $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000
 
@@ -286,13 +286,13 @@ GreyProfileTable:
     dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $1CE7, $3DEF, $1CE7, $3DEF
 
 RedProfileTable:
-    dw $0010, $000C, $001F, $0009, $001F, $000D, $041F, $0010, $0009, $0009, $001F
+    dw $0010, $0000, $0010, $0000, $0010, $0000, $001F, $001F, $0000, $001F, $0010
 
 PurpleProfileTable:
-    dw $602F, $480A, $602F, $0000, $480A, $602F, $6037, $6037, $0000, $602F, $480A
+    dw $602F, $0000, $602F, $0000, $0000, $602F, $0338, $0338, $0000, $602F, $0338
 
-YellowProfileTable:
-    dw $7100, $6000, $3779, $0000, $6000, $3779, $3779, $7100, $0000, $7100, $3739
+;YellowProfileTable:
+;    dw $7100, $6000, $3779, $0000, $6000, $3779, $3779, $7100, $0000, $7100, $3739
 }
 
 cm_draw:

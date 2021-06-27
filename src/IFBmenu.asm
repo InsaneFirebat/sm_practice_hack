@@ -21,17 +21,17 @@ IFBMenu:
     dw #ifb_lockout
     dw #ifb_fixcontrols
     dw #ifb_credits
-    dw #ab_notext
-    dw #ab_notext
-    dw #ab_notext
-    dw #ab_notext
-    dw #ab_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
     dw #ifb_dummy_on
     dw #ifb_dummy_off
     dw #ifb_dummy_hexnum
     dw #ifb_dummy_num
     dw #$0000
-    %cm_header("INSANEFIREBAT MENU")
+    %cm_header("CUSTOM ROMS ONLY")
 
 ifb_menubackground:
     %cm_toggle("Menu Background", !sram_menu_background, #$0001, #0)
@@ -105,6 +105,9 @@ ifb_dummy_hexnum:
 ifb_dummy_num:
     %cm_numfield("Example Number", !sram_dummy_num, 0, 255, 1, #0)
 
+ifb_notext:
+    %cm_jsr("", #action_text, #$0000)
+
 
 ; ----------
 ; Custom Palettes
@@ -175,8 +178,8 @@ CustomPalettesMenu:
     dw #custompalettes_menunumsel_lo
     dw #custompalettes_menunumseloutline_hi
     dw #custompalettes_menunumseloutline_lo
-    dw #custompalettes_menutoggleoutline_hi
-    dw #custompalettes_menutoggleoutline_lo
+    dw #custompalettes_menutoggleon_hi
+    dw #custompalettes_menutoggleon_lo
     dw #custompalettes_menuborder_hi
     dw #custompalettes_menuborder_lo
     dw #custompalettes_menubackground_hi
@@ -338,21 +341,21 @@ custompalettes_menunumseloutline_lo:
         STA !sram_custompalette_menunumseloutline
         RTS
 
-custompalettes_menutoggleoutline_hi:
-    %cm_numfield_hex("Toggle ON Hi", !sram_custompalette_menutoggleoutline_hi, 0, 255, 1, #.routine)
+custompalettes_menutoggleon_hi:
+    %cm_numfield_hex("Toggle ON Hi", !sram_custompalette_menutoggleon_hi, 0, 255, 1, #.routine)
     .routine
         XBA
-        ORA !sram_custompalette_menutoggleoutline_lo
-        STA !sram_custompalette_menutoggleoutline
+        ORA !sram_custompalette_menutoggleon_lo
+        STA !sram_custompalette_menutoggleon
         RTS
 
-custompalettes_menutoggleoutline_lo:
-    %cm_numfield_hex("Toggle ON Lo", !sram_custompalette_menutoggleoutline_lo, 0, 255, 1, #.routine)
+custompalettes_menutoggleon_lo:
+    %cm_numfield_hex("Toggle ON Lo", !sram_custompalette_menutoggleon_lo, 0, 255, 1, #.routine)
     .routine
         XBA
-        ORA !sram_custompalette_menutoggleoutline_hi
+        ORA !sram_custompalette_menutoggleon_hi
         XBA
-        STA !sram_custompalette_menutoggleoutline
+        STA !sram_custompalette_menutoggleon
         RTS
 
 custompalettes_menubackground_hi:
@@ -400,7 +403,7 @@ action_copy_palette:
     LDA ($16),Y : STA !sram_custompalette_menubackground : INY #2
     LDA ($16),Y : STA !sram_custompalette_menunumoutline : INY #2
     LDA ($16),Y : STA !sram_custompalette_menunumfill : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menutoggleoutline : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menutoggleon : INY #2
     LDA ($16),Y : STA !sram_custompalette_menuseltext : INY #2
     LDA ($16),Y : STA !sram_custompalette_menuseltextbg : INY #2
     LDA ($16),Y : STA !sram_custompalette_menunumseloutline : INY #2
@@ -443,23 +446,23 @@ action_copy_palette:
 LockoutConfirm:
     dw #ifb_lockout_abort
     dw #ifb_lockout_piracy
-    dw #ab_notext
-    dw #ab_notext
-    dw #ab_notext
-    dw #ab_notext
-    dw #ab_notext
-    dw #ab_notext
-    dw #ab_notext
-    dw #ab_notext
-    dw #ab_notext
-    dw #ab_notext
-    dw #ab_notext
-    dw #ab_notext
-    dw #ab_notext
-    dw #ab_notext
-    dw #ab_notext
-    dw #ab_notext
-    dw #ab_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
     dw #ab_text_lockout
     dw #$0000
     %cm_header("THIS IS A FORCED RESET")
@@ -744,6 +747,10 @@ CustomMenuSFXMenu:
     dw #ifb_sfx_number
     dw #ifb_sfx_confirm
     dw #ifb_sfx_goback
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_soundtest_lib1_sound
+    dw #ifb_soundtest_lib1_playsound
     dw #$0000
     %cm_header("CHOOSE SFX FROM LIB 1")
 
