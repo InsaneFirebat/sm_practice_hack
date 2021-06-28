@@ -46,6 +46,10 @@
 !ram_infinite_ammo = $7FFBE4
 !ram_infiniteammo_check = $7FFBE6
 !ram_countdamage_hud = $7FFBE8
+!ram_dboost_state = $7FFBEA
+!ram_dboost_kbmax = $7FFBEC
+!ram_dboost_kb = $7FFBEE
+!ram_dboost_counter = $7FFBF0
 
 if !FEATURE_EXTRAS
     !ram_noclip = $7FFBFC

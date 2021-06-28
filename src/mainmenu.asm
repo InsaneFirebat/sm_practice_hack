@@ -1074,6 +1074,7 @@ DisplayModeMenu:
 DisplayModeMenu2:
     dw ihmode_ridleygrab
     dw ihmode_ramwatch
+    dw ihmode_dboost
     dw ihmode_GOTO_PAGE_ONE
     dw #$0000
     %cm_header("INFOHUD DISPLAY MODE")
@@ -1141,6 +1142,9 @@ ihmode_ridleygrab:
 ihmode_ramwatch:
     %cm_jsr("Custom RAM Watch", #action_select_infohud_mode, #$0014)
 
+ihmode_dboost:
+    %cm_jsr("WIP - Damage Boost Trainer", #action_select_infohud_mode, #$0015)
+
 ihmode_GOTO_PAGE_ONE:
     %cm_submenu("GOTO PAGE ONE", #DisplayModeMenu)
 
@@ -1182,6 +1186,7 @@ ih_display_mode:
     db #$28, "DMG COUNTER", #$FF
     db #$28, "RIDLEY GRAB", #$FF
     db #$28, "  RAM WATCH", #$FF
+    db #$28, " WIP DBOOST", #$FF
     db #$FF
 
 ih_goto_room_strat:
