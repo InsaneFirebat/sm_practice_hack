@@ -111,5 +111,119 @@ stop_all_sounds:
     RTL
 }
 
-print pc, " misc end"
+pushpc
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;; Custom Build Hijacks ;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+org $90F640
+HealthAlarm:
+{
+    LDA !sram_healthalarm : BEQ .disabled
+    LDX $0A6A : BNE .return
+    LDA #$0002 : JSL $80914D
+    LDA #$0001 : STA $0A6A
+    RTS
+    
+  .disabled
+    LDA $0A6A : BEQ .return
+    STZ $0A6A
+    LDA #$0001 : JSL $80914D
+    
+  .return
+    RTS
+}
+
+HealthAlarm2:
+{
+    LDA !sram_healthalarm : BEQ .skip
+    LDA #$0002 ; overwritten code
+    JMP $F33C
+
+  .skip
+    JMP $F340
+}
+
+org $91FFF0
+HealthAlarm3:
+{
+    LDA !sram_healthalarm : BEQ .skip
+    LDA #$0002 ; overwritten code
+    JMP $E6DA
+
+  .skip
+    JMP $E6DE
+}
+warnpc $91FFFF
+
+org $A6FEBC      ; free space
+ResetCountDamageRid:
+{
+    PHA
+    LDA #$0000
+    STA !ram_countdamage : STA !sram_countdamage
+    PLA
+    RTS
+}
+
+org $A7FCC0         ; free space
+ResetCountDamagePhan:
+{
+    PHA
+    LDA #$0000
+    STA $0F90,X     ;we overwrote this instruction to get here
+    STA !ram_countdamage : STA !sram_countdamage
+    PLA
+    RTS
+}
+
+org $A0F9E0         ; count damage in free space at end of bank
+CountDamage:
+{
+    CLC : LDA !ram_countdamage : ADC $187A
+    STA !sram_countdamage : STA !ram_countdamage
+    LDA $0F8C,X : SEC : SBC $187A : RTS
+}
+
+
+;;;;;;;;; Custom Build Hijacks ;;;;;;;;;
+
+if !FEATURE_EXTRAS
+
+org $94DC00
+NoClip:
+{
+    LDA !ram_noclip : BEQ .originalcode
+    RTS
+  .originalcode
+    STZ $14 : LDA $20
+    JMP $8F4D
+}
+
+org $A6FFE0
+SteamCollision:
+{
+    LDA !ram_steamcollision : BEQ .originalcode
+    PLA : LDA $0F86,x : JMP $F13B
+  .originalcode
+    LDA $0F86,x : RTS
+}
+
+pullpc
+CustomizePalettes:
+{
+    PHP : %a16()
+    LDA $7E0998 : CMP #$0006 : BMI .done : CMP #$001A : BEQ .done
+    LDA !sram_custompalette_hudoutline : STA $7EC01A
+    LDA !sram_custompalette_hudfill : STA $7EC01C
+  .done
+    PLP
+    RTL
+}
+pushpc
+
+endif
+
+pullpc
+print pc, " misc end"
