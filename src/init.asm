@@ -79,6 +79,7 @@ init_sram:
     LDA #$0000 : STA !sram_countdamage
     LDA #$0000 : STA !sram_menu_background
     LDA #$0000 : STA !sram_sprite_prio_flag
+    LDA #$0001 : STA !sram_healthalarm
 
     if !FEATURE_EXTRAS
         LDA #$0000 : STA !sram_custompalette

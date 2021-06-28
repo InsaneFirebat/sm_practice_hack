@@ -103,8 +103,11 @@ stop_all_sounds:
     JSL $82BE17
     PLA : STA $05F5
 
+    LDA !sram_healthalarm : BEQ .RTL
     ; Makes the game check Samus' health again, to see if we need annoying sound
     LDA #$0000 : STA $0A6A
+
+  .RTL
     RTL
 }
 

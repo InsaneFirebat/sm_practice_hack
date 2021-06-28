@@ -114,7 +114,56 @@ org $A0BB46      ; update timers when Draygon drops spawn
 org $AAE582
     JSL ih_chozo_segment
 
-org $A6A17C      ; Ridley AI init, overwrites a junk LDA
+org $90EA98      ; hijack low health alarm
+    JMP HealthAlarm
+
+org $90F339      ; hijack low health alarm, unknown (maybe when too many sounds queued?)
+    JMP HealthAlarm2
+
+org $91E6D7      ; hijack low health alarm, unpause
+    JMP HealthAlarm3
+
+org $90F640
+HealthAlarm:
+{
+    LDA !sram_healthalarm : BEQ .disabled
+    LDX $0A6A : BNE .return
+    LDA #$0002 : JSL $80914D
+    LDA #$0001 : STA $0A6A
+    RTS
+    
+  .disabled
+    LDA $0A6A : BEQ .return
+    STZ $0A6A
+    LDA #$0001 : JSL $80914D
+    
+  .return
+    RTS
+}
+
+HealthAlarm2:
+{
+    LDA !sram_healthalarm : BEQ .skip
+    LDA #$0002 ; overwritten code
+    JMP $F33C
+
+  .skip
+    JMP $F340
+}
+
+org $91FFF0
+HealthAlarm3:
+{
+    LDA !sram_healthalarm : BEQ .skip
+    LDA #$0002 ; overwritten code
+    JMP $E6DA
+
+  .skip
+    JMP $E6DE
+}
+warnpc $91FFFF
+
+org $A6A17C      ; Ridley AI init, reset !ram_countdamage
     JSR ResetCountDamageRid
 
 org $A6FEBC      ; free space

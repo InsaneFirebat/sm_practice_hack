@@ -17,6 +17,7 @@ IFBMenu:
         dw #ifb_noclip
         dw #ifb_nosteam
     endif
+    dw #ifb_healthalarm
     dw #ifb_debugteleport
     dw #ifb_lockout
     dw #ifb_fixcontrols
@@ -83,6 +84,12 @@ if !FEATURE_EXTRAS
     ifb_nosteam:
         %cm_toggle("No Steam Collision", !ram_steamcollision, #$0001, #0)
 endif
+
+ifb_healthalarm:
+    %cm_toggle("Low Health Alarm", !sram_healthalarm, #$0001, .routine)
+    .routine
+        LDA $0A6A : STA $0A6A
+        RTS
 
 ifb_lockout:
     %cm_submenu("Trigger Piracy Warning", #LockoutConfirm)

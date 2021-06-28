@@ -190,7 +190,8 @@ endif
 !sram_menu_background = $702082
 !sram_dummy_on = $702084
 !sram_dummy_off = $702086
-!sram_dummy_num = $702188
+!sram_dummy_num = $702088
+!sram_healthalarm = $70208A
 
 !sram_custompalette = $7020A0
 !sram_custompalette_hudoutline = $7020A2
