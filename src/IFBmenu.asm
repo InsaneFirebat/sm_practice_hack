@@ -752,7 +752,6 @@ CustomMenuSFXMenu:
     dw #ifb_sfx_confirm
     dw #ifb_sfx_goback
     dw #ifb_notext
-    dw #ifb_notext
     dw #ifb_soundtest_lib1_sound
     dw #ifb_soundtest_lib1_playsound
     dw #$0000
@@ -788,7 +787,6 @@ SoundTestMenu:
     dw #ifb_soundtest_silence
     dw #ifb_soundtest_goto_music
     dw #misc_music_toggle
-    dw #ifb_soundtest_roommusic_toggle
     dw #$0000
     %cm_header("AUDIO TEST MENU")
 
@@ -842,21 +840,6 @@ action_soundtest_silence:
 
 ifb_soundtest_goto_music:
     %cm_submenu("Music Selection", #MusicSelectMenu1)
-
-ifb_soundtest_roommusic_toggle:
-    %cm_toggle("Doors Ignore Music", !ram_soundtest_roommusic, #$0001, #0)
-
-SuppressRoomMusic:
-{
-    LDA !ram_soundtest_roommusic : BNE .done
-    LDA $07CB : BEQ .done ; overwritten code
-    JML $82E082 ; back on track
-
-  .done ; skip music load
-    PLB
-    PLP
-    RTL
-}
 
 MusicSelectMenu1:
     dw #ifb_soundtest_music_title1

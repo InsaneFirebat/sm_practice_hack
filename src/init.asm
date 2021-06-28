@@ -105,9 +105,9 @@ init_sram:
     LDA #$7FFF : STA !sram_custompalette_menunumfill
     LDA #$007F : STA !sram_custompalette_menunumfill_hi
     LDA #$00FF : STA !sram_custompalette_menunumfill_lo
-    LDA #$4376 : STA !sram_custompalette_menutoggleoutline
-    LDA #$0043 : STA !sram_custompalette_menutoggleoutline_hi
-    LDA #$0076 : STA !sram_custompalette_menutoggleoutline_lo
+    LDA #$4376 : STA !sram_custompalette_menutoggleon
+    LDA #$0043 : STA !sram_custompalette_menutoggleon_hi
+    LDA #$0076 : STA !sram_custompalette_menutoggleon_lo
     LDA #$761F : STA !sram_custompalette_menuseltext
     LDA #$0076 : STA !sram_custompalette_menuseltext_hi
     LDA #$001F : STA !sram_custompalette_menuseltext_lo

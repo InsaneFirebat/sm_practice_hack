@@ -50,9 +50,6 @@ org $9493B8      ;hijack, runs when Samus hits a door BTS
 org $82E764      ;hijack, runs when Samus is coming out of a room transition
     JSL ih_after_room_transition : RTS
 
-org $90F1E4      ;hijack, runs when an elevator is activated
-    JSL ih_elevator_activation
-
 org $90A7F7      ;skip drawing minimap grid when entering boss rooms
     BRA FinishDrawMinimap
 
@@ -74,6 +71,9 @@ org $91DAD8      ;hijack, runs after a shinespark has been charged
 
 org $8095fc      ;hijack, end of NMI routine to update realtime frames
     JML ih_nmi_end
+
+org $90F1E4      ;hijack, runs when an elevator is activated
+    JSL ih_elevator_activation
 
 org $A98874      ; update timers after MB1 fight
     JSL ih_mb1_segment
@@ -123,83 +123,14 @@ org $90F339      ; hijack low health alarm, unknown (maybe when too many sounds 
 org $91E6D7      ; hijack low health alarm, unpause
     JMP HealthAlarm3
 
-org $90F640
-HealthAlarm:
-{
-    LDA !sram_healthalarm : BEQ .disabled
-    LDX $0A6A : BNE .return
-    LDA #$0002 : JSL $80914D
-    LDA #$0001 : STA $0A6A
-    RTS
-    
-  .disabled
-    LDA $0A6A : BEQ .return
-    STZ $0A6A
-    LDA #$0001 : JSL $80914D
-    
-  .return
-    RTS
-}
-
-HealthAlarm2:
-{
-    LDA !sram_healthalarm : BEQ .skip
-    LDA #$0002 ; overwritten code
-    JMP $F33C
-
-  .skip
-    JMP $F340
-}
-
-org $91FFF0
-HealthAlarm3:
-{
-    LDA !sram_healthalarm : BEQ .skip
-    LDA #$0002 ; overwritten code
-    JMP $E6DA
-
-  .skip
-    JMP $E6DE
-}
-warnpc $91FFFF
-
 org $A6A17C      ; Ridley AI init, reset !ram_countdamage
     JSR ResetCountDamageRid
 
-org $A6FEBC         ; free space
-ResetCountDamageRid:
-{
-    PHA
-    LDA #$0000
-    STA !ram_countdamage : STA !sram_countdamage
-    PLA
-    RTS
-}
-
-org $A7CE64         ;Phantoon AI init
+org $A7CE64      ;Phantoon AI init
     JSR ResetCountDamagePhan
 
-org $A7FCC0         ; free space
-ResetCountDamagePhan:
-{
-    PHA
-    LDA #$0000
-    STA $0F90,X     ;we overwrote this instruction to get here
-    STA !ram_countdamage : STA !sram_countdamage
-    PLA
-    RTS
-}
-
-org $A0A866         ; hijack damage routine to count total damage dealt
+org $A0A866      ; hijack damage routine to count total damage dealt
     JSR CountDamage
-
-org $A0F9E0         ; count damage in free space at end of bank
-CountDamage:
-{
-    CLC : LDA !ram_countdamage : ADC $187A
-    STA !sram_countdamage : STA !ram_countdamage
-    LDA $0F8C,X : SEC : SBC $187A : RTS
-}
 
 if !FEATURE_EXTRAS
     org $948F49        ; RTS this routine to enable walk through walls
@@ -217,10 +148,6 @@ if !FEATURE_EXTRAS
 +       RTL
     warnpc $828AE3
 endif
-
-org $82E07D       ; hijack load room music
-    JML SuppressRoomMusic
-    NOP
 
 org $9AB200         ; graphics for HUD
 incbin ../resources/hudgfx.bin
@@ -470,19 +397,6 @@ ih_chozo_segment:
     JSL ih_update_hud_early
     RTL
 }
-
-if !FEATURE_EXTRAS
-    CustomizePalettes:
-    {
-        PHP : %a16()
-        LDA $7E0998 : CMP #$0006 : BMI .done : CMP #$001A : BEQ .done
-        LDA !sram_custompalette_hudoutline : STA $7EC01A
-        LDA !sram_custompalette_hudfill : STA $7EC01C
-      .done
-        PLP
-        RTL
-    }
-endif
 
 ih_update_hud_code:
 {
@@ -1244,27 +1158,6 @@ ih_shinespark_code:
 }
 
 print pc, " infohud end"
-
-if !FEATURE_EXTRAS
-    org $94DC00
-    NoClip:
-    {
-        LDA !ram_noclip : BEQ .originalcode
-        RTS
-      .originalcode
-        STZ $14 : LDA $20
-        JMP $8F4D
-    }
-
-    org $A6FFE0
-    SteamCollision:
-    {
-        LDA !ram_steamcollision : BEQ .originalcode
-        PLA : LDA $0F86,x : JMP $F13B
-      .originalcode
-        LDA $0F86,x : RTS
-    }
-endif
 
 
 ; Stuff that needs to be placed in bank 80

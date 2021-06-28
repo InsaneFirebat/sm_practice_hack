@@ -160,7 +160,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.2.3.2")
+    %cm_header("CUSTOM INFOHUD V2.2.3.3")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
