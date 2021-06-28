@@ -85,10 +85,7 @@ if !FEATURE_EXTRAS
 endif
 
 ifb_healthalarm:
-    %cm_toggle("Low Health Alarm", !sram_healthalarm, #$0001, .routine)
-    .routine
-        LDA $0A6A : STA $0A6A
-        RTS
+    %cm_toggle("Low Health Alarm", !sram_healthalarm, #$0001, #0)
 
 ifb_lockout:
     %cm_submenu("Trigger Piracy Warning", #LockoutConfirm)
