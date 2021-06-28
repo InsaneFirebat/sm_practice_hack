@@ -449,3 +449,48 @@ status_kraidradar:
   .done
     RTS
 }
+
+;    $0A1E: Samus pose X direction. 8 = right, 4 = left. Note that unused poses 21h and 22h set $0A1E to 1 and 2 respectively
+;    $0A1F: Samus movement type
+;        Ah:  Knockback / crystal flash ending
+;        19h: Damage boost
+
+;    $0A52: Knockback direction
+;    {
+;        1: Up left
+;        2: Up right
+;        4: Down left
+;        5: Down right
+
+;    $0A54: Knockback X direction. 0 = left, 1 = right
+
+;    $18AA: Samus knockback timer
+;    $8B:   Controller 1 input
+
+
+;status_dboost
+;{
+
+
+;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
