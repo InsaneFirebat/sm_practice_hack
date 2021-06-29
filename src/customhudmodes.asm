@@ -4,6 +4,7 @@
 
 ; When adding or removing infohud modes,
 ; also update infohud.asm: inc_statusdisplay and dec_statusdisplay
+; lookup tables must also be updated in infohudmodes.asm
 
 status_countdamage:
 {
@@ -21,6 +22,90 @@ status_ridleygrab:
 
   .done
     RTS
+}
+
+status_dboost:
+{
+print pc, " <--                                dboost"
+    LDA $0A1F : AND #$00FF
+    CMP #$000A : BEQ .knockback
+;    CMP #$0019 : BEQ .dboost
+    LDA !ram_dboost_state : BEQ .done
+    DEC : BEQ .reset     ; 1 = needs reset
+    DEC : BEQ .kbExpired ; 2 = knockback expired
+  ;.damaged              ; 3 = damage detected
+    LDA $18AA : BEQ .kbExpired : BRA .knockback
+    
+  .kbExpired
+    LDA #$0002 : STA !ram_dboost_state
+    LDA !ram_dboost_counter : CMP #$0014 : BPL .giveUp ; give up 20 frames after kb expires
+    INC : STA !ram_dboost_counter
+    LDA $8B : AND #$0300
+    CMP #$0200 : BEQ .failedHoldingLeft
+    CMP #$0100 : BEQ .failedHoldingRight
+  .done
+    RTS
+
+  .failedHoldingLeft
+    LDA #$0000 : CMP $0A54 : BEQ .failedCheckJumpInput
+    RTS
+
+  .failedHoldingRight
+    LDA #$0001 : CMP $0A54 : BEQ .failedCheckJumpInput
+    RTS
+
+  .failedCheckJumpInput
+    LDA $8B : AND !IH_INPUT_JUMP : BEQ .printfailed
+    RTS
+
+  .printfailed
+    LDX #$008C : LDA !ram_dboost_counter : JSR Draw2
+    LDA !IH_LETTER_L : STA $7EC68A
+
+  .giveUp
+    LDA #$0001 : STA !ram_dboost_state
+    RTS
+
+  .reset
+    LDA #$0000
+    STA !ram_dboost_state
+    STA !ram_dboost_kbmax
+    STA !ram_dboost_kb
+    STA !ram_dboost_counter
+    
+  .knockback
+    LDA $18AA : CMP !ram_dboost_kbmax : BMI .knockbackContinues
+    STA !ram_dboost_kbmax
+    
+  .knockbackContinues
+    LDA #$0003 : STA !ram_dboost_state : BRA .direction
+    
+  .direction
+    LDA $8B : AND #$0300
+    CMP #$0200 : BEQ .holdingLeft
+    CMP #$0100 : BEQ .holdingRight
+    ; no directional input code here
+    
+  .holdingLeft
+    LDA #$0000 : CMP $0A54 : BEQ .checkJumpInput
+    ; directional input does not match knockback direction
+    
+  .holdingRight
+    LDA #$0001 : CMP $0A54 : BEQ .checkJumpInput
+    ; directional input does not match knockback direction
+    
+  .checkJumpInput
+    LDA $8B : AND !IH_INPUT_JUMP : BEQ .dboostInitiated
+    ; not holding jump
+    
+  .dboostInitiated
+    LDA #$0001 : STA !ram_dboost_state
+    LDA $18AA : STA !ram_dboost_kb
+    SEC : LDA !ram_dboost_kbmax : SBC !ram_dboost_kb
+    LDX #$008C : JSR Draw2 : LDA !IH_LETTER_Y : STA $7EC68A
+
+    RTS
+
 }
 
 ; ===========
@@ -449,48 +534,3 @@ status_kraidradar:
   .done
     RTS
 }
-
-;    $0A1E: Samus pose X direction. 8 = right, 4 = left. Note that unused poses 21h and 22h set $0A1E to 1 and 2 respectively
-;    $0A1F: Samus movement type
-;        Ah:  Knockback / crystal flash ending
-;        19h: Damage boost
-
-;    $0A52: Knockback direction
-;    {
-;        1: Up left
-;        2: Up right
-;        4: Down left
-;        5: Down right
-
-;    $0A54: Knockback X direction. 0 = left, 1 = right
-
-;    $18AA: Samus knockback timer
-;    $8B:   Controller 1 input
-
-
-;status_dboost
-;{
-
-
-;}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
