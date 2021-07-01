@@ -32,8 +32,10 @@
 !ram_magic_pants_pal3 = $7FFB74
 !ram_charge_counter = $7FFB1C
 !ram_xfac_counter = $7FFB1E
-!ram_lag_counter = $7FFB96
-!ram_last_lag_counter = $7FFB98
+!ram_map_counter = $7FFB8A
+!ram_last_map_counter = $7FFB8C
+!ram_vcounter_data = $7FFB8E
+!ram_minimap = $7FFB98
 !ram_shot_timer = $7FFB9E
 
 !ram_ammo_missiles = $05C9 ; debug mode would use these for roughly the same purpose
@@ -56,6 +58,7 @@ if !FEATURE_EXTRAS
     !ram_steamcollision = $7FFBFE
 endif
 
+!ram_kraid_rng = $7FFBA6 ; $7FFB78 on master, moved cause it's very tight here
 !ram_phantoon_rng_1 = $7FFB76
 !ram_phantoon_rng_2 = $7FFB78
 !ram_phantoon_rng_3 = $7FFB7A
@@ -134,12 +137,7 @@ endif
 
 !ram_seg_rt_frames = $7FFBA0
 !ram_seg_rt_seconds = $7FFBA2
-!ram_seg_rt_minutes = $7FFBA4
-
-!ram_hex2dec_first_digit = $14
-!ram_hex2dec_second_digit = $16
-!ram_hex2dec_third_digit = $18
-!ram_hex2dec_rest = $1A
+!ram_seg_rt_minutes = $7FFBA4 ; A6 taken
 
 !ram_cm_ctrl_mode = $7FFBC0
 !ram_cm_ctrl_timer = $7FFBC2
@@ -271,7 +269,13 @@ endif
 !ram_cm_etanks = $7FFB90
 !ram_cm_reserve = $7FFB92
 !ram_cm_leave = $7FFB94
+!ram_cm_input_counter = $7FFB96
 !ram_cm_last_nmi_counter = $7FFB9C
+
+!ram_hex2dec_first_digit = $14
+!ram_hex2dec_second_digit = $16
+!ram_hex2dec_third_digit = $18
+!ram_hex2dec_rest = $1A
 
 !ram_ctrl1 = $8B
 !ram_ctrl1_filtered = $8F
@@ -328,13 +332,16 @@ endif
 
 !IH_BLANK = #$2C0F
 !IH_DECIMAL = #$0CCB
-!IH_HYPHEN = #$0C6F
-!IH_LETTER_A = #$0C7A
-!IH_LETTER_B = #$0C7B
-!IH_LETTER_E = #$0C7E
+!IH_HYPHEN = #$0C55
+!IH_LETTER_A = #$0C64
+!IH_LETTER_B = #$0C65
+!IH_LETTER_C = #$0C58
+!IH_LETTER_D = #$0C59
+!IH_LETTER_E = #$0C5A
+!IH_LETTER_F = #$0C5B
 !IH_LETTER_H = #$0C6C
 !IH_LETTER_L = #$0C68
-!IH_LETTER_N = #$0C6D
+!IH_LETTER_N = #$0C56
 !IH_LETTER_R = #$0C69
 !IH_LETTER_X = #$0C66
 !IH_LETTER_Y = #$0C67
@@ -370,3 +377,4 @@ endif
 !MUSIC_BANK = $07F3
 !MUSIC_TRACK = $07F5
 !MUSIC_ROUTINE = $808FC1
+

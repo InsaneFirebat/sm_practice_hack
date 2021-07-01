@@ -1,6 +1,8 @@
 ; $82:8963 AD 98 09    LDA $0998  [$7E:0998]
 ; $82:8966 29 FF 00    AND #$00FF
 org $828963
+    ; gamemode_shortcuts will either CLC or SEC
+    ; to control if normal gameplay will happen on this frame
     JSL gamemode_start : BCS end_of_normal_gameplay
 
 org $82896E
@@ -35,6 +37,7 @@ gamemode_shortcuts:
 {
     LDA !ram_ctrl1_filtered : BNE +
 
+    ; No shortcuts configured, CLC so we won't skip normal gameplay
     CLC : RTS
 
   + LDA !ram_ctrl1 : CMP !sram_ctrl_save_state : BNE +
@@ -81,6 +84,7 @@ gamemode_shortcuts:
     AND !ram_ctrl1_filtered : BEQ +
     JMP .menu
 
+    ; No shortcuts matched, CLC so we won't skip normal gameplay
   + CLC : RTS
 
   .save_state
@@ -89,12 +93,14 @@ gamemode_shortcuts:
     if !FEATURE_SD2SNES
         JSL save_state
     endif
+    ; SEC to skip normal gameplay for one frame after saving state
     SEC : RTS
 
   .load_state
     if !FEATURE_SD2SNES
         JSL load_state
     endif
+    ; SEC to skip normal gameplay for one frame after loading state
     SEC : RTS
 
   .kill_enemies
@@ -104,10 +110,12 @@ gamemode_shortcuts:
     LDA $0F86,X : ORA #$0200 : STA $0F86,X
     TXA : CLC : ADC #$0040 : CMP #$0400 : BNE -
     %sfxgrapple()
+    ; CLC to continue normal gameplay after killing enemies
     CLC : RTS
 
   .load_last_preset
     LDA !sram_last_preset : STA !ram_load_preset
+    ; SEC to skip normal gameplay for one frame after loading preset
     SEC : RTS
 
   .reset_segment_timer
@@ -116,6 +124,7 @@ gamemode_shortcuts:
     STA !ram_seg_rt_seconds
     STA !ram_seg_rt_minutes
     %sfxquake()
+    ; CLC to continue normal gameplay after resetting segment timer
     CLC : RTS
 
   .full_equipment
@@ -126,6 +135,7 @@ gamemode_shortcuts:
 +   LDA $7E09D4 : STA $7E09D6 ; reserves
     STZ $0CD2  ; reset bomb counter
     %sfxenergy() ; play sound effect
+    ; CLC to continue normal gameplay after equipment refill
     CLC : RTS
 
   .reveal_damage
@@ -141,6 +151,7 @@ gamemode_shortcuts:
 
   .random_preset
     JSL LoadRandomPreset
+    ; SEC to skip normal gameplay for one frame after loading preset
     SEC : RTS
 
   .randomize_rng
@@ -151,7 +162,6 @@ gamemode_shortcuts:
     JSL $808111
     %sfxbeep()
     CLC : RTS
-    
 
   .menu
     ; Set IRQ vector
@@ -164,8 +174,9 @@ gamemode_shortcuts:
     ; Restore IRQ vector
     PLA : STA $AB
 
+    ; SEC to skip normal gameplay for one frame after handling the menu
     SEC : RTS
 }
 
 print pc, " gamemode end"
-warnpc $85FF00
+warnpc $85FE00
