@@ -288,6 +288,7 @@ endif
 !ACTION_CTRL_SHORTCUT   = #$000A
 !ACTION_NUMFIELD_HEX    = #$000C
 !ACTION_NUMFIELD_WORD   = #$000E
+!ACTION_TOGGLE_INVERTED = #$0010
 !ACTION_JSR_NOSOUND     = #$0004
 
 ; using macros instead of these in custom builds
