@@ -3,7 +3,7 @@
 ;=======================================================
 
 org $809490
-    jmp $9497    ; skip resetting player 2 inputs
+    JMP $9497    ; skip resetting player 2 inputs
 
 org $8094DF
     PLP          ; patch out resetting of controller 2 buttons and enable debug mode
@@ -139,7 +139,8 @@ else
 org $AAE582      ; update timers when statue grabs Samus
 endif
     JSL ih_chozo_segment
-if FEATURE_PAL
+
+if !FEATURE_PAL
 ; fix this from other PAL branch
 ;org $90D340
 else

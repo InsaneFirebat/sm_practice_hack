@@ -5,7 +5,7 @@
 IFBMenu:
     dw #ifb_menubackground
     if !FEATURE_EXTRAS
-        dw #ifb_custompalettes_hud
+;        dw #ifb_custompalettes_hud
     endif
     dw #ifb_custompalettes_menu
     dw #ifb_paletteprofile

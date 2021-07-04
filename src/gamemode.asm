@@ -161,6 +161,7 @@ gamemode_shortcuts:
     ORA $12 : STA $7E05E5
     JSL $808111
     %sfxbeep()
+    ; CLC to continue normal gameplay after reseeding RNG
     CLC : RTS
 
   .menu

@@ -144,7 +144,7 @@ pushpc
 ;;;;;;;;; Custom Build Hijacks ;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-org $90F640
+org $90FA00 ; careful of minimap.asm using freespace above
 HealthAlarm:
 {
     LDA !sram_healthalarm : BEQ .disabled
