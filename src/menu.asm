@@ -1380,7 +1380,7 @@ cm_execute_action_table:
         JSR ($0020,X)
 
       .end
-        LDA #!SOUND_MENU_MOVE : JSL $80903F
+        %sfxnumber()
         RTS
     }
 
