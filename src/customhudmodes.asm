@@ -8,7 +8,7 @@
 
 status_countdamage:
 {
-    LDA !ram_countdamage : CMP !ram_countdamage_hud : BEQ .done : STA !ram_countdamage_hud
+    LDA !ram_countdamage : CMP !ram_HUD_bottom : BEQ .done : STA !ram_HUD_bottom
     LDX #$0088 : JSR Draw4
 
   .done
@@ -17,7 +17,7 @@ status_countdamage:
 
 status_ridleygrab:
 {
-    LDA $7E800A : CMP !ram_ridleygrab : BEQ .done : STA !ram_ridleygrab
+    LDA $7E800A : CMP !ram_HUD_bottom : BEQ .done : STA !ram_HUD_bottom
     LDX #$008A : JSR Draw3
 
   .done
@@ -112,6 +112,161 @@ print pc, " <--                                dboost"
 ; ROOM STRATS
 ; ===========
 
+status_superhud:
+{
+    ; start with some code to detect various rooms and
+    ; set !sram_superhud_bottom to enable the appropriate HUD mode
+    LDA $079B : CMP #$B2DA : BEQ .roomGGG
+    LDA $079B : CMP #$B6C1 : BEQ .roomAfterGGG
+    BRA .HUD
+
+  .roomGGG
+    LDA #$0010 : STA !sram_superhud_bottom : BRA .HUD
+
+  .roomAfterGGG
+    LDA #$0000 : STA !sram_superhud_bottom; : BRA .HUD
+
+  .HUD
+    LDA !sram_superhud_top : ASL : TAX
+    JSR (superhud_top_table,X)
+
+    LDA !sram_superhud_middle : ASL : TAX
+    JSR (superhud_middle_table,X)
+
+    LDA !sram_superhud_bottom : ASL : TAX
+    JMP (superhud_bottom_table,X)
+
+superhud_bottom_table:
+    dw status_enemyhp
+    dw status_chargetimer
+    dw status_xfactor
+    dw status_cooldowncounter
+    dw status_shinetimer
+    dw status_iframecounter
+    dw status_spikesuit
+    dw status_xpos
+    dw status_ypos
+    dw status_hspeed
+    dw status_quickdrop
+    dw status_walljump
+    dw status_shottimer
+    dw status_countdamage
+    dw status_ramwatch
+    dw status_moatcwj
+    dw status_gateglitch
+    dw status_tacotank
+    dw status_robotflush
+    dw status_elevatorcf
+    dw status_botwooncf
+
+superhud_top_table:
+    dw topHUD_xfactor
+    dw topHUD_shinetimer
+    dw topHUD_iframecounter
+    dw topHUD_lagcounter
+    dw topHUD_shottimer
+
+superhud_middle_table:
+    dw middleHUD_chargetimer
+    dw middleHUD_dashcounter
+    dw middleHUD_cooldowncounter
+    dw middleHUD_ridleygrab
+
+middleHUD_chargetimer:
+{
+    LDA #$003D : SEC : SBC $0CD0 : CMP !ram_HUD_middle : BEQ .done : STA !ram_HUD_middle
+    CMP #$0000 : BPL .charging : LDA #$0000
+
+  .charging
+    LDX #$0054 : JSR Draw3
+
+  .done
+    RTS
+}
+
+topHUD_xfactor:
+{
+    LDA #$0079 : SEC : SBC $0CD0 : CMP !ram_HUD_top : BEQ .done : STA !ram_HUD_top
+    LDX #$0014 : JSR Draw3
+
+  .done
+    RTS
+}
+
+middleHUD_cooldowncounter:
+{
+    LDA $0CCC : CMP !ram_HUD_middle : BEQ .done : STA !ram_HUD_middle
+    LDX #$0054 : JSR Draw3
+
+  .done
+    RTS
+}
+
+topHUD_shinetimer:
+{
+    LDA !ram_armed_shine_duration : CMP !ram_HUD_top : BEQ .done
+    STA !ram_HUD_top : BNE .charge : LDA #$00B4
+
+  .charge
+    LDX #$0014 : JSR Draw3
+
+  .done
+    RTS
+}
+
+middleHUD_dashcounter:
+{
+    LDA $0B3F : AND #$00FF : CMP !ram_dash_counter : BEQ .done
+    STA !ram_dash_counter : ASL : TAX
+    LDA HexGFXTable,X : STA $7EC658
+
+  .done
+    RTS
+}
+
+middleHUD_ridleygrab:
+{
+    LDA $7E800A : CMP !ram_HUD_middle : BEQ .done : STA !ram_HUD_middle
+    LDX #$0056 : JSR Draw2
+
+  .done
+    RTS
+}
+
+topHUD_iframecounter:
+{
+    LDA $18A8 : CMP !ram_HUD_top : BEQ .done : STA !ram_HUD_top
+    LDX #$0014 : JSR Draw3
+
+  .done
+    RTS
+}
+
+topHUD_lagcounter:
+{
+    LDA !ram_vcounter_data : AND #$00FF
+    %a8() : STA $211B : XBA : STA $211B : LDA #$64 : STA $211C : %a16()
+    LDA $2134 : STA $4204
+    %a8() : LDA #$E1 : STA $4206 : %a16()
+    PHA : PLA : PHA : PLA : LDA $4214
+    LDX #$0014 : JSR Draw2
+    LDA !IH_PERCENT : STA $7EC618
+
+    RTS
+}
+
+topHUD_shottimer:
+{
+    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_SHOOT : BEQ .inc
+    LDA !ram_shot_timer : LDX #$0014 : JSR Draw3
+    LDA #$0000 : STA !ram_shot_timer
+
+  .inc
+    LDA !ram_shot_timer : INC : STA !ram_shot_timer
+    RTS
+}
+
+}
 
 status_kihuntermanip:
 {

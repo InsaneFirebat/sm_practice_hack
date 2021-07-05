@@ -15,11 +15,11 @@
 !ram_slowdown_frames = $7FFB52
 !ram_shine_dash_held_late = $7FFB1A
 !ram_shine_counter = $7FFB30
-!ram_cooldown_counter = $7FFB32
+;!ram_cooldown_counter = $7FFB32
 !ram_xpos = $7FFB34
 !ram_ypos = $7FFB36
 !ram_dash_counter = $7FFB38
-!ram_iframe_counter = $7FFB3A
+;!ram_iframe_counter = $7FFB3A
 !ram_subpixel_pos = $7FFB3C
 !ram_mb_hp = $7FFB3E
 !ram_enemy_hp = $7FFB40
@@ -30,8 +30,8 @@
 !ram_magic_pants_pal1 = $7FFB70
 !ram_magic_pants_pal2 = $7FFB72
 !ram_magic_pants_pal3 = $7FFB74
-!ram_charge_counter = $7FFB1C
-!ram_xfac_counter = $7FFB1E
+;!ram_charge_counter = $7FFB1C
+;!ram_xfac_counter = $7FFB1E
 !ram_map_counter = $7FFB8A
 !ram_vcounter_data = $7FFB8C
 !ram_minimap = $7FFB98
@@ -43,10 +43,10 @@
 !ram_countdamage = $0B0C
 
 !ram_display_backup = $7FFBE0
-!ram_ridleygrab = $7FFBE2
+;!ram_ridleygrab = $7FFBE2
 !ram_infinite_ammo = $7FFBE4
 !ram_infiniteammo_check = $7FFBE6
-!ram_countdamage_hud = $7FFBE8
+;!ram_countdamage_hud = $7FFBE8
 !ram_dboost_state = $7FFBEA
 !ram_dboost_kbmax = $7FFBEC
 !ram_dboost_kb = $7FFBEE
