@@ -1119,11 +1119,8 @@ endif
   .update_status
     LDA #$0000
     STA !ram_armed_shine_duration
-    STA !ram_charge_counter
-    STA !ram_xfac_counter
     INC A
     STA !ram_dash_counter
-    STA !ram_iframe_counter
     STA !ram_xpos
     STA !ram_ypos
     STA !ram_horizontal_speed
@@ -1132,7 +1129,6 @@ endif
     STA !ram_mb_hp
     STA !ram_enemy_hp
     STA !ram_shine_counter
-    STA !ram_countdamage_hud
     JMP .done
 }
 
