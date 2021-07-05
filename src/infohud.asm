@@ -468,7 +468,7 @@ ih_update_hud_code:
         LDA HexToNumberGFX1, X : STA $7EC6B0
         LDA HexToNumberGFX2, X : STA $7EC6B2
 
-        BRA .map_lag
+        BRA .map_doorlag
     }
 
     ; Room time with minimap
@@ -503,9 +503,9 @@ ih_update_hud_code:
         LDA !IH_DECIMAL : STA $7EC642
     }
 
-  .map_lag
+  .map_doorlag
     ; Lag
-    LDA !ram_last_room_lag : LDX #$0054 : JSR Draw3
+    LDA !ram_last_door_lag_frames : LDX #$0054 : JSR Draw3
 
   .minimap_end
     BRL .end
