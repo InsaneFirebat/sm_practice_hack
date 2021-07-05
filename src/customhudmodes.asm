@@ -165,12 +165,33 @@ superhud_top_table:
     dw topHUD_iframecounter
     dw topHUD_lagcounter
     dw topHUD_shottimer
+    dw topHUD_chargetimer
+    dw topHUD_dashcounter
+    dw topHUD_cooldowncounter
+    dw topHUD_ridleygrab
 
 superhud_middle_table:
+    dw middleHUD_xfactor
+    dw middleHUD_shinetimer
+    dw middleHUD_iframecounter
+    dw middleHUD_lagcounter
+    dw middleHUD_shottimer
     dw middleHUD_chargetimer
     dw middleHUD_dashcounter
     dw middleHUD_cooldowncounter
     dw middleHUD_ridleygrab
+
+topHUD_chargetimer:
+{
+    LDA #$003D : SEC : SBC $0CD0 : CMP !ram_HUD_top : BEQ .done : STA !ram_HUD_top
+    CMP #$0000 : BPL .charging : LDA #$0000
+
+  .charging
+    LDX #$0014 : JSR Draw3
+
+  .done
+    RTS
+}
 
 middleHUD_chargetimer:
 {
@@ -187,6 +208,24 @@ middleHUD_chargetimer:
 topHUD_xfactor:
 {
     LDA #$0079 : SEC : SBC $0CD0 : CMP !ram_HUD_top : BEQ .done : STA !ram_HUD_top
+    LDX #$0014 : JSR Draw3
+
+  .done
+    RTS
+}
+
+middleHUD_xfactor:
+{
+    LDA #$0079 : SEC : SBC $0CD0 : CMP !ram_HUD_middle : BEQ .done : STA !ram_HUD_middle
+    LDX #$0054 : JSR Draw3
+
+  .done
+    RTS
+}
+
+topHUD_cooldowncounter:
+{
+    LDA $0CCC : CMP !ram_HUD_top : BEQ .done : STA !ram_HUD_top
     LDX #$0014 : JSR Draw3
 
   .done
@@ -214,11 +253,42 @@ topHUD_shinetimer:
     RTS
 }
 
+middleHUD_shinetimer:
+{
+    LDA !ram_armed_shine_duration : CMP !ram_HUD_middle : BEQ .done
+    STA !ram_HUD_middle : BNE .charge : LDA #$00B4
+
+  .charge
+    LDX #$0054 : JSR Draw3
+
+  .done
+    RTS
+}
+
+topHUD_dashcounter:
+{
+    LDA $0B3F : AND #$00FF : CMP !ram_dash_counter : BEQ .done
+    STA !ram_dash_counter : ASL : TAX
+    LDA HexGFXTable,X : STA $7EC618
+
+  .done
+    RTS
+}
+
 middleHUD_dashcounter:
 {
     LDA $0B3F : AND #$00FF : CMP !ram_dash_counter : BEQ .done
     STA !ram_dash_counter : ASL : TAX
     LDA HexGFXTable,X : STA $7EC658
+
+  .done
+    RTS
+}
+
+topHUD_ridleygrab:
+{
+    LDA $7E800A : CMP !ram_HUD_top : BEQ .done : STA !ram_HUD_top
+    LDX #$0016 : JSR Draw2
 
   .done
     RTS
@@ -242,6 +312,15 @@ topHUD_iframecounter:
     RTS
 }
 
+middleHUD_iframecounter:
+{
+    LDA $18A8 : CMP !ram_HUD_middle : BEQ .done : STA !ram_HUD_middle
+    LDX #$0054 : JSR Draw3
+
+  .done
+    RTS
+}
+
 topHUD_lagcounter:
 {
     LDA !ram_vcounter_data : AND #$00FF
@@ -255,10 +334,34 @@ topHUD_lagcounter:
     RTS
 }
 
+middleHUD_lagcounter:
+{
+    LDA !ram_vcounter_data : AND #$00FF
+    %a8() : STA $211B : XBA : STA $211B : LDA #$64 : STA $211C : %a16()
+    LDA $2134 : STA $4204
+    %a8() : LDA #$E1 : STA $4206 : %a16()
+    PHA : PLA : PHA : PLA : LDA $4214
+    LDX #$0054 : JSR Draw2
+    LDA !IH_PERCENT : STA $7EC658
+
+    RTS
+}
+
 topHUD_shottimer:
 {
     LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_SHOOT : BEQ .inc
     LDA !ram_shot_timer : LDX #$0014 : JSR Draw3
+    LDA #$0000 : STA !ram_shot_timer
+
+  .inc
+    LDA !ram_shot_timer : INC : STA !ram_shot_timer
+    RTS
+}
+
+middleHUD_shottimer:
+{
+    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_SHOOT : BEQ .inc
+    LDA !ram_shot_timer : LDX #$0054 : JSR Draw3
     LDA #$0000 : STA !ram_shot_timer
 
   .inc

@@ -85,6 +85,10 @@ init_sram:
     LDA #$0001 : STA !sram_menu_background
     LDA #$0000 : STA !sram_sprite_prio_flag
     LDA #$0001 : STA !sram_healthalarm
+    LDA #$0000 : STA !sram_superhud
+    LDA #$0000 : STA !sram_superhud_bottom
+    LDA #$0000 : STA !sram_superhud_middle
+    LDA #$0000 : STA !sram_superhud_top
 
     if !FEATURE_EXTRAS
         LDA #$0000 : STA !sram_custompalette

@@ -51,6 +51,9 @@
 !ram_dboost_kbmax = $7FFBEC
 !ram_dboost_kb = $7FFBEE
 !ram_dboost_counter = $7FFBF0
+!ram_HUD_top = $7FFBF2
+!ram_HUD_middle = $7FFBF4
+!ram_HUD_bottom = $7FFBF6
 
 if !FEATURE_EXTRAS
     !ram_noclip = $7FFBFC
@@ -192,6 +195,10 @@ endif
 !sram_dummy_off = $702066
 !sram_dummy_num = $702068
 !sram_healthalarm = $70206A
+!sram_superhud = $70206C
+!sram_superhud_bottom = $70206E
+!sram_superhud_middle = $702070
+!sram_superhud_top = $702072
 
 !sram_presetrando = $702090
 !sram_presetrando_morph = $702092

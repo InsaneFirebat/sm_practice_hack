@@ -1058,6 +1058,7 @@ InfoHudMenu:
     dw #ih_display_mode
     dw #ih_goto_room_strat
     dw #ih_room_strat
+    dw #ih_superhud
     dw #ih_room_counter
     dw #ih_lag
     dw #ih_ram_watch
@@ -1206,13 +1207,14 @@ ih_display_mode:
     db #$28, "DMG COUNTER", #$FF
     db #$28, "RIDLEY GRAB", #$FF
     db #$28, "  RAM WATCH", #$FF
-    db #$28, " WIP DBOOST", #$FF
+    db #$28, "WIP D-BOOST", #$FF
     db #$FF
 
 ih_goto_room_strat:
     %cm_submenu("Select Room Strat", #RoomStratMenu)
 
 RoomStratMenu:
+    dw ihstrat_superhud
     dw ihstrat_moatcwj
     dw ihstrat_gateglitch
     dw ihstrat_tacotank
@@ -1225,32 +1227,35 @@ RoomStratMenu:
     dw #$0000
     %cm_header("INFOHUD ROOM STRAT")
 
+ihstrat_superhud:
+    %cm_jsr("Super HUD", #action_select_room_strat, #$0000)
+
 ihstrat_moatcwj:
-    %cm_jsr("Moat CWJ", #action_select_room_strat, #$0000)
+    %cm_jsr("Moat CWJ", #action_select_room_strat, #$0001)
 
 ihstrat_gateglitch:
-    %cm_jsr("Gate Glitch", #action_select_room_strat, #$0001)
+    %cm_jsr("Gate Glitch", #action_select_room_strat, #$0002)
 
 ihstrat_tacotank:
-    %cm_jsr("Taco Tank", #action_select_room_strat, #$0002)
+    %cm_jsr("Taco Tank", #action_select_room_strat, #$0003)
 
 ihstrat_robotflush:
-    %cm_jsr("Robot Flush", #action_select_room_strat, #$0003)
+    %cm_jsr("Robot Flush", #action_select_room_strat, #$0004)
 
 ihstrat_shinetopb:
-    %cm_jsr("Shine to PB", #action_select_room_strat, #$0004)
+    %cm_jsr("Shine to PB", #action_select_room_strat, #$0005)
 
 ihstrat_elevatorcf:
-    %cm_jsr("Elevator Crystal Flash", #action_select_room_strat, #$0005)
+    %cm_jsr("Elevator Crystal Flash", #action_select_room_strat, #$0006)
 
 ihstrat_botwooncf:
-    %cm_jsr("Botwoon Crystal Flash", #action_select_room_strat, #$0006)
+    %cm_jsr("Botwoon Crystal Flash", #action_select_room_strat, #$0007)
 
 ihstrat_kihuntermanip:
-    %cm_jsr("Kihunter Manipulation", #action_select_room_strat, #$0007)
+    %cm_jsr("Kihunter Manipulation", #action_select_room_strat, #$0008)
 
 ihstrat_kraidradar:
-    %cm_jsr("Kraid Nail Radar", #action_select_room_strat, #$0008)
+    %cm_jsr("Kraid Nail Radar", #action_select_room_strat, #$0009)
 
 action_select_room_strat:
 {
@@ -1266,6 +1271,7 @@ ih_room_strat:
     dl #!sram_room_strat
     dw #$0000
     db #$28, "Current Strat", #$FF
+    db #$28, "  SUPER HUD", #$FF
     db #$28, "   MOAT CWJ", #$FF
     db #$28, "GATE GLITCH", #$FF
     db #$28, "  TACO TANK", #$FF
@@ -1276,6 +1282,297 @@ ih_room_strat:
     db #$28, "   KIHUNTER", #$FF
     db #$28, "KRAID RADAR", #$FF
     db #$FF
+
+ih_superhud:
+    %cm_submenu("Configure Super HUD", #SuperHUDMenu)
+
+SuperHUDMenu:
+    dw #ih_superhud_bottom_selector
+    dw #ih_superhud_bottom_submenu
+    dw #ih_superhud_middle_selector
+    dw #ih_superhud_middle_submenu
+    dw #ih_superhud_top_selector
+    dw #ih_superhud_top_submenu
+    dw #ih_superhud_enable
+    dw #$0000
+    %cm_header("CONFIGURE SUPER HUD")
+
+ih_superhud_bottom_selector:
+    dw !ACTION_CHOICE
+    dl #!sram_superhud_bottom
+    dw #$0000
+    db #$28, "Current Bottom", #$FF
+    db #$28, "   ENEMY HP", #$FF
+    db #$28, "     CHARGE", #$FF
+    db #$28, "   X FACTOR", #$FF
+    db #$28, "   COOLDOWN", #$FF
+    db #$28, " SHINESPARK", #$FF
+    db #$28, "   I FRAMES", #$FF
+    db #$28, "  SPIKESUIT", #$FF
+    db #$28, " X POSITION", #$FF
+    db #$28, " Y POSITION", #$FF
+    db #$28, "HORIZ SPEED", #$FF
+    db #$28, " QUICK DROP", #$FF
+    db #$28, "  WALL JUMP", #$FF
+    db #$28, " SHOT TIMER", #$FF
+    db #$28, "DMG COUNTER", #$FF
+    db #$28, "RIDLEY GRAB", #$FF
+    db #$28, "  RAM WATCH", #$FF
+    db #$28, "   MOAT CWJ", #$FF
+    db #$28, "GATE GLITCH", #$FF
+    db #$28, "  TACO TANK", #$FF
+    db #$28, "ROBOT FLUSH", #$FF
+    db #$28, "ELEVATOR CF", #$FF
+    db #$28, " BOTWOON CF", #$FF
+    db #$FF
+
+ih_superhud_bottom_submenu:
+        %cm_submenu("Bottom HUD List", #SuperHUDBottomMenu)
+
+SuperHUDBottomMenu:
+    dw ih_superhud_enemyhp
+    dw ih_superhud_chargetimer
+    dw ih_superhud_xfactor
+    dw ih_superhud_cooldowncounter
+    dw ih_superhud_shinetimer
+    dw ih_superhud_iframecounter
+    dw ih_superhud_spikesuit
+    dw ih_superhud_xpos
+    dw ih_superhud_ypos
+    dw ih_superhud_hspeed
+    dw ih_superhud_quickdrop
+    dw ih_superhud_walljump
+    dw ih_superhud_shottimer
+    dw ih_superhud_countdamage
+    dw ih_superhud_ridleygrab
+    dw ih_superhud_ramwatch
+    dw ih_superhud_moatcwj
+    dw ih_superhud_gateglitch
+    dw ih_superhud_tacotank
+    dw ih_superhud_robotflush
+    dw ih_superhud_elevatorcf
+    dw ih_superhud_botwooncf
+    dw #$0000
+    %cm_header("SUPERHUD MODE")
+
+ih_superhud_enemyhp:
+    %cm_jsr("Enemy HP", #action_select_superhud_bottom, #$0000)
+
+ih_superhud_chargetimer:
+    %cm_jsr("Charge Timer", #action_select_superhud_bottom, #$0001)
+
+ih_superhud_xfactor:
+    %cm_jsr("X-Factor Timer", #action_select_superhud_bottom, #$0002)
+
+ih_superhud_cooldowncounter:
+    %cm_jsr("Cooldown Timer", #action_select_superhud_bottom, #$0003)
+
+ih_superhud_shinetimer:
+    %cm_jsr("Shinespark Timer", #action_select_superhud_bottom, #$0004)
+
+ih_superhud_iframecounter:
+    %cm_jsr("I-Frame Counter", #action_select_superhud_bottom, #$0005)
+
+ih_superhud_spikesuit:
+    %cm_jsr("Spikesuit Trainer", #action_select_superhud_bottom, #$0006)
+
+ih_superhud_xpos:
+    %cm_jsr("X Position", #action_select_superhud_bottom, #$0007)
+
+ih_superhud_ypos:
+    %cm_jsr("Y Position", #action_select_superhud_bottom, #$0008)
+
+ih_superhud_hspeed:
+    %cm_jsr("Horizontal Speed", #action_select_superhud_bottom, #$0009)
+
+ih_superhud_quickdrop:
+    %cm_jsr("Quickdrop Trainer", #action_select_superhud_bottom, #$000A)
+
+ih_superhud_walljump:
+    %cm_jsr("Walljump Trainer", #action_select_superhud_bottom, #$000B)
+
+ih_superhud_shottimer:
+    %cm_jsr("Shot Timer", #action_select_superhud_bottom, #$000C)
+
+ih_superhud_countdamage:
+    %cm_jsr("Boss Damage Counter", #action_select_superhud_bottom, #$000D)
+
+ih_superhud_ridleygrab:
+    %cm_jsr("Ridley Death Grab Attempts", #action_select_superhud_bottom, #$000E)
+
+ih_superhud_ramwatch:
+    %cm_jsr("Custom RAM Watch", #action_select_superhud_bottom, #$000F)
+
+ih_superhud_moatcwj:
+    %cm_jsr("Moat CWJ", #action_select_superhud_bottom, #$0010)
+
+ih_superhud_gateglitch:
+    %cm_jsr("Gate Glitch", #action_select_superhud_bottom, #$0011)
+
+ih_superhud_tacotank:
+    %cm_jsr("Taco Tank", #action_select_superhud_bottom, #$0012)
+
+ih_superhud_robotflush:
+    %cm_jsr("Robot Flush", #action_select_superhud_bottom, #$0013)
+
+ih_superhud_elevatorcf:
+    %cm_jsr("Elevator Crystal Flash", #action_select_superhud_bottom, #$0014)
+
+ih_superhud_botwooncf:
+    %cm_jsr("Botwoon Crystal Flash", #action_select_superhud_bottom, #$0015)
+
+action_select_superhud_bottom:
+{
+    TYA : STA !sram_superhud_bottom
+    JSR cm_go_back
+    JSR cm_calculate_max
+    RTS
+}
+
+ih_superhud_middle_selector:
+    dw !ACTION_CHOICE
+    dl #!sram_superhud_middle
+    dw #$0000
+    db #$28, "Current Middle", #$FF
+    db #$28, "   X FACTOR", #$FF
+    db #$28, " SHINESPARK", #$FF
+    db #$28, "   I FRAMES", #$FF
+    db #$28, " CPU USAGE%", #$FF
+    db #$28, " SHOT TIMER", #$FF
+    db #$28, "     CHARGE", #$FF
+    db #$28, "       DASH", #$FF
+    db #$28, "   COOLDOWN", #$FF
+    db #$28, "RIDLEY GRAB", #$FF
+    db #$FF
+
+ih_superhud_middle_submenu:
+    %cm_submenu("Middle HUD List", #SuperHUDMiddleMenu)
+
+SuperHUDMiddleMenu:
+    dw ih_superhud_middle_xfactor
+    dw ih_superhud_middle_shinetimer
+    dw ih_superhud_middle_iframecounter
+    dw ih_superhud_middle_lagcounter
+    dw ih_superhud_middle_shottimer
+    dw ih_superhud_middle_chargetimer
+    dw ih_superhud_middle_dashcounter
+    dw ih_superhud_middle_cooldowncounter
+    dw ih_superhud_middle_ridleygrab
+    dw #$0000
+    %cm_header("MIDDLE DISPLAY MODE")
+
+ih_superhud_middle_xfactor:
+    %cm_jsr("X-Factor Timer", #action_select_superhud_middle, #$0000)
+
+ih_superhud_middle_shinetimer:
+    %cm_jsr("Shinespark Timer", #action_select_superhud_middle, #$0001)
+
+ih_superhud_middle_iframecounter:
+    %cm_jsr("I-Frame Counter", #action_select_superhud_middle, #$0002)
+
+ih_superhud_middle_lagcounter:
+    %cm_jsr("CPU Usage", #action_select_superhud_middle, #$0003)
+
+ih_superhud_middle_shottimer:
+    %cm_jsr("Shot Timer", #action_select_superhud_middle, #$0004)
+
+ih_superhud_middle_chargetimer:
+    %cm_jsr("Charge Timer", #action_select_superhud_middle, #$0005)
+
+ih_superhud_middle_dashcounter:
+    %cm_jsr("Dash Counter", #action_select_superhud_middle, #$0006)
+
+ih_superhud_middle_cooldowncounter:
+    %cm_jsr("Cooldown Timer", #action_select_superhud_middle, #$0007)
+
+ih_superhud_middle_ridleygrab:
+    %cm_jsr("Ridley Death Grab Attempts", #action_select_superhud_middle, #$0008)
+    
+action_select_superhud_middle:
+{
+    TYA : STA !sram_superhud_middle
+    JSR cm_go_back
+    JSR cm_calculate_max
+    RTS
+}
+
+ih_superhud_top_selector:
+    dw !ACTION_CHOICE
+    dl #!sram_superhud_top
+    dw #$0000
+    db #$28, "Current TopHUD", #$FF
+    db #$28, "   X FACTOR", #$FF
+    db #$28, " SHINESPARK", #$FF
+    db #$28, "   I FRAMES", #$FF
+    db #$28, " CPU USAGE%", #$FF
+    db #$28, " SHOT TIMER", #$FF
+    db #$28, "     CHARGE", #$FF
+    db #$28, "       DASH", #$FF
+    db #$28, "   COOLDOWN", #$FF
+    db #$28, "RIDLEY GRAB", #$FF
+    db #$FF
+
+ih_superhud_top_submenu:
+    %cm_submenu("Top HUD List", #SuperHUDTopMenu)
+
+SuperHUDTopMenu:
+    dw ih_superhud_top_xfactor
+    dw ih_superhud_top_shinetimer
+    dw ih_superhud_top_iframecounter
+    dw ih_superhud_top_lagcounter
+    dw ih_superhud_top_shottimer
+    dw ih_superhud_top_chargetimer
+    dw ih_superhud_top_dashcounter
+    dw ih_superhud_top_cooldowncounter
+    dw ih_superhud_top_ridleygrab
+    dw #$0000
+    %cm_header("TOP DISPLAY MODE")
+
+ih_superhud_top_xfactor:
+    %cm_jsr("X-Factor Timer", #action_select_superhud_top, #$0000)
+
+ih_superhud_top_shinetimer:
+    %cm_jsr("Shinespark Timer", #action_select_superhud_top, #$0001)
+
+ih_superhud_top_iframecounter:
+    %cm_jsr("I-Frame Counter", #action_select_superhud_top, #$0002)
+
+ih_superhud_top_lagcounter:
+    %cm_jsr("CPU Usage", #action_select_superhud_top, #$0003)
+
+ih_superhud_top_shottimer:
+    %cm_jsr("Shot Timer", #action_select_superhud_top, #$0004)
+
+ih_superhud_top_chargetimer:
+    %cm_jsr("Charge Timer", #action_select_superhud_top, #$0005)
+
+ih_superhud_top_dashcounter:
+    %cm_jsr("Dash Counter", #action_select_superhud_top, #$0006)
+
+ih_superhud_top_cooldowncounter:
+    %cm_jsr("Cooldown Timer", #action_select_superhud_top, #$0007)
+
+ih_superhud_top_ridleygrab:
+    %cm_jsr("Ridley Death Grab Attempts", #action_select_superhud_top, #$0008)
+    
+action_select_superhud_top:
+{
+    TYA : STA !sram_superhud_top
+    JSR cm_go_back
+    JSR cm_calculate_max
+    RTS
+}
+
+ih_superhud_enable:
+    %cm_jsr("Enable Super HUD", #action_enable_superhud, #$0001)
+
+action_enable_superhud:
+{
+    TYA : STA !sram_display_mode
+    DEC : STA !sram_room_strat
+    %sfxconfirm()
+    RTS
+}
 
 ih_ram_watch:
     %cm_submenu("Customize RAM Watch", #RAMWatchMenu)

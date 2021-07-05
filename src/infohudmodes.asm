@@ -49,6 +49,7 @@ status_roomstrat:
     RTS
 
   .status_room_table
+    dw status_superhud
     dw status_moatcwj
     dw status_gateglitch
     dw status_tacotank
