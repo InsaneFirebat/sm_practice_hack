@@ -140,12 +140,7 @@ org $AAE582      ; update timers when statue grabs Samus
 endif
     JSL ih_chozo_segment
 
-if !FEATURE_PAL
-; fix this from other PAL branch
-;org $90D340
-else
 org $90D340      ; update timers when shinespark bonk sound plays
-endif
     JSL ih_shinespark_segment
 
 org $90EA98      ; hijack low health alarm
@@ -434,12 +429,83 @@ ih_update_hud_code:
     ; Bank 80
     PEA $8080 : PLB : PLB
 
-    LDA !ram_minimap : BEQ .start_update
+    LDA !ram_minimap : BNE .minimap_hud
+    BRL .start_update
 
-    ; Map visible, so draw map counter unless shinetune is enabled
-    LDA !sram_display_mode : CMP #$0007 : BEQ .minimap_end
-    LDA !ram_map_counter : LDX #$00B0 : JSR Draw4
-    LDA !IH_BLANK : STA $7EC6B8 : STA $7EC6BA
+  .minimap_hud
+    ; Map visible, so draw map counter over item%
+    LDA !ram_map_counter : LDX #$0014 : JSR Draw3
+
+    LDA !sram_frame_counter_mode : BNE .ingameRoomMap
+
+    ; Real time with minimap
+    {
+        ; Divide real time by 60/50, save seconds, frame seperately
+        {
+            STZ $4205
+            LDA !ram_last_realtime_room : STA $4204
+            %a8()
+            if !FEATURE_PAL
+                LDA #$32
+            else
+                LDA #$3C
+            endif
+            STA $4206
+            PHA : PLA : PHA : PLA
+            %a16()
+            LDA $4214 : STA !ram_tmp_1
+        }
+        ; Draw frames
+        LDA $4216 : ASL : TAX
+        LDA HexToNumberGFX1, X : STA $7EC6B6
+        LDA HexToNumberGFX2, X : STA $7EC6B8
+
+        ; Draw decimal seperator
+        LDA !IH_DECIMAL : STA $7EC6B4
+
+        ; Draw seconds
+        LDA !ram_tmp_1 : ASL : TAX
+        LDA HexToNumberGFX1, X : STA $7EC6B0
+        LDA HexToNumberGFX2, X : STA $7EC6B2
+
+        BRA .map_lag
+    }
+
+    ; Room time with minimap
+    .ingameRoomMap
+    {
+        ; Divide game time by 60/50, save seconds, frames seperately
+        {
+            STZ $4205
+            LDA !ram_last_gametime_room : STA $4204
+            %a8()
+            if !FEATURE_PAL
+                LDA #$32
+            else
+                LDA #$3C
+            endif
+            STA $4206
+            PHA : PLA : PHA : PLA
+            %a16()
+            LDA $4214 : STA !ram_tmp_1
+        }
+        ; Draw frames
+        LDA $4216 : ASL : TAX
+        LDA HexToNumberGFX1, X : STA $7EC6B6
+        LDA HexToNumberGFX2, X : STA $7EC6B8
+
+        ; Draw seconds
+        LDA !ram_tmp_1 : ASL : TAX
+        LDA HexToNumberGFX1, X : STA $7EC6B0
+        LDA HexToNumberGFX2, X : STA $7EC6B2
+
+        ; Draw decimal seperator
+        LDA !IH_DECIMAL : STA $7EC642
+    }
+
+  .map_lag
+    ; Lag
+    LDA !ram_last_room_lag : LDX #$0054 : JSR Draw3
 
   .minimap_end
     BRL .end
@@ -517,7 +583,7 @@ ih_update_hud_code:
     ; Draw Item percent
     .pct
     {
-        LDA !sram_display_mode : CMP #$0014 : BEQ .skipPercent : DEC : BEQ .skipPercent
+        LDA !sram_display_mode : CMP #$0001 : BEQ .skipPercent
         LDA #$0000 : STA !ram_pct_1
 
         ; Max HP (E tanks)
@@ -542,7 +608,6 @@ ih_update_hud_code:
         LDA !IH_PERCENT : STA $7EC618
     }
 
-  .skipToEtanks
     ; E-tanks
     LDA !ram_etanks : LDX #$0054 : JSR Draw3
 
