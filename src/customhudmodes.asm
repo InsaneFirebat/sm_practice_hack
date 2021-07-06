@@ -116,15 +116,7 @@ status_superhud:
 {
     ; start with some code to detect various rooms and
     ; set !sram_superhud_bottom to enable the appropriate HUD mode
-    LDA $079B : CMP #$B2DA : BEQ .roomGGG
-    LDA $079B : CMP #$B6C1 : BEQ .roomAfterGGG
-    BRA .HUD
-
-  .roomGGG
-    LDA #$0010 : STA !sram_superhud_bottom : BRA .HUD
-
-  .roomAfterGGG
-    LDA #$0000 : STA !sram_superhud_bottom; : BRA .HUD
+;    LDA $079B : CMP #$B2DA : BEQ .roomGGG
 
   .HUD
     LDA !sram_superhud_top : ASL : TAX

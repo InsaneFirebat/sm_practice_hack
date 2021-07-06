@@ -87,19 +87,10 @@ init_sram:
     LDA #$0001 : STA !sram_healthalarm
     LDA #$0000 : STA !sram_superhud
     LDA #$0000 : STA !sram_superhud_bottom
-    LDA #$0000 : STA !sram_superhud_middle
-    LDA #$0000 : STA !sram_superhud_top
+    LDA #$0006 : STA !sram_superhud_middle
+    LDA #$0008 : STA !sram_superhud_top
 
-    if !FEATURE_EXTRAS
-        LDA #$0000 : STA !sram_custompalette
-        LDA #$0000 : STA !sram_custompalette_profile
-        LDA #$9748 : STA !sram_custompalette_hudoutline
-        LDA #$0097 : STA !sram_custompalette_hudoutline_hi
-        LDA #$0048 : STA !sram_custompalette_hudoutline_lo
-        LDA #$0000 : STA !sram_custompalette_hudfill
-        LDA #$0000 : STA !sram_custompalette_hudfill_hi
-        LDA #$0000 : STA !sram_custompalette_hudfill_lo
-    endif
+    LDA #$0003 : STA !sram_custompalette_profile
     LDA #$0A20 : STA !sram_custompalette_menutext
     LDA #$000A : STA !sram_custompalette_menutext_hi
     LDA #$0020 : STA !sram_custompalette_menutext_lo
