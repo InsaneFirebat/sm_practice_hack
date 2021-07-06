@@ -814,6 +814,7 @@ MiscMenu:
     if !FEATURE_EXTRAS
         dw #misc_infiniteammo
     endif
+    dw #misc_magnetstairs
     dw #$0000
     %cm_header("MISC OPTIONS")
 
@@ -872,6 +873,26 @@ if !FEATURE_EXTRAS
     misc_infiniteammo:
         %cm_toggle_bit("Infinite Ammo", !ram_infinite_ammo, #$0001, #0)
 endif
+
+misc_magnetstairs:
+    %cm_toggle("Magnet Stairs Fix", !ram_magnetstairs, #$0001, #.routine)
+    .routine
+        LDA $079B : CMP #$DFD7 : BNE .done
+        LDA !ram_magnetstairs : BEQ .broken
+        PHP : %a8()
+        LDA #$10 : STA $7F01F9 : STA $7F02EB
+        LDA #$53 : STA $7F64FD : STA $7F6516
+        PLP
+        RTS
+
+      .broken
+        PHP : %a8()
+        LDA #$80 : STA $7F01F9 : STA $7F02EB
+        LDA #$00 : STA $7F64FD : STA $7F6576
+        PLP
+
+      .done
+        RTS
 
 
 ; -----------
