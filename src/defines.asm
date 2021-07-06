@@ -54,6 +54,7 @@
 !ram_HUD_top = $7FFBF2
 !ram_HUD_middle = $7FFBF4
 !ram_HUD_bottom = $7FFBF6
+!ram_magnetstairs = $7FFBF8
 
 if !FEATURE_EXTRAS
     !ram_noclip = $7FFBFC
