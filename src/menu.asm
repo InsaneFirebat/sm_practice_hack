@@ -274,10 +274,10 @@ PaletteProfileTables:
     dw #FirebatProfileTable
     dw #wardrinkerProfileTable
     dw #mm2ProfileTable
+    dw #ptoilProfileTable
     dw #GreyProfileTable
     dw #RedProfileTable
     dw #PurpleProfileTable
-;    dw #YellowProfileTable
     dw #$0000
 
 ; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
@@ -299,6 +299,9 @@ wardrinkerProfileTable:
 mm2ProfileTable:
     dw $0418, $0000, $60E2, $0000, $0000, $7FFF, $03E0, $7F8C, $0842, $0000, $7FFF
 
+ptoilProfileTable:
+    dw $5CAA, $14A5, $01EF, $0000, $0000, $5294, $4376, $03FF, $0000, $0000, $7FFF
+
 GreyProfileTable:
     dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $1CE7, $3DEF, $1CE7, $3DEF
 
@@ -307,9 +310,6 @@ RedProfileTable:
 
 PurpleProfileTable:
     dw $602F, $0000, $602F, $0000, $0000, $602F, $0338, $0338, $0000, $602F, $0338
-
-;YellowProfileTable:
-;    dw $7100, $6000, $3779, $0000, $6000, $3779, $3779, $7100, $0000, $7100, $3739
 }
 
 cm_draw:
