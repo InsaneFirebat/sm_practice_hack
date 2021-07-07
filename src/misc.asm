@@ -184,14 +184,18 @@ HealthAlarm3:
 }
 warnpc $91FFFF
 
-org $83AB92 ; Magnet Stairs (right) door asm pointer
-    dw $EA00
+org $83AB92 ; Magnet Stairs (bottom) door asm pointer
+    dw #MagnetStairFix
 
-org $83AB6E ; Magnet Stairs (left) door asm pointer
-    dw $EA00
+org $83AB6E ; Magnet Stairs (top) door asm pointer
+    dw #MagnetStairFix
 
 org $8FEA00 ; free space for Magnet Stairs door asm
+MagnetStairFix:
+{
     LDA !ram_magnetstairs : BEQ .done
+
+    ; change tile type and BTS
     PHP : %a8()
     LDA #$10 : STA $7F01F9 : STA $7F02EB
     LDA #$53 : STA $7F64FD : STA $7F6576
@@ -199,6 +203,7 @@ org $8FEA00 ; free space for Magnet Stairs door asm
 
   .done
     RTS
+}
 
 org $A6FEBC      ; free space
 ResetCountDamageRid:

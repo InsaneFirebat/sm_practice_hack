@@ -879,13 +879,16 @@ misc_magnetstairs:
     .routine
         LDA $079B : CMP #$DFD7 : BNE .done
         LDA !ram_magnetstairs : BEQ .broken
+
+        ; change tile type and BTS
         PHP : %a8()
         LDA #$10 : STA $7F01F9 : STA $7F02EB
-        LDA #$53 : STA $7F64FD : STA $7F6516
+        LDA #$53 : STA $7F64FD : STA $7F6576
         PLP
         RTS
 
       .broken
+        ; change tile type and BTS
         PHP : %a8()
         LDA #$80 : STA $7F01F9 : STA $7F02EB
         LDA #$00 : STA $7F64FD : STA $7F6576
