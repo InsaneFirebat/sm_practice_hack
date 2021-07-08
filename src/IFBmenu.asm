@@ -7,7 +7,7 @@ IFBMenu:
     if !FEATURE_EXTRAS
 ;        dw #ifb_custompalettes_hud
     endif
-    dw #ifb_custompalettes_menu
+    dw #ifb_custompalettes_menu ; must be 2nd in this list, update cm_loop in menu.asm if needed
     dw #ifb_paletteprofile
     dw #ifb_palette2custom
     dw #ifb_customsfx

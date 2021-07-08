@@ -183,23 +183,25 @@ cm_transfer_custom_cgram:
     PHP
     %a16()
     LDA $7EC00A : STA !ram_cgram_cache
-    LDA $7EC012 : STA !ram_cgram_cache+2
-    LDA $7EC014 : STA !ram_cgram_cache+4
-    LDA $7EC016 : STA !ram_cgram_cache+6
-    LDA $7EC01A : STA !ram_cgram_cache+8
-    LDA $7EC01C : STA !ram_cgram_cache+10
-    LDA $7EC032 : STA !ram_cgram_cache+12
-    LDA $7EC034 : STA !ram_cgram_cache+14
-    LDA $7EC036 : STA !ram_cgram_cache+16
-    LDA $7EC03A : STA !ram_cgram_cache+18
-    LDA $7EC03C : STA !ram_cgram_cache+20
+    LDA $7EC00E : STA !ram_cgram_cache+2
+    LDA $7EC012 : STA !ram_cgram_cache+4
+    LDA $7EC014 : STA !ram_cgram_cache+6
+    LDA $7EC016 : STA !ram_cgram_cache+8
+    LDA $7EC01A : STA !ram_cgram_cache+10
+    LDA $7EC01C : STA !ram_cgram_cache+12
+    LDA $7EC032 : STA !ram_cgram_cache+14
+    LDA $7EC034 : STA !ram_cgram_cache+16
+    LDA $7EC036 : STA !ram_cgram_cache+18
+    LDA $7EC03A : STA !ram_cgram_cache+20
+    LDA $7EC03C : STA !ram_cgram_cache+22
 
     JSR PrepMenuPalette
 
+    LDA #$0000 : STA $7EC000
     LDA !ram_custompalette_menuborder : STA $7EC00A
     LDA !ram_custompalette_menuheaderoutline : STA $7EC012
     LDA !ram_custompalette_menutext : STA $7EC014
-    LDA !ram_custompalette_menubackground : STA $7EC016
+    LDA !ram_custompalette_menubackground : STA $7EC016 : STA $7EC00E
     LDA !ram_custompalette_menunumoutline : STA $7EC01A
     LDA !ram_custompalette_menunumfill : STA $7EC01C
     LDA !ram_custompalette_menutoggleon : STA $7EC032
@@ -218,16 +220,17 @@ cm_transfer_original_cgram:
     PHP
     %a16()
     LDA !ram_cgram_cache : STA $7EC00A
-    LDA !ram_cgram_cache+2 : STA $7EC012
-    LDA !ram_cgram_cache+4 : STA $7EC014
-    LDA !ram_cgram_cache+6 : STA $7EC016
-    LDA !ram_cgram_cache+8 : STA $7EC01A
-    LDA !ram_cgram_cache+10 : STA $7EC01C
-    LDA !ram_cgram_cache+12 : STA $7EC032
-    LDA !ram_cgram_cache+14 : STA $7EC034
-    LDA !ram_cgram_cache+16 : STA $7EC036
-    LDA !ram_cgram_cache+18 : STA $7EC03A
-    LDA !ram_cgram_cache+20 : STA $7EC03C
+    LDA !ram_cgram_cache+2 : STA $7EC00E
+    LDA !ram_cgram_cache+4 : STA $7EC012
+    LDA !ram_cgram_cache+6 : STA $7EC014
+    LDA !ram_cgram_cache+8 : STA $7EC016
+    LDA !ram_cgram_cache+10 : STA $7EC01A
+    LDA !ram_cgram_cache+12 : STA $7EC01C
+    LDA !ram_cgram_cache+14 : STA $7EC032
+    LDA !ram_cgram_cache+16 : STA $7EC034
+    LDA !ram_cgram_cache+18 : STA $7EC036
+    LDA !ram_cgram_cache+20 : STA $7EC03A
+    LDA !ram_cgram_cache+22 : STA $7EC03C
 
     JSL transfer_cgram_long
     PLP
@@ -291,7 +294,7 @@ HUDProfileTable:
     dw $3D46, $48FB, $7FFF, $0000, $44E5, $7FFF, $4A52, $318C, $0000, $02DF, $001F
 
 FirebatProfileTable:
-    dw $000E, $000E, $0A20, $0000, $0A20, $0002, $0680, $000f, $0005, $0A20, $000F
+    dw $000E, $000E, $0A20, $0000, $0A20, $0002, $0680, $000F, $0005, $0A20, $000F
 
 wardrinkerProfileTable:
     dw $7277, $7FFF, $7A02, $0000, $0000, $9200, $7277, $7F29, $0000, $0000, $7F29
@@ -935,11 +938,27 @@ cm_loop:
     BRA .inputLoop
 
     +
+; repeating the cgram transfer for flash carts...
+    ; don't do it if customizing (flashing colors)
+    LDA $7E0998 : CMP #$000C : BMI .check_stack
+    CMP #$0012 : BPL .check_stack
+    BRA .skip_cgram
+
+  .check_stack
+    LDA !ram_cm_cursor_stack : CMP #$0014 : BNE .update_cgram
+    ; ensure that "Customize Menu Palette" is the second option in the "Extras" menu
+    LDA !ram_cm_cursor_stack+2 : CMP #$0002 : BEQ .skip_cgram
+
+  .update_cgram
+    JSR cm_transfer_original_cgram
+    JSR cm_transfer_custom_cgram
+
+  .skip_cgram
     JSR cm_get_inputs : STA !ram_cm_controller : BEQ .inputLoop
 
     BIT #$0080 : BNE .pressedA
     BIT #$8000 : BNE .pressedB
-    BIT #$0040 : BNE .pressedX
+;    BIT #$0040 : BNE .pressedX ; disabled to make a branch fit...
     BIT #$4000 : BNE .pressedY
     BIT #$2000 : BNE .pressedSelect
     BIT #$1000 : BNE .pressedStart
@@ -950,7 +969,7 @@ cm_loop:
     BIT #$0020 : BNE .pressedL
     BIT #$0010 : BNE .pressedR
 
-    BRA .inputLoop
+    JMP .inputLoop
 
   .pressedB
     JSR cm_go_back
@@ -983,7 +1002,7 @@ cm_loop:
     BRA .redraw
 
   .pressedA
-  .pressedX
+;  .pressedX
   .pressedLeft
   .pressedRight
     JSR cm_execute
