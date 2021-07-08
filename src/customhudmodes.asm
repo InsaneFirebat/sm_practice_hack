@@ -388,18 +388,18 @@ status_kihuntermanip:
     
     ; Y position
     LDA $0F7E,X : CMP #$01F4 : BPL .topYSuccess     ; check if below (greater than) Y = 500d
-    LDA #$0C6D : STA $7EC688 : STA $7EC68A          ; draw N's and return
+    LDA !IH_LETTER_N : STA $7EC688 : STA $7EC68A    ; draw N's and return
     STA $7EC68E : BRA .movementEnemy0
   .topYSuccess
-    LDA #$0C67 : STA $7EC688                        ; draw Y
-    LDA #$0C6D : STA $7EC68A                        ; draw N and continue to Xpos
+    LDA !IH_LETTER_Y : STA $7EC688                  ; draw Y
+    LDA !IH_LETTER_N : STA $7EC68A                  ; draw N and continue to Xpos
     
     ; X position
     LDA $0F7A,X : CMP #$00A8 : BMI .topXSuccess     ; check if left of (less than) X = 168d
-    LDA #$0C6D : STA $7EC68A : BRA .movementEnemy0  ; draw N and return
+    LDA !IH_LETTER_N : STA $7EC68A : BRA .movementEnemy0  ; draw N and return
     
   .topXSuccess
-    LDA #$0C67 : STA $7EC68A                        ; draw Y
+    LDA !IH_LETTER_Y : STA $7EC68A                  ; draw Y
     ; movement arrows
   .movementEnemy0
     ; X position
@@ -430,10 +430,10 @@ status_kihuntermanip:
     
     ; Y position
     LDA $0F7E,X : CMP #$0316 : BPL .botYSuccess     ; check if below (greater than) Y = 790d
-    LDA #$0C6D : STA $7EC68E : BRA .movementEnemy4  ; draw N and return
+    LDA !IH_LETTER_N : STA $7EC68E : BRA .movementEnemy4  ; draw N and return
     
   .botYSuccess
-    LDA #$0C67 : STA $7EC68E                        ; draw Y
+    LDA !IH_LETTER_Y : STA $7EC68E                  ; draw Y
     ; movement arrows
 
   .movementEnemy4
@@ -473,16 +473,16 @@ status_kihuntermanip:
     LDX #$0200                                      ; start with top kihunter (enemy8)
     LDA $0F7A,X : CMP #$018C : BPL .success2Top     ; branch if right of (greater than) X = 396d
     CMP #$0157 : BPL .successTop                    ; branch if right of (greater than) X = 343d
-    LDA #$0C6D : STA $7EC616 : STA $7EC618          ; draw N in both slots
+    LDA !IH_LETTER_N : STA $7EC616 : STA $7EC618    ; draw N in both slots
     BRA .movementTop
 
   .success2Top
-    LDA #$0C67 : STA $7EC616 : STA $7EC618          ; draw Y in both slots
+    LDA !IH_LETTER_Y : STA $7EC616 : STA $7EC618    ; draw Y in both slots
     BRA .movementTop
     
   .successTop
-    LDA #$0C67 : STA $7EC616                        ; draw Y in first slot
-    LDA #$0C6D : STA $7EC618                        ; draw N in second slot
+    LDA !IH_LETTER_Y : STA $7EC616                  ; draw Y in first slot
+    LDA !IH_LETTER_N : STA $7EC618                  ; draw N in second slot
 
   .movementTop
     LDA $0F7A,X : CMP !ram_enemy8_last_xpos         ; check xpos again
@@ -510,10 +510,10 @@ status_kihuntermanip:
 ; middle kihunter
     LDX #$0180                                      ; change to middle kihunter (enemy6)
     LDA $0F7A,X : CMP #$0157 : BMI .successMiddle   ; check if left of (less than) X = 343d
-    LDA #$0C6D : STA $7EC688 : BRA .movementMiddle  ; draw N and return
+    LDA !IH_LETTER_N : STA $7EC688 : BRA .movementMiddle  ; draw N and return
     
   .successMiddle
-    LDA #$0C67 : STA $7EC688                        ; draw Y
+    LDA !IH_LETTER_Y : STA $7EC688                  ; draw Y
     
   .movementMiddle
     LDA $0F7A,X : CMP !ram_enemy6_last_xpos         ; check xpos again
@@ -542,10 +542,10 @@ status_kihuntermanip:
 ; bottom kihunter
     LDX #$0100                                      ; change to bottom kihunter (enemy4)
     LDA $0F7A,X : CMP #$0157 : BPL .successBottom   ; check if right of (greater than) X = 343d
-    LDA #$0C6D : STA $7EC692 : BRA .movementBottom  ; draw N and return
+    LDA !IH_LETTER_N : STA $7EC692 : BRA .movementBottom  ; draw N and return
     
   .successBottom
-    LDA #$0C67 : STA $7EC692                        ; draw Y
+    LDA !IH_LETTER_Y : STA $7EC692                  ; draw Y
     
   .movementBottom
     LDA $0F7A,X : CMP !ram_enemy4_last_xpos         ; check xpos again
