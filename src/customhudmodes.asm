@@ -105,8 +105,8 @@ print pc, " <--                                dboost"
     LDX #$008C : JSR Draw2 : LDA !IH_LETTER_Y : STA $7EC68A
 
     RTS
-
 }
+
 
 ; ===========
 ; ROOM STRATS
@@ -114,18 +114,16 @@ print pc, " <--                                dboost"
 
 status_superhud:
 {
-    ; start with some code to detect various rooms and
-    ; set !sram_superhud_bottom to enable the appropriate HUD mode
-;    LDA $079B : CMP #$B2DA : BEQ .roomGGG
-
   .HUD
-    LDA !sram_superhud_top : ASL : TAX
+    LDA !sram_superhud_top : BEQ +
+    ASL : TAX
     JSR (superhud_top_table,X)
 
-    LDA !sram_superhud_middle : ASL : TAX
++   LDA !sram_superhud_middle : BEQ +
+    ASL : TAX
     JSR (superhud_middle_table,X)
 
-    LDA !sram_superhud_bottom : ASL : TAX
++   LDA !sram_superhud_bottom : ASL : TAX
     JMP (superhud_bottom_table,X)
 
 superhud_bottom_table:
@@ -152,6 +150,7 @@ superhud_bottom_table:
     dw status_botwooncf
 
 superhud_top_table:
+    dw topHUD_off
     dw topHUD_xfactor
     dw topHUD_shinetimer
     dw topHUD_iframecounter
@@ -163,6 +162,7 @@ superhud_top_table:
     dw topHUD_ridleygrab
 
 superhud_middle_table:
+    dw middleHUD_off
     dw middleHUD_xfactor
     dw middleHUD_shinetimer
     dw middleHUD_iframecounter
@@ -172,6 +172,13 @@ superhud_middle_table:
     dw middleHUD_dashcounter
     dw middleHUD_cooldowncounter
     dw middleHUD_ridleygrab
+
+topHUD_off:
+middleHUD_off:
+{
+    ; we shouldn't be here, but just in case...
+    RTS
+}
 
 topHUD_chargetimer:
 {
