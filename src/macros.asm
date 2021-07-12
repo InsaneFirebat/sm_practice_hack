@@ -18,19 +18,19 @@ macro a16() ; A = 16-bit
     rep #$20
 endmacro
 
-macro i8() ; X = 8-bit
+macro i8() ; X/Y = 8-bit
     sep #$10
 endmacro
 
-macro i16() ; X = 16-bit
+macro i16() ; X/Y = 16-bit
     rep #$10
 endmacro
 
-macro ai8() ; A + X = 8-bit
+macro ai8() ; A + X/Y = 8-bit
     sep #$30
 endmacro
 
-macro ai16() ; A + X = 16-bit
+macro ai16() ; A + X/Y = 16-bit
     rep #$30
 endmacro
 
