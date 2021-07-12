@@ -378,18 +378,8 @@ endif
 
 ; FREE SPACE
 
-; TO BE REMOVED
-;!sram_custompalette = $
-;!sram_custompalette_hudoutline = $
-;!sram_custompalette_hudoutline_hi = $
-;!sram_custompalette_hudoutline_lo = $
-;!sram_custompalette_hudfill = $
-;!sram_custompalette_hudfill_hi = $
-;!sram_custompalette_hudfill_lo = $
-;!sram_custompalette_menuborder = $
-
 ; do not change order without updating custom palette profiles in menu.asm
-!sram_custompalette_profile = $7020F2
+!sram_custompalette_menuborder = $7020B0
 !sram_custompalette_menuborder_hi = $7020B2
 !sram_custompalette_menuborder_lo = $7020B4
 !sram_custompalette_menuheaderoutline = $7020B6
@@ -422,6 +412,7 @@ endif
 !sram_custompalette_menunumsel = $7020EC
 !sram_custompalette_menunumsel_hi = $7020EE
 !sram_custompalette_menunumsel_lo = $7020F0
+!sram_custompalette_profile = $7020F2
 
 !sram_customsfx_move = $7020F4
 !sram_customsfx_toggle = $7020F6
