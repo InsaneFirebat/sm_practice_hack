@@ -30,7 +30,7 @@
 
 status_enemyhp:
 {
-    LDA $079D : CMP #$DD58 : BEQ .mbhp
+    LDA $079B : CMP #$DD58 : BEQ .mbhp
     LDA $0F8C : CMP !ram_enemy_hp : BEQ .done : STA !ram_enemy_hp
     LDX #$0088 : JSR Draw4
 
@@ -639,22 +639,26 @@ status_ypos:
 
 status_hspeed:
 {
-    ; Suppress Samus HP display
-    LDA $09C2 : STA !ram_last_hp
+; converted to only use 4 tiles in the HUD, saving 202 cycles
+    ; subspeed + submomentum into low byte of Hspeed
+    LDA $0B44 : CLC : ADC $0B48
+    AND #$FF00 : XBA : STA !ram_horizontal_speed
 
-    ; Speed plus momentum, pixels and subpixels
-    LDA $0B44 : CLC : ADC $0B48 : TAY
-    LDA $0B42 : ADC $0B46 : CMP !ram_horizontal_speed : BEQ .checksubpixel
-    STA !ram_horizontal_speed : TYA : STA !ram_subpixel_pos
-    LDA !ram_horizontal_speed : LDX #$0088 : JSR Draw4
-    LDA !ram_subpixel_pos : BRA .drawsubpixel
+    ; speed + momentum + carry into high byte of Hspeed
+    LDA $0B42 : ADC $0B46
+    AND #$00FF : XBA : ORA !ram_horizontal_speed
 
-  .checksubpixel
-    TYA : CMP !ram_subpixel_pos : BEQ .done : STA !ram_subpixel_pos
+    ; maybe skip drawing
+    CMP !ram_HUD_bottom : BEQ .done : STA !ram_HUD_bottom
 
-  .drawsubpixel
-    LDX #$0092 : JSR Draw4Hex
-    LDA !IH_DECIMAL : STA $7EC690
+    ; draw whole number in decimal
+    AND #$FF00 : XBA : LDX #$0088 : JSR Draw2
+    LDA !IH_DECIMAL : STA $7EC68C
+
+    ; draw fraction in hex
+    LDA !ram_horizontal_speed
+    AND #$00F0 : LSR #3 : TAY
+    LDA.w HexGFXTable,Y : STA $7EC68E
 
   .done
     RTS
