@@ -35,73 +35,69 @@ gamemode_start:
 
 gamemode_shortcuts:
 {
-    LDA !ram_ctrl1_filtered : BNE +
+    LDA !IH_CONTROLLER_PRI_NEW : BNE +
 
     ; No shortcuts configured, CLC so we won't skip normal gameplay
     CLC : RTS
 
-  + LDA !ram_ctrl1 : CMP !sram_ctrl_save_state : BNE +
-    AND !ram_ctrl1_filtered : BEQ +
     if !FEATURE_SD2SNES
+  + LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_save_state : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
         JMP .save_state
-    endif
 
-  + LDA !ram_ctrl1 : CMP !sram_ctrl_load_state : BNE +
-    AND !ram_ctrl1_filtered : BEQ +
-    if !FEATURE_SD2SNES
+  + LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_load_state : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
         JMP .load_state
     endif
 
-  + LDA !ram_ctrl1 : AND !sram_ctrl_kill_enemies : CMP !sram_ctrl_kill_enemies : BNE +
-    AND !ram_ctrl1_filtered : BEQ +
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_kill_enemies : CMP !sram_ctrl_kill_enemies : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .kill_enemies
 
-  + LDA !ram_ctrl1 : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
-    AND !ram_ctrl1_filtered : BEQ +
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .load_last_preset
 
-  + LDA !ram_ctrl1 : AND !sram_ctrl_reset_segment_timer : CMP !sram_ctrl_reset_segment_timer : BNE +
-    AND !ram_ctrl1_filtered : BEQ +
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_reset_segment_timer : CMP !sram_ctrl_reset_segment_timer : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .reset_segment_timer
 
-  + LDA !ram_ctrl1 : AND !sram_ctrl_full_equipment : CMP !sram_ctrl_full_equipment : BNE +
-    AND !ram_ctrl1_filtered : BEQ +
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_full_equipment : CMP !sram_ctrl_full_equipment : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .full_equipment
 
-  + LDA !ram_ctrl1 : AND !sram_ctrl_reveal_damage : CMP !sram_ctrl_reveal_damage : BNE +
-    AND !ram_ctrl1_filtered : BEQ +
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_reveal_damage : CMP !sram_ctrl_reveal_damage : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .reveal_damage
 
-  + LDA !ram_ctrl1 : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
-    AND !ram_ctrl1_filtered : BEQ +
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .random_preset
 
-  + LDA !ram_ctrl1 : AND !sram_ctrl_randomize_rng : CMP !sram_ctrl_randomize_rng : BNE +
-    AND !ram_ctrl1_filtered : BEQ +
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_randomize_rng : CMP !sram_ctrl_randomize_rng : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .randomize_rng
 
-  + LDA !ram_ctrl1 : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
-    AND !ram_ctrl1_filtered : BEQ +
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .menu
 
     ; No shortcuts matched, CLC so we won't skip normal gameplay
   + CLC : RTS
 
+if !FEATURE_SD2SNES
   .save_state
     ; This if statement is to prevent an assembler error from an unknown method. The one on the call to this
     ; prevents the button combo from being intercepted by the non-sd2snes rom
-    if !FEATURE_SD2SNES
         JSL save_state
-    endif
     ; SEC to skip normal gameplay for one frame after saving state
     SEC : RTS
 
   .load_state
-    if !FEATURE_SD2SNES
         JSL load_state
-    endif
     ; SEC to skip normal gameplay for one frame after loading state
     SEC : RTS
+endif
 
   .kill_enemies
     LDA #$0000

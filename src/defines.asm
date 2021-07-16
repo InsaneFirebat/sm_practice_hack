@@ -1,85 +1,88 @@
-!ram_gametime_room = $7FFB00
-!ram_last_gametime_room = $7FFB02
-!ram_realtime_room = $7FFB04            
-!ram_last_realtime_room = $7FFB06
-!ram_last_room_lag = $7FFB08
-!ram_transition_counter = $7FFB0A
+!ram_load_preset = $7FFB00
+
+!ram_gametime_room = $7FFB02
+!ram_last_gametime_room = $7FFB04
+!ram_realtime_room = $7FFB06
+!ram_last_realtime_room = $7FFB08
+!ram_last_room_lag = $7FFB0A
 !ram_last_door_lag_frames = $7FFB0C
+!ram_transition_counter = $7FFB0E
+!ram_transition_flag = $7FFB10
+!ram_transition_flag_2 = $7FFB12
 
-!ram_seg_rt_frames = $7FFB0E
-!ram_seg_rt_seconds = $7FFB10
-!ram_seg_rt_minutes = $7FFB12
+!ram_seg_rt_frames = $7FFB14
+!ram_seg_rt_seconds = $7FFB16
+!ram_seg_rt_minutes = $7FFB18
 
-!ram_transition_flag = $7FFB14
-!ram_transition_flag_2 = $7FFB16
-!ram_ih_controller = $7FFB18
-!ram_slowdown_controller_1 = $7FFB1A
-!ram_slowdown_controller_2 = $7FFB1C
-!ram_slowdown_mode = $7FFB1E
-!ram_slowdown_frames = $7FFB20
+!ram_ih_controller = $7FFB1A
+!ram_slowdown_controller_1 = $7FFB1C
+!ram_slowdown_controller_2 = $7FFB1E
+!ram_slowdown_mode = $7FFB20
+!ram_slowdown_frames = $7FFB22
 
-!ram_tmp_1 = $7FFB22
-!ram_tmp_2 = $7FFB24
-!ram_tmp_3 = $7FFB26
-!ram_tmp_4 = $7FFB28
+!ram_tmp_1 = $7FFB24
+!ram_tmp_2 = $7FFB26
+!ram_tmp_3 = $7FFB28
+!ram_tmp_4 = $7FFB2A
 
-!ram_last_hp = $7FFB2A
-!ram_etanks = $7FFB2C ; ??
-!ram_max_etanks = $7FFB2E ; ??
-!ram_armed_shine_duration = $7FFB30
-!ram_pct_1 = $7FFB32
-!ram_pct_2 = $7FFB34
+!ram_last_hp = $7FFB2C
+!ram_etanks = $7FFB2E
+!ram_pct_1 = $7FFB30
+!ram_pct_2 = $7FFB32
+!ram_armed_shine_duration = $7FFB34
 !ram_minimap = $7FFB36
 !ram_map_counter = $7FFB38
 !ram_vcounter_data = $7FFB3A
 
 ; FREE SPACE ^
 
-!ram_roomstrat_counter = $7FFB50
-!ram_roomstrat_state = $7FFB52
-!ram_enemy_hp = $7FFB54
-!ram_mb_hp = $7FFB56
-!ram_charge_counter = $7FFB58
-!ram_xfac_counter = $7FFB5A
-!ram_cooldown_counter = $7FFB5C
-!ram_shot_timer = $7FFB5E
-!ram_iframe_counter = $7FFB60
-!ram_shine_counter = $7FFB62
-!ram_dash_counter = $7FFB64
-!ram_shine_dash_held_late = $7FFB66
-!ram_shinetune_early_1 = $7FFB68
-!ram_shinetune_late_1 = $7FFB6A
-!ram_shinetune_early_2 = $7FFB6C
-!ram_shinetune_late_2 = $7FFB6E
-!ram_shinetune_early_3 = $7FFB70
-!ram_shinetune_late_3 = $7FFB72
-!ram_shinetune_early_4 = $7FFB74
-!ram_shinetune_late_4 = $7FFB76
-!ram_xpos = $7FFB78
-!ram_ypos = $7FFB7A
-!ram_subpixel_pos = $7FFB7C
-!ram_horizontal_speed = $7FFB7E
-!ram_vertical_speed = $7FFB80
-!ram_quickdrop_counter = $7FFB82
-!ram_walljump_counter = $7FFB84
+!ram_magic_pants_enabled = $7FFB50
+!ram_magic_pants_state = $7FFB52
+!ram_magic_pants_pal1 = $7FFB54
+!ram_magic_pants_pal2 = $7FFB56
+!ram_magic_pants_pal3 = $7FFB58
+
+!ram_room_has_set_rng = $7FFB5A
+!ram_kraid_rng = $7FFB5C
+!ram_crocomire_rng = $7FFB5E
+!ram_phantoon_rng_1 = $7FFB60
+!ram_phantoon_rng_2 = $7FFB62
+!ram_phantoon_rng_3 = $7FFB64
+!ram_botwoon_rng = $7FFB66
+!ram_draygon_rng_left = $7FFB68
+!ram_draygon_rng_right = $7FFB6A
 
 ; FREE SPACE ^
 
-!ram_magic_pants_enabled = $7FFBB0
-!ram_magic_pants_state = $7FFBB2
-!ram_magic_pants_pal1 = $7FFBB4
-!ram_magic_pants_pal2 = $7FFBB6
-!ram_magic_pants_pal3 = $7FFBB8
 
-!ram_kraid_rng = $7FFBBA
-!ram_phantoon_rng_3 = $7FFBBC
-!ram_crocomire_rng = $7FFBBE
-!ram_draygon_rng_left = $7FFBC0
-!ram_draygon_rng_right = $7FFBC2
-!ram_phantoon_rng_1 = $7FFBC4
-!ram_phantoon_rng_2 = $7FFBC6
-!ram_botwoon_rng = $7FFBC8
-!ram_room_has_set_rng = $7FFBCA
+; --------
+; Infohud
+; --------
+
+!ram_HUD_check = $7FFB80
+!ram_roomstrat_counter = $7FFB82
+!ram_roomstrat_state = $7FFB84
+!ram_enemy_hp = $7FFB86
+!ram_mb_hp = $7FFB86
+!ram_shot_timer = $7FFB88
+!ram_shine_counter = $7FFB8A
+!ram_dash_counter = $7FFB8C
+!ram_shine_dash_held_late = $7FFB8E
+!ram_shinetune_early_1 = $7FFB90
+!ram_shinetune_late_1 = $7FFB92
+!ram_shinetune_early_2 = $7FFB94
+!ram_shinetune_late_2 = $7FFB96
+!ram_shinetune_early_3 = $7FFB98
+!ram_shinetune_late_3 = $7FFB9A
+!ram_shinetune_early_4 = $7FFB9C
+!ram_shinetune_late_4 = $7FFB9E
+!ram_xpos = $7FFBA0
+!ram_ypos = $7FFBA2
+!ram_subpixel_pos = $7FFBA4
+!ram_horizontal_speed = $7FFBA6
+!ram_vertical_speed = $7FFBA8
+!ram_quickdrop_counter = $7FFBAA
+!ram_walljump_counter = $7FFB8AC
 
 ; FREE SPACE ^
 
@@ -105,33 +108,32 @@
 ; Menu
 ; -------------
 
-!ram_cgram_cache = $7FFF00 ; 0x22 bytes ?
-
-!ram_cm_menu_stack = $7FFFC0 ; 0x10     
-!ram_cm_cursor_stack = $7FFFD0 ; 0x10   
 !ram_cm_stack_index = $5D5
-!ram_cm_cursor_max = $7FFFE0
-!ram_cm_input_timer = $7FFFE2
-!ram_cm_controller = $7FFFE4
-!ram_cm_menu_bank = $7FFFE6
+!ram_cm_menu_stack = $7FFF00 ; 0x10
+!ram_cm_cursor_stack = $7FFF10 ; 0x10
+!ram_cm_cursor_max = $7FFF20
+!ram_cm_input_timer = $7FFF22
+!ram_cm_controller = $7FFF24
+!ram_cm_menu_bank = $7FFF26
 
-!ram_cm_etanks = $7FFFE8
-!ram_cm_reserve = $7FFFEA
-!ram_cm_leave = $7FFFEC
-!ram_cm_input_counter = $7FFFEE
-!ram_cm_last_nmi_counter = $7FFFF0
+!ram_cm_etanks = $7FFF28
+!ram_cm_reserve = $7FFF2A
+!ram_cm_leave = $7FFF2C
+!ram_cm_input_counter = $7FFF2E
+!ram_cm_last_nmi_counter = $7FFF30
 
-!ram_cm_ctrl_mode = $7FFFF2
-!ram_cm_ctrl_timer = $7FFFF4
-!ram_cm_ctrl_last_input = $7FFFF6
+!ram_cm_ctrl_mode = $7FFF32
+!ram_cm_ctrl_timer = $7FFF34
+!ram_cm_ctrl_last_input = $7FFF36
+
+; FREE SPACE ^
+
+!ram_cgram_cache = $7FFFD0 ; 0x14 bytes
 
 !ram_hex2dec_first_digit = $14
 !ram_hex2dec_second_digit = $16
 !ram_hex2dec_third_digit = $18
 !ram_hex2dec_rest = $1A
-
-!ram_ctrl1 = $8B
-!ram_ctrl1_filtered = $8F
 
 !ACTION_TOGGLE          = #$0000
 !ACTION_TOGGLE_BIT      = #$0002
@@ -148,23 +150,10 @@
 !SOUND_MENU_MOVE = $0039
 !SOUND_MENU_JSR = $0039
 
-; Pointers to single queue soundfx/music
-!SFX_LIB1 = $80903F
-!SFX_LIB2 = $8090C1
-!SFX_LIB3 = $809143
-;!MUSIC_ROUTINE = $808FC1  ; duplicated here for reference
-
 
 ; ------------
-; Presets
+; Pointers
 ; ------------
-
-!ram_load_preset = $7FFFFE
-
-
-; --------
-; Infohud
-; --------
 
 !IH_CONTROLLER_PRI = $8B
 !IH_CONTROLLER_PRI_NEW = $8F
@@ -173,6 +162,27 @@
 !IH_CONTROLLER_SEC = $8D
 !IH_CONTROLLER_SEC_NEW = $91
 !IH_CONTROLLER_SEC_PREV = $99
+
+!IH_BLANK = #$2C0F
+!IH_PERCENT = #$0C0A
+!IH_DECIMAL = #$0CCB
+!IH_HYPHEN = #$0C55
+!IH_LETTER_A = #$0C64
+!IH_LETTER_B = #$0C65
+!IH_LETTER_C = #$0C58
+!IH_LETTER_D = #$0C59
+!IH_LETTER_E = #$0C5A
+!IH_LETTER_F = #$0C5B
+!IH_LETTER_H = #$0C6C
+!IH_LETTER_L = #$0C68
+!IH_LETTER_N = #$0C56
+!IH_LETTER_R = #$0C69
+!IH_LETTER_X = #$0C66
+!IH_LETTER_Y = #$0C67
+!IH_ARROW_LEFT = #$0C60
+!IH_ARROW_UP = #$0C61
+!IH_ARROW_RIGHT = #$0C62
+!IH_ARROW_DOWN = #$0C63
 
 !IH_PAUSE = #$0100 ; right
 !IH_SLOWDOWN = #$0400 ; down
@@ -193,27 +203,6 @@
 !IH_INPUT_ANGLE_UP = $7E09BC
 !IH_INPUT_ANGLE_DOWN = $7E09BE
 
-!IH_BLANK = #$2C0F
-!IH_DECIMAL = #$0CCB
-!IH_HYPHEN = #$0C55
-!IH_LETTER_A = #$0C64
-!IH_LETTER_B = #$0C65
-!IH_LETTER_C = #$0C58
-!IH_LETTER_D = #$0C59
-!IH_LETTER_E = #$0C5A
-!IH_LETTER_F = #$0C5B
-!IH_LETTER_H = #$0C6C
-!IH_LETTER_L = #$0C68
-!IH_LETTER_N = #$0C56
-!IH_LETTER_R = #$0C69
-!IH_LETTER_X = #$0C66
-!IH_LETTER_Y = #$0C67
-!IH_PERCENT = #$0C0A
-!IH_ARROW_LEFT = #$0C60
-!IH_ARROW_UP = #$0C61
-!IH_ARROW_RIGHT = #$0C62
-!IH_ARROW_DOWN = #$0C63
-
 
 ; -----
 ; SRAM
@@ -230,6 +219,8 @@
 !sram_ctrl_load_last_preset = $70200E
 !sram_ctrl_random_preset = $702010
 
+; FREE SPACE ^
+
 !sram_artificial_lag = $702020
 !sram_rerandomize = $702022
 !sram_fanfare_toggle = $702024
@@ -242,13 +233,16 @@
 !sram_room_strat = $702032
 !sram_sprite_prio_flag = $702034
 
+; FREE SPACE ^
+
 
 ; ----------
-; Save/load
+; Save/Load
 ; ----------
 
 ; Savestate code variables
 !SS_BANK = $8000
+
 !SS_INPUT_CUR = $8B
 !SS_INPUT_NEW = $8F
 !SS_INPUT_PREV = $97
@@ -345,6 +339,12 @@ endif
 !ram_soundtest_lib2 = $7FFCFA
 !ram_soundtest_lib3 = $7FFCFC
 !ram_soundtest_music = $7FFCFE
+
+; Pointers to single queue soundfx/music
+!SFX_LIB1 = $80903F
+!SFX_LIB2 = $8090C1
+!SFX_LIB3 = $809143
+;!MUSIC_ROUTINE = $808FC1  ; duplicated here for reference
 
 
 ; -----
