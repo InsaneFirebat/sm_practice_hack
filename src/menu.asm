@@ -278,6 +278,7 @@ PaletteProfileTables:
     dw #wardrinkerProfileTable
     dw #mm2ProfileTable
     dw #ptoilProfileTable
+    dw #CharlesProfileTable
     dw #GreyProfileTable
     dw #RedProfileTable
     dw #PurpleProfileTable
@@ -304,6 +305,9 @@ mm2ProfileTable:
 
 ptoilProfileTable:
     dw $5CAA, $14A5, $01EF, $0000, $0000, $5294, $4376, $03FF, $0000, $0000, $7FFF
+
+CharlesProfileTable:
+    dw $602F, $602F, $7FFF, $0000, $0000, $7FFF, $602F, $602F, $0000, $602F, $7FFF
 
 GreyProfileTable:
     dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $1CE7, $3DEF, $1CE7, $3DEF
