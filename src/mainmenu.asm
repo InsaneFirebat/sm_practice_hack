@@ -176,7 +176,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("LUCENTW INFOHUD V2.2.4.1")
+    %cm_header("CUSTOM INFOHUD V2.2.5")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
