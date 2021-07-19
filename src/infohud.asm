@@ -140,6 +140,9 @@ org $AAE582      ; update timers when statue grabs Samus
 endif
     JSL ih_chozo_segment
 
+org $89AD0A      ; update timers when Samus escapes Ceres
+    JSL ih_ceres_elevator_segment
+
 org $90D340      ; update timers when shinespark bonk sound plays
     JSL ih_shinespark_segment
 
@@ -409,6 +412,12 @@ ih_chozo_segment:
 {
     JSL $8090CB ; overwritten code
     JML ih_update_hud_early
+}
+
+ih_ceres_elevator_segment:
+{
+    JSL ih_update_hud_early
+    JML $90F084 ; overwritten code
 }
 
 ih_update_hud_code:
