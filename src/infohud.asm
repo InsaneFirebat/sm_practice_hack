@@ -143,6 +143,13 @@ endif
 org $89AD0A      ; update timers when Samus escapes Ceres
     JSL ih_ceres_elevator_segment
 
+if !FEATURE_PAL
+org $A2AA38
+else
+org $A2AA20      ; update timers when Samus enters ship
+endif
+    JSL ih_ship_elevator_segment
+
 org $90D340      ; update timers when shinespark bonk sound plays
     JSL ih_shinespark_segment
 
@@ -418,6 +425,16 @@ ih_ceres_elevator_segment:
 {
     JSL ih_update_hud_early
     JML $90F084 ; overwritten code
+}
+
+ih_ship_elevator_segment:
+{
+    JSL ih_update_hud_early
+if !FEATURE_PAL
+    JML $91E35B ; overwritten code
+else
+    JML $91E3F6 ; overwritten code
+endif
 }
 
 ih_update_hud_code:
