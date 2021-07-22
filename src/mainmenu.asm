@@ -672,16 +672,16 @@ precat_rbo:
     %cm_jsr("Reverse Boss Order", #action_select_preset_category, #$000C)
 
 precat_nintendopower:
-    %cm_jsr("Nintendo Power%", #action_select_preset_category, #$000C)
+    %cm_jsr("Nintendo Power%", #action_select_preset_category, #$000D)
 
 precat_allbosskpdr:
-    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000D)
+    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000E)
 
 precat_allbosspkdr:
-    %cm_jsr("All Bosses PKDR", #action_select_preset_category, #$000E)
+    %cm_jsr("All Bosses PKDR", #action_select_preset_category, #$000F)
 
 precat_allbossprkd:
-    %cm_jsr("All Bosses PRKD", #action_select_preset_category, #$000F)
+    %cm_jsr("All Bosses PRKD", #action_select_preset_category, #$0010)
 
 action_select_preset_category:
 {
