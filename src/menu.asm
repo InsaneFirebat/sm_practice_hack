@@ -310,7 +310,7 @@ CharlesProfileTable:
     dw $602F, $602F, $7FFF, $0000, $0000, $7FFF, $602F, $602F, $0000, $602F, $7FFF
 
 GreyProfileTable:
-    dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $1CE7, $3DEF, $1CE7, $3DEF
+    dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $0012, $0C63, $1CE7, $3DEF
 
 RedProfileTable:
     dw $0010, $0000, $0010, $0000, $0010, $0000, $001F, $001F, $0000, $001F, $0010
