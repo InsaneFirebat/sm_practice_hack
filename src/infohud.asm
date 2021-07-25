@@ -1052,6 +1052,10 @@ ih_game_loop_code:
     PHA
 
     LDA !ram_transition_counter : INC : STA !ram_transition_counter
+    LDA !ram_metronome : BEQ .checkpants
+    JSR metronome
+
+  .checkpants
     if !FEATURE_EXTRAS
         LDA !ram_magic_pants_enabled : BEQ .infiniteammo
     else
@@ -1166,6 +1170,32 @@ endif
     STA !ram_enemy_hp
     STA !ram_shine_counter
     JMP .done
+}
+
+metronome:
+PRINT PC, " <---- BREAK FOR METRONOME"
+{
+    LDA !ram_metronome_counter : INC
+    CMP !sram_metronome_tickrate : BEQ .tick
+    CMP #$0002 : BEQ .eraseHUD
+    STA !ram_metronome_counter
+    RTS
+
+  .eraseHUD
+    STA !ram_metronome_counter
+    LDA !IH_BLANK : STA $7EC662
+    RTS
+
+  .tick
+    LDA !IH_LETTER_X : STA $7EC662
+    LDA #$0000 : STA !ram_metronome_counter
+    LDA !sram_metronome_sfx : ASL : TAX
+    LDA.l MetronomeSFX,X : JSL !SFX_LIB1
+    RTS
+
+MetronomeSFX:
+    ; missile, click, beep, shot, spazer
+    dw #$0003, #$0039, #$0036, #$000B, #$000F
 }
 
 magic_pants:

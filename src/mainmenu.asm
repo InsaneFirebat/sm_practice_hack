@@ -176,7 +176,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.2.5.2")
+    %cm_header("CUSTOM INFOHUD V2.2.6")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -200,7 +200,7 @@ mm_goto_infohud:
     %cm_submenu("InfoHUD", #InfoHudMenu)
 
 mm_goto_gamemenu:
-    %cm_submenu("Game Options", #GameMenu)
+    %cm_submenu("Game Settings", #GameMenu)
 
 mm_goto_rngmenu:
     %cm_submenu("RNG Control", #RngMenu)
@@ -1747,6 +1747,9 @@ if !FEATURE_PAL
 endif
     dw #game_minimap
     dw #game_clear_minimap
+    dw #game_metronome
+    dw #game_metronome_tickrate
+    dw #game_metronome_sfx
     dw #$0000
     %cm_header("GAME OPTIONS")
 
@@ -1794,6 +1797,27 @@ game_clear_minimap:
     STA $7EDD1C,X : STA $7E07F7,X
     DEX : DEX : BPL .clear_minimap_loop
     RTS
+
+game_metronome:
+    %cm_toggle("Metronome", !ram_metronome, #$0001, #0)
+
+game_metronome_tickrate:
+    %cm_numfield("Metronome Tickrate", !sram_metronome_tickrate, 1, 255, 1, #.routine)
+    .routine
+        LDA #$0000 : STA !ram_metronome_counter
+        RTS
+
+game_metronome_sfx:
+    dw !ACTION_CHOICE
+    dl #!sram_metronome_sfx
+    dw #$0000
+    db #$28, "Metronome SFX", #$FF
+        db #$28, "    MISSILE", #$FF
+        db #$28, "      CLICK", #$FF
+        db #$28, "       BEEP", #$FF
+        db #$28, " POWER BEAM", #$FF
+        db #$28, "     SPAZER", #$FF
+    db #$FF
 
 
 ; ----------
