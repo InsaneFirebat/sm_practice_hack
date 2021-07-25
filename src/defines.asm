@@ -290,6 +290,9 @@
 !ram_dboost_kb = $7FFC1C
 !ram_dboost_counter = $7FFC1E
 
+!ram_metronome = $7FFC20
+!ram_metronome_counter = $7FFC22
+
 ; FREE SPACE
 
 if !FEATURE_EXTRAS
@@ -375,6 +378,9 @@ endif
 !sram_presetrando_max_supers = $7020A0
 !sram_presetrando_max_pbs = $7020A2
 !sram_presetrando_beampref = $7020A4
+
+!sram_metronome_tickrate = $7020A6
+!sram_metronome_sfx = $7020A8
 
 ; FREE SPACE
 
