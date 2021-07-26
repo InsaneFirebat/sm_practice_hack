@@ -194,7 +194,10 @@ org $83AB92 ; Magnet Stairs (bottom) door asm pointer
 org $83AB6E ; Magnet Stairs (top) door asm pointer
     dw #MagnetStairFix
 
-org $8FEA00 ; free space for Magnet Stairs door asm
+org $83AAD2
+    dw #MotherBrainHP
+
+org $8FEA00 ; free space for door asm
 MagnetStairFix:
 {
     LDA !ram_magnetstairs : BEQ .done
@@ -204,6 +207,15 @@ MagnetStairFix:
     LDA #$10 : STA $7F01F9 : STA $7F02EB
     LDA #$53 : STA $7F64FD : STA $7F6576
     PLP
+
+  .done
+    RTS
+}
+
+MotherBrainHP:
+{
+    LDA !sram_display_mode : BNE .done
+    LDA #$0001 : STA !sram_display_mode : STA !sram_room_strat
 
   .done
     RTS
