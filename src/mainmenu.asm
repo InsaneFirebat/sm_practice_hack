@@ -176,7 +176,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.2.6.1")
+    %cm_header("CUSTOM INFOHUD V2.2.6.2")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -446,32 +446,31 @@ action_category:
     TYA : ASL #4 : TAX
 
     ; Items
-    LDA.l .table, X : STA $7E09A4 : STA $7E09A2 : INX #2
+    LDA .table,X : STA $7E09A4 : STA $7E09A2 : INX #2
 
     ; Beams
-    LDA.l .table, X : STA $7E09A8 : AND #$FFFB : STA $7E09A6 : INX #2
+    LDA .table,X : STA $7E09A8 : TAY
+    AND #$000C : CMP #$000C : BEQ .murderBeam
+    TYA : STA $7E09A6 : INX #2 : BRA +
+
+  .murderBeam
+    TYA : AND #$100B : STA $7E09A6 : INX #2
 
     ; Health
-    LDA.l .table, X : STA $7E09C2 : STA $7E09C4 : INX #2
++   LDA .table,X : STA $7E09C2 : STA $7E09C4 : INX #2
 
     ; Missiles
-    LDA.l .table, X : STA $7E09C6 : STA $7E09C8 : INX #2
+    LDA .table,X : STA $7E09C6 : STA $7E09C8 : INX #2
 
     ; Supers
-    LDA.l .table, X : STA $7E09CA : STA $7E09CC : INX #2
+    LDA .table,X : STA $7E09CA : STA $7E09CC : INX #2
 
     ; PBs
-    LDA.l .table, X : STA $7E09CE : STA $7E09D0 : INX #2
+    LDA .table,X : STA $7E09CE : STA $7E09D0 : INX #2
 
     ; Reserves
-    LDA.l .table, X : STA $7E09D4 : STA $7E09D6 : INX #2
+    LDA .table,X : STA $7E09D4 : STA $7E09D6 : INX #2
 
-    CPY #$0000 : BNE +
-
-    LDA $7E09A6 : AND #$000C : CMP #$000C : BNE +
-    LDA $7E09A6 : EOR #$0004 : STA $7E09A6
-
-    +
     JSR cm_set_etanks_and_reserve
     %sfxmissile()
     RTS
