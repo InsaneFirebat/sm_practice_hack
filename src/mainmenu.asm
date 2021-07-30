@@ -811,9 +811,7 @@ MiscMenu:
     dw #misc_music_toggle
     dw #misc_transparent
     dw #misc_invincibility
-    if !FEATURE_EXTRAS
-        dw #misc_infiniteammo
-    endif
+    dw #misc_infiniteammo
     dw #misc_magnetstairs
     dw #$0000
     %cm_header("MISC OPTIONS")
@@ -831,10 +829,10 @@ misc_babyslowdown:
     %cm_toggle("Baby Slowdown", $7E0A66, #$0002, #0)
 
 misc_magicpants:
-    %cm_toggle_bit("Magic Pants", !ram_magic_pants_enabled, #$0001, #0)
+    %cm_toggle_bit("Magic Pants", !ram_magic_pants_enabled, #$0001, GameLoopExtras)
 
 misc_spacepants:
-    %cm_toggle_bit("Space Pants", !ram_magic_pants_enabled, #$0002, #0)
+    %cm_toggle_bit("Space Pants", !ram_magic_pants_enabled, #$0002, GameLoopExtras)
 
 misc_fanfare_toggle:
     %cm_toggle("Fanfare", !sram_fanfare_toggle, #$0001, #0)
@@ -869,10 +867,8 @@ misc_transparent:
 misc_invincibility:
     %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
 
-if !FEATURE_EXTRAS
-    misc_infiniteammo:
-        %cm_toggle_bit("Infinite Ammo", !ram_infinite_ammo, #$0001, #0)
-endif
+misc_infiniteammo:
+    %cm_toggle_bit("Infinite Ammo", !ram_infinite_ammo, #$0001, #GameLoopExtras)
 
 misc_magnetstairs:
     %cm_toggle("Magnet Stairs Fix", !ram_magnetstairs, #$0001, #.routine)
@@ -1804,7 +1800,7 @@ game_clear_minimap:
     RTS
 
 game_metronome:
-    %cm_toggle("Metronome", !ram_metronome, #$0001, #0)
+    %cm_toggle("Metronome", !ram_metronome, #$0001, GameLoopExtras)
 
 game_metronome_tickrate:
     %cm_numfield("Metronome Tickrate", !sram_metronome_tickrate, 1, 255, 1, #.routine)
@@ -1823,6 +1819,18 @@ game_metronome_sfx:
         db #$28, " POWER BEAM", #$FF
         db #$28, "     SPAZER", #$FF
     db #$FF
+
+GameLoopExtras:
+{
+    LDA !ram_magic_pants_enabled : BNE .enabled
+    LDA !ram_metronome : BNE .enabled
+    LDA !ram_infinite_ammo : BNE .enabled
+    LDA #$0000 : STA !ram_game_loop_extras
+    RTS
+  .enabled
+    LDA #$0001 : STA !ram_game_loop_extras
+    RTS
+}
 
 
 ; ----------

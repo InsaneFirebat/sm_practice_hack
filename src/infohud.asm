@@ -1058,14 +1058,17 @@ ih_game_loop_code:
     PHA
 
     LDA !ram_transition_counter : INC : STA !ram_transition_counter
-    LDA !ram_metronome : BEQ .checkpants
+
+    LDA !ram_game_loop_extras : BEQ .handleinputs
+
+    LDA !ram_metronome : BEQ +
     JSR metronome
 
   .checkpants
     if !FEATURE_EXTRAS
-        LDA !ram_magic_pants_enabled : BEQ .infiniteammo
+    +   LDA !ram_magic_pants_enabled : BEQ .infiniteammo
     else
-        LDA !ram_magic_pants_enabled : BEQ .handleinputs
+    +   LDA !ram_magic_pants_enabled : BEQ .handleinputs
     endif
     CMP #$0001 : BEQ .magicpants
     CMP #$0002 : BEQ .spacepants
@@ -1088,7 +1091,6 @@ ih_game_loop_code:
   .spacepants
     JSR space_pants
 
-if !FEATURE_EXTRAS
   .infiniteammo
     LDA !ram_infinite_ammo : CMP !ram_infiniteammo_check : BMI .reset_ammo_check
     BEQ .handleinputs
@@ -1100,7 +1102,6 @@ if !FEATURE_EXTRAS
     LDA !ram_ammo_missiles : STA $7E09C6
     LDA !ram_ammo_supers : STA $7E09CA
     LDA !ram_ammo_powerbombs : STA $7E09CE
-endif
 
   .handleinputs
     LDA !IH_CONTROLLER_SEC_NEW : BEQ .done
@@ -1276,28 +1277,28 @@ space_pants:
     RTS
 }
 
+infinite_ammo:
+{
+    LDA !ram_infiniteammo_check : BNE + ; 0 if first time it's been run
+    INC : STA !ram_infiniteammo_check
+    ; preserve ammo counts
+    LDA $7E09C6 : STA !ram_ammo_missiles
+    LDA $7E09CA : STA !ram_ammo_supers
+    LDA $7E09CE : STA !ram_ammo_powerbombs
+
+    ; lock ammo to specific values
++   LDA #$01A4 : STA $7E09C6  ; missiles
+    LDA #$0045 : STA $7E09CA  ; supers
+    LDA #$0045 : STA $7E09CE  ; pbs
+    RTS
+}
+
 if !FEATURE_EXTRAS
     space_pants_helper:
     {
         LDA !ram_magic_pants_state : BEQ +
         STA $7EC194 : STA $7EC196 : STA $7EC198 : STA $7EC19A : STA $7EC19C : STA $7EC19E
-        RTL
-    }
-
-    infinite_ammo:
-    {
-        LDA !ram_infiniteammo_check : BNE + ; 0 if first time it's been run
-        INC : STA !ram_infiniteammo_check
-        ; preserve ammo counts
-        LDA $7E09C6 : STA !ram_ammo_missiles
-        LDA $7E09CA : STA !ram_ammo_supers
-        LDA $7E09CE : STA !ram_ammo_powerbombs
-
-        ; lock ammo to specific values
-+       LDA #$01A4 : STA $7E09C6  ; missiles
-        LDA #$0045 : STA $7E09CA  ; supers
-        LDA #$0045 : STA $7E09CE  ; pbs
-        RTS
+    +   RTL
     }
 endif
 

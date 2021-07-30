@@ -52,6 +52,9 @@
 !ram_draygon_rng_left = $7FFB68
 !ram_draygon_rng_right = $7FFB6A
 
+!ram_metronome = $7FFB6E
+!ram_metronome_counter = $7FFB70
+
 ; FREE SPACE ^
 
 
@@ -191,6 +194,8 @@
 !IH_STATUS_R = #$0010 ; r
 !IH_STATUS_L = #$0020 ; l
 
+!ram_game_loop_extras = $0A00
+
 !IH_INPUT_UP = $7E09AA
 !IH_INPUT_DOWN = $7E09AC
 !IH_INPUT_LEFT = $7E09AE
@@ -202,6 +207,12 @@
 !IH_INPUT_ITEM_SELECT = $7E09BA
 !IH_INPUT_ANGLE_UP = $7E09BC
 !IH_INPUT_ANGLE_DOWN = $7E09BE
+
+; Pointers to single queue soundfx/music
+!SFX_LIB1 = $80903F
+!SFX_LIB2 = $8090C1
+!SFX_LIB3 = $809143
+;!MUSIC_ROUTINE = $808FC1  ; duplicated here for reference
 
 
 ; -----
@@ -232,6 +243,8 @@
 !sram_preset_category = $702030
 !sram_room_strat = $702032
 !sram_sprite_prio_flag = $702034
+!sram_metronome_tickrate = $702036
+!sram_metronome_sfx = $702038
 
 ; FREE SPACE ^
 
@@ -290,9 +303,6 @@
 !ram_dboost_kb = $7FFC1C
 !ram_dboost_counter = $7FFC1E
 
-!ram_metronome = $7FFC20
-!ram_metronome_counter = $7FFC22
-
 ; FREE SPACE
 
 if !FEATURE_EXTRAS
@@ -343,11 +353,12 @@ endif
 !ram_soundtest_lib3 = $7FFCFC
 !ram_soundtest_music = $7FFCFE
 
-; Pointers to single queue soundfx/music
-!SFX_LIB1 = $80903F
-!SFX_LIB2 = $8090C1
-!SFX_LIB3 = $809143
-;!MUSIC_ROUTINE = $808FC1  ; duplicated here for reference
+
+; ------------
+; Pointers
+; ------------
+
+!ram_game_loop_extras = $0A00
 
 
 ; -----
@@ -378,9 +389,6 @@ endif
 !sram_presetrando_max_supers = $7020A0
 !sram_presetrando_max_pbs = $7020A2
 !sram_presetrando_beampref = $7020A4
-
-!sram_metronome_tickrate = $7020A6
-!sram_metronome_sfx = $7020A8
 
 ; FREE SPACE
 
