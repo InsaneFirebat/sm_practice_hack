@@ -110,9 +110,11 @@ endif
     CLC : RTS
 
   .load_last_preset
-    LDA !sram_last_preset : STA !ram_load_preset
+    LDA !sram_last_preset : BEQ + : STA !ram_load_preset
     ; SEC to skip normal gameplay for one frame after loading preset
     SEC : RTS
+    ; Choose a random preset if zero
++   JMP .random_preset
 
   .reset_segment_timer
     LDA #$0000
