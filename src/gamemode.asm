@@ -70,6 +70,14 @@ gamemode_shortcuts:
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .reveal_damage
 
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_save_custom_preset : CMP !sram_ctrl_save_custom_preset : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .save_custom_preset
+
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_custom_preset : CMP !sram_ctrl_load_custom_preset : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .load_custom_preset
+
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .random_preset
@@ -146,6 +154,28 @@ endif
   + LDA !ram_display_backup : STA !sram_display_mode
     %sfxship()
     CLC : RTS
+
+  .save_custom_preset
+    JSL custom_preset_save
+    ; CLC to continue normal gameplay after saving preset
+    %sfxconfirm()
+    CLC : RTS
+
+  .load_custom_preset
+    ; check if slot is populated first
+    LDA !sram_custom_preset_slot : ASL : TAX
+    LDA.l PresetSlot,X : TAX
+    LDA $703000,X : CMP #$5AFE : BEQ .safe
+    %sfxgoback()
+    ; CLC to continue normal gameplay after failing to load preset
+    CLC : RTS
+
+  .safe
+    LDA #$FFFF : STA !ram_custom_preset
+    JSL preset_load
+    LDA #$0000 : STA !ram_custom_preset
+    ; SEC to skip normal gameplay for one frame after loading preset
+    SEC : RTS
 
   .random_preset
     JSL LoadRandomPreset
