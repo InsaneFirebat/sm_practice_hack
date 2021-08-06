@@ -1,4 +1,4 @@
-!SRAM_VERSION = $0006
+!SRAM_VERSION = $0007
 
 
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values
@@ -55,6 +55,8 @@ init_sram:
     LDA #$0000 : STA !sram_ctrl_reveal_damage
     LDA #$0000 : STA !sram_ctrl_random_preset
     LDA #$0000 : STA !sram_ctrl_randomize_rng
+    LDA #$0000 : STA !sram_ctrl_save_custom_preset
+    LDA #$0000 : STA !sram_ctrl_load_custom_preset
 
     ; Input Cheat Sheet  ($4218)
     ; $8000 = B
@@ -84,6 +86,7 @@ init_sram:
     LDA #$0000 : STA !sram_countdamage
     LDA #$0001 : STA !sram_menu_background
     LDA #$0000 : STA !sram_sprite_prio_flag
+    LDA #$0000 : STA !sram_custom_preset_slot
     LDA #$000A : STA !sram_metronome_tickrate
     LDA #$0002 : STA !sram_metronome_sfx
     LDA #$0001 : STA !sram_healthalarm
