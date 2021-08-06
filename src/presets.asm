@@ -134,6 +134,13 @@ preset_load_preset:
     LDA #$0000
     STA $7E09D2 ; Current selected weapon
     STA $7E0A04 ; Auto-cancel item
+
+    ; check if custom preset is being loaded
+    LDA !ram_custom_preset : BEQ .normal_preset
+    JSL custom_preset_load
+    BRA .done
+
+  .normal_preset
     LDA !sram_preset_category : ASL : TAX
     LDA.l preset_banks,X : %a8() : PHA : PLB : %a16()
 
