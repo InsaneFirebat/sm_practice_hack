@@ -81,14 +81,24 @@ preset_load:
     JSL reset_all_counters
     STZ $0795 ; clear door transition flag
 
-    ; Clear enemies (8000 = solid to Samus, 0400 = Ignore Samus projectiles)
+    ; Option to clear enemies, 1 = kill
+    LDA !sram_preset_enemies : BEQ .enemies
     LDA #$0000
-    -
-    TAX : LDA $0F86,X : BIT #$8400 : BNE +
+
+    ; 8000 = solid to Samus, 0400 = Ignore Samus projectiles
+-   TAX : LDA $0F86,X : BIT #$8400 : BNE +
     ORA #$0200 : STA $0F86,X
-    +
-    TXA : CLC : ADC #$0040 : CMP #$0400 : BNE -
-    ; JSL $A08A6D
+
++   TXA : CLC : ADC #$0040 : CMP #$0400 : BNE -
+    ; JSL $A08A6D ; Clear enemy data and process enemy set ;; Pinkus probably disabled this call because it's already been executed
+    BRA .done
+
+  .enemies
+    LDA !ram_custom_preset : BEQ .done
+    JSL custom_preset_enemy_data
+
+  .done
+    LDA #$0000 : STA !ram_custom_preset
     PLP
     RTL
 }
@@ -123,6 +133,13 @@ preset_load_preset:
     LDA #$0000
     STA $7E09D2 ; Current selected weapon
     STA $7E0A04 ; Auto-cancel item
+
+    ; check if custom preset is being loaded
+    LDA !ram_custom_preset : BEQ .normal_preset
+    JSL custom_preset_load
+    BRA .done
+
+  .normal_preset
     LDA !sram_preset_category : ASL : TAX
     LDA.l preset_banks,X : %a8() : PHA : PLB : %a16()
 
@@ -294,13 +311,19 @@ transfer_cgram_long:
     PLP
     RTL
 }
+
 print pc, " preset_start_gameplay end"
 warnpc $80FFC0
 
+
+org $FD8000
+print pc, " custom presets start"
+incsrc custompresets.asm
+print pc, " custom presets end"
+warnpc $85F000
 
 org $FF8000
 print pc, " preset menu/data start"
 incsrc presets/prkd_menu.asm
 incsrc presets/prkd_data.asm
 print pc, " preset menu/data end"
-
