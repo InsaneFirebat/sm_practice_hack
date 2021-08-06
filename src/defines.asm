@@ -33,6 +33,7 @@
 !ram_minimap = $7FFB34
 !ram_map_counter = $7FFB36
 !ram_vcounter_data = $7FFB38
+!ram_custom_preset = $7FFB3C
 
 ; FREE SPACE ^
 
@@ -229,6 +230,8 @@
 !sram_ctrl_save_state = $70200C
 !sram_ctrl_load_last_preset = $70200E
 !sram_ctrl_random_preset = $702010
+!sram_ctrl_save_custom_preset = $702012
+!sram_ctrl_load_custom_preset = $702014
 
 ; FREE SPACE ^
 
@@ -245,6 +248,7 @@
 !sram_sprite_prio_flag = $702034
 !sram_metronome_tickrate = $702036
 !sram_metronome_sfx = $702038
+!sram_custom_preset_slot = $70203A
 
 ; FREE SPACE ^
 
@@ -380,15 +384,15 @@ endif
 !sram_superhud_middle = $702190
 !sram_superhud_top = $702192
 
-!sram_presetrando = $702094
-!sram_presetrando_morph = $702096
-!sram_presetrando_charge = $702098
-!sram_presetrando_max_etanks = $70209A
-!sram_presetrando_max_reserves = $70209C
-!sram_presetrando_max_missiles = $70209E
-!sram_presetrando_max_supers = $7020A0
-!sram_presetrando_max_pbs = $7020A2
-!sram_presetrando_beampref = $7020A4
+!sram_presetrando = $702194
+!sram_presetrando_morph = $702196
+!sram_presetrando_charge = $702198
+!sram_presetrando_max_etanks = $70219A
+!sram_presetrando_max_reserves = $70219C
+!sram_presetrando_max_missiles = $70219E
+!sram_presetrando_max_supers = $7021A0
+!sram_presetrando_max_pbs = $7021A2
+!sram_presetrando_beampref = $7021A4
 
 ; FREE SPACE
 
