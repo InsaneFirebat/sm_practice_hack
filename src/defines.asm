@@ -33,6 +33,7 @@
 !ram_minimap = $7FFB34
 !ram_map_counter = $7FFB36
 !ram_vcounter_data = $7FFB38
+!ram_custom_preset = $7FFB3C
 
 ; FREE SPACE ^
 
@@ -222,6 +223,10 @@
 !sram_ctrl_save_state = $70200C
 !sram_ctrl_load_last_preset = $70200E
 !sram_ctrl_random_preset = $702010
+!sram_ctrl_save_custom_preset = $702012
+!sram_ctrl_load_custom_preset = $702014
+!sram_ctrl_inc_custom_preset = $702018
+!sram_ctrl_dec_custom_preset = $70201A
 
 ; FREE SPACE ^
 
@@ -238,6 +243,8 @@
 !sram_sprite_prio_flag = $702034
 !sram_metronome_tickrate = $702036
 !sram_metronome_sfx = $702038
+!sram_custom_preset_slot = $70203A
+!sram_preset_enemies = $70203C
 
 ; FREE SPACE ^
 
@@ -262,4 +269,3 @@
 !MUSIC_BANK = $07F3
 !MUSIC_TRACK = $07F5
 !MUSIC_ROUTINE = $808FC1
-
