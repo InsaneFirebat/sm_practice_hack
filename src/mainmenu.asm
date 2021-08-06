@@ -129,7 +129,7 @@ preset_category_banks:
 MainMenu:
     dw #mm_goto_equipment
     dw #mm_goto_presets
-    dw #mm_goto_select_preset_category
+    dw #mm_goto_presets_menu
     dw #mm_goto_teleport
     dw #mm_goto_events
     dw #mm_goto_misc
@@ -146,8 +146,8 @@ mm_goto_equipment:
 mm_goto_presets:
     %cm_jsr("Category Presets", #action_presets_submenu, #$0000)
 
-mm_goto_select_preset_category:
-    %cm_submenu("Select Preset Category", #SelectPresetCategoryMenu)
+mm_goto_presets_menu:
+    %cm_submenu("Presets Menu", #PresetsMenu)
 
 mm_goto_teleport:
     %cm_submenu("Teleport", #TeleportMenu)
@@ -174,6 +174,84 @@ mm_goto_ctrlsmenu:
 ; -------------
 ; Presets menu
 ; -------------
+
+
+; -------------
+; Presets menu
+; -------------
+
+PresetsMenu:
+    dw #presets_goto_select_preset_category
+    dw #presets_current
+    dw #presets_custom_preset_slot
+    dw #presets_save_custom_preset
+    dw #presets_load_custom_preset
+    dw #presets_kill_enemies
+    dw #$0000
+    %cm_header("PRESET OPTIONS MENU")
+
+presets_goto_select_preset_category:
+    %cm_submenu("Select Preset Category", #SelectPresetCategoryMenu)
+
+presets_custom_preset_slot:
+    %cm_numfield("Custom Preset Slot", !sram_custom_preset_slot, 0, 31, 1, #0) ; update max slots in gamemode.asm
+
+presets_save_custom_preset:
+    %cm_jsr("Save Custom Preset", #action_save_custom_preset, #$0000)
+
+presets_load_custom_preset:
+    %cm_jsr("Load Custom Preset", #action_load_custom_preset, #$0000)
+
+presets_kill_enemies:
+    %cm_toggle("Auto-Kill Enemies", !sram_preset_enemies, #$0001, #0)
+
+SelectPresetCategoryMenu:
+    dw #presets_current
+    dw #precat_prkd
+    dw #$0000
+    %cm_header("SELECT PRESET CATEGORY")
+
+presets_current:
+    dw !ACTION_CHOICE
+    dl #!sram_preset_category
+    dw #$0000
+    db #$28, "CURRENT PRESET", #$FF
+        db #$28, "  ANY% PRKD", #$FF
+    db #$FF
+
+precat_prkd:
+    %cm_jsr("Any% PRKD", #action_select_preset_category, #$0000)
+
+action_select_preset_category:
+{
+    TYA : STA !sram_preset_category
+    JSR cm_go_back
+    JSR cm_calculate_max
+    RTS
+}
+
+action_save_custom_preset:
+{
+    JSL custom_preset_save
+    LDA #$0001 : STA !ram_cm_leave
+    LDA #!SOUND_MENU_MOVE : JSL $80903F
+    RTS
+}
+
+action_load_custom_preset:
+{
+    ; check if slot is populated first
+    LDA !sram_custom_preset_slot : ASL : TAX
+    LDA.l PresetSlot,X : TAX
+    LDA $703000,X : CMP #$5AFE : BEQ .safe
+    LDA #$0007 : JSL $80903F
+    RTS
+
+  .safe
+    STA !ram_custom_preset
+    LDA #$0001 : STA !ram_cm_leave
+    RTS
+}
 
 LoadRandomPreset:
 {
@@ -500,37 +578,6 @@ tb_spazerbeam:
 
 tb_plasmabeam:
     %cm_toggle_bit("Plasma", $7E09A8, #$0008, #0)
-
-
-; ------------------
-; Select Preset Category menu
-; ------------------
-
-SelectPresetCategoryMenu:
-    dw #precat_current
-    dw #precat_anynoboss
-    dw #$0000
-    %cm_header("SELECT PRESET CATEGORY")
-
-precat_current:
-    dw !ACTION_CHOICE
-    dl #!sram_preset_category
-    dw #$0000
-    db #$28, "CURRENT PRESET", #$FF
-        db #$28, "ANY NO BOSS", #$FF
-    db #$FF
-    db #$FF
-
-precat_anynoboss:
-    %cm_jsr("Any% No Bosses", #action_select_preset_category, #$0000)
-
-action_select_preset_category:
-{
-    TYA : STA !sram_preset_category
-    JSR cm_go_back
-    JSR cm_calculate_max
-    RTS
-}
 
 
 ; ---------------
@@ -1402,15 +1449,19 @@ rng_kraid_rng:
 
 CtrlMenu:
     dw #ctrl_menu
-    dw #ctrl_load_last_preset
     if !FEATURE_SD2SNES
         dw #ctrl_save_state
         dw #ctrl_load_state
     endif
+    dw #ctrl_load_last_preset
+    dw #ctrl_save_custom_preset
+    dw #ctrl_load_custom_preset
+    dw #ctrl_inc_custom_preset
+    dw #ctrl_dec_custom_preset
+    dw #ctrl_random_preset
     dw #ctrl_reset_segment_timer
     dw #ctrl_full_equipment
     dw #ctrl_kill_enemies
-    dw #ctrl_random_preset
     dw #ctrl_clear_shortcuts
     dw #$0000
     %cm_header("CONTROLLER SHORTCUTS")
@@ -1440,6 +1491,18 @@ ctrl_kill_enemies:
 ctrl_random_preset:
     %cm_ctrl_shortcut("Random Preset", !sram_ctrl_random_preset)
 
+ctrl_save_custom_preset:
+    %cm_ctrl_shortcut("Save Cust Preset", !sram_ctrl_save_custom_preset)
+
+ctrl_load_custom_preset:
+    %cm_ctrl_shortcut("Load Cust Preset", !sram_ctrl_load_custom_preset)
+
+ctrl_inc_custom_preset:
+    %cm_ctrl_shortcut("Next Preset Slot", !sram_ctrl_inc_custom_preset)
+
+ctrl_dec_custom_preset:
+    %cm_ctrl_shortcut("Prev Preset Slot", !sram_ctrl_dec_custom_preset)
+
 ctrl_clear_shortcuts:
     %cm_jsr("Clear Shortcuts", action_clear_shortcuts, #$0000)
 
@@ -1452,6 +1515,10 @@ action_clear_shortcuts:
     STA !sram_ctrl_full_equipment
     STA !sram_ctrl_kill_enemies
     STA !sram_ctrl_random_preset
+    STA !sram_ctrl_save_custom_preset
+    STA !sram_ctrl_load_custom_preset
+    STA !sram_ctrl_inc_custom_preset
+    STA !sram_ctrl_dec_custom_preset
     STA !sram_ctrl_reset_segment_timer
     ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
