@@ -149,6 +149,8 @@ stop_all_sounds:
 
 print pc, " misc end"
 
+print pc, " misc bankA0 end"
+
 
 ; -----------
 ; Axeil Hacks

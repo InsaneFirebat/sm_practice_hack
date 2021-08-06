@@ -22,12 +22,12 @@ gamemode_start:
     ; don't load presets if we're in credits
     LDA $0998 : CMP #$0027 : BEQ +
 
-    LDA !ram_load_preset : BEQ +
+    LDA !ram_custom_preset : BNE +
+    LDA !ram_load_preset : BEQ ++
 
-    JSL preset_load
++   JSL preset_load
 
-    +
-    LDA $0998 : AND #$00FF
+++  LDA $0998 : AND #$00FF
     PLP
     PLB
     RTL
@@ -65,6 +65,14 @@ gamemode_shortcuts:
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_full_equipment : CMP !sram_ctrl_full_equipment : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .full_equipment
+
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_save_custom_preset : CMP !sram_ctrl_save_custom_preset : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .save_custom_preset
+
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_custom_preset : CMP !sram_ctrl_load_custom_preset : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .load_custom_preset
 
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
@@ -125,6 +133,27 @@ gamemode_shortcuts:
     LDA $7E09D4 : STA $7E09D6 ; reserves
     ; CLC to continue normal gameplay after equipment refill
     CLC : RTS
+
+  .save_custom_preset
+    JSL custom_preset_save
+    ; CLC to continue normal gameplay after saving preset
+    LDA #!SOUND_MENU_MOVE : JSL $80903F
+    CLC : RTS
+
+  .load_custom_preset
+    ; check if slot is populated first
+    LDA !sram_custom_preset_slot : ASL : TAX
+    LDA.l PresetSlot,X : TAX
+    LDA $703000,X : CMP #$5AFE : BEQ .safe
+    LDA #$0007 : JSL $80903F
+    ; CLC to continue normal gameplay after failing to load preset
+    CLC : RTS
+
+  .safe
+    STA !ram_custom_preset
+    JSL preset_load
+    ; SEC to skip normal gameplay for one frame after loading preset
+    SEC : RTS
 
   .random_preset
     JSL LoadRandomPreset
