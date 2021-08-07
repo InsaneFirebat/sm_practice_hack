@@ -420,7 +420,7 @@ LoadRandomPreset:
     LDA [$16],Y : BNE .subloop
     TYA : LSR : TAY
 
-    LDA $12 : AND #$00FF : STA $4204     ; divide random number...
+    LDA $12 : AND #$00FF : STA $4204           ; divide random number...
     %a8()
     STY $4206                                  ; by number of presets in the group
     %a16()
