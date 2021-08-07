@@ -279,6 +279,7 @@ PaletteProfileTables:
     dw #wardrinkerProfileTable
     dw #mm2ProfileTable
     dw #ptoilProfileTable
+    dw #ZohdinProfileTable
     dw #TwitchProfileTable
     dw #GreyProfileTable
     dw #RedProfileTable
@@ -306,6 +307,9 @@ mm2ProfileTable:
 
 ptoilProfileTable:
     dw $5CAA, $14A5, $01EF, $0000, $0000, $5294, $4376, $03FF, $0000, $0000, $7FFF
+
+ZohdinProfileTable:
+    dw $7BFF, $0402, $0300, $0060, $0100, $9700, $7B64, $7BFF, $94A6, $2051, $09BF
 
 TwitchProfileTable:
     dw $550D, $550D, $7FFF, $0000, $0000, $7FFF, $550D, $550D, $0000, $550D, $7FFF
