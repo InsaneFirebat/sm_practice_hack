@@ -176,7 +176,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.2.6.4")
+    %cm_header("CUSTOM INFOHUD V2.2.6.5")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -218,9 +218,11 @@ mm_goto_IFBmenu:
 
 PresetsMenu:
     dw #presets_goto_select_preset_category
+    dw #presets_current
     dw #presets_custom_preset_slot
     dw #presets_save_custom_preset
     dw #presets_load_custom_preset
+    dw #presets_kill_enemies
     dw #$0000
     %cm_header("PRESET OPTIONS MENU")
 
@@ -228,7 +230,7 @@ presets_goto_select_preset_category:
     %cm_submenu("Select Preset Category", #SelectPresetCategoryMenu)
 
 presets_custom_preset_slot:
-    %cm_numfield("Custom Preset Slot", !sram_custom_preset_slot, 0, 39, 1, #0)
+    %cm_numfield("Custom Preset Slot", !sram_custom_preset_slot, 0, 27, 1, #0)
 
 presets_save_custom_preset:
     %cm_jsr("Save Custom Preset", #action_save_custom_preset, #$0000)
@@ -236,8 +238,11 @@ presets_save_custom_preset:
 presets_load_custom_preset:
     %cm_jsr("Load Custom Preset", #action_load_custom_preset, #$0000)
 
+presets_kill_enemies:
+    %cm_toggle("Auto-Kill Enemies", !sram_preset_enemies, #$0001, #0)
+
 SelectPresetCategoryMenu:
-    dw #precat_current
+    dw #presets_current
     dw #precat_kpdr21
     dw #precat_prkd
     dw #precat_pkrd
@@ -257,7 +262,7 @@ SelectPresetCategoryMenu:
     dw #$0000
     %cm_header("SELECT PRESET CATEGORY")
 
-precat_current:
+presets_current:
     dw !ACTION_CHOICE
     dl #!sram_preset_category
     dw #$0000
@@ -354,9 +359,7 @@ action_load_custom_preset:
     RTS
 
   .safe
-    LDA #$FFFF : STA !ram_custom_preset
-    JSL preset_load
-    LDA #$0000 : STA !ram_custom_preset
+    STA !ram_custom_preset
     LDA #$0001 : STA !ram_cm_leave
     RTS
 }

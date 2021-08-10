@@ -22,12 +22,12 @@ gamemode_start:
     ; don't load presets if we're in credits
     LDA $0998 : CMP #$0027 : BEQ +
 
-    LDA !ram_load_preset : BEQ +
+    LDA !ram_custom_preset : BNE +
+    LDA !ram_load_preset : BEQ ++
 
-    JSL preset_load
++   JSL preset_load
 
-    +
-    LDA $0998 : AND #$00FF
+++  LDA $0998 : AND #$00FF
     PLP
     PLB
     RTL
@@ -171,9 +171,8 @@ endif
     CLC : RTS
 
   .safe
-    LDA #$FFFF : STA !ram_custom_preset
+    STA !ram_custom_preset
     JSL preset_load
-    LDA #$0000 : STA !ram_custom_preset
     ; SEC to skip normal gameplay for one frame after loading preset
     SEC : RTS
 

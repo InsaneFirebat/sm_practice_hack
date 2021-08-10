@@ -4,18 +4,31 @@
 
 print pc, " custom presets start"
 
-PresetSlot: ; 1AEh bytes needed per slot
-    dw $0000, $01AE, $035C, $050A, $06B8, $0866, $0A14, $0BC2
-    dw $0D70, $0F1E, $10CC, $127A, $1428, $15D6, $1784, $1932
-    dw $1AE0, $1C8E, $1E3C, $1FEA, $2198, $2346, $24F4, $26A2
-    dw $2850, $29FE, $2BAC, $2D5A, $2F08, $30B6, $3264, $3412
-    dw $35C0, $376E, $391C, $3ACA, $3C78, $3E26, $3FD4, $4182
-    dw $4330, $44DE, $468C, $483A, $49E8, $4B96, $4D44
+PresetSlot: ; 2DEh bytes needed per slot
+    dw $0000, $02DE, $05BC, $089A, $0B78, $0E56, $1134, $1412
+    dw $16F0, $19CE, $1CAC, $1F8A, $2268, $2546, $2824, $2B02
+    dw $2DE0, $30BE, $339C, $367A, $3958, $3C36, $3F14, $41F2
+    dw $44D0, $47AE, $4A8C, $4D6A
+
+    ; 26Eh bytes needed per slot
+;    dw $0000, $026E, $04DC, $074A, $09B8, $0C26, $0E94, $1102
+;    dw $1370, $15DE, $184C, $1ABA, $1D28, $1F96, $2204, $2472
+;    dw $26E0, $294E, $2BBC, $2E2A, $3098, $3306, $3574, $37E2
+;    dw $3A50, $3CBE, $3F2C, $419A, $4408, $4676, $48E4, $4B52
+;    dw $4DC0
+
+    ; 1AEh size slots (no enemy RAM)
+;    dw $0000, $01AE, $035C, $050A, $06B8, $0866, $0A14, $0BC2
+;    dw $0D70, $0F1E, $10CC, $127A, $1428, $15D6, $1784, $1932
+;    dw $1AE0, $1C8E, $1E3C, $1FEA, $2198, $2346, $24F4, $26A2
+;    dw $2850, $29FE, $2BAC, $2D5A, $2F08, $30B6, $3264, $3412
+;    dw $35C0, $376E, $391C, $3ACA, $3C78, $3E26, $3FD4, $4182
+;    dw $4330, $44DE, $468C, $483A, $49E8, $4B96, $4D44
 
 custom_preset_save:
 {
     LDA !sram_custom_preset_slot : ASL : TAX
-    LDA.l PresetSlot,X : TAX
+    LDA.l PresetSlot,X : TAX : LDY #$0000
     LDA #$5AFE : STA $703000,X : INX #2 ; mark this slot as "SAFE" to load
     LDA $078B : STA $703000,X : INX #2 ;  Elevator Index
     LDA $078D : STA $703000,X : INX #2 ;  DDB
@@ -27,7 +40,7 @@ custom_preset_save:
     LDA $07C7 : STA $703000,X : INX #2 ;  GFX Pointers
     LDA $07F3 : STA $703000,X : INX #2 ;  Music Bank
     LDA $07F5 : STA $703000,X : INX #2 ;  Music Track
-    LDA $090F : STA $703000,X : INX #2 ;  Screen subpixel X position.
+    LDA $090F : STA $703000,X : INX #2 ;  Screen subpixel X position
     LDA $0911 : STA $703000,X : INX #2 ;  Screen X position in pixels
     LDA $0913 : STA $703000,X : INX #2 ;  Screen subpixel Y position
     LDA $0915 : STA $703000,X : INX #2 ;  Screen Y position in pixels
@@ -231,13 +244,38 @@ custom_preset_save:
     LDA $7ED91A : STA $703000,X : INX #2 ;  Events, Items, Doors
     LDA $7ED91C : STA $703000,X : INX #2 ;  Events, Items, Doors
     LDA $7ED91E : STA $703000,X : INX #2 ;  Events, Items, Doors
+
+  .loopEnemies
+    LDA $0F7A,Y : STA $703000,X : INX #2 ;  Enemy X position
+    LDA $0F7C,Y : STA $703000,X : INX #2 ;  Enemy X subposition
+    LDA $0F7E,Y : STA $703000,X : INX #2 ;  Enemy Y position
+    LDA $0F80,Y : STA $703000,X : INX #2 ;  Enemy Y subposition
+    LDA $0F8A,Y : STA $703000,X : INX #2 ;  Enemy AI handler
+    LDA $0F8C,Y : STA $703000,X : INX #2 ;  Enemy Health
+    LDA $0F90,Y : STA $703000,X : INX #2 ;  Enemy Timer
+    LDA $0F92,Y : STA $703000,X : INX #2 ;  Enemy Initialisation parameter / instruction list pointer
+    LDA $0F94,Y : STA $703000,X : INX #2 ;  Enemy Instruction timer
+    LDA $0F96,Y : STA $703000,X : INX #2 ;  Enemy Palette index
+    LDA $0F9C,Y : STA $703000,X : INX #2 ;  Flash timer
+    LDA $0F9E,Y : STA $703000,X : INX #2 ;  Enemy Frozen timer
+    LDA $0FA0,Y : STA $703000,X : INX #2 ;  Enemy Invincibility timer
+    LDA $0FA4,Y : STA $703000,X : INX #2 ;  Enemy Frame counter
+    LDA $0FAA,Y : STA $703000,X : INX #2 ;  Enemy AI variable
+    LDA $0FAC,Y : STA $703000,X : INX #2 ;  Enemy AI variable
+    LDA $0FAE,Y : STA $703000,X : INX #2 ;  Enemy AI variable
+    LDA $0FB0,Y : STA $703000,X : INX #2 ;  Enemy AI variable
+    LDA $0FB2,Y : STA $703000,X : INX #2 ;  Enemy AI variable
+    TYA : CLC : ADC #$0040 : TAY : CPY #$0200 : BPL .done
+    JMP .loopEnemies
+
+  .done
     RTL
 }
 
 custom_preset_load:
 {
     LDA !sram_custom_preset_slot : ASL : TAX
-    LDA.l PresetSlot,X : TAX
+    LDA.l PresetSlot,X : TAX : LDY #$0000
     INX #2 ; skip past "5AFE" word
 +   LDA $703000,X : STA $078B : INX #2 ;  Elevator Index
     LDA $703000,X : STA $078D : INX #2 ;  DDB
@@ -249,7 +287,7 @@ custom_preset_load:
     LDA $703000,X : STA $07C7 : INX #2 ;  GFX Pointers
     LDA $703000,X : STA $07F3 : INX #2 ;  Music Bank
     LDA $703000,X : STA $07F5 : INX #2 ;  Music Track
-    LDA $703000,X : STA $090F : INX #2 ;  Screen subpixel X position.
+    LDA $703000,X : STA $090F : INX #2 ;  Screen subpixel X position
     LDA $703000,X : STA $0911 : INX #2 ;  Screen X position in pixels
     LDA $703000,X : STA $0913 : INX #2 ;  Screen subpixel Y position
     LDA $703000,X : STA $0915 : INX #2 ;  Screen Y position in pixels
@@ -453,6 +491,38 @@ custom_preset_load:
     LDA $703000,X : STA $7ED91A : INX #2 ;  Events, Items, Doors
     LDA $703000,X : STA $7ED91C : INX #2 ;  Events, Items, Doors
     LDA $703000,X : STA $7ED91E : INX #2 ;  Events, Items, Doors
+    RTL
+}
+
+custom_preset_enemy_data:
+{
+    LDA !sram_custom_preset_slot : ASL : TAX
+    LDA.l PresetSlot,X : TAX : LDY #$0000
+
+  .loopEnemies
+    LDA $7031AE,X : STA $0F7A,Y : INX #2 ;  Enemy X position
+    LDA $7031AE,X : STA $0F7C,Y : INX #2 ;  Enemy X subposition
+    LDA $7031AE,X : STA $0F7E,Y : INX #2 ;  Enemy Y position
+    LDA $7031AE,X : STA $0F80,Y : INX #2 ;  Enemy Y subposition
+    LDA $7031AE,X : STA $0F8A,Y : INX #2 ;  Enemy AI handler
+    LDA $7031AE,X : STA $0F8C,Y : INX #2 ;  Enemy Health
+    LDA $7031AE,X : STA $0F90,Y : INX #2 ;  Enemy Timer
+    LDA $7031AE,X : STA $0F92,Y : INX #2 ;  Enemy Initialisation parameter / instruction list pointer
+    LDA $7031AE,X : STA $0F94,Y : INX #2 ;  Enemy Instruction timer
+    LDA $7031AE,X : STA $0F96,Y : INX #2 ;  Enemy Palette index
+    LDA $703000,X : STA $0F9C,Y : INX #2 ;  Flash timer
+    LDA $7031AE,X : STA $0F9E,Y : INX #2 ;  Enemy Frozen timer
+    LDA $7031AE,X : STA $0FA0,Y : INX #2 ;  Enemy Invincibility timer
+    LDA $7031AE,X : STA $0FA4,Y : INX #2 ;  Enemy Frame counter
+    LDA $7031AE,X : STA $0FAA,Y : INX #2 ;  Enemy AI variable
+    LDA $7031AE,X : STA $0FAC,Y : INX #2 ;  Enemy AI variable
+    LDA $7031AE,X : STA $0FAE,Y : INX #2 ;  Enemy AI variable
+    LDA $7031AE,X : STA $0FB0,Y : INX #2 ;  Enemy AI variable
+    LDA $7031AE,X : STA $0FB2,Y : INX #2 ;  Enemy AI variable
+    TYA : CLC : ADC #$0040 : TAY : CPY #$0200 : BPL .done
+    JMP .loopEnemies
+
+  .done
     RTL
 }
 

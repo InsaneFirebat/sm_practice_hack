@@ -249,6 +249,7 @@
 !sram_metronome_tickrate = $702036
 !sram_metronome_sfx = $702038
 !sram_custom_preset_slot = $70203A
+!sram_preset_enemies = $70203C
 
 ; FREE SPACE ^
 
@@ -307,12 +308,12 @@
 !ram_dboost_kb = $7FFC1C
 !ram_dboost_counter = $7FFC1E
 
-; FREE SPACE
+; FREE SPACE ^
 
 if !FEATURE_EXTRAS
     !ram_noclip = $7FFC30
     !ram_steamcollision = $7FFC32
-; FREE SPACE
+; FREE SPACE ^
 endif
 
 !ram_enemy0_last_xpos = $7FFC40
@@ -336,7 +337,7 @@ endif
 !ram_radar1 = $7FFC64
 !ram_radar2 = $7FFC66
 
-; FREE SPACE
+; FREE SPACE ^
 
 !ram_custompalette_menuborder = $7FFCE0
 !ram_custompalette_menuheaderoutline = $7FFCE2
@@ -350,7 +351,7 @@ endif
 !ram_custompalette_menunumseloutline = $7FFCF2
 !ram_custompalette_menunumsel = $7FFCF4
 
-; FREE SPACE
+; FREE SPACE ^
 
 !ram_soundtest_lib1 = $7FFCF8
 !ram_soundtest_lib2 = $7FFCFA
@@ -374,27 +375,28 @@ endif
 
 !sram_countdamage = $702110
 !sram_menu_background = $702112
-!sram_dummy_on = $702114
-!sram_dummy_off = $702116
-!sram_dummy_num = $702118
-!sram_healthalarm = $70218A
+!sram_healthalarm = $70211A
 
-!sram_superhud = $70218C
-!sram_superhud_bottom = $70218E
-!sram_superhud_middle = $702190
-!sram_superhud_top = $702192
+; FREE SPACE ^
 
-!sram_presetrando = $702194
-!sram_presetrando_morph = $702196
-!sram_presetrando_charge = $702198
-!sram_presetrando_max_etanks = $70219A
-!sram_presetrando_max_reserves = $70219C
-!sram_presetrando_max_missiles = $70219E
-!sram_presetrando_max_supers = $7021A0
-!sram_presetrando_max_pbs = $7021A2
-!sram_presetrando_beampref = $7021A4
+!sram_superhud = $702182
+!sram_superhud_bottom = $702184
+!sram_superhud_middle = $702186
+!sram_superhud_top = $702188
 
-; FREE SPACE
+!sram_dummy_on = $70218A
+!sram_dummy_off = $70218C
+!sram_dummy_num = $70218E
+
+!sram_presetrando = $702190
+!sram_presetrando_morph = $702192
+!sram_presetrando_charge = $702194
+!sram_presetrando_max_etanks = $702196
+!sram_presetrando_max_reserves = $702198
+!sram_presetrando_max_missiles = $7021A0
+!sram_presetrando_max_supers = $7021AA
+!sram_presetrando_max_pbs = $7021AC
+!sram_presetrando_beampref = $7021AE
 
 ; do not change order without updating custom palette profiles in menu.asm
 !sram_custompalette_menuborder = $7020B0
