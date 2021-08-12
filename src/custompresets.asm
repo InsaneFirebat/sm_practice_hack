@@ -265,7 +265,8 @@ custom_preset_save:
     LDA $0FAE,Y : STA $703000,X : INX #2 ;  Enemy AI variable
     LDA $0FB0,Y : STA $703000,X : INX #2 ;  Enemy AI variable
     LDA $0FB2,Y : STA $703000,X : INX #2 ;  Enemy AI variable
-    TYA : CLC : ADC #$0040 : TAY : CPY #$0200 : BPL .done
+    CPY #$0200 : BPL .done ; exit after enemy 8, zero indexed
+    TYA : CLC : ADC #$0040 : TAY
     JMP .loopEnemies
 
   .done
@@ -495,7 +496,7 @@ custom_preset_load:
 }
 
 custom_preset_enemy_data:
-{
+{   ; runs near the end of preset routine
     LDA !sram_custom_preset_slot : ASL : TAX
     LDA.l PresetSlot,X : TAX : LDY #$0000
 
@@ -519,7 +520,8 @@ custom_preset_enemy_data:
     LDA $7031AE,X : STA $0FAE,Y : INX #2 ;  Enemy AI variable
     LDA $7031AE,X : STA $0FB0,Y : INX #2 ;  Enemy AI variable
     LDA $7031AE,X : STA $0FB2,Y : INX #2 ;  Enemy AI variable
-    TYA : CLC : ADC #$0040 : TAY : CPY #$0200 : BPL .done
+    CPY #$0200 : BPL .done ; exit after enemy 8, zero indexed
+    TYA : CLC : ADC #$0040 : TAY
     JMP .loopEnemies
 
   .done

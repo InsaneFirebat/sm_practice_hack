@@ -149,6 +149,7 @@ pushpc
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 org $90FA00 ; careful of minimap.asm using freespace above
+print pc, " misc bank90 start"
 HealthAlarm:
 {
     LDA !sram_healthalarm : BEQ .disabled
@@ -175,8 +176,12 @@ HealthAlarm2:
   .skip
     JMP $F340
 }
+warnpc $90FFFF
+print pc, " misc bank90 end"
+
 
 org $91FFF0
+print pc, " misc bank91 start"
 HealthAlarm3:
 {
     LDA !sram_healthalarm : BEQ .skip
@@ -187,6 +192,8 @@ HealthAlarm3:
     JMP $E6DE
 }
 warnpc $91FFFF
+print pc, " misc bank91 end"
+
 
 org $83AB92 ; Magnet Stairs (bottom) door asm pointer
     dw #MagnetStairFix
@@ -198,6 +205,7 @@ org $83AAD2
     dw #MotherBrainHP
 
 org $8FEA00 ; free space for door asm
+print pc, " misc door asm start"
 MagnetStairFix:
 {
     LDA !ram_magnetstairs : BEQ .done
@@ -221,7 +229,12 @@ MotherBrainHP:
     RTS
 }
 
+warnpc $8FFFFF
+print pc, " misc door asm end"
+
+
 org $A6FEBC      ; free space
+print pc, " misc bankA6 start"
 ResetCountDamageRid:
 {
     PHA
@@ -230,8 +243,12 @@ ResetCountDamageRid:
     PLA
     RTS
 }
+warnpc $A6FFE0
+print pc, " misc bankA6 end"
 
-org $A7FCC0         ; free space
+
+org $A7FF90         ; free space
+print pc, " misc bankA7 start"
 ResetCountDamagePhan:
 {
     PHA
@@ -242,7 +259,11 @@ ResetCountDamagePhan:
     RTS
 }
 
+print pc, " misc bankA7 end"
+
+
 org $A0F9E0         ; count damage in free space at end of bank
+print pc, " misc bankA0 start"
 CountDamage:
 {
     CLC : LDA !ram_countdamage : ADC $187A
@@ -250,12 +271,15 @@ CountDamage:
     LDA $0F8C,X : SEC : SBC $187A : RTS
 }
 
+print pc, " misc bankA0 end"
+
 
 ;;;;;;;;; Custom Build Hijacks ;;;;;;;;;
 
 if !FEATURE_EXTRAS
 
 org $94DC00
+print pc, " EXTRAS=1 misc bank94 start"
 NoClip:
 {
     LDA !ram_noclip : BEQ .originalcode
@@ -265,7 +289,11 @@ NoClip:
     JMP $8F4D
 }
 
+print pc, " EXTRAS=1 misc bank94 end"
+
+
 org $A6FFE0
+print pc, " EXTRAS=1 misc bankA6 end"
 SteamCollision:
 {
     LDA !ram_steamcollision : BEQ .originalcode
@@ -273,6 +301,7 @@ SteamCollision:
   .originalcode
     LDA $0F86,x : RTS
 }
+print pc, " EXTRAS=1 misc bankA6 end"
 endif
 
 pullpc
