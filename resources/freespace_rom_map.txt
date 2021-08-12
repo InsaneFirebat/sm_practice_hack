@@ -1,0 +1,323 @@
+    ;; Bank $80
+$CD8E-$FFC0, 3232h
+$D000-$D2D0, 2D0h, save.asm " save start"
+$D300-$D4C4, 1C4h, infohud.asm " infohud bank80 start"
+$F000-$F46B, 46Bh, presets.asm " preset_start_gameplay start"
+
+    ;; Bank $81
+$EF1A-$FF00, $FF60-$FFFF, FE6h, A0h
+$EF20-$EFAD, 8Dh, spriteprio.asm " spriteprio start"
+$F000-$F288, 288h, init.asm " init start"
+
+    ;; Bank $82
+$F70F-$FFFF, 8F1h
+$F70F-$F793, 84h, minimap.asm " minimap bank82 start"
+$FA00-$FC1A, 21Ah, presets.asm " presets start"
+
+       ;; Bank $83
+$AD66-$FFFF, 529Ah
+$B000-$B0D2, D2h, rng.asm " rng start"
+
+    ;; Bank $84
+$EFD3-$FFFF, 102Dh
+$EFD9-$EFEA, 11h, fanfare.asm " fanfare restore start"
+
+    ;; Bank $85
+$9643-$FFFF, 69BDh
+$A000-$A258, 258h, gamemode.asm " gamemode start"
+$FE00-$FE14, 14h, menu.asm " menu bank85 start"
+$FF00-$FF40, 40h, fanfare.asm " fanfare start"
+
+    ;; Bank $86
+$F4A6-$FFFF, B5Ah
+
+    ;; Bank $87
+$C964-$FFFF, 369Ch
+$D000-$D096, 96h, misc.asm " misc start"
+
+    ;; Bank $88
+$EE32-$FFFF, 11CEh
+
+    ;; Bank $89
+$AEFD-$FFFF, 5103h
+
+    ;; Bank $8A
+$E980-$FFFF, 1680h
+
+    ;; Bank $8B
+$F754-$FFFF, 8ACh
+
+    ;; Bank $8C
+$F3E9-$FFFF, C17h
+
+    ;; Bank $8D
+$FFF1-$FFFF, Fh
+
+    ;; Bank $8E
+$E600-$FFFF, 1A00h
+
+    ;; Bank $8F
+$E99B-$FFFF, 1665h
+$EA00-EA31, 31h, misc.asm " misc door asm start"
+
+    ;; Bank $90
+$F63A-$FFFF, 9C6h
+$F640-$F714, D4h, minimap.asm " minimap bank90 start"
+$FA00-$FA38, 38h, misc.asm " misc bank90 start"
+
+    ;; Bank $91
+$FFEE-$FFFF, 12h
+$FFF0-$FFFF, Fh, misc.asm " misc bank91 start"
+
+    ;; Bank $92
+$EDF4-$FFFF, 120Ch
+
+    ;; Bank $93
+$F61D-$FFFF, 9E3h
+
+    ;; Bank $94
+$DC00-$DFFF, 400h
+$DC00-$DC0E, Eh, misc.asm " EXTRAS=1 misc bank94 start"
+
+    ;; Bank $95
+<none>
+
+    ;; Bank $96
+<none>
+
+    ;; Bank $97
+<none>
+
+    ;; Bank $98
+<none>
+
+    ;; Bank $99
+$EE21-$FFFF, 11DFh
+
+    ;; Bank $9A
+$FC20-$FFFF, 3E0h
+
+    ;; Bank $9B
+$FDA0-$FFFF, 260h
+
+    ;; Bank $9C
+$FA80-$FFFF, 580h
+
+    ;; Bank $9D
+$F780-$FFFF, 880h
+
+    ;; Bank $9E
+$F6C0-$FFFF, 940h
+
+    ;; Bank $9F
+$F740-$FFFF, 8C0h
+
+    ;; Bank $A0
+$F9D3-$FFFF, 62Dh
+$F9E0-$F9F6, 16h, misc.asm " misc bankA0 start"
+
+    ;; Bank $A1
+$EBD1-$FFFF, 142Fh
+
+    ;; Bank $A2
+$F498-$FFFF, B68h
+
+    ;; Bank $A3
+$F1AB-$FFFF, E55h
+
+    ;; Bank $A4
+$F6BF-$FFFF, 941h
+$F700-$F715, 15h, rng.asm " crocomire rng start"
+
+    ;; Bank $A5
+$F95A-$FFFF, 6A6h
+$F960-$F978, 18h, rng.asm " draygon rng start"
+
+    ;; Bank $A6
+$FEBC-$FFFF, 144h
+$FEBC-$FEC9, Dh, misc.asm " misc bankA6 start"
+$FFE0-$FFF1, Eh, misc.asm " EXTRAS=1 misc bankA6 start"
+
+    ;; Bank $A7
+$FF82-$FFFF, 7Eh
+$FF90-$FFA0, 10h, misc.asm " misc bankA7 start"
+$FFB6-$FFC3, Dh, rng.asm " kraid rng start"
+
+    ;; Bank $A8
+$F9BE-$FFFF, 642h
+
+    ;; Bank $A9
+$FB70-$FFFF, 490h
+
+    ;; Bank $AA
+$F7D3-$FFFF, 82Dh
+
+    ;; Bank $AB
+$F800-$FFFF, 800h
+
+    ;; Bank $AC
+$EE00-$FFFF, 1200h
+
+    ;; Bank $AD
+$F444-$FFFF, BBCh
+
+    ;; Bank $AE
+$FD20-$FFFF, 2E0h
+
+    ;; Bank $AF
+$EC00-$FFFF, 1400h
+
+    ;; Bank $B0
+$EE00-$FFFF, 1200h
+
+    ;; Bank $B1
+<none>
+
+    ;; Bank $B2
+$FEAA-$FFFF, 156h
+
+    ;; Bank $B3
+$ED77-$FFFF, 1289h
+
+    ;; Bank $B4
+$F4B8-$FFFF, B48h
+
+    ;; Bank $B5
+$F000-$FFFF, 1000h
+
+    ;; Bank $B6
+$F200-$FFFF, E00h
+
+    ;; Bank $B7
+$FD00-$FFFF, 300h
+
+    ;; Bank $B8
+$8000-$FFFF, 8000h
+$8000-$EE28, 6E28h, menu.asm " menu start"
+
+    ;; Bank $B9
+<none>
+
+    ;; Bank $BA
+<none>
+
+    ;; Bank $BB
+<none>
+
+    ;; Bank $BC
+<none>
+
+    ;; Bank $BD
+<none>
+
+    ;; Bank $BE
+<none>
+
+    ;; Bank $BF
+<none>
+
+    ;; Bank $C0
+<none>
+
+    ;; Bank $C1
+<none>
+
+    ;; Bank $C2
+$B22E-$FFFF, 4DD2h
+
+    ;; Bank $C3
+<none>
+
+    ;; Bank $C4
+<none>
+
+    ;; Bank $C5
+<none>
+
+    ;; Bank $C6
+<none>
+
+    ;; Bank $C7
+<none>
+
+    ;; Bank $C8
+<none>
+
+    ;; Bank $C9
+<none>
+
+    ;; Bank $CA
+<none>
+
+    ;; Bank $CB
+<none>
+
+    ;; Bank $CC
+<none>
+
+    ;; Bank $CD
+<none>
+
+    ;; Bank $CE
+$B22E-$FFFF, 4DD2h
+
+    ;; Bank $CF
+<none>
+
+    ;; Bank $D0
+<none>
+
+    ;; Bank $D1
+<none>
+
+    ;; Bank $D2
+<none>
+
+    ;; Bank $D3
+<none>
+
+    ;; Bank $D4
+<none>
+
+    ;; Bank $D5
+<none>
+
+    ;; Bank $D6
+<none>
+
+    ;; Bank $D7
+<none>
+
+    ;; Bank $D8
+<none>
+
+    ;; Bank $D9
+<none>
+
+    ;; Bank $DA
+<none>
+
+    ;; Bank $DB
+<none>
+
+    ;; Bank $DC
+<none>
+
+    ;; Bank $DD
+<none>
+
+    ;; Bank $DE
+$D1C0-$FFFF, 2E40h
+
+    ;; Bank $DF
+$8000-$FFFF, 8000h
+$D500-$F500, 2000h, minimap.asm " minimap bankDF start"
+
+    ;; Bank $E0
+$8000-AAE4, 2AE4h, infohud.asm " infohud start"
+
+    ;; Bank $FE
+$8000-F49E+, 749Eh+, mainmenu.asm (presets/prkd_menu.asm)
+
+    ;; Bank $FF
+$8000-D263, 5263h, mainmenu.asm (presets/allbosskpdr_menu.asm)
