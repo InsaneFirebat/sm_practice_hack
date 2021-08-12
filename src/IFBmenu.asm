@@ -7,6 +7,7 @@ IFBMenu:
     dw #ifb_custompalettes_menu ; must be 2nd in this list, update cm_loop in menu.asm if needed
     dw #ifb_paletteprofile
     dw #ifb_palette2custom
+    dw #ifb_paletterando
     dw #ifb_customsfx
     dw #ifb_soundtest
     dw #ifb_presetrando
@@ -18,7 +19,6 @@ IFBMenu:
     dw #ifb_debugteleport
     dw #ifb_lockout
     dw #ifb_credits
-    dw #ifb_notext
     dw #ifb_notext
     dw #ifb_notext
     dw #ifb_notext
@@ -55,6 +55,9 @@ ifb_paletteprofile:
 
 ifb_palette2custom:
     %cm_jsr_nosound("Copy Palette to Custom", action_copy_palette, #$0000)
+
+ifb_paletterando:
+    %cm_jsr_nosound("Randomize Custom Palette", action_palette_randomizer, #$0000)
 
 ifb_customsfx:
     %cm_submenu("Customize Menu Sounds", #CustomMenuSFXMenu)
@@ -379,6 +382,42 @@ action_copy_palette:
 
   .done
     PLP
+    RTS
+}
+
+action_palette_randomizer:
+{
+    LDA $05E5 : STA !sram_custompalette_menuborder : DEC $05E5
+    JSL $808111 : STA !sram_custompalette_menuheaderoutline : INC $05E5
+    JSL $808111 : STA !sram_custompalette_menutext : AND #$FECD : STA $05E5
+    JSL $808111 : STA !sram_custompalette_menubackground : INC $05E5
+    JSL $808111 : STA !sram_custompalette_menunumoutline : DEC $05E5
+    JSL $808111 : STA !sram_custompalette_menunumfill
+    JSL $808111 : STA !sram_custompalette_menutoggleon : AND #$DEAD : STA $05E5
+    JSL $808111 : STA !sram_custompalette_menuseltext : DEC $05E5
+    JSL $808111 : STA !sram_custompalette_menuseltextbg : AND #$BEEF : STA $05E5
+    JSL $808111 : STA !sram_custompalette_menunumseloutline : INC $05E5
+    JSL $808111 : STA !sram_custompalette_menunumsel
+
+    ; split hi and lo bytes into separate addresses
+    %ai8()
+    LDX #$00
+
+  .loop
+    ; load lo, then hi
+    LDA !sram_custompalette_menuborder,X : XBA
+    INX : LDA !sram_custompalette_menuborder,X
+    ; store hi, then lo
+    INX : STA !sram_custompalette_menuborder,X
+    INX #2 : XBA : STA !sram_custompalette_menuborder,X
+    ; next word
+    INX #2 : CPX #$42 : BNE .loop
+
+    ; play a happy sound and refresh current profile
+    %ai16()
+    JSR PrepMenuPalette_customPalette
+    JSR action_custompalettes_refresh
+    %sfxbubble()
     RTS
 }
 
