@@ -26,7 +26,6 @@ status_ridleygrab:
 
 status_dboost:
 {
-print pc, " <--                                dboost"
     LDA $0A1F : AND #$00FF
     CMP #$000A : BEQ .knockback
 ;    CMP #$0019 : BEQ .dboost
