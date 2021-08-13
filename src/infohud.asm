@@ -20,7 +20,7 @@ org $82EE92      ; runs on START GAME
 
 org $828B34      ; reset room timers for first room of Ceres
     JML ceres_start_timers : NOP #2 : ceres_start_timers_return:
-        
+
 org $90E6AA      ; hijack, runs on gamestate = 08 (main gameplay), handles most updating HUD information
     JSL ih_gamemode_frame : NOP : NOP
 
@@ -1180,7 +1180,6 @@ ih_game_loop_code:
 }
 
 metronome:
-PRINT PC, " <---- BREAK FOR METRONOME"
 {
     LDA !ram_metronome_counter : INC
     CMP !sram_metronome_tickrate : BEQ .tick
