@@ -1,4 +1,5 @@
-org $82FA00
+;org $82FA00
+org $81F4D0
 print pc, " presets start"
 preset_load:
 {
@@ -8,9 +9,7 @@ preset_load:
     LDA !MUSIC_TRACK : STA !SRAM_MUSIC_TRACK
 
     JSL $809E93  ; Clear timer RAM
-    JSR $819B  ; Initialise IO registers
-    JSR $82E2  ; Load standard BG3 tiles and sprite tiles, clear tilemaps
-    JSR $82C5  ; Load initial palette
+    JSL preset_load_bank82 ; few JSR's in Bank 82
 if !FEATURE_PAL
     JSL $91DF72  ; Initialise Samus
 else
@@ -210,7 +209,17 @@ preset_banks:
 print pc, " presets end"
 
 
-org $80F000
+org $82FD80
+preset_load_bank82:
+{
+    JSR $819B  ; Initialise IO registers
+    JSR $82E2  ; Load standard BG3 tiles and sprite tiles, clear tilemaps
+    JSR $82C5  ; Load initial palette
+    RTL
+}
+
+;org $80F000
+org $80F62E
 print pc, " preset_start_gameplay start"
 preset_start_gameplay:
 {

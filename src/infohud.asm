@@ -1237,7 +1237,8 @@ print pc, " infohud end"
 
 
 ; Stuff that needs to be placed in bank 80
-org $80D300
+;org $80D300
+org $80E3D0
 print pc, " infohud bank80 start"
 
 NumberGFXTable:

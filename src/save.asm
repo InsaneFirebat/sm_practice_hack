@@ -2,7 +2,8 @@
 ; by acmlm, total, Myria
 ;
 
-org $80D000
+;org $80D000
+org $80FAA0
 print pc, " save start"
 ; These can be modified to do game-specific things before and after saving and loading
 ; Both A and X/Y are 16-bit here

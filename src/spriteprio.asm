@@ -15,7 +15,8 @@ org $908643
 ; It's a copy so that it only affects Samus, and only adds a single instruction
 ; keeping the change in timing down as much as possible.
 
-org $81ef20
+;org $81ef20
+org $81F3D0
 print pc, " spriteprio start"
 oam_add_samus_sprite_with_prio:
     PHB
@@ -92,4 +93,4 @@ oam_add_samus_sprite_with_prio:
     RTL
 
 print pc, " spriteprio end"
-warnpc $81f000
+;warnpc $81f000
