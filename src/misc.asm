@@ -14,11 +14,7 @@ endif
 ; Skip intro
 ; $82:EEDF A9 95 A3    LDA #$A395
 org $82EEDF
-if !FEATURE_PAL
-    LDA #$C065
-else
     LDA #$C100
-endif
 
 ; Skips the waiting time after teleporting
 org $90E877
@@ -121,11 +117,7 @@ hook_unpause:
 gamemode_end:
 {
    ; overwritten logic
-if !FEATURE_PAL
-    JSL $A09179
-else
     JSL $A09169
-endif
 
     ; If minimap is disabled or shown, we ignore artificial lag
     LDA $05F7 : BNE .endlag

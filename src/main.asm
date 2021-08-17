@@ -13,7 +13,7 @@ if !FEATURE_SD2SNES
     print "SD2SNES ENABLED"
     incsrc save.asm
 endif
-incsrc minimap.asm
+;incsrc minimap.asm
 incsrc infohud.asm
 incsrc menu.asm
 incsrc rng.asm
@@ -24,4 +24,5 @@ incsrc fanfare.asm
 incsrc spriteprio.asm
 
 ; Make sure the ROM expands to 4MB
-org $ffffff : db $ff
+;org $ffffff : db $ff
+; Axeil is already 4MB
