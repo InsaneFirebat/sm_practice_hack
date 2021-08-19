@@ -21,24 +21,24 @@ org $90A91B
     JMP mm_update_minimap
 
 org $90A97E
-    JMP mm_inc_tile_count
+    JMP mm_inc_tile_count_helper
 
 org $90A7EE      ; only clear minimap if it is visible
     LDA !ram_minimap : BEQ .skip_minimap
-    JMP mm_clear_boss_room_tiles
+    JMP mm_clear_boss_room_tiles_helper
 
 org $90A80A      ; normally runs after minimap grid has been drawn
     .skip_minimap
 
 org $8282E5      ; write and clear tiles to VRAM
-    JSR mm_write_and_clear_hud_tiles
+    JSR mm_write_and_clear_hud_tiles_helper
     BRA .write_next_tiles
 
 org $828305
     .write_next_tiles
 
 org $828EB8      ; write and clear tiles to VRAM
-    JSR mm_write_and_clear_hud_tiles
+    JSR mm_write_and_clear_hud_tiles_helper
     PLP
     RTL
 
@@ -52,9 +52,10 @@ incbin ../resources/hudgfx.bin
 
 
 ; Place minimap graphics in bank DF
-org $DFD500
+org $FDE000
 print pc, " minimap bankDF start"
-incbin ../resources/mapgfx.bin
+;incbin ../resources/mapgfx.bin
+incbin ../resources/AxeilMapGFX.bin
 
 ; Next block needs to be all zeros to clear a tilemap
 fillbyte $00
@@ -78,9 +79,17 @@ org $80994D
 
 
 ; Placed in bank 82 so that the jumps work
-org $82F70F
+; Using helper functions cause bank 82 is full of Axeil code
+;org $FDE000
+org $82FED0
 print pc, " minimap bank82 start"
+mm_write_and_clear_hud_tiles_helper:
+{
+    JSL mm_write_and_clear_hud_tiles
+    RTS
+}
 
+org $81F200
 mm_write_and_clear_hud_tiles:
 {
     %i16()
@@ -96,21 +105,22 @@ mm_write_and_clear_hud_tiles:
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
     %i8()
-    RTS
+    RTL
 
   .minimap_vram
     LDA #$80 : STA $2115
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
-    LDX #$D500 : STX $4302 ; Source offset
-    LDA #$DF : STA $4304 ; Source bank
+    LDX #$E000 : STX $4302 ; Source offset
+    LDA #$FD : STA $4304 ; Source bank
     LDX #$2000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
     %i8()
-    RTS
+    RTL
 }
 
+org $82E675
 mm_write_hud_tiles_during_door_transition:
 {
     LDA !ram_minimap : BNE .minimap_vram
@@ -124,18 +134,20 @@ mm_write_hud_tiles_during_door_transition:
 
   .minimap_vram
     JSR $E039
-    dl $DFD500
+    dl $FDE000
     dw $4000
     dw $1000
     JMP $E492  ; resume logic
 }
+warnpc $82E6A1
 
 print pc, " minimap bank82 end"
-warnpc $82FA00
+;warnpc $82FA00
 
 
 ; Placed in bank 90 so that the jumps work
-org $90F640
+;org $90F640
+org $90FF6B
 print pc, " minimap bank90 start"
 
 mm_initialize_minimap:
@@ -169,6 +181,7 @@ mm_initialize_minimap:
     RTL
 }
 
+org $90F861
 mm_update_minimap:
 {
     PHP
@@ -181,6 +194,15 @@ mm_update_minimap:
     RTL
 }
 
+org $90F72A
+; bank 90 is full of Axeil code
+mm_inc_tile_count_helper:
+    JML mm_inc_tile_count
+
+mm_clear_boss_room_tiles_helper:
+    JML mm_clear_boss_room_tiles
+
+org $92F530
 mm_inc_tile_count:
 {
     ; Check if tile is already set
@@ -195,7 +217,7 @@ mm_inc_tile_count:
     SEP #$20
 
   .done
-    JMP $A987  ; resume original logic
+    JML $90A987  ; resume original logic
 }
 
 mm_clear_boss_room_tiles:
@@ -207,7 +229,7 @@ mm_clear_boss_room_tiles:
     STA $7EC67C,X
     STA $7EC6BC,X
     INX : INX : CPX #$000A : BMI .loop
-    JMP $A80A
+    JML $90A80A
 }
 
 print pc, " minimap bank90 end"

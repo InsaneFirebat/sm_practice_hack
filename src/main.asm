@@ -1,7 +1,6 @@
 lorom
 
 !FEATURE_SD2SNES ?= 1
-!FEATURE_PAL ?= 1
 
 table ../resources/normal.tbl
 
@@ -13,10 +12,10 @@ if !FEATURE_SD2SNES
     print "SD2SNES ENABLED"
     incsrc save.asm
 endif
-;incsrc minimap.asm
+incsrc minimap.asm
 incsrc infohud.asm
 incsrc menu.asm
-incsrc rng.asm
+;incsrc rng.asm
 incsrc presets.asm
 incsrc misc.asm
 incsrc init.asm

@@ -93,6 +93,32 @@ org $89AD0A      ; update timers when Samus escapes Ceres
 org $A2AA20      ; update timers when Samus enters ship
     JSL ih_ship_elevator_segment
 
+;org $90A91B      ;minimap drawing routine
+;    RTL
+
+;org $90A8EF      ;minimap update during HUD loading
+;    ; Make sure it only runs when you start a new game
+;    LDA $0998 : AND #$00FF : CMP #$0006 : BNE +
+;    ; It actually runs when you finish the cutscenes after Ceres
+;    JSL post_ceres_timers
+;+   RTL
+
+;org $90A7F7      ;skip drawing minimap grid when entering boss rooms
+;    BRA FinishDrawMinimap
+
+;org $90A80A      ;normally runs after minimap grid has been drawn
+;    FinishDrawMinimap:
+;   LDA $179C
+
+;org $82AED9      ;routine to draw auto reserve icon on HUD from equip screen
+;    NOP : NOP : NOP
+
+;org $82AEAF      ;routine to remove auto reserve icon on HUD from equip screen
+;    NOP : NOP : NOP
+
+;org $9AB200      ; graphics for HUD
+;incbin ../resources/hudgfx.bin
+
 
 ; Main bank stuff
 org $FE8000
@@ -922,6 +948,7 @@ ih_game_loop_code:
 
     LDA !ram_transition_counter : INC : STA !ram_transition_counter
 
+    ; preserve CPU timing by gating new features behind a common flag
     LDA !ram_game_loop_extras : BEQ .handleinputs
 
     LDA !ram_metronome : BEQ +
@@ -1149,6 +1176,25 @@ ih_shinespark_code:
     RTL
 }
 
+post_ceres_timers:
+{   ; reset timers but leave segment timer running
+    LDA #$0000 : STA $12 : STA $14 : STA !ram_room_has_set_rng
+    STA $09DA : STA $09DC : STA $09DE : STA $09E0
+    STA !ram_realtime_room : STA !ram_last_realtime_room
+    STA !ram_gametime_room : STA !ram_last_gametime_room
+    STA !ram_last_room_lag : STA !ram_last_door_lag_frames : STA !ram_transition_counter
+
+    ; adding 1:13 to seg timer to account for missed frames between Ceres and Zebes
+    LDA !ram_seg_rt_frames : CLC : ADC #$000D : STA !ram_seg_rt_frames : CMP #$003C : BMI +
+    SEC : SBC #$003C : STA !ram_seg_rt_frames : INC $12
++   LDA !ram_seg_rt_seconds : CLC : ADC #$0001 : ADC $12 : STA !ram_seg_rt_seconds : CMP #$003C : BMI +
+    SEC : SBC #$003C : STA !ram_seg_rt_seconds : INC $14
++   LDA $14 : BEQ .done : CLC : ADC !ram_seg_rt_minutes : STA !ram_seg_rt_minutes
+
+  .done
+    RTL
+}
+
 print pc, " infohud end"
 
 
@@ -1159,6 +1205,7 @@ print pc, " infohud bank80 start"
 
 NumberGFXTable:
     dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
+;    dw #$0C61, #$0C62, #$0C63, #$0C64, #$0C65, #$0C66, #$0C67, #$0C68, #$0C69, #$0C6A
     dw #$0C70, #$0C71, #$0C72, #$0C73, #$0C74, #$0C75, #$0C78, #$0C79, #$0C7A, #$0C7B
     dw #$0C7C, #$0C7D, #$0C7E, #$0C7F, #$0CD2, #$0CD4, #$0CD5, #$0CD6, #$0CD7, #$0CD8
     dw #$0CD9, #$0CDA, #$0CDB, #$0C5C, #$0C5D, #$0CB8, #$0C8D, #$0C12, #$0C13, #$0C14
@@ -1176,8 +1223,12 @@ ControllerTable2:
     dw #$0200, #$0400, #$0100, #$8000, #$0080, #$1000
 ControllerGfx1:
     dw #$0C68, #$0C61, #$0C69, #$0C67, #$0C66, #$0C6A
+       ;  L       ^       R       Y       X       Sl 
+;   dw #$0C0B, #$0CD5, #$0C0C, #$0CDB, #$0CDA, #$0C0D
 ControllerGfx2:
     dw #$0C60, #$0C63, #$0C62, #$0C65, #$0C64, #$0C6B
+       ;  <       v       >       B       A       St
+;   dw #$0CD4, #$0CD7, #$0CD6, #$0CD9, #$0CD8, #$0C32
 
 HexToNumberGFX1:
     dw #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09
@@ -1198,3 +1249,5 @@ HexToNumberGFX2:
 print pc, " infohud bank80 end"
 warnpc $80E7F0
 
+;org $9AB200      ; graphics for HUD
+;incbin ../resources/hudgfx.bin

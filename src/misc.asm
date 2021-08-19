@@ -149,3 +149,25 @@ stop_all_sounds:
 
 print pc, " misc end"
 
+
+; -----------
+; Axeil Hacks
+; -----------
+
+; Next 3 org's spread out the bomb graphics on the HUD
+org $90F876
+    BEQ .jump_AC1C
+
+org $90F889
+    LDX #$000C ; was 8
+
+org $90F88F
+-   DEY : BNE + : SBC #$03FF
++   STA $7EC6AE,X
+    DEX #6 ; was 4
+    BPL -
+    PLX
+    PLY
+  .jump_AC1C
+    JMP $AC1C
+warnpc $90F8A7
