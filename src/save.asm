@@ -330,4 +330,4 @@ vm_done:
     jmp ($0002,x)
 
 print pc, " save end"
-warnpc $80D300
+warnpc $80FDFF

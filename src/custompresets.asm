@@ -529,3 +529,4 @@ custom_preset_enemy_data:
 }
 
 print pc, " custom presets end"
+warnpc $85F000

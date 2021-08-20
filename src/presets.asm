@@ -328,10 +328,7 @@ print pc, " preset_start_gameplay end"
 warnpc $80FFC0
 
 org $85B000
-print pc, " custom presets start"
 incsrc custompresets.asm
-print pc, " custom presets end"
-warnpc $85F000
 
 org $FD99D0
 print pc, " prkd data start"
