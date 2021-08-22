@@ -176,7 +176,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.2.6.5")
+    %cm_header("CUSTOM INFOHUD V2.2.6.6")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -2007,6 +2007,7 @@ CtrlMenu:
     dw #ctrl_load_last_preset
     dw #ctrl_random_preset
     dw #ctrl_reset_segment_timer
+    dw #ctrl_reset_segment_later
     dw #ctrl_full_equipment
     dw #ctrl_kill_enemies
     dw #ctrl_reveal_damage
@@ -2030,6 +2031,9 @@ ctrl_load_state:
 
 ctrl_reset_segment_timer:
     %cm_ctrl_shortcut("Reset Seg Timer", !sram_ctrl_reset_segment_timer)
+
+ctrl_reset_segment_later:
+    %cm_ctrl_shortcut("Reset Seg Later", !sram_ctrl_reset_segment_later)
 
 ctrl_full_equipment:
     %cm_ctrl_shortcut("Full Equipment", !sram_ctrl_full_equipment)
@@ -2067,6 +2071,7 @@ action_clear_shortcuts:
     STA !sram_ctrl_save_custom_preset
     STA !sram_ctrl_load_custom_preset
     STA !sram_ctrl_reset_segment_timer
+    STA !sram_ctrl_reset_segment_later
     STA !sram_ctrl_reveal_damage
     STA !sram_ctrl_randomize_rng
     ; menu to default, Start + Select
