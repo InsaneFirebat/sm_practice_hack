@@ -4,11 +4,17 @@
 
 print pc, " custom presets start"
 
-PresetSlot: ; 2DEh bytes needed per slot
-    dw $0000, $02DE, $05BC, $089A, $0B78, $0E56, $1134, $1412
-    dw $16F0, $19CE, $1CAC, $1F8A, $2268, $2546, $2824, $2B02
-    dw $2DE0, $30BE, $339C, $367A, $3958, $3C36, $3F14, $41F2
-    dw $44D0, $47AE, $4A8C, $4D6A
+PresetSlot: ; 304h bytes needed per slot
+    dw $0000, $0304, $0608, $090C, $0C10, $0F14, $1218, $151C
+    dw $1820, $1B24, $1E28, $212C, $2430, $2734, $2A38, $2D3C
+    dw $3040, $3344, $3648, $394C, $3C50, $3F54, $4258, $455C
+    dw $4860, $4B64, $4E68
+
+    ; 2DEh bytes needed per slot
+;    dw $0000, $02DE, $05BC, $089A, $0B78, $0E56, $1134, $1412
+;    dw $16F0, $19CE, $1CAC, $1F8A, $2268, $2546, $2824, $2B02
+;    dw $2DE0, $30BE, $339C, $367A, $3958, $3C36, $3F14, $41F2
+;    dw $44D0, $47AE, $4A8C, $4D6A
 
     ; 26Eh bytes needed per slot
 ;    dw $0000, $026E, $04DC, $074A, $09B8, $0C26, $0E94, $1102
