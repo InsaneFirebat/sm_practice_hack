@@ -272,18 +272,18 @@ PrepMenuPalette:
     RTS
 
 PaletteProfileTables:
-    dw #CustomProfileTable
-    dw #DefaultProfileTable
-    dw #HUDProfileTable
-    dw #FirebatProfileTable
-    dw #wardrinkerProfileTable
-    dw #mm2ProfileTable
-    dw #ptoilProfileTable
-    dw #ZohdinProfileTable
-    dw #TwitchProfileTable
-    dw #GreyProfileTable
-    dw #RedProfileTable
-    dw #PurpleProfileTable
+    dw #CustomProfileTable        ; 0
+    dw #DefaultProfileTable       ; 1
+    dw #HUDProfileTable           ; 2
+    dw #FirebatProfileTable       ; 3
+    dw #wardrinkerProfileTable    ; 4
+    dw #mm2ProfileTable           ; 5
+    dw #ptoilProfileTable         ; 6
+    dw #ZohdinProfileTable        ; 7
+    dw #TwitchProfileTable        ; 8
+    dw #GreyProfileTable          ; 9
+    dw #RedProfileTable           ; A
+    dw #PurpleProfileTable        ; B
     dw #$0000
 
 ; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
