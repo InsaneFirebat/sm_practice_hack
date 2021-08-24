@@ -36,6 +36,7 @@
 !ram_custom_preset = $7FFB3C
 !ram_tel_debug_area = $7FFB3E
 !ram_tel_debug_station = $7FFB40
+!ram_reset_segment_later = $7FFB42
 
 ; FREE SPACE ^
 
@@ -229,6 +230,7 @@
 !sram_ctrl_load_custom_preset = $702014
 !sram_ctrl_inc_custom_preset = $702018
 !sram_ctrl_dec_custom_preset = $70201A
+!sram_ctrl_reset_segment_later = $70201C
 
 ; FREE SPACE ^
 
