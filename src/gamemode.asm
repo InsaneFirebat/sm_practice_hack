@@ -74,6 +74,14 @@ gamemode_shortcuts:
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .load_custom_preset
 
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_inc_custom_preset : CMP !sram_ctrl_inc_custom_preset : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .next_preset_slot
+
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_dec_custom_preset : CMP !sram_ctrl_dec_custom_preset : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .prev_preset_slot
+
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .random_preset
@@ -118,10 +126,13 @@ gamemode_shortcuts:
 +   JMP .random_preset
 
   .reset_segment_timer
-    LDA #$0000
-    STA !ram_seg_rt_frames
-    STA !ram_seg_rt_seconds
-    STA !ram_seg_rt_minutes
+    LDA #$0000 : STA !ram_seg_rt_frames
+    STA !ram_seg_rt_seconds : STA !ram_seg_rt_minutes
+    ; CLC to continue normal gameplay after resetting segment timer
+    CLC : RTS
+
+  .reset_segment_later
+    LDA #$7FFF : STA !ram_reset_segment_later
     ; CLC to continue normal gameplay after resetting segment timer
     CLC : RTS
 
@@ -154,6 +165,22 @@ gamemode_shortcuts:
     JSL preset_load
     ; SEC to skip normal gameplay for one frame after loading preset
     SEC : RTS
+
+  .next_preset_slot
+    LDA !sram_custom_preset_slot : CMP #$001F ; min slots - 1
+    BNE + : LDA #$FFFF
++   INC : STA !sram_custom_preset_slot
+    ASL : TAX : LDA.l NumberGFXTable,X : STA $7EC67C
+    ; CLC to continue normal gameplay after incrementing preset slot
+    CLC : RTS
+
+  .prev_preset_slot
+    LDA !sram_custom_preset_slot : BNE +
+    LDA #$0021 ; max slots + 1
++   DEC : STA !sram_custom_preset_slot
+    ASL : TAX : LDA.l NumberGFXTable,X : STA $7EC67C
+    ; CLC to continue normal gameplay after decrementing preset slot
+    CLC : RTS
 
   .random_preset
     JSL LoadRandomPreset
