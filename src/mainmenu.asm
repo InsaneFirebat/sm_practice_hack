@@ -1132,9 +1132,9 @@ InfoHudMenu:
     dw #ih_room_strat
     dw #ih_superhud
     dw #ih_room_counter
+    dw #ih_reset_seg_later
     dw #ih_lag
     dw #ih_ram_watch
-    dw #ih_reset_seg_later
     dw #$0000
     %cm_header("INFOHUD")
 
@@ -1786,14 +1786,11 @@ ih_lag:
     %cm_numfield("Artificial Lag", !sram_artificial_lag, 0, 64, 1, #0)
 
 ih_reset_seg_later:
-    %cm_jsr("Reset Segment at Next Door", #action_reset_segment_later, #$0000)
-
-action_reset_segment_later:
-{
-    LDA #$FFFF : STA !ram_reset_segment_later
-    %sfxquake()
-    RTS
-}
+    %cm_jsr("Reset Segment in Next Room", #.routine, #$FFFF)
+    .routine
+        TYA : STA !ram_reset_segment_later
+        %sfxquake()
+        RTS
 
 
 ; ----------

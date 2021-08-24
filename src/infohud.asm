@@ -306,6 +306,12 @@ ih_after_room_transition:
     LDA $079B : CMP #$DD58 : BEQ +
     LDA #$0000 : STA !sram_display_mode
 
+    ; Maybe reset segment timer
++   LDA !ram_reset_segment_later : BEQ +
+    LDA #$0000 : STA !ram_reset_segment_later
+    STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds
+    STA !ram_seg_rt_minutes
+
     ; Update HUD
 +   JSL ih_update_hud_code
 
@@ -330,7 +336,7 @@ ih_before_room_transition:
     PHX
     PHY
 
-    ; save and reset timers
+    ; Save and reset timers
     LDA !ram_transition_flag : CMP #$0001 : BEQ .done
     LDA #$0001 : STA !ram_transition_flag
     LDA #$0000 : STA !ram_room_has_set_rng
@@ -657,23 +663,14 @@ ih_update_hud_code:
     LDA !ram_last_room_lag : LDX #$0080 : JSR Draw4
 
     ; Skip door lag and segment timer when shinetune enabled
-    LDA !sram_display_mode : CMP #$0007 : BNE +
-    JMP .end
+    LDA !sram_display_mode : CMP #$0007 : BEQ .end
 
     ; Door lag
-+   LDA !ram_last_door_lag_frames : LDX #$00C2 : JSR Draw3
+    LDA !ram_last_door_lag_frames : LDX #$00C2 : JSR Draw3
 
     ; Segment timer
     {
-        ; Maybe reset segment timer
-        LDA !ram_reset_segment_later : BEQ ++ : BMI +
-        ; #$FFFF = from menu, try again later
-        LDA #$0000 : STA !ram_reset_segment_later
-        STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds
-        STA !ram_seg_rt_minutes : BRA ++
-+       LDA #$7FFF : STA !ram_reset_segment_later
-
-++      LDA !sram_frame_counter_mode : BNE .ingameSeg
+        LDA !sram_frame_counter_mode : BNE .ingameSeg
         LDA.w #!ram_seg_rt_frames : STA $00
         LDA #$007F : STA $02
         BRA .drawSeg
