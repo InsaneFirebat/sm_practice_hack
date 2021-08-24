@@ -234,6 +234,8 @@
 !sram_ctrl_random_preset = $702012
 !sram_ctrl_save_custom_preset = $702014
 !sram_ctrl_load_custom_preset = $702016
+!sram_ctrl_inc_custom_preset = $702018
+!sram_ctrl_dec_custom_preset = $70201A
 
 ; FREE SPACE ^
 

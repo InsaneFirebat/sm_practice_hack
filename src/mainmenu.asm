@@ -232,7 +232,7 @@ presets_goto_select_preset_category:
     %cm_submenu("Select Preset Category", #SelectPresetCategoryMenu)
 
 presets_custom_preset_slot:
-    %cm_numfield("Custom Preset Slot", !sram_custom_preset_slot, 0, 27, 1, #0)
+    %cm_numfield("Custom Preset Slot", !sram_custom_preset_slot, 0, 27, 1, #0) ; update max slots in gamemode.asm
 
 presets_save_custom_preset:
     %cm_jsr("Save Custom Preset", #action_save_custom_preset, #$0000)
@@ -1134,6 +1134,7 @@ InfoHudMenu:
     dw #ih_room_counter
     dw #ih_lag
     dw #ih_ram_watch
+    dw #ih_reset_seg_later
     dw #$0000
     %cm_header("INFOHUD")
 
@@ -1784,6 +1785,16 @@ ih_room_counter:
 ih_lag:
     %cm_numfield("Artificial Lag", !sram_artificial_lag, 0, 64, 1, #0)
 
+ih_reset_seg_later:
+    %cm_jsr("Reset Segment at Next Door", #action_reset_segment_later, #$0000)
+
+action_reset_segment_later:
+{
+    LDA #$FFFF : STA !ram_reset_segment_later
+    %sfxquake()
+    RTS
+}
+
 
 ; ----------
 ; Game menu
@@ -2007,9 +2018,11 @@ CtrlMenu:
         dw #ctrl_save_state
         dw #ctrl_load_state
     endif
+    dw #ctrl_load_last_preset
     dw #ctrl_save_custom_preset
     dw #ctrl_load_custom_preset
-    dw #ctrl_load_last_preset
+    dw #ctrl_inc_custom_preset
+    dw #ctrl_dec_custom_preset
     dw #ctrl_random_preset
     dw #ctrl_reset_segment_timer
     dw #ctrl_reset_segment_later
@@ -2061,6 +2074,12 @@ ctrl_save_custom_preset:
 ctrl_load_custom_preset:
     %cm_ctrl_shortcut("Load Cust Preset", !sram_ctrl_load_custom_preset)
 
+ctrl_inc_custom_preset:
+    %cm_ctrl_shortcut("Next Preset Slot", !sram_ctrl_inc_custom_preset)
+
+ctrl_dec_custom_preset:
+    %cm_ctrl_shortcut("Prev Preset Slot", !sram_ctrl_dec_custom_preset)
+
 ctrl_clear_shortcuts:
     %cm_jsr_nosound("Clear Shortcuts", action_clear_shortcuts, #$0000)
 
@@ -2075,6 +2094,8 @@ action_clear_shortcuts:
     STA !sram_ctrl_random_preset
     STA !sram_ctrl_save_custom_preset
     STA !sram_ctrl_load_custom_preset
+    STA !sram_ctrl_inc_custom_preset
+    STA !sram_ctrl_dec_custom_preset
     STA !sram_ctrl_reset_segment_timer
     STA !sram_ctrl_reset_segment_later
     STA !sram_ctrl_reveal_damage
