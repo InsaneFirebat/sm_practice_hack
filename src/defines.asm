@@ -34,6 +34,8 @@
 !ram_map_counter = $7FFB36
 !ram_vcounter_data = $7FFB38
 !ram_custom_preset = $7FFB3C
+!ram_tel_debug_area = $7FFB3E
+!ram_tel_debug_station = $7FFB40
 
 ; FREE SPACE ^
 
