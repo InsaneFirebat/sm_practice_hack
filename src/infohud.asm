@@ -665,12 +665,15 @@ ih_update_hud_code:
 
     ; Segment timer
     {
-        LDA !ram_reset_segment_later : BEQ +
+        ; Maybe reset segment timer
+        LDA !ram_reset_segment_later : BEQ ++ : BMI +
+        ; #$FFFF = from menu, try again later
         LDA #$0000 : STA !ram_reset_segment_later
         STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds
-        STA !ram_seg_rt_minutes
+        STA !ram_seg_rt_minutes : BRA ++
++       LDA #$7FFF : STA !ram_reset_segment_later
 
-+       LDA !sram_frame_counter_mode : BNE .ingameSeg
+++      LDA !sram_frame_counter_mode : BNE .ingameSeg
         LDA.w #!ram_seg_rt_frames : STA $00
         LDA #$007F : STA $02
         BRA .drawSeg
