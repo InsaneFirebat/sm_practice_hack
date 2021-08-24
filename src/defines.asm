@@ -379,7 +379,7 @@ endif
 
 !sram_countdamage = $702110
 !sram_menu_background = $702112
-!sram_healthalarm = $70211A
+!sram_healthalarm = $702114
 
 ; FREE SPACE ^
 
