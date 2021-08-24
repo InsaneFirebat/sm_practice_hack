@@ -145,8 +145,6 @@ endif
 
   .reset_segment_later
     LDA #$7FFF : STA !ram_reset_segment_later
-    LDA #$0000 : STA !ram_seg_rt_frames
-    STA !ram_seg_rt_seconds : STA !ram_seg_rt_minutes
     %sfxquake()
     ; CLC to continue normal gameplay after resetting segment timer
     CLC : RTS
