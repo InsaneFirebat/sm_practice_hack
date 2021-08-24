@@ -15,15 +15,11 @@ The build script will create two IPS patch files for the practice hack. The patc
 
 ## Known Issues:
 
-- Stuck crouching bug after applying 100% equipment
+- Stuck crouching bug in some areas with 100% equipment
 - Equipment options are missing
 - Event flags are missing
 - Category presets are empty (vanilla PRKD presets as placeholder)
 - Presets do not yet support all event/item/door addresses
 - Teleports untouched
-- "25" HUD graphic overwrote hyphen for message boxes
-- "28" is also overwriting something in message boxes (guardian disarmed)
 - Pause menu map doesn't scroll and double-toggles hints
-- Room strats are mostly unusable due to room ID checks
 - No RNG options while rng.asm is commented out
-- Moonwalk needs to be removed from Game options (JP text too?)

@@ -239,7 +239,6 @@ ih_after_room_transition:
 
     ; Check if MBHP needs to be disabled
     LDA !sram_display_mode : CMP #$0001 : BNE +
-    LDA !sram_room_strat : CMP #$0007 : BNE +
     LDA $079B : CMP #$DD58 : BEQ +
     LDA #$0000 : STA !sram_display_mode
 
@@ -1011,7 +1010,7 @@ ih_game_loop_code:
   .inc_statusdisplay
     LDA !sram_display_mode
     INC A
-    CMP #$0013
+    CMP #$0012
     BNE +
     LDA #$0000
 +   STA !sram_display_mode
@@ -1022,7 +1021,7 @@ ih_game_loop_code:
     DEC A
     CMP #$FFFF
     BNE +
-    LDA #$0012
+    LDA #$0011
 +   STA !sram_display_mode
     JMP .update_status
 
@@ -1058,7 +1057,7 @@ metronome:
     RTS
 
   .tick
-    LDA !IH_LETTER_X : STA $7EC662
+    LDA !IH_BOMB : STA $7EC662
     LDA #$0000 : STA !ram_metronome_counter
     LDA !sram_metronome_sfx : ASL : TAX
     LDA.l MetronomeSFX,X : JSL !SFX_LIB1
@@ -1207,11 +1206,11 @@ NumberGFXTable:
     dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
 ;    dw #$0C61, #$0C62, #$0C63, #$0C64, #$0C65, #$0C66, #$0C67, #$0C68, #$0C69, #$0C6A
     dw #$0C70, #$0C71, #$0C72, #$0C73, #$0C74, #$0C75, #$0C78, #$0C79, #$0C7A, #$0C7B
-    dw #$0C7C, #$0C7D, #$0C7E, #$0C7F, #$0C58, #$0C60, #$0C61, #$0C62, #$0C63, #$0C64
-    dw #$0C65, #$0C66, #$0C67, #$0C5C, #$0C5D, #$0CB8, #$0C8D, #$0C12, #$0C13, #$0C14
+    dw #$0C7C, #$0C7D, #$0C7E, #$0C7F, #$0C8F, #$0C4D, #$0C4F, #$0C5E, #$0C5F, #$0C6D
+    dw #$0C6E, #$0C6F, #$0C8E, #$0C5C, #$0C5D, #$0CB8, #$0C8D, #$0C12, #$0C13, #$0C14
     dw #$0C15, #$0C16, #$0C17, #$0C18, #$0C19, #$0C1A, #$0C1B, #$0C20, #$0C21, #$0C22
     dw #$0C23, #$0C24, #$0C25, #$0C26, #$0C27, #$0C28, #$0C29, #$0C2A, #$0C2B, #$0C2C
-    dw #$0C2D, #$0C2E, #$0C2F, #$0C30, #$0C31, #$0CCA
+    dw #$0C2D, #$0C2E, #$0C2F, #$0C30, #$0C31, #$0CD2
 
 HexGFXTable:
     dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08

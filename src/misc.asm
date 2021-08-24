@@ -65,9 +65,9 @@ org $83AAD2
 org $8FEA00 ; free space for door asm
 MotherBrainHP:
 {
-    LDA !sram_display_mode : BNE .done
-    LDA #$0001 : STA !sram_display_mode
-    LDA #$0007 : STA !sram_room_strat
+
+    LDA !sram_display_mode : BNE .done    ; if 0 (enemy HP)
+    LDA #$0001 : STA !sram_display_mode   ; set 1 (MB HP)
 
   .done
     RTS

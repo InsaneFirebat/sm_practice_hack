@@ -9,7 +9,7 @@ incsrc defines.asm
 
 incsrc gamemode.asm
 if !FEATURE_SD2SNES
-    print "SD2SNES ENABLED"
+    print "SAVESTATES ENABLED"
     incsrc save.asm
 endif
 incsrc minimap.asm

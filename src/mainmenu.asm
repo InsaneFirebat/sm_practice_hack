@@ -135,10 +135,10 @@ MainMenu:
     dw #mm_goto_misc
     dw #mm_goto_infohud
     dw #mm_goto_gamemenu
-    dw #mm_goto_rngmenu
+;    dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_header("AXEIL PRACTICE HACK V2.2.7")
+    %cm_header("AXEIL EDITION V2.2.7 B2")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -614,8 +614,8 @@ TeleportMenu:
     dw #tel_maridiaaqueduct
     dw #tel_maridiadraygon
     dw #tel_tourianentrance
-    dw #tel_tourianbbyskip
     dw #tel_tourianmb
+    dw #tel_goto_debug
     dw #$0000
     %cm_header("TELEPORT")
 
@@ -676,11 +676,11 @@ tel_maridiadraygon:
 tel_tourianentrance:
     %cm_jsr("Tourian Entrance", #action_teleport, #$0501)
 
-tel_tourianbbyskip:
-    %cm_jsr("Tourian Baby Skip", #action_teleport, #$0511)
-
 tel_tourianmb:
     %cm_jsr("Tourian MB", #action_teleport, #$0500)
+
+tel_goto_debug:
+    %cm_submenu("Debug Teleports", #DebugTeleportMenu)
 
 action_teleport:
 {
@@ -701,6 +701,41 @@ action_teleport:
 
     RTS
 }
+
+DebugTeleportMenu:
+    dw #tel_debug_area
+    dw #tel_debug_station
+    dw #tel_debug_execute
+    dw #$0000
+    %cm_header("DEBUG LOAD POINTS")
+
+tel_debug_area:
+    dw !ACTION_CHOICE
+    dl #!ram_tel_debug_area
+    dw #$0000
+    db #$28, "Select Area", #$FF
+        db #$28, "   CRATERIA", #$FF
+        db #$28, "   BRINSTAR", #$FF
+        db #$28, "    NORFAIR", #$FF
+        db #$28, "  REQT SHIP", #$FF
+        db #$28, "    MARIDIA", #$FF
+        db #$28, "    TOURIAN", #$FF
+        db #$28, "    NORFAIR", #$FF
+    db #$FF
+
+tel_debug_station:
+    %cm_numfield_hex("Station ID", !ram_tel_debug_station, 0, 21, 1, #0)
+
+tel_debug_execute:
+    %cm_jsr("TELEPORT", #action_debug_teleport, #$0000)
+
+action_debug_teleport:
+{
+    LDA !ram_tel_debug_area : XBA
+    ORA !ram_tel_debug_station : TAY
+    JMP action_teleport
+}
+
 
 ; -----------
 ; Misc menu
@@ -942,8 +977,8 @@ ConfigMenu:
 InfoHudMenu:
     dw #ih_goto_display_mode
     dw #ih_display_mode
-    dw #ih_goto_room_strat
-    dw #ih_room_strat
+;    dw #ih_goto_room_strat
+;    dw #ih_room_strat
     dw #ih_room_counter
     dw #ih_lag
     dw #ih_ram_watch
@@ -1258,7 +1293,7 @@ action_HUD_ramwatch:
 
 GameMenu:
     dw #game_alternatetext
-    dw #game_moonwalk
+;    dw #game_moonwalk ; doesn't work even if enabled
     dw #game_iconcancel
     dw #game_debugmode
     dw #game_debugbrightness

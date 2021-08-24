@@ -34,6 +34,8 @@
 !ram_map_counter = $7FFB36
 !ram_vcounter_data = $7FFB38
 !ram_custom_preset = $7FFB3C
+!ram_tel_debug_area = $7FFB3E
+!ram_tel_debug_station = $7FFB40
 
 ; FREE SPACE ^
 
@@ -172,6 +174,7 @@
 !IH_PERCENT = #$0C0A
 !IH_DECIMAL = #$0CCB
 !IH_HYPHEN = #$0CCF
+!IH_BOMB = #$0058
 !IH_LETTER_A = #$0CD8
 !IH_LETTER_B = #$0CD9
 !IH_LETTER_C = #$0C33
