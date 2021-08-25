@@ -211,29 +211,6 @@ mm_goto_ctrlsmenu:
 mm_goto_IFBmenu:
     %cm_submenu("Extras Menu", #IFBMenu)
 
-action_save_custom_preset:
-{
-    JSL custom_preset_save
-    LDA #$0001 : STA !ram_cm_leave
-    RTS
-}
-
-action_load_custom_preset:
-{
-    ; check if slot is populated first
-    LDA !sram_custom_preset_slot : ASL : TAX
-    LDA.l PresetSlot,X : TAX
-    LDA $703000,X : CMP #$5AFE : BNE .abort
-
-    LDA #$FFFF : STA !ram_custom_preset
-    JSL preset_load
-    LDA #$0000 : STA !ram_custom_preset
-    LDA #$0001 : STA !ram_cm_leave
-
-  .abort
-    RTS
-}
-
 
 ; -------------
 ; Presets menu
