@@ -138,7 +138,7 @@ MainMenu:
 ;    dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_header("AXEIL EDITION V2.2.7 B2")
+    %cm_header("AXEIL EDITION V2.2.7 B3")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -595,35 +595,57 @@ tb_plasmabeam:
 ; ---------------
 
 TeleportMenu:
-    dw #tel_crateriaship
-    dw #tel_crateriaparlor
-    dw #tel_brinstarpink
-    dw #tel_brinstargreenshaft
-    dw #tel_brinstargreenetecoons
-    dw #tel_brinstarkraid
-    dw #tel_brinstarredtower
-    dw #tel_norfairgrapple
-    dw #tel_norfairbubble
-    dw #tel_norfairtunnel
-    dw #tel_norfaircrocomire
-    dw #tel_norfairlnelevator
-    dw #tel_norfairridley
-    dw #tel_wreckedship
-    dw #tel_maridiatube
-    dw #tel_maridiaelevator
-    dw #tel_maridiaaqueduct
-    dw #tel_maridiadraygon
-    dw #tel_tourianentrance
-    dw #tel_tourianmb
+    dw #tel_goto_crat
+    dw #tel_goto_brin
+    dw #tel_goto_norf
+    dw #tel_goto_ship
+    dw #tel_goto_mari
+    dw #tel_goto_tour
     dw #tel_goto_debug
     dw #$0000
-    %cm_header("TELEPORT")
+    %cm_header("TELEPORT TO SAVE STATION")
+
+tel_goto_crat:
+    %cm_submenu("Crateria", #TeleportCrateriaMenu)
+
+tel_goto_brin:
+    %cm_submenu("Brinstar", #TeleportBrinstarMenu)
+
+tel_goto_norf:
+    %cm_submenu("Norfair", #TeleportNorfairMenu)
+
+tel_goto_ship:
+    %cm_submenu("Wrecked Ship", #TeleportWreckedShipMenu)
+
+tel_goto_mari:
+    %cm_submenu("Maridia", #TeleportMaridiaMenu)
+
+tel_goto_tour:
+    %cm_submenu("Tourian", #TeleportTourianMenu)
+
+tel_goto_debug:
+    %cm_submenu("Debug Teleports", #DebugTeleportMenu)
+
+TeleportCrateriaMenu:
+    dw #tel_crateriaship
+    dw #tel_crateriaparlor
+    dw #$0000
+    %cm_header("CRATERIA SAVE STATIONS")
 
 tel_crateriaship:
     %cm_jsr("Crateria Ship", #action_teleport, #$0000)
 
 tel_crateriaparlor:
     %cm_jsr("Crateria Parlor", #action_teleport, #$0001)
+
+TeleportBrinstarMenu:
+    dw #tel_brinstarpink
+    dw #tel_brinstargreenshaft
+    dw #tel_brinstargreenetecoons
+    dw #tel_brinstarkraid
+    dw #tel_brinstarredtower
+    dw #$0000
+    %cm_header("BRINSTAR SAVE STATIONS")
 
 tel_brinstarpink:
     %cm_jsr("Brinstar Pink Spospo", #action_teleport, #$0100)
@@ -639,6 +661,16 @@ tel_brinstarkraid:
 
 tel_brinstarredtower:
     %cm_jsr("Brinstar Red Tower", #action_teleport, #$0104)
+
+TeleportNorfairMenu:
+    dw #tel_norfairgrapple
+    dw #tel_norfairbubble
+    dw #tel_norfairtunnel
+    dw #tel_norfaircrocomire
+    dw #tel_norfairlnelevator
+    dw #tel_norfairridley
+    dw #$0000
+    %cm_header("NORFAIR SAVE STATIONS")
 
 tel_norfairgrapple:
     %cm_jsr("Norfair Grapple", #action_teleport, #$0200)
@@ -658,8 +690,21 @@ tel_norfairlnelevator:
 tel_norfairridley:
     %cm_jsr("Norfair Ridley", #action_teleport, #$0205)
 
+TeleportWreckedShipMenu:
+    dw #tel_wreckedship
+    dw #$0000
+    %cm_header("WRECKED SHIP SAVE STATIONS")
+
 tel_wreckedship:
     %cm_jsr("Wrecked Ship", #action_teleport, #$0300)
+
+TeleportMaridiaMenu:
+    dw #tel_maridiatube
+    dw #tel_maridiaelevator
+    dw #tel_maridiaaqueduct
+    dw #tel_maridiadraygon
+    dw #$0000
+    %cm_header("MARIDIA SAVE STATIONS")
 
 tel_maridiatube:
     %cm_jsr("Maridia Tube", #action_teleport, #$0400)
@@ -673,34 +718,17 @@ tel_maridiaaqueduct:
 tel_maridiadraygon:
     %cm_jsr("Maridia Draygon", #action_teleport, #$0403)
 
+TeleportTourianMenu:
+    dw #tel_tourianentrance
+    dw #tel_tourianmb
+    dw #$0000
+    %cm_header("TOURIAN SAVE STATIONS")
+
 tel_tourianentrance:
     %cm_jsr("Tourian Entrance", #action_teleport, #$0501)
 
 tel_tourianmb:
     %cm_jsr("Tourian MB", #action_teleport, #$0500)
-
-tel_goto_debug:
-    %cm_submenu("Debug Teleports", #DebugTeleportMenu)
-
-action_teleport:
-{
-    ; teleport destination in Y when called
-    TYA : AND #$FF00 : XBA : STA $7E079F
-    TYA : AND #$00FF : STA $7E078B
-    LDA #$0006 : STA $7E0998
-
-    ; Make sure we can teleport to Zebes from Ceres
-    SEP #$20
-    LDA #$05 : STA $7ED914
-    REP #$20
-
-    JSL reset_all_counters
-    JSL stop_all_sounds
-
-    LDA #$0001 : STA !ram_cm_leave
-
-    RTS
-}
 
 DebugTeleportMenu:
     dw #tel_debug_area
@@ -728,6 +756,29 @@ tel_debug_station:
 
 tel_debug_execute:
     %cm_jsr("TELEPORT", #action_debug_teleport, #$0000)
+
+action_teleport:
+{
+    ; teleport destination in Y when called
+    TYA : AND #$FF00 : XBA : STA $7E079F
+    TYA : AND #$00FF : STA $7E078B
+    LDA #$0006 : STA $7E0998
+
+    ; Make sure we can teleport to Zebes from Ceres
+    SEP #$20
+    LDA #$05 : STA $7ED914
+    REP #$20
+
+    ; Clear morph and door transition flags
+    STZ $1F6B : STZ $0795
+
+    JSL reset_all_counters
+    JSL stop_all_sounds
+
+    LDA #$0001 : STA !ram_cm_leave
+
+    RTS
+}
 
 action_debug_teleport:
 {

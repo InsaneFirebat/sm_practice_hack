@@ -15,11 +15,10 @@ The build script will create two IPS patch files for the practice hack. The patc
 
 ## Known Issues:
 
-- Stuck crouching bug in some areas with 100% equipment
 - Equipment options are missing
 - Event flags are missing
 - Category presets are empty (vanilla PRKD presets as placeholder)
 - Presets do not yet support all event/item/door addresses
-- Teleports untouched
+- Debug teleports need labeling
 - Pause menu map doesn't scroll and double-toggles hints
 - No RNG options while rng.asm is commented out

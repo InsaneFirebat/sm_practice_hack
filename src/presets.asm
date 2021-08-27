@@ -78,7 +78,9 @@ preset_load:
     JSL !MUSIC_ROUTINE
 
     JSL reset_all_counters
-    STZ $0795 ; clear door transition flag
+
+    ; Clear morph and door transition flags
+    STZ $1F6B : STZ $0795
 
     ; Option to clear enemies, 1 = kill
     LDA !sram_preset_enemies : BEQ .enemies
