@@ -59,20 +59,20 @@ org $808F24
     NOP #2
 
 ; swap Enemy HP to MB HP when entering MB's room
-org $83AAD2
-    dw #MotherBrainHP
+;org $83AAD2 ; Where is MB's room? Probably not here
+;    dw #MotherBrainHP
 
-org $8FEA00 ; free space for door asm
-MotherBrainHP:
-{
+;org $8FEA00 ; free space for door asm
+;org $8FF9F9 ; This org is safe but all of this is commented out because I don't even know where MB's room is -IFB
+;MotherBrainHP:
+;{
 
-    LDA !sram_display_mode : BNE .done    ; if 0 (enemy HP)
-    LDA #$0001 : STA !sram_display_mode   ; set 1 (MB HP)
+;    LDA !sram_display_mode : BNE .done    ; if 0 (enemy HP)
+;    LDA #$0001 : STA !sram_display_mode   ; set 1 (MB HP)
 
-  .done
-    RTS
-}
-warnpc $8FFFFF
+;  .done
+;    RTS
+;}
 
 org $87D000
 print pc, " misc start"
@@ -156,7 +156,10 @@ print pc, " misc bankA0 end"
 ; Axeil Hacks
 ; -----------
 
-; Next 3 org's spread out the bomb graphics on the HUD
+; Next 4 org's spread out the bomb graphics on the HUD
+org $80E2C9
+    STA $7EC6AE : STA $7EC6B4 : STA $7EC6BA
+
 org $90F876
     BEQ .jump_AC1C
 

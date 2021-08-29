@@ -138,7 +138,7 @@ MainMenu:
 ;    dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_header("AXEIL EDITION V2.2.7 B3")
+    %cm_header("AXEIL EDITION V2.2.7 B4")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -769,8 +769,10 @@ action_teleport:
     LDA #$05 : STA $7ED914
     REP #$20
 
-    ; Clear morph and door transition flags
-    STZ $1F6B : STZ $0795
+    ; Clear flags
+    STZ $0795 ; door transition
+    STZ $0280 ; metroid latched (Redesign)
+    STZ $1F6B ; morph (Redesign)
 
     JSL reset_all_counters
     JSL stop_all_sounds
