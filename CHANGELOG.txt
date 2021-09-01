@@ -1,5 +1,4 @@
 
-## Changelog since 2.2.7
+## Changelog since v2.2.7
 
-* [2.2.7.1] 
-* [2.2.7]   Changelog added
+* [2.2.7]   Damage counter tracks shinesparks

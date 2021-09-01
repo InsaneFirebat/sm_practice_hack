@@ -114,7 +114,7 @@ $F740-$FFFF, 8C0h
 
     ;; Bank $A0
 $F9D3-$FFFF, 62Dh
-$F9E0-$F9F6, 16h, misc.asm " misc bankA0 start"
+$F9E0-$F9F6, 23h, misc.asm " misc bankA0 start"
 
     ;; Bank $A1
 $EBD1-$FFFF, 142Fh
