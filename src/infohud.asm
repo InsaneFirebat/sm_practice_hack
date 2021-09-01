@@ -171,7 +171,10 @@ org $A6A17C      ; Ridley AI init, reset !ram_countdamage
 org $A7CE64      ;Phantoon AI init
     JSR ResetCountDamagePhan
 
-org $A0A866      ; hijack damage routine to count total damage dealt
+org $A0A54C
+    JSR CountDamageShinespark
+
+org $A0A862      ; hijack damage routine to count total damage dealt
     JSR CountDamage
 
 if !FEATURE_EXTRAS
