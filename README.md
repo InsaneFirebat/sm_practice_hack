@@ -1,6 +1,6 @@
-# Super Metroid Practice Hack
+# Super Metroid Reimagined Practice Hack
 
-This page hosts the source material for the Super Metroid Practice Hack. It is intended for users that wish to contribute to the project, customize their own Practice Hacks, adapt it for SM romhacks, or just to see how it works. Visit https://smpractice.speedga.me for details on patching your SM rom with the latest version of InfoHUD.
+This page hosts the source material for the Super Metroid Reimagined Practice Hack. It is intended for users that wish to contribute to the project, customize their own Practice Hacks, adapt it for SM romhacks, or just to see how it works. Visit https://smpractice.speedga.me for details on patching your SM rom with the latest version of InfoHUD.
 
 ## Getting Started:
 

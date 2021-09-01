@@ -14,11 +14,7 @@ endif
 ; Skip intro
 ; $82:EEDF A9 95 A3    LDA #$A395
 org $82EEDF
-if !FEATURE_PAL
-    LDA #$C065
-else
     LDA #$C100
-endif
 
 ; Skips the waiting time after teleporting
 org $90E877
@@ -63,19 +59,20 @@ org $808F24
     NOP #2
 
 ; swap Enemy HP to MB HP when entering MB's room
-org $83AAD2
-    dw #MotherBrainHP
+;org $83AAD2
+;    dw #MotherBrainHP
 
-org $8FEA00 ; free space for door asm
-MotherBrainHP:
-{
-    LDA !sram_display_mode : BNE .done
-    LDA #$0001 : STA !sram_display_mode
-    LDA #$0007 : STA !sram_room_strat
+;org $8FEA00 ; free space for door asm
+;org $8FF230 ; free space for door asm
+;MotherBrainHP:
+;{
+;    LDA !sram_display_mode : BNE .done
+;    LDA #$0001 : STA !sram_display_mode
+;    LDA #$0007 : STA !sram_room_strat
 
-  .done
-    RTS
-}
+;  .done
+;    RTS
+;}
 warnpc $8FFFFF
 
 org $87D000
@@ -121,11 +118,7 @@ hook_unpause:
 gamemode_end:
 {
    ; overwritten logic
-if !FEATURE_PAL
-    JSL $A09179
-else
     JSL $A09169
-endif
 
     ; If minimap is disabled or shown, we ignore artificial lag
     LDA $05F7 : BNE .endlag

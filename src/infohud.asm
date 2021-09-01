@@ -45,117 +45,56 @@ org $84889F      ; hijack, runs every time an item is picked up
 org $8095FC      ; hijack, end of NMI routine to update realtime frames
     JML ih_nmi_end
 
-if !FEATURE_PAL
-org $91DA3D      ; hijack, runs after a shinespark has been charged
-else
 org $91DAD8      ; hijack, runs after a shinespark has been charged
-endif
     JSL ih_shinespark_code
 
-if !FEATURE_PAL
-org $90F1E1      ; hijack, runs when an elevator is activated
-else
 org $90F1E4      ; hijack, runs when an elevator is activated
-endif
     JSL ih_elevator_activation
 
-if !FEATURE_PAL
-org $A98884      ; update timers after MB1 fight
-else
 org $A98874      ; update timers after MB1 fight
-endif
     JSL ih_mb1_segment
 
-if !FEATURE_PAL
-org $A9BE33      ; update timers when baby spawns (off-screen) in MB2 fight
-else
 org $A9BE23      ; update timers when baby spawns (off-screen) in MB2 fight
-endif
     JSL ih_mb2_segment
 
-if !FEATURE_PAL
-org $A0B9BE      ; update timers when Ridley drops spawn
-else
 org $A0B9AE      ; update timers when Ridley drops spawn
-endif
     JSL ih_drops_segment
 
-if !FEATURE_PAL
-org $A0B9F1      ; update timers when Crocomire drops spawn
-else
 org $A0B9E1      ; update timers when Crocomire drops spawn
-endif
     JSL ih_drops_segment
 
-if !FEATURE_PAL
-org $A0BA24      ; update timers when Phantoon drops spawn
-else
 org $A0BA14      ; update timers when Phantoon drops spawn
-endif
     JSL ih_drops_segment
 
-if !FEATURE_PAL
-org $A0BA57      ; update timers when Botwoon drops spawn
-else
 org $A0BA47      ; update timers when Botwoon drops spawn
-endif
     JSL ih_drops_segment
 
-if !FEATURE_PAL
-org $A0BA8A      ; update timers when Kraid drops spawn
-else
 org $A0BA7A      ; update timers when Kraid drops spawn
-endif
     JSL ih_drops_segment
 
-if !FEATURE_PAL
-org $A0BABD      ; update timers when Bomb Torizo drops spawn
-else
 org $A0BAAD      ; update timers when Bomb Torizo drops spawn
-endif
     JSL ih_drops_segment
 
-if !FEATURE_PAL
-org $A0BAF0      ; update timers when Golden Torizo drops spawn
-else
 org $A0BAE0      ; update timers when Golden Torizo drops spawn
-endif
     JSL ih_drops_segment
 
-if !FEATURE_PAL
-org $A0BB23      ; update timers when Spore Spawn drops spawn
-else
 org $A0BB13      ; update timers when Spore Spawn drops spawn
-endif
     JSL ih_drops_segment
 
-if !FEATURE_PAL
-org $A0BB56      ; update timers when Draygon drops spawn
-else
 org $A0BB46      ; update timers when Draygon drops spawn
-endif
     JSL ih_drops_segment
 
-if !FEATURE_PAL
-org $AAE592      ; update timers when statue grabs Samus
-else
 org $AAE582      ; update timers when statue grabs Samus
-endif
     JSL ih_chozo_segment
 
 org $89AD0A      ; update timers when Samus escapes Ceres
     JSL ih_ceres_elevator_segment
-
-if !FEATURE_PAL
-org $A2AA38
-else
 org $A2AA20      ; update timers when Samus enters ship
-endif
     JSL ih_ship_elevator_segment
 
 
 ; Main bank stuff
-org $E08000
+org $F08000
 print pc, " infohud start"
 ih_max_etank_code:
 {
@@ -405,12 +344,7 @@ ih_ceres_elevator_segment:
 
 ih_ship_elevator_segment:
 {
-    JSL ih_update_hud_early
-if !FEATURE_PAL
-    JML $91E35B ; overwritten code
-else
     JML $91E3F6 ; overwritten code
-endif
 }
 
 ih_update_hud_code:
@@ -441,12 +375,7 @@ ih_update_hud_code:
             STZ $4205
             LDA !ram_last_realtime_room : STA $4204
             %a8()
-            if !FEATURE_PAL
-                LDA #$32
-            else
-                LDA #$3C
-            endif
-            STA $4206
+            LDA #$3C : STA $4206
             PHA : PLA : PHA : PLA
             %a16()
             LDA $4214 : STA !ram_tmp_1
@@ -474,12 +403,7 @@ ih_update_hud_code:
             STZ $4205
             LDA !ram_last_gametime_room : STA $4204
             %a8()
-            if !FEATURE_PAL
-                LDA #$32
-            else
-                LDA #$3C
-            endif
-            STA $4206
+            LDA #$3C : STA $4206
             PHA : PLA : PHA : PLA
             %a16()
             LDA $4214 : STA !ram_tmp_3
@@ -516,12 +440,7 @@ ih_update_hud_code:
             STZ $4205
             LDA !ram_last_realtime_room : STA $4204
             %a8()
-            if !FEATURE_PAL
-                LDA #$32
-            else
-                LDA #$3C
-            endif
-            STA $4206
+            LDA #$3C : STA $4206
             PHA : PLA : PHA : PLA
             %a16()
             LDA $4214 : STA !ram_tmp_1
@@ -550,12 +469,7 @@ ih_update_hud_code:
             STZ $4205
             LDA !ram_last_gametime_room : STA $4204
             %a8()
-            if !FEATURE_PAL
-                LDA #$32
-            else
-                LDA #$3C
-            endif
-            STA $4206
+            LDA #$3C : STA $4206
             PHA : PLA : PHA : PLA
             %a16()
             LDA $4214 : STA !ram_tmp_3

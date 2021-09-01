@@ -6,7 +6,8 @@ org $808455
     JML init_code
 
 
-org $81F000
+;org $81F000
+org $81F0B0
 print pc, " init start"
 init_code:
 {
@@ -34,11 +35,7 @@ init_code:
   .sram_initialized
     PLA
     ; Execute overwritten logic and return
-if !FEATURE_PAL
-    JSL $8B90EF
-else
     JSL $8B9146
-endif
     JML $808459
 }
 
@@ -91,4 +88,4 @@ init_sram:
 }
 
 print pc, " init end"
-warnpc $81FF00
+warnpc $81F7FF
