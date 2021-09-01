@@ -54,6 +54,8 @@
 !ram_draygon_rng_left = $7FFB68
 !ram_draygon_rng_right = $7FFB6A
 
+!ram_game_loop_extras = $7FFB6C
+
 !ram_metronome = $7FFB6E
 !ram_metronome_counter = $7FFB70
 
@@ -196,8 +198,6 @@
 !IH_STATUS_R = #$0010 ; r
 !IH_STATUS_L = #$0020 ; l
 
-!ram_game_loop_extras = $0A00
-
 !IH_INPUT_UP = $7E09AA
 !IH_INPUT_DOWN = $7E09AC
 !IH_INPUT_LEFT = $7E09AE
@@ -288,13 +288,6 @@
 !ram_HUD_top = $7FFC00
 !ram_HUD_middle = $7FFC02
 !ram_HUD_bottom = $7FFC03
-
-;!ram_cooldown_counter = $7FFB32
-;!ram_iframe_counter = $7FFB3A
-;!ram_charge_counter = $7FFB1C
-;!ram_xfac_counter = $7FFB1E
-;!ram_ridleygrab = $7FFBE2
-;!ram_countdamage_hud = $7FFBE8
 
 !ram_infinite_ammo = $7FFC10
 !ram_infiniteammo_check = $7FFC12
