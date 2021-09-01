@@ -12,11 +12,7 @@ preset_load:
     JSR $819B  ; Initialise IO registers
     JSR $82E2  ; Load standard BG3 tiles and sprite tiles, clear tilemaps
     JSR $82C5  ; Load initial palette
-if !FEATURE_PAL
-    JSL $91DF72  ; Initialise Samus
-else
     JSL $91E00D  ; Initialise Samus
-endif
 
     JSL preset_load_preset
 
@@ -48,11 +44,7 @@ endif
 
     LDA #$0006 : STA $0DA0
   .loopSomething
-if !FEATURE_PAL
-    JSL $A08CE7  ; Load enemies
-else
     JSL $A08CD7  ; Load enemies
-endif
     JSL $808338  ; Wait for NMI
     DEC $0DA0  ; Decrement $0DA0
     BPL .loopSomething
@@ -73,11 +65,7 @@ endif
     PLP
 
     ; Fix Samus' palette
-if !FEATURE_PAL
-    JSL $91DE4B
-else
     JSL $91DEBA
-endif
 
     LDA !SRAM_MUSIC_BANK
     CMP !MUSIC_BANK
@@ -193,19 +181,7 @@ preset_to_memory:
 
 preset_banks:
 {
-  dw preset_prkd_crateria_ship>>16
-  dw preset_kpdr21_crateria_ship>>16
-  dw preset_hundo_bombs_ceres_elevator>>16
-  dw preset_100early_crateria_ceres_elevator>>16
-  dw preset_rbo_bombs_ceres_elevator>>16
-  dw preset_pkrd_crateria_ship>>16
-  dw preset_kpdr25_bombs_ceres_elevator>>16
-  dw preset_gtclassic_crateria_ship>>16
-  dw preset_14ice_crateria_ceres_elevator>>16
-  dw preset_14speed_crateria_ceres_elevator>>16
-  dw preset_allbosskpdr_crateria_ceres_elevator>>16
-  dw preset_allbosspkdr_crateria_ceres_elevator>>16
-  dw preset_allbossprkd_crateria_ceres_elevator>>16
+  dw preset_anynoboss_start_to_bombs_construction_zone>>16
 }
 
 print pc, " presets end"
@@ -240,11 +216,7 @@ preset_start_gameplay:
     JSL $8DC4D8  ; Clear $8D PLM-esque headers
     JSL $90AC8D  ; Update beam graphics
     JSL $82E139  ; Load target colours for common sprites, beams and slashing enemies / pickups
-if !FEATURE_PAL
-    JSL $A08A2E  ; Load enemies
-else
     JSL $A08A1E  ; Load enemies
-endif
     JSL $82E071  ; Clear music
     JSR $A12B    ; Play 14h frames of music
     JSL $82E09B  ; Execute subroutine $82:E09B
@@ -328,74 +300,11 @@ transfer_cgram_long:
 print pc, " preset_start_gameplay end"
 warnpc $80FFC0
 
-org $F18000
-  ; 2EAA (length in hex)
-  print pc, " prkd data start"
-  incsrc presets/prkd_data.asm
-  print pc, " prkd data end"
 
-  ; 42A2 (length in hex)
-  print pc, " hundo data start"
-  incsrc presets/hundo_data.asm
-  print pc, " hundo data end"
 
-org $F28000
-  ; 2FF6 (length in hex)
-  print pc, " kpdr21 data start"
-  incsrc presets/kpdr21_data.asm
-  print pc, " kpdr21 data end"
-
-  ; 3274 (length in hex)
-  print pc, " rbo data start"
-  incsrc presets/rbo_data.asm
-  print pc, " rbo data end"
-
-org $F38000
-  ; 2B5E (length in hex)
-  print pc, " gtclassic data start"
-  incsrc presets/gtclassic_data.asm
-  print pc, " gtclassic data end"
-
-  ; 1E95 (length in hex)
-  print pc, " 14ice data start"
-  incsrc presets/14ice_data.asm
-  print pc, " 14ice data end"
-
-  ; 1EE6 (length in hex)
-  print pc, " 14speed data start"
-  incsrc presets/14speed_data.asm
-  print pc, " 14speed data end"
-
-org $F48000
-  ; 2400 (length in hex)
-  print pc, " allbosskpdr data start"
-  incsrc presets/allbosskpdr_data.asm
-  print pc, " allbosskpdr data end"
-
-  ; 2484 (length in hex)
-  print pc, " allbosspkdr data start"
-  incsrc presets/allbosspkdr_data.asm
-  print pc, " allbosspkdr data end"
-
-  ; 2568 (length in hex)
-  print pc, " allbossprkd data start"
-  incsrc presets/allbossprkd_data.asm
-  print pc, " allbossprkd data end"    
-
-org $F58000
-  ; 423C (length in hex)
-  print pc, " 100early data start"
-  incsrc presets/100early_data.asm
-  print pc, " 100early data end"
-
-  ; 1E3A (length in hex)
-  print pc, " kpdr25 data start"
-  incsrc presets/kpdr25_data.asm
-  print pc, " kpdr25 data end"
-
-org $F68000
-  ; 2EBC (length in hex)
-  print pc, " pkrd data start"
-  incsrc presets/pkrd_data.asm
-  print pc, " pkrd data end"
+org $FF8000
+  print pc, " preset menu/data start"
+  incsrc presets/anynoboss_menu.asm
+  incsrc presets/anynoboss_data.asm
+  print pc, " preset menu/data end"
 
