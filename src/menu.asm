@@ -1,32 +1,33 @@
 !ram_tilemap_buffer = $7E5800
 
-org $85FE00
+org $859A00
 print pc, " menu bank85 start"
 
 wait_for_lag_frame_long:
-  jsr $8136
-  rtl
+    JSR $8136
+    RTL
 
 initialize_ppu_long:
-  jsr $8143
-  rtl
+    JSR $8143
+    RTL
 
 restore_ppu_long:
-  jsr $861A
-  rtl
+    JSR $861A
+    RTL
 
 play_music_long:
-  jsr $8574
-  rtl
+    JSR $8574
+    RTL
 
 maybe_trigger_pause_long:
-  jsr $80FA
-  rtl
+    JSR $80FA
+    RTL
 
 print pc, " menu bank85 end"
-warnpc $85FF00
+warnpc $859B00
 
-org $B88000
+;org $B88000
+org $85A100
 print pc, " menu start"
 
 cm_start:
@@ -163,7 +164,7 @@ cm_transfer_original_tileset:
   .minimap_vram
     LDA #$80 : STA $2115
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
-    LDX #$D500 : STX $4302 ; Source offset
+    LDX #$8000 : STX $4302 ; Source offset
     LDA #$DF : STA $4304 ; Source bank
     LDX #$1000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
@@ -1449,3 +1450,4 @@ HexMenuGFXTable:
     dw $2C70, $2C71, $2C72, $2C73, $2C74, $2C75, $2C76, $2C77, $2C78, $2C79, $2C50, $2C51, $2C52, $2C53, $2C54, $2C55
 
 print pc, " menu end"
+warnpc $85FFCF

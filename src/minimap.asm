@@ -52,7 +52,8 @@ incbin ../resources/hudgfx.bin
 
 
 ; Place minimap graphics in bank DF
-org $DFD500
+;org $DFD500
+org $DF8000
 print pc, " minimap bankDF start"
 incbin ../resources/mapgfx.bin
 
@@ -78,7 +79,8 @@ org $80994D
 
 
 ; Placed in bank 82 so that the jumps work
-org $82F70F
+;org $82F70F
+org $82FC56
 print pc, " minimap bank82 start"
 
 mm_write_and_clear_hud_tiles:
@@ -131,11 +133,12 @@ mm_write_hud_tiles_during_door_transition:
 }
 
 print pc, " minimap bank82 end"
-warnpc $82FA00
+warnpc $82FCFF
 
 
 ; Placed in bank 90 so that the jumps work
-org $90F640
+;org $90F640
+org $90FB00
 print pc, " minimap bank90 start"
 
 mm_initialize_minimap:

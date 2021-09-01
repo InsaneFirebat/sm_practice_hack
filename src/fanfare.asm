@@ -1,4 +1,5 @@
-org $84EFD9
+;org $84EFD9
+org $84F125
 print pc, " fanfare restore start"
   .prepareloop
     PHX              ; start of logic that was overwritten
@@ -13,6 +14,8 @@ print pc, " fanfare restore start"
     BRL .continue    ; jump back to the original logic
 
 print pc, " fanfare restore end"
+warnpc $84F4F0
+
 
 ; $84:8BDD: Instruction - clear music queue and queue music track [[Y]] ;;;
 org $848BDD
@@ -27,6 +30,7 @@ org $848BDD
     BRL .prepareloop
 
 warnpc $848BEB       ; we are only overwriting original logic up to this point
+
 
 ; $84:8BEB: Resume original logic
 org $848BEB
