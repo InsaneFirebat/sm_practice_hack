@@ -370,33 +370,6 @@ action_load_custom_preset:
     RTS
 }
 
-pushpc
-
-org $fe8000    ; F49E / B61
-incsrc presets/prkd_menu.asm   ; E6A (length in hex)
-incsrc presets/kpdr21_menu.asm   ; F91 (length in hex)
-incsrc presets/hundo_menu.asm   ; 1220 (length in hex)
-incsrc presets/100early_menu.asm   ; 1320 (length in hex)
-incsrc presets/rbo_menu.asm   ; D97 (length in hex)
-incsrc presets/kpdr25_menu.asm   ; 69F (length in hex)
-incsrc presets/gtclassic_menu.asm   ; D7C (length in hex)
-incsrc presets/14ice_menu.asm   ; 7C6 (length in hex)
-incsrc presets/14speed_menu.asm   ; 7EB (length in hex)
-
-org $ff8000    ; BBDA / 4425
-incsrc presets/allbosskpdr_menu.asm   ; 942 (length in hex)
-incsrc presets/allbosspkdr_menu.asm   ; 9B0 (length in hex)
-incsrc presets/allbossprkd_menu.asm   ; 9BE (length in hex)
-incsrc presets/spazer_menu.asm   ; F91 (length in hex)
-incsrc presets/ngplasma_menu.asm   ; 85C (length in hex)
-incsrc presets/nghyper_menu.asm   ; 864 (length in hex)
-incsrc presets/pkrd_menu.asm   ; E6A (length in hex)
-print pc, " <---    NINTENDO POWER menu start"
-incsrc presets/nintendopower_menu.asm   ; ??? (length in hex)
-print pc, " <---    NINTENDO POWER menu end"
-
-pullpc
-
 LoadRandomPreset:
 {
     PHY : PHX
@@ -914,7 +887,7 @@ misc_music_toggle:
     RTS
 
 misc_transparent:
-    %cm_toggle_bit("Samus on top", !sram_sprite_prio_flag, #$3000, #0)
+    %cm_toggle_bit("Samus on Top", !sram_sprite_prio_flag, #$3000, #0)
 
 misc_invincibility:
     %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
@@ -1168,7 +1141,7 @@ DisplayModeMenu:
 DisplayModeMenu2:
     dw ihmode_ridleygrab
     dw ihmode_ramwatch
-    dw ihmode_dboost
+;    dw ihmode_dboost
     dw ihmode_GOTO_PAGE_ONE
     dw #$0000
     %cm_header("INFOHUD DISPLAY MODE")
@@ -1280,7 +1253,7 @@ ih_display_mode:
     db #$28, "DMG COUNTER", #$FF
     db #$28, "RIDLEY GRAB", #$FF
     db #$28, "  RAM WATCH", #$FF
-    db #$28, "WIP D-BOOST", #$FF
+;    db #$28, "WIP D-BOOST", #$FF
     db #$FF
 
 ih_goto_room_strat:

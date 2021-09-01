@@ -1,13 +1,3 @@
 *.srm
-*.bst
 *.s[mf]c
-*.
 build/*
-*.sw[op]
-tools/*.smv
-tools/*.asm
-tools/*.log
-tools/asar.exe
-tools/dll/*
-.vscode/launch.json
-.vscode/tasks.json
