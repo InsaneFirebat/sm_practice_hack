@@ -16,7 +16,7 @@ endif
 incsrc minimap.asm
 incsrc infohud.asm
 incsrc menu.asm
-incsrc rng.asm
+;incsrc rng.asm
 incsrc presets.asm
 incsrc misc.asm
 incsrc init.asm

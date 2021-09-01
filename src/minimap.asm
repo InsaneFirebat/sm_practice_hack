@@ -78,7 +78,8 @@ org $80994D
 
 
 ; Placed in bank 82 so that the jumps work
-org $82F70F
+;org $82F70F
+org $82F820
 print pc, " minimap bank82 start"
 
 mm_write_and_clear_hud_tiles:
@@ -131,11 +132,12 @@ mm_write_hud_tiles_during_door_transition:
 }
 
 print pc, " minimap bank82 end"
-warnpc $82FA00
+warnpc $82F8FF ; presets.asm
 
 
 ; Placed in bank 90 so that the jumps work
-org $90F640
+;org $90F640
+org $90F720
 print pc, " minimap bank90 start"
 
 mm_initialize_minimap:

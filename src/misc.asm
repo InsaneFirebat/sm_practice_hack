@@ -66,7 +66,8 @@ org $808F24
 org $83AAD2
     dw #MotherBrainHP
 
-org $8FEA00 ; free space for door asm
+;org $8FEA00 ; free space for door asm
+org $8FE99E
 MotherBrainHP:
 {
     LDA !sram_display_mode : BNE .done
@@ -76,7 +77,7 @@ MotherBrainHP:
   .done
     RTS
 }
-warnpc $8FFFFF
+warnpc $8FE9F9
 
 org $87D000
 print pc, " misc start"

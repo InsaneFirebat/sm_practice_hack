@@ -155,8 +155,10 @@ endif
 
 
 ; Main bank stuff
-org $E08000
+;org $E08000
+org $F08000
 print pc, " infohud start"
+
 ih_max_etank_code:
 {
     ; Reset max-etanks value

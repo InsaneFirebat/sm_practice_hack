@@ -6,7 +6,8 @@ org $808455
     JML init_code
 
 
-org $81F000
+;org $81F000
+org $81F100
 print pc, " init start"
 init_code:
 {
@@ -39,7 +40,7 @@ if !FEATURE_PAL
 else
     JSL $8B9146
 endif
-    JML $808459
+    JML $808459 ; return
 }
 
 init_sram:
@@ -91,4 +92,4 @@ init_sram:
 }
 
 print pc, " init end"
-warnpc $81FF00
+warnpc $81FDFF ; spriteprio.asm
