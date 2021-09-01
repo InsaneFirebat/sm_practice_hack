@@ -496,92 +496,70 @@ print pc, " preset_start_gameplay end"
 warnpc $80FFC0
 
 
-org $E08000 
-  ; 42A2 (length in hex)
-  print pc, " hundo data start"
-  incsrc presets/hundo_data.asm
-  print pc, " hundo data end"
+org $FE8000    ; 749Eh bytes used / B62h bytes free
+print pc, " preset_menu.asm bankFE start"
+incsrc presets/prkd_menu.asm   ; E6Ah bytes
+incsrc presets/kpdr21_menu.asm   ; F91h bytes
+incsrc presets/hundo_menu.asm   ; 1220h bytes
+incsrc presets/100early_menu.asm   ; 1320h bytes
+incsrc presets/rbo_menu.asm   ; D97h bytes
+incsrc presets/kpdr25_menu.asm   ; 69Fh bytes
+incsrc presets/gtclassic_menu.asm   ; D7Ch bytes
+incsrc presets/14ice_menu.asm   ; 7C6h bytes
+incsrc presets/14speed_menu.asm   ; 7EBh bytes
+print pc, " preset_menu.asm bankFE end"
 
-  ; 2EAA (length in hex)
-  print pc, " prkd data start"
-  incsrc presets/prkd_data.asm
-  print pc, " prkd data end"
+org $FF8000    ; 42E6h bytes used / 3D1Ah bytes free
+print pc, " preset_menu.asm bankFF start"
+incsrc presets/allbosskpdr_menu.asm   ; 942h bytes
+incsrc presets/allbosspkdr_menu.asm   ; 9B0h bytes
+incsrc presets/allbossprkd_menu.asm   ; 9BEh bytes
+incsrc presets/pkrd_menu.asm   ; E6Ah bytes
+incsrc presets/ngplasma_menu.asm   ; 85Ch bytes
+incsrc presets/nghyper_menu.asm   ; 864h bytes
+incsrc presets/nintendopower_menu.asm   ; 70Ch bytes
+print pc, " preset_menu.asm bankFF end"
 
 org $E18000
-  ; 3024 (length in hex)
-  print pc, " kpdr21 data start"
-  incsrc presets/kpdr21_data.asm
-  print pc, " kpdr21 data end"
+print pc, " preset_data.asm BankE1 start"
+incsrc presets/prkd_data.asm ; 2EAAh bytes
+incsrc presets/hundo_data.asm ; 42A2h bytes
+print pc, " preset_data.asm BankE1 end"
 
-  ; 1E3A (length in hex)
-  print pc, " kpdr25 data start"
-  incsrc presets/kpdr25_data.asm
-  print pc, " kpdr25 data end"
+org $E28000
+print pc, " preset_data.asm BankE2 start"
+incsrc presets/kpdr21_data.asm ; 2FF6h bytes
+incsrc presets/rbo_data.asm ; 3274h bytes
+print pc, " preset_data.asm BankE2 end"
 
 org $E38000
-  ; 2B5E (length in hex)
-  print pc, " gtclassic data start"
-  incsrc presets/gtclassic_data.asm
-  print pc, " gtclassic data end"
-
-  ; 1E95 (length in hex)
-  print pc, " 14ice data start"
-  incsrc presets/14ice_data.asm
-  print pc, " 14ice data end"
-
-  ; 1EE6 (length in hex)
-  print pc, " 14speed data start"
-  incsrc presets/14speed_data.asm
-  print pc, " 14speed data end"
+print pc, " preset_data.asm BankE3 start"
+incsrc presets/gtclassic_data.asm ; 2B5Eh bytes
+incsrc presets/14ice_data.asm ; 1E95h bytes
+incsrc presets/14speed_data.asm ; 1EE6h bytes
+print pc, " preset_data.asm BankE3 end"
 
 org $E48000
-  ; 2400 (length in hex)
-  print pc, " allbosskpdr data start"
-  incsrc presets/allbosskpdr_data.asm
-  print pc, " allbosskpdr data end"
-
-  ; 2484 (length in hex)
-  print pc, " allbosspkdr data start"
-  incsrc presets/allbosspkdr_data.asm
-  print pc, " allbosspkdr data end"
-
-  ; 2568 (length in hex)
-  print pc, " allbossprkd data start"
-  incsrc presets/allbossprkd_data.asm
-  print pc, " allbossprkd data end"
-
-org $E48000
-
-  ; 423C (length in hex)
-  print pc, " 100early data start"
-  incsrc presets/100early_data.asm
-  print pc, " 100early data end"
+print pc, " preset_data.asm BankE4 start"
+incsrc presets/allbosskpdr_data.asm ; 2400h bytes
+incsrc presets/allbosspkdr_data.asm ; 2484h bytes
+incsrc presets/allbossprkd_data.asm ; 2568h bytes
+print pc, " preset_data.asm BankE4 end"
 
 org $E58000
-  
-  ; 1B5A (length in hex)
-  print pc, " ngplasma data start"
-  incsrc presets/ngplasma_data.asm
-  print pc, " ngplasma data end"
-
-  ; 1B70 (length in hex)
-  print pc, " nghyper data start"
-  incsrc presets/nghyper_data.asm
-  print pc, " nghyper data end"
-
-  ; 3274 (length in hex)
-  print pc, " rbo data start"
-  incsrc presets/rbo_data.asm
-  print pc, " rbo data end"
+print pc, " preset_data.asm BankE5 start"
+incsrc presets/100early_data.asm ; 423Ch bytes
+incsrc presets/kpdr25_data.asm ; 1E3Ah bytes
+print pc, " preset_data.asm BankE5 end"
 
 org $E68000
+print pc, " preset_data.asm BankE6 start"
+incsrc presets/pkrd_data.asm ; 2EBCh bytes
+print pc, " preset_data.asm BankE6 end"
 
-  ; 2EBC (length in hex)
-  print pc, " pkrd data start"
-  incsrc presets/pkrd_data.asm
-  print pc, " pkrd data end"
-
-  ; ???? (length in hex)
-  print pc, " nintendopower data start"
-  incsrc presets/nintendopower_data.asm
-  print pc, " nintendopower data end"
+org $E78000
+print pc, " preset_data.asm BankE7 start"
+incsrc presets/nintendopower_data.asm ; 20F8h bytes
+incsrc presets/ngplasma_data.asm ; 1B5Ah bytes
+incsrc presets/nghyper_data.asm ; 1B70h bytes
+print pc, " preset_data.asm BankE7 end"
