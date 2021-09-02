@@ -19,7 +19,7 @@ incsrc menu.asm
 incsrc presets.asm
 incsrc misc.asm
 incsrc init.asm
-incsrc fanfare.asm
+;incsrc fanfare.asm ; Hyper doesn't need this
 incsrc spriteprio.asm
 
 ; Make sure the ROM expands to 4MB

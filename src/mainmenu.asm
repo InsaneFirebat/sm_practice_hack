@@ -325,9 +325,10 @@ EquipmentMenu:
     dw #eq_goto_togglebeams
     dw #eq_setetanks
     dw #eq_setreserves
-    dw #eq_setmissiles
-    dw #eq_setsupers
-    dw #eq_setpbs
+    dw #eq_setammo
+;    dw #eq_setmissiles
+;    dw #eq_setsupers
+;    dw #eq_setpbs
     dw #$0000
     %cm_header("EQUIPMENT")
 
@@ -353,7 +354,7 @@ eq_goto_togglebeams:
     %cm_submenu("Toggle Beams", #ToggleBeamsMenu)
 
 eq_setetanks:
-    %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 21, 1, .routine)
+    %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 14, 1, .routine)
     .routine
         TAX
         LDA #$0000
@@ -368,7 +369,7 @@ eq_setetanks:
         RTS
 
 eq_setreserves:
-    %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 7, 1, .routine)
+    %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 5, 1, .routine)
     .routine
         TAX
         LDA #$0000
@@ -379,6 +380,9 @@ eq_setreserves:
       .endloop
         STA $09D6 : STA $09D4
         RTS
+
+eq_setammo:
+    %cm_numfield_word("Ammo", $7E09D8, 0, 500, 5, #0)
 
 eq_setmissiles:
     %cm_numfield_word("Missiles", $7E09C8, 0, 325, 5, .routine)
@@ -404,13 +408,8 @@ eq_setpbs:
 
 ToggleCategoryMenu:
     dw #cat_100
-    dw #cat_any_new
-    dw #cat_any_old
-    dw #cat_14ice
-    dw #cat_14speed
-    dw #cat_gt_code
-    dw #cat_rbo
-    dw #cat_any_glitched
+    dw #cat_any
+    dw #cat_low
     dw #cat_nothing
     dw #$0000
     %cm_header("TOGGLE CATEGORY")
@@ -419,29 +418,14 @@ ToggleCategoryMenu:
 cat_100:
     %cm_jsr("100%", action_category, #$0000)
 
-cat_any_new:
-    %cm_jsr("Any% PRKD", action_category, #$0001)
+cat_any:
+    %cm_jsr("Any%", action_category, #$0001)
 
-cat_any_old:
-    %cm_jsr("Any% KPDR", action_category, #$0002)
-
-cat_14ice:
-    %cm_jsr("14% Ice", action_category, #$0003)
-
-cat_14speed:
-    %cm_jsr("14% Speed", action_category, #$0004)
-
-cat_gt_code:
-    %cm_jsr("GT Code", action_category, #$0005)
-
-cat_rbo:
-    %cm_jsr("RBO", action_category, #$0006)
-
-cat_any_glitched:
-    %cm_jsr("Any% glitched", action_category, #$0007)
+cat_low:
+    %cm_jsr("Low%", action_category, #$0002)
 
 cat_nothing:
-    %cm_jsr("Nothing", action_category, #$0008)
+    %cm_jsr("Nothing", action_category, #$0003)
 
 
 action_category:
@@ -452,12 +436,7 @@ action_category:
     LDA .table,X : STA $7E09A4 : STA $7E09A2 : INX #2
 
     ; Beams
-    LDA .table,X : STA $7E09A8 : TAY
-    AND #$000C : CMP #$000C : BEQ .murderBeam
-    TYA : STA $7E09A6 : INX #2 : BRA +
-
-  .murderBeam
-    TYA : AND #$100B : STA $7E09A6 : INX #2
+    LDA .table,X : STA $7E09A6 : STA $7E09A8 : INX #2
 
     ; Health
 +   LDA .table,X : STA $7E09C2 : STA $7E09C4 : INX #2
@@ -474,20 +453,18 @@ action_category:
     ; Reserves
     LDA .table,X : STA $7E09D4 : STA $7E09D6 : INX #2
 
+    ; Weapon
+    LDA .table,X : STA $7E09D8 : INX #2
+
     JSR cm_set_etanks_and_reserve
     LDA #!SOUND_MENU_JSR : JSL $80903F
     RTS
 
   .table
-    ;  Items,  Beams,  Health, Miss,   Supers, PBs,    Reserv, Dummy
-    dw #$F32F, #$100F, #$05DB, #$00E6, #$0032, #$0032, #$0190, #$0000        ; 100%
-    dw #$3125, #$1007, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% new
-    dw #$3325, #$100B, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% old
-    dw #$1025, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% ice
-    dw #$3025, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% speed
-    dw #$F32F, #$100F, #$02BC, #$0064, #$0014, #$0014, #$012C, #$0000        ; gt code
-    dw #$710C, #$1001, #$031F, #$001E, #$0019, #$0014, #$0064, #$0000        ; rbo
-    dw #$9004, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0000, #$0000        ; any% glitched
+    ;  Items,  Beams,  Health, Ammo,   Supers, PBs,    Reserv, Weapon
+    dw #$F32F, #$100F, #$05DB, #$01F4, #$01F4, #$01F4, #$01F4, #$0007        ; 100%
+    dw #$3327, #$100F, #$018F, #$0041, #$0041, #$0041, #$0000, #$0007        ; any%
+    dw #$3027, #$1000, #$00C7, #$001E, #$001E, #$001E, #$0000, #$0007        ; low%
     dw #$0000, #$0000, #$0063, #$0000, #$0000, #$0000, #$0000, #$0000        ; nothing
 }
 
@@ -623,102 +600,110 @@ TeleportCrateriaMenu:
     %cm_header("CRATERIA SAVE STATIONS")
 
 tel_crateriaship:
-    %cm_jsr("Crateria Ship", #action_teleport, #$0000)
+    %cm_jsr("Ship", #action_teleport, #$0000)
 
 tel_crateriaparlor:
-    %cm_jsr("Crateria Parlor", #action_teleport, #$0001)
+    %cm_jsr("Parlor", #action_teleport, #$0001)
 
 TeleportBrinstarMenu:
-    dw #tel_brinstarpink
-    dw #tel_brinstargreenshaft
-    dw #tel_brinstargreenetecoons
-    dw #tel_brinstarkraid
-    dw #tel_brinstarredtower
+    dw #tel_brinstarcharge
+    dw #tel_brinstargrapple
+    dw #tel_brinstarsidehopperspeedway
+    dw #tel_brinstarbeforekraid
+    dw #tel_brinstarafterkraid
     dw #$0000
     %cm_header("BRINSTAR SAVE STATIONS")
 
-tel_brinstarpink:
-    %cm_jsr("Brinstar Pink Spospo", #action_teleport, #$0100)
+tel_brinstarcharge:
+    %cm_jsr("Charge", #action_teleport, #$0103)
 
-tel_brinstargreenshaft:
-    %cm_jsr("Brinstar Green Shaft", #action_teleport, #$0101)
+tel_brinstargrapple:
+    %cm_jsr("Grapple", #action_teleport, #$0102)
 
-tel_brinstargreenetecoons:
-    %cm_jsr("Brinstar Green Etecoons", #action_teleport, #$0102)
+tel_brinstarsidehopperspeedway:
+    %cm_jsr("Sidehopper Speedway", #action_teleport, #$0104)
 
-tel_brinstarkraid:
-    %cm_jsr("Brinstar Kraid", #action_teleport, #$0103)
+tel_brinstarbeforekraid:
+    %cm_jsr("Before Kraid", #action_teleport, #$0101)
 
-tel_brinstarredtower:
-    %cm_jsr("Brinstar Red Tower", #action_teleport, #$0104)
+tel_brinstarafterkraid:
+    %cm_jsr("After Kraid", #action_teleport, #$0100)
 
 TeleportNorfairMenu:
-    dw #tel_norfairgrapple
-    dw #tel_norfairbubble
-    dw #tel_norfairtunnel
+    dw #tel_norfairmissilestreet
+    dw #tel_norfairteasersupers
     dw #tel_norfaircrocomire
-    dw #tel_norfairlnelevator
-    dw #tel_norfairridley
+    dw #tel_norfairgoldentorizo
+    dw #tel_norfairwarehouse
+    dw #tel_norfairfurnace
     dw #$0000
     %cm_header("NORFAIR SAVE STATIONS")
 
-tel_norfairgrapple:
-    %cm_jsr("Norfair Grapple", #action_teleport, #$0200)
+tel_norfairmissilestreet:
+    %cm_jsr("Missile Street", #action_teleport, #$0204)
 
-tel_norfairbubble:
-    %cm_jsr("Norfair Bubble Mountain", #action_teleport, #$0201)
-
-tel_norfairtunnel:
-    %cm_jsr("Norfair Tunnel", #action_teleport, #$0202)
+tel_norfairteasersupers:
+    %cm_jsr("Teaser Supers", #action_teleport, #$0200)
 
 tel_norfaircrocomire:
-    %cm_jsr("Norfair Crocomire", #action_teleport, #$0203)
+    %cm_jsr("Crocomire", #action_teleport, #$0201)
 
-tel_norfairlnelevator:
-    %cm_jsr("Norfair LN Elevator", #action_teleport, #$0204)
+tel_norfairgoldentorizo:
+    %cm_jsr("Golden Torizo", #action_teleport, #$0202)
 
-tel_norfairridley:
-    %cm_jsr("Norfair Ridley", #action_teleport, #$0205)
+tel_norfairwarehouse:
+    %cm_jsr("Warehouse", #action_teleport, #$0203)
+
+tel_norfairfurnace:
+    %cm_jsr("Furnace", #action_teleport, #$0205)
 
 TeleportWreckedShipMenu:
-    dw #tel_wreckedship
+    dw #tel_wreckedshipphantoon
+    dw #tel_wreckedshipattic
     dw #$0000
     %cm_header("WRECKED SHIP SAVE STATIONS")
 
-tel_wreckedship:
-    %cm_jsr("Wrecked Ship", #action_teleport, #$0300)
+tel_wreckedshipphantoon:
+    %cm_jsr("Phantoon", #action_teleport, #$0301)
+
+tel_wreckedshipattic:
+    %cm_jsr("Attic", #action_teleport, #$0300)
 
 TeleportMaridiaMenu:
-    dw #tel_maridiatube
     dw #tel_maridiaelevator
-    dw #tel_maridiaaqueduct
+    dw #tel_maridiatube
+    dw #tel_maridiadepths
     dw #tel_maridiadraygon
     dw #$0000
     %cm_header("MARIDIA SAVE STATIONS")
 
-tel_maridiatube:
-    %cm_jsr("Maridia Tube", #action_teleport, #$0400)
-
 tel_maridiaelevator:
-    %cm_jsr("Maridia Elevator", #action_teleport, #$0401)
+    %cm_jsr("Main Elevator", #action_teleport, #$0400)
 
-tel_maridiaaqueduct:
-    %cm_jsr("Maridia Aqueduct", #action_teleport, #$0402)
+tel_maridiadepths:
+    %cm_jsr("Depths", #action_teleport, #$0403)
+
+tel_maridiatube:
+    %cm_jsr("Tube", #action_teleport, #$0401)
 
 tel_maridiadraygon:
-    %cm_jsr("Maridia Draygon", #action_teleport, #$0403)
+    %cm_jsr("Draygon", #action_teleport, #$0402)
 
 TeleportTourianMenu:
     dw #tel_tourianentrance
+    dw #tel_tourianbaby
     dw #tel_tourianmb
     dw #$0000
     %cm_header("TOURIAN SAVE STATIONS")
 
 tel_tourianentrance:
-    %cm_jsr("Tourian Entrance", #action_teleport, #$0501)
+    %cm_jsr("Entrance", #action_teleport, #$0500)
+
+tel_tourianbaby:
+    %cm_jsr("Baby Metroid", #action_teleport, #$0511)
 
 tel_tourianmb:
-    %cm_jsr("Tourian MB", #action_teleport, #$0500)
+    %cm_jsr("Mother Brain", #action_teleport, #$0501)
 
 DebugTeleportMenu:
     dw #tel_debug_area
@@ -789,7 +774,7 @@ MiscMenu:
     dw #misc_babyslowdown
     dw #misc_magicpants
     dw #misc_spacepants
-    dw #misc_fanfare_toggle
+;    dw #misc_fanfare_toggle
     dw #misc_music_toggle
     dw #misc_transparent
     dw #misc_invincibility
@@ -856,15 +841,18 @@ EventsMenu:
     dw #events_resetdoors
     dw #events_resetitems
     dw #events_goto_bosses
-    dw #events_zebesawake
+    dw #events_opentouriangates
+    dw #events_closetouriangates
+;    dw #events_zebesawake
     dw #events_maridiatubebroken
     dw #events_chozoacid
-    dw #events_shaktool
-    dw #events_tourian
+;    dw #events_shaktool
+;    dw #events_tourian
     dw #events_metroid1
     dw #events_metroid2
     dw #events_metroid3
     dw #events_metroid4
+    dw #events_metroidskip
     dw #events_zebesexploding
     dw #events_animals
     dw #$0000
@@ -881,6 +869,12 @@ events_resetitems:
 
 events_goto_bosses:
     %cm_submenu("Bosses", #BossesMenu)
+
+events_opentouriangates:
+    %cm_jsr("Open Tourian Gates", action_open_gates, #$0000)
+
+events_closetouriangates:
+    %cm_jsr("Close Tourian Gates", action_close_gates, #$0000)
 
 events_zebesawake:
     %cm_toggle_bit("Zebes Awake", $7ED820, #$0001, #0)
@@ -908,6 +902,9 @@ events_metroid3:
 
 events_metroid4:
     %cm_toggle_bit("4th Metroids Cleared", $7ED822, #$0008, #0)
+
+events_metroidskip:
+    %cm_toggle_bit("Baby Skip", $7ED822, #$0016, #0)
 
 events_zebesexploding:
     %cm_toggle_bit("Zebes Set Ablaze", $7ED820, #$4000, #0)
@@ -952,6 +949,20 @@ action_reset_items:
     BNE -
     PLP
     LDA #!SOUND_MENU_JSR : JSL $80903F
+    RTS
+}
+
+action_open_gates:
+{
+    LDA #$0F0F
+    STA $7ED864 : STA $7ED866
+    RTS
+}
+
+action_close_gates:
+{
+    LDA #$0000
+    STA $7ED864 : STA $7ED866
     RTS
 }
 
@@ -1333,25 +1344,6 @@ action_HUD_ramwatch:
     LDA #$0012 : STA !sram_display_mode
     RTS
 }
-
-ih_room_counter:
-    dw !ACTION_CHOICE
-    dl #!sram_frame_counter_mode
-    dw #$0000
-    db #$28, "Frame Counters", #$FF
-    db #$28, "   REALTIME", #$FF
-    db #$28, "     INGAME", #$FF
-    db #$FF
-
-ih_lag:
-    %cm_numfield("Artificial Lag", !sram_artificial_lag, 0, 64, 1, #0)
-
-ih_reset_seg_later:
-    %cm_jsr("Reset Segment in Next Room", #.routine, #$FFFF)
-    .routine
-        TYA : STA !ram_reset_segment_later
-        %sfxquake()
-        RTS
 
 
 ; ----------

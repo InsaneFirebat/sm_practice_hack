@@ -320,7 +320,6 @@ org $FD8000
 print pc, " custom presets start"
 incsrc custompresets.asm
 print pc, " custom presets end"
-warnpc $85F000
 
 org $FF8000
 print pc, " preset menu/data start"
