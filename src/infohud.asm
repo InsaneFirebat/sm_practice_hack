@@ -213,7 +213,6 @@ ih_after_room_transition:
 
     ; Check if MBHP needs to be disabled
     LDA !sram_display_mode : CMP #$0001 : BNE +
-    LDA !sram_room_strat : CMP #$0007 : BNE +
     LDA $079B : CMP #$DD58 : BEQ +
     LDA #$0000 : STA !sram_display_mode
 
@@ -984,7 +983,7 @@ ih_game_loop_code:
   .inc_statusdisplay
     LDA !sram_display_mode
     INC A
-    CMP #$0013
+    CMP #$0012
     BNE +
     LDA #$0000
 +   STA !sram_display_mode
@@ -995,7 +994,7 @@ ih_game_loop_code:
     DEC A
     CMP #$FFFF
     BNE +
-    LDA #$0012
+    LDA #$0011
 +   STA !sram_display_mode
     JMP .update_status
 
