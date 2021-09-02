@@ -6,7 +6,7 @@
 ; also update infohud.asm: inc_statusdisplay and dec_statusdisplay
 .status_display_table
     dw status_enemyhp
-    dw status_roomstrat
+    dw status_mbhp
     dw status_chargetimer
     dw status_xfactor
     dw status_cooldowncounter
