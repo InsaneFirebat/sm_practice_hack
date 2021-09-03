@@ -7,29 +7,7 @@ print pc, " custom presets start"
 PresetSlot: ; 400h bytes needed per slot (3DEh)
     dw $0000, $0400, $0800, $0C00, $1000, $1400, $1800, $1C00
     dw $2000, $2400, $2800, $2C00, $3000, $3400, $3800, $3C00
-    dw $4000, $4400, $4800, $4C00, $5000, $5400, $5800, $5C00
-    dw $6000, $6400, $6800, $6C00, $7000, $7400, $7800, $7C00
-
-    ; 304h bytes needed per slot
-;    dw $0000, $0304, $0608, $090C, $0C10, $0F14, $1218, $151C
-;    dw $1820, $1B24, $1E28, $212C, $2430, $2734, $2A38, $2D3C
-;    dw $3040, $3344, $3648, $394C, $3C50, $3F54, $4258, $455C
-;    dw $4860, $4B64, $4E68
-
-    ; 26Eh bytes needed per slot
-;    dw $0000, $026E, $04DC, $074A, $09B8, $0C26, $0E94, $1102
-;    dw $1370, $15DE, $184C, $1ABA, $1D28, $1F96, $2204, $2472
-;    dw $26E0, $294E, $2BBC, $2E2A, $3098, $3306, $3574, $37E2
-;    dw $3A50, $3CBE, $3F2C, $419A, $4408, $4676, $48E4, $4B52
-;    dw $4DC0
-
-    ; 1AEh size slots (no enemy RAM)
-;    dw $0000, $01AE, $035C, $050A, $06B8, $0866, $0A14, $0BC2
-;    dw $0D70, $0F1E, $10CC, $127A, $1428, $15D6, $1784, $1932
-;    dw $1AE0, $1C8E, $1E3C, $1FEA, $2198, $2346, $24F4, $26A2
-;    dw $2850, $29FE, $2BAC, $2D5A, $2F08, $30B6, $3264, $3412
-;    dw $35C0, $376E, $391C, $3ACA, $3C78, $3E26, $3FD4, $4182
-;    dw $4330, $44DE, $468C, $483A, $49E8, $4B96, $4D44
+    dw $4000, $4400, $4800, $4C00
 
 custom_preset_save:
 {
@@ -281,7 +259,7 @@ custom_preset_save:
     LDA $0FAC,Y : STA $703000,X : INX #2 ;  Enemy AI variable
     LDA $0FAE,Y : STA $703000,X : INX #2 ;  Enemy AI variable
     LDA $0FB0,Y : STA $703000,X : INX #2 ;  Enemy AI variable
-    LDA $0FB2,Y : STA $703000,X : INX #2 ;  Enemy AI variable
+;    LDA $0FB2,Y : STA $703000,X : INX #2 ;  Enemy AI variable
 ;    LDA $0FB4,Y : STA $703000,X : INX #2 ;  Enemy Parameter 1
 ;    LDA $0FB6,Y : STA $703000,X : INX #2 ;  Enemy Parameter 2
     CPY #$0380 : BPL .done ; exit after enemy 13, zero indexed
@@ -544,12 +522,12 @@ custom_preset_enemy_data:
 ;    LDA $7031AE,X : STA $0FA2,Y : INX #2 ;  Enemy Shake timer
     LDA $7031AE,X : STA $0FA4,Y : INX #2 ;  Enemy Frame counter
 ;    LDA $7031AE,X : STA $0FA6,Y : INX #2 ;  Enemy Bank
-;    LDA $7031AE,X : STA $0FA8,Y : INX #2 ;  Enemy AI variable, frequently function pointer
+    LDA $7031AE,X : STA $0FA8,Y : INX #2 ;  Enemy AI variable, frequently function pointer
     LDA $7031AE,X : STA $0FAA,Y : INX #2 ;  Enemy AI variable
     LDA $7031AE,X : STA $0FAC,Y : INX #2 ;  Enemy AI variable
     LDA $7031AE,X : STA $0FAE,Y : INX #2 ;  Enemy AI variable
     LDA $7031AE,X : STA $0FB0,Y : INX #2 ;  Enemy AI variable
-    LDA $7031AE,X : STA $0FB2,Y : INX #2 ;  Enemy AI variable
+;    LDA $7031AE,X : STA $0FB2,Y : INX #2 ;  Enemy AI variable
 ;    LDA $7031AE,X : STA $0FB4,Y : INX #2 ;  Enemy Parameter 1
 ;    LDA $7031AE,X : STA $0FB6,Y : INX #2 ;  Enemy Parameter 2
     CPY #$0380 : BPL .done ; exit after enemy 13, zero indexed
