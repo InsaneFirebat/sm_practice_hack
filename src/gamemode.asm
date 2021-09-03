@@ -193,7 +193,7 @@ endif
     SEC : RTS
 
   .next_preset_slot
-    LDA !sram_custom_preset_slot : CMP #$001F ; min slots - 1
+    LDA !sram_custom_preset_slot : CMP #$0013 ; max slots
     BNE + : LDA #$FFFF
 +   INC : STA !sram_custom_preset_slot
     ASL : TAX : LDA.l NumberGFXTable,X : STA $7EC67C
@@ -203,7 +203,7 @@ endif
 
   .prev_preset_slot
     LDA !sram_custom_preset_slot : BNE +
-    LDA #$0021 ; max slots + 1
+    LDA #$0014 ; max slots + 1
 +   DEC : STA !sram_custom_preset_slot
     ASL : TAX : LDA.l NumberGFXTable,X : STA $7EC67C
     %sfxnumber()
