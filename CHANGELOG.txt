@@ -1,4 +1,5 @@
 
 ## Changelog since v2.2.7
 
+* [2.2.7.1] Equipment options to set current health/reserves
 * [2.2.7]   Damage counter tracks shinesparks
