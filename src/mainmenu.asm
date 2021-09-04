@@ -176,7 +176,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.2.7")
+    %cm_header("CUSTOM INFOHUD V2.2.7.1")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -436,7 +436,9 @@ EquipmentMenu:
     dw #eq_toggle_category
     dw #eq_goto_toggleitems
     dw #eq_goto_togglebeams
+    dw #eq_currentetanks
     dw #eq_setetanks
+    dw #eq_currentreserves
     dw #eq_setreserves
     dw #eq_setmissiles
     dw #eq_setsupers
@@ -466,6 +468,9 @@ eq_goto_toggleitems:
 eq_goto_togglebeams:
     %cm_submenu("Toggle Beams", #ToggleBeamsMenu)
 
+eq_currentetanks:
+    %cm_numfield_word("Current Energy", $7E09C2, 0, 1499, 1, #0)
+
 eq_setetanks:
     %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 21, 1, .routine)
     .routine
@@ -480,6 +485,9 @@ eq_setetanks:
       .endloop
         STA $09C4 : STA $09C2
         RTS
+
+eq_currentreserves:
+    %cm_numfield_word("Current Reserves", $7E09D6, 0, 400, 1, #0)
 
 eq_setreserves:
     %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 7, 1, .routine)
