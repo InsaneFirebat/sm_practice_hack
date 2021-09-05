@@ -52,7 +52,8 @@ incbin ../resources/hudgfx.bin
 
 
 ; Place minimap graphics in bank DF
-org $DFD500
+;org $DFD500
+org $FC8000
 print pc, " minimap bankDF start"
 incbin ../resources/mapgfx.bin
 
@@ -78,7 +79,8 @@ org $80994D
 
 
 ; Placed in bank 82 so that the jumps work
-org $82F70F
+;org $82F70F
+org $82F760
 print pc, " minimap bank82 start"
 
 mm_write_and_clear_hud_tiles:
@@ -101,8 +103,8 @@ mm_write_and_clear_hud_tiles:
   .minimap_vram
     LDA #$80 : STA $2115
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
-    LDX #$D500 : STX $4302 ; Source offset
-    LDA #$DF : STA $4304 ; Source bank
+    LDX #$8000 : STX $4302 ; Source offset
+    LDA #$FC : STA $4304 ; Source bank
     LDX #$2000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
@@ -135,7 +137,8 @@ warnpc $82FA00
 
 
 ; Placed in bank 90 so that the jumps work
-org $90F640
+;org $90F640
+org $90F800
 print pc, " minimap bank90 start"
 
 mm_initialize_minimap:
