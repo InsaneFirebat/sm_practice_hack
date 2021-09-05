@@ -36,6 +36,36 @@ org $82E764      ; hijack, runs when Samus is coming out of a room transition
 org $809B4C      ; hijack, HUD routine (game timer by Quote58)
     JSL ih_hud_code : NOP
 
+; Hyper HUD start
+
+    ; continue from above org
+    JMP $9B8B    ; jump to Hyper's ammo routine
+
+org $809B91      ; skip drawing auto reserve icon and normal energy numbers and tanks during HUD routine
+    BRA BRANCH_HEALTH_END
+
+org $809BFB
+BRANCH_HEALTH_END:
+
+org $80CF3C      ; draw missile instead of AMMO and shift / two tiles to the left
+    STA $7EC6A6
+    LDA #$2847 : STA $7EC69C
+    LDA #$2848 : STA $7EC69E
+    BRA SkipAMMOonHUD : NOP
+
+org $80CF55
+SkipAMMOonHUD:
+
+org $80CF8E      ; shift ammo numers (min and max) two tiles to the left
+    STA $7EC5FC,X : skip 10
+    STA $7EC5FC,X : skip 10
+    STA $7EC5FC,X
+
+org $809AC9      ; don't skip icon drawing routines during HUD init
+    LDA $09C8
+
+; Hyper HUD end
+
 org $82894F      ; hijack, main game loop: runs EVERY frame (used for room transition timer)
     JSL ih_game_loop_code
 
@@ -1163,7 +1193,7 @@ print pc, " infohud bank80 start"
 
 NumberGFXTable:
     dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
-    dw #$0C70, #$0C71, #$0C72, #$0C73, #$0C74, #$0C32, #$0C78, #$0C79, #$0C7A, #$0C7B
+    dw #$0C70, #$0C71, #$0C72, #$0C73, #$0C74, #$0C32, #$0CB2, #$0CB3, #$0CB4, #$0C7B
     dw #$0C7C, #$0C7D, #$0C7E, #$0C7F, #$0CD2, #$0CD4, #$0CD5, #$0CD6, #$0CD7, #$0CD8
     dw #$0CD9, #$0CDA, #$0CDB, #$0C5C, #$0C5D, #$0C60, #$0C8D, #$0C12, #$0C13, #$0C14
     dw #$0C15, #$0C16, #$0C17, #$0C18, #$0C19, #$0C1A, #$0C1B, #$0C20, #$0C21, #$0C22

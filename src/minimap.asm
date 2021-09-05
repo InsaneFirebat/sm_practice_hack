@@ -2,8 +2,8 @@
 ;Patches to support the minimap
 ;=======================================================
 
-org $809B51
-    JMP $9BFB    ; skip drawing auto reserve icon and normal energy numbers and tanks during HUD routine
+;org $809B51      ; This would skip Hyper's ammo drawing routine. See infohud.asm
+;    JMP $9BFB    ; skip drawing auto reserve icon and normal energy numbers and tanks during HUD routine
 
 org $82AED9      ; routine to draw auto reserve icon on HUD from equip screen
     NOP : NOP : NOP
