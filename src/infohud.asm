@@ -211,12 +211,13 @@ ih_after_room_transition:
     LDA #$0000 : STA !ram_transition_flag
 
     ; Check if MBHP needs to be disabled
-    LDA !sram_display_mode : CMP #$0001 : BNE +
-    LDA $079B : CMP #$DD58 : BEQ +
-    LDA #$0000 : STA !sram_display_mode
+;    LDA !sram_display_mode : CMP #$0001 : BNE +
+;    LDA $079B : CMP #$DD58 : BEQ +
+;    LDA #$0000 : STA !sram_display_mode
+;+
 
     ; Maybe reset segment timer
-+   LDA !ram_reset_segment_later : BEQ +
+    LDA !ram_reset_segment_later : BEQ +
     LDA #$0000 : STA !ram_reset_segment_later
     STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds
     STA !ram_seg_rt_minutes

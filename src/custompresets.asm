@@ -2,8 +2,6 @@
 ; Custom Presets
 ; --------------
 
-print pc, " custom presets start"
-
 PresetSlot: ; 400h bytes needed per slot (3DEh)
     dw $0000, $0400, $0800, $0C00, $1000, $1400, $1800, $1C00
     dw $2000, $2400, $2800, $2C00, $3000, $3400, $3800, $3C00
@@ -537,5 +535,3 @@ custom_preset_enemy_data:
   .done
     RTL
 }
-
-print pc, " custom presets end"

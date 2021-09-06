@@ -111,13 +111,15 @@ action_presets_submenu:
 
 preset_category_submenus:
 {
-    dw #PresetsMenuPrkd  
+;    dw #PresetsMenuRouteA
+    dw #PresetsMenuRouteB
     dw #$0000
 }
 
 preset_category_banks:
 {
-    dw #PresetsMenuPrkd>>16
+;    dw #PresetsMenuRouteA>>16
+    dw #PresetsMenuRouteB>>16
     dw #$0000
 
 }
@@ -138,7 +140,7 @@ MainMenu:
 ;    dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_header("REIMAGINED 2.2.7 BETA 2")
+    %cm_header("REIMAGINED 2.2.7 BETA 3")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -207,7 +209,8 @@ presets_kill_enemies:
 
 SelectPresetCategoryMenu:
     dw #presets_current
-    dw #precat_prkd
+;    dw #precat_RouteA
+    dw #precat_RouteB
     dw #$0000
     %cm_header("SELECT PRESET CATEGORY")
 
@@ -216,11 +219,15 @@ presets_current:
     dl #!sram_preset_category
     dw #$0000
     db #$28, "CURRENT PRESET", #$FF
-        db #$28, "  ANY% PRKD", #$FF
+;        db #$28, "    Route A", #$FF
+        db #$28, "    Route B", #$FF
     db #$FF
 
-precat_prkd:
-    %cm_jsr("Any% PRKD", #action_select_preset_category, #$0000)
+;precat_RouteA:
+;    %cm_jsr("Any% RouteA", #action_select_preset_category, #$0000)
+
+precat_RouteB:
+    %cm_jsr("Any% RouteB", #action_select_preset_category, #$0000) ; change to #$0001 if re-enabling RouteA
 
 action_select_preset_category:
 {
@@ -404,13 +411,8 @@ eq_setpbs:
 
 ToggleCategoryMenu:
     dw #cat_100
-    dw #cat_any_new
-    dw #cat_any_old
-    dw #cat_14ice
-    dw #cat_14speed
-    dw #cat_gt_code
-    dw #cat_rbo
-    dw #cat_any_glitched
+    dw #cat_any_A
+    dw #cat_any_B
     dw #cat_nothing
     dw #$0000
     %cm_header("TOGGLE CATEGORY")
@@ -419,29 +421,14 @@ ToggleCategoryMenu:
 cat_100:
     %cm_jsr("100%", action_category, #$0000)
 
-cat_any_new:
-    %cm_jsr("Any% PRKD", action_category, #$0001)
+cat_any_A:
+    %cm_jsr("Any% Route A", action_category, #$0001)
 
-cat_any_old:
-    %cm_jsr("Any% KPDR", action_category, #$0002)
-
-cat_14ice:
-    %cm_jsr("14% Ice", action_category, #$0003)
-
-cat_14speed:
-    %cm_jsr("14% Speed", action_category, #$0004)
-
-cat_gt_code:
-    %cm_jsr("GT Code", action_category, #$0005)
-
-cat_rbo:
-    %cm_jsr("RBO", action_category, #$0006)
-
-cat_any_glitched:
-    %cm_jsr("Any% glitched", action_category, #$0007)
+cat_any_B:
+    %cm_jsr("Any% Route B", action_category, #$0002)
 
 cat_nothing:
-    %cm_jsr("Nothing", action_category, #$0008)
+    %cm_jsr("Nothing", action_category, #$0003)
 
 
 action_category:
@@ -480,14 +467,9 @@ action_category:
 
   .table
     ;  Items,  Beams,  Health, Miss,   Supers, PBs,    Reserv, Dummy
-    dw #$F32F, #$100F, #$05DB, #$00E6, #$0032, #$0032, #$0190, #$0000        ; 100%
-    dw #$3125, #$1007, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% new
-    dw #$3325, #$100B, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% old
-    dw #$1025, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% ice
-    dw #$3025, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% speed
-    dw #$F32F, #$100F, #$02BC, #$0064, #$0014, #$0014, #$012C, #$0000        ; gt code
-    dw #$710C, #$1001, #$031F, #$001E, #$0019, #$0014, #$0064, #$0000        ; rbo
-    dw #$9004, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0000, #$0000        ; any% glitched
+    dw #$F32F, #$100F, #$05db, #$00E6, #$0032, #$0032, #$0190, #$0000        ; 100%
+    dw #$3125, #$1007, #$01F3, #$0014, #$000A, #$000A, #$0000, #$0000        ; any% A
+    dw #$7F2F, #$100B, #$01F3, #$0014, #$000A, #$000A, #$0000, #$0000        ; any% B
     dw #$0000, #$0000, #$0063, #$0000, #$0000, #$0000, #$0000, #$0000        ; nothing
 }
 
@@ -634,13 +616,13 @@ tel_crateriaship:
     %cm_jsr("Crateria Ship", #action_teleport, #$0000)
 
 tel_crateria01:
-    %cm_jsr("Crateria West", #action_teleport, #$0001)
+    %cm_jsr("Crateria Bomb Torizo", #action_teleport, #$0001)
 
 tel_crateria02:
-    %cm_jsr("Crateria East", #action_teleport, #$0002)
+    %cm_jsr("Crateria Underwater", #action_teleport, #$0002)
 
 tel_crateria03:
-    %cm_jsr("Crateria Far East", #action_teleport, #$0003)
+    %cm_jsr("Crateria Old Lab", #action_teleport, #$0003)
 
 tel_crateria08:
     %cm_jsr("DEBUG - Shaft to Maridia", #action_teleport, #$0008)
@@ -671,19 +653,19 @@ TeleportBrinstarMenu:
     %cm_header("BRINSTAR SAVE STATIONS")
 
 tel_brinstar00:
-    %cm_jsr("Brinstar Green", #action_teleport, #$0100)
+    %cm_jsr("Brinstar Entrance", #action_teleport, #$0100)
 
 tel_brinstar01:
     %cm_jsr("Brinstar Pink", #action_teleport, #$0101)
 
 tel_brinstar02:
-    %cm_jsr("Brinstar Red South", #action_teleport, #$0102)
+    %cm_jsr("Brinstar Red Tower", #action_teleport, #$0102)
 
 tel_brinstar03:
-    %cm_jsr("Brinstar Warehouse", #action_teleport, #$0103)
+    %cm_jsr("Brinstar Kraid", #action_teleport, #$0103)
 
 tel_brinstar04:
-    %cm_jsr("Brinstar East Near Maridia", #action_teleport, #$0104)
+    %cm_jsr("Brinstar Red Waterway", #action_teleport, #$0104)
 
 tel_brinstar11:
     %cm_jsr("DEBUG - Kraid", #action_teleport, #$0111)
@@ -701,19 +683,19 @@ TeleportNorfairMenu:
     %cm_header("NORFAIR SAVE STATIONS")
 
 tel_norfair00:
-    %cm_jsr("Norfair West", #action_teleport, #$0200)
+    %cm_jsr("Norfair Super Missiles", #action_teleport, #$0200)
 
 tel_norfair01:
-    %cm_jsr("Norfair Bubbles", #action_teleport, #$0201)
+    %cm_jsr("Norfair Bubble Room", #action_teleport, #$0201)
 
 tel_norfair02:
-    %cm_jsr("Norfair Elevator to Brin", #action_teleport, #$0202)
+    %cm_jsr("Norfair Entrance", #action_teleport, #$0202)
 
 tel_norfair03:
     %cm_jsr("Norfair Crocomire", #action_teleport, #$0203)
 
 tel_norfair04:
-    %cm_jsr("Norfair Elev to Maridia", #action_teleport, #$0204)
+    %cm_jsr("Norfair Bubble Mountain", #action_teleport, #$0204)
 
 tel_norfair05:
     %cm_jsr("Norfair Ridley", #action_teleport, #$0205)
@@ -750,13 +732,13 @@ tel_maridia01:
     %cm_jsr("Elevator to East Crateria", #action_teleport, #$0401)
 
 tel_maridia02:
-    %cm_jsr("Maridia East", #action_teleport, #$0402)
+    %cm_jsr("Maridia Upper", #action_teleport, #$0402)
 
 tel_maridia03:
-    %cm_jsr("Maridia South", #action_teleport, #$0403)
+    %cm_jsr("Maridia Lower", #action_teleport, #$0403)
 
 tel_maridia04:
-    %cm_jsr("Maridia Sandpit", #action_teleport, #$0404)
+    %cm_jsr("Maridia Draygon", #action_teleport, #$0404)
 
 tel_maridia10:
     %cm_jsr("Maridia Beach", #action_teleport, #$0410)

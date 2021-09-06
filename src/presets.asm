@@ -197,7 +197,8 @@ preset_to_memory:
 
 preset_banks:
 {
-  dw preset_prkd_crateria_ship>>16
+;  dw preset_RouteA_crateria_ship>>16
+  dw preset_RouteB_crateria_ship>>16
 }
 
 print pc, " presets end"
@@ -318,14 +319,19 @@ print pc, " preset_start_gameplay end"
 warnpc $80FFC0
 
 
-
 org $FD8000
 print pc, " custom presets start"
 incsrc custompresets.asm
 print pc, " custom presets end"
 
+
 org $FF8000
 print pc, " preset menu/data start"
-incsrc presets/prkd_menu.asm
-incsrc presets/prkd_data.asm
+
+incsrc presets/RouteA_menu.asm
+incsrc presets/RouteA_data.asm
+
+incsrc presets/RouteB_menu.asm
+incsrc presets/RouteB_data.asm
+
 print pc, " preset menu/data end"
