@@ -1027,7 +1027,7 @@ ih_goto_display_mode:
 
 DisplayModeMenu:
     dw ihmode_enemyhp
-    dw ihmode_roomstrat
+    dw ihmode_mbhp
     dw ihmode_chargetimer
     dw ihmode_xfactor
     dw ihmode_cooldowncounter
@@ -1051,8 +1051,8 @@ DisplayModeMenu:
 ihmode_enemyhp:
     %cm_jsr("Enemy HP", #action_select_infohud_mode, #$0000)
 
-ihmode_roomstrat:
-    %cm_jsr("Room Strat", #action_select_infohud_mode, #$0001)
+ihmode_mbhp:
+    %cm_jsr("Mother Brain HP", #action_select_infohud_mode, #$0001)
 
 ihmode_chargetimer:
     %cm_jsr("Charge Timer", #action_select_infohud_mode, #$0002)
@@ -1119,7 +1119,7 @@ ih_display_mode:
     dw #$0000
     db #$28, "Current Mode", #$FF
     db #$28, "   ENEMY HP", #$FF
-    db #$28, " ROOM STRAT", #$FF
+    db #$28, "      MB HP", #$FF
     db #$28, "     CHARGE", #$FF
     db #$28, "   X FACTOR", #$FF
     db #$28, "   COOLDOWN", #$FF

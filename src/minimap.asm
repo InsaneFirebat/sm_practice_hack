@@ -48,14 +48,14 @@ org $82E488      ; write tiles to VRAM
 
 
 org $9AB200      ; graphics for HUD
-incbin ../resources/hudgfx.bin
+incbin ../resources/SZM_hudgfx.bin
 
 
 ; Place minimap graphics in bank DF
 ;org $DFD500
 org $FC8000
 print pc, " minimap bankDF start"
-incbin ../resources/mapgfx.bin
+incbin ../resources/SZM_mapgfx.bin
 
 ; Next block needs to be all zeros to clear a tilemap
 fillbyte $00
