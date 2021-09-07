@@ -138,7 +138,7 @@ MainMenu:
 ;    dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_header("AXEIL EDITION V2.2.7 B4")
+    %cm_header("AXEIL EDITION V2.2.7 B5")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -628,67 +628,108 @@ tel_goto_debug:
 
 TeleportCrateriaMenu:
     dw #tel_crateriaship
-    dw #tel_crateriaparlor
+    dw #tel_crateria01
+    dw #tel_crateria02
+    dw #tel_crateria03
+    dw #tel_crateria04
+    dw #tel_crateria05
+    dw #tel_crateria06
+    dw #tel_crateria09
+    dw #tel_crateria0B
     dw #$0000
     %cm_header("CRATERIA SAVE STATIONS")
 
 tel_crateriaship:
-    %cm_jsr("Crateria Ship", #action_teleport, #$0000)
+    %cm_jsr("Ship", #action_teleport, #$0000)
 
-tel_crateriaparlor:
-    %cm_jsr("Crateria Parlor", #action_teleport, #$0001)
+tel_crateria01:
+    %cm_jsr("Brinstar Elevator", #action_teleport, #$0001)
+
+tel_crateria02:
+    %cm_jsr("West Maridia Elevator", #action_teleport, #$0002)
+
+tel_crateria03:
+    %cm_jsr("Northeast Crateria", #action_teleport, #$0003)
+
+tel_crateria04:
+    %cm_jsr("East Maridia Elevator", #action_teleport, #$0004)
+
+tel_crateria05:
+    %cm_jsr("Tourian Elevator", #action_teleport, #$0005)
+
+tel_crateria06:
+    %cm_jsr("Phantoon - Lost Caverns", #action_teleport, #$0006)
+
+tel_crateria09:
+    %cm_jsr("DEBUG - Central Crateria", #action_teleport, #$0009)
+
+tel_crateria0B:
+    %cm_jsr("DEBUG - West Crateria", #action_teleport, #$000B)
 
 TeleportBrinstarMenu:
-    dw #tel_brinstarpink
-    dw #tel_brinstargreenshaft
-    dw #tel_brinstargreenetecoons
+    dw #tel_brinstar00
     dw #tel_brinstarkraid
-    dw #tel_brinstarredtower
+    dw #tel_brinstar02
+    dw #tel_brinstar03
+    dw #tel_brinstar02
     dw #$0000
     %cm_header("BRINSTAR SAVE STATIONS")
 
-tel_brinstarpink:
-    %cm_jsr("Brinstar Pink Spospo", #action_teleport, #$0100)
-
-tel_brinstargreenshaft:
-    %cm_jsr("Brinstar Green Shaft", #action_teleport, #$0101)
-
-tel_brinstargreenetecoons:
-    %cm_jsr("Brinstar Green Etecoons", #action_teleport, #$0102)
+tel_brinstar00:
+    %cm_jsr("West Norfair Elevator", #action_teleport, #$0100)
 
 tel_brinstarkraid:
-    %cm_jsr("Brinstar Kraid", #action_teleport, #$0103)
+    %cm_jsr("Kraid", #action_teleport, #$0101)
 
-tel_brinstarredtower:
-    %cm_jsr("Brinstar Red Tower", #action_teleport, #$0104)
+tel_brinstar02:
+    %cm_jsr("East Pink Brinstar", #action_teleport, #$0102)
+
+tel_brinstar03:
+    %cm_jsr("DEBUG - Central Brinstar", #action_teleport, #$0103)
+
+tel_brinstar04:
+    %cm_jsr("Spore Spawn", #action_teleport, #$0104)
+
+tel_brinstar08:
+    %cm_jsr("DEBUG - Cactus", #action_teleport, #$0108)
+
+tel_brinstar0A:
+    %cm_jsr("DEBUG - Red Brinstar", #action_teleport, #$010A)
+
+tel_brinstar12:
+    %cm_jsr("DEBUG - West Pink Brinstar", #action_teleport, #$0112)
 
 TeleportNorfairMenu:
-    dw #tel_norfairgrapple
-    dw #tel_norfairbubble
-    dw #tel_norfairtunnel
-    dw #tel_norfaircrocomire
-    dw #tel_norfairlnelevator
-    dw #tel_norfairridley
+    dw #tel_norfair01
+    dw #tel_norfair02
+    dw #tel_norfair03
+    dw #tel_norfair04
+    dw #tel_norfair05
+    dw #tel_norfair10
+    dw #tel_norfair13
     dw #$0000
     %cm_header("NORFAIR SAVE STATIONS")
 
-tel_norfairgrapple:
-    %cm_jsr("Norfair Grapple", #action_teleport, #$0200)
+tel_norfair01:
+    %cm_jsr("West Hanging Save", #action_teleport, #$0201)
 
-tel_norfairbubble:
-    %cm_jsr("Norfair Bubble Mountain", #action_teleport, #$0201)
+tel_norfair02:
+    %cm_jsr("Northern LN Lava Pit", #action_teleport, #$0202)
 
-tel_norfairtunnel:
-    %cm_jsr("Norfair Tunnel", #action_teleport, #$0202)
+tel_norfair03:
+    %cm_jsr("Southeast Norfair", #action_teleport, #$0203)
 
-tel_norfaircrocomire:
-    %cm_jsr("Norfair Crocomire", #action_teleport, #$0203)
+tel_norfair04:
+    %cm_jsr("LN East of GT", #action_teleport, #$0204)
 
-tel_norfairlnelevator:
-    %cm_jsr("Norfair LN Elevator", #action_teleport, #$0204)
-
-tel_norfairridley:
+tel_norfair05:
     %cm_jsr("Norfair Ridley", #action_teleport, #$0205)
+
+tel_norfair10:
+    %cm_jsr("DEBUG - Northwest Norfair", #action_teleport, #$0210)		
+
+tel_norfair13:
+    %cm_jsr("DEBUG - Crocomire Room", #action_teleport, #$0213)			
 
 TeleportWreckedShipMenu:
     dw #tel_wreckedship
@@ -699,36 +740,56 @@ tel_wreckedship:
     %cm_jsr("Wrecked Ship", #action_teleport, #$0300)
 
 TeleportMaridiaMenu:
-    dw #tel_maridiatube
-    dw #tel_maridiaelevator
-    dw #tel_maridiaaqueduct
     dw #tel_maridiadraygon
+    dw #tel_maridia01
+    dw #tel_maridia02
+    dw #tel_maridia03
+    dw #tel_maridia08
+    dw #tel_maridia13
     dw #$0000
     %cm_header("MARIDIA SAVE STATIONS")
 
-tel_maridiatube:
-    %cm_jsr("Maridia Tube", #action_teleport, #$0400)
-
-tel_maridiaelevator:
-    %cm_jsr("Maridia Elevator", #action_teleport, #$0401)
-
-tel_maridiaaqueduct:
-    %cm_jsr("Maridia Aqueduct", #action_teleport, #$0402)
-
 tel_maridiadraygon:
-    %cm_jsr("Maridia Draygon", #action_teleport, #$0403)
+    %cm_jsr("Draygon", #action_teleport, #$0400)
+
+tel_maridia01:
+    %cm_jsr("Southwest Maridia", #action_teleport, #$0401)
+
+tel_maridia02:
+    %cm_jsr("Northern Maridia", #action_teleport, #$0402)
+
+tel_maridia03:
+    %cm_jsr("Tourian Elevator", #action_teleport, #$0403)
+
+tel_maridia08:
+    %cm_jsr("DEBUG - Northeast Maridia", #action_teleport, #$0408)
+
+tel_maridia13:
+    %cm_jsr("DEBUG - Northern Maridia", #action_teleport, #$0413)
 
 TeleportTourianMenu:
     dw #tel_tourianentrance
     dw #tel_tourianmb
+    dw #tel_tourian02
+    dw #tel_tourian08
+    dw #tel_tourian11
     dw #$0000
     %cm_header("TOURIAN SAVE STATIONS")
 
 tel_tourianentrance:
-    %cm_jsr("Tourian Entrance", #action_teleport, #$0501)
+    %cm_jsr("Tourian Entrance", #action_teleport, #$0500)
 
 tel_tourianmb:
-    %cm_jsr("Tourian MB", #action_teleport, #$0500)
+    %cm_jsr("Mother Brain", #action_teleport, #$0501)
+
+tel_tourian02:
+    %cm_jsr("DEBUG - Escape Sequence", #action_teleport, #$0502)
+
+tel_tourian08:
+    %cm_jsr("DEBUG - Northern Tourian", #action_teleport, #$0508)
+
+tel_tourian11:
+    %cm_jsr("DEBUG - Escape Elevator", #action_teleport, #$0511)
 
 DebugTeleportMenu:
     dw #tel_debug_area
@@ -748,7 +809,6 @@ tel_debug_area:
         db #$28, "  REQT SHIP", #$FF
         db #$28, "    MARIDIA", #$FF
         db #$28, "    TOURIAN", #$FF
-        db #$28, "    NORFAIR", #$FF
     db #$FF
 
 tel_debug_station:
