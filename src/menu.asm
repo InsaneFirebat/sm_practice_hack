@@ -1441,14 +1441,20 @@ cm_divide_100:
 
 incsrc mainmenu.asm
 
+print pc, " menu end"
+
 ; ----------
 ; Resources
 ; ----------
 
+
+org $B8A2E5
+print pc, " menu gfx start"
 cm_hud_table:
-    incbin ../resources/cm_gfx.bin
+incbin ../resources/cm_gfx.bin
 
 HexMenuGFXTable:
     dw $2C70, $2C71, $2C72, $2C73, $2C74, $2C75, $2C76, $2C77, $2C78, $2C79, $2C50, $2C51, $2C52, $2C53, $2C54, $2C55
 
-print pc, " menu end"
+warnpc $B8C458 ; There's a small chunk of Redesign code at $B8C459
+print pc, " menu gfx end"

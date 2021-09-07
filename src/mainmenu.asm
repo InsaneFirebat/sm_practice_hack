@@ -138,7 +138,11 @@ MainMenu:
 ;    dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
+if !FEATURE_REDESIGN
+    %cm_header("REDESIGN INFOHUD V2.2.7 B5")
+else
     %cm_header("AXEIL EDITION V2.2.7 B5")
+endif
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -226,11 +230,11 @@ presets_current:
     dl #!sram_preset_category
     dw #$0000
     db #$28, "CURRENT PRESET", #$FF
-        db #$28, "  ANY% PRKD", #$FF
+        db #$28, "PLACEHOLDER", #$FF
     db #$FF
 
 precat_prkd:
-    %cm_jsr("Any% PRKD", #action_select_preset_category, #$0000)
+    %cm_jsr("PLACEHOLDER - Do Not Use!", #action_select_preset_category, #$0000)
 
 action_select_preset_category:
 {
@@ -601,6 +605,7 @@ TeleportMenu:
     dw #tel_goto_ship
     dw #tel_goto_mari
     dw #tel_goto_tour
+    dw #tel_goto_express
     dw #tel_goto_debug
     dw #$0000
     %cm_header("TELEPORT TO SAVE STATION")
@@ -622,6 +627,9 @@ tel_goto_mari:
 
 tel_goto_tour:
     %cm_submenu("Tourian", #TeleportTourianMenu)
+
+tel_goto_express:
+    %cm_submenu("Zebes Express", #TeleportExpressMenu)
 
 tel_goto_debug:
     %cm_submenu("Debug Teleports", #DebugTeleportMenu)
@@ -791,6 +799,27 @@ tel_tourian08:
 tel_tourian11:
     %cm_jsr("DEBUG - Escape Elevator", #action_teleport, #$0511)
 
+TeleportExpressMenu:
+    dw #tel_express
+    dw #tel_express_blank
+    dw #tel_express_blank
+    dw #tel_express_warning0
+    dw #tel_express_warning1
+    dw #$0000
+    %cm_header("ZEBES EXPRESS CONFIRMATION")
+
+tel_express:
+    %cm_jsr("GOTO ZEBES EXPRESS", #action_teleport, #$0510)
+
+tel_express_blank:
+    %cm_jsr("", #action_text, #$0000)
+
+tel_express_warning0:
+    %cm_jsr("Warning - Graphics will be", #action_text, #$0000)
+
+tel_express_warning1:
+    %cm_jsr("corrupted. Pause to fix it", #action_text, #$0000)
+    
 DebugTeleportMenu:
     dw #tel_debug_area
     dw #tel_debug_station
@@ -847,6 +876,12 @@ action_debug_teleport:
     LDA !ram_tel_debug_area : XBA
     ORA !ram_tel_debug_station : TAY
     JMP action_teleport
+}
+
+action_text:
+{
+    ; do nothing
+    RTS
 }
 
 
@@ -927,6 +962,7 @@ EventsMenu:
     dw #events_resetevents
     dw #events_resetdoors
     dw #events_resetitems
+    dw #events_unlockexpress
     dw #events_goto_bosses
     dw #events_zebesawake
     dw #events_maridiatubebroken
@@ -950,6 +986,9 @@ events_resetdoors:
 
 events_resetitems:
     %cm_jsr("Reset All Items", action_reset_items, #$0000)
+
+events_unlockexpress:
+    %cm_jsr("Unlock Express Menu", action_unlock_express_menu, #$0000)
 
 events_goto_bosses:
     %cm_submenu("Bosses", #BossesMenu)
@@ -1023,6 +1062,20 @@ action_reset_items:
     CPX #$90
     BNE -
     PLP
+    LDA #!SOUND_MENU_JSR : JSL $80903F
+    RTS
+}
+
+action_unlock_express_menu:
+{
+    LDA $7ECEE7 : ORA #$0002 : STA $7ECEE7
+    LDA $7ED177 : ORA #$0040 : STA $7ED177
+    LDA $7ED88E : ORA #$001C : STA $7ED88E
+    LDA $7ED894 : ORA #$0008 : STA $7ED894
+    LDA $7ED898 : ORA #$0008 : STA $7ED898
+    LDA $7ED8B1 : ORA #$0020 : STA $7ED8B1
+    LDA $7ED8C6 : ORA #$0040 : STA $7ED8C6
+    LDA $7ED8C7 : ORA #$0007 : STA $7ED8C7
     LDA #!SOUND_MENU_JSR : JSL $80903F
     RTS
 }
