@@ -86,7 +86,8 @@
 
 ; Hooks
 
-org $83B000
+;org $83B000
+org $83C500
 print pc, " rng start"
 
 hook_hopper_set_rng:
@@ -231,6 +232,7 @@ hook_draygon_rng_right:
     RTS
 }
 
+warnpc $83E200
 print pc, " draygon rng end"
 
 org $A4F700

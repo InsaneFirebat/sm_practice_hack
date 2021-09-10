@@ -1,6 +1,7 @@
 !ram_tilemap_buffer = $7E5800
 
-org $85FE00
+;org $85FE00
+org $859700
 print pc, " menu bank85 start"
 
 wait_for_lag_frame_long:
@@ -24,9 +25,10 @@ maybe_trigger_pause_long:
   rtl
 
 print pc, " menu bank85 end"
-warnpc $85FF00
+warnpc $8597FF
 
-org $B88000
+;org $B88000
+org $85B000
 print pc, " menu start"
 
 cm_start:
@@ -164,7 +166,7 @@ cm_transfer_original_tileset:
     LDA #$80 : STA $2115
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
     LDX #$D500 : STX $4302 ; Source offset
-    LDA #$DF : STA $4304 ; Source bank
+    LDA #$FD : STA $4304 ; Source bank
     LDX #$1000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
@@ -1438,10 +1440,12 @@ cm_divide_100:
 
 incsrc mainmenu.asm
 
+
 ; ----------
 ; Resources
 ; ----------
 
+;org $859B00
 cm_hud_table:
     incbin ../resources/cm_gfx.bin
 

@@ -138,7 +138,7 @@ MainMenu:
 ;    dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_header("SM PRACTICE HACK 2.2.7")
+    %cm_header("ANCIENT CHOZO 2.2.7 B1")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -169,84 +169,6 @@ mm_goto_rngmenu:
 
 mm_goto_ctrlsmenu:
     %cm_submenu("Controller Shortcuts", #CtrlMenu)
-
-
-; -------------
-; Presets menu
-; -------------
-
-PresetsMenu:
-    dw #presets_goto_select_preset_category
-    dw #presets_current
-    dw #presets_custom_preset_slot
-    dw #presets_save_custom_preset
-    dw #presets_load_custom_preset
-    dw #presets_kill_enemies
-    dw #$0000
-    %cm_header("PRESET OPTIONS MENU")
-
-presets_goto_select_preset_category:
-    %cm_submenu("Select Preset Category", #SelectPresetCategoryMenu)
-
-presets_custom_preset_slot:
-    %cm_numfield("Custom Preset Slot", !sram_custom_preset_slot, 0, 31, 1, #0) ; update max slots in gamemode.asm
-
-presets_save_custom_preset:
-    %cm_jsr("Save Custom Preset", #action_save_custom_preset, #$0000)
-
-presets_load_custom_preset:
-    %cm_jsr("Load Custom Preset", #action_load_custom_preset, #$0000)
-
-presets_kill_enemies:
-    %cm_toggle("Auto-Kill Enemies", !sram_preset_enemies, #$0001, #0)
-
-SelectPresetCategoryMenu:
-    dw #presets_current
-    dw #precat_prkd
-    dw #$0000
-    %cm_header("SELECT PRESET CATEGORY")
-
-presets_current:
-    dw !ACTION_CHOICE
-    dl #!sram_preset_category
-    dw #$0000
-    db #$28, "CURRENT PRESET", #$FF
-        db #$28, "  ANY% PRKD", #$FF
-    db #$FF
-
-precat_prkd:
-    %cm_jsr("Any% PRKD", #action_select_preset_category, #$0000)
-
-action_select_preset_category:
-{
-    TYA : STA !sram_preset_category
-    JSR cm_go_back
-    JSR cm_calculate_max
-    RTS
-}
-
-action_save_custom_preset:
-{
-    JSL custom_preset_save
-    LDA #$0001 : STA !ram_cm_leave
-    LDA #!SOUND_MENU_MOVE : JSL $80903F
-    RTS
-}
-
-action_load_custom_preset:
-{
-    ; check if slot is populated first
-    LDA !sram_custom_preset_slot : ASL : TAX
-    LDA.l PresetSlot,X : TAX
-    LDA $703000,X : CMP #$5AFE : BEQ .safe
-    LDA #$0007 : JSL $80903F
-    RTS
-
-  .safe
-    STA !ram_custom_preset
-    LDA #$0001 : STA !ram_cm_leave
-    RTS
-}
 
 
 ; -------------

@@ -8,7 +8,8 @@ org $828963
 org $82896E
     end_of_normal_gameplay:
 
-org $85A000
+;org $85A000
+org $859900
 print pc, " gamemode start"
 gamemode_start:
 {
@@ -207,4 +208,4 @@ gamemode_shortcuts:
 }
 
 print pc, " gamemode end"
-warnpc $85FE00
+warnpc $859FFF

@@ -45,7 +45,8 @@ org $82E126
     BRA $08
 
 
-org $85FF00
+;org $85FF00
+org $859800
 print pc, " fanfare start"
 hook_message_box_wait:
     LDA !sram_fanfare_toggle : BNE .fanfareloop

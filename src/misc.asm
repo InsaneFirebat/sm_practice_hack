@@ -14,7 +14,9 @@ endif
 ; Skip intro
 ; $82:EEDF A9 95 A3    LDA #$A395
 org $82EEDF
-    LDA #$C100
+;    LDA #$C100 ; no ceres in this hack
+    LDA #$CADF ; proper ship start
+
 
 ; Skips the waiting time after teleporting
 org $90E877
