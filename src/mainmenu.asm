@@ -138,7 +138,7 @@ MainMenu:
 ;    dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_header("ANCIENT CHOZO 2.2.7 B1")
+    %cm_header("ANCIENT CHOZO 2.2.7 B2")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)

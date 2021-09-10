@@ -2,8 +2,11 @@
 ;Patches to support the minimap
 ;=======================================================
 
-org $809B51
-    JMP $9BFB    ; skip drawing auto reserve icon and normal energy numbers and tanks during HUD routine
+org $90FAE3      ; skip drawing ENERGY and CRITICAL!
+    RTS : NOP : NOP
+
+org $809B51      ; skip drawing auto reserve icon and normal energy numbers and tanks during HUD routine
+    JMP $9BFB
 
 org $82AED9      ; routine to draw auto reserve icon on HUD from equip screen
     NOP : NOP : NOP
@@ -48,19 +51,22 @@ org $82E488      ; write tiles to VRAM
 
 
 org $9AB200      ; graphics for HUD
-incbin ../resources/hudgfx.bin
+incbin ../resources/AC_hudgfx.bin
 
 
-; Place minimap graphics in bank DF
+; Place minimap graphics in bank FD
 ;org $DFD500
 org $FDD500
-print pc, " minimap bankDF start"
-incbin ../resources/mapgfx.bin
+print pc, " minimap bankFD start"
+; All of it fits into the same space, thanks to message boxes being gutted
+; Not worth the effort to undo the transfer routines here and in menu.asm
+; Duplicating the data for now
+incbin ../resources/AC_hudgfx.bin
 
 ; Next block needs to be all zeros to clear a tilemap
 fillbyte $00
 fill 4096
-print pc, " minimap bankDF end"
+print pc, " minimap bankFD end"
 
 
 ; The default HUD minimap should be cleared
