@@ -503,8 +503,9 @@ add_grapple_and_xray_to_hud:
     JSL $809A2E            ; Add grapple to HUD tilemap
     JMP .resume_infohud_icon_initialization
 }
+
 print pc, " preset_start_gameplay end"
-warnpc $80FFC0
+warnpc $80FC00
 
 ; $80:9AB1: Add x-ray and grapple HUD items if necessary
 org $809AB1
