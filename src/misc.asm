@@ -142,7 +142,8 @@ stop_all_sounds:
     RTL
 }
 
-pushpc
+print pc, " misc end"
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;; Custom Build Hijacks ;;;;;;;;;
@@ -312,6 +313,3 @@ SteamCollision:
 }
 print pc, " EXTRAS=1 misc bankA6 end"
 endif
-
-pullpc
-print pc, " misc end"

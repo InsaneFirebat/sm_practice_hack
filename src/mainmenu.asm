@@ -119,18 +119,19 @@ action_presets_submenu:
 preset_category_submenus:
 {
     dw #PresetsMenuSpazer
-    dw #PresetsMenuGtclassic
     dw #PresetsMenuKpdr21
-    dw #PresetsMenuNgplasma
     dw #PresetsMenuPrkd
     dw #PresetsMenuPkrd
     dw #PresetsMenuKpdr25
+    dw #PresetsMenuGtclassic
+    dw #PresetsMenuGtmax
     dw #PresetsMenu14ice
     dw #PresetsMenu14speed
-    dw #PresetsMenuNghyper
     dw #PresetsMenu100early
     dw #PresetsMenuHundo
     dw #PresetsMenuRbo
+    dw #PresetsMenuNgplasma
+    dw #PresetsMenuNghyper
     dw #PresetsMenuNintendopower
     dw #PresetsMenuAllbosskpdr
     dw #PresetsMenuAllbosspkdr
@@ -141,18 +142,19 @@ preset_category_submenus:
 preset_category_banks:
 {
     dw #PresetsMenuSpazer>>16
-    dw #PresetsMenuGtclassic>>16
     dw #PresetsMenuKpdr21>>16
-    dw #PresetsMenuNgplasma>>16
     dw #PresetsMenuPrkd>>16
     dw #PresetsMenuPkrd>>16
     dw #PresetsMenuKpdr25>>16
+    dw #PresetsMenuGtclassic>>16
+    dw #PresetsMenuGtmax>>16
     dw #PresetsMenu14ice>>16
     dw #PresetsMenu14speed>>16
-    dw #PresetsMenuNghyper>>16
     dw #PresetsMenu100early>>16
     dw #PresetsMenuHundo>>16
     dw #PresetsMenuRbo>>16
+    dw #PresetsMenuNgplasma>>16
+    dw #PresetsMenuNghyper>>16
     dw #PresetsMenuNintendopower>>16
     dw #PresetsMenuAllbosskpdr>>16
     dw #PresetsMenuAllbosspkdr>>16
@@ -178,7 +180,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("FIREBAT INFOHUD V2.2.7.1")
+    %cm_header("FIREBAT INFOHUD V2.2.7.2")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -250,6 +252,7 @@ SelectPresetCategoryMenu:
     dw #precat_pkrd
     dw #precat_kpdr25
     dw #precat_gtclassic
+    dw #precat_gtmax
     dw #precat_14ice
     dw #precat_14speed
     dw #precat_100early
@@ -270,18 +273,19 @@ presets_current:
     dw #$0000
     db #$28, "CURRENT PRESET", #$FF
         db #$28, "     SPAZER", #$FF ; Note the "y" ;)
-        db #$28, " GT CLASSIC", #$FF
         db #$28, "   ANY KPDR", #$FF
-        db #$28, "  NG PLASMA", #$FF
         db #$28, "   ANY PRKD", #$FF
         db #$28, "   ANY PKRD", #$FF
         db #$28, "   KPDR ICE", #$FF
+        db #$28, " GT CLASSIC", #$FF
+        db #$28, "     GT MAX", #$FF
         db #$28, "     14 ICE", #$FF
         db #$28, "   14 SPEED", #$FF
-        db #$28, "   NG HYPER", #$FF
         db #$28, "  100 EARLY", #$FF
         db #$28, "   100 LATE", #$FF
         db #$28, "        RBO", #$FF
+        db #$28, "  NG PLASMA", #$FF
+        db #$28, "   NG HYPER", #$FF
         db #$28, " NIN POWER%", #$FF
         db #$28, "  BOSS KPDR", #$FF
         db #$28, "  BOSS PKDR", #$FF
@@ -291,23 +295,23 @@ presets_current:
 precat_spazer:
     %cm_jsr("Spazer Any%", #action_select_preset_category, #$0000)
 
-precat_gtclassic:
-    %cm_jsr("GT Classic", #action_select_preset_category, #$0001)
-
 precat_kpdr21:
-    %cm_jsr("Any% KPDR", #action_select_preset_category, #$0002)
-
-precat_ngplasma:
-    %cm_jsr("NewGamePlus Plasma", #action_select_preset_category, #$0003)
+    %cm_jsr("Any% KPDR", #action_select_preset_category, #$0001)
 
 precat_prkd:
-    %cm_jsr("Any% PRKD", #action_select_preset_category, #$0004)
+    %cm_jsr("Any% PRKD", #action_select_preset_category, #$0002)
 
 precat_pkrd:
-    %cm_jsr("Any% PKRD", #action_select_preset_category, #$0005)
+    %cm_jsr("Any% PKRD", #action_select_preset_category, #$0003)
 
 precat_kpdr25:
-    %cm_jsr("Any% KPDR Early Ice", #action_select_preset_category, #$0006)
+    %cm_jsr("Any% KPDR Early Ice", #action_select_preset_category, #$0004)
+
+precat_gtclassic:
+    %cm_jsr("GT Classic", #action_select_preset_category, #$0005)
+
+precat_gtmax:
+    %cm_jsr("GT Max%", #action_select_preset_category, #$0006)
 
 precat_14ice:
     %cm_jsr("Low% Ice", #action_select_preset_category, #$0007)
@@ -315,29 +319,32 @@ precat_14ice:
 precat_14speed:
     %cm_jsr("Low% Speed", #action_select_preset_category, #$0008)
 
-precat_nghyper:
-    %cm_jsr("NewGamePlus Hyper", #action_select_preset_category, #$0009)
-
 precat_100early:
-    %cm_jsr("100% Early Crocomire", #action_select_preset_category, #$000A)
+    %cm_jsr("100% Early Crocomire", #action_select_preset_category, #$0009)
 
 precat_hundo:
-    %cm_jsr("100% Late Crocomire", #action_select_preset_category, #$000B)
+    %cm_jsr("100% Late Crocomire", #action_select_preset_category, #$000A)
 
 precat_rbo:
-    %cm_jsr("Reverse Boss Order", #action_select_preset_category, #$000C)
+    %cm_jsr("Reverse Boss Order", #action_select_preset_category, #$000B)
+
+precat_ngplasma:
+    %cm_jsr("NewGamePlus Plasma", #action_select_preset_category, #$000C)
+
+precat_nghyper:
+    %cm_jsr("NewGamePlus Hyper", #action_select_preset_category, #$000D)
 
 precat_nintendopower:
-    %cm_jsr("Nintendo Power%", #action_select_preset_category, #$000D)
+    %cm_jsr("Nintendo Power%", #action_select_preset_category, #$000E)
 
 precat_allbosskpdr:
-    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000E)
+    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000F)
 
 precat_allbosspkdr:
-    %cm_jsr("All Bosses PKDR", #action_select_preset_category, #$000F)
+    %cm_jsr("All Bosses PKDR", #action_select_preset_category, #$0010)
 
 precat_allbossprkd:
-    %cm_jsr("All Bosses PRKD", #action_select_preset_category, #$0010)
+    %cm_jsr("All Bosses PRKD", #action_select_preset_category, #$0011)
 
 action_select_preset_category:
 {

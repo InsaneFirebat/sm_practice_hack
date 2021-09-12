@@ -210,18 +210,19 @@ preset_to_memory:
 preset_banks:
 {
   dw preset_spazer_crateria_ship>>16
-  dw preset_gtclassic_crateria_ship>>16
   dw preset_kpdr21_crateria_ship>>16
-  dw preset_ngplasma_ceres_station_ceres_elevator>>16
   dw preset_prkd_crateria_ship>>16
   dw preset_pkrd_crateria_ship>>16
   dw preset_kpdr25_bombs_ceres_elevator>>16
+  dw preset_gtclassic_crateria_ship>>16
+  dw preset_gtmax_crateria_ship>>16
   dw preset_14ice_crateria_ceres_elevator>>16
   dw preset_14speed_crateria_ceres_elevator>>16
-  dw preset_nghyper_ceres_station_ceres_elevator>>16
   dw preset_100early_crateria_ceres_elevator>>16
   dw preset_hundo_bombs_ceres_elevator>>16
   dw preset_rbo_bombs_ceres_elevator>>16
+  dw preset_ngplasma_ceres_station_ceres_elevator>>16
+  dw preset_nghyper_ceres_station_ceres_elevator>>16
   dw preset_nintendopower_crateria_ship>>16
   dw preset_allbosskpdr_crateria_ceres_elevator>>16
   dw preset_allbosspkdr_crateria_ceres_elevator>>16
@@ -497,7 +498,6 @@ warnpc $80FFC0
 
 
 org $FE8000    ; 749Eh bytes used / B62h bytes free
-print pc, " preset_menu.asm bankFE start"
 incsrc presets/prkd_menu.asm   ; E6Ah bytes
 incsrc presets/kpdr21_menu.asm   ; F91h bytes
 incsrc presets/hundo_menu.asm   ; 1220h bytes
@@ -509,8 +509,7 @@ incsrc presets/14ice_menu.asm   ; 7C6h bytes
 incsrc presets/14speed_menu.asm   ; 7EBh bytes
 print pc, " preset_menu.asm bankFE end"
 
-org $FF8000    ; 5277h bytes used / 2D89h bytes free
-print pc, " preset_menu.asm bankFF start"
+org $FF8000    ; 5666h bytes used / 299Ah bytes free
 incsrc presets/allbosskpdr_menu.asm   ; 942h bytes
 incsrc presets/allbosspkdr_menu.asm   ; 9B0h bytes
 incsrc presets/allbossprkd_menu.asm   ; 9BEh bytes
@@ -519,48 +518,43 @@ incsrc presets/ngplasma_menu.asm   ; 85Ch bytes
 incsrc presets/nghyper_menu.asm   ; 864h bytes
 incsrc presets/nintendopower_menu.asm   ; 70Ch bytes
 incsrc presets/spazer_menu.asm   ; F91h bytes
+incsrc presets/gtmax_menu.asm   ; 137Bh bytes
 print pc, " preset_menu.asm bankFF end"
 
 org $E18000
-print pc, " preset_data.asm BankE1 start"
 incsrc presets/prkd_data.asm ; 2EAAh bytes
 incsrc presets/hundo_data.asm ; 42A2h bytes
 print pc, " preset_data.asm BankE1 end"
 
 org $E28000
-print pc, " preset_data.asm BankE2 start"
 incsrc presets/kpdr21_data.asm ; 2FF6h bytes
 incsrc presets/rbo_data.asm ; 3274h bytes
 print pc, " preset_data.asm BankE2 end"
 
 org $E38000
-print pc, " preset_data.asm BankE3 start"
 incsrc presets/gtclassic_data.asm ; 2B5Eh bytes
 incsrc presets/14ice_data.asm ; 1E95h bytes
 incsrc presets/14speed_data.asm ; 1EE6h bytes
 print pc, " preset_data.asm BankE3 end"
 
 org $E48000
-print pc, " preset_data.asm BankE4 start"
 incsrc presets/allbosskpdr_data.asm ; 2400h bytes
 incsrc presets/allbosspkdr_data.asm ; 2484h bytes
 incsrc presets/allbossprkd_data.asm ; 2568h bytes
 print pc, " preset_data.asm BankE4 end"
 
 org $E58000
-print pc, " preset_data.asm BankE5 start"
 incsrc presets/100early_data.asm ; 423Ch bytes
-incsrc presets/kpdr25_data.asm ; 1E3Ah bytes
+incsrc presets/spazer_data.asm ; 3024h bytes
 print pc, " preset_data.asm BankE5 end"
 
 org $E68000
-print pc, " preset_data.asm BankE6 start"
 incsrc presets/pkrd_data.asm ; 2EBCh bytes
-incsrc presets/spazer_data.asm ; 3024h bytes
+incsrc presets/gtmax_data.asm ; 420Ah bytes
 print pc, " preset_data.asm BankE6 end"
 
 org $E78000
-print pc, " preset_data.asm BankE7 start"
+incsrc presets/kpdr25_data.asm ; 1E3Ah bytes
 incsrc presets/nintendopower_data.asm ; 20F8h bytes
 incsrc presets/ngplasma_data.asm ; 1B5Ah bytes
 incsrc presets/nghyper_data.asm ; 1B70h bytes
