@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.2.7.3] Hide Grapple and Xray icons when loading GT Code presets
 * [2.2.7.2] Added GT Max% presets for the WR route
 * [2.2.7.1] Equipment options to set current health/reserves
 * [2.2.7.1] Fixed custom presets corrupting existing saves in the next slot
