@@ -493,8 +493,31 @@ transfer_cgram_long:
     PLP
     RTL
 }
+
+add_grapple_and_xray_to_hud:
+{
+    ; Copied from $809AB1 to $809AC9
+    LDA $09A2 : BIT #$8000 : BEQ $04
+    JSL $809A3E            ; Add x-ray to HUD tilemap
+    LDA $09A2 : BIT #$4000 : BEQ $04
+    JSL $809A2E            ; Add grapple to HUD tilemap
+    JMP .resume_infohud_icon_initialization
+}
 print pc, " preset_start_gameplay end"
 warnpc $80FFC0
+
+; $80:9AB1: Add x-ray and grapple HUD items if necessary
+org $809AB1
+    ; Skip x-ray and grapple if max HP is a multiple of 4,
+    ; which is only possible if GT code was used
+    LDA $09C4 : AND #$0003 : BEQ .resume_infohud_icon_initialization
+    JMP add_grapple_and_xray_to_hud
+
+warnpc $809AC9
+
+; $80:9AC9: Resume original logic
+org $809AC9
+  .resume_infohud_icon_initialization
 
 
 org $FE8000    ; 749Eh bytes used / B62h bytes free
