@@ -60,7 +60,7 @@ incbin ../resources/SZM_mapgfx.bin
 ; Next block needs to be all zeros to clear a tilemap
 fillbyte $00
 fill 4096
-print pc, " minimap bankDF end"
+print pc, " minimap bankFD end"
 
 
 ; The default HUD minimap should be cleared
