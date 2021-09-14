@@ -1182,7 +1182,7 @@ ControllerGfx1:
       ;  L       ^       R       Y       X       Sl 
    dw #$0CB8, #$0CB1, #$0CB9, #$0CB7, #$0CB6, #$0CBA
 ControllerGfx2:
-      ;  <       v       >       B       A       St
+      ;  <       v       >       B       A       St 
    dw #$0CB0, #$0CB3, #$0CB2, #$0CB5, #$0CB4, #$0CBB
 
 HexToNumberGFX1:
