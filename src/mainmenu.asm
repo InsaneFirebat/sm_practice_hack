@@ -138,7 +138,7 @@ MainMenu:
 ;    dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_header("SM PRACTICE HACK 2.2.7")
+    %cm_header("ESCAPE II INFOHUD 2.2.7 B1")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -580,140 +580,244 @@ tb_plasmabeam:
 ; ---------------
 
 TeleportMenu:
-    dw #tel_goto_crat
-    dw #tel_goto_brin
-    dw #tel_goto_norf
-    dw #tel_goto_ship
-    dw #tel_goto_mari
-    dw #tel_goto_tour
+    dw #tel_goto_area00
+    dw #tel_goto_area01
+    dw #tel_goto_area02
+    dw #tel_goto_area03
+    dw #tel_goto_area04
+    dw #tel_goto_area05
     dw #tel_goto_debug
     dw #$0000
     %cm_header("TELEPORT TO SAVE STATION")
 
-tel_goto_crat:
-    %cm_submenu("Crateria", #TeleportCrateriaMenu)
+tel_goto_area00:
+    %cm_submenu("Landing Site", #TeleportLandingSiteMenu)
 
-tel_goto_brin:
-    %cm_submenu("Brinstar", #TeleportBrinstarMenu)
+tel_goto_area01:
+    %cm_submenu("Nature Caves", #TeleportNatureCavesMenu)
 
-tel_goto_norf:
-    %cm_submenu("Norfair", #TeleportNorfairMenu)
+tel_goto_area02:
+    %cm_submenu("SpoSpo Ruins", #TeleportSpoSpoRuinsMenu)
 
-tel_goto_ship:
-    %cm_submenu("Wrecked Ship", #TeleportWreckedShipMenu)
+tel_goto_area03:
+    %cm_submenu("Fearful Lab", #TeleportFearfulLabMenu)
 
-tel_goto_mari:
-    %cm_submenu("Maridia", #TeleportMaridiaMenu)
+tel_goto_area04:
+    %cm_submenu("Water Maze", #TeleportWaterMazeMenu)
 
-tel_goto_tour:
-    %cm_submenu("Tourian", #TeleportTourianMenu)
+tel_goto_area05:
+    %cm_submenu("Sector S", #TeleportSectorSMenu)
 
 tel_goto_debug:
     %cm_submenu("Debug Teleports", #DebugTeleportMenu)
 
-TeleportCrateriaMenu:
-    dw #tel_crateriaship
-    dw #tel_crateriaparlor
+TeleportLandingSiteMenu:
+    dw #tel_landingsiteship
+    dw #tel_landingsite01
+    dw #tel_landingsite02
+    dw #tel_landingsite03
+    dw #tel_landingsite08
+    dw #tel_landingsite09
+    dw #tel_landingsite0A
+    dw #tel_landingsite12
     dw #$0000
-    %cm_header("CRATERIA SAVE STATIONS")
+    %cm_header("LANDING SITE SAVE STATIONS")
 
-tel_crateriaship:
-    %cm_jsr("Crateria Ship", #action_teleport, #$0000)
+tel_landingsiteship:
+    %cm_jsr("Ship", #action_teleport, #$0000)
 
-tel_crateriaparlor:
-    %cm_jsr("Crateria Parlor", #action_teleport, #$0001)
+tel_landingsite01:
+    %cm_jsr("Southwest", #action_teleport, #$0001)
 
-TeleportBrinstarMenu:
-    dw #tel_brinstarpink
-    dw #tel_brinstargreenshaft
-    dw #tel_brinstargreenetecoons
-    dw #tel_brinstarkraid
-    dw #tel_brinstarredtower
+tel_landingsite02:
+    %cm_jsr("Northeast", #action_teleport, #$0002)
+
+tel_landingsite03:
+    %cm_jsr("Southeast", #action_teleport, #$0003)
+
+tel_landingsite08:
+    %cm_jsr("DEBUG - Northeast Maze", #action_teleport, #$0008)
+
+tel_landingsite09:
+    %cm_jsr("DEBUG - To SpoSpo Ruins", #action_teleport, #$0009)
+
+tel_landingsite0A:
+    %cm_jsr("DEBUG - Path To Tourian", #action_teleport, #$000A)
+
+tel_landingsite12:
+    %cm_jsr("DEBUG - PB Pack Above Ship", #action_teleport, #$0012)
+
+TeleportNatureCavesMenu:
+    dw #tel_naturecaves00
+    dw #tel_naturecaves01
+    dw #tel_naturecaves02
+    dw #tel_naturecaves03
+    dw #tel_naturecaves04
+    dw #tel_naturecaves08
+    dw #tel_naturecaves09
+    dw #tel_naturecaves0A
+    dw #tel_naturecaves11
+    dw #tel_naturecaves12
     dw #$0000
-    %cm_header("BRINSTAR SAVE STATIONS")
+    %cm_header("NATURE CAVES SAVE STATIONS")
 
-tel_brinstarpink:
-    %cm_jsr("Brinstar Pink Spospo", #action_teleport, #$0100)
+tel_naturecaves00:
+    %cm_jsr("Northwest", #action_teleport, #$0100)
 
-tel_brinstargreenshaft:
-    %cm_jsr("Brinstar Green Shaft", #action_teleport, #$0101)
+tel_naturecaves01:
+    %cm_jsr("South Central", #action_teleport, #$0101)
 
-tel_brinstargreenetecoons:
-    %cm_jsr("Brinstar Green Etecoons", #action_teleport, #$0102)
+tel_naturecaves02:
+    %cm_jsr("Far East", #action_teleport, #$0102)
 
-tel_brinstarkraid:
-    %cm_jsr("Brinstar Kraid", #action_teleport, #$0103)
+tel_naturecaves03:
+    %cm_jsr("Southwest", #action_teleport, #$0103)
 
-tel_brinstarredtower:
-    %cm_jsr("Brinstar Red Tower", #action_teleport, #$0104)
+tel_naturecaves04:
+    %cm_jsr("Southeast", #action_teleport, #$0104)
 
-TeleportNorfairMenu:
-    dw #tel_norfairgrapple
-    dw #tel_norfairbubble
-    dw #tel_norfairtunnel
-    dw #tel_norfaircrocomire
-    dw #tel_norfairlnelevator
-    dw #tel_norfairridley
+tel_naturecaves08:
+    %cm_jsr("DEBUG - Central", #action_teleport, #$0108)
+
+tel_naturecaves09:
+    %cm_jsr("DEBUG - Elevator 2 Landing", #action_teleport, #$0109)
+
+tel_naturecaves0A:
+    %cm_jsr("DEBUG - Northeast", #action_teleport, #$010A)
+
+tel_naturecaves11:
+    %cm_jsr("DEBUG - Kraid", #action_teleport, #$0111)
+
+tel_naturecaves12:
+    %cm_jsr("DEBUG BAD SCROLL - Central", #action_teleport, #$0112)
+
+TeleportSpoSpoRuinsMenu:
+    dw #tel_sposporuins00
+    dw #tel_sposporuins01
+    dw #tel_sposporuins02
+    dw #tel_sposporuins03
+    dw #tel_sposporuins04
+    dw #tel_sposporuins05
+    dw #tel_sposporuins06
+    dw #tel_sposporuins09
     dw #$0000
-    %cm_header("NORFAIR SAVE STATIONS")
+    %cm_header("SPOSPO RUINS SAVE STATIONS")
 
-tel_norfairgrapple:
-    %cm_jsr("Norfair Grapple", #action_teleport, #$0200)
+tel_sposporuins00:
+    %cm_jsr("Northwest Elevator", #action_teleport, #$0200)
 
-tel_norfairbubble:
-    %cm_jsr("Norfair Bubble Mountain", #action_teleport, #$0201)
+tel_sposporuins01:
+    %cm_jsr("Northwest 2", #action_teleport, #$0201)
 
-tel_norfairtunnel:
-    %cm_jsr("Norfair Tunnel", #action_teleport, #$0202)
+tel_sposporuins02:
+    %cm_jsr("North Central", #action_teleport, #$0202)
 
-tel_norfaircrocomire:
-    %cm_jsr("Norfair Crocomire", #action_teleport, #$0203)
+tel_sposporuins03:
+    %cm_jsr("Elevator to Lower Ruins", #action_teleport, #$0203)
 
-tel_norfairlnelevator:
-    %cm_jsr("Norfair LN Elevator", #action_teleport, #$0204)
+tel_sposporuins04:
+    %cm_jsr("Far East", #action_teleport, #$0204)
 
-tel_norfairridley:
-    %cm_jsr("Norfair Ridley", #action_teleport, #$0205)
+tel_sposporuins05:
+    %cm_jsr("Southwest", #action_teleport, #$0205)
 
-TeleportWreckedShipMenu:
-    dw #tel_wreckedship
+tel_sposporuins06:
+    %cm_jsr("South Central Warpzone", #action_teleport, #$0206)
+
+tel_sposporuins09:
+    %cm_jsr("DEBUG - Central Acid Pit", #action_teleport, #$0209)
+
+TeleportFearfulLabMenu:
+    dw #tel_fearfullab00
+    dw #tel_fearfullab01
+    dw #tel_fearfullab02
+    dw #tel_fearfullab03
+    dw #tel_fearfullab10
+    dw #tel_fearfullab11
     dw #$0000
-    %cm_header("WRECKED SHIP SAVE STATIONS")
+    %cm_header("FEARFUL LAB SAVE STATIONS")
 
-tel_wreckedship:
-    %cm_jsr("Wrecked Ship", #action_teleport, #$0300)
+tel_fearfullab00:
+    %cm_jsr("Northeast Entrance", #action_teleport, #$0300)
 
-TeleportMaridiaMenu:
-    dw #tel_maridiatube
-    dw #tel_maridiaelevator
-    dw #tel_maridiaaqueduct
-    dw #tel_maridiadraygon
+tel_fearfullab01:
+    %cm_jsr("Central", #action_teleport, #$0301)
+
+tel_fearfullab02:
+    %cm_jsr("Elevator to SpoSpo Ruins", #action_teleport, #$0302)
+
+tel_fearfullab03:
+    %cm_jsr("Elevator to Water Maze", #action_teleport, #$0303)
+
+tel_fearfullab10:
+    %cm_jsr("DEBUG - Warpzone Elevator", #action_teleport, #$0310)
+
+tel_fearfullab11:
+    %cm_jsr("DEBUG - Large Central Room", #action_teleport, #$0311)
+
+TeleportWaterMazeMenu:
+    dw #tel_watermaze00
+    dw #tel_watermaze01
+    dw #tel_watermaze02
+    dw #tel_watermaze03
+    dw #tel_watermaze04
+    dw #tel_watermaze05
+    dw #tel_watermaze06
+    dw #tel_watermaze13
     dw #$0000
-    %cm_header("MARIDIA SAVE STATIONS")
+    %cm_header("WATER MAZE SAVE STATIONS")
 
-tel_maridiatube:
-    %cm_jsr("Maridia Tube", #action_teleport, #$0400)
+tel_watermaze00:
+    %cm_jsr("Northwest", #action_teleport, #$0400)
 
-tel_maridiaelevator:
-    %cm_jsr("Maridia Elevator", #action_teleport, #$0401)
+tel_watermaze01:
+    %cm_jsr("Elevator to Landing Site", #action_teleport, #$0401)
 
-tel_maridiaaqueduct:
-    %cm_jsr("Maridia Aqueduct", #action_teleport, #$0402)
+tel_watermaze02:
+    %cm_jsr("Southwest", #action_teleport, #$0402)
 
-tel_maridiadraygon:
-    %cm_jsr("Maridia Draygon", #action_teleport, #$0403)
+tel_watermaze03:
+    %cm_jsr("Southeast", #action_teleport, #$0403)
 
-TeleportTourianMenu:
-    dw #tel_tourianentrance
-    dw #tel_tourianmb
+tel_watermaze04:
+    %cm_jsr("West Central", #action_teleport, #$0404)
+
+tel_watermaze05:
+    %cm_jsr("East", #action_teleport, #$0405)
+
+tel_watermaze06:
+    %cm_jsr("East Central - Draygon", #action_teleport, #$0406)
+
+tel_watermaze13:
+    %cm_jsr("DEBUG - South of Tube", #action_teleport, #$0406)
+
+TeleportSectorSMenu:
+    dw #tel_sectors01
+    dw #tel_sectors02
+    dw #tel_sectors03
+    dw #tel_sectors04
+    dw #tel_sectors10
+    dw #tel_sectors11
     dw #$0000
-    %cm_header("TOURIAN SAVE STATIONS")
+    %cm_header("SECTOR S SAVE STATIONS")
 
-tel_tourianentrance:
-    %cm_jsr("Tourian Entrance", #action_teleport, #$0501)
+tel_sectors01:
+    %cm_jsr("Entrance", #action_teleport, #$0501)
 
-tel_tourianmb:
-    %cm_jsr("Tourian MB", #action_teleport, #$0500)
+tel_sectors02:
+    %cm_jsr("Central", #action_teleport, #$0502)
+
+tel_sectors03:
+    %cm_jsr("Southeast", #action_teleport, #$0503)
+
+tel_sectors04:
+    %cm_jsr("Southwest", #action_teleport, #$0504)
+
+tel_sectors10:
+    %cm_jsr("DEBUG - Escape", #action_teleport, #$0510)
+
+tel_sectors11:
+    %cm_jsr("DEBUG - West", #action_teleport, #$0511)
 
 DebugTeleportMenu:
     dw #tel_debug_area
@@ -727,13 +831,12 @@ tel_debug_area:
     dl #!ram_tel_debug_area
     dw #$0000
     db #$28, "Select Area", #$FF
-        db #$28, "   CRATERIA", #$FF
-        db #$28, "   BRINSTAR", #$FF
-        db #$28, "    NORFAIR", #$FF
-        db #$28, "  REQT SHIP", #$FF
-        db #$28, "    MARIDIA", #$FF
-        db #$28, "    TOURIAN", #$FF
-        db #$28, "    NORFAIR", #$FF
+        db #$28, "LANDINGSITE", #$FF
+        db #$28, "NATURECAVES", #$FF
+        db #$28, "SPOSPORUINS", #$FF
+        db #$28, "FEARFUL LAB", #$FF
+        db #$28, " WATER MAZE", #$FF
+        db #$28, "   SECTOR S", #$FF
     db #$FF
 
 tel_debug_station:

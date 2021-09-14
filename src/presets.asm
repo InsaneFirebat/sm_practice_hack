@@ -1,4 +1,5 @@
-org $82FA00
+;org $82FA00
+org $82FC00
 print pc, " presets start"
 preset_load:
 {
