@@ -164,7 +164,7 @@ cm_transfer_original_tileset:
     LDA #$80 : STA $2115
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
     LDX #$D500 : STX $4302 ; Source offset
-    LDA #$DF : STA $4304 ; Source bank
+    LDA #$FD : STA $4304 ; Source bank
     LDX #$1000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
