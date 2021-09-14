@@ -692,7 +692,7 @@ Draw2:
     RTS
 
   .blanktens
-    LDA #$0057 : STA $7EC600,X
+    LDA !IH_BLANK : STA $7EC600,X
     BRA .done
 }
 
@@ -727,11 +727,11 @@ Draw3:
     RTS
 
   .blanktens
-    LDA #$0057 : STA $7EC600,X : STA $7EC602,X
+    LDA !IH_BLANK : STA $7EC600,X : STA $7EC602,X
     BRA .done
 
   .blankhundreds
-    LDA #$0057 : STA $7EC600,X
+    LDA !IH_BLANK : STA $7EC600,X
     BRA .done
 }
 
@@ -777,15 +777,15 @@ Draw4:
     RTS
 
   .blanktens
-    LDA #$0057 : STA $7EC600,X : STA $7EC602,X : STA $7EC604,X
+    LDA !IH_BLANK : STA $7EC600,X : STA $7EC602,X : STA $7EC604,X
     BRA .done
 
   .blankhundreds
-    LDA #$0057 : STA $7EC600,X : STA $7EC602,X
+    LDA !IH_BLANK : STA $7EC600,X : STA $7EC602,X
     BRA .done
 
   .blankthousands
-    LDA #$0057 : STA $7EC600,X
+    LDA !IH_BLANK : STA $7EC600,X
     BRA .done
 }
 
@@ -1179,8 +1179,10 @@ ControllerTable1:
 ControllerTable2:
     dw #$0200, #$0400, #$0100, #$8000, #$0080, #$1000
 ControllerGfx1:
-    dw #$0C68, #$0C61, #$0C69, #$0C67, #$0C66, #$0C6A
+      ;  L       ^       R       Y       X       Sl
+    dw #$0CB4, #$0CB1, #$0CC4, #$0CC3, #$0CC2, #$0C47
 ControllerGfx2:
+      ;  <       v       >       B       A       St
     dw #$0C60, #$0C63, #$0C62, #$0C65, #$0C64, #$0C6B
 
 HexToNumberGFX1:
