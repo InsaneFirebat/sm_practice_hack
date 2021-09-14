@@ -754,8 +754,8 @@ action_teleport:
     LDA #$05 : STA $7ED914
     REP #$20
 
-    ; Clear morph and door transition flags
-    STZ $1F6B : STZ $0795
+    ; Clear message box index and door transition flags
+    STZ $0795 : STZ $1C1F
 
     JSL reset_all_counters
     JSL stop_all_sounds
