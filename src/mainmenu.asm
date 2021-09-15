@@ -178,7 +178,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.2.7.3")
+    %cm_header("CUSTOM INFOHUD V2.2.8")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -443,7 +443,7 @@ EquipmentMenu:
     dw #eq_toggle_category
     dw #eq_goto_toggleitems
     dw #eq_goto_togglebeams
-    dw #eq_currentetanks
+    dw #eq_currentenergy
     dw #eq_setetanks
     dw #eq_currentreserves
     dw #eq_setreserves
