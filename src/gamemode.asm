@@ -8,7 +8,8 @@ org $828963
 org $82896E
     end_of_normal_gameplay:
 
-org $85A000
+;org $85A000
+org $859870
 print pc, " gamemode start"
 gamemode_start:
 {

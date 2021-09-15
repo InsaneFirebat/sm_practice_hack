@@ -2,7 +2,7 @@
 
 
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values
-org $808455
+org $80845C ; moved for Yfaster2, as the APU upload comes before initialization
     JML init_code
 
 
@@ -35,7 +35,7 @@ init_code:
     PLA
     ; Execute overwritten logic and return
     JSL $8B9146
-    JML $808459
+    JML $808460 ; moved for Yfaster2, as the APU upload comes before initialization
 }
 
 init_sram:
