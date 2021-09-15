@@ -1158,17 +1158,18 @@ print pc, " infohud end"
 
 
 ; Stuff that needs to be placed in bank 80
-org $80D300
+;org $80D300
+org $80CD90
 print pc, " infohud bank80 start"
 
 NumberGFXTable:
     dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
     dw #$0C70, #$0C71, #$0C72, #$0C73, #$0C74, #$0C75, #$0C78, #$0C79, #$0C7A, #$0C7B
     dw #$0C7C, #$0C7D, #$0C7E, #$0C7F, #$0CD2, #$0CD4, #$0CD5, #$0CD6, #$0CD7, #$0CD8
-    dw #$0CD9, #$0CDA, #$0CDB, #$0C5C, #$0C5D, #$0CB8, #$0C8D, #$0C12, #$0C13, #$0C14
-    dw #$0C15, #$0C16, #$0C17, #$0C18, #$0C19, #$0C1A, #$0C1B, #$0C20, #$0C21, #$0C22
+    dw #$0C46, #$0CDA, #$0CDB, #$0C5C, #$0C5D, #$0CB8, #$0C8D, #$0C0B, #$0C0C, #$0C0D
+    dw #$0C10, #$0C41, #$0C42, #$0C43, #$0C44, #$0C45, #$0C46, #$0C20, #$0C21, #$0C22
     dw #$0C23, #$0C24, #$0C25, #$0C26, #$0C27, #$0C28, #$0C29, #$0C2A, #$0C2B, #$0C2C
-    dw #$0C2D, #$0C2E, #$0C2F, #$0C30, #$0C31, #$0CCA
+    dw #$0C2D, #$0C2E, #$0C2F, #$0C32, #$0C33, #$0CCA
 
 HexGFXTable:
     dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
@@ -1180,7 +1181,7 @@ ControllerTable2:
     dw #$0200, #$0400, #$0100, #$8000, #$0080, #$1000
 ControllerGfx1:
       ;  L       ^       R       Y       X       Sl
-    dw #$0CB4, #$0CB1, #$0CC4, #$0CC3, #$0CC2, #$0C47
+    dw #$0C68, #$0C61, #$0C69, #$0C67, #$0C66, #$0C6A
 ControllerGfx2:
       ;  <       v       >       B       A       St
     dw #$0C60, #$0C63, #$0C62, #$0C65, #$0C64, #$0C6B
@@ -1202,5 +1203,5 @@ HexToNumberGFX2:
     dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
 
 print pc, " infohud bank80 end"
-warnpc $80F000
+warnpc $80CFFF
 

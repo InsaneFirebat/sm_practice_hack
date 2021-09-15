@@ -26,7 +26,8 @@ maybe_trigger_pause_long:
 print pc, " menu bank85 end"
 warnpc $85FF00
 
-org $B88000
+;org $B88000
+org $B8B500
 print pc, " menu start"
 
 cm_start:
