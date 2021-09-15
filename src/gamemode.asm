@@ -20,7 +20,7 @@ gamemode_start:
     PHP
 
     ; don't load presets if we're in credits
-    LDA $0998 : CMP #$0027 : BEQ +
+    LDA $0998 : CMP #$0027 : BEQ ++
 
     LDA !ram_custom_preset : BNE +
     LDA !ram_load_preset : BEQ ++

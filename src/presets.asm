@@ -201,7 +201,7 @@ preset_banks:
 {
   dw preset_prkd_crateria_ship>>16
 }
-
+warnpc $81F77F
 print pc, " presets end"
 
 
@@ -213,6 +213,7 @@ preset_load_bank82:
     JSR $82C5  ; Load initial palette
     RTL
 }
+warnpc $82FD9B
 
 ;org $80F000
 org $80F62E
@@ -331,7 +332,7 @@ transfer_cgram_long:
 
 
 print pc, " preset_start_gameplay end"
-warnpc $80FFC0
+warnpc $80FDFD
 
 org $85B000
 incsrc custompresets.asm
