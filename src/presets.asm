@@ -166,6 +166,7 @@ preset_load_preset:
     PLB
     RTL
 }
+
 preset_to_memory:
 {
     PHX
@@ -296,6 +297,9 @@ preset_scroll_fixes:
 +   CPX #$CC6F : BNE +        ; right of Basement (Phantoon)
     STA $7ECD24
     BRA .done
++   CPX #$D48E : BNE +        ; Oasis (bottom of Toilet)
+    LDA #$02 : STA $7ECD20 : STA $7ECD21
+    BRA .done
 +   CPX #$D8C5 : BNE .done    ; Pants Room (door to Shaktool)
     LDA #$00 : STA $7ECD22
 
@@ -315,7 +319,7 @@ transfer_cgram_long:
 }
 
 print pc, " preset_start_gameplay end"
-warnpc $80FFC0
+warnpc $80FC00
 
 
 org $FD8000

@@ -137,7 +137,7 @@ gamemode_shortcuts:
 
   .reset_segment_later
     LDA #$7FFF : STA !ram_reset_segment_later
-    ; CLC to continue normal gameplay after resetting segment timer
+    ; CLC to continue normal gameplay after setting segement timer reset
     CLC : RTS
 
   .full_equipment

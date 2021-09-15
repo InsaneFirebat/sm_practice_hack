@@ -16,6 +16,10 @@ endif
 ;org $82EEDF
 ;    LDA #$C100
 
+; Fix Zebes planet tiling error
+org $8C9607
+    dw #$0E2F
+
 ; Skips the waiting time after teleporting
 org $90E877
     BRA $1F

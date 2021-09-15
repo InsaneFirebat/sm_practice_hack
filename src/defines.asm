@@ -13,17 +13,18 @@
 !ram_seg_rt_frames = $7FFB14
 !ram_seg_rt_seconds = $7FFB16
 !ram_seg_rt_minutes = $7FFB18
+!ram_reset_segment_later = $7FFB1A
 
-!ram_ih_controller = $7FFB1A
-!ram_slowdown_controller_1 = $7FFB1C
-!ram_slowdown_controller_2 = $7FFB1E
-!ram_slowdown_frames = $7FFB20
+!ram_ih_controller = $7FFB1C
+!ram_slowdown_controller_1 = $7FFB1E
+!ram_slowdown_controller_2 = $7FFB20
+!ram_slowdown_frames = $7FFB22
 !ram_slowdown_mode = $7EFFFC ; $7E
 
-!ram_tmp_1 = $7FFB22
-!ram_tmp_2 = $7FFB24
-!ram_tmp_3 = $7FFB26
-!ram_tmp_4 = $7FFB28
+!ram_tmp_1 = $7FFB24
+!ram_tmp_2 = $7FFB26
+!ram_tmp_3 = $7FFB28
+!ram_tmp_4 = $7FFB2A
 
 !ram_last_hp = $7FFB2A
 !ram_etanks = $7FFB2C
@@ -36,7 +37,6 @@
 !ram_custom_preset = $7FFB3C
 !ram_tel_debug_area = $7FFB3E
 !ram_tel_debug_station = $7FFB40
-!ram_reset_segment_later = $7FFB42
 
 ; FREE SPACE ^
 
@@ -222,15 +222,15 @@
 !sram_ctrl_kill_enemies = $702004
 !sram_ctrl_full_equipment = $702006
 !sram_ctrl_reset_segment_timer = $702008
-!sram_ctrl_load_state = $70200A
-!sram_ctrl_save_state = $70200C
-!sram_ctrl_load_last_preset = $70200E
-!sram_ctrl_random_preset = $702010
-!sram_ctrl_save_custom_preset = $702012
-!sram_ctrl_load_custom_preset = $702014
-!sram_ctrl_inc_custom_preset = $702018
-!sram_ctrl_dec_custom_preset = $70201A
-!sram_ctrl_reset_segment_later = $70201C
+!sram_ctrl_reset_segment_later = $70200A
+!sram_ctrl_load_state = $70200C
+!sram_ctrl_save_state = $70200E
+!sram_ctrl_load_last_preset = $702010
+!sram_ctrl_random_preset = $702012
+!sram_ctrl_save_custom_preset = $702014
+!sram_ctrl_load_custom_preset = $702018
+!sram_ctrl_inc_custom_preset = $70201A
+!sram_ctrl_dec_custom_preset = $70201C
 
 ; FREE SPACE ^
 
