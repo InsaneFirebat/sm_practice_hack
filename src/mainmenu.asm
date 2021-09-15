@@ -475,8 +475,8 @@ eq_goto_toggleitems:
 eq_goto_togglebeams:
     %cm_submenu("Toggle Beams", #ToggleBeamsMenu)
 
-eq_currentetanks:
-    %cm_numfield_word("Current Energy", $7E09C2, 0, 1499, 1, #0)
+eq_currentenergy:
+    %cm_numfield_word("Current Energy", $7E09C2, 0, 2100, 1, #0)
 
 eq_setetanks:
     %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 21, 1, .routine)
@@ -494,7 +494,7 @@ eq_setetanks:
         RTS
 
 eq_currentreserves:
-    %cm_numfield_word("Current Reserves", $7E09D6, 0, 400, 1, #0)
+    %cm_numfield_word("Current Reserves", $7E09D6, 0, 700, 1, #0)
 
 eq_setreserves:
     %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 7, 1, .routine)
