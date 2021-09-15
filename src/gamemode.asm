@@ -8,7 +8,7 @@ org $828963
 org $82896E
     end_of_normal_gameplay:
 
-org $85A700
+org $85A900
 print pc, " gamemode start"
 gamemode_start:
 {
@@ -61,6 +61,10 @@ gamemode_shortcuts:
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_reset_segment_timer : CMP !sram_ctrl_reset_segment_timer : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .reset_segment_timer
+
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_reset_segment_later : CMP !sram_ctrl_reset_segment_later : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .reset_segment_later
 
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_full_equipment : CMP !sram_ctrl_full_equipment : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
@@ -133,7 +137,7 @@ gamemode_shortcuts:
 
   .reset_segment_later
     LDA #$7FFF : STA !ram_reset_segment_later
-    ; CLC to continue normal gameplay after resetting segment timer
+    ; CLC to continue normal gameplay after setting segement timer reset
     CLC : RTS
 
   .full_equipment

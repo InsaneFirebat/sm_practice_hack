@@ -1,6 +1,6 @@
 @echo off
 
-echo Building SM Practice Hack
+echo Building Redesign Axeil Edition Practice Hack
 
 cd build
 echo Building and pre-patching saveless version

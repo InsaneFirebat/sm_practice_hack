@@ -13,17 +13,18 @@
 !ram_seg_rt_frames = $7FFB14
 !ram_seg_rt_seconds = $7FFB16
 !ram_seg_rt_minutes = $7FFB18
+!ram_reset_segment_later = $7FFB1A
 
-!ram_ih_controller = $7FFB1A
-!ram_slowdown_controller_1 = $7FFB1C
-!ram_slowdown_controller_2 = $7FFB1E
-!ram_slowdown_frames = $7FFB20
+!ram_ih_controller = $7FFB1C
+!ram_slowdown_controller_1 = $7FFB1E
+!ram_slowdown_controller_2 = $7FFB20
+!ram_slowdown_frames = $7FFB22
 !ram_slowdown_mode = $7EFFFC ; $7E
 
-!ram_tmp_1 = $7FFB22
-!ram_tmp_2 = $7FFB24
-!ram_tmp_3 = $7FFB26
-!ram_tmp_4 = $7FFB28
+!ram_tmp_1 = $7FFB24
+!ram_tmp_2 = $7FFB26
+!ram_tmp_3 = $7FFB28
+!ram_tmp_4 = $7FFB2A
 
 !ram_last_hp = $7FFB2A
 !ram_etanks = $7FFB2C
@@ -36,7 +37,6 @@
 !ram_custom_preset = $7FFB3C
 !ram_tel_debug_area = $7FFB3E
 !ram_tel_debug_station = $7FFB40
-!ram_reset_segment_later = $7FFB42
 
 ; FREE SPACE ^
 
@@ -217,7 +217,7 @@
 ; SRAM
 ; -----
 
-!sram_initialized = $702000
+!sram_initialized = $702A00
 
 !sram_ctrl_menu = $702A02
 !sram_ctrl_kill_enemies = $702A04

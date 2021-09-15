@@ -139,9 +139,9 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #$0000
 if !FEATURE_REDESIGN
-    %cm_header("REDESIGN INFOHUD V2.2.7 B5")
+    %cm_header("REDESIGN INFOHUD V2.2.8 B6")
 else
-    %cm_header("AXEIL EDITION V2.2.7 B5")
+    %cm_header("AXEIL EDITION V2.2.8 B6")
 endif
 
 mm_goto_equipment:
@@ -337,7 +337,9 @@ EquipmentMenu:
     dw #eq_toggle_category
     dw #eq_goto_toggleitems
     dw #eq_goto_togglebeams
+    dw #eq_currentenergy
     dw #eq_setetanks
+    dw #eq_currentreserves
     dw #eq_setreserves
     dw #eq_setmissiles
     dw #eq_setsupers
@@ -366,6 +368,9 @@ eq_goto_toggleitems:
 eq_goto_togglebeams:
     %cm_submenu("Toggle Beams", #ToggleBeamsMenu)
 
+eq_currentenergy:
+    %cm_numfield_word("Current Energy", $7E09C2, 0, 2100, 1, #0)
+
 eq_setetanks:
     %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 21, 1, .routine)
     .routine
@@ -380,6 +385,9 @@ eq_setetanks:
       .endloop
         STA $09C4 : STA $09C2
         RTS
+
+eq_currentreserves:
+    %cm_numfield_word("Current Reserves", $7E09D6, 0, 700, 1, #0)
 
 eq_setreserves:
     %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 7, 1, .routine)
@@ -860,6 +868,7 @@ action_teleport:
 
     ; Clear flags
     STZ $0795 ; door transition
+    STZ $1C1F ; message box index
     STZ $0280 ; metroid latched (Redesign)
     STZ $1F6B ; morph (Redesign)
 
@@ -1678,6 +1687,7 @@ CtrlMenu:
     dw #ctrl_dec_custom_preset
     dw #ctrl_random_preset
     dw #ctrl_reset_segment_timer
+    dw #ctrl_reset_segment_later
     dw #ctrl_full_equipment
     dw #ctrl_kill_enemies
     dw #ctrl_clear_shortcuts
@@ -1699,6 +1709,9 @@ ctrl_load_state:
 
 ctrl_reset_segment_timer:
     %cm_ctrl_shortcut("Reset Seg Timer", !sram_ctrl_reset_segment_timer)
+
+ctrl_reset_segment_later:
+    %cm_ctrl_shortcut("Reset Seg Later", !sram_ctrl_reset_segment_later)
 
 ctrl_full_equipment:
     %cm_ctrl_shortcut("Full Equipment", !sram_ctrl_full_equipment)
@@ -1738,6 +1751,7 @@ action_clear_shortcuts:
     STA !sram_ctrl_inc_custom_preset
     STA !sram_ctrl_dec_custom_preset
     STA !sram_ctrl_reset_segment_timer
+    STA !sram_ctrl_reset_segment_later
     ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
     RTS

@@ -167,6 +167,7 @@ preset_load_preset:
     PLB
     RTL
 }
+
 preset_to_memory:
 {
     PHX
@@ -306,6 +307,9 @@ preset_scroll_fixes:
     BRA .done
 +   CPX #$CC6F : BNE +        ; right of Basement (Phantoon)
     STA $7ECD24
+    BRA .done
++   CPX #$D48E : BNE +        ; Oasis (bottom of Toilet)
+    LDA #$02 : STA $7ECD20 : STA $7ECD21
     BRA .done
 +   CPX #$D8C5 : BNE .done    ; Pants Room (door to Shaktool)
     LDA #$00 : STA $7ECD22
