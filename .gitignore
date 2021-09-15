@@ -1,3 +1,5 @@
 *.srm
 *.s[mf]c
 build/*
+tools/asar.exe
+tools/dll/*
