@@ -1,13 +1,12 @@
-# Super Metroid Practice Hack
+# Super Metroid Eris Practice Hack
 
-This page hosts the source material for the Super Metroid Practice Hack. It is intended for users that wish to contribute to the project, customize their own Practice Hacks, adapt it for SM romhacks, or just to see how it works. Visit https://smpractice.speedga.me for details on patching your SM rom with the latest version of InfoHUD.
+This page hosts the source material for the Super Metroid Practice Hack, adapted to work with Eris. You should know that the person adapting this work has not played this romhack outside of basic testing. Some features may not be updated from their vanilla counterparts. If you have suggestions, requests, or bugs to report, please contact InsaneFirebat on Discord or open an issue here on GitHub.
 
 ## Getting Started:
 
-1. Download asar from https://github.com/RPGHacker/asar and place it in the \tools\ folder.
-2. Download and install Python 3 from https://python.org. Windows users will need to set the PATH environmental variable to point to their Python installation folder.
-3. Run build.bat to create IPS patch files.
-4. Locate the patch files in \build\.
+1. Download and install Python 3 from https://python.org. Windows users will need to set the PATH environmental variable to point to their Python installation folder.
+2. Run build.bat to create IPS patch files.
+3. Locate the patch files in \build\.
 
 ## Which rom should I use?
 

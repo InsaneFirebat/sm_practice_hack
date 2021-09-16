@@ -6,6 +6,8 @@ build/*.exe
 build/*.ips
 build/*.smc
 build/*.sfc
+build/HACK/*
+!build/HACK/.gitkeep
 *.sw[op]
 tools/*.smv
 tools/*.asm
