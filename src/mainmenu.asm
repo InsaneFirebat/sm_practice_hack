@@ -91,7 +91,7 @@ action_submenu:
     TYA : STA !ram_cm_menu_stack,X
     LDA #$0000 : STA !ram_cm_cursor_stack,X
 
-    %sfxclick()
+    %sfxmove()
     JSR cm_calculate_max
     JSR cm_draw
 
@@ -109,7 +109,7 @@ action_presets_submenu:
     
     LDA #$0000 : STA !ram_cm_cursor_stack,X
 
-    %sfxclick()
+    %sfxmove()
     JSR cm_calculate_max
     JSR cm_draw
 
@@ -178,7 +178,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.2.8")
+    %cm_header("CUSTOM INFOHUD V2.2.8.1")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)

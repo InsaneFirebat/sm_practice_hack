@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.2.8.1] Allow submenu navigation sound to be customized
 * [2.2.8]   Fixed credits
 * [2.2.8]   Support SpriteSomething Hitbox skin
 * [2.2.7.3] Hide Grapple and Xray icons when loading GT Code presets
