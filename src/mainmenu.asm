@@ -91,7 +91,7 @@ action_submenu:
     TYA : STA !ram_cm_menu_stack,X
     LDA #$0000 : STA !ram_cm_cursor_stack,X
 
-    %sfxclick()
+    %sfxconfirm()
     JSR cm_calculate_max
     JSR cm_draw
 
@@ -109,7 +109,7 @@ action_presets_submenu:
     
     LDA #$0000 : STA !ram_cm_cursor_stack,X
 
-    %sfxclick()
+    %sfxconfirm()
     JSR cm_calculate_max
     JSR cm_draw
 
