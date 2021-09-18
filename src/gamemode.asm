@@ -50,25 +50,13 @@ gamemode_shortcuts:
         JMP .load_state
     endif
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_kill_enemies : CMP !sram_ctrl_kill_enemies : BNE +
-    AND !IH_CONTROLLER_PRI_NEW : BEQ +
-    JMP .kill_enemies
-
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .load_last_preset
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_reset_segment_timer : CMP !sram_ctrl_reset_segment_timer : BNE +
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
-    JMP .reset_segment_timer
-
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_reset_segment_later : CMP !sram_ctrl_reset_segment_later : BNE +
-    AND !IH_CONTROLLER_PRI_NEW : BEQ +
-    JMP .reset_segment_later
-
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_full_equipment : CMP !sram_ctrl_full_equipment : BNE +
-    AND !IH_CONTROLLER_PRI_NEW : BEQ +
-    JMP .full_equipment
+    JMP .random_preset
 
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_save_custom_preset : CMP !sram_ctrl_save_custom_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
@@ -78,6 +66,10 @@ gamemode_shortcuts:
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .load_custom_preset
 
+    ; Check if any less common shortcuts are configured
+  + LDA !ram_gamemode_extras : BNE +
+    JMP .check_menu
+
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_inc_custom_preset : CMP !sram_ctrl_inc_custom_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .next_preset_slot
@@ -86,32 +78,51 @@ gamemode_shortcuts:
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .prev_preset_slot
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_kill_enemies : CMP !sram_ctrl_kill_enemies : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
-    JMP .random_preset
+    JMP .kill_enemies
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_full_equipment : CMP !sram_ctrl_full_equipment : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .full_equipment
+
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_reset_segment_timer : CMP !sram_ctrl_reset_segment_timer : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .reset_segment_timer
+
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_reset_segment_later : CMP !sram_ctrl_reset_segment_later : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .reset_segment_later
+
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_reveal_damage : CMP !sram_ctrl_reveal_damage : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .reveal_damage
+
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_randomize_rng : CMP !sram_ctrl_randomize_rng : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ .check_menu
+    JMP .randomize_rng
+
+  .check_menu
+    LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .menu
 
     ; No shortcuts matched, CLC so we won't skip normal gameplay
   + CLC : RTS
 
+if !FEATURE_SD2SNES
   .save_state
     ; This if statement is to prevent an assembler error from an unknown method. The one on the call to this
     ; prevents the button combo from being intercepted by the non-sd2snes rom
-    if !FEATURE_SD2SNES
-        JSL save_state
-    endif
+    JSL save_state
     ; SEC to skip normal gameplay for one frame after saving state
     SEC : RTS
 
   .load_state
-    if !FEATURE_SD2SNES
-        JSL load_state
-    endif
+    JSL load_state
     ; SEC to skip normal gameplay for one frame after loading state
     SEC : RTS
+endif
 
   .kill_enemies
     LDA #$0000
