@@ -139,9 +139,9 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #$0000
 if !FEATURE_REDESIGN
-    %cm_header("REDESIGN INFOHUD V2.2.8 B6")
+    %cm_header("REDESIGN INFOHUD V2.2.8 B7")
 else
-    %cm_header("AXEIL EDITION V2.2.8 B6")
+    %cm_header("AXEIL EDITION V2.2.8 B7")
 endif
 
 mm_goto_equipment:
@@ -1776,6 +1776,7 @@ ctrl_clear_shortcuts:
 action_clear_shortcuts:
 {
     TYA
+    STA !ram_gamemode_extras
     STA !sram_ctrl_save_state
     STA !sram_ctrl_load_state
     STA !sram_ctrl_load_last_preset
