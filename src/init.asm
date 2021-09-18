@@ -32,7 +32,21 @@ init_code:
     JSR init_sram
 
   .sram_initialized
-    PLA
+    ; Check if any less common shortcuts are configured
+    LDA !sram_ctrl_inc_custom_preset : BNE .enabled
+    LDA !sram_ctrl_dec_custom_preset : BNE .enabled
+    LDA !sram_ctrl_reset_segment_timer : BNE .enabled
+    LDA !sram_ctrl_reset_segment_later : BNE .enabled
+    LDA !sram_ctrl_kill_enemies : BNE .enabled 
+    LDA !sram_ctrl_full_equipment : BNE .enabled
+    LDA !sram_ctrl_reveal_damage : BNE .enabled
+    LDA !sram_ctrl_randomize_rng : BNE .enabled
+    BRA +
+
+  .enabled
+    LDA #$FFFF : STA !ram_gamemode_extras
+
++   PLA
     ; Execute overwritten logic and return
 if !FEATURE_PAL
     JSL $8B90EF

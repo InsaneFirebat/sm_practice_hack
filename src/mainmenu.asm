@@ -2071,6 +2071,7 @@ ctrl_clear_shortcuts:
 action_clear_shortcuts:
 {
     TYA
+    STA !ram_gamemode_extras
     STA !sram_ctrl_save_state
     STA !sram_ctrl_load_state
     STA !sram_ctrl_load_last_preset
