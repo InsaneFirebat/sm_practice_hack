@@ -178,7 +178,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.2.8.1")
+    %cm_header("CUSTOM INFOHUD V2.2.8.2")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -2069,6 +2069,7 @@ ctrl_clear_shortcuts:
 action_clear_shortcuts:
 {
     TYA
+    STA !ram_gamemode_extras
     STA !sram_ctrl_save_state
     STA !sram_ctrl_load_state
     STA !sram_ctrl_load_last_preset
