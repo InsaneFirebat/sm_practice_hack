@@ -138,7 +138,7 @@ MainMenu:
 ;    dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_header("CONTAINMENT CHAMBER V2.2.8")
+    %cm_header("CONTAINMENT CHAMBER V2.2.8.4")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -1538,6 +1538,7 @@ ctrl_clear_shortcuts:
 action_clear_shortcuts:
 {
     TYA
+    STA !ram_gamemode_extras
     STA !sram_ctrl_save_state
     STA !sram_ctrl_load_state
     STA !sram_ctrl_load_last_preset

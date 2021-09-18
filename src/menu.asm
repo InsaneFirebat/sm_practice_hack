@@ -922,6 +922,20 @@ cm_ctrl_mode:
     LDA !ram_cm_ctrl_timer : INC : STA !ram_cm_ctrl_timer : CMP.w #0060 : BNE .next_frame
 
     LDA $8B : STA [$C5]
+    ; Check if any less common shortcuts are configured
+    LDA !sram_ctrl_inc_custom_preset : BNE .enabled
+    LDA !sram_ctrl_dec_custom_preset : BNE .enabled
+    LDA !sram_ctrl_reset_segment_timer : BNE .enabled
+    LDA !sram_ctrl_reset_segment_later : BNE .enabled
+    LDA !sram_ctrl_kill_enemies : BNE .enabled 
+    LDA !sram_ctrl_full_equipment : BNE .enabled
+    LDA !sram_ctrl_reveal_damage : BNE .enabled
+    LDA !sram_ctrl_randomize_rng : BNE .enabled
+    LDA #!SOUND_MENU_MOVE : JSL $80903F
+    BRA .exit
+
+  .enabled
+    LDA #$FFFF : STA !ram_gamemode_extras
     LDA #!SOUND_MENU_MOVE : JSL $80903F
     BRA .exit
 
