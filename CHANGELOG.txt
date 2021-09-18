@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.2.8.2] Combined normal and No-X PRKD presets
 * [2.2.8.2] Optimizations for controller shortcut checks
 * [2.2.8.1] Allow submenu navigation sound to be customized
 * [2.2.8]   Fixed credits
