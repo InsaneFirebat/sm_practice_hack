@@ -741,7 +741,6 @@ tel_debug_area:
         db #$28, "  REQT SHIP", #$FF
         db #$28, "    MARIDIA", #$FF
         db #$28, "    TOURIAN", #$FF
-        db #$28, "    NORFAIR", #$FF
     db #$FF
 
 tel_debug_station:
