@@ -515,31 +515,31 @@ ToggleItemsMenu:
     %cm_header("TOGGLE ITEMS")
 
 ti_variasuit:
-    %cm_toggle_bit("Varia Suit", $7E09A4, #$0001, #0)
+    %cm_toggle_bit("Varia Suit", $7E09A4, #$0001, #action_equip_collected_items)
 
 ti_gravitysuit:
-    %cm_toggle_bit("Gravity Suit", $7E09A4, #$0020, #0)
+    %cm_toggle_bit("Gravity Suit", $7E09A4, #$0020, #action_equip_collected_items)
 
 ti_morphball:
-    %cm_toggle_bit("Morphing Ball", $7E09A4, #$0004, #0)
+    %cm_toggle_bit("Morphing Ball", $7E09A4, #$0004, #action_equip_collected_items)
 
 ti_bomb:
-    %cm_toggle_bit("Bombs", $7E09A4, #$1000, #0)
+    %cm_toggle_bit("Bombs", $7E09A4, #$1000, #action_equip_collected_items)
 
 ti_springball:
-    %cm_toggle_bit("Spring Ball", $7E09A4, #$0002, #0)
+    %cm_toggle_bit("Spring Ball", $7E09A4, #$0002, #action_equip_collected_items)
 
 ti_screwattack:
-    %cm_toggle_bit("Screw Attack", $7E09A4, #$0008, #0)
+    %cm_toggle_bit("Screw Attack", $7E09A4, #$0008, #action_equip_collected_items)
 
 ti_hijumpboots:
-    %cm_toggle_bit("Hi Jump Boots", $7E09A4, #$0100, #0)
+    %cm_toggle_bit("Hi Jump Boots", $7E09A4, #$0100, #action_equip_collected_items)
 
 ti_spacejump:
-    %cm_toggle_bit("Space Jump", $7E09A4, #$0200, #0)
+    %cm_toggle_bit("Space Jump", $7E09A4, #$0200, #action_equip_collected_items)
 
 ti_speedbooster:
-    %cm_toggle_bit("Speed Booster", $7E09A4, #$2000, #0)
+    %cm_toggle_bit("Speed Booster", $7E09A4, #$2000, #action_equip_collected_items)
 
 ti_grapple:
     %cm_toggle_bit("Grapple", $7E09A2, #$4000, .routine)
@@ -552,6 +552,12 @@ ti_xray:
     .routine
         LDA $09A4 : EOR #$8000 : STA $09A4
         RTS
+
+action_equip_collected_items:
+{
+    LDA $09A4 : STA $09A6
+    RTS
+}
 
 
 ; ------------------
@@ -568,19 +574,33 @@ ToggleBeamsMenu:
     %cm_header("TOGGLE BEAMS")
 
 tb_chargebeam:
-    %cm_toggle_bit("Charge", $7E09A8, #$1000, #0)
+    %cm_toggle_bit("Charge", $7E09A8, #$1000, #action_equip_collected_beams)
 
 tb_icebeam:
-    %cm_toggle_bit("Ice", $7E09A8, #$0002, #0)
+    %cm_toggle_bit("Ice", $7E09A8, #$0002, #action_equip_collected_beams)
 
 tb_wavebeam:
-    %cm_toggle_bit("Wave", $7E09A8, #$0001, #0)
+    %cm_toggle_bit("Wave", $7E09A8, #$0001, #action_equip_collected_beams)
 
 tb_spazerbeam:
-    %cm_toggle_bit("Spazer", $7E09A8, #$0004, #0)
+    %cm_toggle_bit("Spazer", $7E09A8, #$0004, #action_equip_collected_beams)
 
 tb_plasmabeam:
-    %cm_toggle_bit("Plasma", $7E09A8, #$0008, #0)
+    %cm_toggle_bit("Plasma", $7E09A8, #$0008, #action_equip_collected_beams)
+
+action_equip_collected_beams:
+{
+    LDA $09A8 : STA $09A6 : TAY
+    AND #$000C : CMP #$000C : BEQ .murderBeam
+    TYA : STA $7E09A6
+    RTS
+
+  .murderBeam
+    TYA : AND #$100B : STA $7E09A6
+
+  .done
+    RTS
+}
 
 
 ; ---------------
