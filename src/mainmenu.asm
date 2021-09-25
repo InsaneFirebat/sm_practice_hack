@@ -180,7 +180,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("FIREBAT INFOHUD V2.2.8.2")
+    %cm_header("FIREBAT INFOHUD V2.2.8.3")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
