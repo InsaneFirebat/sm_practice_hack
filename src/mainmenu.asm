@@ -119,7 +119,7 @@ action_presets_submenu:
 preset_category_submenus:
 {
     dw #PresetsMenuSpazer
-    dw #PresetsMenuKpdr21
+    dw #PresetsMenuKpdr22
     dw #PresetsMenuPrkd
     dw #PresetsMenuPkrd
     dw #PresetsMenuKpdr25
@@ -129,6 +129,7 @@ preset_category_submenus:
     dw #PresetsMenu14speed
     dw #PresetsMenu100early
     dw #PresetsMenuHundo
+    dw #PresetsMenu100map
     dw #PresetsMenuRbo
     dw #PresetsMenuNgplasma
     dw #PresetsMenuNghyper
@@ -142,7 +143,7 @@ preset_category_submenus:
 preset_category_banks:
 {
     dw #PresetsMenuSpazer>>16
-    dw #PresetsMenuKpdr21>>16
+    dw #PresetsMenuKpdr22>>16
     dw #PresetsMenuPrkd>>16
     dw #PresetsMenuPkrd>>16
     dw #PresetsMenuKpdr25>>16
@@ -152,6 +153,7 @@ preset_category_banks:
     dw #PresetsMenu14speed>>16
     dw #PresetsMenu100early>>16
     dw #PresetsMenuHundo>>16
+    dw #PresetsMenu100map>>16
     dw #PresetsMenuRbo>>16
     dw #PresetsMenuNgplasma>>16
     dw #PresetsMenuNghyper>>16
@@ -247,7 +249,7 @@ presets_kill_enemies:
 
 SelectPresetCategoryMenu:
     dw #presets_current
-    dw #precat_kpdr21
+    dw #precat_kpdr22
     dw #precat_prkd
     dw #precat_pkrd
     dw #precat_kpdr25
@@ -257,6 +259,7 @@ SelectPresetCategoryMenu:
     dw #precat_14speed
     dw #precat_100early
     dw #precat_hundo
+    dw #precat_100map
     dw #precat_rbo
     dw #precat_ngplasma
     dw #precat_nghyper
@@ -283,9 +286,10 @@ presets_current:
         db #$28, "   14 SPEED", #$FF
         db #$28, "  100 EARLY", #$FF
         db #$28, "   100 LATE", #$FF
+        db #$28, "   100% MAP", #$FF
         db #$28, "        RBO", #$FF
-        db #$28, "  NG PLASMA", #$FF
-        db #$28, "   NG HYPER", #$FF
+        db #$28, " NG+ PLASMA", #$FF
+        db #$28, "  NG+ HYPER", #$FF
         db #$28, " NIN POWER%", #$FF
         db #$28, "  BOSS KPDR", #$FF
         db #$28, "  BOSS PKDR", #$FF
@@ -295,7 +299,7 @@ presets_current:
 precat_spazer:
     %cm_jsr("Spazer Any%", #action_select_preset_category, #$0000)
 
-precat_kpdr21:
+precat_kpdr22:
     %cm_jsr("Any% KPDR", #action_select_preset_category, #$0001)
 
 precat_prkd:
@@ -325,26 +329,29 @@ precat_100early:
 precat_hundo:
     %cm_jsr("100% Late Crocomire", #action_select_preset_category, #$000A)
 
+precat_100map:
+    %cm_jsr("100% Map Completion", #action_select_preset_category, #$000B)
+
 precat_rbo:
-    %cm_jsr("Reverse Boss Order", #action_select_preset_category, #$000B)
+    %cm_jsr("Reverse Boss Order", #action_select_preset_category, #$000C)
 
 precat_ngplasma:
-    %cm_jsr("NewGamePlus Plasma", #action_select_preset_category, #$000C)
+    %cm_jsr("NewGamePlus Plasma", #action_select_preset_category, #$000D)
 
 precat_nghyper:
-    %cm_jsr("NewGamePlus Hyper", #action_select_preset_category, #$000D)
+    %cm_jsr("NewGamePlus Hyper", #action_select_preset_category, #$000E)
 
 precat_nintendopower:
-    %cm_jsr("Nintendo Power%", #action_select_preset_category, #$000E)
+    %cm_jsr("Nintendo Power%", #action_select_preset_category, #$000F)
 
 precat_allbosskpdr:
-    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000F)
+    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$0010)
 
 precat_allbosspkdr:
-    %cm_jsr("All Bosses PKDR", #action_select_preset_category, #$0010)
+    %cm_jsr("All Bosses PKDR", #action_select_preset_category, #$0011)
 
 precat_allbossprkd:
-    %cm_jsr("All Bosses PRKD", #action_select_preset_category, #$0011)
+    %cm_jsr("All Bosses PRKD", #action_select_preset_category, #$0012)
 
 action_select_preset_category:
 {

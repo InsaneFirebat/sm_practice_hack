@@ -1,6 +1,9 @@
 
 ## Changelog since v2.2.7
 
+* [2.2.8.4] 100% Max Completion category presets by mm2nescartridge
+* [2.2.8.3] Fixed more scolling issues with presets in Basement and Aqueduct
+* [2.2.8.3] Added "Business Center Pre-Elev" to PRKD presets
 * [2.2.8.2] Combined normal and No-X PRKD presets
 * [2.2.8.2] Optimizations for controller shortcut checks
 * [2.2.8.1] Allow submenu navigation sound to be customized
