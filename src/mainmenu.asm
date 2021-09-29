@@ -126,6 +126,7 @@ preset_category_submenus:
     dw #PresetsMenuGtmax
     dw #PresetsMenu100early
     dw #PresetsMenuHundo
+    dw #PresetsMenu100map
     dw #PresetsMenu14ice
     dw #PresetsMenu14speed
     dw #PresetsMenuRbo
@@ -148,6 +149,7 @@ preset_category_banks:
     dw #PresetsMenuGtmax>>16
     dw #PresetsMenu100early>>16
     dw #PresetsMenuHundo>>16
+    dw #PresetsMenu100map>>16
     dw #PresetsMenu14ice>>16
     dw #PresetsMenu14speed>>16
     dw #PresetsMenuRbo>>16
@@ -178,7 +180,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.2.8.3")
+    %cm_header("CUSTOM INFOHUD V2.2.8.4")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -251,10 +253,11 @@ SelectPresetCategoryMenu:
     dw #precat_kpdr25
     dw #precat_gtclassic
     dw #precat_gtmax
-    dw #precat_14ice
-    dw #precat_14speed
     dw #precat_100early
     dw #precat_hundo
+    dw #precat_100map
+    dw #precat_14ice
+    dw #precat_14speed
     dw #precat_rbo
     dw #precat_ngplasma
     dw #precat_nghyper
@@ -270,19 +273,20 @@ presets_current:
     dl #!sram_preset_category
     dw #$0000
     db #$28, "CURRENT PRESET", #$FF
-        db #$28, "   ANY KPDR", #$FF
-        db #$28, "   ANY PRKD", #$FF
-        db #$28, "   ANY PKRD", #$FF
+        db #$28, "  ANY% KPDR", #$FF
+        db #$28, "  ANY% PRKD", #$FF
+        db #$28, "  ANY% PKRD", #$FF
         db #$28, "   KPDR ICE", #$FF
         db #$28, " GT CLASSIC", #$FF
         db #$28, "     GT MAX", #$FF
-        db #$28, "  100 EARLY", #$FF
-        db #$28, "   100 LATE", #$FF
-        db #$28, "     14 ICE", #$FF
-        db #$28, "   14 SPEED", #$FF
+        db #$28, " 100% EARLY", #$FF
+        db #$28, "  100% LATE", #$FF
+        db #$28, "   100% MAP", #$FF
+        db #$28, "    14% ICE", #$FF
+        db #$28, "  14% SPEED", #$FF
         db #$28, "        RBO", #$FF
-        db #$28, "  NG PLASMA", #$FF
-        db #$28, "   NG HYPER", #$FF
+        db #$28, " NG+ PLASMA", #$FF
+        db #$28, "  NG+ HYPER", #$FF
         db #$28, " NIN POWER%", #$FF
         db #$28, "  BOSS KPDR", #$FF
         db #$28, "  BOSS PKDR", #$FF
@@ -313,32 +317,35 @@ precat_100early:
 precat_hundo:
     %cm_jsr("100% Late Crocomire", #action_select_preset_category, #$0007)
 
+precat_100map:
+    %cm_jsr("100% Map Completion", #action_select_preset_category, #$0008)
+
 precat_14ice:
-    %cm_jsr("Low% Ice", #action_select_preset_category, #$0008)
+    %cm_jsr("Low% Ice", #action_select_preset_category, #$0009)
 
 precat_14speed:
-    %cm_jsr("Low% Speed", #action_select_preset_category, #$0009)
+    %cm_jsr("Low% Speed", #action_select_preset_category, #$000A)
 
 precat_rbo:
-    %cm_jsr("Reverse Boss Order", #action_select_preset_category, #$000A)
+    %cm_jsr("Reverse Boss Order", #action_select_preset_category, #$000B)
 
 precat_ngplasma:
-    %cm_jsr("NewGamePlus Plasma", #action_select_preset_category, #$000B)
+    %cm_jsr("NewGamePlus Plasma", #action_select_preset_category, #$000C)
 
 precat_nghyper:
-    %cm_jsr("NewGamePlus Hyper", #action_select_preset_category, #$000C)
+    %cm_jsr("NewGamePlus Hyper", #action_select_preset_category, #$000D)
 
 precat_nintendopower:
-    %cm_jsr("Nintendo Power%", #action_select_preset_category, #$000D)
+    %cm_jsr("Nintendo Power%", #action_select_preset_category, #$000E)
 
 precat_allbosskpdr:
-    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000E)
+    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000F)
 
 precat_allbosspkdr:
-    %cm_jsr("All Bosses PKDR", #action_select_preset_category, #$000F)
+    %cm_jsr("All Bosses PKDR", #action_select_preset_category, #$0010)
 
 precat_allbossprkd:
-    %cm_jsr("All Bosses PRKD", #action_select_preset_category, #$0010)
+    %cm_jsr("All Bosses PRKD", #action_select_preset_category, #$0011)
 
 action_select_preset_category:
 {

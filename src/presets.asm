@@ -217,6 +217,7 @@ preset_banks:
   dw preset_gtmax_crateria_ship>>16
   dw preset_100early_crateria_ceres_elevator>>16
   dw preset_hundo_bombs_ceres_elevator>>16
+  dw preset_100map_varia_landing_site>>16
   dw preset_14ice_crateria_ceres_elevator>>16
   dw preset_14speed_crateria_ceres_elevator>>16
   dw preset_rbo_bombs_ceres_elevator>>16
@@ -308,27 +309,42 @@ preset_scroll_fixes:
     ; is normally hidden until passing over a red scroll block.
     ; These fixes can often be found in nearby door asm.
     PHP : %a8() : %i16()
-    LDX $079B : LDA #$01
+    LDA #$01 : LDX $079B      ; X = room ID
+    CPX #$C000 : BPL .halfway ; organized by room ID so we only have to check half
+
 +   CPX #$A011 : BNE +        ; bottom-left of Etecoons Etank
     STA $7ECD25 : STA $7ECD26
+    JMP .done
++   CPX #$AC83 : BNE +        ; left of Green Bubbles Missile Room (Norfair Reserve)
+    STA $7ECD20
     JMP .done
 +   CPX #$AE32 : BNE +        ; bottom of Volcano Room
     STA $7ECD26
     JMP .done
 +   CPX #$B07A : BNE +        ; top of Bat Cave
     STA $7ECD20
-    BRA .done
+    JMP .done
 +   CPX #$B1E5 : BNE +        ; bottom of Acid Chozo Room
     STA $7ECD26 : STA $7ECD27 : STA $7ECD28
     LDA #$00 : STA $7ECD23 : STA $7ECD24
-    BRA .done
+    JMP .done
 +   CPX #$B3A5 : BNE +        ; bottom of Pre-Pillars
+    LDY $0AFA : CPY #$0190    ; no scroll fix if Ypos < 400
+    BMI .done
     STA $7ECD22 : STA $7ECD24
     LDA #$00 : STA $7ECD21
-    BRA .done
+    JMP .done
++   CPX #$B4AD : BNE +        ; top of Worst Room in the Game
+    LDA #$02 : STA $7ECD20
+    JMP .done
+  .halfway
 +   CPX #$CAF6 : BNE +        ; bottom of WS Shaft
     LDA #$02
     STA $7ECD48 : STA $7ECD4E
+    BRA .done
++   CPX #$CBD5 : BNE +        ; top of Electric Death Room (WS E-Tank)
+    LDA #$02
+    STA $7ECD20
     BRA .done
 +   CPX #$CC6F : BNE +        ; right of Basement (Phantoon)
     STA $7ECD24
@@ -533,63 +549,65 @@ org $809AC9
   .resume_infohud_icon_initialization
 
 
-org $FE8000    ; 749Eh bytes used / B62h bytes free
+org $F18000    ; 7603h bytes used / 9FEh bytes free
 incsrc presets/prkd_menu.asm   ; E6Ah bytes
 incsrc presets/kpdr21_menu.asm   ; F91h bytes
 incsrc presets/hundo_menu.asm   ; 1220h bytes
 incsrc presets/100early_menu.asm   ; 1320h bytes
-incsrc presets/rbo_menu.asm   ; D97h bytes
+incsrc presets/pkrd_menu.asm   ; E6Ah bytes
 incsrc presets/kpdr25_menu.asm   ; 69Fh bytes
 incsrc presets/gtclassic_menu.asm   ; D7Ch bytes
 incsrc presets/14ice_menu.asm   ; 7C6h bytes
 incsrc presets/14speed_menu.asm   ; 7EBh bytes
 print pc, " preset_menu.asm bankFE end"
 
-org $FF8000    ; 5666h bytes used / 299Ah bytes free
+org $F28000    ; 6CDFh bytes used / 1321h bytes free
+incsrc presets/rbo_menu.asm   ; D97h bytes
 incsrc presets/allbosskpdr_menu.asm   ; 942h bytes
 incsrc presets/allbosspkdr_menu.asm   ; 9B0h bytes
 incsrc presets/allbossprkd_menu.asm   ; 9BEh bytes
-incsrc presets/pkrd_menu.asm   ; E6Ah bytes
 incsrc presets/ngplasma_menu.asm   ; 85Ch bytes
 incsrc presets/nghyper_menu.asm   ; 864h bytes
 incsrc presets/nintendopower_menu.asm   ; 70Ch bytes
-incsrc presets/gtmax_menu.asm   ; 137Bh bytes
+incsrc presets/gtmax_menu.asm   ; 1378h bytes
+incsrc presets/100map_menu.asm   ; 1670h bytes
 print pc, " preset_menu.asm bankFF end"
 
-org $E18000
+org $EF8000
 incsrc presets/prkd_data.asm ; 2EAAh bytes
 incsrc presets/hundo_data.asm ; 42A2h bytes
-print pc, " preset_data.asm BankE1 end"
+print pc, " preset_data.asm BankEF end"
 
-org $E28000
+org $EE8000
 incsrc presets/kpdr21_data.asm ; 2FF6h bytes
-incsrc presets/rbo_data.asm ; 3274h bytes
-print pc, " preset_data.asm BankE2 end"
+incsrc presets/kpdr25_data.asm ; 1E3Ah bytes
+incsrc presets/nintendopower_data.asm ; 20F8h bytes
+print pc, " preset_data.asm BankEE end"
 
-org $E38000
+org $ED8000
 incsrc presets/gtclassic_data.asm ; 2B5Eh bytes
 incsrc presets/14ice_data.asm ; 1E95h bytes
 incsrc presets/14speed_data.asm ; 1EE6h bytes
-print pc, " preset_data.asm BankE3 end"
+print pc, " preset_data.asm BankED end"
 
-org $E48000
+org $EC8000
 incsrc presets/allbosskpdr_data.asm ; 2400h bytes
 incsrc presets/allbosspkdr_data.asm ; 2484h bytes
 incsrc presets/allbossprkd_data.asm ; 2568h bytes
-print pc, " preset_data.asm BankE4 end"
+print pc, " preset_data.asm BankEC end"
 
-org $E58000
+org $EB8000
 incsrc presets/100early_data.asm ; 423Ch bytes
-incsrc presets/kpdr25_data.asm ; 1E3Ah bytes
-print pc, " preset_data.asm BankE5 end"
-
-org $E68000
 incsrc presets/pkrd_data.asm ; 2EBCh bytes
-incsrc presets/gtmax_data.asm ; 420Ah bytes
-print pc, " preset_data.asm BankE6 end"
+print pc, " preset_data.asm BankEB end"
 
-org $E78000
-incsrc presets/nintendopower_data.asm ; 20F8h bytes
+org $EA8000
+incsrc presets/gtmax_data.asm ; 420Ah bytes
+incsrc presets/rbo_data.asm ; 3274h bytes
+print pc, " preset_data.asm BankEA end"
+
+org $E98000
+incsrc presets/100map_data.asm ; 492Eh bytes
 incsrc presets/ngplasma_data.asm ; 1B5Ah bytes
 incsrc presets/nghyper_data.asm ; 1B70h bytes
-print pc, " preset_data.asm BankE7 end"
+print pc, " preset_data.asm BankE9 end"
