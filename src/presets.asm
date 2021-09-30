@@ -110,6 +110,7 @@ endif
 
   .done
     LDA #$0000 : STA !ram_custom_preset
+    LDA #$0001 : STA !ram_reset_segment_later
     PLP
     RTL
 }

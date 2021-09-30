@@ -3,7 +3,7 @@ PresetsMenuGtclassic:
     dw #presets_goto_gtclassic_brinstar
     dw #presets_goto_gtclassic_kraid
     dw #presets_goto_gtclassic_bootless_upper_norfair
-    dw #presets_goto_gtclassic_hi_jump_upper_norfair
+;    dw #presets_goto_gtclassic_hi_jump_upper_norfair
     dw #presets_goto_gtclassic_lower_norfair
     dw #presets_goto_gtclassic_maridia
     dw #presets_goto_gtclassic_wrecked_ship
