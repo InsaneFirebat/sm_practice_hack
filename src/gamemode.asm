@@ -184,8 +184,8 @@ endif
 
   .load_custom_preset
     ; check if slot is populated first
-    LDA !sram_custom_preset_slot : ASL : TAX
-    LDA.l PresetSlot,X : TAX
+    LDA !sram_custom_preset_slot
+    ASL : XBA : TAX
     LDA $703000,X : CMP #$5AFE : BEQ .safe
     %sfxgoback()
     ; CLC to continue normal gameplay after failing to load preset
@@ -198,7 +198,7 @@ endif
     SEC : RTS
 
   .next_preset_slot
-    LDA !sram_custom_preset_slot : CMP #$0013 ; max slots
+    LDA !sram_custom_preset_slot : CMP #$0027 ; total slots minus one
     BNE + : LDA #$FFFF
 +   INC : STA !sram_custom_preset_slot
     ASL : TAX : LDA.l NumberGFXTable,X : STA $7EC67C
@@ -208,7 +208,7 @@ endif
 
   .prev_preset_slot
     LDA !sram_custom_preset_slot : BNE +
-    LDA #$0014 ; max slots + 1
+    LDA #$0028 ; total slots
 +   DEC : STA !sram_custom_preset_slot
     ASL : TAX : LDA.l NumberGFXTable,X : STA $7EC67C
     %sfxnumber()

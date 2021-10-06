@@ -33,8 +33,8 @@
 !ram_armed_shine_duration = $7FFB34
 !ram_minimap = $7FFB36
 !ram_map_counter = $7FFB38
-!ram_vcounter_data = $7FFB3C
-!ram_custom_preset = $7FFB3E
+!ram_vcounter_data = $7FFB3A
+!ram_custom_preset = $7FFB3C
 
 ; FREE SPACE ^
 
@@ -254,7 +254,6 @@
 !sram_metronome_tickrate = $702036
 !sram_metronome_sfx = $702038
 !sram_custom_preset_slot = $70203A
-!sram_preset_enemies = $70203C
 
 ; FREE SPACE ^
 
