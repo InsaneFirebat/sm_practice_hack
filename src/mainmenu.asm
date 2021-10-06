@@ -200,7 +200,6 @@ PresetsMenu:
     dw #presets_custom_preset_slot
     dw #presets_save_custom_preset
     dw #presets_load_custom_preset
-    dw #presets_kill_enemies
     dw #$0000
     %cm_header("PRESET OPTIONS MENU")
 
@@ -208,16 +207,13 @@ presets_goto_select_preset_category:
     %cm_submenu("Select Preset Category", #SelectPresetCategoryMenu)
 
 presets_custom_preset_slot:
-    %cm_numfield("Custom Preset Slot", !sram_custom_preset_slot, 0, 19, 1, #0) ; update max slots in gamemode.asm
+    %cm_numfield("Custom Preset Slot", !sram_custom_preset_slot, 0, 39, 1, #0) ; update max slots in gamemode.asm
 
 presets_save_custom_preset:
     %cm_jsr("Save Custom Preset", #action_save_custom_preset, #$0000)
 
 presets_load_custom_preset:
     %cm_jsr("Load Custom Preset", #action_load_custom_preset, #$0000)
-
-presets_kill_enemies:
-    %cm_toggle("Auto-Kill Enemies", !sram_preset_enemies, #$0001, #0)
 
 SelectPresetCategoryMenu:
     dw #presets_current
@@ -255,8 +251,8 @@ action_save_custom_preset:
 action_load_custom_preset:
 {
     ; check if slot is populated first
-    LDA !sram_custom_preset_slot : ASL : TAX
-    LDA.l PresetSlot,X : TAX
+    LDA !sram_custom_preset_slot
+    ASL : XBA : TAX
     LDA $703000,X : CMP #$5AFE : BEQ .safe
     LDA #$0007 : JSL $80903F
     RTS
