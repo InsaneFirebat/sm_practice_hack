@@ -26,14 +26,14 @@
 !ram_tmp_3 = $7FFB28
 !ram_tmp_4 = $7FFB2A
 
-!ram_last_hp = $7FFB2A
-!ram_etanks = $7FFB2C
-!ram_pct_1 = $7FFB2E
-!ram_pct_2 = $7FFB30
-!ram_armed_shine_duration = $7FFB32
-!ram_minimap = $7FFB34
-!ram_map_counter = $7FFB36
-!ram_vcounter_data = $7FFB38
+!ram_last_hp = $7FFB2C
+!ram_etanks = $7FFB2E
+!ram_pct_1 = $7FFB30
+!ram_pct_2 = $7FFB32
+!ram_armed_shine_duration = $7FFB34
+!ram_minimap = $7FFB36
+!ram_map_counter = $7FFB38
+!ram_vcounter_data = $7FFB3A
 !ram_custom_preset = $7FFB3C
 !ram_tel_debug_area = $7FFB3E
 !ram_tel_debug_station = $7FFB40
@@ -249,7 +249,6 @@
 !sram_metronome_tickrate = $702036
 !sram_metronome_sfx = $702038
 !sram_custom_preset_slot = $70203A
-!sram_preset_enemies = $70203C
 
 ; FREE SPACE ^
 

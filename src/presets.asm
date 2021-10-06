@@ -81,23 +81,13 @@ preset_load:
     JSL reset_all_counters
     STZ $0795 ; clear door transition flag
 
-    ; Option to clear enemies, 1 = kill
-    LDA !sram_preset_enemies : BEQ .enemies
+    ; Kill non-solid enemies
     LDA #$0000
-
     ; 8000 = solid to Samus, 0400 = Ignore Samus projectiles
 -   TAX : LDA $0F86,X : BIT #$8400 : BNE +
     ORA #$0200 : STA $0F86,X
-
 +   TXA : CLC : ADC #$0040 : CMP #$0400 : BNE -
-    ; JSL $A08A6D ; Clear enemy data and process enemy set ;; Pinkus probably disabled this call because it's already been executed
-    BRA .done
 
-  .enemies
-    LDA !ram_custom_preset : BEQ .done
-    JSL custom_preset_enemy_data
-
-  .done
     LDA #$0000 : STA !ram_custom_preset
     PLP
     RTL
