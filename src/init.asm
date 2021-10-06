@@ -99,7 +99,7 @@ init_sram:
     LDA #$0000 : STA !sram_room_strat
     LDA #$0000 : STA !sram_sprite_prio_flag
     LDA #$0000 : STA !sram_custom_preset_slot
-    LDA #$0001 : STA !sram_preset_enemies
+
     LDA #$000A : STA !sram_metronome_tickrate
     LDA #$0002 : STA !sram_metronome_sfx
 

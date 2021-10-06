@@ -2,17 +2,13 @@
 ; Custom Presets
 ; --------------
 
-
-PresetSlot: ; 400h bytes needed per slot (3DEh)
-    dw $0000, $0400, $0800, $0C00, $1000, $1400, $1800, $1C00
-    dw $2000, $2400, $2800, $2C00, $3000, $3400, $3800, $3C00
-    dw $4000, $4400, $4800, $4C00
-
 custom_preset_save:
 {
-    LDA !sram_custom_preset_slot : ASL : TAX
-    LDA.l PresetSlot,X : TAX : LDY #$0000
-    LDA #$5AFE : STA $703000,X : INX #2 ; mark this slot as "SAFE" to load
+print pc, " custom presets start"
+    LDA !sram_custom_preset_slot
+    ASL : XBA : TAX
+    LDA #$5AFE : STA $703000,X : INX #2 ; Mark this slot as "SAFE" to load
+    LDA #$01B0 : STA $703000,X : INX #2 ; Preset data size (for future compatibility)
     LDA $078B : STA $703000,X : INX #2 ;  Elevator Index
     LDA $078D : STA $703000,X : INX #2 ;  DDB
     LDA $078F : STA $703000,X : INX #2 ;  DoorOut Index
@@ -227,54 +223,16 @@ custom_preset_save:
     LDA $7ED91A : STA $703000,X : INX #2 ;  Events, Items, Doors
     LDA $7ED91C : STA $703000,X : INX #2 ;  Events, Items, Doors
     LDA $7ED91E : STA $703000,X : INX #2 ;  Events, Items, Doors
-
-  .loopEnemies
-;    LDA $0F78,Y : STA $703000,X : INX #2 ;  Enemy ID
-    LDA $0F7A,Y : STA $703000,X : INX #2 ;  Enemy X position
-    LDA $0F7C,Y : STA $703000,X : INX #2 ;  Enemy X subposition
-    LDA $0F7E,Y : STA $703000,X : INX #2 ;  Enemy Y position
-    LDA $0F80,Y : STA $703000,X : INX #2 ;  Enemy Y subposition
-;    LDA $0F82,Y : STA $703000,X : INX #2 ;  Enemy X radius
-;    LDA $0F84,Y : STA $703000,X : INX #2 ;  Enemy Y radius
-;    LDA $0F86,Y : STA $703000,X : INX #2 ;  Enemy Properties
-;    LDA $0F88,Y : STA $703000,X : INX #2 ;  Enemy Extra Properties
-    LDA $0F8A,Y : STA $703000,X : INX #2 ;  Enemy AI handler
-    LDA $0F8C,Y : STA $703000,X : INX #2 ;  Enemy Health
-    LDA $0F8E,Y : STA $703000,X : INX #2 ;  Enemy Spritemap pointer
-    LDA $0F90,Y : STA $703000,X : INX #2 ;  Enemy Timer
-    LDA $0F92,Y : STA $703000,X : INX #2 ;  Enemy Initialisation parameter / instruction list pointer
-    LDA $0F94,Y : STA $703000,X : INX #2 ;  Enemy Instruction timer
-;    LDA $0F96,Y : STA $703000,X : INX #2 ;  Enemy Palette index
-;    LDA $0F98,Y : STA $703000,X : INX #2 ;  Enemy VRAM tiles index
-;    LDA $0F9A,Y : STA $703000,X : INX #2 ;  Enemy Layer
-    LDA $0F9C,Y : STA $703000,X : INX #2 ;  Flash timer
-    LDA $0F9E,Y : STA $703000,X : INX #2 ;  Enemy Frozen timer
-    LDA $0FA0,Y : STA $703000,X : INX #2 ;  Enemy Invincibility timer
-;    LDA $0FA2,Y : STA $703000,X : INX #2 ;  Enemy Shake timer
-    LDA $0FA4,Y : STA $703000,X : INX #2 ;  Enemy Frame counter
-;    LDA $0FA6,Y : STA $703000,X : INX #2 ;  Enemy Bank
-    LDA $0FA8,Y : STA $703000,X : INX #2 ;  Enemy AI variable, frequently function pointer
-    LDA $0FAA,Y : STA $703000,X : INX #2 ;  Enemy AI variable
-    LDA $0FAC,Y : STA $703000,X : INX #2 ;  Enemy AI variable
-    LDA $0FAE,Y : STA $703000,X : INX #2 ;  Enemy AI variable
-    LDA $0FB0,Y : STA $703000,X : INX #2 ;  Enemy AI variable
-;    LDA $0FB2,Y : STA $703000,X : INX #2 ;  Enemy AI variable
-;    LDA $0FB4,Y : STA $703000,X : INX #2 ;  Enemy Parameter 1
-;    LDA $0FB6,Y : STA $703000,X : INX #2 ;  Enemy Parameter 2
-    CPY #$0380 : BPL .done ; exit after enemy 13, zero indexed
-    TYA : CLC : ADC #$0040 : TAY
-    JMP .loopEnemies
-
-  .done
     RTL
 }
 
 custom_preset_load:
 {
-    LDA !sram_custom_preset_slot : ASL : TAX
-    LDA.l PresetSlot,X : TAX : LDY #$0000
+    LDA !sram_custom_preset_slot
+    ASL : XBA : TAX
     INX #2 ; skip past "5AFE" word
-+   LDA $703000,X : STA $078B : INX #2 ;  Elevator Index
+    INX #2 ; skip past size for now
+    LDA $703000,X : STA $078B : INX #2 ;  Elevator Index
     LDA $703000,X : STA $078D : INX #2 ;  DDB
     LDA $703000,X : STA $078F : INX #2 ;  DoorOut Index
     LDA $703000,X : STA $079B : INX #2 ;  MDB
@@ -490,50 +448,4 @@ custom_preset_load:
     LDA $703000,X : STA $7ED91E : INX #2 ;  Events, Items, Doors
     RTL
 }
-
-custom_preset_enemy_data:
-{   ; runs near the end of preset routine
-    LDA !sram_custom_preset_slot : ASL : TAX
-    LDA.l PresetSlot,X : TAX : LDY #$0000
-
-  .loopEnemies
-;    LDA $7031AE,X : STA $0F78,Y : INX #2 ;  Enemy ID
-    LDA $7031AE,X : STA $0F7A,Y : INX #2 ;  Enemy X position
-    LDA $7031AE,X : STA $0F7C,Y : INX #2 ;  Enemy X subposition
-    LDA $7031AE,X : STA $0F7E,Y : INX #2 ;  Enemy Y position
-    LDA $7031AE,X : STA $0F80,Y : INX #2 ;  Enemy Y subposition
-;    LDA $7031AE,X : STA $0F82,Y : INX #2 ;  Enemy X radius
-;    LDA $7031AE,X : STA $0F84,Y : INX #2 ;  Enemy Y radius
-;    LDA $7031AE,X : STA $0F86,Y : INX #2 ;  Enemy Properties
-;    LDA $7031AE,X : STA $0F88,Y : INX #2 ;  Enemy Extra Properties
-    LDA $7031AE,X : STA $0F8A,Y : INX #2 ;  Enemy AI handler
-    LDA $7031AE,X : STA $0F8C,Y : INX #2 ;  Enemy Health
-    LDA $7031AE,X : STA $0F8E,Y : INX #2 ;  Enemy Spritemap pointer
-    LDA $7031AE,X : STA $0F90,Y : INX #2 ;  Enemy Timer
-    LDA $7031AE,X : STA $0F92,Y : INX #2 ;  Enemy Initialisation parameter / instruction list pointer
-    LDA $7031AE,X : STA $0F94,Y : INX #2 ;  Enemy Instruction timer
-;    LDA $7031AE,X : STA $0F96,Y : INX #2 ;  Enemy Palette index
-;    LDA $7031AE,X : STA $0F98,Y : INX #2 ;  Enemy VRAM tiles index
-;    LDA $7031AE,X : STA $0F9A,Y : INX #2 ;  Enemy Layer
-    LDA $7031AE,X : STA $0F9C,Y : INX #2 ;  Enemy Flash timer
-    LDA $7031AE,X : STA $0F9E,Y : INX #2 ;  Enemy Frozen timer
-    LDA $7031AE,X : STA $0FA0,Y : INX #2 ;  Enemy Invincibility timer
-;    LDA $7031AE,X : STA $0FA2,Y : INX #2 ;  Enemy Shake timer
-    LDA $7031AE,X : STA $0FA4,Y : INX #2 ;  Enemy Frame counter
-;    LDA $7031AE,X : STA $0FA6,Y : INX #2 ;  Enemy Bank
-    LDA $7031AE,X : STA $0FA8,Y : INX #2 ;  Enemy AI variable, frequently function pointer
-    LDA $7031AE,X : STA $0FAA,Y : INX #2 ;  Enemy AI variable
-    LDA $7031AE,X : STA $0FAC,Y : INX #2 ;  Enemy AI variable
-    LDA $7031AE,X : STA $0FAE,Y : INX #2 ;  Enemy AI variable
-    LDA $7031AE,X : STA $0FB0,Y : INX #2 ;  Enemy AI variable
-;    LDA $7031AE,X : STA $0FB2,Y : INX #2 ;  Enemy AI variable
-;    LDA $7031AE,X : STA $0FB4,Y : INX #2 ;  Enemy Parameter 1
-;    LDA $7031AE,X : STA $0FB6,Y : INX #2 ;  Enemy Parameter 2
-    CPY #$0380 : BPL .done ; exit after enemy 13, zero indexed
-    TYA : CLC : ADC #$0040 : TAY
-    JMP .loopEnemies
-
-  .done
-    RTL
-}
-
+print pc, " custom presets end"
