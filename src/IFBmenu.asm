@@ -48,6 +48,7 @@ ifb_paletteprofile:
         db #$28, "        MM2", #$FF
         db #$28, "      PTOIL", #$FF
         db #$28, "     ZOHDIN", #$FF
+        db #$28, "    DARKXOA", #$FF
         db #$28, "     TWITCH", #$FF
         db #$28, "       GREY", #$FF
         db #$28, "        RED", #$FF
