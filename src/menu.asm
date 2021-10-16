@@ -281,10 +281,11 @@ PaletteProfileTables:
     dw #ptoilProfileTable         ; 6
     dw #ZohdinProfileTable        ; 7
     dw #DarkXoaProfileTable       ; 8
-    dw #TwitchProfileTable        ; 9
-    dw #GreyProfileTable          ; A
-    dw #RedProfileTable           ; B
-    dw #PurpleProfileTable        ; C
+    dw #MelonaxProfileTable       ; 9
+    dw #TwitchProfileTable        ; A
+    dw #GreyProfileTable          ; B
+    dw #RedProfileTable           ; C
+    dw #PurpleProfileTable        ; D
     dw #$0000
 
 ; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
@@ -314,6 +315,9 @@ ZohdinProfileTable:
 
 DarkXoaProfileTable:
     dw $24C4, $45A8, $24C4, $0000, $0000, $24C4, $45A8, $45A8, $0000, $1505, $45A8
+
+MelonaxProfileTable:
+    dw $7FFF, $0000, $3DEF, $0C63, $0000, $7FFF, $266B, $3DFE, $0C63, $0000, $266B
 
 TwitchProfileTable:
     dw $550D, $550D, $7FFF, $0000, $0000, $7FFF, $550D, $550D, $0000, $550D, $7FFF
