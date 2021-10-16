@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.2.8.6] Fix item% calculation after using GT Code
 * [2.2.8.5] Removed enemies from presets and increase slots
 * [2.2.8.4] 100% Max Completion category presets by mm2nescartridge
 * [2.2.8.3] Fixed more scolling issues with presets in Basement and Aqueduct
