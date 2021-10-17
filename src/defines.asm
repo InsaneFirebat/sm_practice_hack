@@ -431,8 +431,12 @@ endif
 !sram_custompalette_menunumsel_lo = $7020F0
 !sram_custompalette_profile = $7020F2
 
-!sram_customsfx_move = $7020F4
-!sram_customsfx_toggle = $7020F6
-!sram_customsfx_number = $7020F8
-!sram_customsfx_confirm = $7020FA
-!sram_customsfx_goback = $7020FC
+!sram_custompalette_blue = $7020F4
+!sram_custompalette_green = $7020F6
+!sram_custompalette_red = $7020F8
+
+!sram_customsfx_move = $7020FA
+!sram_customsfx_toggle = $7020FC
+!sram_customsfx_number = $7020FE
+!sram_customsfx_confirm = $702100
+!sram_customsfx_goback = $702102

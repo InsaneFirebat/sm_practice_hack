@@ -95,6 +95,8 @@ action_submenu:
     JSR cm_calculate_max
     JSR cm_draw
 
+    JSR cm_colors
+
     RTS
 }
 
