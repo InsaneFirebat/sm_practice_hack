@@ -1017,7 +1017,7 @@ cm_loop:
     BIT #$0080 : BNE .pressedA
     BIT #$8000 : BNE .pressedB
 ;    BIT #$0040 : BNE .pressedX ; disabled to make a branch fit...
-    BIT #$4000 : BNE .pressedY
+;    BIT #$4000 : BNE .pressedY
     BIT #$2000 : BNE .pressedSelect
     BIT #$1000 : BNE .pressedStart
     BIT #$0800 : BNE .pressedUp
@@ -1034,8 +1034,6 @@ cm_loop:
     JSR cm_calculate_max
     BRA .redraw
 
-  .pressedY
-    JMP .Ypressed
 
   .pressedDown
     LDA #$0002
@@ -1061,6 +1059,7 @@ cm_loop:
 
   .pressedA
 ;  .pressedX
+  .pressedY
   .pressedLeft
   .pressedRight
     JSR cm_execute
@@ -1075,22 +1074,7 @@ cm_loop:
     JMP .inputLoop
 
   .done
-    RTS
-
-  .Ypressed
-    LDA !ram_cm_cursor_stack : CMP #$0014 : BNE .failed
-    LDA $7E0998 : CMP #$000C : BMI .refresh
-    CMP #$0012 : BPL .refresh
-
-  .failed
-    %sfxdamage()
-    JMP .inputLoop
-
-  .refresh
-    JSR cm_transfer_original_cgram
-    JSR cm_transfer_custom_cgram
-    %sfxbubble()
-    
+    RTS    
 
   .restartLoop
     JMP .inputLoop
