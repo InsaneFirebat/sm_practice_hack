@@ -368,33 +368,37 @@ endif
 ; SRAM for custom features
 ; -----
 
-!sram_ctrl_reveal_damage = $702100
-!sram_ctrl_randomize_rng = $702102
+!sram_ctrl_reveal_damage = $702200
+!sram_ctrl_randomize_rng = $702202
 
-!sram_countdamage = $702110
-!sram_menu_background = $702112
-!sram_healthalarm = $702114
+!sram_countdamage = $702210
+!sram_menu_background = $702212
+!sram_healthalarm = $70221A
 
 ; FREE SPACE ^
 
-!sram_superhud = $702182
-!sram_superhud_bottom = $702184
-!sram_superhud_middle = $702186
-!sram_superhud_top = $702188
+!sram_superhud = $702282
+!sram_superhud_bottom = $702284
+!sram_superhud_middle = $702286
+!sram_superhud_top = $702288
 
-!sram_dummy_on = $70218A
-!sram_dummy_off = $70218C
-!sram_dummy_num = $70218E
+!sram_dummy_on = $70228A
+!sram_dummy_off = $70228C
+!sram_dummy_num = $70228E
 
-!sram_presetrando = $702190
-!sram_presetrando_morph = $702192
-!sram_presetrando_charge = $702194
-!sram_presetrando_max_etanks = $702196
-!sram_presetrando_max_reserves = $702198
-!sram_presetrando_max_missiles = $7021A0
-!sram_presetrando_max_supers = $7021AA
-!sram_presetrando_max_pbs = $7021AC
-!sram_presetrando_beampref = $7021AE
+!sram_presetrando = $702290
+!sram_presetrando_morph = $702292
+!sram_presetrando_charge = $702294
+!sram_presetrando_max_etanks = $702296
+!sram_presetrando_max_reserves = $702298
+!sram_presetrando_max_missiles = $70229A
+!sram_presetrando_max_supers = $70229C
+!sram_presetrando_max_pbs = $70229E
+!sram_presetrando_beampref = $7022A0
+
+!sram_custompalette_blue = $7022A2
+!sram_custompalette_green = $7022A4
+!sram_custompalette_red = $7022A6
 
 ; do not change order without updating custom palette profiles in menu.asm
 !sram_custompalette_menuborder = $7020B0
@@ -431,10 +435,6 @@ endif
 !sram_custompalette_menunumsel_hi = $7020EE
 !sram_custompalette_menunumsel_lo = $7020F0
 !sram_custompalette_profile = $7020F2
-
-!sram_custompalette_blue = $7020F4
-!sram_custompalette_green = $7020F6
-!sram_custompalette_red = $7020F8
 
 !sram_customsfx_move = $7020FA
 !sram_customsfx_toggle = $7020FC
