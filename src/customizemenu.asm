@@ -16,18 +16,18 @@ macro examplemenu()
 endmacro
 
 macro palettemenu(header, mix, hi, lo)
-    dw #custompalettes_red
-    dw #custompalettes_green
-    dw #custompalettes_blue
+    dw #custompalettes_hex_red
+    dw #custompalettes_hex_green
+    dw #custompalettes_hex_blue
+    dw #ifb_notext
     dw #<mix>
     dw #ifb_notext
+    dw #custompalettes_dec_red
+    dw #custompalettes_dec_green
+    dw #custompalettes_dec_blue
     dw #ifb_notext
     dw #<hi>
     dw #<lo>
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
     %examplemenu()
     dw #$0000
     %cm_header("<header>")
@@ -236,14 +236,23 @@ custompalettes_mix_background:
     %cm_mixcolor(!sram_custompalette_menubackground, !sram_custompalette_menubackground_hi, !sram_custompalette_menubackground_lo)
 
 
-custompalettes_red:
-    %cm_numfield_color("Red", !sram_custompalette_red, #0)
+custompalettes_hex_red:
+    %cm_numfield_color("Hexidecimal Red", !sram_custompalette_red, #0)
 
-custompalettes_green:
-    %cm_numfield_color("Green", !sram_custompalette_green, #0)
+custompalettes_hex_green:
+    %cm_numfield_color("Hexidecimal Green", !sram_custompalette_green, #0)
 
-custompalettes_blue:
-    %cm_numfield_color("Blue", !sram_custompalette_blue, #0)
+custompalettes_hex_blue:
+    %cm_numfield_color("Hexidecimal Blue", !sram_custompalette_blue, #0)
+
+custompalettes_dec_red:
+    %cm_numfield("Decimal Red", !sram_custompalette_red, 0, 31, 1, #0)
+
+custompalettes_dec_green:
+    %cm_numfield("Decimal Green", !sram_custompalette_green, 0, 31, 1, #0)
+
+custompalettes_dec_blue:
+    %cm_numfield("Decimal Blue", !sram_custompalette_blue, 0, 31, 1, #0)
 
 
 CustomPalettesMenuOld:
