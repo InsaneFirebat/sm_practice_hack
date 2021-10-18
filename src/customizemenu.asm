@@ -2,12 +2,6 @@
 ; Macros
 ; ------
 
-macro palettemenu()
-    dw #custompalettes_red
-    dw #custompalettes_green
-    dw #custompalettes_blue
-endmacro
-
 macro examplemenu()
     dw #ifb_notext
     dw #ifb_notext
@@ -19,6 +13,24 @@ macro examplemenu()
     dw #ifb_dummy_off
     dw #ifb_dummy_hexnum
     dw #ifb_dummy_num
+endmacro
+
+macro palettemenu(header, mix, hi, lo)
+    dw #custompalettes_red
+    dw #custompalettes_green
+    dw #custompalettes_blue
+    dw #<mix>
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #<hi>
+    dw #<lo>
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    dw #ifb_notext
+    %examplemenu()
+    dw #$0000
+    %cm_header("<header>")
 endmacro
 
 macro cm_mixcolor(addr, addr_hi, addr_lo)
@@ -118,11 +130,7 @@ custompalettes_menutext:
     %cm_submenu("Text", #CustomPalettesMenu_menutext)
 
 CustomPalettesMenu_menutext:
-    %palettemenu()
-    dw #custompalettes_mix_text
-    %examplemenu()
-    dw #$0000
-    %cm_header("TEXT")
+    %palettemenu("TEXT", custompalettes_mix_text, custompalettes_menutext_hi, custompalettes_menutext_lo)
 
 custompalettes_mix_text:
     %cm_mixcolor(!sram_custompalette_menutext, !sram_custompalette_menutext_hi, !sram_custompalette_menutext_lo)
@@ -132,11 +140,7 @@ custompalettes_menuseltext:
     %cm_submenu("Selected Text", #CustomPalettesMenu_menuseltext)
 
 CustomPalettesMenu_menuseltext:
-    %palettemenu()
-    dw #custompalettes_mix_seltext
-    %examplemenu()
-    dw #$0000
-    %cm_header("SELECTED TEXT")
+    %palettemenu("SELECTED TEXT", custompalettes_mix_seltext, custompalettes_menuseltext_hi, custompalettes_menuseltext_lo)
 
 custompalettes_mix_seltext:
     %cm_mixcolor(!sram_custompalette_menuseltext, !sram_custompalette_menuseltext_hi, !sram_custompalette_menuseltext_lo)
@@ -146,11 +150,7 @@ custompalettes_menuseltextbg:
     %cm_submenu("Selected Text Background", #CustomPalettesMenu_menuseltextbg)
 
 CustomPalettesMenu_menuseltextbg:
-    %palettemenu()
-    dw #custompalettes_mix_seltextbg
-    %examplemenu()
-    dw #$0000
-    %cm_header("SELECTED TEXT BACKGROUND")
+    %palettemenu("SELECTED TEXT BACKGROUND", custompalettes_mix_seltextbg, custompalettes_menuseltextbg_hi, custompalettes_menuseltextbg_lo)
 
 custompalettes_mix_seltextbg:
     %cm_mixcolor(!sram_custompalette_menuseltextbg, !sram_custompalette_menuseltextbg_hi, !sram_custompalette_menuseltextbg_lo)
@@ -160,11 +160,7 @@ custompalettes_menuheaderoutline:
     %cm_submenu("Header Outline", #CustomPalettesMenu_menuheaderoutline)
 
 CustomPalettesMenu_menuheaderoutline:
-    %palettemenu()
-    dw #custompalettes_mix_headeroutline
-    %examplemenu()
-    dw #$0000
-    %cm_header("HEADER OUTLINE")
+    %palettemenu("HEADER OUTLINE", custompalettes_mix_headeroutline, custompalettes_menuheaderoutline_hi, custompalettes_menuheaderoutline_lo)
 
 custompalettes_mix_headeroutline:
     %cm_mixcolor(!sram_custompalette_menuheaderoutline, !sram_custompalette_menuheaderoutline_hi, !sram_custompalette_menuheaderoutline_lo)
@@ -174,11 +170,7 @@ custompalettes_menunumfill:
     %cm_submenu("Number Field Text", #CustomPalettesMenu_menunumfill)
 
 CustomPalettesMenu_menunumfill:
-    %palettemenu()
-    dw #custompalettes_mix_numfill
-    %examplemenu()
-    dw #$0000
-    %cm_header("NUMBER FIELD TEXT")
+    %palettemenu("NUMBER FIELD TEXT", custompalettes_mix_numfill, custompalettes_menunumfill_hi, custompalettes_menunumfill_lo)
 
 custompalettes_mix_numfill:
     %cm_mixcolor(!sram_custompalette_menunumfill, !sram_custompalette_menunumfill_hi, !sram_custompalette_menunumfill_lo)
@@ -188,11 +180,7 @@ custompalettes_menunumoutline:
     %cm_submenu("Number Field Outline", #CustomPalettesMenu_menunumoutline)
 
 CustomPalettesMenu_menunumoutline:
-    %palettemenu()
-    dw #custompalettes_mix_numoutline
-    %examplemenu()
-    dw #$0000
-    %cm_header("NUMBER FIELD OUTLINE")
+    %palettemenu("NUMBER FIELD OUTLINE", custompalettes_mix_numoutline, custompalettes_menunumoutline_hi, custompalettes_menunumoutline_lo)
 
 custompalettes_mix_numoutline:
     %cm_mixcolor(!sram_custompalette_menunumoutline, !sram_custompalette_menunumoutline_hi, !sram_custompalette_menunumoutline_lo)
@@ -202,11 +190,7 @@ custompalettes_menunumsel:
     %cm_submenu("Selected Num-Field Text", #CustomPalettesMenu_menunumsel)
 
 CustomPalettesMenu_menunumsel:
-    %palettemenu()
-    dw #custompalettes_mix_numsel
-    %examplemenu()
-    dw #$0000
-    %cm_header("SELECTED NUM-FIELD TEXT")
+    %palettemenu("SELECTED NUM-FIELD TEXT", custompalettes_mix_numsel, custompalettes_menunumsel_hi, custompalettes_menunumsel_lo)
 
 custompalettes_mix_numsel:
     %cm_mixcolor(!sram_custompalette_menunumsel, !sram_custompalette_menunumsel_hi, !sram_custompalette_menunumsel_lo)
@@ -216,11 +200,7 @@ custompalettes_menunumseloutline:
     %cm_submenu("Selected Num-Field Outline", #CustomPalettesMenu_menunumseloutline)
 
 CustomPalettesMenu_menunumseloutline:
-    %palettemenu()
-    dw #custompalettes_mix_numseloutline
-    %examplemenu()
-    dw #$0000
-    %cm_header("SELECTED NUM-FIELD OUTLINE")
+    %palettemenu("SELECTED NUM-FIELD OUTLINE", custompalettes_mix_numseloutline, custompalettes_menunumseloutline_hi, custompalettes_menunumseloutline_lo)
 
 custompalettes_mix_numseloutline:
     %cm_mixcolor(!sram_custompalette_menunumseloutline, !sram_custompalette_menunumseloutline_hi, !sram_custompalette_menunumseloutline_lo)
@@ -230,11 +210,7 @@ custompalettes_menutoggleon:
     %cm_submenu("Toggle ON", #CustomPalettesMenu_menutoggleon)
 
 CustomPalettesMenu_menutoggleon:
-    %palettemenu()
-    dw #custompalettes_mix_toggleon
-    %examplemenu()
-    dw #$0000
-    %cm_header("TOGGLE ON")
+    %palettemenu("TOGGLE ON", custompalettes_mix_toggleon, custompalettes_menutoggleon_hi, custompalettes_menutoggleon_lo)
 
 custompalettes_mix_toggleon:
     %cm_mixcolor(!sram_custompalette_menutoggleon, !sram_custompalette_menutoggleon_hi, !sram_custompalette_menutoggleon_lo)
@@ -244,11 +220,7 @@ custompalettes_menuborder:
     %cm_submenu("Toggle OFF + Border", #CustomPalettesMenu_menuborder)
 
 CustomPalettesMenu_menuborder:
-    %palettemenu()
-    dw #custompalettes_mix_border
-    %examplemenu()
-    dw #$0000
-    %cm_header("TOGGLE OFF AND BORDER")
+    %palettemenu("TOGGLE OFF AND BORDER", custompalettes_mix_border, custompalettes_menuborder_hi, custompalettes_menuborder_lo)
 
 custompalettes_mix_border:
     %cm_mixcolor(!sram_custompalette_menuborder, !sram_custompalette_menuborder_hi, !sram_custompalette_menuborder_lo)
@@ -258,11 +230,7 @@ custompalettes_menubackground:
     %cm_submenu("Background", #CustomPalettesMenu_menubackground)
 
 CustomPalettesMenu_menubackground:
-    %palettemenu()
-    dw #custompalettes_mix_background
-    %examplemenu()
-    dw #$0000
-    %cm_header("BACKGROUND")
+    %palettemenu("BACKGROUND", custompalettes_mix_background, custompalettes_menubackground_hi, custompalettes_menubackground_lo)
 
 custompalettes_mix_background:
     %cm_mixcolor(!sram_custompalette_menubackground, !sram_custompalette_menubackground_hi, !sram_custompalette_menubackground_lo)
