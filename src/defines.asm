@@ -152,6 +152,7 @@
 !ACTION_NUMFIELD_HEX    = #$000C
 !ACTION_NUMFIELD_WORD   = #$000E
 !ACTION_TOGGLE_INVERTED = #$0010
+!ACTION_NUMFIELD_COLOR  = #$0012
 !ACTION_JSR_NOSOUND     = #$0004
 
 ; using macros instead of these in custom builds

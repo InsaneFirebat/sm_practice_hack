@@ -237,13 +237,13 @@ custompalettes_mix_background:
 
 
 custompalettes_red:
-    %cm_numfield("Red", !sram_custompalette_red, 0, 31, 1, #0)
+    %cm_numfield_color("Red", !sram_custompalette_red, #0)
 
 custompalettes_green:
-    %cm_numfield("Green", !sram_custompalette_green, 0, 31, 1, #0)
+    %cm_numfield_color("Green", !sram_custompalette_green, #0)
 
 custompalettes_blue:
-    %cm_numfield("Blue", !sram_custompalette_blue, 0, 31, 1, #0)
+    %cm_numfield_color("Blue", !sram_custompalette_blue, #0)
 
 
 CustomPalettesMenuOld:
