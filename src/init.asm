@@ -67,7 +67,7 @@ init_sram:
     LDA #$0000 : STA !sram_ctrl_kill_enemies
     LDA #$0000 : STA !sram_ctrl_reset_segment_timer
     LDA #$0000 : STA !sram_ctrl_reset_segment_later
-    LDA #$8470 : STA !sram_ctrl_reveal_damage          ; Down + L + R + B + X
+    LDA #$0000 : STA !sram_ctrl_reveal_damage
     LDA #$C930 : STA !sram_ctrl_random_preset          ; Up + Right + L + R + Y + B
     LDA #$0000 : STA !sram_ctrl_randomize_rng
     LDA #$0000 : STA !sram_ctrl_save_custom_preset
