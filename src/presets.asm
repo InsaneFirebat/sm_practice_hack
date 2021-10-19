@@ -525,6 +525,7 @@ add_grapple_and_xray_to_hud:
 print pc, " preset_start_gameplay end"
 warnpc $80FC00
 
+
 ; $80:9AB1: Add x-ray and grapple HUD items if necessary
 org $809AB1
     ; Skip x-ray and grapple if max HP is a multiple of 4,
