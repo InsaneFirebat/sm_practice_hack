@@ -1,3 +1,16 @@
+; ---------------
+; Compiler Flags
+; ---------------
+
+!FEATURE_SD2SNES ?= 0
+!FEATURE_PAL ?= 0
+!FEATURE_EXTRAS ?= 0
+!ORIGINAL_MESSAGE_TEXT ?= 0
+
+; ----
+; RAM
+; ----
+
 !ram_load_preset = $7FFB00
 
 !ram_gametime_room = $7FFB02
@@ -112,9 +125,9 @@
 !ram_watch_edit_lock_right = $7FFBFE
 
 
-; -------------
+; -----
 ; Menu
-; -------------
+; -----
 
 !ram_cm_stack_index = $5D5
 !ram_cm_menu_stack = $7FFF00 ; 0x10
@@ -160,9 +173,9 @@
 !SOUND_MENU_JSR = $0039
 
 
-; ------------
+; ---------
 ; Pointers
-; ------------
+; ---------
 
 !IH_CONTROLLER_PRI = $8B
 !IH_CONTROLLER_PRI_NEW = $8F
@@ -357,9 +370,9 @@ endif
 !ram_soundtest_music = $7FFCFE
 
 
-; ------------
+; ---------
 ; Pointers
-; ------------
+; ---------
 
 !ram_game_loop_extras = $0A00
 
