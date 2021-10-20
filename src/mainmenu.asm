@@ -189,7 +189,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD V2.2.8.7")
+    %cm_header("SM PRACTICE HACK 2.3.0")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -364,7 +364,7 @@ action_save_custom_preset:
 {
     JSL custom_preset_save
     LDA #$0001 : STA !ram_cm_leave
-    %sfxconfirm()
+    LDA #!SOUND_MENU_MOVE : JSL !SFX_LIB1
     RTS
 }
 
@@ -374,7 +374,7 @@ action_load_custom_preset:
     LDA !sram_custom_preset_slot
     ASL : XBA : TAX
     LDA $703000,X : CMP #$5AFE : BEQ .safe
-    %sfxgoback()
+    LDA #!SOUND_MENU_FAIL : JSL !SFX_LIB1
     RTS
 
   .safe
@@ -2013,26 +2013,28 @@ rng_kraid_rng:
 
 CtrlMenu:
     dw #ctrl_menu
-    if !FEATURE_SD2SNES
-        dw #ctrl_save_state
-        dw #ctrl_load_state
-    endif
+if !FEATURE_SD2SNES
+    dw #ctrl_save_state
+    dw #ctrl_load_state
+endif
     dw #ctrl_load_last_preset
+    dw #ctrl_random_preset
     dw #ctrl_save_custom_preset
     dw #ctrl_load_custom_preset
     dw #ctrl_inc_custom_preset
     dw #ctrl_dec_custom_preset
-    dw #ctrl_random_preset
     dw #ctrl_reset_segment_timer
     dw #ctrl_reset_segment_later
     dw #ctrl_full_equipment
     dw #ctrl_kill_enemies
     dw #ctrl_reveal_damage
+if !FEATURE_SD2SNES
+else
     dw #ctrl_randomize_rng
+endif
     dw #ctrl_clear_shortcuts
     dw #$0000
     %cm_header("CONTROLLER SHORTCUTS")
-
 
 ctrl_menu:
     %cm_ctrl_shortcut("Main menu", !sram_ctrl_menu)
@@ -2085,7 +2087,7 @@ ctrl_clear_shortcuts:
 action_clear_shortcuts:
 {
     TYA
-    STA !ram_gamemode_extras
+    STA !ram_game_mode_extras
     STA !sram_ctrl_save_state
     STA !sram_ctrl_load_state
     STA !sram_ctrl_load_last_preset
@@ -2106,9 +2108,20 @@ action_clear_shortcuts:
     RTS
 }
 
+GameModeExtras:
+{
+    ; Check if any less common shortcuts are configured
+    LDA !sram_ctrl_reset_segment_timer : BNE .enabled
+    LDA !sram_ctrl_reset_segment_later : BNE .enabled
+    LDA !sram_ctrl_kill_enemies : BNE .enabled
+    LDA !sram_ctrl_full_equipment : BNE .enabled
+    LDA !sram_ctrl_save_custom_preset : BNE .enabled
+    LDA !sram_ctrl_load_custom_preset : BNE .enabled
+    LDA !sram_ctrl_inc_custom_preset : BNE .enabled
+    LDA !sram_ctrl_dec_custom_preset : BNE .enabled
+    RTL
 
-; ----------
-; Firebat Menu   IFBMenu:
-; ----------
-
-incsrc IFBmenu.asm
+  .enabled
+    STA !ram_game_mode_extras
+    RTL
+}

@@ -68,10 +68,11 @@
 !ram_draygon_rng_right = $7FFB6A
 
 !ram_game_loop_extras = $7FFB6C
-!ram_gamemode_extras = $7FFB6E
+!ram_game_mode_extras = $7FFB6E
 
 !ram_metronome = $7FFB70
 !ram_metronome_counter = $7FFB72
+
 
 ; FREE SPACE ^
 
@@ -171,6 +172,7 @@
 ; using macros instead of these in custom builds
 !SOUND_MENU_MOVE = $0039
 !SOUND_MENU_JSR = $0039
+!SOUND_MENU_FAIL = $0007
 
 
 ; ---------
@@ -263,11 +265,11 @@
 !sram_last_preset = $70202C
 !sram_save_has_set_rng = $70202E
 !sram_preset_category = $702030
-!sram_room_strat = $702032
-!sram_sprite_prio_flag = $702034
-!sram_metronome_tickrate = $702036
-!sram_metronome_sfx = $702038
-!sram_custom_preset_slot = $70203A
+!sram_custom_preset_slot = $702032
+!sram_room_strat = $702034
+!sram_sprite_prio_flag = $702036
+!sram_metronome_tickrate = $702038
+!sram_metronome_sfx = $70203A
 
 ; FREE SPACE ^
 

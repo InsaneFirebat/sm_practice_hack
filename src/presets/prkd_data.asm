@@ -2211,7 +2211,7 @@ preset_prkd_maridia_aqueduct:
     dl $7E0911 : db $02 : dw $0006 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $F001 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $0300 ; Screen Y position in pixels
-    dl $7E09D2 : db $02 : dw $0003 ; Currently selected item
+    dl $7E09D2 : db $02 : dw $0002 ; Currently selected item
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
     dl $7E0AF6 : db $02 : dw $0078 ; Samus X
