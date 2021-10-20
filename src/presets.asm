@@ -541,6 +541,10 @@ org $809AC9
   .resume_infohud_icon_initialization
 
 
+; -------------------
+; Category Menus/Data
+; -------------------
+
 org $F18000    ; 7603h bytes used / 9FEh bytes free
 incsrc presets/prkd_menu.asm   ; E6Ah bytes
 incsrc presets/kpdr22_menu.asm   ; F91h bytes
