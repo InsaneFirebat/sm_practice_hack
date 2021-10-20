@@ -1076,9 +1076,9 @@ ih_game_loop_code:
 
   .checkpants
     if !FEATURE_EXTRAS
-    +   LDA !ram_magic_pants_enabled : BEQ .infiniteammo
+    +   LDA !ram_magic_pants_enabled : AND #$0003 : BEQ .infiniteammo
     else
-    +   LDA !ram_magic_pants_enabled : BEQ .handleinputs
+    +   LDA !ram_magic_pants_enabled : AND #$0003 : BEQ .handleinputs
     endif
     CMP #$0001 : BEQ .magicpants
     CMP #$0002 : BEQ .spacepants
@@ -1208,11 +1208,11 @@ metronome:
     LDA !sram_metronome_sfx : ASL : TAX
     LDA.l MetronomeSFX,X : JSL !SFX_LIB1
     RTS
+}
 
 MetronomeSFX:
     ; missile, click, beep, shot, spazer
     dw #$0003, #$0039, #$0036, #$000B, #$000F
-}
 
 magic_pants:
 {
@@ -1229,11 +1229,17 @@ magic_pants:
     RTS
 
   .flash
-    LDA !ram_magic_pants_state : BNE +
-    LDA $7EC194 : STA !ram_magic_pants_pal1
+    LDA !ram_magic_pants_state : BNE ++
+
+    ; if loudpants are enabled, click
+    LDA !ram_magic_pants_enabled : AND #$0004 : BEQ +
+    LDA !sram_metronome_sfx : ASL : TAX
+    LDA.l MetronomeSFX,X : JSL !SFX_LIB1
+
++   LDA $7EC194 : STA !ram_magic_pants_pal1
     LDA $7EC196 : STA !ram_magic_pants_pal2
     LDA $7EC19E : STA !ram_magic_pants_pal3
-+   LDA #$FFFF
+++  LDA #$FFFF
     STA $7EC194 : STA $7EC196 : STA $7EC19E
     STA !ram_magic_pants_state
     RTS
@@ -1273,8 +1279,14 @@ space_pants:
 
   .flash
     LDA !ram_magic_pants_state : BNE .done
+
+    ; if loudpants are enabled, click
+    LDA !ram_magic_pants_enabled : AND #$0004 : BEQ +
+    LDA !sram_metronome_sfx : ASL : TAX
+    LDA.l MetronomeSFX,X : JSL !SFX_LIB1
+
     ; preserve palettes first
-    LDA $7EC194 : STA !ram_magic_pants_pal1
++   LDA $7EC194 : STA !ram_magic_pants_pal1
     LDA $7EC196 : STA !ram_magic_pants_pal2
     LDA $7EC198 : STA !ram_magic_pants_pal3
     ; then flash
