@@ -1135,6 +1135,8 @@ InfoHudMenu:
     dw #ih_reset_seg_later
     dw #ih_lag
     dw #ih_ram_watch
+    dw #ih_show_hitbox
+    dw #ih_oob_viewer
     dw #$0000
     %cm_header("INFOHUD")
 
@@ -1664,6 +1666,21 @@ action_enable_superhud:
 
 ih_ram_watch:
     %cm_submenu("Customize RAM Watch", #RAMWatchMenu)
+
+ih_show_hitbox:
+    %cm_toggle("Show Samus Hitbox", !ram_sprite_hitbox_active, #1, #0)
+
+ih_oob_viewer:
+    %cm_toggle("OOB Tile Viewer", !ram_oob_watch_active, #1, #toggle_oob_viewer)
+
+toggle_oob_viewer:
+{
+    LDA !ram_oob_watch_active
+    BEQ +
+        JSL upload_sprite_oob_tiles
+    +
+    RTS
+}
 
 RAMWatchMenu:
     dw ramwatch_left_hi

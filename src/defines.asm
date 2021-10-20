@@ -47,7 +47,10 @@
 !ram_minimap = $7FFB36
 !ram_map_counter = $7FFB38
 !ram_vcounter_data = $7FFB3A
-!ram_custom_preset = $7FFB3C
+!ram_sprite_hitbox_active = $7FFB3E
+!ram_oob_watch_active = $7FFB40
+!ram_oob_watch_lag_backup = $7FFB42
+!ram_custom_preset = $7FFB44
 
 ; FREE SPACE ^
 
