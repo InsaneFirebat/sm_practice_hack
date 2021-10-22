@@ -32,6 +32,13 @@ macro cm_numfield_hex(title, addr, start, end, increment, jsrtarget)
     db #$28, "<title>", #$FF
 endmacro
 
+macro cm_numfield_color(title, addr, jsrtarget)
+    dw !ACTION_NUMFIELD_COLOR
+    dl <addr>
+    dw <jsrtarget>
+    db #$28, "<title>", #$FF
+endmacro
+
 macro cm_toggle(title, addr, value, jsrtarget)
     dw !ACTION_TOGGLE
     dl <addr>
@@ -147,7 +154,7 @@ mm_goto_presets:
     %cm_jsr("Category Presets", #action_presets_submenu, #$0000)
 
 mm_goto_presets_menu:
-    %cm_submenu("Presets Menu", #PresetsMenu)
+    %cm_submenu("Preset Options", #PresetsMenu)
 
 mm_goto_teleport:
     %cm_submenu("Teleport", #TeleportMenu)
@@ -188,7 +195,7 @@ presets_goto_select_preset_category:
     %cm_submenu("Select Preset Category", #SelectPresetCategoryMenu)
 
 presets_custom_preset_slot:
-    %cm_numfield("Custom Preset Slot", !sram_custom_preset_slot, 0, 39, 1, #0) ; update max slots in gamemode.asm
+    %cm_numfield("Custom Preset Slot", !sram_custom_preset_slot, 0, 39, 1, #0) ; update total slots in gamemode.asm
 
 presets_save_custom_preset:
     %cm_jsr("Save Custom Preset", #action_save_custom_preset, #$0000)
@@ -199,6 +206,21 @@ presets_load_custom_preset:
 SelectPresetCategoryMenu:
     dw #presets_current
     dw #precat_prkd
+    dw #precat_kpdr21
+    dw #precat_hundo
+    dw #precat_100early
+    dw #precat_rbo
+    dw #precat_pkrd
+    dw #precat_kpdr25
+    dw #precat_gtclassic
+    dw #precat_gtmax
+    dw #precat_14ice
+    dw #precat_14speed
+    dw #precat_100map
+    dw #precat_nintendopower
+    dw #precat_allbosskpdr
+    dw #precat_allbosspkdr
+    dw #precat_allbossprkd
     dw #$0000
     %cm_header("SELECT PRESET CATEGORY")
 
@@ -207,11 +229,11 @@ presets_current:
     dl #!sram_preset_category
     dw #$0000
     db #$28, "CURRENT PRESET", #$FF
-        db #$28, "  ANY% PRKD", #$FF
+        db #$28, "PLACEHOLDER", #$FF
     db #$FF
 
 precat_prkd:
-    %cm_jsr("Any% PRKD", #action_select_preset_category, #$0000)
+    %cm_jsr("Any% PRKD (Placeholder)", #action_select_preset_category, #$0000)
 
 action_select_preset_category:
 {
@@ -225,7 +247,7 @@ action_save_custom_preset:
 {
     JSL custom_preset_save
     LDA #$0001 : STA !ram_cm_leave
-    LDA #!SOUND_MENU_MOVE : JSL $80903F
+    LDA #!SOUND_MENU_MOVE : JSL !SFX_LIB1
     RTS
 }
 
@@ -235,7 +257,7 @@ action_load_custom_preset:
     LDA !sram_custom_preset_slot
     ASL : XBA : TAX
     LDA $703000,X : CMP #$5AFE : BEQ .safe
-    LDA #$0007 : JSL $80903F
+    LDA #!SOUND_MENU_FAIL : JSL !SFX_LIB1
     RTS
 
   .safe
@@ -807,6 +829,7 @@ MiscMenu:
     dw #misc_babyslowdown
     dw #misc_magicpants
     dw #misc_spacepants
+    dw #misc_loudpants
     dw #misc_fanfare_toggle
     dw #misc_music_toggle
     dw #misc_transparent
@@ -831,6 +854,9 @@ misc_magicpants:
 
 misc_spacepants:
     %cm_toggle_bit("Space Pants", !ram_magic_pants_enabled, #$0002, GameLoopExtras)
+
+misc_loudpants:
+    %cm_toggle_bit("Loud Pants", !ram_magic_pants_enabled, #$0004, GameLoopExtras)
 
 misc_fanfare_toggle:
     %cm_toggle("Fanfare", !sram_fanfare_toggle, #$0001, #0)
@@ -1042,6 +1068,8 @@ InfoHudMenu:
     dw #ih_reset_seg_later
     dw #ih_lag
     dw #ih_ram_watch
+    dw #ih_show_hitbox
+    dw #ih_oob_viewer
     dw #$0000
     %cm_header("INFOHUD")
 
@@ -1245,6 +1273,21 @@ ih_reset_seg_later:
 
 ih_ram_watch:
     %cm_submenu("Customize RAM Watch", #RAMWatchMenu)
+
+ih_show_hitbox:
+    %cm_toggle("Show Samus Hitbox", !ram_sprite_hitbox_active, #1, #0)
+
+ih_oob_viewer:
+    %cm_toggle("OOB Tile Viewer", !ram_oob_watch_active, #1, #toggle_oob_viewer)
+
+toggle_oob_viewer:
+{
+    LDA !ram_oob_watch_active
+    BEQ +
+        JSL upload_sprite_oob_tiles
+    +
+    RTS
+}
 
 RAMWatchMenu:
     dw ramwatch_left_hi
@@ -1565,11 +1608,11 @@ CtrlMenu:
         dw #ctrl_load_state
     endif
     dw #ctrl_load_last_preset
+    dw #ctrl_random_preset
     dw #ctrl_save_custom_preset
     dw #ctrl_load_custom_preset
     dw #ctrl_inc_custom_preset
     dw #ctrl_dec_custom_preset
-    dw #ctrl_random_preset
     dw #ctrl_reset_segment_timer
     dw #ctrl_reset_segment_later
     dw #ctrl_full_equipment
@@ -1577,7 +1620,6 @@ CtrlMenu:
     dw #ctrl_clear_shortcuts
     dw #$0000
     %cm_header("CONTROLLER SHORTCUTS")
-
 
 ctrl_menu:
     %cm_ctrl_shortcut("Main menu", !sram_ctrl_menu)
@@ -1624,7 +1666,7 @@ ctrl_clear_shortcuts:
 action_clear_shortcuts:
 {
     TYA
-    STA !ram_gamemode_extras
+    STA !ram_game_mode_extras
     STA !sram_ctrl_save_state
     STA !sram_ctrl_load_state
     STA !sram_ctrl_load_last_preset
@@ -1640,4 +1682,22 @@ action_clear_shortcuts:
     ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
     RTS
+}
+
+GameModeExtras:
+{
+    ; Check if any less common shortcuts are configured
+    LDA !sram_ctrl_reset_segment_timer : BNE .enabled
+    LDA !sram_ctrl_reset_segment_later : BNE .enabled
+    LDA !sram_ctrl_kill_enemies : BNE .enabled
+    LDA !sram_ctrl_full_equipment : BNE .enabled
+    LDA !sram_ctrl_save_custom_preset : BNE .enabled
+    LDA !sram_ctrl_load_custom_preset : BNE .enabled
+    LDA !sram_ctrl_inc_custom_preset : BNE .enabled
+    LDA !sram_ctrl_dec_custom_preset : BNE .enabled
+    RTL
+
+  .enabled
+    STA !ram_game_mode_extras
+    RTL
 }
