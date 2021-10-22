@@ -1,3 +1,12 @@
+; ---------------
+; Compiler Flags
+; ---------------
+!ORIGINAL_MESSAGE_TEXT ?= 0
+
+; ----
+; RAM
+; ----
+
 !ram_load_preset = $7FFB00
 
 !ram_gametime_room = $7FFB02
@@ -37,6 +46,8 @@
 !ram_custom_preset = $7FFB3C
 !ram_tel_debug_area = $7FFB3E
 !ram_tel_debug_station = $7FFB40
+!ram_sprite_hitbox_active = $7FFB42
+!ram_oob_watch_active = $7FFB44
 
 ; FREE SPACE ^
 
@@ -57,7 +68,7 @@
 !ram_draygon_rng_right = $7FFB6A
 
 !ram_game_loop_extras = $7FFB6C
-!ram_gamemode_extras = $7FFB6E
+!ram_game_mode_extras = $7FFB6E
 
 !ram_metronome = $7FFB70
 !ram_metronome_counter = $7FFB72
@@ -115,9 +126,9 @@
 !ram_watch_edit_lock_right = $7FFBFE
 
 
-; -------------
+; -----
 ; Menu
-; -------------
+; -----
 
 !ram_cm_stack_index = $5D5
 !ram_cm_menu_stack = $7FFF00 ; 0x10
@@ -155,14 +166,16 @@
 !ACTION_NUMFIELD_HEX    = #$000C
 !ACTION_NUMFIELD_WORD   = #$000E
 !ACTION_TOGGLE_INVERTED = #$0010
+!ACTION_NUMFIELD_COLOR  = #$0012
 
 !SOUND_MENU_MOVE = $0039
 !SOUND_MENU_JSR = $0039
+!SOUND_MENU_FAIL = $0007
 
 
-; ------------
+; ---------
 ; Pointers
-; ------------
+; ---------
 
 !IH_CONTROLLER_PRI = $8B
 !IH_CONTROLLER_PRI_NEW = $8F
@@ -224,15 +237,15 @@
 !sram_ctrl_kill_enemies = $702A04
 !sram_ctrl_full_equipment = $702A06
 !sram_ctrl_reset_segment_timer = $702A08
-!sram_ctrl_load_state = $702A0A
-!sram_ctrl_save_state = $702A0C
-!sram_ctrl_load_last_preset = $702A0E
-!sram_ctrl_random_preset = $702A10
-!sram_ctrl_save_custom_preset = $702A12
-!sram_ctrl_load_custom_preset = $702A14
+!sram_ctrl_reset_segment_later = $702A0A
+!sram_ctrl_load_state = $702A0C
+!sram_ctrl_save_state = $702A0E
+!sram_ctrl_load_last_preset = $702A10
+!sram_ctrl_random_preset = $702A12
+!sram_ctrl_save_custom_preset = $702A14
+!sram_ctrl_load_custom_preset = $702A16
 !sram_ctrl_inc_custom_preset = $702A18
 !sram_ctrl_dec_custom_preset = $702A1A
-!sram_ctrl_reset_segment_later = $702A1C
 
 ; FREE SPACE ^
 
@@ -245,11 +258,11 @@
 !sram_last_preset = $702A2C
 !sram_save_has_set_rng = $702A2E
 !sram_preset_category = $702A30
-!sram_room_strat = $702A32
-!sram_sprite_prio_flag = $702A34
-!sram_metronome_tickrate = $702A36
-!sram_metronome_sfx = $702A38
-!sram_custom_preset_slot = $702A3A
+!sram_custom_preset_slot = $702A32
+!sram_room_strat = $702A34
+!sram_sprite_prio_flag = $702A36
+!sram_metronome_tickrate = $702A38
+!sram_metronome_sfx = $702A3A
 
 ; FREE SPACE ^
 

@@ -121,6 +121,7 @@ org $A2AA20      ; update timers when Samus enters ship
 
 
 ; Main bank stuff
+;org $F08000
 org $FE8000
 print pc, " infohud start"
 ih_max_etank_code:
@@ -342,7 +343,7 @@ ih_elevator_activation:
 ih_mb1_segment:
 {
     ; runs during MB1 cutscene when you regain control of Samus, just before music change
-    JSL $90F084    ; we overwrote this instruction to get here
+    JSL $90F084 ; overwritten code
 
     JML ih_update_hud_early
 }
@@ -658,7 +659,7 @@ ih_hud_code:
 ++  STA $7EC608, X
     INX
     INX
-    CPX #$00C
+    CPX #$000C
     BNE -
 
     LDX #$0000
@@ -910,6 +911,7 @@ CalcItem:
 CalcLargeItem:
 {
     LDA $09A4
+    AND #$F32F ; GT Code adds an unused item (10h)
     LDX #$0000
   .loop
     BIT #$0001 : BEQ .noItem
@@ -959,7 +961,7 @@ ih_game_loop_code:
     LDA !ram_metronome : BEQ +
     JSR metronome
 
-+   LDA !ram_magic_pants_enabled : BEQ .handleinputs
++   LDA !ram_magic_pants_enabled : AND #$0003 : BEQ .handleinputs
     CMP #$0001 : BEQ .magicpants
     CMP #$0002 : BEQ .spacepants
 
@@ -1068,11 +1070,11 @@ metronome:
     LDA !sram_metronome_sfx : ASL : TAX
     LDA.l MetronomeSFX,X : JSL !SFX_LIB1
     RTS
+}
 
 MetronomeSFX:
     ; missile, click, beep, shot, spazer
     dw #$0003, #$0039, #$0036, #$000B, #$000F
-}
 
 magic_pants:
 {
@@ -1090,11 +1092,17 @@ magic_pants:
     RTS
 
   .flash
-    LDA !ram_magic_pants_state : BNE +
-    LDA $7EC194 : STA !ram_magic_pants_pal1
+    LDA !ram_magic_pants_state : BNE ++
+
+    ; if loudpants are enabled, click
+    LDA !ram_magic_pants_enabled : AND #$0004 : BEQ +
+    LDA !sram_metronome_sfx : ASL : TAX
+    LDA.l MetronomeSFX,X : JSL !SFX_LIB1
+
++   LDA $7EC194 : STA !ram_magic_pants_pal1
     LDA $7EC196 : STA !ram_magic_pants_pal2
     LDA $7EC19E : STA !ram_magic_pants_pal3
-+   LDA #$FFFF
+++  LDA #$FFFF
     STA $7EC194 : STA $7EC196 : STA $7EC19E
     STA !ram_magic_pants_state
     RTS
@@ -1136,8 +1144,14 @@ space_pants:
 ; Screw Attack seems to write new palette data every frame, which overwrites the flash
   .flash
     LDA !ram_magic_pants_state : BNE .done
+
+    ; if loudpants are enabled, click
+    LDA !ram_magic_pants_enabled : AND #$0004 : BEQ +
+    LDA !sram_metronome_sfx : ASL : TAX
+    LDA.l MetronomeSFX,X : JSL !SFX_LIB1
+
     ; preserve palettes first
-    LDA $7EC194 : STA !ram_magic_pants_pal1
++   LDA $7EC194 : STA !ram_magic_pants_pal1
     LDA $7EC196 : STA !ram_magic_pants_pal2
     LDA $7EC198 : STA !ram_magic_pants_pal3
     ; then flash
@@ -1201,6 +1215,7 @@ post_ceres_timers:
 }
 
 print pc, " infohud end"
+warnpc $F0E000
 
 
 ; Stuff that needs to be placed in bank 80

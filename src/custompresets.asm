@@ -2,13 +2,13 @@
 ; Custom Presets
 ; --------------
 
+print pc, " custom presets start"
 custom_preset_save:
 {
-print pc, " custom presets start"
     LDA !sram_custom_preset_slot
-    ASL : XBA : TAX
-    LDA #$5AFE : STA $703000,X : INX #2 ; Mark this slot as "SAFE" to load
-    LDA #$01B0 : STA $703000,X : INX #2 ; Preset data size (for future compatibility)
+    ASL : XBA : TAX ; multiply by 200h (slot offset)
+    LDA #$5AFE : STA $703000,X : INX #2 ; mark this slot as "SAFE" to load
+    LDA #$01B0 : STA $703000,X : INX #2 ; record slot size for future compatibility
     LDA $078B : STA $703000,X : INX #2 ;  Elevator Index
     LDA $078D : STA $703000,X : INX #2 ;  DDB
     LDA $078F : STA $703000,X : INX #2 ;  DoorOut Index
@@ -30,7 +30,7 @@ print pc, " custom presets start"
     LDA $09A8 : STA $703000,X : INX #2 ;  Beams
     LDA $09C0 : STA $703000,X : INX #2 ;  Manual/Auto reserve tank
     LDA $09C2 : STA $703000,X : INX #2 ;  Health
-    LDA $09C4 : STA $703000,X : INX #2 ;  Max helath
+    LDA $09C4 : STA $703000,X : INX #2 ;  Max health
     LDA $09C6 : STA $703000,X : INX #2 ;  Missiles
     LDA $09C8 : STA $703000,X : INX #2 ;  Max missiles
     LDA $09CA : STA $703000,X : INX #2 ;  Supers
@@ -229,7 +229,7 @@ print pc, " custom presets start"
 custom_preset_load:
 {
     LDA !sram_custom_preset_slot
-    ASL : XBA : TAX
+    ASL : XBA : TAX ; multiply by 200h
     INX #2 ; skip past "5AFE" word
     INX #2 ; skip past size for now
     LDA $703000,X : STA $078B : INX #2 ;  Elevator Index
@@ -253,7 +253,7 @@ custom_preset_load:
     LDA $703000,X : STA $09A8 : INX #2 ;  Beams
     LDA $703000,X : STA $09C0 : INX #2 ;  Manual/Auto reserve tank
     LDA $703000,X : STA $09C2 : INX #2 ;  Health
-    LDA $703000,X : STA $09C4 : INX #2 ;  Max helath
+    LDA $703000,X : STA $09C4 : INX #2 ;  Max health
     LDA $703000,X : STA $09C6 : INX #2 ;  Missiles
     LDA $703000,X : STA $09C8 : INX #2 ;  Max missiles
     LDA $703000,X : STA $09CA : INX #2 ;  Supers
@@ -446,6 +446,7 @@ custom_preset_load:
     LDA $703000,X : STA $7ED91A : INX #2 ;  Events, Items, Doors
     LDA $703000,X : STA $7ED91C : INX #2 ;  Events, Items, Doors
     LDA $703000,X : STA $7ED91E : INX #2 ;  Events, Items, Doors
+    LDA #$0000 : STA !ram_custom_preset
     RTL
 }
 

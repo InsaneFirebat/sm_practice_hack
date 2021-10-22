@@ -16,8 +16,16 @@ endif
 org $82EEDF
     LDA #$C100
 
+; Fix Zebes planet tiling error
+org $8C9607
+    dw #$0E2F
+
 ; Skips the waiting time after teleporting
+if !FEATURE_PAL
+org $90E874
+else
 org $90E877
+endif
     BRA $1F
 
 
@@ -122,6 +130,9 @@ gamemode_end:
     ; If minimap is disabled or shown, we ignore artificial lag
     LDA $05F7 : BNE .endlag
     LDA !ram_minimap : BNE .endlag
+
+    ; Ignore artifical lag if OOB viewer is active
+    LDA !ram_oob_watch_active : BNE .endlag
 
     ; Artificial lag, multiplied by 16 to get loop count
     ; Each loop takes 5 clock cycles (assuming branch taken)

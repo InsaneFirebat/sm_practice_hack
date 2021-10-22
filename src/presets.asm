@@ -65,6 +65,11 @@ preset_load:
     ; Fix Samus' palette
     JSL $91DEBA
 
+    ; Re-upload OOB viewer tiles if needed
+    LDA !ram_oob_watch_active : BEQ +
+      JSL upload_sprite_oob_tiles
+    +
+
     LDA !SRAM_MUSIC_BANK
     CMP !MUSIC_BANK
     BEQ .load_music_track
@@ -88,8 +93,6 @@ preset_load:
 -   TAX : LDA $0F86,X : BIT #$8400 : BNE +
     ORA #$0200 : STA $0F86,X
 +   TXA : CLC : ADC #$0040 : CMP #$0400 : BNE -
-
-    LDA #$0000 : STA !ram_custom_preset
     PLP
     RTL
 }
@@ -278,29 +281,53 @@ preset_scroll_fixes:
     ; is normally hidden until passing over a red scroll block.
     ; These fixes can often be found in nearby door asm.
     PHP : %a8() : %i16()
-    LDX $079B : LDA #$01
+    LDA #$01 : LDX $079B      ; X = room ID
+    CPX #$C000 : BPL .halfway ; organized by room ID so we only have to check half
+
 +   CPX #$A011 : BNE +        ; bottom-left of Etecoons Etank
     STA $7ECD25 : STA $7ECD26
-    BRA .done
+    JMP .done
++   CPX #$AC83 : BNE +        ; left of Green Bubbles Missile Room (Norfair Reserve)
+    STA $7ECD20
+    JMP .done
 +   CPX #$AE32 : BNE +        ; bottom of Volcano Room
     STA $7ECD26
-    BRA .done
+    JMP .done
 +   CPX #$B07A : BNE +        ; top of Bat Cave
     STA $7ECD20
-    BRA .done
+    JMP .done
 +   CPX #$B1E5 : BNE +        ; bottom of Acid Chozo Room
     STA $7ECD26 : STA $7ECD27 : STA $7ECD28
     LDA #$00 : STA $7ECD23 : STA $7ECD24
-    BRA .done
+    JMP .done
 +   CPX #$B3A5 : BNE +        ; bottom of Pre-Pillars
+    LDY $0AFA : CPY #$0190    ; no scroll fix if Ypos < 400
+    BMI .done
     STA $7ECD22 : STA $7ECD24
     LDA #$00 : STA $7ECD21
+    JMP .done
++   CPX #$B4AD : BNE +        ; top of Worst Room in the Game
+    LDA #$02 : STA $7ECD20
+    JMP .done
+  .halfway
++   CPX #$CAF6 : BNE +        ; bottom of WS Shaft
+    LDA #$02
+    STA $7ECD48 : STA $7ECD4E
+    BRA .done
++   CPX #$CBD5 : BNE +        ; top of Electric Death Room (WS E-Tank)
+    LDA #$02
+    STA $7ECD20
     BRA .done
 +   CPX #$CC6F : BNE +        ; right of Basement (Phantoon)
     STA $7ECD24
     BRA .done
++   CPX #$D1A3 : BNE +        ; bottom of Crab Shaft
+    STA $7ECD26
+    LDA #$02 : STA $7ECD24
+    BRA .done
 +   CPX #$D48E : BNE +        ; Oasis (bottom of Toilet)
-    LDA #$02 : STA $7ECD20 : STA $7ECD21
+    LDA #$02
+    STA $7ECD20 : STA $7ECD21
     BRA .done
 +   CPX #$D8C5 : BNE .done    ; Pants Room (door to Shaktool)
     LDA #$00 : STA $7ECD22
