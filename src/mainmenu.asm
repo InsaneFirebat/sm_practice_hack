@@ -2144,3 +2144,11 @@ GameModeExtras:
     STA !ram_game_mode_extras
     RTL
 }
+
+
+; ----------
+; Firebat Menu   IFBMenu:
+; ----------
+
+incsrc IFBmenu.asm
+

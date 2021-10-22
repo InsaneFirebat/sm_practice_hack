@@ -1124,15 +1124,17 @@ endif
     LDA !IH_BLANK : STA $7EC688 : STA $7EC68A
     BRL .returnstart
 
+  .incstate
+    LDA !ram_roomstrat_state : INC : STA !ram_roomstrat_state
+    LDA #$0000 : STA !ram_roomstrat_counter
+    RTS
+
   .incleft
     ; Arbitrary wait of 64 frames before giving up
     LDA !ram_roomstrat_counter : CMP #$0040 : BPL .clearreturnstart
     INC : STA !ram_roomstrat_counter
-    RTS
 
-  .incstate
-    LDA !ram_roomstrat_state : INC : STA !ram_roomstrat_state
-    LDA #$0000 : STA !ram_roomstrat_counter
+  .donerising
     RTS
 
   .rising
