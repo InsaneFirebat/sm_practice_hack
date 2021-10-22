@@ -183,6 +183,7 @@ MainMenu:
     dw #mm_goto_teleport
     dw #mm_goto_events
     dw #mm_goto_misc
+    dw #mm_goto_sprites
     dw #mm_goto_infohud
     dw #mm_goto_gamemenu
     dw #mm_goto_rngmenu
@@ -208,6 +209,9 @@ mm_goto_events:
 
 mm_goto_misc:
     %cm_submenu("Misc Options", #MiscMenu)
+
+mm_goto_sprites:
+    %cm_submenu("Sprite Features", #SpritesMenu)
 
 mm_goto_infohud:
     %cm_submenu("InfoHUD", #InfoHudMenu)
@@ -858,7 +862,6 @@ MiscMenu:
     dw #misc_loudpants
     dw #misc_fanfare_toggle
     dw #misc_music_toggle
-    dw #misc_transparent
     dw #misc_invincibility
     dw #misc_infiniteammo
     dw #misc_magnetstairs
@@ -913,9 +916,6 @@ misc_music_toggle:
     STA $2140
     RTS
 
-misc_transparent:
-    %cm_toggle_bit("Samus on Top", !sram_sprite_prio_flag, #$3000, #0)
-
 misc_invincibility:
     %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
 
@@ -944,6 +944,34 @@ misc_magnetstairs:
 
       .done
         RTS
+
+
+; ---------------
+; Sprite Features
+; ---------------
+
+SpritesMenu:
+    dw #sprites_samus_prio
+    dw #sprites_show_hitbox
+    dw #sprites_oob_viewer
+    dw #$0000
+    %cm_header("SPRITE FEATURES")
+
+sprites_samus_prio:
+    %cm_toggle_bit("Samus on Top", !sram_sprite_prio_flag, #$3000, #0)
+
+sprites_show_hitbox:
+    %cm_toggle("Show Samus Hitbox", !ram_sprite_hitbox_active, #1, #0)
+
+sprites_oob_viewer:
+    %cm_toggle("OOB Tile Viewer", !ram_oob_watch_active, #1, #toggle_oob_viewer)
+
+toggle_oob_viewer:
+{
+    LDA !ram_oob_watch_active : BEQ +
+    JSL upload_sprite_oob_tiles
++   RTS
+}
 
 
 ; -----------
@@ -1135,8 +1163,6 @@ InfoHudMenu:
     dw #ih_reset_seg_later
     dw #ih_lag
     dw #ih_ram_watch
-    dw #ih_show_hitbox
-    dw #ih_oob_viewer
     dw #$0000
     %cm_header("INFOHUD")
 
@@ -1666,21 +1692,6 @@ action_enable_superhud:
 
 ih_ram_watch:
     %cm_submenu("Customize RAM Watch", #RAMWatchMenu)
-
-ih_show_hitbox:
-    %cm_toggle("Show Samus Hitbox", !ram_sprite_hitbox_active, #1, #0)
-
-ih_oob_viewer:
-    %cm_toggle("OOB Tile Viewer", !ram_oob_watch_active, #1, #toggle_oob_viewer)
-
-toggle_oob_viewer:
-{
-    LDA !ram_oob_watch_active
-    BEQ +
-        JSL upload_sprite_oob_tiles
-    +
-    RTS
-}
 
 RAMWatchMenu:
     dw ramwatch_left_hi
