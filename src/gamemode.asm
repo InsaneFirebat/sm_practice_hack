@@ -51,6 +51,10 @@ if !FEATURE_SD2SNES
     JMP .load_state
 endif
 
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .load_last_preset
+
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .random_preset
@@ -75,7 +79,7 @@ endif
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .prev_preset_slot
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_full_equipment : CMP !sram_ctrl_full_equipment : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .full_equipment
 
