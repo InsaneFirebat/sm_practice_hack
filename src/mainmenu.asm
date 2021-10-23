@@ -258,6 +258,7 @@ presets_load_custom_preset:
 
 SelectPresetCategoryMenu:
     dw #presets_current
+    dw #precat_spazer
     dw #precat_kpdr22
     dw #precat_prkd
     dw #precat_pkrd
