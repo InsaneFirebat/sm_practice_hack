@@ -237,13 +237,13 @@ custompalettes_mix_background:
 
 
 custompalettes_hex_red:
-    %cm_numfield_color("Hexidecimal Red", !sram_custompalette_red, #0)
+    %cm_numfield_color("Hexadecimal Red", !sram_custompalette_red, #0)
 
 custompalettes_hex_green:
-    %cm_numfield_color("Hexidecimal Green", !sram_custompalette_green, #0)
+    %cm_numfield_color("Hexadecimal Green", !sram_custompalette_green, #0)
 
 custompalettes_hex_blue:
-    %cm_numfield_color("Hexidecimal Blue", !sram_custompalette_blue, #0)
+    %cm_numfield_color("Hexadecimal Blue", !sram_custompalette_blue, #0)
 
 custompalettes_dec_red:
     %cm_numfield("Decimal Red", !sram_custompalette_red, 0, 31, 1, #0)

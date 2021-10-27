@@ -11,7 +11,7 @@ PresetsMenuPrkd:
     dw #presets_goto_prkd_backtracking
     dw #presets_goto_prkd_tourian
     dw #$0000
-    %cm_header("PRESETS FOR ANY PRKD")
+    %cm_header("PRESETS FOR ANY% PRKD")
 
 presets_goto_prkd_crateria:
     %cm_submenu("Crateria", #presets_submenu_prkd_crateria)
@@ -199,7 +199,7 @@ presets_submenu_prkd_kraid:
     dw #presets_prkd_kraid_kraid_kihunters_revisit
     dw #presets_prkd_kraid_leaving_kraids_lair
     dw #$0000
-    %cm_header("KRAID")
+    %cm_header("KRAID'S LAIR")
 
 presets_submenu_prkd_maridia:
     dw #presets_prkd_maridia_maridia_tube_revisit
@@ -576,7 +576,7 @@ presets_prkd_lower_norfair_business_center_final:
 
 ; Kraid
 presets_prkd_kraid_entering_kraids_lair:
-    %cm_preset("Entering Kraids Lair", #preset_prkd_kraid_entering_kraids_lair)
+    %cm_preset("Entering Kraid's Lair", #preset_prkd_kraid_entering_kraids_lair)
 
 presets_prkd_kraid_kraid_kihunters:
     %cm_preset("Kraid Kihunters", #preset_prkd_kraid_kraid_kihunters)
@@ -597,7 +597,7 @@ presets_prkd_kraid_kraid_kihunters_revisit:
     %cm_preset("Kraid Kihunters Revisit", #preset_prkd_kraid_kraid_kihunters_revisit)
 
 presets_prkd_kraid_leaving_kraids_lair:
-    %cm_preset("Leaving Kraids Lair", #preset_prkd_kraid_leaving_kraids_lair)
+    %cm_preset("Leaving Kraid's Lair", #preset_prkd_kraid_leaving_kraids_lair)
 
 
 ; Maridia

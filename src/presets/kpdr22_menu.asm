@@ -11,7 +11,7 @@ PresetsMenuKpdr22:
     dw #presets_goto_kpdr22_backtracking
     dw #presets_goto_kpdr22_tourian
     dw #$0000
-    %cm_header("PRESETS FOR ANY KPDR")
+    %cm_header("PRESETS FOR ANY% KPDR")
 
 presets_goto_kpdr22_crateria:
     %cm_submenu("Crateria", #presets_submenu_kpdr22_crateria)
@@ -315,7 +315,7 @@ presets_kpdr22_brinstar_below_spazer:
     %cm_preset("Below Spazer", #preset_kpdr22_brinstar_below_spazer)
 
 presets_kpdr22_brinstar_entering_kraids_lair:
-    %cm_preset("Entering Kraids Lair", #preset_kpdr22_brinstar_entering_kraids_lair)
+    %cm_preset("Entering Kraid's Lair", #preset_kpdr22_brinstar_entering_kraids_lair)
 
 presets_kpdr22_brinstar_kraid_kihunters:
     %cm_preset("Kraid Kihunters", #preset_kpdr22_brinstar_kraid_kihunters)

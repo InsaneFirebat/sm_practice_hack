@@ -11,7 +11,7 @@ PresetsMenuSpazer:
     dw #presets_goto_spazer_backtracking
     dw #presets_goto_spazer_tourian
     dw #$0000
-    %cm_header("ANY KPDR WITH SPAZER")
+    %cm_header("ANY% KPDR WITH SPAZER")
 
 presets_goto_spazer_crateria:
     %cm_submenu("Crateria", #presets_submenu_spazer_crateria)
@@ -311,7 +311,7 @@ presets_spazer_brinstar_below_spazer:
     %cm_preset("Below Spazer", #preset_spazer_brinstar_below_spazer)
 
 presets_spazer_brinstar_entering_kraids_lair:
-    %cm_preset("Entering Kraids Lair", #preset_spazer_brinstar_entering_kraids_lair)
+    %cm_preset("Entering Kraid's Lair", #preset_spazer_brinstar_entering_kraids_lair)
 
 presets_spazer_brinstar_kraid_kihunters:
     %cm_preset("Kraid Kihunters", #preset_spazer_brinstar_kraid_kihunters)
