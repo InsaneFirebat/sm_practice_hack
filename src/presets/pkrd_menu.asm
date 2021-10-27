@@ -10,7 +10,7 @@ PresetsMenuPkrd:
     dw #presets_goto_pkrd_backtracking
     dw #presets_goto_pkrd_tourian
     dw #$0000
-    %cm_header("PRESETS FOR ANY PKRD")
+    %cm_header("PRESETS FOR ANY% PKRD")
 
 presets_goto_pkrd_crateria:
     %cm_submenu("Crateria", #presets_submenu_pkrd_crateria)
@@ -383,7 +383,7 @@ presets_pkrd_red_brinstar_revisit_breaking_tube:
 
 ; Kraid
 presets_pkrd_kraid_entering_kraids_lair:
-    %cm_preset("Entering Kraids Lair", #preset_pkrd_kraid_entering_kraids_lair)
+    %cm_preset("Entering Kraid's Lair", #preset_pkrd_kraid_entering_kraids_lair)
 
 presets_pkrd_kraid_kraid_kihunters:
     %cm_preset("Kraid Kihunters", #preset_pkrd_kraid_kraid_kihunters)
@@ -407,7 +407,7 @@ presets_pkrd_kraid_kraid_etank:
     %cm_preset("Kraid E-tank", #preset_pkrd_kraid_kraid_etank)
 
 presets_pkrd_kraid_leaving_kraids_lair:
-    %cm_preset("Leaving Kraids Lair", #preset_pkrd_kraid_leaving_kraids_lair)
+    %cm_preset("Leaving Kraid's Lair", #preset_pkrd_kraid_leaving_kraids_lair)
 
 
 ; Upper Norfair

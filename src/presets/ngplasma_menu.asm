@@ -9,7 +9,7 @@ PresetsMenuNgplasma:
     dw #presets_goto_ngplasma_crateria
     dw #presets_goto_ngplasma_tourian
     dw #$0000
-    %cm_header("NEWGAME PLUS PLASMA")
+    %cm_header("NEWGAME+ PLASMA BEAM")
 
 presets_goto_ngplasma_ceres_station:
     %cm_submenu("Ceres Station", #presets_submenu_ngplasma_ceres_station)
@@ -27,7 +27,7 @@ presets_goto_ngplasma_norfair_postridley:
     %cm_submenu("Norfair Post-Ridley", #presets_submenu_ngplasma_norfair_postridley)
 
 presets_goto_ngplasma_kraids_lair:
-    %cm_submenu("Kraids Lair", #presets_submenu_ngplasma_kraids_lair)
+    %cm_submenu("Kraid's Lair", #presets_submenu_ngplasma_kraids_lair)
 
 presets_goto_ngplasma_maridia:
     %cm_submenu("Maridia", #presets_submenu_ngplasma_maridia)
@@ -108,7 +108,7 @@ presets_submenu_ngplasma_kraids_lair:
     dw #presets_ngplasma_kraids_lair_warehouse_zealas
     dw #presets_ngplasma_kraids_lair_leaving_kraids_lair
     dw #$0000
-    %cm_header("KRAIDS LAIR")
+    %cm_header("KRAID'S LAIR")
 
 presets_submenu_ngplasma_maridia:
     dw #presets_ngplasma_maridia_entering_maridia
@@ -281,7 +281,7 @@ presets_ngplasma_norfair_postridley_business_center_revisit:
 
 ; Kraids Lair
 presets_ngplasma_kraids_lair_entering_kraids_lair:
-    %cm_preset("Entering Kraids Lair", #preset_ngplasma_kraids_lair_entering_kraids_lair)
+    %cm_preset("Entering Kraid's Lair", #preset_ngplasma_kraids_lair_entering_kraids_lair)
 
 presets_ngplasma_kraids_lair_warehouse_kihunters:
     %cm_preset("Warehouse Kihunters", #preset_ngplasma_kraids_lair_warehouse_kihunters)
@@ -302,7 +302,7 @@ presets_ngplasma_kraids_lair_warehouse_zealas:
     %cm_preset("Warehouse Zealas", #preset_ngplasma_kraids_lair_warehouse_zealas)
 
 presets_ngplasma_kraids_lair_leaving_kraids_lair:
-    %cm_preset("Leaving Kraids Lair", #preset_ngplasma_kraids_lair_leaving_kraids_lair)
+    %cm_preset("Leaving Kraid's Lair", #preset_ngplasma_kraids_lair_leaving_kraids_lair)
 
 
 ; Maridia
