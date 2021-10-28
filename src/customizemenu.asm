@@ -15,12 +15,13 @@ macro examplemenu()
     dw #ifb_dummy_num
 endmacro
 
-macro palettemenu(header, mix, hi, lo)
+macro palettemenu(title, hi, lo, pointer)
+    %cm_submenu("<title>", <pointer>)
+    
+<pointer>:
     dw #custompalettes_hex_red
     dw #custompalettes_hex_green
     dw #custompalettes_hex_blue
-    dw #ifb_notext
-    dw #<mix>
     dw #ifb_notext
     dw #custompalettes_dec_red
     dw #custompalettes_dec_green
@@ -28,27 +29,14 @@ macro palettemenu(header, mix, hi, lo)
     dw #ifb_notext
     dw #<hi>
     dw #<lo>
+    dw #ifb_notext
+    dw #ifb_notext
     %examplemenu()
     dw #$0000
-    %cm_header("<header>")
+    %cm_header("<title>")
 endmacro
 
-macro cm_mixcolor(addr, addr_hi, addr_lo)
-    %cm_jsr("Mix Colors", #.mix, #$0000)
-  .mix
-    LDA !sram_custompalette_blue : XBA : ASL #2 : STA $12
-    LDA !sram_custompalette_green : ASL #5 : ORA $12 : STA $12
-    LDA !sram_custompalette_red : ORA $12
-
-    STA <addr>
-    %a8()
-    STA <addr_lo> : XBA : STA <addr_hi>
-    %a16()
-    JSR action_custompalettes_refresh
-    RTS
-endmacro
-
-macro setRGB(addr)
+macro setupRGB(addr)
     LDA <addr> : AND #$7C00 : XBA : LSR #2 : STA !sram_custompalette_blue
     LDA <addr> : AND #$03E0 : LSR #5 : STA !sram_custompalette_green
     LDA <addr> : AND #$001F : STA !sram_custompalette_red
@@ -103,7 +91,7 @@ ifb_paletteprofile:
     db #$FF
 
 ifb_palette2custom:
-    %cm_jsr_nosound("Copy Palette to Custom", action_copy_palette, #$0000)
+    %cm_jsr("Copy Palette to Custom", action_copy_palette, #$0000)
 
 ifb_customsfx:
     %cm_submenu("Customize Menu Sounds", #CustomMenuSFXMenu)
@@ -127,132 +115,90 @@ CustomPalettesMenu:
     %cm_header("CUSTOMIZE MENU PALETTE")
 
 custompalettes_menutext:
-    %cm_submenu("Text", #CustomPalettesMenu_menutext)
-
-CustomPalettesMenu_menutext:
-    %palettemenu("TEXT", custompalettes_mix_text, custompalettes_menutext_hi, custompalettes_menutext_lo)
-
-custompalettes_mix_text:
-    %cm_mixcolor(!sram_custompalette_menutext, !sram_custompalette_menutext_hi, !sram_custompalette_menutext_lo)
-
+    %palettemenu("Text", custompalettes_menutext_hi, custompalettes_menutext_lo, #CustomPalettesMenu_menutext)
 
 custompalettes_menuseltext:
-    %cm_submenu("Selected Text", #CustomPalettesMenu_menuseltext)
-
-CustomPalettesMenu_menuseltext:
-    %palettemenu("SELECTED TEXT", custompalettes_mix_seltext, custompalettes_menuseltext_hi, custompalettes_menuseltext_lo)
-
-custompalettes_mix_seltext:
-    %cm_mixcolor(!sram_custompalette_menuseltext, !sram_custompalette_menuseltext_hi, !sram_custompalette_menuseltext_lo)
-
+    %palettemenu("Selected Text", custompalettes_menuseltext_hi, custompalettes_menuseltext_lo, #CustomPalettesMenu_menuseltext)
 
 custompalettes_menuseltextbg:
-    %cm_submenu("Selected Text Background", #CustomPalettesMenu_menuseltextbg)
-
-CustomPalettesMenu_menuseltextbg:
-    %palettemenu("SELECTED TEXT BACKGROUND", custompalettes_mix_seltextbg, custompalettes_menuseltextbg_hi, custompalettes_menuseltextbg_lo)
-
-custompalettes_mix_seltextbg:
-    %cm_mixcolor(!sram_custompalette_menuseltextbg, !sram_custompalette_menuseltextbg_hi, !sram_custompalette_menuseltextbg_lo)
-
+    %palettemenu("Selected Text Background", custompalettes_menuseltextbg_hi, custompalettes_menuseltextbg_lo, #CustomPalettesMenu_menuseltextbg)
 
 custompalettes_menuheaderoutline:
-    %cm_submenu("Header Outline", #CustomPalettesMenu_menuheaderoutline)
-
-CustomPalettesMenu_menuheaderoutline:
-    %palettemenu("HEADER OUTLINE", custompalettes_mix_headeroutline, custompalettes_menuheaderoutline_hi, custompalettes_menuheaderoutline_lo)
-
-custompalettes_mix_headeroutline:
-    %cm_mixcolor(!sram_custompalette_menuheaderoutline, !sram_custompalette_menuheaderoutline_hi, !sram_custompalette_menuheaderoutline_lo)
-
+    %palettemenu("Header Outline", custompalettes_menuheaderoutline_hi, custompalettes_menuheaderoutline_lo, #CustomPalettesMenu_menuheaderoutline)
 
 custompalettes_menunumfill:
-    %cm_submenu("Number Field Text", #CustomPalettesMenu_menunumfill)
-
-CustomPalettesMenu_menunumfill:
-    %palettemenu("NUMBER FIELD TEXT", custompalettes_mix_numfill, custompalettes_menunumfill_hi, custompalettes_menunumfill_lo)
-
-custompalettes_mix_numfill:
-    %cm_mixcolor(!sram_custompalette_menunumfill, !sram_custompalette_menunumfill_hi, !sram_custompalette_menunumfill_lo)
-
+    %palettemenu("Number Field Text", custompalettes_menunumfill_hi, custompalettes_menunumfill_lo, #CustomPalettesMenu_menunumfill)
 
 custompalettes_menunumoutline:
-    %cm_submenu("Number Field Outline", #CustomPalettesMenu_menunumoutline)
-
-CustomPalettesMenu_menunumoutline:
-    %palettemenu("NUMBER FIELD OUTLINE", custompalettes_mix_numoutline, custompalettes_menunumoutline_hi, custompalettes_menunumoutline_lo)
-
-custompalettes_mix_numoutline:
-    %cm_mixcolor(!sram_custompalette_menunumoutline, !sram_custompalette_menunumoutline_hi, !sram_custompalette_menunumoutline_lo)
-
+    %palettemenu("Number Field Outline", custompalettes_menunumoutline_hi, custompalettes_menunumoutline_lo, #CustomPalettesMenu_menunumoutline)
 
 custompalettes_menunumsel:
-    %cm_submenu("Selected Num-Field Text", #CustomPalettesMenu_menunumsel)
-
-CustomPalettesMenu_menunumsel:
-    %palettemenu("SELECTED NUM-FIELD TEXT", custompalettes_mix_numsel, custompalettes_menunumsel_hi, custompalettes_menunumsel_lo)
-
-custompalettes_mix_numsel:
-    %cm_mixcolor(!sram_custompalette_menunumsel, !sram_custompalette_menunumsel_hi, !sram_custompalette_menunumsel_lo)
-
+    %palettemenu("Selected Num-Field Text", custompalettes_menunumsel_hi, custompalettes_menunumsel_lo, #CustomPalettesMenu_menunumsel)
 
 custompalettes_menunumseloutline:
-    %cm_submenu("Selected Num-Field Outline", #CustomPalettesMenu_menunumseloutline)
-
-CustomPalettesMenu_menunumseloutline:
-    %palettemenu("SELECTED NUM-FIELD OUTLINE", custompalettes_mix_numseloutline, custompalettes_menunumseloutline_hi, custompalettes_menunumseloutline_lo)
-
-custompalettes_mix_numseloutline:
-    %cm_mixcolor(!sram_custompalette_menunumseloutline, !sram_custompalette_menunumseloutline_hi, !sram_custompalette_menunumseloutline_lo)
-
+    %palettemenu("Selected Num-Field Outline", custompalettes_menunumseloutline_hi, custompalettes_menunumseloutline_lo, #CustomPalettesMenu_menunumseloutline)
 
 custompalettes_menutoggleon:
-    %cm_submenu("Toggle ON", #CustomPalettesMenu_menutoggleon)
-
-CustomPalettesMenu_menutoggleon:
-    %palettemenu("TOGGLE ON", custompalettes_mix_toggleon, custompalettes_menutoggleon_hi, custompalettes_menutoggleon_lo)
-
-custompalettes_mix_toggleon:
-    %cm_mixcolor(!sram_custompalette_menutoggleon, !sram_custompalette_menutoggleon_hi, !sram_custompalette_menutoggleon_lo)
-
+    %palettemenu("Toggle ON", custompalettes_menutoggleon_hi, custompalettes_menutoggleon_lo, #CustomPalettesMenu_menutoggleon)
 
 custompalettes_menuborder:
-    %cm_submenu("Toggle OFF + Border", #CustomPalettesMenu_menuborder)
-
-CustomPalettesMenu_menuborder:
-    %palettemenu("TOGGLE OFF AND BORDER", custompalettes_mix_border, custompalettes_menuborder_hi, custompalettes_menuborder_lo)
-
-custompalettes_mix_border:
-    %cm_mixcolor(!sram_custompalette_menuborder, !sram_custompalette_menuborder_hi, !sram_custompalette_menuborder_lo)
-
+    %palettemenu("Toggle OFF + Border", custompalettes_menuborder_hi, custompalettes_menuborder_lo, #CustomPalettesMenu_menuborder)
 
 custompalettes_menubackground:
-    %cm_submenu("Background", #CustomPalettesMenu_menubackground)
-
-CustomPalettesMenu_menubackground:
-    %palettemenu("BACKGROUND", custompalettes_mix_background, custompalettes_menubackground_hi, custompalettes_menubackground_lo)
-
-custompalettes_mix_background:
-    %cm_mixcolor(!sram_custompalette_menubackground, !sram_custompalette_menubackground_hi, !sram_custompalette_menubackground_lo)
+    %palettemenu("Background", custompalettes_menubackground_hi, custompalettes_menubackground_lo, #CustomPalettesMenu_menubackground)
 
 
 custompalettes_hex_red:
-    %cm_numfield_color("Hexadecimal Red", !sram_custompalette_red, #0)
+    %cm_numfield_color("Hexadecimal Red", !sram_custompalette_red, #MixRGB)
 
 custompalettes_hex_green:
-    %cm_numfield_color("Hexadecimal Green", !sram_custompalette_green, #0)
+    %cm_numfield_color("Hexadecimal Green", !sram_custompalette_green, #MixRGB)
 
 custompalettes_hex_blue:
-    %cm_numfield_color("Hexadecimal Blue", !sram_custompalette_blue, #0)
+    %cm_numfield_color("Hexadecimal Blue", !sram_custompalette_blue, #MixRGB)
 
 custompalettes_dec_red:
-    %cm_numfield("Decimal Red", !sram_custompalette_red, 0, 31, 1, #0)
+    %cm_numfield("Decimal Red", !sram_custompalette_red, 0, 31, 1, #MixRGB)
 
 custompalettes_dec_green:
-    %cm_numfield("Decimal Green", !sram_custompalette_green, 0, 31, 1, #0)
+    %cm_numfield("Decimal Green", !sram_custompalette_green, 0, 31, 1, #MixRGB)
 
 custompalettes_dec_blue:
-    %cm_numfield("Decimal Blue", !sram_custompalette_blue, 0, 31, 1, #0)
+    %cm_numfield("Decimal Blue", !sram_custompalette_blue, 0, 31, 1, #MixRGB)
+
+MixRGB:
+{
+    ; figure out which menu element is being edited
+    LDA !ram_cm_cursor_stack+6 : TAX
+    LDA.w MenuPaletteTable,X : STA $12 ; store indirect address
+    LDA #$0070 : STA $14 ; store indirect bank
+
+    ; mix RGB values
+    LDA !sram_custompalette_blue : XBA : ASL #2 : STA $16
+    LDA !sram_custompalette_green : ASL #5 : ORA $16 : STA $16
+    LDA !sram_custompalette_red : ORA $16
+
+    STA [$12] ; store combined color value
+    %a8()
+    LDY #$0004 : STA [$12],Y ; store lo byte
+    XBA : DEY #2 : STA [$12],Y ; store hi byte
+    %a16()
+    JSR action_custompalettes_refresh
+    RTS
+
+MenuPaletteTable:
+    dw #!sram_custompalette_menutext
+    dw #!sram_custompalette_menuseltext
+    dw #!sram_custompalette_menuseltextbg
+    dw #!sram_custompalette_menuheaderoutline
+    dw #!sram_custompalette_menunumfill
+    dw #!sram_custompalette_menunumoutline
+    dw #!sram_custompalette_menunumsel
+    dw #!sram_custompalette_menunumseloutline
+    dw #!sram_custompalette_menutoggleon
+    dw #!sram_custompalette_menuborder
+    dw #!sram_custompalette_menubackground
+}
 
 
 CustomPalettesMenuOld:
@@ -552,37 +498,37 @@ ColorMenuTable:
 }
 
 ColorMenuTable_text:
-    %setRGB(!sram_custompalette_menutext)
+    %setupRGB(!sram_custompalette_menutext)
 
 ColorMenuTable_seltext:
-    %setRGB(!sram_custompalette_menuseltext)
+    %setupRGB(!sram_custompalette_menuseltext)
 
 ColorMenuTable_seltextbg:
-    %setRGB(!sram_custompalette_menuseltextbg)
+    %setupRGB(!sram_custompalette_menuseltextbg)
 
 ColorMenuTable_headeroutline:
-    %setRGB(!sram_custompalette_menuheaderoutline)
+    %setupRGB(!sram_custompalette_menuheaderoutline)
 
 ColorMenuTable_numfill:
-    %setRGB(!sram_custompalette_menunumfill)
+    %setupRGB(!sram_custompalette_menunumfill)
 
 ColorMenuTable_numoutline:
-    %setRGB(!sram_custompalette_menunumoutline)
+    %setupRGB(!sram_custompalette_menunumoutline)
 
 ColorMenuTable_numsel:
-    %setRGB(!sram_custompalette_menunumsel)
+    %setupRGB(!sram_custompalette_menunumsel)
 
 ColorMenuTable_numseloutline:
-    %setRGB(!sram_custompalette_menunumseloutline)
+    %setupRGB(!sram_custompalette_menunumseloutline)
 
 ColorMenuTable_toggleon:
-    %setRGB(!sram_custompalette_menutoggleon)
+    %setupRGB(!sram_custompalette_menutoggleon)
 
 ColorMenuTable_border:
-    %setRGB(!sram_custompalette_menuborder)
+    %setupRGB(!sram_custompalette_menuborder)
 
 ColorMenuTable_background:
-    %setRGB(!sram_custompalette_menubackground)
+    %setupRGB(!sram_custompalette_menubackground)
 
 
 ; ---------------
