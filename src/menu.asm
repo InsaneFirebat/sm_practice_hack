@@ -1282,7 +1282,6 @@ cm_execute_action_table:
     dw execute_numfield_word
     dw execute_toggle
     dw execute_numfield_color
-    dw execute_jsr_nosound
 
     execute_toggle:
     {
@@ -1344,25 +1343,6 @@ cm_execute_action_table:
     }
 
     execute_jsr:
-    {
-        ; <, > and X should do nothing here
-        LDA !ram_cm_controller : BIT #$0340 : BNE .end
-
-        ; $02 = JSR target
-        LDA [$00] : INC $00 : INC $00 : STA $04
-
-        ; Y = Argument
-        LDA [$00] : TAY
-
-        LDX #$0000
-        JSR ($0004,X)
-
-      .end
-        ;%sfxpause()
-        RTS
-    }
-
-    execute_jsr_nosound:
     {
         ; <, > and X should do nothing here
         LDA !ram_cm_controller : BIT #$0340 : BNE .end
