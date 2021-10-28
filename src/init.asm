@@ -1,4 +1,4 @@
-!SRAM_VERSION = $0009
+!SRAM_VERSION = $F009
 
 
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values
@@ -104,38 +104,16 @@ init_sram:
     LDA #$0000 : STA !sram_superhud_top
 
     LDA #$7277 : STA !sram_custompalette_menuborder
-    LDA #$0072 : STA !sram_custompalette_menuborder_hi
-    LDA #$0077 : STA !sram_custompalette_menuborder_lo
     LDA #$48F3 : STA !sram_custompalette_menuheaderoutline
-    LDA #$0048 : STA !sram_custompalette_menuheaderoutline_hi
-    LDA #$00F3 : STA !sram_custompalette_menuheaderoutline_lo
     LDA #$7FFF : STA !sram_custompalette_menutext
-    LDA #$007F : STA !sram_custompalette_menutext_hi
-    LDA #$00FF : STA !sram_custompalette_menutext_lo
     LDA #$0000 : STA !sram_custompalette_menunumoutline
-    LDA #$0000 : STA !sram_custompalette_menunumoutline_hi
-    LDA #$0000 : STA !sram_custompalette_menunumoutline_lo
     LDA #$7FFF : STA !sram_custompalette_menunumfill
-    LDA #$007F : STA !sram_custompalette_menunumfill_hi
-    LDA #$00FF : STA !sram_custompalette_menunumfill_lo
     LDA #$4376 : STA !sram_custompalette_menutoggleon
-    LDA #$0043 : STA !sram_custompalette_menutoggleon_hi
-    LDA #$0076 : STA !sram_custompalette_menutoggleon_lo
     LDA #$761F : STA !sram_custompalette_menuseltext
-    LDA #$0076 : STA !sram_custompalette_menuseltext_hi
-    LDA #$001F : STA !sram_custompalette_menuseltext_lo
     LDA #$0000 : STA !sram_custompalette_menuseltextbg
-    LDA #$0000 : STA !sram_custompalette_menuseltextbg_hi
-    LDA #$0000 : STA !sram_custompalette_menuseltextbg_lo
     LDA #$0000 : STA !sram_custompalette_menubackground
-    LDA #$0000 : STA !sram_custompalette_menubackground_hi
-    LDA #$0000 : STA !sram_custompalette_menubackground_lo
     LDA #$0000 : STA !sram_custompalette_menunumseloutline
-    LDA #$0000 : STA !sram_custompalette_menunumseloutline_hi
-    LDA #$0000 : STA !sram_custompalette_menunumseloutline_lo
     LDA #$761F : STA !sram_custompalette_menunumsel
-    LDA #$0076 : STA !sram_custompalette_menunumsel_hi
-    LDA #$001F : STA !sram_custompalette_menunumsel_lo
     LDA #$0001 : STA !sram_custompalette_profile
 
     LDA #$0037 : STA !sram_customsfx_move
