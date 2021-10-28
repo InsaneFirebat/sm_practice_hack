@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.0.1] Further improvements to color selection menus
+* [2.3.0]   New menu for "Sprite Features"
 * [2.2.8.7] Reworked color customization menu to be more intuitive
 * [2.2.8.6] Fix item% calculation after using GT Code
 * [2.2.8.5] Removed enemies from presets and increase slots

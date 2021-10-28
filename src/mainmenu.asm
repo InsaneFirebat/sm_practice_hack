@@ -84,13 +84,6 @@ macro cm_ctrl_shortcut(title, addr)
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_jsr_nosound(title, routine, argument)
-    dw !ACTION_JSR_NOSOUND
-    dw <routine>
-    dw <argument>
-    db #$28, "<title>", #$FF
-endmacro
-
 action_submenu:
 {
     ; Increment stack pointer by 2, then store current menu
@@ -1000,13 +993,13 @@ EventsMenu:
     %cm_header("EVENT FLAGS")
 
 events_resetevents:
-    %cm_jsr_nosound("Reset All Events", action_reset_events, #$0000)
+    %cm_jsr("Reset All Events", action_reset_events, #$0000)
 
 events_resetdoors:
-    %cm_jsr_nosound("Reset All Doors", action_reset_doors, #$0000)
+    %cm_jsr("Reset All Doors", action_reset_doors, #$0000)
 
 events_resetitems:
-    %cm_jsr_nosound("Reset All Items", action_reset_items, #$0000)
+    %cm_jsr("Reset All Items", action_reset_items, #$0000)
 
 events_goto_bosses:
     %cm_submenu("Bosses", #BossesMenu)
@@ -2110,7 +2103,7 @@ ctrl_dec_custom_preset:
     %cm_ctrl_shortcut("Prev Preset Slot", !sram_ctrl_dec_custom_preset)
 
 ctrl_clear_shortcuts:
-    %cm_jsr_nosound("Clear Shortcuts", action_clear_shortcuts, #$0000)
+    %cm_jsr("Clear Shortcuts", action_clear_shortcuts, #$0000)
 
 action_clear_shortcuts:
 {
