@@ -160,16 +160,17 @@
 !ram_hex2dec_third_digit = $18
 !ram_hex2dec_rest = $1A
 
-!ACTION_TOGGLE          = #$0000
-!ACTION_TOGGLE_BIT      = #$0002
-!ACTION_JSR             = #$0004
-!ACTION_NUMFIELD        = #$0006
-!ACTION_CHOICE          = #$0008
-!ACTION_CTRL_SHORTCUT   = #$000A
-!ACTION_NUMFIELD_HEX    = #$000C
-!ACTION_NUMFIELD_WORD   = #$000E
-!ACTION_TOGGLE_INVERTED = #$0010
-!ACTION_NUMFIELD_COLOR  = #$0012
+!ACTION_TOGGLE            = #$0000
+!ACTION_TOGGLE_BIT        = #$0002
+!ACTION_JSR               = #$0004
+!ACTION_NUMFIELD          = #$0006
+!ACTION_CHOICE            = #$0008
+!ACTION_CTRL_SHORTCUT     = #$000A
+!ACTION_NUMFIELD_HEX      = #$000C
+!ACTION_NUMFIELD_WORD     = #$000E
+!ACTION_TOGGLE_INVERTED   = #$0010
+!ACTION_NUMFIELD_COLOR    = #$0012
+!ACTION_NUMFIELD_HEX_WORD = #$0014
 
 ; using macros instead of these in custom builds
 !SOUND_MENU_MOVE = $0039
@@ -378,8 +379,6 @@ endif
 ; Pointers
 ; ---------
 
-!ram_game_loop_extras = $0A00
-
 
 ; -----
 ; SRAM for custom features
@@ -417,44 +416,26 @@ endif
 !sram_custompalette_green = $7022A4
 !sram_custompalette_red = $7022A6
 
-; do not change order without updating custom palette profiles in menu.asm
-!sram_custompalette_menuborder = $7020B0
-!sram_custompalette_menuborder_hi = $7020B2
-!sram_custompalette_menuborder_lo = $7020B4
-!sram_custompalette_menuheaderoutline = $7020B6
-!sram_custompalette_menuheaderoutline_hi = $7020B8
-!sram_custompalette_menuheaderoutline_lo = $7020BA
-!sram_custompalette_menutext = $7020BC
-!sram_custompalette_menutext_hi = $7020BE
-!sram_custompalette_menutext_lo = $7020C0
-!sram_custompalette_menunumoutline = $7020C2
-!sram_custompalette_menunumoutline_hi = $7020C4
-!sram_custompalette_menunumoutline_lo = $7020C6
-!sram_custompalette_menunumfill = $7020C8
-!sram_custompalette_menunumfill_hi = $7020CA
-!sram_custompalette_menunumfill_lo = $7020CC
-!sram_custompalette_menutoggleon = $7020CE
-!sram_custompalette_menutoggleon_hi = $7020D0
-!sram_custompalette_menutoggleon_lo = $7020D2
-!sram_custompalette_menuseltext = $7020D4
-!sram_custompalette_menuseltext_hi = $7020D6
-!sram_custompalette_menuseltext_lo = $7020D8
-!sram_custompalette_menuseltextbg = $7020DA
-!sram_custompalette_menuseltextbg_hi = $7020DC
-!sram_custompalette_menuseltextbg_lo = $7020DE
-!sram_custompalette_menubackground = $7020E0
-!sram_custompalette_menubackground_hi = $7020E2
-!sram_custompalette_menubackground_lo = $7020E4
-!sram_custompalette_menunumseloutline = $7020E6
-!sram_custompalette_menunumseloutline_hi = $7020E8
-!sram_custompalette_menunumseloutline_lo = $7020EA
-!sram_custompalette_menunumsel = $7020EC
-!sram_custompalette_menunumsel_hi = $7020EE
-!sram_custompalette_menunumsel_lo = $7020F0
-!sram_custompalette_profile = $7020F2
+; FREE SPACE ^
 
-!sram_customsfx_move = $7020FA
-!sram_customsfx_toggle = $7020FC
-!sram_customsfx_number = $7020FE
-!sram_customsfx_confirm = $702100
-!sram_customsfx_goback = $702102
+; do not change order without updating custom palette profiles in menu.asm
+!sram_custompalette_menuborder = $7022B0
+!sram_custompalette_menuheaderoutline = $7022B2
+!sram_custompalette_menutext = $7022B4
+!sram_custompalette_menunumoutline = $7022B6
+!sram_custompalette_menunumfill = $7022B8
+!sram_custompalette_menutoggleon = $7022BA
+!sram_custompalette_menuseltext = $7022BC
+!sram_custompalette_menuseltextbg = $7022BE
+!sram_custompalette_menubackground = $7022C0
+!sram_custompalette_menunumseloutline = $7022C2
+!sram_custompalette_menunumsel = $7022C4
+!sram_custompalette_profile = $7022C6
+
+; FREE SPACE ^
+
+!sram_customsfx_move = $7022F0
+!sram_customsfx_toggle = $7022F2
+!sram_customsfx_number = $7022F4
+!sram_customsfx_confirm = $7022F6
+!sram_customsfx_goback = $7022F8

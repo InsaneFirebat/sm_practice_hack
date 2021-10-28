@@ -572,6 +572,7 @@ cm_draw_action_table:
     dw draw_numfield_word
     dw draw_toggle_inverted
     dw draw_numfield_color
+    dw draw_numfield_hex_word
 
     draw_toggle:
     {
@@ -590,7 +591,7 @@ cm_draw_action_table:
         PHX : JSR cm_draw_text : PLX
 
         ; Set position for ON/OFF
-        TXA : CLC : ADC #$002C : TAX
+        TXA : CLC : ADC #$002E : TAX
 
         %a8()
         ; set palette
@@ -634,7 +635,7 @@ cm_draw_action_table:
         PHX : JSR cm_draw_text : PLX
 
         ; Set position for ON/OFF
-        TXA : CLC : ADC #$002C : TAX
+        TXA : CLC : ADC #$002E : TAX
 
         %a8()
         ; set palette
@@ -678,7 +679,7 @@ cm_draw_action_table:
         PHX : JSR cm_draw_text : PLX
 
         ; Set position for ON/OFF
-        TXA : CLC : ADC #$002C : TAX
+        TXA : CLC : ADC #$002E : TAX
 
         ; grab the value at that memory address
         LDA [$08] : AND $0C : BNE .checked
@@ -728,7 +729,7 @@ cm_draw_action_table:
         PHX : JSR cm_draw_text : PLX
 
         ; set position for the number
-        TXA : CLC : ADC #$002C : TAX
+        TXA : CLC : ADC #$002E : TAX
         LDA [$08] : AND #$00FF : JSR cm_hex2dec
         ; Clear out the area (black tile)
         LDA #$281F : STA !ram_tilemap_buffer+0,X
@@ -770,7 +771,7 @@ cm_draw_action_table:
         PHX : JSR cm_draw_text : PLX
 
         ; set position for the number
-        TXA : CLC : ADC #$002A : TAX
+        TXA : CLC : ADC #$002C : TAX
 
         LDA [$08] : JSR cm_hex2dec
 
@@ -822,7 +823,7 @@ cm_draw_action_table:
         PHX : JSR cm_draw_text : PLX
 
         ; set position for the number
-        TXA : CLC : ADC #$002E : TAX
+        TXA : CLC : ADC #$0030 : TAX
 
         LDA [$08] : AND #$00FF : STA !ram_tmp_2
 
@@ -843,6 +844,48 @@ cm_draw_action_table:
         RTS
     }
 
+    draw_numfield_hex_word:
+    {
+        ; grab the memory address (long)
+        LDA [$04] : INC $04 : INC $04 : STA $08
+        LDA [$04] : INC $04 : STA $0A
+
+        ; Draw the text
+        %item_index_to_vram_index()
+        PHX : JSR cm_draw_text : PLX
+
+        ; set position for the number
+        TXA : CLC : ADC #$002C : TAX
+
+        LDA [$08] : STA !ram_tmp_2
+
+        ; Clear out the area (black tile)
+        LDA #$281F : STA !ram_tilemap_buffer+0,X
+                     STA !ram_tilemap_buffer+2,X
+                     STA !ram_tilemap_buffer+4,X
+                     STA !ram_tilemap_buffer+6,X
+
+        ; Draw numbers
+        ; (X000)
+        LDA !ram_tmp_2 : AND #$F000 : XBA : LSR #3 : TAY
+        LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer,X
+        
+        ; (0X00)
+        LDA !ram_tmp_2 : AND #$0F00 : XBA : ASL : TAY
+        LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X
+
+        ; (00X0)
+        LDA !ram_tmp_2 : AND #$00F0 : LSR #3 : TAY
+        LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+4,X
+        
+        ; (000X)
+        LDA !ram_tmp_2 : AND #$000F : ASL : TAY
+        LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+6,X
+
+      .done
+        RTS
+    }
+
     draw_numfield_color:
     {
         ; grab the memory address (long)
@@ -857,7 +900,7 @@ cm_draw_action_table:
         PHX : JSR cm_draw_text : PLX
 
         ; set position for the number
-        TXA : CLC : ADC #$002E : TAX
+        TXA : CLC : ADC #$0030 : TAX
 
         LDA [$08] : AND #$00FF : STA !ram_tmp_2
 
@@ -896,7 +939,7 @@ cm_draw_action_table:
         PHX : JSR cm_draw_text : PLX
 
         ; set position for choice
-        TXA : CLC : ADC #$001C : TAX
+        TXA : CLC : ADC #$001E : TAX
 
         LDY #$0000
         LDA #$0000
@@ -1282,6 +1325,7 @@ cm_execute_action_table:
     dw execute_numfield_word
     dw execute_toggle
     dw execute_numfield_color
+    dw execute_numfield_hex_word
 
     execute_toggle:
     {
@@ -1586,6 +1630,12 @@ cm_execute_action_table:
         .end
         RTS
     }
+
+    execute_numfield_hex_word:
+    {
+        ; do nothing
+        RTS
+    }
 }
 
 cm_hex2dec:
@@ -1636,7 +1686,6 @@ cm_divide_100:
 ; -----------
 
 incsrc mainmenu.asm
-
 
 
 ; ----------
