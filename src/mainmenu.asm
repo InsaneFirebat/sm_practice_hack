@@ -32,6 +32,12 @@ macro cm_numfield_hex(title, addr, start, end, increment, jsrtarget)
     db #$28, "<title>", #$FF
 endmacro
 
+macro cm_numfield_hex_word(title, addr)
+    dw !ACTION_NUMFIELD_HEX_WORD
+    dl <addr>
+    db #$28, "<title>", #$FF
+endmacro
+
 macro cm_numfield_color(title, addr, jsrtarget)
     dw !ACTION_NUMFIELD_COLOR
     dl <addr>

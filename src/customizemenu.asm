@@ -15,7 +15,7 @@ macro examplemenu()
     dw #ifb_dummy_num
 endmacro
 
-macro palettemenu(title, hi, lo, pointer)
+macro palettemenu(title, pointer)
     %cm_submenu("<title>", <pointer>)
     
 <pointer>:
@@ -27,8 +27,8 @@ macro palettemenu(title, hi, lo, pointer)
     dw #custompalettes_dec_green
     dw #custompalettes_dec_blue
     dw #ifb_notext
-    dw #<hi>
-    dw #<lo>
+    dw #ifb_notext
+    dw #ifb_notext
     dw #ifb_notext
     dw #ifb_notext
     %examplemenu()
@@ -62,9 +62,6 @@ ifb_customizemenu:
 
 ifb_menubackground:
     %cm_toggle("Menu Background", !sram_menu_background, #$0001, #0)
-
-ifb_custompalettes_menu_old:
-    %cm_submenu("Screenshot To Share Colors", #CustomPalettesMenuOld)
 
 ifb_custompalettes_menu:
     %cm_submenu("Customize Menu Palette", #CustomPalettesMenu)
@@ -110,42 +107,42 @@ CustomPalettesMenu:
     dw #custompalettes_menuborder
     dw #custompalettes_menubackground
     %examplemenu()
-    dw #ifb_custompalettes_menu_old
+    dw #ifb_custompalettes_display_menu
     dw #$0000
     %cm_header("CUSTOMIZE MENU PALETTE")
 
 custompalettes_menutext:
-    %palettemenu("Text", custompalettes_menutext_hi, custompalettes_menutext_lo, #CustomPalettesMenu_menutext)
+    %palettemenu("Text", #CustomPalettesMenu_menutext)
 
 custompalettes_menuseltext:
-    %palettemenu("Selected Text", custompalettes_menuseltext_hi, custompalettes_menuseltext_lo, #CustomPalettesMenu_menuseltext)
+    %palettemenu("Selected Text", #CustomPalettesMenu_menuseltext)
 
 custompalettes_menuseltextbg:
-    %palettemenu("Selected Text Background", custompalettes_menuseltextbg_hi, custompalettes_menuseltextbg_lo, #CustomPalettesMenu_menuseltextbg)
+    %palettemenu("Selected Text Background", #CustomPalettesMenu_menuseltextbg)
 
 custompalettes_menuheaderoutline:
-    %palettemenu("Header Outline", custompalettes_menuheaderoutline_hi, custompalettes_menuheaderoutline_lo, #CustomPalettesMenu_menuheaderoutline)
+    %palettemenu("Header Outline", #CustomPalettesMenu_menuheaderoutline)
 
 custompalettes_menunumfill:
-    %palettemenu("Number Field Text", custompalettes_menunumfill_hi, custompalettes_menunumfill_lo, #CustomPalettesMenu_menunumfill)
+    %palettemenu("Number Field Text", #CustomPalettesMenu_menunumfill)
 
 custompalettes_menunumoutline:
-    %palettemenu("Number Field Outline", custompalettes_menunumoutline_hi, custompalettes_menunumoutline_lo, #CustomPalettesMenu_menunumoutline)
+    %palettemenu("Number Field Outline", #CustomPalettesMenu_menunumoutline)
 
 custompalettes_menunumsel:
-    %palettemenu("Selected Num-Field Text", custompalettes_menunumsel_hi, custompalettes_menunumsel_lo, #CustomPalettesMenu_menunumsel)
+    %palettemenu("Selected Num-Field Text", #CustomPalettesMenu_menunumsel)
 
 custompalettes_menunumseloutline:
-    %palettemenu("Selected Num-Field Outline", custompalettes_menunumseloutline_hi, custompalettes_menunumseloutline_lo, #CustomPalettesMenu_menunumseloutline)
+    %palettemenu("Selected Num-Field Outline", #CustomPalettesMenu_menunumseloutline)
 
 custompalettes_menutoggleon:
-    %palettemenu("Toggle ON", custompalettes_menutoggleon_hi, custompalettes_menutoggleon_lo, #CustomPalettesMenu_menutoggleon)
+    %palettemenu("Toggle ON", #CustomPalettesMenu_menutoggleon)
 
 custompalettes_menuborder:
-    %palettemenu("Toggle OFF + Border", custompalettes_menuborder_hi, custompalettes_menuborder_lo, #CustomPalettesMenu_menuborder)
+    %palettemenu("Toggle OFF + Border", #CustomPalettesMenu_menuborder)
 
 custompalettes_menubackground:
-    %palettemenu("Background", custompalettes_menubackground_hi, custompalettes_menubackground_lo, #CustomPalettesMenu_menubackground)
+    %palettemenu("Background", #CustomPalettesMenu_menubackground)
 
 
 custompalettes_hex_red:
@@ -179,10 +176,6 @@ MixRGB:
     LDA !sram_custompalette_red : ORA $16
 
     STA [$12] ; store combined color value
-    %a8()
-    LDY #$0004 : STA [$12],Y ; store lo byte
-    XBA : DEY #2 : STA [$12],Y ; store hi byte
-    %a16()
     JSR action_custompalettes_refresh
     RTS
 
@@ -201,218 +194,56 @@ MenuPaletteTable:
 }
 
 
-CustomPalettesMenuOld:
-    dw #custompalettes_menuborder_hi
-    dw #custompalettes_menuborder_lo
-    dw #custompalettes_menuheaderoutline_hi
-    dw #custompalettes_menuheaderoutline_lo
-    dw #custompalettes_menutext_hi
-    dw #custompalettes_menutext_lo
-    dw #custompalettes_menubackground_hi
-    dw #custompalettes_menubackground_lo
-    dw #custompalettes_menunumoutline_hi
-    dw #custompalettes_menunumoutline_lo
-    dw #custompalettes_menunumfill_hi
-    dw #custompalettes_menunumfill_lo
-    dw #custompalettes_menutoggleon_hi
-    dw #custompalettes_menutoggleon_lo
-    dw #custompalettes_menuseltext_hi
-    dw #custompalettes_menuseltext_lo
-    dw #custompalettes_menuseltextbg_hi
-    dw #custompalettes_menuseltextbg_lo
-    dw #custompalettes_menunumseloutline_hi
-    dw #custompalettes_menunumseloutline_lo
-    dw #custompalettes_menunumsel_hi
-    dw #custompalettes_menunumsel_lo
+ifb_custompalettes_display_menu:
+    %cm_submenu("Screenshot To Share Colors", #CustomPalettesDisplayMenu)
+
+CustomPalettesDisplayMenu:
+    dw #custompalettes_menuborder_display
+    dw #custompalettes_menuheaderoutline_display
+    dw #custompalettes_menutext_display
+    dw #custompalettes_menubackground_display
+    dw #custompalettes_menunumoutline_display
+    dw #custompalettes_menunumfill_display
+    dw #custompalettes_menutoggleon_display
+    dw #custompalettes_menuseltext_display
+    dw #custompalettes_menuseltextbg_display
+    dw #custompalettes_menunumseloutline_display
+    dw #custompalettes_menunumsel_display
     dw #$0000
     %cm_header("SHARE YOUR COLORS")
 
-custompalettes_menutext_hi:
-    %cm_numfield_hex("Text Hi", !sram_custompalette_menutext_hi, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menutext_lo
-        STA !sram_custompalette_menutext
-        RTS
+custompalettes_menutext_display:
+    %cm_numfield_hex_word("Text", !sram_custompalette_menutext)
 
-custompalettes_menutext_lo:
-    %cm_numfield_hex("Text Lo", !sram_custompalette_menutext_lo, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menutext_hi
-        XBA
-        STA !sram_custompalette_menutext
-        RTS
+custompalettes_menuseltext_display:
+    %cm_numfield_hex_word("Selected Text", !sram_custompalette_menuseltext)
 
-custompalettes_menuseltext_hi:
-    %cm_numfield_hex("Selected Text Hi", !sram_custompalette_menuseltext_hi, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menuseltext_lo
-        STA !sram_custompalette_menuseltext
-        RTS
+custompalettes_menuseltextbg_display:
+    %cm_numfield_hex_word("Selected Text BG", !sram_custompalette_menuseltextbg)
 
-custompalettes_menuseltext_lo:
-    %cm_numfield_hex("Selected Text Lo", !sram_custompalette_menuseltext_lo, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menuseltext_hi
-        XBA
-        STA !sram_custompalette_menuseltext
-        RTS
+custompalettes_menuborder_display:
+    %cm_numfield_hex_word("Toggle OFF + Border", !sram_custompalette_menuborder)
 
-custompalettes_menuseltextbg_hi:
-    %cm_numfield_hex("Selected Text + ON BG Hi", !sram_custompalette_menuseltextbg_hi, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menuseltextbg_lo
-        STA !sram_custompalette_menuseltextbg
-        RTS
+custompalettes_menuheaderoutline_display:
+    %cm_numfield_hex_word("Header Text Outline", !sram_custompalette_menuheaderoutline)
 
-custompalettes_menuseltextbg_lo:
-    %cm_numfield_hex("Selected Text + ON BG Lo", !sram_custompalette_menuseltextbg_lo, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menuseltextbg_hi
-        XBA
-        STA !sram_custompalette_menuseltextbg
-        RTS
+custompalettes_menunumfill_display:
+    %cm_numfield_hex_word("NumField Text", !sram_custompalette_menunumfill)
 
-custompalettes_menuborder_hi:
-    %cm_numfield_hex("Toggle OFF + Border Hi", !sram_custompalette_menuborder_hi, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menuborder_lo
-        STA !sram_custompalette_menuborder
-        RTS
+custompalettes_menunumoutline_display:
+    %cm_numfield_hex_word("NumField Outline", !sram_custompalette_menunumoutline)
 
-custompalettes_menuborder_lo:
-    %cm_numfield_hex("Toggle OFF + Border Lo", !sram_custompalette_menuborder_lo, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menuborder_hi
-        XBA
-        STA !sram_custompalette_menuborder
-        RTS
+custompalettes_menunumsel_display:
+    %cm_numfield_hex_word("Selected NumField", !sram_custompalette_menunumsel)
 
-custompalettes_menuheaderoutline_hi:
-    %cm_numfield_hex("Header Text Outline Hi", !sram_custompalette_menuheaderoutline_hi, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menuheaderoutline_lo
-        STA !sram_custompalette_menuheaderoutline
-        RTS
+custompalettes_menunumseloutline_display:
+    %cm_numfield_hex_word("Selected NumField OL", !sram_custompalette_menunumseloutline)
 
-custompalettes_menuheaderoutline_lo:
-    %cm_numfield_hex("Header Text Outline Lo", !sram_custompalette_menuheaderoutline_lo, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menuheaderoutline_hi
-        XBA
-        STA !sram_custompalette_menuheaderoutline
-        RTS
+custompalettes_menutoggleon_display:
+    %cm_numfield_hex_word("Toggle ON", !sram_custompalette_menutoggleon)
 
-custompalettes_menunumfill_hi:
-    %cm_numfield_hex("NumField Text Hi", !sram_custompalette_menunumfill_hi, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menunumfill_lo
-        STA !sram_custompalette_menunumfill
-        RTS
-
-custompalettes_menunumfill_lo:
-    %cm_numfield_hex("NumField Text Lo", !sram_custompalette_menunumfill_lo, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menunumfill_hi
-        XBA
-        STA !sram_custompalette_menunumfill
-        RTS
-
-custompalettes_menunumoutline_hi:
-    %cm_numfield_hex("NumField Outline Hi", !sram_custompalette_menunumoutline_hi, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menunumoutline_lo
-        STA !sram_custompalette_menunumoutline
-        RTS
-
-custompalettes_menunumoutline_lo:
-    %cm_numfield_hex("NumField Outline Lo", !sram_custompalette_menunumoutline_lo, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menunumoutline_hi
-        XBA
-        STA !sram_custompalette_menunumoutline
-        RTS
-
-custompalettes_menunumsel_hi:
-    %cm_numfield_hex("Selected NumField Hi", !sram_custompalette_menunumsel_hi, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menunumsel_lo
-        STA !sram_custompalette_menunumsel
-        RTS
-
-custompalettes_menunumsel_lo:
-    %cm_numfield_hex("Selected NumField Lo", !sram_custompalette_menunumsel_lo, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menunumsel_hi
-        XBA
-        STA !sram_custompalette_menunumsel
-        RTS
-
-custompalettes_menunumseloutline_hi:
-    %cm_numfield_hex("Selected NumField OL Hi", !sram_custompalette_menunumseloutline_hi, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menunumseloutline_lo
-        STA !sram_custompalette_menunumseloutline
-        RTS
-
-custompalettes_menunumseloutline_lo:
-    %cm_numfield_hex("Selected NumField OL Lo", !sram_custompalette_menunumseloutline_lo, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menunumseloutline_hi
-        XBA
-        STA !sram_custompalette_menunumseloutline
-        RTS
-
-custompalettes_menutoggleon_hi:
-    %cm_numfield_hex("Toggle ON Hi", !sram_custompalette_menutoggleon_hi, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menutoggleon_lo
-        STA !sram_custompalette_menutoggleon
-        RTS
-
-custompalettes_menutoggleon_lo:
-    %cm_numfield_hex("Toggle ON Lo", !sram_custompalette_menutoggleon_lo, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menutoggleon_hi
-        XBA
-        STA !sram_custompalette_menutoggleon
-        RTS
-
-custompalettes_menubackground_hi:
-    %cm_numfield_hex("Background Hi", !sram_custompalette_menubackground_hi, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menubackground_lo
-        STA !sram_custompalette_menubackground
-        RTS
-
-custompalettes_menubackground_lo:
-    %cm_numfield_hex("Background Lo", !sram_custompalette_menubackground_lo, 0, 255, 1, #.routine)
-    .routine
-        XBA
-        ORA !sram_custompalette_menubackground_hi
-        XBA
-        STA !sram_custompalette_menubackground
-        RTS
+custompalettes_menubackground_display:
+    %cm_numfield_hex_word("Background", !sram_custompalette_menubackground)
 
 action_custompalettes_refresh:
 {
@@ -444,20 +275,6 @@ action_copy_palette:
     LDA ($16),Y : STA !sram_custompalette_menuseltextbg : INY #2
     LDA ($16),Y : STA !sram_custompalette_menunumseloutline : INY #2
     LDA ($16),Y : STA !sram_custompalette_menunumsel : INY #2
-
-    ; split hi and lo bytes into separate addresses
-    %ai8()
-    LDX #$00
-
-  .loop
-    ; load lo, then hi
-    LDA !sram_custompalette_menuborder,X : XBA
-    INX : LDA !sram_custompalette_menuborder,X
-    ; store hi, then lo
-    INX : STA !sram_custompalette_menuborder,X
-    INX #2 : XBA : STA !sram_custompalette_menuborder,X
-    ; next word
-    INX #2 : CPX #$42 : BNE .loop
 
     ; play a happy sound and refresh current profile
     %ai16()
