@@ -573,6 +573,7 @@ cm_draw_action_table:
     dw draw_toggle_inverted
     dw draw_numfield_color
     dw draw_numfield_hex_word
+    dw draw_numfield_sound
 
     draw_toggle:
     {
@@ -807,6 +808,7 @@ cm_draw_action_table:
     }
 
     draw_numfield_hex:
+    draw_numfield_sound:
     {
         ; grab the memory address (long)
         LDA [$04] : INC $04 : INC $04 : STA $08
@@ -1088,10 +1090,10 @@ cm_loop:
   .skip_cgram
     JSR cm_get_inputs : STA !ram_cm_controller : BEQ .inputLoop
 
-    BIT #$0080 : BNE .pressedA
-    BIT #$8000 : BNE .pressedB
-;    BIT #$0040 : BNE .pressedX ; disabled to make a branch fit...
-;    BIT #$4000 : BNE .pressedY
+    BIT #$0080 : BEQ + : JMP .pressedA ; more wiggle room with branch limits...
++   BIT #$8000 : BEQ + : JMP .pressedB
+;    BIT #$0040 : BNE .pressedX
++   BIT #$4000 : BNE .pressedY
     BIT #$2000 : BNE .pressedSelect
     BIT #$1000 : BNE .pressedStart
     BIT #$0800 : BNE .pressedUp
@@ -1326,6 +1328,7 @@ cm_execute_action_table:
     dw execute_toggle
     dw execute_numfield_color
     dw execute_numfield_hex_word
+    dw execute_numfield_sound
 
     execute_toggle:
     {
@@ -1451,6 +1454,56 @@ cm_execute_action_table:
 
       .end
         %sfxnumber()
+        RTS
+    }
+
+    execute_numfield_sound:
+    {
+        ; $04[0x3] = memory address to manipulate
+        ; $08[0x1] = min
+        ; $0A[0x1] = max
+        ; $0C[0x1] = increment
+        ; $20[0x2] = JSR target
+        LDA [$00] : INC $00 : INC $00 : STA $04
+        LDA [$00] : INC $00 : STA $06
+
+        LDA [$00] : INC $00 : AND #$00FF : STA $08
+        LDA [$00] : INC $00 : AND #$00FF : INC : STA $0A ; INC for convenience
+        LDA [$00] : INC $00 : AND #$00FF : STA $0C
+
+        LDA [$00] : INC $00 : INC $00 : STA $20
+
+        LDA !ram_cm_controller : BIT #$4000 : BNE .jsr ; check for Y pressed
+        LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
+
+        LDA [$04] : CLC : ADC $0C
+
+        CMP $0A : BCS .set_to_min
+
+        STA [$04] : BRA .end
+
+      .pressed_left
+        LDA [$04] : SEC : SBC $0C : BMI .set_to_max
+
+        CMP $0A : BCS .set_to_max
+
+        STA [$04] : BRA .end
+
+      .set_to_min
+        LDA $08 : STA [$04] : CLC : BRA .end
+
+      .set_to_max
+        LDA $0A : DEC : STA [$04] : CLC : BRA .end
+
+      .jsr
+        LDA $20 : BEQ .end
+
+        LDA [$04]
+        LDX #$0000
+        JSR ($0020,X)
+
+      .end
+;        %sfxnumber()
         RTS
     }
 

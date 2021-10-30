@@ -45,6 +45,14 @@ macro cm_numfield_color(title, addr, jsrtarget)
     db #$28, "<title>", #$FF
 endmacro
 
+macro cm_numfield_sound(title, addr, start, end, increment, jsrtarget)
+    dw !ACTION_NUMFIELD_SOUND
+    dl <addr>
+    db <start>, <end>, <increment>
+    dw <jsrtarget>
+    db #$28, "<title>", #$FF
+endmacro
+
 macro cm_toggle(title, addr, value, jsrtarget)
     dw !ACTION_TOGGLE
     dl <addr>

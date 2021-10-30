@@ -373,23 +373,19 @@ presetrando_pbs:
 ; ----------
 
 SoundTestMenu:
-    dw #ifb_soundtest_lib1_sound
-    dw #ifb_soundtest_lib1_playsound
-    dw #ifb_soundtest_lib2_sound
-    dw #ifb_soundtest_lib2_playsound
-    dw #ifb_soundtest_lib3_sound
-    dw #ifb_soundtest_lib3_playsound
-    dw #ifb_soundtest_silence
     dw #ifb_soundtest_goto_music
     dw #misc_music_toggle
+    dw #ifb_soundtest_lib1_sound
+    dw #ifb_soundtest_lib2_sound
+    dw #ifb_soundtest_lib3_sound
+    dw #ifb_soundtest_silence
+    dw #ifb_notext
+    dw #ifb_pressYtext
     dw #$0000
-    %cm_header("AUDIO TEST MENU")
+    %cm_header("SOUND TEST MENU")
 
 ifb_soundtest_lib1_sound:
-    %cm_numfield_hex("Library One Sound", !ram_soundtest_lib1, 1, 66, 1, #0)
-
-ifb_soundtest_lib1_playsound:
-    %cm_jsr("   Play Lib1", #action_soundtest_lib1_play, #$0000)
+    %cm_numfield_sound("Library One Sound", !ram_soundtest_lib1, 1, 66, 1, #action_soundtest_lib1_play)
 
 action_soundtest_lib1_play:
 {
@@ -398,10 +394,7 @@ action_soundtest_lib1_play:
 }
 
 ifb_soundtest_lib2_sound:
-    %cm_numfield_hex("Library Two Sound", !ram_soundtest_lib2, 1, 127, 1, #0)
-
-ifb_soundtest_lib2_playsound:
-    %cm_jsr("   Play Lib2", #action_soundtest_lib2_play, #$0000)
+    %cm_numfield_sound("Library Two Sound", !ram_soundtest_lib2, 1, 127, 1, #action_soundtest_lib2_play)
 
 action_soundtest_lib2_play:
 {
@@ -410,10 +403,7 @@ action_soundtest_lib2_play:
 }
 
 ifb_soundtest_lib3_sound:
-    %cm_numfield_hex("Library Three Sound", !ram_soundtest_lib3, 1, 47, 1, #0)
-
-ifb_soundtest_lib3_playsound:
-    %cm_jsr("   Play Lib3", #action_soundtest_lib3_play, #$0000)
+    %cm_numfield_sound("Library Three Sound", !ram_soundtest_lib3, 1, 47, 1, #action_soundtest_lib3_play)
 
 action_soundtest_lib3_play:
 {
@@ -427,7 +417,7 @@ ifb_soundtest_silence:
 action_soundtest_silence:
 {
     ; silence all 3 libs at once
-    TXA : JSL !SFX_LIB1
+    TYA : JSL !SFX_LIB1
     LDA #$0071 : JSL !SFX_LIB2
     LDA #$0001 : JSL !SFX_LIB3
     RTS
@@ -604,27 +594,25 @@ action_soundtest_playmusic:
 ifb_soundtest_music_toggle:
     %cm_toggle("Music", !sram_music_toggle, #$0001, MusicToggle)
 
-    MusicToggle:
-    {
-        BIT #$0001 : BEQ .noMusic
-
-        LDA $07F5 : STA $2140
-
-        RTS
+MusicToggle:
+{
+    BIT #$0001 : BEQ .noMusic
+    LDA $07F5 : STA $2140
+    RTS
 
   .noMusic
-        LDA #$0000 
-        STA $0629
-        STA $062B
-        STA $062D
-        STA $062F
-        STA $0631
-        STA $0633
-        STA $0635
-        STA $0637
-        STA $063F
-        STA $2140
-        RTS
+    LDA #$0000 
+    STA $0629
+    STA $062B
+    STA $062D
+    STA $062F
+    STA $0631
+    STA $0633
+    STA $0635
+    STA $0637
+    STA $063F
+    STA $2140
+    RTS
 }
 
 action_fixcontrols:

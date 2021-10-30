@@ -359,22 +359,30 @@ CustomMenuSFXMenu:
     dw #ifb_sfx_confirm
     dw #ifb_sfx_goback
     dw #ifb_notext
-    dw #ifb_soundtest_lib1_sound
-    dw #ifb_soundtest_lib1_playsound
+    dw #ifb_pressYtext
     dw #$0000
-    %cm_header("CHOOSE SFX FROM LIB 1")
+    %cm_header("CUSTOMIZE MENU SOUND FX")
 
 ifb_sfx_move:
-    %cm_numfield_hex("Move Cursor", !sram_customsfx_move, 1, 63, 1, #0)
+    %cm_numfield_sound("Move Cursor", !sram_customsfx_move, 1, 63, 1, #action_test_sfx)
 
 ifb_sfx_toggle:
-    %cm_numfield_hex("Toggle", !sram_customsfx_toggle, 1, 63, 1, #0)
+    %cm_numfield_sound("Toggle", !sram_customsfx_toggle, 1, 63, 1, #action_test_sfx)
 
 ifb_sfx_number:
-    %cm_numfield_hex("Number Select", !sram_customsfx_number, 1, 63, 1, #0)
+    %cm_numfield_sound("Number Select", !sram_customsfx_number, 1, 63, 1, #action_test_sfx)
 
 ifb_sfx_goback:
-    %cm_numfield_hex("Go Back", !sram_customsfx_goback, 1, 63, 1, #0)
+    %cm_numfield_sound("Go Back", !sram_customsfx_goback, 1, 63, 1, #action_test_sfx)
 
 ifb_sfx_confirm:
-    %cm_numfield_hex("Confirm Selection", !sram_customsfx_confirm, 1, 63, 1, #0)
+    %cm_numfield_sound("Confirm Selection", !sram_customsfx_confirm, 1, 63, 1, #action_test_sfx)
+
+ifb_pressYtext:
+    %cm_jsr("Press Y to Play Sounds", #action_text, #0)
+
+action_test_sfx:
+{
+    JSL !SFX_LIB1
+    RTS
+}
