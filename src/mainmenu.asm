@@ -191,7 +191,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("FIREBAT INFOHUD v2.3.0.1")
+    %cm_header("FIREBAT INFOHUD v2.3.0.2")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -869,6 +869,7 @@ MiscMenu:
     dw #misc_invincibility
     dw #misc_infiniteammo
     dw #misc_magnetstairs
+    dw #misc_killenemies
     dw #$0000
     %cm_header("MISC OPTIONS")
 
@@ -901,9 +902,7 @@ misc_music_toggle:
 
   .routine
     BIT #$0001 : BEQ .noMusic
-
     LDA $07F5 : STA $2140
-
     RTS
 
   .noMusic
@@ -928,26 +927,33 @@ misc_infiniteammo:
 
 misc_magnetstairs:
     %cm_toggle("Magnet Stairs Fix", !ram_magnetstairs, #$0001, #.routine)
-    .routine
-        LDA $079B : CMP #$DFD7 : BNE .done
-        LDA !ram_magnetstairs : BEQ .broken
+  .routine
+    LDA $079B : CMP #$DFD7 : BNE .done
+    LDA !ram_magnetstairs : BEQ .broken
 
-        ; change tile type and BTS
-        PHP : %a8()
-        LDA #$10 : STA $7F01F9 : STA $7F02EB
-        LDA #$53 : STA $7F64FD : STA $7F6576
-        PLP
-        RTS
+    ; change tile type and BTS
+    PHP : %a8()
+    LDA #$10 : STA $7F01F9 : STA $7F02EB
+    LDA #$53 : STA $7F64FD : STA $7F6576
+    PLP
+    RTS
 
-      .broken
-        ; change tile type and BTS
-        PHP : %a8()
-        LDA #$80 : STA $7F01F9 : STA $7F02EB
-        LDA #$00 : STA $7F64FD : STA $7F6576
-        PLP
+  .broken
+    ; change tile type and BTS
+    PHP : %a8()
+    LDA #$80 : STA $7F01F9 : STA $7F02EB
+    LDA #$00 : STA $7F64FD : STA $7F6576
+    PLP
 
-      .done
-        RTS
+  .done
+    RTS
+
+misc_killenemies:
+    %cm_jsr("Kill Enemies", #.kill_loop, #0)
+  .kill_loop
+    TAX : LDA $0F86,X : ORA #$0200 : STA $0F86,X
+    TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
+    RTS
 
 
 ; ---------------
