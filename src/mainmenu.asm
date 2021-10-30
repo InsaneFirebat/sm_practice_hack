@@ -960,6 +960,7 @@ MiscMenu:
     dw #misc_music_toggle
     dw #misc_transparent
     dw #misc_invincibility
+    dw #misc_killenemies
     dw #$0000
     %cm_header("MISC")
 
@@ -992,9 +993,7 @@ misc_music_toggle:
 
   .routine
     BIT #$0001 : BEQ .noMusic
-
     LDA $07F5 : STA $2140
-
     RTS
 
   .noMusic
@@ -1011,7 +1010,29 @@ misc_music_toggle:
     STA $2140
     RTS
 
-misc_transparent:
+misc_invincibility:
+    %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
+
+misc_killenemies:
+    %cm_jsr("Kill Enemies", #.kill_loop, #0)
+  .kill_loop
+    TAX : LDA $0F86,X : ORA #$0200 : STA $0F86,X
+    TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
+    RTS
+
+
+; ---------------
+; Sprite Features
+; ---------------
+
+SpritesMenu:
+    dw #sprites_samus_prio
+    dw #sprites_show_hitbox
+    dw #sprites_oob_viewer
+    dw #$0000
+    %cm_header("SPRITE FEATURES")
+
+sprites_samus_prio:
     %cm_toggle_bit("Samus on Top", !sram_sprite_prio_flag, #$3000, #0)
 
 misc_invincibility:
