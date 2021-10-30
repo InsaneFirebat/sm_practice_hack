@@ -73,7 +73,7 @@ ifb_paletteprofile:
     db #$28, "Menu Palette", #$FF
         db #$28, "     CUSTOM", #$FF ; CUSTOM should always be first
         db #$28, "    DEFAULT", #$FF
-        db #$28, "        HUD", #$FF
+        db #$28, "     TWITCH", #$FF
         db #$28, "    FIREBAT", #$FF
         db #$28, " WARDRINKER", #$FF
         db #$28, "        MM2", #$FF
@@ -81,10 +81,11 @@ ifb_paletteprofile:
         db #$28, "     ZOHDIN", #$FF
         db #$28, "    DARKXOA", #$FF
         db #$28, "    MELONAX", #$FF
-        db #$28, "     TWITCH", #$FF
+        db #$28, " TOPSYTURVE", #$FF
         db #$28, "       GREY", #$FF
         db #$28, "        RED", #$FF
         db #$28, "     PURPLE", #$FF
+        db #$28, "        HUD", #$FF
     db #$FF
 
 ifb_palette2custom:

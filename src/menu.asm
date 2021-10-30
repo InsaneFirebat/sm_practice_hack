@@ -309,8 +309,8 @@ PrepMenuPalette:
 
 PaletteProfileTables:
     dw #CustomProfileTable        ; 0
-    dw #DefaultProfileTable       ; 1
-    dw #HUDProfileTable           ; 2
+    dw #TwitchProfileTable        ; 1
+    dw #DefaultProfileTable       ; 2
     dw #FirebatProfileTable       ; 3
     dw #wardrinkerProfileTable    ; 4
     dw #mm2ProfileTable           ; 5
@@ -318,21 +318,22 @@ PaletteProfileTables:
     dw #ZohdinProfileTable        ; 7
     dw #DarkXoaProfileTable       ; 8
     dw #MelonaxProfileTable       ; 9
-    dw #TwitchProfileTable        ; A
+    dw #TopsyTurveProfileTable    ; A
     dw #GreyProfileTable          ; B
     dw #RedProfileTable           ; C
     dw #PurpleProfileTable        ; D
+    dw #HUDProfileTable           ; E
     dw #$0000
 
 ; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
 CustomProfileTable: ; custom always first
     dw $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000
 
+TwitchProfileTable:
+    dw $550D, $550D, $7FFF, $0000, $0000, $7FFF, $550D, $550D, $0000, $550D, $7FFF
+
 DefaultProfileTable:
     dw $7277, $48F3, $7FFF, $0000, $0000, $7FFF, $4376, $761F, $0000, $0000, $761F
-
-HUDProfileTable:
-    dw $3D46, $48FB, $7FFF, $0000, $44E5, $7FFF, $4A52, $318C, $0000, $02DF, $001F
 
 FirebatProfileTable:
     dw $000E, $000E, $0A20, $0000, $0A20, $0002, $0680, $000F, $0005, $0A20, $000F
@@ -355,8 +356,8 @@ DarkXoaProfileTable:
 MelonaxProfileTable:
     dw $7FFF, $0000, $3DEF, $0C63, $0000, $7FFF, $266B, $3DFE, $0C63, $0000, $266B
 
-TwitchProfileTable:
-    dw $550D, $550D, $7FFF, $0000, $0000, $7FFF, $550D, $550D, $0000, $550D, $7FFF
+TopsyTurveProfileTable:
+    dw $7264, $7264, $7FFF, $0000, $0000, $7FFF, $7264, $7264, $0000, $0000, $7264
 
 GreyProfileTable:
     dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $0012, $0C63, $1CE7, $3DEF
@@ -366,6 +367,9 @@ RedProfileTable:
 
 PurpleProfileTable:
     dw $602F, $0000, $602F, $0000, $0000, $602F, $0338, $0338, $0000, $602F, $0338
+
+HUDProfileTable:
+    dw $3D46, $48FB, $7FFF, $0000, $44E5, $7FFF, $4A52, $318C, $0000, $02DF, $001F
 }
 
 cm_draw:

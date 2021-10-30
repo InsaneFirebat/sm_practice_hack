@@ -103,6 +103,7 @@ init_sram:
     LDA #$0000 : STA !sram_superhud_middle
     LDA #$0000 : STA !sram_superhud_top
 
+    LDA #$0001 : STA !sram_custompalette_profile ; 1 - Twitch
     LDA #$7277 : STA !sram_custompalette_menuborder
     LDA #$48F3 : STA !sram_custompalette_menuheaderoutline
     LDA #$7FFF : STA !sram_custompalette_menutext
@@ -114,7 +115,6 @@ init_sram:
     LDA #$0000 : STA !sram_custompalette_menubackground
     LDA #$0000 : STA !sram_custompalette_menunumseloutline
     LDA #$761F : STA !sram_custompalette_menunumsel
-    LDA #$0001 : STA !sram_custompalette_profile
 
     LDA #$0037 : STA !sram_customsfx_move
     LDA #$0038 : STA !sram_customsfx_toggle
