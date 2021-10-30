@@ -105,7 +105,7 @@ init_sram:
     LDA #$0006 : STA !sram_superhud_middle
     LDA #$0008 : STA !sram_superhud_top
 
-    LDA #$0003 : STA !sram_custompalette_profile
+    LDA #$0003 : STA !sram_custompalette_profile ; 3 - Firebat
     LDA #$0A20 : STA !sram_custompalette_menutext
     LDA #$000F : STA !sram_custompalette_menuseltext
     LDA #$0005 : STA !sram_custompalette_menuseltextbg
