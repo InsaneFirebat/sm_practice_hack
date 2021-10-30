@@ -954,8 +954,11 @@ misc_magnetstairs:
 misc_killenemies:
     %cm_jsr("Kill Enemies", #.kill_loop, #0)
   .kill_loop
-    TAX : LDA $0F86,X : ORA #$0200 : STA $0F86,X
-    TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
+    ; 8000 = solid to Samus, 0400 = Ignore Samus projectiles
+    TAX : LDA $0F86,X : BIT #$8400 : BNE +
+    ORA #$0200 : STA $0F86,X
++   TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
+
     RTS
 
 
