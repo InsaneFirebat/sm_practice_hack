@@ -37,8 +37,9 @@ kill_enemies:
 {
     LDA #$0000
   .kill_loop
-    TAX : LDA $0F86,X : ORA #$0200 : STA $0F86,X
-    TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
+    TAX : LDA $0F86,X : BIT #$8400 : BNE +
+    ORA #$0200 : STA $0F86,X
++   TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
 
 if !ORIGINAL_MESSAGE_TEXT
     RTL
@@ -49,14 +50,17 @@ else
     LDA #$0168 : JSL $82E118
 
     ; Open message box
-    LDA $079B : CMP #$DD58 : BEQ .kill_mb
-    CMP #$CD13 : BEQ .kill_phantoon : CMP #$91F8 : BEQ .kill_ship
+    LDA $079B
+    CMP #$DD58 : BEQ .kill_mb
+    CMP #$CD13 : BEQ .kill_phantoon
+;    CMP #$91F8 : BEQ .kill_ship
     LDA #$001E : JML $858080
   .kill_mb
     LDA #$001F : JML $858080
   .kill_phantoon
     LDA #$0020 : JML $858080
   .kill_ship
+    ; this can't happen because I don't allow the ship to be killed
     LDA #$0021 : JML $858080
 endif
 }
