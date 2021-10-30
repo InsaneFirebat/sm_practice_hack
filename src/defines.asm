@@ -171,6 +171,7 @@
 !ACTION_TOGGLE_INVERTED   = #$0010
 !ACTION_NUMFIELD_COLOR    = #$0012
 !ACTION_NUMFIELD_HEX_WORD = #$0014
+!ACTION_NUMFIELD_SOUND    = #$0016
 
 ; using macros instead of these in custom builds
 !SOUND_MENU_MOVE = $0039
