@@ -219,10 +219,11 @@
 !IH_STATUS_R = #$0010 ; r
 !IH_STATUS_L = #$0020 ; l
 
-!IH_INPUT_UP = $7E09AA
-!IH_INPUT_DOWN = $7E09AC
-!IH_INPUT_LEFT = $7E09AE
-!IH_INPUT_RIGHT = $7E09B0
+!IH_INPUT_START = #$1000
+!IH_INPUT_UP = #$0800
+!IH_INPUT_DOWN = #$0400
+!IH_INPUT_LEFT = #$0200
+!IH_INPUT_RIGHT = #$0100
 !IH_INPUT_SHOOT = $7E09B2
 !IH_INPUT_JUMP = $7E09B4
 !IH_INPUT_RUN = $7E09B6
@@ -257,6 +258,7 @@
 !sram_ctrl_load_custom_preset = $702016
 !sram_ctrl_inc_custom_preset = $702018
 !sram_ctrl_dec_custom_preset = $70201A
+!sram_ctrl_toggle_tileviewer = $70201C
 
 ; FREE SPACE ^
 

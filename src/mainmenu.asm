@@ -1227,6 +1227,7 @@ ihmode_enemyhp:
     %cm_jsr("Enemy HP", #action_select_infohud_mode, #$0000)
 
 ihmode_roomstrat:
+!IH_MODE_ROOMSTRAT_INDEX = $0001
     %cm_jsr("Room Strat", #action_select_infohud_mode, #$0001)
 
 ihmode_chargetimer:
@@ -1245,6 +1246,7 @@ ihmode_dashcounter:
     %cm_jsr("Dash Counter", #action_select_infohud_mode, #$0006)
 
 ihmode_shinetune:
+!IH_MODE_SHINETUNE_INDEX = $0007
     %cm_jsr("Shine Tune", #action_select_infohud_mode, #$0007)
 
 ihmode_iframecounter:
@@ -1346,6 +1348,7 @@ RoomStratMenu:
     dw ihstrat_shinetopb
     dw ihstrat_elevatorcf
     dw ihstrat_botwooncf
+    dw ihstrat_doorskip
     dw ihstrat_kihuntermanip
     dw ihstrat_kraidradar
     dw #$0000
@@ -1355,6 +1358,7 @@ ihstrat_superhud:
     %cm_jsr("Super HUD", #action_select_room_strat, #$0000)
 
 ihstrat_mbhp:
+!IH_STRAT_MBHP_INDEX = $0001
     %cm_jsr("Mother Brain HP", #action_select_room_strat, #$0001)
 
 ihstrat_moatcwj:
@@ -1378,11 +1382,14 @@ ihstrat_elevatorcf:
 ihstrat_botwooncf:
     %cm_jsr("Botwoon Crystal Flash", #action_select_room_strat, #$0008)
 
+ihstrat_doorskip:
+    %cm_jsr("Parlor Door Skip", #action_select_room_strat, #$0009)
+
 ihstrat_kihuntermanip:
-    %cm_jsr("Kihunter Manipulation", #action_select_room_strat, #$0009)
+    %cm_jsr("Kihunter Manipulation", #action_select_room_strat, #$000A)
 
 ihstrat_kraidradar:
-    %cm_jsr("Kraid Nail Radar", #action_select_room_strat, #$000A)
+    %cm_jsr("Kraid Nail Radar", #action_select_room_strat, #$000B)
 
 action_select_room_strat:
 {
@@ -1407,6 +1414,7 @@ ih_room_strat:
     db #$28, "SHINE TO PB", #$FF
     db #$28, "ELEVATOR CF", #$FF
     db #$28, " BOTWOON CF", #$FF
+    db #$28, "  DOOR SKIP", #$FF
     db #$28, "   KIHUNTER", #$FF
     db #$28, "KRAID RADAR", #$FF
     db #$FF
@@ -1452,6 +1460,7 @@ ih_superhud_bottom_selector:
     db #$28, "ROBOT FLUSH", #$FF
     db #$28, "ELEVATOR CF", #$FF
     db #$28, " BOTWOON CF", #$FF
+    db #$28, "  DOOR SKIP", #$FF
     db #$FF
 
 ih_superhud_bottom_submenu:
@@ -1480,6 +1489,7 @@ SuperHUDBottomMenu:
     dw ih_superhud_robotflush
     dw ih_superhud_elevatorcf
     dw ih_superhud_botwooncf
+    dw ih_superhud_doorskip
     dw #$0000
     %cm_header("SUPERHUD MODE")
 
@@ -1548,6 +1558,9 @@ ih_superhud_elevatorcf:
 
 ih_superhud_botwooncf:
     %cm_jsr("Botwoon Crystal Flash", #action_select_superhud_bottom, #$0015)
+
+ih_superhud_doorskip:
+    %cm_jsr("Parlor Door Skip", #action_select_superhud_bottom, #$0016)
 
 action_select_superhud_bottom:
 {
@@ -2075,6 +2088,7 @@ endif
     dw #ctrl_reset_segment_later
     dw #ctrl_full_equipment
     dw #ctrl_kill_enemies
+    dw #ctrl_toggle_tileviewer
     dw #ctrl_reveal_damage
 if !FEATURE_SD2SNES
 else
@@ -2129,6 +2143,9 @@ ctrl_inc_custom_preset:
 ctrl_dec_custom_preset:
     %cm_ctrl_shortcut("Prev Preset Slot", !sram_ctrl_dec_custom_preset)
 
+ctrl_toggle_tileviewer:
+    %cm_ctrl_shortcut("Toggle Tile View", !sram_ctrl_toggle_tileviewer)
+
 ctrl_clear_shortcuts:
     %cm_jsr("Clear Shortcuts", action_clear_shortcuts, #$0000)
 
@@ -2150,6 +2167,7 @@ action_clear_shortcuts:
     STA !sram_ctrl_reset_segment_later
     STA !sram_ctrl_reveal_damage
     STA !sram_ctrl_randomize_rng
+    STA !sram_ctrl_toggle_tileviewer
     ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
     %sfxquake()
@@ -2167,6 +2185,7 @@ GameModeExtras:
     LDA !sram_ctrl_load_custom_preset : BNE .enabled
     LDA !sram_ctrl_inc_custom_preset : BNE .enabled
     LDA !sram_ctrl_dec_custom_preset : BNE .enabled
+    LDA !sram_ctrl_toggle_tileviewer : BNE .enabled
     RTL
 
   .enabled
