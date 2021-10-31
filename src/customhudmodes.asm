@@ -147,6 +147,7 @@ superhud_bottom_table:
     dw status_robotflush
     dw status_elevatorcf
     dw status_botwooncf
+    dw status_doorskip
 
 superhud_top_table:
     dw topHUD_off

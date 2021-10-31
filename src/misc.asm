@@ -231,7 +231,8 @@ MagnetStairFix:
 MotherBrainHP:
 {
     LDA !sram_display_mode : BNE .done
-    LDA #$0001 : STA !sram_display_mode : STA !sram_room_strat
+    LDA #!IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
+    LDA #!IH_STRAT_MBHP_INDEX : STA !sram_room_strat
 
   .done
     RTS

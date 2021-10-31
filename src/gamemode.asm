@@ -95,6 +95,11 @@ endif
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .reset_segment_later
 
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_toggle_tileviewer : CMP !sram_ctrl_toggle_tileviewer : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .toggle_tileviewer
+
+    ; Custom build shortcuts without priority
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_reveal_damage : CMP !sram_ctrl_reveal_damage : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .reveal_damage
@@ -225,6 +230,18 @@ endif
     JSL $808111
     %sfxbeep()
     ; CLC to continue normal gameplay after reseeding RNG
+    CLC : RTS
+
+  .toggle_tileviewer
+    LDA !ram_oob_watch_active : BEQ .turnOn
+    LDA #$0000 : STA !ram_oob_watch_active
+    ; CLC to continue normal gameplay after disabling OOB Tile Viewer
+    CLC : RTS
+
+  .turnOn
+    LDA #$0001 : STA !ram_oob_watch_active
+    JSL upload_sprite_oob_tiles
+    ; CLC to continue normal gameplay after enabling OOB Tile Viewer
     CLC : RTS
 
   .menu

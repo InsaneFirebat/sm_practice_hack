@@ -11,8 +11,8 @@ if !FEATURE_SD2SNES
     incsrc save.asm
 endif
 incsrc minimap.asm
-incsrc infohud.asm
 incsrc menu.asm
+incsrc infohud.asm
 incsrc rng.asm
 incsrc presets.asm
 incsrc misc.asm
