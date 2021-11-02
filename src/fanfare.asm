@@ -1,3 +1,4 @@
+
 ;org $84EFD9
 org $84F100
 print pc, " fanfare restore start"
