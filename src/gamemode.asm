@@ -119,7 +119,11 @@ if !FEATURE_SD2SNES
 endif
 
   .kill_enemies
-    JSL kill_enemies
+    LDA #$0000
+  .kill_loop
+    TAX : LDA $0F86,X : BIT #$8400 : BNE +
+    ORA #$0200 : STA $0F86,X
++   TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
     ; CLC to continue normal gameplay after killing enemies
     CLC : RTS
 
