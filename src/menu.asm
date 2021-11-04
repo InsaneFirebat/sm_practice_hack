@@ -26,7 +26,8 @@ maybe_trigger_pause_long:
 print pc, " menu bank85 end"
 warnpc $85FF00
 
-org $B88000
+;org $B88000
+org $83AD70
 print pc, " menu start"
 
 cm_start:
@@ -466,7 +467,6 @@ cm_draw_action_table:
     dw draw_numfield_hex
     dw draw_numfield_word
     dw draw_toggle_inverted
-    dw draw_numfield_color
 
     draw_toggle:
     {
@@ -738,42 +738,6 @@ cm_draw_action_table:
         
         ; (000X)
         LDA !ram_tmp_2 : AND #$000F : ASL : TAY
-        LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X
-
-      .done
-        RTS
-    }
-
-    draw_numfield_color:
-    {
-        ; grab the memory address (long)
-        LDA [$04] : INC $04 : INC $04 : STA $08
-        LDA [$04] : INC $04 : STA $0A
-
-        ; increment past JSR
-        INC $04 : INC $04
-
-        ; Draw the text
-        %item_index_to_vram_index()
-        PHX : JSR cm_draw_text : PLX
-
-        ; set position for the number
-        TXA : CLC : ADC #$002E : TAX
-
-        LDA [$08] : AND #$00FF : STA !ram_tmp_2
-
-        ; Clear out the area (black tile)
-        LDA #$281F : STA !ram_tilemap_buffer+0,X
-                     STA !ram_tilemap_buffer+2,X
-
-        ; Draw numbers
-        ; (00X0)
-        LDA !ram_tmp_2 : AND #$001E : TAY
-        LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer,X
-
-        ; (000X)
-        LDA !ram_tmp_2 : AND #$0001 : ASL #4 : STA $0E
-        LDA !ram_tmp_2 : AND #$001C : LSR : CLC : ADC $0E : TAY
         LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X
 
       .done
@@ -1165,7 +1129,6 @@ cm_execute_action_table:
     dw execute_numfield_hex
     dw execute_numfield_word
     dw execute_toggle
-    dw execute_numfield_color
 
     execute_toggle:
     {
@@ -1343,44 +1306,6 @@ cm_execute_action_table:
         RTS
     }
 
-    execute_numfield_color:
-    {
-        ; $04[0x3] = memory address to manipulate
-        ; $20[0x2] = JSR target
-        LDA [$00] : INC $00 : INC $00 : STA $04
-        LDA [$00] : INC $00 : STA $06
-
-        LDA [$00] : INC $00 : INC $00 : STA $20
-
-        LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
-
-        LDA [$04] : INC : CMP #$0020 : BCS .set_to_min
-
-        STA [$04] : BRA .jsr
-
-      .pressed_left
-        LDA [$04] : DEC : BMI .set_to_max
-
-        STA [$04] : BRA .jsr
-
-      .set_to_min
-        LDA #$0000 : STA [$04] : CLC : BRA .jsr
-
-      .set_to_max
-        LDA #$001F : STA [$04] : CLC
-
-      .jsr
-        LDA $20 : BEQ .end
-
-        LDA [$04]
-        LDX #$0000
-        JSR ($0020,X)
-
-      .end
-        LDA #!SOUND_MENU_MOVE : JSL $80903F
-        RTS
-    }
-
     execute_choice:
     {
         ; $04[0x3] = memory to manipulate
@@ -1516,7 +1441,9 @@ cm_divide_100:
 ; Main menu
 ; -----------
 
+print pc, " mainmenu start"
 incsrc mainmenu.asm
+print pc, " mainmenu end"
 
 
 ; ----------

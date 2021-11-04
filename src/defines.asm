@@ -44,10 +44,8 @@
 !ram_map_counter = $7FFB38
 !ram_vcounter_data = $7FFB3A
 !ram_custom_preset = $7FFB3C
-!ram_tel_debug_area = $7FFB3E
-!ram_tel_debug_station = $7FFB40
-!ram_sprite_hitbox_active = $7FFB42
-!ram_oob_watch_active = $7FFB44
+!ram_sprite_hitbox_active = $7FFB3E
+!ram_oob_watch_active = $7FFB40
 
 ; FREE SPACE ^
 
@@ -166,7 +164,6 @@
 !ACTION_NUMFIELD_HEX    = #$000C
 !ACTION_NUMFIELD_WORD   = #$000E
 !ACTION_TOGGLE_INVERTED = #$0010
-!ACTION_NUMFIELD_COLOR  = #$0012
 
 !SOUND_MENU_MOVE = $0039
 !SOUND_MENU_JSR = $0039
@@ -185,22 +182,22 @@
 !IH_CONTROLLER_SEC_NEW = $91
 !IH_CONTROLLER_SEC_PREV = $99
 
-!IH_BLANK = #$0057
+!IH_BLANK = #$000E
 !IH_PERCENT = #$0C0A
 !IH_DECIMAL = #$0CCB
-!IH_HYPHEN = #$0C55
-!IH_LETTER_A = #$0C64
-!IH_LETTER_B = #$0C65
-!IH_LETTER_C = #$0C58
-!IH_LETTER_D = #$0C59
-!IH_LETTER_E = #$0C5A
-!IH_LETTER_F = #$0C5B
-!IH_LETTER_H = #$0C6C
-!IH_LETTER_L = #$0C68
-!IH_LETTER_N = #$0C56
-!IH_LETTER_R = #$0C69
-!IH_LETTER_X = #$0C66
-!IH_LETTER_Y = #$0C67
+!IH_HYPHEN = #$0C0B
+!IH_LETTER_A = #$0CD8
+!IH_LETTER_B = #$0CD9
+!IH_LETTER_C = #$0C0D
+!IH_LETTER_D = #$0C30
+!IH_LETTER_E = #$0C31
+!IH_LETTER_F = #$0C32
+!IH_LETTER_H = #$0C33
+!IH_LETTER_L = #$0CB8
+!IH_LETTER_N = #$0C0B
+!IH_LETTER_R = #$0CCA
+!IH_LETTER_X = #$0CDA
+!IH_LETTER_Y = #$0CDB
 
 !IH_PAUSE = #$0100 ; right
 !IH_SLOWDOWN = #$0400 ; down

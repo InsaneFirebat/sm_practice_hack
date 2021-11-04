@@ -1,8 +1,8 @@
-# HACK
+# Y-Faster 2 Furious
 
 ## Notes
 
-Always use the UNHEADERED (UH) version of the hack for the practice rom.
+Always use the latest UNHEADERED (UH) version of the hack for the practice rom.
 
 ## Which Download?
 

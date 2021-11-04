@@ -17,19 +17,14 @@ endif
 ;    LDA #$C100
 
 ; Fix Zebes planet tiling error
-org $8C9607
-    dw #$0E2F
+;org $8C9607
+;    dw #$0E2F
 
-; Fix Zebes planet tiling error
-org $8C9607
-    dw #$0E2F
+;org $8C9607
+;    dw #$0E2F
 
 ; Skips the waiting time after teleporting
-if !FEATURE_PAL
-org $90E874
-else
 org $90E877
-endif
     BRA $1F
 
 
@@ -84,9 +79,22 @@ org $808F24
 ;  .done
 ;    RTS
 ;}
-warnpc $8FFFFF
 
-org $87D000
+; Fix corner tiles in HUD, frees up more tiles
+org $8098BF
+    dw $2C0F, $2C0F, $2C0F, $2C0F, $2C0F, $2C0F
+
+org $809909
+    db $0F
+
+org $809949
+    db $0F
+
+org $809989
+    db $0F
+
+;org $87D000
+org $87FF00
 print pc, " misc start"
 hook_set_music_track:
 {
@@ -163,4 +171,3 @@ stop_all_sounds:
 }
 
 print pc, " misc end"
-

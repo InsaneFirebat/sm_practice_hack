@@ -349,12 +349,6 @@ print pc, " preset_start_gameplay end"
 warnpc $80FC00
 
 
-org $FD8000
-print pc, " custom presets start"
-incsrc custompresets.asm
-print pc, " custom presets end"
-
-
 ; $80:9AB1: Add x-ray and grapple HUD items if necessary
 org $809AB1
     ; Skip x-ray and grapple if max HP is a multiple of 4,
@@ -367,6 +361,16 @@ warnpc $809AC9
 ; $80:9AC9: Resume original logic
 org $809AC9
   .resume_infohud_icon_initialization
+
+
+; --------------
+; Custom Presets
+; --------------
+
+org $FD8000
+print pc, " custom presets start"
+incsrc custompresets.asm
+print pc, " custom presets end"
 
 
 ; -------------------

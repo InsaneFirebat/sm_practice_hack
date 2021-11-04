@@ -47,13 +47,13 @@ org $82E488      ; write tiles to VRAM
 
 
 org $9AB200      ; graphics for HUD
-incbin ../resources/hudgfx.bin
+incbin ../resources/Yfaster2f_hudgfx.bin
 
 
 ; Place minimap graphics in bank FD
 org $FDD500
 print pc, " minimap bankFD start"
-incbin ../resources/mapgfx.bin
+incbin ../resources/Yfaster2f_mapgfx.bin
 
 ; Next block needs to be all zeros to clear a tilemap
 fillbyte $00
@@ -134,7 +134,8 @@ warnpc $82FA00
 
 
 ; Placed in bank 90 so that the jumps work
-org $90F640
+;org $90F640
+org $90F840
 print pc, " minimap bank90 start"
 
 mm_initialize_minimap:
