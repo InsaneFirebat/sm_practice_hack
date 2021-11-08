@@ -868,7 +868,7 @@ MiscMenu:
     dw #misc_bluesuit
     dw #misc_flashsuit
     dw #misc_hyperbeam
-    dw #misc_babyslowdown
+    dw #misc_slowdownrate
     dw #misc_magicpants
     dw #misc_spacepants
     dw #misc_loudpants
@@ -879,6 +879,8 @@ MiscMenu:
     dw #misc_magnetstairs
     dw #misc_killenemies
     dw #misc_forcestand
+    dw #misc_elevatorstanding
+    dw #misc_elevatorriding
     dw #$0000
     %cm_header("MISC OPTIONS")
 
@@ -891,8 +893,8 @@ misc_flashsuit:
 misc_hyperbeam:
     %cm_toggle("Hyper Beam", $7E0A76, #$0001, #0)
 
-misc_babyslowdown:
-    %cm_toggle("Baby Slowdown", $7E0A66, #$0002, #0)
+misc_slowdownrate:
+    %cm_numfield("Samus Slowdown Rate", $7E0A66, 0, 4, 1, #0)
 
 misc_magicpants:
     %cm_toggle_bit("Magic Pants", !ram_magic_pants_enabled, #$0001, GameLoopExtras)
@@ -973,6 +975,12 @@ misc_forcestand:
   .routine
     JSL $90E2D4
     RTS
+
+misc_elevatorstanding:
+    %cm_toggle("Standing On Elevator", $7E0E16, #$0001, #0)
+
+misc_elevatorriding:
+    %cm_toggle("Riding Elevator", $7E0E16, #$0080, #0)
 
 
 ; ---------------
