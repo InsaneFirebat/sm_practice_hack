@@ -389,6 +389,7 @@ endif
 
 !sram_ctrl_reveal_damage = $702200
 !sram_ctrl_randomize_rng = $702202
+!sram_ctrl_force_stand = $702204
 
 !sram_countdamage = $702210
 !sram_menu_background = $702212
