@@ -145,7 +145,7 @@ MainMenu:
 ;    dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_header("HACK PRACTICE HACK 2.3.0.3")
+    %cm_header("HACK PRACTICE HACK 2.3.0.9")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -835,6 +835,7 @@ MiscMenu:
     dw #misc_transparent
     dw #misc_invincibility
     dw #misc_killenemies
+    dw #misc_forcestand
     dw #$0000
     %cm_header("MISC")
 
@@ -888,13 +889,20 @@ misc_invincibility:
     %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
 
 misc_killenemies:
-    %cm_jsr("Kill Enemies", #.kill_loop, #0)
+    %cm_jsr("Kill Enemies", .kill_loop, #0)
   .kill_loop
     ; 8000 = solid to Samus, 0400 = Ignore Samus projectiles
     TAX : LDA $0F86,X : BIT #$8400 : BNE +
     ORA #$0200 : STA $0F86,X
 +   TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
 
+    RTS
+
+misc_forcestand:
+    %cm_jsr("Force Samus to Stand Up", .routine, #0)
+
+  .routine
+    JSL $90E2D4
     RTS
 
 
@@ -1641,6 +1649,13 @@ CtrlMenu:
     dw #ctrl_reset_segment_later
     dw #ctrl_full_equipment
     dw #ctrl_kill_enemies
+    dw #ctrl_toggle_tileviewer
+    dw #ctrl_reveal_damage
+    dw #ctrl_force_stand
+if !FEATURE_SD2SNES
+else
+    dw #ctrl_randomize_rng
+endif
     dw #ctrl_clear_shortcuts
     dw #$0000
     %cm_header("CONTROLLER SHORTCUTS")
@@ -1684,6 +1699,12 @@ ctrl_inc_custom_preset:
 ctrl_dec_custom_preset:
     %cm_ctrl_shortcut("Prev Preset Slot", !sram_ctrl_dec_custom_preset)
 
+ctrl_toggle_tileviewer:
+    %cm_ctrl_shortcut("Toggle Tile View", !sram_ctrl_toggle_tileviewer)
+
+ctrl_force_stand:
+    %cm_ctrl_shortcut("Force Stand", !sram_ctrl_force_stand)
+
 ctrl_clear_shortcuts:
     %cm_jsr("Clear Shortcuts", action_clear_shortcuts, #$0000)
 
@@ -1703,6 +1724,8 @@ action_clear_shortcuts:
     STA !sram_ctrl_dec_custom_preset
     STA !sram_ctrl_reset_segment_timer
     STA !sram_ctrl_reset_segment_later
+    STA !sram_ctrl_toggle_tileviewer
+    STA !sram_ctrl_force_stand
     ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
     RTS
@@ -1719,6 +1742,8 @@ GameModeExtras:
     LDA !sram_ctrl_load_custom_preset : BNE .enabled
     LDA !sram_ctrl_inc_custom_preset : BNE .enabled
     LDA !sram_ctrl_dec_custom_preset : BNE .enabled
+    LDA !sram_ctrl_toggle_tileviewer : BNE .enabled
+    LDA !sram_ctrl_force_stand : BNE .enabled
     RTL
 
   .enabled

@@ -95,6 +95,10 @@ gamemode_shortcuts:
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .full_equipment
 
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_force_stand : CMP !sram_ctrl_force_stand : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .force_stand
+
   .check_menu
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
@@ -230,6 +234,11 @@ endif
 +   DEC : STA !sram_custom_preset_slot
     ASL : TAX : LDA.l NumberGFXTable,X : STA $7EC67C
     ; CLC to continue normal gameplay after decrementing preset slot
+    CLC : RTS
+
+  .force_stand
+    JSL $90E2D4
+    ; CLC to continue normal gameplay after forced stand
     CLC : RTS
 
   .menu

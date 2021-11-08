@@ -57,6 +57,8 @@ init_sram:
     LDA #$0000 : STA !sram_ctrl_load_custom_preset
     LDA #$0000 : STA !sram_ctrl_inc_custom_preset
     LDA #$0000 : STA !sram_ctrl_dec_custom_preset
+    LDA #$0000 : STA !sram_ctrl_toggle_tileviewer
+    LDA #$0000 : STA !sram_ctrl_force_stand
 
     ; Input Cheat Sheet  ($4218)
     ; $8000 = B
