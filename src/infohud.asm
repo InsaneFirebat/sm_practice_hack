@@ -1175,6 +1175,24 @@ warnpc $F0E000
 org $80FC00
 print pc, " infohud bank80 start"
 
+ih_hud_code_paused:
+{
+    ; overwritten code
+    PHP : PHB : PHK : PLB
+    %a8() : STZ $02 : %ai16()
+
+    ; Update Samus' HP
+    LDA $7E09C2 : CMP !ram_last_hp : BEQ .end : STA !ram_last_hp
+    PHY : PHX
+    LDX #$0092 : JSL Draw4JSL
+    PLX : PLY
+    LDA !IH_BLANK : STA $7EC690
+
+  .end
+    LDA $7E09C0 ; overwritten code
+    JMP $9B51
+}
+
 NumberGFXTable:
     dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
     dw #$0C70, #$0C71, #$0C72, #$0C73, #$0C74, #$0C75, #$0C78, #$0C79, #$0C7A, #$0C7B
