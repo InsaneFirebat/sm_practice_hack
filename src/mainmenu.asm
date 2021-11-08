@@ -197,7 +197,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD v2.3.0.2")
+    %cm_header("CUSTOM INFOHUD v2.3.0.4")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -873,6 +873,7 @@ MiscMenu:
     dw #misc_infiniteammo
     dw #misc_magnetstairs
     dw #misc_killenemies
+    dw #misc_forcestand
     dw #$0000
     %cm_header("MISC OPTIONS")
 
@@ -952,13 +953,20 @@ misc_magnetstairs:
     RTS
 
 misc_killenemies:
-    %cm_jsr("Kill Enemies", #.kill_loop, #0)
+    %cm_jsr("Kill Enemies", .kill_loop, #0)
   .kill_loop
     ; 8000 = solid to Samus, 0400 = Ignore Samus projectiles
     TAX : LDA $0F86,X : BIT #$8400 : BNE +
     ORA #$0200 : STA $0F86,X
 +   TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
 
+    RTS
+
+misc_forcestand:
+    %cm_jsr("Force Samus to Stand Up", .routine, #0)
+
+  .routine
+    JSL $90E2D4
     RTS
 
 
@@ -2086,6 +2094,7 @@ endif
     dw #ctrl_kill_enemies
     dw #ctrl_toggle_tileviewer
     dw #ctrl_reveal_damage
+    dw #ctrl_force_stand
 if !FEATURE_SD2SNES
 else
     dw #ctrl_randomize_rng
@@ -2142,6 +2151,9 @@ ctrl_dec_custom_preset:
 ctrl_toggle_tileviewer:
     %cm_ctrl_shortcut("Toggle Tile View", !sram_ctrl_toggle_tileviewer)
 
+ctrl_force_stand:
+    %cm_ctrl_shortcut("Force Stand", !sram_ctrl_force_stand)
+
 ctrl_clear_shortcuts:
     %cm_jsr("Clear Shortcuts", action_clear_shortcuts, #$0000)
 
@@ -2164,6 +2176,7 @@ action_clear_shortcuts:
     STA !sram_ctrl_reveal_damage
     STA !sram_ctrl_randomize_rng
     STA !sram_ctrl_toggle_tileviewer
+    STA !sram_ctrl_force_stand
     ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
     %sfxquake()
@@ -2182,6 +2195,7 @@ GameModeExtras:
     LDA !sram_ctrl_inc_custom_preset : BNE .enabled
     LDA !sram_ctrl_dec_custom_preset : BNE .enabled
     LDA !sram_ctrl_toggle_tileviewer : BNE .enabled
+    LDA !sram_ctrl_force_stand : BNE .enabled
     RTL
 
   .enabled

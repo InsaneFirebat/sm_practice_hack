@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.0.4] Option to force Samus into standing pose
 * [2.3.0.3] Door Skip room strat by idlechild
 * [2.3.0.2] Improved Soundtest and Customize Sounds menus
 * [2.3.0.2] Added menu option to kill enemies

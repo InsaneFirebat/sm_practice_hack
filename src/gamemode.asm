@@ -108,6 +108,10 @@ endif
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .randomize_rng
 
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_force_stand : CMP !sram_ctrl_force_stand : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .force_stand
+
   .check_menu
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
@@ -242,6 +246,11 @@ endif
     LDA #$0001 : STA !ram_oob_watch_active
     JSL upload_sprite_oob_tiles
     ; CLC to continue normal gameplay after enabling OOB Tile Viewer
+    CLC : RTS
+
+  .force_stand
+    JSL $90E2D4
+    ; CLC to continue normal gameplay after forced stand
     CLC : RTS
 
   .menu
