@@ -1380,22 +1380,18 @@ print pc, " infohud bank80 start"
 ih_hud_code_paused:
 {
     ; overwritten code
-    PHP
-    PHB
-    PHK
-    PLB
-    %a8()
-    STZ $02
-    %ai16()
+    PHP : PHB : PHK : PLB
+    %a8() : STZ $02 : %ai16()
 
     ; Update Samus' HP
     LDA $7E09C2 : CMP !ram_last_hp : BEQ .end : STA !ram_last_hp
+    PHY : PHX
     LDX #$0092 : JSL Draw4JSL
+    PLX : PLY
     LDA !IH_BLANK : STA $7EC690
 
   .end
-    ; overwritten code
-    LDA $7E09C0
+    LDA $7E09C0 ; overwritten code
     JMP $9B51
 }
 
