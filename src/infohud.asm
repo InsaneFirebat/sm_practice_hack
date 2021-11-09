@@ -782,22 +782,34 @@ ih_hud_code:
     JSR (.status_display_table,X)
 
     ; Samus' HP
-    LDA $09C2 : CMP !ram_last_hp : BEQ .elevator : STA !ram_last_hp
+    LDA $09C2 : CMP !ram_last_hp : BEQ .statusIcons : STA !ram_last_hp
     LDX #$0092 : JSR Draw4
     LDA !IH_BLANK : STA $7EC690
 
-    ; Elevator
-  .elevator
-    LDA $0E16 : CMP !ram_last_elevator : BEQ .end : STA !ram_last_elevator
-    CMP #$0000 : BEQ .clearelevator
-    LDA !IH_ELEVATOR : STA $7EC658
-    BRA .end
+    ; Status Icons
+  .statusIcons
+    LDA !sram_status_icons : BEQ .end
 
-  .clearelevator
+    ; elevator
+    LDA $0E16 : CMP !ram_last_elevator : BEQ + : STA !ram_last_elevator
+    CMP #$0000 : BEQ .clearElevator
+    LDA !IH_ELEVATOR : STA $7EC656
+    BRA +
+
+  .clearElevator
+    LDA !IH_BLANK : STA $7EC656
+
+    ; shinespark
++   LDA $0A68 : CMP !ram_spark_icon : BEQ + : STA !ram_spark_icon
+    CMP #$0000 : BEQ .clearSpark
+    LDA !IH_SHINESPARK : STA $7EC658
+    BRA +
+
+  .clearSpark
     LDA !IH_BLANK : STA $7EC658
 
   .end
-    PLB
++   PLB
     ; overwritten code
     REP #$30
     LDA $7E09C0

@@ -1193,6 +1193,7 @@ InfoHudMenu:
     dw #ih_superhud
     dw #ih_room_counter
     dw #ih_reset_seg_later
+    dw #ih_status_icons
     dw #ih_lag
     dw #ih_ram_watch
     dw #$0000
@@ -1855,6 +1856,9 @@ ih_room_counter:
     db #$28, "   REALTIME", #$FF
     db #$28, "     INGAME", #$FF
     db #$FF
+
+ih_status_icons:
+    %cm_toggle("Status Icons", !sram_status_icons, #$0001, #0)
 
 ih_lag:
     %cm_numfield("Artificial Lag", !sram_artificial_lag, 0, 64, 1, #0)

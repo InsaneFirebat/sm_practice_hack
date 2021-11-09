@@ -196,6 +196,7 @@
 !IH_DECIMAL = #$0CCB
 !IH_HYPHEN = #$0C55
 !IH_ELEVATOR = #$1CCE
+!IH_SHINESPARK = #$0C47
 !IH_LETTER_A = #$0C64
 !IH_LETTER_B = #$0C65
 !IH_LETTER_C = #$0C58
@@ -277,6 +278,7 @@
 !sram_sprite_prio_flag = $702036
 !sram_metronome_tickrate = $702038
 !sram_metronome_sfx = $70203A
+!sram_status_icons = $70203C
 
 ; FREE SPACE ^
 
@@ -327,6 +329,7 @@
 !ram_dboost_kbmax = $7FFC1A
 !ram_dboost_kb = $7FFC1C
 !ram_dboost_counter = $7FFC1E
+!ram_spark_icon = $7FFC20
 
 ; FREE SPACE ^
 
