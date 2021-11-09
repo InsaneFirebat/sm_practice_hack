@@ -199,7 +199,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("FIREBAT INFOHUD v2.3.0.5")
+    %cm_header("FIREBAT INFOHUD v2.3.0.6")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -1283,6 +1283,7 @@ ihmode_ypos:
 ihmode_hspeed:
     %cm_jsr("Horizontal Speed", #action_select_infohud_mode, #$000D)
 
+!IH_MODE_VSPEED_INDEX = $000E
 ihmode_vspeed:
     %cm_jsr("Vertical Speed", #action_select_infohud_mode, #$000E)
 

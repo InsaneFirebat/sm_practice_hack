@@ -72,8 +72,8 @@ ifb_paletteprofile:
     dw #$0000
     db #$28, "Menu Palette", #$FF
         db #$28, "     CUSTOM", #$FF ; CUSTOM should always be first
-        db #$28, "    DEFAULT", #$FF
         db #$28, "     TWITCH", #$FF
+        db #$28, "    DEFAULT", #$FF
         db #$28, "    FIREBAT", #$FF
         db #$28, " WARDRINKER", #$FF
         db #$28, "        MM2", #$FF

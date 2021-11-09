@@ -40,7 +40,7 @@
 !ram_tmp_4 = $7FFB2A
 
 !ram_last_hp = $7FFB2C
-!ram_etanks = $7FFB2E
+!ram_last_elevator = $7FFB2E
 !ram_pct_1 = $7FFB30
 !ram_pct_2 = $7FFB32
 !ram_armed_shine_duration = $7FFB34
@@ -195,6 +195,7 @@
 !IH_PERCENT = #$0C0A
 !IH_DECIMAL = #$0CCB
 !IH_HYPHEN = #$0C55
+!IH_ELEVATOR = #$1CCE
 !IH_LETTER_A = #$0C64
 !IH_LETTER_B = #$0C65
 !IH_LETTER_C = #$0C58
