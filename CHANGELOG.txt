@@ -1,7 +1,8 @@
 
 ## Changelog since v2.2.7
 
-* [2.3.0.6] Replace E-tank counter with elevator and spikesuit status icons by idlechild
+* [2.3.0.7] Changed elevator flags to a simple fix option
+* [2.3.0.6] Replaced E-tank counter with elevator and spikesuit status icons by idlechild
 * [2.3.0.5] Allow loading savestates during door scrolling by idlechild
 * [2.3.0.5] Added flags in Misc for standing and riding elevators by idlechild
 * [2.3.0.5] Changed Baby Slowdown to Slowdown Mode (2 for Baby) by idlechild
