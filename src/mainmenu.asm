@@ -199,7 +199,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("FIREBAT INFOHUD v2.3.0.6")
+    %cm_header("FIREBAT INFOHUD v2.3.0.7")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -879,8 +879,7 @@ MiscMenu:
     dw #misc_magnetstairs
     dw #misc_killenemies
     dw #misc_forcestand
-    dw #misc_elevatorstanding
-    dw #misc_elevatorriding
+    dw #misc_elevatorfix
     dw #$0000
     %cm_header("MISC OPTIONS")
 
@@ -971,16 +970,15 @@ misc_killenemies:
 
 misc_forcestand:
     %cm_jsr("Force Samus to Stand Up", .routine, #0)
-
   .routine
     JSL $90E2D4
     RTS
 
-misc_elevatorstanding:
-    %cm_toggle("Standing On Elevator", $7E0E16, #$0001, #0)
-
-misc_elevatorriding:
-    %cm_toggle("Riding Elevator", $7E0E16, #$0080, #0)
+misc_elevatorfix:
+    %cm_jsr("OoB Elevator Tile Fix", .routine, #0)
+  .routine
+    LDA #$0000 : STA $7E0E16
+    RTS
 
 
 ; ---------------
