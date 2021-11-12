@@ -168,9 +168,9 @@
 !ACTION_TOGGLE_INVERTED = #$0010
 !ACTION_NUMFIELD_COLOR  = #$0012
 
-!SOUND_MENU_MOVE = $0039
-!SOUND_MENU_JSR = $0039
-!SOUND_MENU_FAIL = $0007
+!SOUND_MENU_MOVE = #$0039
+!SOUND_MENU_JSR = #$0039
+!SOUND_MENU_FAIL = #$0007
 
 
 ; ---------
@@ -230,38 +230,40 @@
 ; SRAM
 ; -----
 
-!sram_initialized = $702000
+!sram_initialized = $F02000
 
-!sram_ctrl_menu = $702002
-!sram_ctrl_kill_enemies = $702004
-!sram_ctrl_full_equipment = $702006
-!sram_ctrl_reset_segment_timer = $702008
-!sram_ctrl_reset_segment_later = $70200A
-!sram_ctrl_load_state = $70200C
-!sram_ctrl_save_state = $70200E
-!sram_ctrl_load_last_preset = $702010
-!sram_ctrl_random_preset = $702012
-!sram_ctrl_save_custom_preset = $702014
-!sram_ctrl_load_custom_preset = $702016
-!sram_ctrl_inc_custom_preset = $702018
-!sram_ctrl_dec_custom_preset = $70201A
+!sram_ctrl_menu = $F02002
+!sram_ctrl_kill_enemies = $F02004
+!sram_ctrl_full_equipment = $F02006
+!sram_ctrl_reset_segment_timer = $F02008
+!sram_ctrl_reset_segment_later = $F0200A
+!sram_ctrl_load_state = $F0200C
+!sram_ctrl_save_state = $F0200E
+!sram_ctrl_load_last_preset = $F02010
+!sram_ctrl_random_preset = $F02012
+!sram_ctrl_save_custom_preset = $F02014
+!sram_ctrl_load_custom_preset = $F02016
+!sram_ctrl_inc_custom_preset = $F02018
+!sram_ctrl_dec_custom_preset = $F0201A
+!sram_ctrl_toggle_tileviewer = $F0201C
 
 ; FREE SPACE ^
 
-!sram_artificial_lag = $702020
-!sram_rerandomize = $702022
-!sram_fanfare_toggle = $702024
-!sram_frame_counter_mode = $702026
-!sram_display_mode = $702028
-!sram_music_toggle = $70202A
-!sram_last_preset = $70202C
-!sram_save_has_set_rng = $70202E
-!sram_preset_category = $702030
-!sram_custom_preset_slot = $702032
-!sram_room_strat = $702034
-!sram_sprite_prio_flag = $702036
-!sram_metronome_tickrate = $702038
-!sram_metronome_sfx = $70203A
+!sram_artificial_lag = $F02020
+!sram_rerandomize = $F02022
+!sram_fanfare_toggle = $F02024
+!sram_frame_counter_mode = $F02026
+!sram_display_mode = $F02028
+!sram_music_toggle = $F0202A
+!sram_last_preset = $F0202C
+!sram_save_has_set_rng = $F0202E
+!sram_preset_category = $F02030
+!sram_custom_preset_slot = $F02032
+!sram_room_strat = $F02034
+!sram_sprite_prio_flag = $F02036
+!sram_metronome_tickrate = $F02038
+!sram_metronome_sfx = $F0203A
+!sram_status_icons = $F0203C
 
 ; FREE SPACE ^
 
