@@ -163,15 +163,15 @@ endif
   .save_custom_preset
     JSL custom_preset_save
     ; CLC to continue normal gameplay after saving preset
-    LDA #!SOUND_MENU_MOVE : JSL $80903F
+    LDA !SOUND_MENU_MOVE : JSL !SFX_LIB1
     CLC : RTS
 
   .load_custom_preset
     ; check if slot is populated first
     LDA !sram_custom_preset_slot
     ASL : XBA : TAX
-    LDA $703000,X : CMP #$5AFE : BEQ .safe
-    LDA #$0007 : JSL $80903F
+    LDA $F03000,X : CMP #$5AFE : BEQ .safe
+    LDA !SOUND_MENU_FAIL : JSL !SFX_LIB1
     ; CLC to continue normal gameplay after failing to load preset
     CLC : RTS
 

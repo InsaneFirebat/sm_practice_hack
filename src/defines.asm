@@ -168,9 +168,9 @@
 !ACTION_TOGGLE_INVERTED = #$0010
 !ACTION_NUMFIELD_COLOR  = #$0012
 
-!SOUND_MENU_MOVE = $0039
-!SOUND_MENU_JSR = $0039
-!SOUND_MENU_FAIL = $0007
+!SOUND_MENU_MOVE = #$0039
+!SOUND_MENU_JSR = #$0039
+!SOUND_MENU_FAIL = #$0007
 
 
 ; ---------
@@ -263,6 +263,7 @@
 !sram_sprite_prio_flag = $702A36
 !sram_metronome_tickrate = $702A38
 !sram_metronome_sfx = $702A3A
+!sram_status_icons = $F02A3C
 
 ; FREE SPACE ^
 
