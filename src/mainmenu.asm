@@ -247,7 +247,7 @@ action_save_custom_preset:
 {
     JSL custom_preset_save
     LDA #$0001 : STA !ram_cm_leave
-    LDA #!SOUND_MENU_MOVE : JSL !SFX_LIB1
+    LDA !SOUND_MENU_MOVE : JSL !SFX_LIB1
     RTS
 }
 
@@ -256,7 +256,7 @@ action_load_custom_preset:
     ; check if slot is populated first
     LDA !sram_custom_preset_slot
     ASL : XBA : TAX
-    LDA $703000,X : CMP #$5AFE : BEQ .safe
+    LDA $F03000,X : CMP #$5AFE : BEQ .safe
     LDA #!SOUND_MENU_FAIL : JSL !SFX_LIB1
     RTS
 
