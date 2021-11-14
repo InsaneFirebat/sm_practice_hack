@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.0.8] Added sound effects for more menu options
+* [2.3.0.8] Added menu options to set glitched beam combos
 * [2.3.0.7] Changed elevator flags to a simple fix option
 * [2.3.0.6] Replaced E-tank counter with elevator and spikesuit status icons by idlechild
 * [2.3.0.5] Allow loading savestates during door scrolling by idlechild

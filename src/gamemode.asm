@@ -256,6 +256,7 @@ endif
 
   .force_stand
     JSL $90E2D4
+    %sfxconfirm()
     ; CLC to continue normal gameplay after forced stand
     CLC : RTS
 
