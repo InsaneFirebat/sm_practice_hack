@@ -197,7 +197,7 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
-    %cm_header("CUSTOM INFOHUD v2.3.0.7")
+    %cm_header("CUSTOM INFOHUD v2.3.0.8")
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -572,7 +572,6 @@ ToggleCategoryMenu:
     dw #$0000
     %cm_header("CATEGORY PRESETS")
 
-
 cat_100:
     %cm_jsr("100%", action_category, #$0000)
 
@@ -712,9 +711,9 @@ ti_xray:
         RTS
 
 
-; ------------------
+; -----------------
 ; Toggle Beams menu
-; ------------------
+; -----------------
 
 ToggleBeamsMenu:
     dw tb_chargebeam
@@ -722,6 +721,7 @@ ToggleBeamsMenu:
     dw tb_wavebeam
     dw tb_spazerbeam
     dw tb_plasmabeam
+    dw tb_glitchedbeams
     dw #$0000
     %cm_header("TOGGLE BEAMS")
 
@@ -740,10 +740,46 @@ tb_spazerbeam:
 tb_plasmabeam:
     %cm_toggle_bit("Plasma", $7E09A8, #$0008, #0)
 
+tb_glitchedbeams:
+    %cm_submenu("Glitched Beams", #GlitchedBeamsMenu)
 
-; ---------------
+
+; -------------------
+; Glitched Beams menu
+; -------------------
+
+GlitchedBeamsMenu:
+    dw #gb_murder
+    dw #gb_spacetime
+    dw #gb_chainsaw
+    dw #gb_unnamed
+    dw #$0000
+    %cm_header("GL1TC#ED %E4MS")
+
+gb_murder:
+    %cm_jsr("Murder Beam", action_glitched_beam, #$100F)
+
+gb_spacetime:
+    %cm_jsr("Spacetime Beam", action_glitched_beam, #$100E)
+
+gb_chainsaw:
+    %cm_jsr("Chainsaw Beam", action_glitched_beam, #$100D)
+
+gb_unnamed:
+    %cm_jsr("Unnamed Glitched Beam", action_glitched_beam, #$100C)
+
+action_glitched_beam:
+{
+    TYA
+    STA $09A6 : STA $09A8
+    LDA #$0042 : JSL !SFX_LIB1 ; unlabled, song dependent sound
+    RTS
+}
+    
+
+; -------------
 ; Teleport menu
-; ---------------
+; -------------
 
 TeleportMenu:
     dw #tel_crateriaship
@@ -855,6 +891,7 @@ action_teleport:
     RTS
 }
 
+
 ; -----------
 ; Misc menu
 ; -----------
@@ -960,19 +997,21 @@ misc_killenemies:
     TAX : LDA $0F86,X : BIT #$8400 : BNE +
     ORA #$0200 : STA $0F86,X
 +   TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
-
+    %sfxconfirm()
     RTS
 
 misc_forcestand:
     %cm_jsr("Force Samus to Stand Up", .routine, #0)
   .routine
     JSL $90E2D4
+    %sfxconfirm()
     RTS
 
 misc_elevatorfix:
     %cm_jsr("OoB Elevator Tile Fix", .routine, #0)
   .routine
     LDA #$0000 : STA $7E0E16
+    %sfxconfirm()
     RTS
 
 
@@ -1083,7 +1122,6 @@ events_zebesexploding:
 events_animals:
     %cm_toggle_bit("Animals Saved", $7ED820, #$8000, #0)
 
-
 action_reset_events:
 {
     LDA #$0000
@@ -1167,16 +1205,6 @@ boss_gt:
 
 boss_ridley:
     %cm_toggle_bit("Ridley", #$7ED82A, #$0001, #0)
-
-
-; ------------
-; Config menu
-; ------------
-
-ConfigMenu:
-    dw #$0000
-    %cm_header("CONFIG")
-
 
 
 ; --------------
@@ -1933,6 +1961,7 @@ game_clear_minimap:
     STA $7EDB1C,X : STA $7EDC1C,X
     STA $7EDD1C,X : STA $7E07F7,X
     DEX : DEX : BPL .clear_minimap_loop
+    %sfxquake()
     RTS
 
 game_metronome:
