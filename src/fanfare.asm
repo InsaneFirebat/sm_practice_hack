@@ -1,4 +1,5 @@
-org $84EFD9
+;org $84EFD9
+org $84EFF0
 print pc, " fanfare restore start"
   .prepareloop
     PHX              ; start of logic that was overwritten

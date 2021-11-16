@@ -363,7 +363,8 @@ warnpc $80FC00
 ;  .resume_infohud_icon_initialization
 
 
-org $FD8000
+;org $FD8000
+org $E18000
 print pc, " custom presets start"
 incsrc custompresets.asm
 print pc, " custom presets end"
@@ -375,7 +376,7 @@ print pc, " custom presets end"
 
 ; Preset data/menus can be anywhere in the rom, even in separate banks. 
 
-org $FE8000
+org $E48000
 print pc, " preset menu/data start"
 incsrc presets/prkd_menu.asm
 incsrc presets/prkd_data.asm

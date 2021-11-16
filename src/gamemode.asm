@@ -14,7 +14,8 @@ org $82E526
 endif
 
 
-org $85F800
+;org $85F800
+org $85A000
 print pc, " gamemode start"
 
 gamemode_start:
@@ -100,10 +101,6 @@ gamemode_shortcuts:
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_full_equipment : CMP !sram_ctrl_full_equipment : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .full_equipment
-
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_force_stand : CMP !sram_ctrl_force_stand : BNE +
-    AND !IH_CONTROLLER_PRI_NEW : BEQ +
-    JMP .force_stand
 
   .check_menu
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
@@ -204,6 +201,7 @@ endif
     JSL LoadRandomPreset
     ; SEC to skip normal gameplay for one frame after loading preset
     SEC : RTS
+
   .menu
     ; Set IRQ vector
     LDA $AB : PHA

@@ -47,18 +47,19 @@ org $82E488      ; write tiles to VRAM
 
 
 org $9AB200      ; graphics for HUD
-incbin ../resources/hudgfx.bin
+incbin ../resources/Blue-Plague_hudgfx.bin
 
 
-; Place minimap graphics in bank FD
-org $FDD500
-print pc, " minimap bankFD start"
-incbin ../resources/mapgfx.bin
+; Place minimap graphics in bank E2
+;org $FDD500
+org $E2D500
+print pc, " minimap bankE2 start"
+incbin ../resources/Blue-Plague_mapgfx.bin
 
 ; Next block needs to be all zeros to clear a tilemap
 fillbyte $00
 fill 4096
-print pc, " minimap bankFD end"
+print pc, " minimap bankE2 end"
 
 
 ; The default HUD minimap should be cleared
@@ -77,7 +78,8 @@ org $80994D
 
 
 ; Placed in bank 82 so that the jumps work
-org $82F70F
+;org $82F70F
+org $82F740
 print pc, " minimap bank82 start"
 
 mm_write_and_clear_hud_tiles:
@@ -101,7 +103,7 @@ mm_write_and_clear_hud_tiles:
     LDA #$80 : STA $2115 ; word-access, incr by 1
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
     LDX #$D500 : STX $4302 ; Source offset
-    LDA #$FD : STA $4304 ; Source bank
+    LDA #$E2 : STA $4304 ; Source bank
     LDX #$2000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
@@ -123,7 +125,7 @@ mm_write_hud_tiles_during_door_transition:
 
   .minimap_vram
     JSR $E039
-    dl $DFD500
+    dl $E2D500
     dw $4000
     dw $1000
     JMP $E492  ; resume logic
@@ -134,7 +136,8 @@ warnpc $82FA00
 
 
 ; Placed in bank 90 so that the jumps work
-org $90F640
+;org $90F640
+org $90F660
 print pc, " minimap bank90 start"
 
 mm_initialize_minimap:
