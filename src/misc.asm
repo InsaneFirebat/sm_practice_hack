@@ -21,11 +21,7 @@ org $8C9607
     dw #$0E2F
 
 ; Skips the waiting time after teleporting
-if !FEATURE_PAL
-org $90E874
-else
 org $90E877
-endif
     BRA $1F
 
 
