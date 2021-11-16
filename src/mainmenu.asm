@@ -142,6 +142,7 @@ MainMenu:
     dw #mm_goto_misc
     dw #mm_goto_infohud
     dw #mm_goto_gamemenu
+    dw #mm_goto_sprites
 ;    dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
@@ -170,6 +171,9 @@ mm_goto_infohud:
 
 mm_goto_gamemenu:
     %cm_submenu("Game", #GameMenu)
+
+mm_goto_sprites:
+    %cm_submenu("Sprite Features", #SpritesMenu)
 
 mm_goto_rngmenu:
     %cm_submenu("RNG Control", #RngMenu)
@@ -206,21 +210,6 @@ presets_load_custom_preset:
 SelectPresetCategoryMenu:
     dw #presets_current
     dw #precat_prkd
-    dw #precat_kpdr21
-    dw #precat_hundo
-    dw #precat_100early
-    dw #precat_rbo
-    dw #precat_pkrd
-    dw #precat_kpdr25
-    dw #precat_gtclassic
-    dw #precat_gtmax
-    dw #precat_14ice
-    dw #precat_14speed
-    dw #precat_100map
-    dw #precat_nintendopower
-    dw #precat_allbosskpdr
-    dw #precat_allbosspkdr
-    dw #precat_allbossprkd
     dw #$0000
     %cm_header("SELECT PRESET CATEGORY")
 
@@ -832,7 +821,6 @@ MiscMenu:
     dw #misc_loudpants
     dw #misc_fanfare_toggle
     dw #misc_music_toggle
-    dw #misc_transparent
     dw #misc_invincibility
     dw #misc_killenemies
     dw #misc_forcestand
@@ -928,8 +916,18 @@ SpritesMenu:
 sprites_samus_prio:
     %cm_toggle_bit("Samus on Top", !sram_sprite_prio_flag, #$3000, #0)
 
-misc_invincibility:
-    %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
+sprites_show_hitbox:
+    %cm_toggle("Show Samus Hitbox", !ram_sprite_hitbox_active, #1, #0)
+
+sprites_oob_viewer:
+    %cm_toggle("OOB Tile Viewer", !ram_oob_watch_active, #1, #toggle_oob_viewer)
+
+toggle_oob_viewer:
+{
+    LDA !ram_oob_watch_active : BEQ +
+    JSL upload_sprite_oob_tiles
++   RTS
+}
 
 
 ; -----------
@@ -1108,8 +1106,6 @@ InfoHudMenu:
     dw #ih_reset_seg_later
     dw #ih_lag
     dw #ih_ram_watch
-    dw #ih_show_hitbox
-    dw #ih_oob_viewer
     dw #$0000
     %cm_header("INFOHUD")
 
@@ -1313,21 +1309,6 @@ ih_reset_seg_later:
 
 ih_ram_watch:
     %cm_submenu("Customize RAM Watch", #RAMWatchMenu)
-
-ih_show_hitbox:
-    %cm_toggle("Show Samus Hitbox", !ram_sprite_hitbox_active, #1, #0)
-
-ih_oob_viewer:
-    %cm_toggle("OOB Tile Viewer", !ram_oob_watch_active, #1, #toggle_oob_viewer)
-
-toggle_oob_viewer:
-{
-    LDA !ram_oob_watch_active
-    BEQ +
-        JSL upload_sprite_oob_tiles
-    +
-    RTS
-}
 
 RAMWatchMenu:
     dw ramwatch_left_hi

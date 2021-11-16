@@ -104,15 +104,9 @@ status_dashcounter:
 
 status_shinetune:
 {
-if !FEATURE_PAL
-    !tap_1_to_2 = $0014
-    !tap_2_to_3 = $0014
-    !tap_3_to_4 = $000A
-else
     !tap_1_to_2 = $0019
     !tap_2_to_3 = $0014
     !tap_3_to_4 = $000F
-endif
 
     ; Suppress Samus HP display
     ; The segment timer is also suppressed elsewhere just for shinetune
@@ -662,17 +656,11 @@ status_hspeed:
 
 status_vspeed:
 {
-if !FEATURE_PAL
-    !first_spacejump_subspeed = $00A0
-    !allowed_spacejump_frames = $0024
-    !air_frame_delay = $0010
-    !water_frame_cutoff = $0007
-else
     !first_spacejump_subspeed = $008C
     !allowed_spacejump_frames = $002A
     !air_frame_delay = $0012
     !water_frame_cutoff = $0000
-endif
+
 
     ; Suppress Samus HP display
     LDA $09C2 : STA !ram_last_hp
@@ -950,9 +938,6 @@ status_walljump:
     ; We can provide extra feedback on max-delayed walljumps near the target position
     ; Only clear that information if we have another max-delayed walljump
     LDA !ram_walljump_counter
-if !FEATURE_PAL
-    CMP #$0007 : BEQ .clear
-endif
     CMP #$0009 : BNE .reset
 
   .clear
@@ -967,9 +952,6 @@ endif
     ; assume this is a regular walljump and ignore the target position
     SEC : SBC !ram_ypos : CMP #$0042 : BPL .ignore
     ASL : TAY : LDA !ram_walljump_counter
-if !FEATURE_PAL
-    CMP #$0007 : BEQ .printlow
-endif
     CMP #$0009 : BNE .clear
 
   .printlow
@@ -985,9 +967,6 @@ endif
     ; assume this is a regular walljump and ignore the target position
     LDA !ram_ypos : DEC : SEC : SBC $0AFA : CMP #$0042 : BPL .ignore
     ASL : TAY : LDA !ram_walljump_counter
-if !FEATURE_PAL
-    CMP #$0007 : BEQ .printhigh
-endif
     CMP #$0009 : BNE .clear
 
   .printhigh
@@ -1057,13 +1036,9 @@ status_ramwatch:
 
 status_tacotank:
 {
-if !FEATURE_PAL
-    !expected_subspeed = $3C00
-    !first_possible_x = $002D
-else
     !expected_subspeed = $3000
     !first_possible_x = $0036
-endif
+
 
     ; Suppress Samus HP display
     LDA $09C2 : STA !ram_last_hp
@@ -1084,11 +1059,8 @@ endif
     LDA $0AF8 : CMP #$FFFF : BNE .donestart
     LDA $0B36 : CMP #$0000 : BNE .donestart
     LDA $0A1E : AND #$0004 : CMP #$0004 : BNE .donestart
-if !FEATURE_PAL
-    LDA $0A60 : CMP #$E910 : BNE .donestart
-else
     LDA $0A60 : CMP #$E913 : BNE .donestart
-endif
+
     LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_LEFT : BNE .donestart
 
     ; Ready to start
@@ -1144,11 +1116,8 @@ endif
 
   .rising
     ; If our speed is still good then we haven't broken spin
-if !FEATURE_PAL
-    LDA $0B48 : CMP #$A600 : BEQ .donerising
-else
     LDA $0B48 : CMP #$6000 : BEQ .donerising
-endif
+
 
     ; We have broken spin, combine starting X position with walljump to see how we did
     LDA !ram_xpos : CLC : ADC !ram_walljump_counter : STA !ram_xpos
@@ -1199,11 +1168,8 @@ endif
 
     ; Once we can evaluate, make sure it is good
     LDA $0B44 : CMP #!expected_subspeed : BNE .wjfail
-if !FEATURE_PAL
-    LDA !ram_xpos : CMP #$0032 : BPL .wjfail
-else
     LDA !ram_xpos : CMP #$0039 : BPL .wjfail
-endif
+
     BRL .incstate
 
   .peakfail
@@ -1224,11 +1190,8 @@ endif
     CMP #$0002 : BNE .peakfail
     LDA $0AFA : CMP #$0243 : BPL .peakfail
     LDA $0B44 : CMP #!expected_subspeed : BNE .peakfail
-if !FEATURE_PAL
-    LDA $0B48 : CMP #$8000 : BNE .peakfail
-else
     LDA $0B48 : CMP #$4000 : BNE .peakfail
-endif
+
     LDA $0A1C : CMP #$0018 : BNE .peakfail
     BRL .incstate
 
@@ -1248,11 +1211,6 @@ endif
 
     ; Store this for later, each pixel counts as 8 frames of good horizontal movement
     TYA : ASL : ASL
-if !FEATURE_PAL
-    ; Actually on PAL it only counts as ~6.75 frames, which we'll round to 7 frames
-    ; We have the value multiplied by 8, subtract the original value to get multiplied by 7
-    SEC : SBC !ram_xpos
-endif
     STA !ram_xpos
 
   .wjcontinue
@@ -1261,11 +1219,8 @@ endif
 
     ; Now time to evaluate the jump height
     ; If necessary evaluate down to the subpixel
-if !FEATURE_PAL
-    LDA $0AFA : CMP #$029E : BEQ .bonk : CMP #$029F : BEQ .threey : BPL .maybelow
-else
     LDA $0AFA : CMP #$029D : BEQ .bonk : CMP #$029E : BEQ .threey : BPL .maybelow
-endif
+
 
   .high
     LDA #$029E : SEC : SBC $0AFA : CMP #$0042 : BPL .toohigh
@@ -1280,19 +1235,13 @@ endif
     BRL .wjfail
 
   .bonk
-if !FEATURE_PAL
-    LDA $0AFC : CMP #$F000 : BCS .printtwob : CMP #$8C00 : BCS .printoneb
-else
     LDA $0AFC : CMP #$F000 : BCS .printtwob : CMP #$B000 : BCS .printoneb
-endif
+
     BRA .high
 
   .maybelow
-if !FEATURE_PAL
-    CMP #$02A0 : BEQ .printtwoy : CMP #$02A1 : BEQ .twoy : CMP #$02A2 : BEQ .oney
-else
     CMP #$029F : BEQ .twoy : CMP #$02A0 : BEQ .printoney : CMP #$02A1 : BEQ .oney
-endif
+
 
   .low
     LDA $0AFA : SEC : SBC #$02A0
@@ -1301,13 +1250,9 @@ endif
     BRL .wjfail
 
   .threey
-if !FEATURE_PAL
-    LDA $0AFC : CMP #$A800 : BCS .printtwoy : CMP #$2C00 : BCC .printtwob
-    CMP #$4000 : BCC .printthreeb
-else
     LDA $0AFC : CMP #$9400 : BCS .printtwoy : CMP #$1400 : BCC .printtwob
     CMP #$1C00 : BCC .printthreeb
-endif
+
     LDA #$0003
 
   .printy
@@ -1319,11 +1264,8 @@ endif
     BRL .incstate
 
   .twoy
-if !FEATURE_PAL
-    LDA $0AFC : CMP #$3800 : BCS .printoney
-else
     LDA $0AFC : CMP #$E400 : BCS .printoney
-endif
+
 
   .printtwoy
     LDA #$0002
@@ -1338,11 +1280,8 @@ endif
     BRA .printb
 
   .oney
-if !FEATURE_PAL
-    LDA $0AFC : CMP #$A000 : BCS .low
-else
     LDA $0AFC : CMP #$1800 : BCS .low
-endif
+
 
   .printoney
     LDA #$0001
@@ -1361,11 +1300,8 @@ endif
 
   .setx
     ; Determine first frame where we can gather the tank
-if !FEATURE_PAL
-    LDA !ram_xpos : CMP #$0045 : BPL .threex : CMP #$0039 : BPL .twox : CMP #$002C : BPL .onex
-else
     LDA !ram_xpos : CMP #$0051 : BPL .threex : CMP #$0046 : BPL .twox : CMP #$003A : BPL .onex
-endif
+
     BRA .predictfail
 
   .threex
@@ -1704,11 +1640,8 @@ status_shinetopb:
 
 status_elevatorcf:
 {
-if !FEATURE_PAL
-    !elevatorcf_frame = $0092
-else
     !elevatorcf_frame = $009A
-endif
+
 
     ; Counter used to check if a power bomb has been laid
     LDA !ram_roomstrat_counter : CMP $09CE : BNE .roomcheck
@@ -1803,11 +1736,8 @@ endif
 
 status_botwooncf:
 {
-if !FEATURE_PAL
-    !botwooncf_frame = $0091
-else
     !botwooncf_frame = $0099
-endif
+
 
     ; Counter used to check if a power bomb has been laid
     LDA !ram_roomstrat_counter : CMP $09CE : BNE .pbcheck
