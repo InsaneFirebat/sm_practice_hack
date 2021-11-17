@@ -397,13 +397,13 @@ eq_setmissiles:
         RTS
 
 eq_setsupers:
-    %cm_numfield("Super Missiles", $7E09CC, 0, 65, 5, .routine)
+    %cm_numfield("Super Missiles", $7E09CC, 0, 65, 2, .routine)
     .routine
         LDA $09CC : STA $09CA ; supers
         RTS
 
 eq_setpbs:
-    %cm_numfield("Power Bombs", $7E09D0, 0, 65, 5, .routine)
+    %cm_numfield("Power Bombs", $7E09D0, 0, 65, 2, .routine)
     .routine
         LDA $09D0 : STA $09CE ; pbs
         RTS
@@ -648,39 +648,65 @@ tel_goto_debug:
 
 TeleportCrateriaMenu:
     dw #tel_crateriaship
-    dw #tel_crateriaparlor
+    dw #tel_crateria01
+    dw #tel_crateria02
+    dw #tel_crateria08
+    dw #tel_crateria0A
     dw #$0000
     %cm_header("CRATERIA SAVE STATIONS")
 
 tel_crateriaship:
     %cm_jsr("Crateria Ship", #action_teleport, #$0000)
 
-tel_crateriaparlor:
-    %cm_jsr("Crateria Parlor", #action_teleport, #$0001)
+tel_crateria01:
+    %cm_jsr("Crateria East", #action_teleport, #$0001)
+
+tel_crateria02:
+    %cm_jsr("Crateria West", #action_teleport, #$0002)
+
+tel_crateria08:
+    %cm_jsr("DEBUG - Crateria East", #action_teleport, #$0008)
+
+tel_crateria0A:
+    %cm_jsr("DEBUG - West Acid Rippers", #action_teleport, #$000A)
 
 TeleportBrinstarMenu:
     dw #tel_brinstarpink
     dw #tel_brinstargreenshaft
-    dw #tel_brinstargreenetecoons
     dw #tel_brinstarkraid
     dw #tel_brinstarredtower
+    dw #tel_brinstar05
+    dw #tel_crateria0B
+    dw #tel_brinstargreenetecoons
     dw #$0000
     %cm_header("BRINSTAR SAVE STATIONS")
 
 tel_brinstarpink:
-    %cm_jsr("Brinstar Pink Spospo", #action_teleport, #$0100)
+    %cm_jsr("Brinstar North Central", #action_teleport, #$0100)
 
 tel_brinstargreenshaft:
-    %cm_jsr("Brinstar Green Shaft", #action_teleport, #$0101)
-
-tel_brinstargreenetecoons:
-    %cm_jsr("Brinstar Green Etecoons", #action_teleport, #$0102)
+    %cm_jsr("Brinstar South Central", #action_teleport, #$0101)
 
 tel_brinstarkraid:
-    %cm_jsr("Brinstar Kraid", #action_teleport, #$0103)
+    %cm_jsr("Brinstar Deep South", #action_teleport, #$0103)
 
 tel_brinstarredtower:
-    %cm_jsr("Brinstar Red Tower", #action_teleport, #$0104)
+    %cm_jsr("Brinstar East", #action_teleport, #$0104)
+
+tel_brinstar05:
+    %cm_jsr("Brinstar Spo Spo", #action_teleport, #$0105)
+
+tel_crateria0B:
+    %cm_jsr("DEBUG - Brinstar Map Room", #action_teleport, #$000B)
+
+tel_brinstargreenetecoons:
+    %cm_jsr("DEBUG - South Central", #action_teleport, #$0102)
+
+tel_brinstar08:
+    %cm_jsr("DEBUG - Central Elevator", #action_teleport, #$0108)
+
+tel_brinstar0B:
+    %cm_jsr("DEBUG - Northeast", #action_teleport, #$010B)
 
 TeleportNorfairMenu:
     dw #tel_norfairgrapple
@@ -689,54 +715,89 @@ TeleportNorfairMenu:
     dw #tel_norfaircrocomire
     dw #tel_norfairlnelevator
     dw #tel_norfairridley
+    dw #tel_norfair06
+    dw #tel_norfair08
     dw #$0000
     %cm_header("NORFAIR SAVE STATIONS")
 
 tel_norfairgrapple:
-    %cm_jsr("Norfair Grapple", #action_teleport, #$0200)
+    %cm_jsr("Norfair Northwest", #action_teleport, #$0200)
 
 tel_norfairbubble:
-    %cm_jsr("Norfair Bubble Mountain", #action_teleport, #$0201)
+    %cm_jsr("Norfair Elevator to Brin", #action_teleport, #$0201)
 
 tel_norfairtunnel:
-    %cm_jsr("Norfair Tunnel", #action_teleport, #$0202)
+    %cm_jsr("Below Elevator to Brin", #action_teleport, #$0202)
 
 tel_norfaircrocomire:
     %cm_jsr("Norfair Crocomire", #action_teleport, #$0203)
 
 tel_norfairlnelevator:
-    %cm_jsr("Norfair LN Elevator", #action_teleport, #$0204)
+    %cm_jsr("Lower Norfair", #action_teleport, #$0204)
 
 tel_norfairridley:
-    %cm_jsr("Norfair Ridley", #action_teleport, #$0205)
+    %cm_jsr("Lower Lower Norfair", #action_teleport, #$0205)
+
+tel_norfair06:
+    %cm_jsr("Norfair Deep South", #action_teleport, #$0206)
+
+tel_norfair08:
+    %cm_jsr("DEBUG - Lower Norfair", #action_teleport, #$0208)
+
+tel_norfair10:
+    %cm_jsr("DEBUG - Lower Norfair", #action_teleport, #$0210)
 
 TeleportWreckedShipMenu:
     dw #tel_wreckedship
+    dw #tel_wreckedship01
+    dw #tel_wreckedship02
+    dw #tel_wreckedship03
+    dw #tel_wreckedship04
     dw #$0000
-    %cm_header("WRECKED SHIP SAVE STATIONS")
+    %cm_header("PIRATE SHIP SAVE STATIONS")
 
 tel_wreckedship:
-    %cm_jsr("Wrecked Ship", #action_teleport, #$0300)
+    %cm_jsr("Pirate Ship North", #action_teleport, #$0300)
+
+tel_wreckedship01:
+    %cm_jsr("Pirate Ship Central", #action_teleport, #$0301)
+
+tel_wreckedship02:
+    %cm_jsr("Pirate Ship East", #action_teleport, #$0302)
+
+tel_wreckedship03:
+    %cm_jsr("Pirate Ship South", #action_teleport, #$0303)
+
+tel_wreckedship04:
+    %cm_jsr("Pirate Ship Northeast", #action_teleport, #$0304)
 
 TeleportMaridiaMenu:
     dw #tel_maridiatube
     dw #tel_maridiaelevator
     dw #tel_maridiaaqueduct
     dw #tel_maridiadraygon
+    dw #tel_maridia10
+    dw #tel_maridia12
     dw #$0000
-    %cm_header("MARIDIA SAVE STATIONS")
+    %cm_header("CHOZODIA SAVE STATIONS")
 
 tel_maridiatube:
-    %cm_jsr("Maridia Tube", #action_teleport, #$0400)
+    %cm_jsr("Chozodia East", #action_teleport, #$0400)
 
 tel_maridiaelevator:
-    %cm_jsr("Maridia Elevator", #action_teleport, #$0401)
+    %cm_jsr("Chozodia Southeast", #action_teleport, #$0401)
 
 tel_maridiaaqueduct:
-    %cm_jsr("Maridia Aqueduct", #action_teleport, #$0402)
+    %cm_jsr("Chozodia Northwest", #action_teleport, #$0402)
 
 tel_maridiadraygon:
-    %cm_jsr("Maridia Draygon", #action_teleport, #$0403)
+    %cm_jsr("Chozodia West", #action_teleport, #$0403)
+
+tel_maridia10:
+    %cm_jsr("DEBUG - Chozodia Map Room", #action_teleport, #$0410)
+
+tel_maridia12:
+    %cm_jsr("DEBUG - Central Chozodia", #action_teleport, #$0412)
 
 TeleportTourianMenu:
     dw #tel_tourianentrance
@@ -745,10 +806,13 @@ TeleportTourianMenu:
     %cm_header("TOURIAN SAVE STATIONS")
 
 tel_tourianentrance:
-    %cm_jsr("Tourian Entrance", #action_teleport, #$0501)
+    %cm_jsr("Tourian Entrance", #action_teleport, #$0500)
 
 tel_tourianmb:
     %cm_jsr("Tourian MB", #action_teleport, #$0500)
+
+tel_tourian11:
+    %cm_jsr("debug - Northeast", #action_teleport, #$0511)
 
 DebugTeleportMenu:
     dw #tel_debug_area
@@ -765,8 +829,8 @@ tel_debug_area:
         db #$28, "   CRATERIA", #$FF
         db #$28, "   BRINSTAR", #$FF
         db #$28, "    NORFAIR", #$FF
-        db #$28, "  REQT SHIP", #$FF
-        db #$28, "    MARIDIA", #$FF
+        db #$28, "PIRATE SHIP", #$FF
+        db #$28, "   CHOZODIA", #$FF
         db #$28, "    TOURIAN", #$FF
     db #$FF
 
