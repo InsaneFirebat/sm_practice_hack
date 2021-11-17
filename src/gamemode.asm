@@ -162,7 +162,7 @@ endif
   .save_custom_preset
     JSL custom_preset_save
     ; CLC to continue normal gameplay after saving preset
-    LDA !SOUND_MENU_MOVE : JSL !SFX_LIB1
+    LDA #!SOUND_MENU_MOVE : JSL !SFX_LIB1
     CLC : RTS
 
   .load_custom_preset
@@ -170,7 +170,7 @@ endif
     LDA !sram_custom_preset_slot
     ASL : XBA : TAX
     LDA $F03000,X : CMP #$5AFE : BEQ .safe
-    LDA !SOUND_MENU_FAIL : JSL !SFX_LIB1
+    LDA #!SOUND_MENU_FAIL : JSL !SFX_LIB1
     ; CLC to continue normal gameplay after failing to load preset
     CLC : RTS
 
@@ -200,43 +200,6 @@ endif
     JSL LoadRandomPreset
     ; SEC to skip normal gameplay for one frame after loading preset
     SEC : RTS
-
-  .save_custom_preset
-    JSL custom_preset_save
-    ; CLC to continue normal gameplay after saving preset
-    LDA #!SOUND_MENU_JSR : JSL !SFX_LIB1
-    CLC : RTS
-
-  .load_custom_preset
-    ; check if slot is populated first
-    LDA !sram_custom_preset_slot
-    ASL : XBA : TAX
-    LDA $703000,X : CMP #$5AFE : BEQ .safe
-    LDA #!SOUND_MENU_FAIL : JSL !SFX_LIB1
-    ; CLC to continue normal gameplay after failing to load preset
-    CLC : RTS
-
-  .safe
-    STA !ram_custom_preset
-    JSL preset_load
-    ; SEC to skip normal gameplay for one frame after loading preset
-    SEC : RTS
-
-  .next_preset_slot
-    LDA !sram_custom_preset_slot : CMP #$0027 ; total slots minus one
-    BNE + : LDA #$FFFF
-+   INC : STA !sram_custom_preset_slot
-    ASL : TAX : LDA.l NumberGFXTable,X : STA $7EC67C
-    ; CLC to continue normal gameplay after incrementing preset slot
-    CLC : RTS
-
-  .prev_preset_slot
-    LDA !sram_custom_preset_slot : BNE +
-    LDA #$0028 ; total slots
-+   DEC : STA !sram_custom_preset_slot
-    ASL : TAX : LDA.l NumberGFXTable,X : STA $7EC67C
-    ; CLC to continue normal gameplay after decrementing preset slot
-    CLC : RTS
 
   .menu
     ; Set IRQ vector
