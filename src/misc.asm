@@ -11,6 +11,43 @@ else
         db $05 ; 64kb
 endif
 
+
+; Enable version display
+org $8B8697
+    NOP
+
+; 'Ver.' OAM entry X positions
+;$8B:8774             dw 0074, 006C, 0064
+org $8B8774
+    dw $0060, $0058, $0050
+
+; Version string OAM entry X positions
+;$8B:8764             db $80, $88, $90, $98, $A0, $A8, $B0, $B8, $C0, $C8, $D0, $D8, $E0, $E8, $F0, $F8
+org $8B8764 ; center version string
+    db $68, $70, $78, $80, $88, $90, $98, $A0, $A8, $B0, $B8, $C0, $C8, $D0, $D8, $E0
+
+if !FEATURE_PAL
+org $8BF6DC
+else
+org $8BF754
+endif
+    db #$20, #($30+!VERSION_MAJOR)
+    db #$2E, #($30+!VERSION_MINOR)
+    db #$2E, #($30+!VERSION_BUILD)
+if !VERSION_REV_1
+    db #$2E, #($30+!VERSION_REV_1)
+    db #($30+!VERSION_REV_2)
+    db #$20, #$20
+else
+if !VERSION_REV_2
+    db #$2E, #($30+!VERSION_REV_2)
+    db #$20, #$20, #$20
+else
+    db #$20, #$20, #$20, #$20, #$20
+endif
+endif
+
+
 ; Skip intro
 ; $82:EEDF A9 95 A3    LDA #$A395
 org $82EEDF
@@ -20,9 +57,11 @@ else
     LDA #$C100
 endif
 
+
 ; Fix Zebes planet tiling error
 org $8C9607
     dw #$0E2F
+
 
 ; Skips the waiting time after teleporting
 org $90E877
