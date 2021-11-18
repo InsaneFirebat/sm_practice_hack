@@ -32,14 +32,16 @@ update_sprite_features:
     ; Draw OOB viewer if activated
     LDA !ram_oob_watch_active : BEQ +
     JSR update_sprite_oob
-    +
 
     ; Draw Samus hitbox if activated
-    LDA !ram_sprite_hitbox_active : BEQ +
-    JSR update_sprite_hitbox
-    +
++   LDA !ram_sprite_samus_hitbox_active : BEQ +
+    JSR update_samus_sprite_hitbox
 
-    PLP : PLY : PLX : PLA
+    ; Draw enemy hitboxes if activated
++   LDA !ram_sprite_enemy_hitbox_active : BEQ +
+    JSR update_enemy_sprite_hitbox
+
++   PLP : PLY : PLX : PLA
 
     if !FEATURE_PAL
         JSL $A0885D
@@ -194,6 +196,7 @@ block_gfx:
 
 ; draw hitbox around samus for the oob viewer (static position on the screen)
 sprite_draw_oob_samus_hitbox:
+{
     ;LDA $0AFA : SEC : SBC $0915 : PHA ; top edge
     ;LDA $0B04 : PHA ; left edge
 
@@ -277,32 +280,33 @@ sprite_draw_oob_samus_hitbox:
     REP #$30
     TYA : CLC : ADC #$0010 : STA $0590
     RTS
+}
 
 spr_clr_flags:
     dw %1111111111111100, %1111111111110011, %1111111111001111, %1111111100111111
 
-
 ; draw hitbox around samus
-update_sprite_hitbox:
-    LDA $0AFA : SEC : SBC $0915 : PHA ; top edge
-    LDA $0B04 : PHA ; left edge
+update_samus_sprite_hitbox:
+{
+    LDA !SAMUS_Y : SEC : SBC !LAYER1_Y : PHA ; top edge
+    LDA !SAMUS_X : SEC : SBC !LAYER1_X : PHA ; left edge
 
     LDA #$0000
     SEP #$20
-    LDY $0590
+    LDY !OAM_STACK_POINTER
     PLA ; X coord
-    SEC : SBC $0AFE
+    SEC : SBC !SAMUS_X_RADIUS
     STA $0370, Y
     STA $0378, Y
-    CLC : ADC $0AFE : ADC $0AFE : SEC : SBC #$08
+    CLC : ADC !SAMUS_X_RADIUS : ADC !SAMUS_X_RADIUS : SEC : SBC #$08
     STA $0374, Y
     STA $037C, Y
 
     PLA : PLA : DEC ; Y coord
-    SEC : SBC $0B00
+    SEC : SBC !SAMUS_Y_RADIUS
     STA $0371, Y
     STA $0375, Y
-    CLC : ADC $0B00 : ADC $0B00 : SEC : SBC #$08
+    CLC : ADC !SAMUS_Y_RADIUS : ADC !SAMUS_Y_RADIUS : SEC : SBC #$08
     STA $0379, Y
     STA $037D, Y
     PLA
@@ -326,8 +330,97 @@ update_sprite_hitbox:
     STA $037E, Y
 
     REP #$30
-    TYA : CLC : ADC #$0010 : STA $0590
+    TYA : CLC : ADC #$0010 : STA !OAM_STACK_POINTER
     RTS
+}
+
+; draw hitbox around first 3 enemies
+update_enemy_sprite_hitbox:
+{
+    LDX #$0000 ; X = enemy number
+    LDY !OAM_STACK_POINTER ; Y = OAM stack pointer
+
+  .loopEnemies
+    JSR CheckEnemyOnScreen : AND #$0001 : BEQ .drawHitbox
+
+  .skipEnemy
+    CPX #$0080 : BEQ .end ; only first 3 enemies get hitboxes
+    TXA : CLC : ADC #$0040 : TAX : JMP .loopEnemies
+
+  .end
+    RTS
+
+  .drawHitbox
+    LDA !ENEMY_Y,X : SEC : SBC !LAYER1_Y : PHA ; top edge
+    LDA !ENEMY_X,X : SEC : SBC !LAYER1_X : PHA ; left edge
+
+    SEP #$20
+    PLA ; X coord
+    SEC : SBC !ENEMY_X_RADIUS,X
+    STA $0370, Y ; X pos
+    STA $0378, Y ; X pos
+    CLC : ADC !ENEMY_X_RADIUS,X : ADC !ENEMY_X_RADIUS,X : SEC : SBC #$08
+    STA $0374, Y
+    STA $037C, Y
+
+    PLA : PLA : DEC ; Y coord
+    SEC : SBC !ENEMY_Y_RADIUS,X
+    STA $0371, Y
+    STA $0375, Y
+    CLC : ADC !ENEMY_Y_RADIUS,X : ADC !ENEMY_Y_RADIUS,X : SEC : SBC #$08
+    STA $0379, Y
+    STA $037D, Y
+    PLA
+
+    LDA #%00111010
+    STA $0373, Y        ; Sprite 1 ATTR
+    LDA #%01111010
+    STA $0377, Y        ; Sprite 2 ATTR
+    LDA #%10111010
+    STA $037B, Y        ; Sprite 3 ATTR
+    LDA #%11111010
+    STA $037F, Y        ; Sprite 4 ATTR
+
+    LDA #$47
+    STA $0372, Y
+    LDA #$47
+    STA $0376, Y
+    LDA #$47
+    STA $037A, Y
+    LDA #$47
+    STA $037E, Y
+
+    REP #$30
+    TYA : CLC : ADC #$0010 : STA !OAM_STACK_POINTER
+
+    CPX #$0080 : BEQ .done ; only first 3 enemies get hitboxes
+    TXA : CLC : ADC #$0040 : TAX : JMP .loopEnemies
+
+  .done
+    RTS
+}
+
+CheckEnemyOnScreen:
+{
+; expects X = enemy index
+    PHP : %ai16()
+    LDA !ENEMY_X,X : CLC : ADC !ENEMY_X_RADIUS,X
+    CMP !LAYER1_X : BMI +
+    LDA !LAYER1_X : CLC : ADC #$0100 : CLC : ADC !ENEMY_X_RADIUS,X
+    CMP !ENEMY_X,X : BMI +
+    LDA !ENEMY_Y,X : CLC : ADC #$0008
+    CMP !LAYER1_Y : BMI +
+    LDA !LAYER1_Y : CLC : ADC #$00F8
+    CMP !ENEMY_Y,X : BMI +
+
+    LDA #$0000
+    PLP
+    RTS
+
++   LDA #$0001
+    PLP
+    RTS
+}
 
 sprite_tiles:
     incbin "../resources/spritegfx.bin":0-600

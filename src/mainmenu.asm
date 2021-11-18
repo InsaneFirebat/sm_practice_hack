@@ -1040,7 +1040,8 @@ misc_elevatorfix:
 
 SpritesMenu:
     dw #sprites_samus_prio
-    dw #sprites_show_hitbox
+    dw #sprites_show_samus_hitbox
+    dw #sprites_show_enemy_hitbox
     dw #sprites_oob_viewer
     dw #$0000
     %cm_header("SPRITE FEATURES")
@@ -1048,8 +1049,11 @@ SpritesMenu:
 sprites_samus_prio:
     %cm_toggle_bit("Samus on Top", !sram_sprite_prio_flag, #$3000, #0)
 
-sprites_show_hitbox:
-    %cm_toggle("Show Samus Hitbox", !ram_sprite_hitbox_active, #1, #0)
+sprites_show_samus_hitbox:
+    %cm_toggle("Show Samus Hitbox", !ram_sprite_samus_hitbox_active, #1, #0)
+
+sprites_show_enemy_hitbox:
+    %cm_toggle("Show Enemy Hitboxes", !ram_sprite_enemy_hitbox_active, #1, #0)
 
 sprites_oob_viewer:
     %cm_toggle("OOB Tile Viewer", !ram_oob_watch_active, #1, #toggle_oob_viewer)
