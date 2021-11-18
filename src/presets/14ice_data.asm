@@ -11,9 +11,9 @@ preset_14ice_crateria_ceres_elevator:
     dl $7E07C7 : db $02 : dw $C2C1 ; GFX Pointers
     dl $7E07F3 : db $02 : dw $002D ; Music Bank
     dl $7E07F5 : db $02 : dw $0006 ; Music Track
-    dl $7E090F : db $02 : dw $8000 ; Screen subpixel X position.
+    dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
     dl $7E0911 : db $02 : dw $0000 ; Screen X position in pixels
-    dl $7E0913 : db $02 : dw $4000 ; Screen subpixel Y position
+    dl $7E0913 : db $02 : dw $0000 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $0000 ; Screen Y position in pixels
     dl $7E093F : db $02 : dw $0000 ; Ceres escape flag
     dl $7E09A2 : db $02 : dw $0000 ; Equipped Items
@@ -22,7 +22,7 @@ preset_14ice_crateria_ceres_elevator:
     dl $7E09A8 : db $02 : dw $0000 ; Beams
     dl $7E09C0 : db $02 : dw $0000 ; Manual/Auto reserve tank
     dl $7E09C2 : db $02 : dw $0063 ; Health
-    dl $7E09C4 : db $02 : dw $0063 ; Max helath
+    dl $7E09C4 : db $02 : dw $0063 ; Max health
     dl $7E09C6 : db $02 : dw $0000 ; Missiles
     dl $7E09C8 : db $02 : dw $0000 ; Max missiles
     dl $7E09CA : db $02 : dw $0000 ; Supers
@@ -32,12 +32,12 @@ preset_14ice_crateria_ceres_elevator:
     dl $7E09D2 : db $02 : dw $0000 ; Currently selected item
     dl $7E09D4 : db $02 : dw $0000 ; Max reserves
     dl $7E09D6 : db $02 : dw $0000 ; Reserves
-    dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
-    dl $7E0A1E : db $02 : dw $0008 ; More position/state
+    dl $7E0A1C : db $02 : dw $0000 ; Samus position/state
+    dl $7E0A1E : db $02 : dw $0000 ; More position/state
     dl $7E0A68 : db $02 : dw $0000 ; Flash suit
     dl $7E0A76 : db $02 : dw $0000 ; Hyper beam
-    dl $7E0AF6 : db $02 : dw $0082 ; Samus X
-    dl $7E0AFA : db $02 : dw $004B ; Samus Y
+    dl $7E0AF6 : db $02 : dw $0080 ; Samus X
+    dl $7E0AFA : db $02 : dw $0048 ; Samus Y
     dl $7E0B3F : db $02 : dw $0000 ; Blue suit
     dl $7ED7C0 : db $02 : dw $0000 ; SRAM copy
     dl $7ED7C2 : db $02 : dw $0000 ; SRAM copy
@@ -72,7 +72,7 @@ preset_14ice_crateria_ceres_elevator:
     dl $7ED7FC : db $02 : dw $0000 ; SRAM copy
     dl $7ED7FE : db $02 : dw $0000 ; SRAM copy
     dl $7ED800 : db $02 : dw $0000 ; SRAM copy
-    dl $7ED802 : db $02 : dw $0001 ; SRAM copy
+    dl $7ED802 : db $02 : dw $0000 ; SRAM copy
     dl $7ED804 : db $02 : dw $0001 ; SRAM copy
     dl $7ED806 : db $02 : dw $0001 ; SRAM copy
     dl $7ED808 : db $02 : dw $0000 ; SRAM copy
@@ -370,7 +370,7 @@ preset_14ice_brinstar_green_brinstar_elevator:
     dl $7E0911 : db $02 : dw $0000 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $A800 ; Screen subpixel Y position
     dl $7E09C2 : db $02 : dw $00C7 ; Health
-    dl $7E09C4 : db $02 : dw $00C7 ; Max helath
+    dl $7E09C4 : db $02 : dw $00C7 ; Max health
     dl $7E09C6 : db $02 : dw $0002 ; Missiles
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
@@ -845,7 +845,7 @@ preset_14ice_upper_norfair_ice_beam:
     dl $7E0913 : db $02 : dw $0000 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $0238 ; Screen Y position in pixels
     dl $7E09C2 : db $02 : dw $012B ; Health
-    dl $7E09C4 : db $02 : dw $012B ; Max helath
+    dl $7E09C4 : db $02 : dw $012B ; Max health
     dl $7E09CA : db $02 : dw $0009 ; Supers
     dl $7E09CE : db $02 : dw $0005 ; Pbs
     dl $7E0A1C : db $02 : dw $009B ; Samus position/state
@@ -1098,7 +1098,7 @@ preset_14ice_lower_norfair_leaving_ridley:
     dl $7E0913 : db $02 : dw $A800 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $011F ; Screen Y position in pixels
     dl $7E09C2 : db $02 : dw $018F ; Health
-    dl $7E09C4 : db $02 : dw $018F ; Max helath
+    dl $7E09C4 : db $02 : dw $018F ; Max health
     dl $7E09C6 : db $02 : dw $0008 ; Missiles
     dl $7E09CA : db $02 : dw $0002 ; Supers
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state

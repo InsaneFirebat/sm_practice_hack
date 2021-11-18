@@ -1,20 +1,20 @@
 
-preset_kpdr21_crateria_ship:
+preset_kpdr21_crateria_ceres_elevator:
     dw #$0000
     dl $7E078B : db $02 : dw $0000 ; Elevator Index
-    dl $7E078D : db $02 : dw $88FE ; DDB
+    dl $7E078D : db $02 : dw $AB58 ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
-    dl $7E079B : db $02 : dw $91F8 ; MDB
-    dl $7E079F : db $02 : dw $0000 ; Region
-    dl $7E07C3 : db $02 : dw $C629 ; GFX Pointers
-    dl $7E07C5 : db $02 : dw $7CBA ; GFX Pointers
-    dl $7E07C7 : db $02 : dw $C2AD ; GFX Pointers
-    dl $7E07F3 : db $02 : dw $0006 ; Music Bank
-    dl $7E07F5 : db $02 : dw $0005 ; Music Track
-    dl $7E090F : db $02 : dw $8000 ; Screen subpixel X position.
-    dl $7E0911 : db $02 : dw $0400 ; Screen X position in pixels
+    dl $7E079B : db $02 : dw $DF45 ; MDB
+    dl $7E079F : db $02 : dw $0006 ; Region
+    dl $7E07C3 : db $02 : dw $E22A ; GFX Pointers
+    dl $7E07C5 : db $02 : dw $04C0 ; GFX Pointers
+    dl $7E07C7 : db $02 : dw $C2C1 ; GFX Pointers
+    dl $7E07F3 : db $02 : dw $002D ; Music Bank
+    dl $7E07F5 : db $02 : dw $0006 ; Music Track
+    dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
+    dl $7E0911 : db $02 : dw $0000 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $0000 ; Screen subpixel Y position
-    dl $7E0915 : db $02 : dw $03D0 ; Screen Y position in pixels
+    dl $7E0915 : db $02 : dw $0000 ; Screen Y position in pixels
     dl $7E093F : db $02 : dw $0000 ; Ceres escape flag
     dl $7E09A2 : db $02 : dw $0000 ; Equipped Items
     dl $7E09A4 : db $02 : dw $0000 ; Collected Items
@@ -22,7 +22,7 @@ preset_kpdr21_crateria_ship:
     dl $7E09A8 : db $02 : dw $0000 ; Beams
     dl $7E09C0 : db $02 : dw $0000 ; Manual/Auto reserve tank
     dl $7E09C2 : db $02 : dw $0063 ; Health
-    dl $7E09C4 : db $02 : dw $0063 ; Max helath
+    dl $7E09C4 : db $02 : dw $0063 ; Max health
     dl $7E09C6 : db $02 : dw $0000 ; Missiles
     dl $7E09C8 : db $02 : dw $0000 ; Max missiles
     dl $7E09CA : db $02 : dw $0000 ; Supers
@@ -36,8 +36,8 @@ preset_kpdr21_crateria_ship:
     dl $7E0A1E : db $02 : dw $0000 ; More position/state
     dl $7E0A68 : db $02 : dw $0000 ; Flash suit
     dl $7E0A76 : db $02 : dw $0000 ; Hyper beam
-    dl $7E0AF6 : db $02 : dw $0481 ; Samus X
-    dl $7E0AFA : db $02 : dw $0440 ; Samus Y
+    dl $7E0AF6 : db $02 : dw $0080 ; Samus X
+    dl $7E0AFA : db $02 : dw $0048 ; Samus Y
     dl $7E0B3F : db $02 : dw $0000 ; Blue suit
     dl $7ED7C0 : db $02 : dw $0000 ; SRAM copy
     dl $7ED7C2 : db $02 : dw $0000 ; SRAM copy
@@ -67,9 +67,9 @@ preset_kpdr21_crateria_ship:
     dl $7ED7F2 : db $02 : dw $0000 ; SRAM copy
     dl $7ED7F4 : db $02 : dw $0000 ; SRAM copy
     dl $7ED7F6 : db $02 : dw $0000 ; SRAM copy
-    dl $7ED7F8 : db $02 : dw $0026 ; SRAM copy
-    dl $7ED7FA : db $02 : dw $0006 ; SRAM copy
-    dl $7ED7FC : db $02 : dw $0001 ; SRAM copy
+    dl $7ED7F8 : db $02 : dw $0000 ; SRAM copy
+    dl $7ED7FA : db $02 : dw $0000 ; SRAM copy
+    dl $7ED7FC : db $02 : dw $0000 ; SRAM copy
     dl $7ED7FE : db $02 : dw $0000 ; SRAM copy
     dl $7ED800 : db $02 : dw $0000 ; SRAM copy
     dl $7ED802 : db $02 : dw $0000 ; SRAM copy
@@ -94,7 +94,7 @@ preset_kpdr21_crateria_ship:
     dl $7ED828 : db $02 : dw $0000 ; Events, Items, Doors
     dl $7ED82A : db $02 : dw $0000 ; Events, Items, Doors
     dl $7ED82C : db $02 : dw $0000 ; Events, Items, Doors
-    dl $7ED82E : db $02 : dw $0001 ; Events, Items, Doors
+    dl $7ED82E : db $02 : dw $0000 ; Events, Items, Doors
     dl $7ED830 : db $02 : dw $0000 ; Events, Items, Doors
     dl $7ED832 : db $02 : dw $0000 ; Events, Items, Doors
     dl $7ED834 : db $02 : dw $0000 ; Events, Items, Doors
@@ -195,7 +195,7 @@ preset_kpdr21_crateria_ship:
     dl $7ED8F2 : db $02 : dw $0000 ; Events, Items, Doors
     dl $7ED8F4 : db $02 : dw $0000 ; Events, Items, Doors
     dl $7ED8F6 : db $02 : dw $0000 ; Events, Items, Doors
-    dl $7ED8F8 : db $02 : dw $0001 ; Events, Items, Doors
+    dl $7ED8F8 : db $02 : dw $0000 ; Events, Items, Doors
     dl $7ED8FA : db $02 : dw $0000 ; Events, Items, Doors
     dl $7ED8FC : db $02 : dw $0000 ; Events, Items, Doors
     dl $7ED8FE : db $02 : dw $0000 ; Events, Items, Doors
@@ -209,12 +209,60 @@ preset_kpdr21_crateria_ship:
     dl $7ED90E : db $02 : dw $0000 ; Events, Items, Doors
     dl $7ED910 : db $02 : dw $0000 ; Events, Items, Doors
     dl $7ED912 : db $02 : dw $0000 ; Events, Items, Doors
-    dl $7ED914 : db $02 : dw $0005 ; Events, Items, Doors
+    dl $7ED914 : db $02 : dw $001F ; Events, Items, Doors
     dl $7ED916 : db $02 : dw $0000 ; Events, Items, Doors
-    dl $7ED918 : db $02 : dw $0000 ; Events, Items, Doors
+    dl $7ED918 : db $02 : dw $0006 ; Events, Items, Doors
     dl $7ED91A : db $02 : dw $0000 ; Events, Items, Doors
-    dl $7ED91C : db $02 : dw $1010 ; Events, Items, Doors
+    dl $7ED91C : db $02 : dw $0000 ; Events, Items, Doors
     dl $7ED91E : db $02 : dw $0000 ; Events, Items, Doors
+    dw #$FFFF
+.after
+
+preset_kpdr21_crateria_ceres_last_3_rooms:
+    dw #preset_kpdr21_crateria_ceres_elevator ; Crateria: Ceres Elevator
+    dl $7E078D : db $02 : dw $ABA0 ; DDB
+    dl $7E079B : db $02 : dw $E021 ; MDB
+    dl $7E07C3 : db $02 : dw $B004 ; GFX Pointers
+    dl $7E07C5 : db $02 : dw $E3C0 ; GFX Pointers
+    dl $7E07F3 : db $02 : dw $0024 ; Music Bank
+    dl $7E07F5 : db $02 : dw $0007 ; Music Track
+    dl $7E090F : db $02 : dw $7400 ; Screen subpixel X position.
+    dl $7E0913 : db $02 : dw $F000 ; Screen subpixel Y position
+    dl $7E093F : db $02 : dw $0002 ; Ceres escape flag
+    dl $7E09C2 : db $02 : dw $0018 ; Health
+    dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
+    dl $7E0A1E : db $02 : dw $0004 ; More position/state
+    dl $7E0AF6 : db $02 : dw $004E ; Samus X
+    dl $7E0AFA : db $02 : dw $00A2 ; Samus Y
+    dl $7ED82E : db $02 : dw $0001 ; Events, Items, Doors
+    dw #$FFFF
+.after
+
+preset_kpdr21_crateria_ship:
+    dw #preset_kpdr21_crateria_ceres_last_3_rooms ; Crateria: Ceres Last 3 Rooms
+    dl $7E078D : db $02 : dw $88FE ; DDB
+    dl $7E079B : db $02 : dw $91F8 ; MDB
+    dl $7E079F : db $02 : dw $0000 ; Region
+    dl $7E07C3 : db $02 : dw $C629 ; GFX Pointers
+    dl $7E07C5 : db $02 : dw $7CBA ; GFX Pointers
+    dl $7E07C7 : db $02 : dw $C2AD ; GFX Pointers
+    dl $7E07F3 : db $02 : dw $0006 ; Music Bank
+    dl $7E07F5 : db $02 : dw $0005 ; Music Track
+    dl $7E090F : db $02 : dw $1000 ; Screen subpixel X position.
+    dl $7E0911 : db $02 : dw $03FB ; Screen X position in pixels
+    dl $7E0913 : db $02 : dw $C000 ; Screen subpixel Y position
+    dl $7E0915 : db $02 : dw $03D3 ; Screen Y position in pixels
+    dl $7E093F : db $02 : dw $0000 ; Ceres escape flag
+    dl $7E09C2 : db $02 : dw $0063 ; Health
+    dl $7E0AF6 : db $02 : dw $047E ; Samus X
+    dl $7E0AFA : db $02 : dw $0443 ; Samus Y
+    dl $7ED7F8 : db $02 : dw $0030 ; SRAM copy
+    dl $7ED7FA : db $02 : dw $0006 ; SRAM copy
+    dl $7ED7FC : db $02 : dw $0001 ; SRAM copy
+    dl $7ED8F8 : db $02 : dw $0001 ; Events, Items, Doors
+    dl $7ED914 : db $02 : dw $0005 ; Events, Items, Doors
+    dl $7ED918 : db $02 : dw $0000 ; Events, Items, Doors
+    dl $7ED91C : db $02 : dw $1010 ; Events, Items, Doors
     dw #$FFFF
 .after
 
@@ -465,7 +513,7 @@ preset_kpdr21_crateria_green_pirate_shaft:
     dl $7E0913 : db $02 : dw $0000 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $01FC ; Screen Y position in pixels
     dl $7E09C2 : db $02 : dw $00C7 ; Health
-    dl $7E09C4 : db $02 : dw $00C7 ; Max helath
+    dl $7E09C4 : db $02 : dw $00C7 ; Max health
     dl $7E0AF6 : db $02 : dw $0063 ; Samus X
     dl $7E0AFA : db $02 : dw $029B ; Samus Y
     dl $7E0B3F : db $02 : dw $0000 ; Blue suit
@@ -818,7 +866,7 @@ preset_kpdr21_upper_norfair_leaving_hi_jump:
     dl $7E09A2 : db $02 : dw $1105 ; Equipped Items
     dl $7E09A4 : db $02 : dw $1105 ; Collected Items
     dl $7E09C2 : db $02 : dw $012B ; Health
-    dl $7E09C4 : db $02 : dw $012B ; Max helath
+    dl $7E09C4 : db $02 : dw $012B ; Max health
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
     dl $7E0AF6 : db $02 : dw $00B5 ; Samus X
@@ -1676,7 +1724,7 @@ preset_kpdr21_maridia_halfie_setup:
     dl $7E0913 : db $02 : dw $4400 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $001F ; Screen Y position in pixels
     dl $7E09C2 : db $02 : dw $018F ; Health
-    dl $7E09C4 : db $02 : dw $018F ; Max helath
+    dl $7E09C4 : db $02 : dw $018F ; Max health
     dl $7E0AF6 : db $02 : dw $008D ; Samus X
     dl $7E0AFA : db $02 : dw $009B ; Samus Y
     dl $7ED882 : db $02 : dw $0100 ; Events, Items, Doors
