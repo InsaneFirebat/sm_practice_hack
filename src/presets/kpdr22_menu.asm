@@ -47,6 +47,8 @@ presets_goto_kpdr22_tourian:
     %cm_submenu("Tourian", #presets_submenu_kpdr22_tourian)
 
 presets_submenu_kpdr22_crateria:
+    dw #presets_kpdr22_crateria_ceres_elevator
+    dw #presets_kpdr22_crateria_ceres_last_3_rooms
     dw #presets_kpdr22_crateria_ship
     dw #presets_kpdr22_crateria_parlor
     dw #presets_kpdr22_crateria_parlor_downback
@@ -237,6 +239,12 @@ presets_submenu_kpdr22_tourian:
     %cm_header("TOURIAN")
 
 ; Crateria
+presets_kpdr22_crateria_ceres_elevator:
+    %cm_preset("Ceres Elevator", #preset_kpdr22_crateria_ceres_elevator)
+
+presets_kpdr22_crateria_ceres_last_3_rooms:
+    %cm_preset("Ceres Last 3 Rooms", #preset_kpdr22_crateria_ceres_last_3_rooms)
+
 presets_kpdr22_crateria_ship:
     %cm_preset("Ship", #preset_kpdr22_crateria_ship)
 

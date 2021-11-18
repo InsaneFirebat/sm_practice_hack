@@ -16,32 +16,33 @@ preset_nghyper_ceres_station_ceres_elevator:
     dl $7E0913 : db $02 : dw $0000 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $0000 ; Screen Y position in pixels
     dl $7E093F : db $02 : dw $0000 ; Ceres escape flag
-    dl $7E09A2 : db $02 : dw $F32F ; Equipped Items
-    dl $7E09A4 : db $02 : dw $F32F ; Collected Items
-    dl $7E09A6 : db $02 : dw $100B ; Beams
-    dl $7E09A8 : db $02 : dw $100F ; Beams
-    dl $7E09C0 : db $02 : dw $0001 ; Manual/Auto reserve tank
-    dl $7E09C2 : db $02 : dw $002C ; Health
-    dl $7E09C4 : db $02 : dw $05DB ; Max helath
-    dl $7E09C6 : db $02 : dw $00E6 ; Missiles
-    dl $7E09C8 : db $02 : dw $00E6 ; Max missiles
-    dl $7E09CA : db $02 : dw $0032 ; Supers
-    dl $7E09CC : db $02 : dw $0032 ; Max supers
-    dl $7E09CE : db $02 : dw $0032 ; Pbs
-    dl $7E09D0 : db $02 : dw $0032 ; Max pbs
-    dl $7E09D4 : db $02 : dw $0190 ; Max reserves
-    dl $7E09D6 : db $02 : dw $0190 ; Reserves
+    dl $7E09A2 : db $02 : dw $0000 ; Equipped Items
+    dl $7E09A4 : db $02 : dw $0000 ; Collected Items
+    dl $7E09A6 : db $02 : dw $0000 ; Beams
+    dl $7E09A8 : db $02 : dw $0000 ; Beams
+    dl $7E09C0 : db $02 : dw $0000 ; Manual/Auto reserve tank
+    dl $7E09C2 : db $02 : dw $0063 ; Health
+    dl $7E09C4 : db $02 : dw $0063 ; Max health
+    dl $7E09C6 : db $02 : dw $0000 ; Missiles
+    dl $7E09C8 : db $02 : dw $0000 ; Max missiles
+    dl $7E09CA : db $02 : dw $0000 ; Supers
+    dl $7E09CC : db $02 : dw $0000 ; Max supers
+    dl $7E09CE : db $02 : dw $0000 ; Pbs
+    dl $7E09D0 : db $02 : dw $0000 ; Max pbs
+    dl $7E09D2 : db $02 : dw $0000 ; Currently selected item
+    dl $7E09D4 : db $02 : dw $0000 ; Max reserves
+    dl $7E09D6 : db $02 : dw $0000 ; Reserves
     dl $7E0A1C : db $02 : dw $0000 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0000 ; More position/state
     dl $7E0A68 : db $02 : dw $0000 ; Flash suit
-    dl $7E0A76 : db $02 : dw $0001 ; Hyper beam
+    dl $7E0A76 : db $02 : dw $0000 ; Hyper beam
     dl $7E0AF6 : db $02 : dw $0080 ; Samus X
     dl $7E0AFA : db $02 : dw $0048 ; Samus Y
     dl $7E0B3F : db $02 : dw $0000 ; Blue suit
-    dl $7ED7C0 : db $02 : dw $F32F ; SRAM copy
-    dl $7ED7C2 : db $02 : dw $F32F ; SRAM copy
-    dl $7ED7C4 : db $02 : dw $100B ; SRAM copy
-    dl $7ED7C6 : db $02 : dw $100F ; SRAM copy
+    dl $7ED7C0 : db $02 : dw $0000 ; SRAM copy
+    dl $7ED7C2 : db $02 : dw $0000 ; SRAM copy
+    dl $7ED7C4 : db $02 : dw $0000 ; SRAM copy
+    dl $7ED7C6 : db $02 : dw $0000 ; SRAM copy
     dl $7ED7C8 : db $02 : dw $0800 ; SRAM copy
     dl $7ED7CA : db $02 : dw $0400 ; SRAM copy
     dl $7ED7CC : db $02 : dw $0200 ; SRAM copy
@@ -53,28 +54,28 @@ preset_nghyper_ceres_station_ceres_elevator:
     dl $7ED7D8 : db $02 : dw $2000 ; SRAM copy
     dl $7ED7DA : db $02 : dw $0020 ; SRAM copy
     dl $7ED7DC : db $02 : dw $0010 ; SRAM copy
-    dl $7ED7DE : db $02 : dw $0001 ; SRAM copy
-    dl $7ED7E0 : db $02 : dw $002C ; SRAM copy
-    dl $7ED7E2 : db $02 : dw $05DB ; SRAM copy
-    dl $7ED7E4 : db $02 : dw $00E6 ; SRAM copy
-    dl $7ED7E6 : db $02 : dw $00E6 ; SRAM copy
-    dl $7ED7E8 : db $02 : dw $0032 ; SRAM copy
-    dl $7ED7EA : db $02 : dw $0032 ; SRAM copy
-    dl $7ED7EC : db $02 : dw $0032 ; SRAM copy
-    dl $7ED7EE : db $02 : dw $0032 ; SRAM copy
+    dl $7ED7DE : db $02 : dw $0000 ; SRAM copy
+    dl $7ED7E0 : db $02 : dw $0063 ; SRAM copy
+    dl $7ED7E2 : db $02 : dw $0063 ; SRAM copy
+    dl $7ED7E4 : db $02 : dw $0000 ; SRAM copy
+    dl $7ED7E6 : db $02 : dw $0000 ; SRAM copy
+    dl $7ED7E8 : db $02 : dw $0000 ; SRAM copy
+    dl $7ED7EA : db $02 : dw $0000 ; SRAM copy
+    dl $7ED7EC : db $02 : dw $0000 ; SRAM copy
+    dl $7ED7EE : db $02 : dw $0000 ; SRAM copy
     dl $7ED7F0 : db $02 : dw $0000 ; SRAM copy
-    dl $7ED7F2 : db $02 : dw $0190 ; SRAM copy
-    dl $7ED7F4 : db $02 : dw $0190 ; SRAM copy
+    dl $7ED7F2 : db $02 : dw $0000 ; SRAM copy
+    dl $7ED7F4 : db $02 : dw $0000 ; SRAM copy
     dl $7ED7F6 : db $02 : dw $0000 ; SRAM copy
     dl $7ED7F8 : db $02 : dw $0000 ; SRAM copy
     dl $7ED7FA : db $02 : dw $0000 ; SRAM copy
     dl $7ED7FC : db $02 : dw $0000 ; SRAM copy
     dl $7ED7FE : db $02 : dw $0000 ; SRAM copy
     dl $7ED800 : db $02 : dw $0000 ; SRAM copy
-    dl $7ED802 : db $02 : dw $0001 ; SRAM copy
+    dl $7ED802 : db $02 : dw $0000 ; SRAM copy
     dl $7ED804 : db $02 : dw $0001 ; SRAM copy
     dl $7ED806 : db $02 : dw $0001 ; SRAM copy
-    dl $7ED808 : db $02 : dw $0001 ; SRAM copy
+    dl $7ED808 : db $02 : dw $0000 ; SRAM copy
     dl $7ED80A : db $02 : dw $0000 ; SRAM copy
     dl $7ED80C : db $02 : dw $0000 ; SRAM copy
     dl $7ED80E : db $02 : dw $0000 ; SRAM copy

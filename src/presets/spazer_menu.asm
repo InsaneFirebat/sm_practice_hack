@@ -47,6 +47,8 @@ presets_goto_spazer_tourian:
     %cm_submenu("Tourian", #presets_submenu_spazer_tourian)
 
 presets_submenu_spazer_crateria:
+    dw #presets_spazer_crateria_ceres_elevator
+    dw #presets_spazer_crateria_ceres_last_3_rooms
     dw #presets_spazer_crateria_ship
     dw #presets_spazer_crateria_parlor
     dw #presets_spazer_crateria_climb_down
@@ -236,6 +238,12 @@ presets_submenu_spazer_tourian:
     %cm_header("TOURIAN")
 
 ; Crateria
+presets_spazer_crateria_ceres_elevator:
+    %cm_preset("Ceres Elevator", #preset_spazer_crateria_ceres_elevator)
+
+presets_spazer_crateria_ceres_last_3_rooms:
+    %cm_preset("Ceres Last 3 Rooms", #preset_spazer_crateria_ceres_last_3_rooms)
+
 presets_spazer_crateria_ship:
     %cm_preset("Ship", #preset_spazer_crateria_ship)
 

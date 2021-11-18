@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.0.9] Fixed Ceres mode 7 rooms when loading from presets by idlechild
 * [2.3.0.8] Added sound effects for more menu options
 * [2.3.0.8] Added menu options to set glitched beam combos
 * [2.3.0.7] Changed elevator flags to a simple fix option
