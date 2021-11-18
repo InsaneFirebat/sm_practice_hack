@@ -54,10 +54,11 @@
 !ram_minimap = $7FFB36
 !ram_map_counter = $7FFB38
 !ram_vcounter_data = $7FFB3A
-!ram_sprite_hitbox_active = $7FFB3E
-!ram_oob_watch_active = $7FFB40
-!ram_oob_watch_lag_backup = $7FFB42
-!ram_custom_preset = $7FFB44
+!ram_sprite_samus_hitbox_active = $7FFB3E
+!ram_sprite_enemy_hitbox_active = $7FFB40
+!ram_oob_watch_active = $7FFB42
+!ram_oob_watch_lag_backup = $7FFB44
+!ram_custom_preset = $7FFB46
 
 ; FREE SPACE ^
 
@@ -454,3 +455,22 @@ endif
 !sram_customsfx_number = $F022F4
 !sram_customsfx_confirm = $F022F6
 !sram_customsfx_goback = $F022F8
+
+
+; -----------
+; Vanilla RAM
+; -----------
+
+!OAM_STACK_POINTER = $0590
+!LAYER1_X = $0911
+!LAYER1_Y = $0915
+!SAMUS_X = $0AF6
+!SAMUS_Y = $0AFA
+!SAMUS_X_RADIUS = $0AFE
+!SAMUS_Y_RADIUS = $0B00
+!SAMUS_SPRITEMAP_X = $0B04
+!ENEMY_X = $0F7A
+!ENEMY_Y = $0F7E
+!ENEMY_X_RADIUS = $0F82
+!ENEMY_Y_RADIUS = $0F84
+
