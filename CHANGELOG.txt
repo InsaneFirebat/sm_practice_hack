@@ -1,33 +1,35 @@
 
 ## Changelog since v2.2.7
 
-* [2.3.0.9] Fixed Ceres mode 7 rooms when loading from presets by idlechild
-* [2.3.0.8] Added sound effects for more menu options
-* [2.3.0.8] Added menu options to set glitched beam combos
-* [2.3.0.7] Changed elevator flags to a simple fix option
-* [2.3.0.6] Replaced E-tank counter with elevator and spikesuit status icons by idlechild
-* [2.3.0.5] Allow loading savestates during door scrolling by idlechild
-* [2.3.0.5] Added flags in Misc for standing and riding elevators by idlechild
-* [2.3.0.5] Changed Baby Slowdown to Slowdown Mode (2 for Baby) by idlechild
-* [2.3.0.4] Option to force Samus into standing pose
-* [2.3.0.3] Door Skip room strat by idlechild
-* [2.3.0.2] Improved Soundtest and Customize Sounds menus
-* [2.3.0.2] Added menu option to kill enemies
-* [2.3.0.1] Further improvements to color selection menus
-* [2.3.0]   New menu for "Sprite Features"
-* [2.2.8.7] Reworked color customization menu to be more intuitive
-* [2.2.8.6] Fix item% calculation after using GT Code
-* [2.2.8.5] Removed enemies from presets and increase slots
-* [2.2.8.4] 100% Max Completion category presets by mm2nescartridge
-* [2.2.8.3] Fixed more scolling issues with presets in Basement and Aqueduct
-* [2.2.8.3] Added "Business Center Pre-Elev" to PRKD presets
-* [2.2.8.2] Combined normal and No-X PRKD presets
-* [2.2.8.2] Optimizations for controller shortcut checks
-* [2.2.8.1] Allow submenu navigation sound to be customized
-* [2.2.8]   Fixed credits
-* [2.2.8]   Support SpriteSomething Hitbox skin
-* [2.2.7.3] Hide Grapple and Xray icons when loading GT Code presets
-* [2.2.7.2] Added GT Max% presets for the WR route
-* [2.2.7.1] Equipment options to set current health/reserves
-* [2.2.7.1] Fixed custom presets corrupting existing saves in the next slot
-* [2.2.7]   Damage counter tracks shinesparks
+* [2.3.0.10] Added version number to title screen by idlechild
+* [2.3.0.10] Added support for Dachora Room to Elevator CF room strat by idlechild
+* [2.3.0.9]  Fixed Ceres mode 7 rooms when loading from presets by idlechild
+* [2.3.0.8]  Added sound effects for more menu options
+* [2.3.0.8]  Added menu options to set glitched beam combos
+* [2.3.0.7]  Changed elevator flags to a simple fix option
+* [2.3.0.6]  Replaced E-tank counter with elevator and spikesuit status icons by idlechild
+* [2.3.0.5]  Allow loading savestates during door scrolling by idlechild
+* [2.3.0.5]  Added flags in Misc for standing and riding elevators by idlechild
+* [2.3.0.5]  Changed Baby Slowdown to Slowdown Mode (2 for Baby) by idlechild
+* [2.3.0.4]  Option to force Samus into standing pose
+* [2.3.0.3]  Door Skip room strat by idlechild
+* [2.3.0.2]  Improved Soundtest and Customize Sounds menus
+* [2.3.0.2]  Added menu option to kill enemies
+* [2.3.0.1]  Further improvements to color selection menus
+* [2.3.0]    New menu for "Sprite Features"
+* [2.2.8.7]  Reworked color customization menu to be more intuitive
+* [2.2.8.6]  Fix item% calculation after using GT Code
+* [2.2.8.5]  Removed enemies from presets and increase slots
+* [2.2.8.4]  100% Max Completion category presets by mm2nescartridge
+* [2.2.8.3]  Fixed more scolling issues with presets in Basement and Aqueduct
+* [2.2.8.3]  Added "Business Center Pre-Elev" to PRKD presets
+* [2.2.8.2]  Combined normal and No-X PRKD presets
+* [2.2.8.2]  Optimizations for controller shortcut checks
+* [2.2.8.1]  Allow submenu navigation sound to be customized
+* [2.2.8]    Fixed credits
+* [2.2.8]    Support SpriteSomething Hitbox skin
+* [2.2.7.3]  Hide Grapple and Xray icons when loading GT Code presets
+* [2.2.7.2]  Added GT Max% presets for the WR route
+* [2.2.7.1]  Equipment options to set current health/reserves
+* [2.2.7.1]  Fixed custom presets corrupting existing saves in the next slot
+* [2.2.7]    Damage counter tracks shinesparks
