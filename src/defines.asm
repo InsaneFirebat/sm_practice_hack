@@ -338,6 +338,7 @@
 !ram_dboost_kb = $7FFC1C
 !ram_dboost_counter = $7FFC1E
 !ram_spark_icon = $7FFC20
+!ram_healthbomb_icon = $7FFC22
 
 ; FREE SPACE ^
 

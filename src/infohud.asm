@@ -808,6 +808,14 @@ ih_hud_code:
   .clearSpark
     LDA !IH_BLANK : STA $7EC658
 
+    ; health bomb
++   LDA $0E1A : BEQ .clearHealthBomb
+    LDA !IH_LETTER_E : STA $7EC654
+    BRA +
+
+  .clearHealthBomb
+    LDA !IH_BLANK : STA $7EC654
+
   .end
 +   PLB
     ; overwritten code
