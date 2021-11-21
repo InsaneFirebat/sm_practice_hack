@@ -7,7 +7,6 @@ org $858493
     JSR hook_message_box_wait
     BRA $0B
 
-
 ; $82:E126: Logic to queue room music after fanfare
 org $82E126
     JSL hook_resume_room_music

@@ -344,7 +344,7 @@ update_enemy_sprite_hitbox:
     JSR CheckEnemyOnScreen : AND #$0001 : BEQ .drawHitbox
 
   .skipEnemy
-    CPX #$0080 : BEQ .end ; only first 3 enemies get hitboxes
+    CPX #$0200 : BEQ .end ; limit # of hitboxes drawn
     TXA : CLC : ADC #$0040 : TAX : JMP .loopEnemies
 
   .end
@@ -393,7 +393,7 @@ update_enemy_sprite_hitbox:
     REP #$30
     TYA : CLC : ADC #$0010 : STA !OAM_STACK_POINTER
 
-    CPX #$0080 : BEQ .done ; only first 3 enemies get hitboxes
+    CPX #$0200 : BEQ .done ; limit # of hitboxes drawn
     TXA : CLC : ADC #$0040 : TAX : JMP .loopEnemies
 
   .done

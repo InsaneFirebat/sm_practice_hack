@@ -925,6 +925,7 @@ MiscMenu:
     dw #misc_loudpants
     dw #misc_fanfare_toggle
     dw #misc_music_toggle
+    dw #misc_suit_properties
     dw #misc_invincibility
     dw #misc_infiniteammo
     dw #misc_magnetstairs
@@ -979,6 +980,35 @@ misc_music_toggle:
     STA $063F
     STA $2140
     RTS
+
+misc_suit_properties:
+    dw !ACTION_CHOICE
+    dl #!sram_suit_properties
+    dw .routine
+    db #$28, "Suit Properties", #$FF
+    db #$28, "    VANILLA", #$FF
+    db #$28, "   BALANCED", #$FF
+    db #$28, "   PROGRESS", #$FF
+    db #$FF
+
+  .routine
+    JSL misc_init_suits_ram
+    RTS
+
+misc_init_suits_ram:
+{
+    LDA #$0021 : STA !ram_suits_enemy_damage_check : STA !ram_suits_periodic_damage_check
+
+    LDA !sram_suit_properties : CMP #$0002 : BNE .init_periodic_damage
+    LDA #$0001 : STA !ram_suits_enemy_damage_check
+
+  .init_periodic_damage
+    LDA !sram_suit_properties : BEQ .end
+    LDA #$0001 : STA !ram_suits_periodic_damage_check
+
+  .end
+    RTL
+}
 
 misc_invincibility:
     %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
@@ -2097,20 +2127,20 @@ rng_draygon_rng_right:
     dw !ACTION_CHOICE
     dl #!ram_draygon_rng_right
     dw #$0000
-    db #$28, "Draygon from R", #$FF
-    db #$28, "ight RANDOM", #$FF
-    db #$28, "ight   GOOP", #$FF
-    db #$28, "ight  SWOOP", #$FF
+    db #$28, "Draygon from Ri", #$FF
+    db #$28, "ght  RANDOM", #$FF
+    db #$28, "ght    GOOP", #$FF
+    db #$28, "ght   SWOOP", #$FF
     db #$FF
 
 rng_draygon_rng_left:
     dw !ACTION_CHOICE
     dl #!ram_draygon_rng_left
     dw #$0000
-    db #$28, "Draygon from L", #$FF
-    db #$28, "eft  RANDOM", #$FF
-    db #$28, "eft    GOOP", #$FF
-    db #$28, "eft   SWOOP", #$FF
+    db #$28, "Draygon from Le", #$FF
+    db #$28, "ft   RANDOM", #$FF
+    db #$28, "ft     GOOP", #$FF
+    db #$28, "ft    SWOOP", #$FF
     db #$FF
 
 rng_crocomire_rng:
