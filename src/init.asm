@@ -1,4 +1,4 @@
-!SRAM_VERSION = $F009
+!SRAM_VERSION = $000A
 
 
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values
@@ -73,9 +73,10 @@ init_nonzero_wram:
     JSL misc_init_suits_ram
 
     ; RAM $7E0000 fluctuates so it is not a good default value
-    LDA #$FFFE : STA !ram_watch_left : STA !ram_watch_right
-    LDA #$00FF : STA !ram_watch_left_hi : STA !ram_watch_right_hi
-    LDA #$00FE : STA !ram_watch_left_lo : STA !ram_watch_right_lo
+    LDA #$0F8C : STA !ram_watch_left ; Enemy HP
+    LDA #$09C2 : STA !ram_watch_right ; Samus HP
+    LDA #$000F : STA !ram_watch_left_hi : LDA #$008C : STA !ram_watch_left_lo
+    LDA #$0009 : STA !ram_watch_right_hi : LDA #$00C2 : STA !ram_watch_right_lo
 
     ; Check if any less common controller shortcuts are configured
     JML GameModeExtras
@@ -175,6 +176,20 @@ init_sram:
     LDA #$0001 : STA !sram_dummy_on
     LDA #$0000 : STA !sram_dummy_off
     LDA #$FFFF : STA !sram_dummy_num
+
+    LDA #$0000
+    STA !ram_infinite_ammo
+    STA !ram_infiniteammo_check
+    STA !ram_display_backup
+    STA !ram_magnetstairs
+    STA !ram_dboost_state
+    STA !ram_dboost_kbmax
+    STA !ram_dboost_kb
+    STA !ram_dboost_counter
+if !FEATURE_EXTRAS
+    STA !ram_noclip
+    STA !ram_steamcollision
+endif
 
     LDA #!SRAM_VERSION : STA !sram_initialized
 
