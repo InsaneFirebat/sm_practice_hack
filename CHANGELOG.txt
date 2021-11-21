@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.1]    Added options to change suit properties based on randomizer settings
+* [2.3.1]    Added option to draw hitboxes on enemies
 * [2.3.0.10] Added version number to title screen by idlechild
 * [2.3.0.10] Added support for Dachora Room to Elevator CF room strat by idlechild
 * [2.3.0.9]  Fixed Ceres mode 7 rooms when loading from presets by idlechild

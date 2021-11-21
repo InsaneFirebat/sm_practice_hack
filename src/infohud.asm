@@ -190,6 +190,33 @@ endif
 org $F08000
 print pc, " infohud start"
 
+; List this first since it affects bank $84 where we are trying to minimize change
+ih_get_item_code:
+{
+    PHA
+
+    ; calculate lag frames
+    LDA !ram_realtime_room : SEC : SBC !ram_transition_counter : STA !ram_last_room_lag
+
+    LDA !ram_gametime_room : STA !ram_last_gametime_room
+    LDA !ram_realtime_room : STA !ram_last_realtime_room
+
+    ; save temp variables
+    LDA $12 : PHA
+    LDA $14 : PHA
+
+    ; Update HUD
+    JSL ih_update_hud_code
+
+    ; restore temp variables
+    PLA : STA $14
+    PLA : STA $12
+
+    PLA
+    JSL $80818E
+    RTL
+}
+
 ih_debug_patch:
 {
     LDA $05D1
@@ -278,10 +305,9 @@ ih_nmi_end:
 ih_gamemode_frame:
 {
     PHA
-    LDA !ram_gametime_room : CMP #$EA5F : BEQ +
-    INC : STA !ram_gametime_room
+    LDA !ram_gametime_room : INC : STA !ram_gametime_room
+    PLA
 
-+   PLA
     ; overwritten code
     STZ $0A30
     STZ $0A32
@@ -667,7 +693,7 @@ ih_update_hud_code:
     {
         LDA !sram_frame_counter_mode : BNE .ingameSeg
         LDA.w #!ram_seg_rt_frames : STA $00
-        LDA #$007F : STA $02
+        LDA !WRAM_BANK : STA $02
         BRA .drawSeg
 
       .ingameSeg
@@ -791,8 +817,7 @@ ih_hud_code:
     LDA !sram_status_icons : BEQ .end
 
     ; elevator
-    LDA $0E16 : CMP !ram_last_elevator : BEQ + : STA !ram_last_elevator
-    CMP #$0000 : BEQ .clearElevator
+    LDA $0E16 : BEQ .clearElevator
     LDA !IH_ELEVATOR : STA $7EC656
     BRA +
 
@@ -800,8 +825,7 @@ ih_hud_code:
     LDA !IH_BLANK : STA $7EC656
 
     ; shinespark
-+   LDA $0A68 : CMP !ram_spark_icon : BEQ + : STA !ram_spark_icon
-    CMP #$0000 : BEQ .clearSpark
++   LDA $0A68 : BEQ .clearSpark
     LDA !IH_SHINESPARK : STA $7EC658
     BRA +
 
@@ -1350,32 +1374,6 @@ if !FEATURE_EXTRAS
     +   RTL
     }
 endif
-
-ih_get_item_code:
-{
-    PHA
-
-    ; calculate lag frames
-    LDA !ram_realtime_room : SEC : SBC !ram_transition_counter : STA !ram_last_room_lag
-
-    LDA !ram_gametime_room : STA !ram_last_gametime_room
-    LDA !ram_realtime_room : STA !ram_last_realtime_room
-
-    ; save temp variables
-    LDA $12 : PHA
-    LDA $14 : PHA
-
-    ; Update HUD
-    JSL ih_update_hud_code
-
-    ; restore temp variables
-    PLA : STA $14
-    PLA : STA $12
-
-    PLA
-    JSL $80818E
-    RTL
-}
 
 ih_shinespark_code:
 {
