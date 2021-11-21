@@ -6,7 +6,7 @@
 !FEATURE_PAL ?= 0
 !FEATURE_EXTRAS ?= 0
 !ORIGINAL_MESSAGE_TEXT ?= 0
-!PRESERVE_WRAM_DURING_SPACETIME ?= 0
+!PRESERVE_WRAM_DURING_SPACETIME ?= 1
 
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 3
@@ -292,9 +292,9 @@
 !sram_metronome_tickrate = $F02038
 !sram_metronome_sfx = $F0203A
 !sram_status_icons = $F0203C
-!sram_suit_properties = $70203E
+!sram_suit_properties = $F0203E
 
-; ^ FREE SPACE ^ up to $703000
+; ^ FREE SPACE ^ up to $F03000
 
 
 ; ----------
@@ -312,8 +312,8 @@
 !SRAM_SAVED_SP = $774004
 
 ; SM specific things
-!SRAM_MUSIC_BANK = $701FD0
-!SRAM_MUSIC_TRACK = $701FD2
+!SRAM_MUSIC_BANK = $F01FD0
+!SRAM_MUSIC_TRACK = $F01FD2
 !MUSIC_BANK = $07F3
 !MUSIC_TRACK = $07F5
 !MUSIC_ROUTINE = $808FC1
@@ -324,76 +324,78 @@
 ;                             Custom Features                             ;
 ; ----------------------------------------------------------------------- ;
 
-!ram_HUD_top = $7FFC00
-!ram_HUD_middle = $7FFC02
-!ram_HUD_bottom = $7FFC03
+!ram_HUD_top = $F02100
+!ram_HUD_middle = $F02102
+!ram_HUD_bottom = $F02104
 
-!ram_infinite_ammo = $7FFC10
-!ram_infiniteammo_check = $7FFC12
+; FREE SPACE ^
+
+!ram_infinite_ammo = $F02110
+!ram_infiniteammo_check = $F02112
 !ram_ammo_missiles = $05C9
 !ram_ammo_supers = $05CB
 !ram_ammo_powerbombs = $05CD
 
 !ram_countdamage = $0B0C
-!ram_display_backup = $7FFC14
+!ram_display_backup = $F02114
 
-!ram_magnetstairs = $7FFC16
+!ram_magnetstairs = $F02116
 
-!ram_dboost_state = $7FFC18
-!ram_dboost_kbmax = $7FFC1A
-!ram_dboost_kb = $7FFC1C
-!ram_dboost_counter = $7FFC1E
-!ram_spark_icon = $7FFC20
+!ram_dboost_state = $F02118
+!ram_dboost_kbmax = $F0211A
+!ram_dboost_kb = $F0211C
+!ram_dboost_counter = $F0211E
+!ram_spark_icon = $F02120
 
 ; FREE SPACE ^
 
 if !FEATURE_EXTRAS
-    !ram_noclip = $7FFC30
-    !ram_steamcollision = $7FFC32
+    !ram_noclip = $F02130
+    !ram_steamcollision = $F02132
 ; FREE SPACE ^
 endif
 
-!ram_enemy0_last_xpos = $7FFC40
-!ram_enemy0_last_ypos = $7FFC42
-;!ram_enemy1_last_xpos = $7FFC44
-;!ram_enemy1_last_ypos = $7FFC46
-!ram_enemy2_last_xpos = $7FFC48
-!ram_enemy2_last_ypos = $7FFC4A
-;!ram_enemy3_last_xpos = $7FFC4C
-;!ram_enemy3_last_ypos = $7FFC4E
-!ram_enemy4_last_xpos = $7FFC50
-!ram_enemy4_last_ypos = $7FFC52
-;!ram_enemy5_last_xpos = $7FFC54
-;!ram_enemy5_last_ypos = $7FFC56
-!ram_enemy6_last_xpos = $7FFC58
-!ram_enemy6_last_ypos = $7FFC5A
-!ram_enemy7_last_xpos = $7FFC5C
-!ram_enemy7_last_ypos = $7FFC5E
-!ram_enemy8_last_xpos = $7FFC60
-!ram_enemy8_last_ypos = $7FFC62
-!ram_radar1 = $7FFC64
-!ram_radar2 = $7FFC66
+!ram_enemy0_last_xpos = $F02140
+!ram_enemy0_last_ypos = $F02142
+;!ram_enemy1_last_xpos = $F02144
+;!ram_enemy1_last_ypos = $F02146
+!ram_enemy2_last_xpos = $F02148
+!ram_enemy2_last_ypos = $F0214A
+;!ram_enemy3_last_xpos = $F0214C
+;!ram_enemy3_last_ypos = $F0214E
+!ram_enemy4_last_xpos = $F02150
+!ram_enemy4_last_ypos = $F02152
+;!ram_enemy5_last_xpos = $F02154
+;!ram_enemy5_last_ypos = $F02156
+!ram_enemy6_last_xpos = $F02158
+!ram_enemy6_last_ypos = $F0215A
+!ram_enemy7_last_xpos = $F0215C
+!ram_enemy7_last_ypos = $F0215E
+!ram_enemy8_last_xpos = $F02160
+!ram_enemy8_last_ypos = $F02162
+!ram_radar1 = $F02164
+!ram_radar2 = $F02166
 
 ; FREE SPACE ^
 
-!ram_custompalette_menuborder = $7FFCE0
-!ram_custompalette_menuheaderoutline = $7FFCE2
-!ram_custompalette_menutext = $7FFCE4
-!ram_custompalette_menubackground = $7FFCE6
-!ram_custompalette_menunumoutline = $7FFCE8
-!ram_custompalette_menunumfill = $7FFCEA
-!ram_custompalette_menutoggleon = $7FFCEC
-!ram_custompalette_menuseltext = $7FFCEE
-!ram_custompalette_menuseltextbg = $7FFCF0
-!ram_custompalette_menunumseloutline = $7FFCF2
-!ram_custompalette_menunumsel = $7FFCF4
+!ram_custompalette_menuborder = $F021E0
+!ram_custompalette_menuheaderoutline = $F021E2
+!ram_custompalette_menutext = $F021E4
+!ram_custompalette_menubackground = $F021E6
+!ram_custompalette_menunumoutline = $F021E8
+!ram_custompalette_menunumfill = $F021EA
+!ram_custompalette_menutoggleon = $F021EC
+!ram_custompalette_menuseltext = $F021EE
+!ram_custompalette_menuseltextbg = $F021F0
+!ram_custompalette_menunumseloutline = $F021F2
+!ram_custompalette_menunumsel = $F021F4
 
 ; FREE SPACE ^
 
-!ram_soundtest_lib1 = $7FFCF8
-!ram_soundtest_lib2 = $7FFCFA
-!ram_soundtest_lib3 = $7FFCFC
-!ram_soundtest_music = $7FFCFE
+!ram_soundtest_lib1 = $F021F8
+!ram_soundtest_lib2 = $F021FA
+!ram_soundtest_lib3 = $F021FC
+!ram_soundtest_music = $F021FE
 
 
 ; ---------

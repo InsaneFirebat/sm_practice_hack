@@ -300,61 +300,6 @@ stop_all_sounds:
   .RTL
     RTL
 }
-
-
-if !PRESERVE_WRAM_DURING_SPACETIME
-original_load_projectile_palette:
-{
-    AND #$0FFF : ASL : TAY
-    LDA #$0090 : XBA : STA $01
-    LDA $C3C9,Y : STA $00
-    LDY #$0000
-    LDX #$0000
-
-  .original_load_palette_loop
-    LDA [$00],Y
-    STA $7EC1C0,X
-    INX : INX : INY : INY
-    CPY #$0020 : BMI .original_load_palette_loop
-    RTS
-}
-
-spacetime_routine:
-{
-    ; The normal routine shouldn't come here, but sanity check just in case
-    ; Also skips out if spacetime but Y value is positive
-    INY : INY : CPY #$0000 : BPL .normal_load_palette
-
-    ; Spacetime, sanity check that X is 0 (if not then do the original routine)
-    CPX #$0000 : BNE .normal_load_palette
-
-    ; Spacetime, check if Y will cause us to reach WRAM
-    TYA : CLC : ADC #(!WRAM_START-$7EC1E2) : CMP #$0000 : BPL .normal_load_palette
-
-    ; It will, so run our own loop
-    INX : INX
-  .loop_before_wram
-    LDA [$00],Y
-    STA $7EC1C0,X
-    INX : INX : INY : INY
-    CPX #(!WRAM_START-$7EC1C0) : BMI .loop_before_wram
-
-    ; Skip over WRAM and resume normal loop
-    TXA : CLC : ADC !WRAM_SIZE : TAX
-    TYA : CLC : ADC !WRAM_SIZE : TAY
-    CPY #$0020 : BMI .normal_load_loop
-    RTS
-
-  .normal_load_loop
-    LDA [$00],Y
-    STA $7EC1C0,X
-    INY : INY
-  .normal_load_palette
-    INX : INX
-    CPY #$0020 : BMI .normal_load_loop
-    RTS
-}
-endif
 print pc, " misc end"
 
 
@@ -426,7 +371,62 @@ else
     JMP $EA11
 endif
 }
-print pc, " misc bank90 start"
+
+
+if !PRESERVE_WRAM_DURING_SPACETIME
+original_load_projectile_palette:
+{
+    AND #$0FFF : ASL : TAY
+    LDA #$0090 : XBA : STA $01
+    LDA $C3C9,Y : STA $00
+    LDY #$0000
+    LDX #$0000
+
+  .original_load_palette_loop
+    LDA [$00],Y
+    STA $7EC1C0,X
+    INX : INX : INY : INY
+    CPY #$0020 : BMI .original_load_palette_loop
+    RTS
+}
+
+spacetime_routine:
+{
+    ; The normal routine shouldn't come here, but sanity check just in case
+    ; Also skips out if spacetime but Y value is positive
+    INY : INY : CPY #$0000 : BPL .normal_load_palette
+
+    ; Spacetime, sanity check that X is 0 (if not then do the original routine)
+    CPX #$0000 : BNE .normal_load_palette
+
+    ; Spacetime, check if Y will cause us to reach WRAM
+    TYA : CLC : ADC #(!WRAM_START-$7EC1E2) : CMP #$0000 : BPL .normal_load_palette
+
+    ; It will, so run our own loop
+    INX : INX
+  .loop_before_wram
+    LDA [$00],Y
+    STA $7EC1C0,X
+    INX : INX : INY : INY
+    CPX #(!WRAM_START-$7EC1C0) : BMI .loop_before_wram
+
+    ; Skip over WRAM and resume normal loop
+    TXA : CLC : ADC !WRAM_SIZE : TAX
+    TYA : CLC : ADC !WRAM_SIZE : TAY
+    CPY #$0020 : BMI .normal_load_loop
+    RTS
+
+  .normal_load_loop
+    LDA [$00],Y
+    STA $7EC1C0,X
+    INY : INY
+  .normal_load_palette
+    INX : INX
+    CPY #$0020 : BMI .normal_load_loop
+    RTS
+}
+endif
+print pc, " misc bank90 end"
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
