@@ -212,4 +212,5 @@ mm_clear_boss_room_tiles:
 }
 
 print pc, " minimap bank90 end"
+warnpc $90F800
 

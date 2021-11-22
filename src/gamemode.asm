@@ -101,6 +101,10 @@ gamemode_shortcuts:
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .full_equipment
 
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_toggle_tileviewer : CMP !sram_ctrl_toggle_tileviewer : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .toggle_tileviewer
+
   .check_menu
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
@@ -201,6 +205,17 @@ endif
     ; SEC to skip normal gameplay for one frame after loading preset
     SEC : RTS
 
+  .toggle_tileviewer
+    LDA !ram_oob_watch_active : BEQ .turnOnTileViewer
+    LDA #$0000 : STA !ram_oob_watch_active
+    ; CLC to continue normal gameplay after disabling OOB Tile Viewer
+    CLC : RTS
+
+  .turnOnTileViewer
+    LDA #$0001 : STA !ram_oob_watch_active
+    JSL upload_sprite_oob_tiles
+    ; CLC to continue normal gameplay after enabling OOB Tile Viewer
+
   .menu
     ; Set IRQ vector
     LDA $AB : PHA
@@ -232,4 +247,4 @@ gamemode_door_transition:
 endif
 
 print pc, " gamemode end"
-warnpc $85FE00
+warnpc $85FD00
