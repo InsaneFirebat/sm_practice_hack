@@ -41,17 +41,15 @@ update_sprite_features:
 
     PLP : PLY : PLX : PLA
 
-        JSL $A0884D
+    JSL $A0884D
 
     RTL
 
 ; When loading into a game, do we need to update any sprite tiles?
 update_sprite_tiles_loading:
     LDA !ram_oob_watch_active : BEQ +
-      JSL upload_sprite_oob_tiles
-    +
-
-    JSL $80894D
+    JSL upload_sprite_oob_tiles
++   JSL $80894D
     RTL
 
 upload_sprite_oob_tiles:

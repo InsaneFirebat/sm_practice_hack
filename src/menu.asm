@@ -1,6 +1,6 @@
 !ram_tilemap_buffer = $7E5800
 
-;org $85FE00
+;org $85FD00
 org $85FE9C
 print pc, " menu bank85 start"
 
@@ -222,7 +222,7 @@ cm_transfer_original_tileset:
     LDA #$80 : STA $2115 ; word-access, incr by 1
     LDX #$2000 : STX $2116 ; VRAM address (4000 in vram)
     LDX #$D500 : STX $4302 ; Source offset
-    LDA #$DF : STA $4304 ; Source bank
+    LDA #$FD : STA $4304 ; Source bank
     LDX #$1000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
