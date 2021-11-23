@@ -12,7 +12,7 @@
 !VERSION_MINOR = 3
 !VERSION_BUILD = 1
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 0
+!VERSION_REV_2 = 1
 
 
 ; ---------
@@ -327,6 +327,8 @@
 !ram_HUD_top = $F02100
 !ram_HUD_middle = $F02102
 !ram_HUD_bottom = $F02104
+
+!ram_watch_bank = $F02106
 
 ; FREE SPACE ^
 
