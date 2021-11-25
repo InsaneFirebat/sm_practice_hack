@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.1.2]  Support fast scrolling on number fields when holding Y
+* [2.3.1.1]  Support bank $7F and SRAM in RAM Watch mode
 * [2.3.1]    Added options to change suit properties based on randomizer settings
 * [2.3.1]    Added option to draw hitboxes on enemies
 * [2.3.0.10] Added version number to title screen by idlechild

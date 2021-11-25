@@ -1264,13 +1264,13 @@ cm_get_inputs:
     RTS
 
   .check_holding
-    ; Check if we're holding up or down
+    ; Check if we're holding dpad
     LDA $8B : AND #$0F00 : BEQ .noinput
 
     ; Decrement delay timer and check if it's zero
     LDA !ram_cm_input_timer : DEC : STA !ram_cm_input_timer : BNE .noinput
 
-    ; Set new delay to 4 frames and return the input we're holding
+    ; Set new delay to 2 frames and return the input we're holding
     LDA #$0002 : STA !ram_cm_input_timer
     LDA $8B : AND #$0F00
     RTS
@@ -1426,7 +1426,11 @@ cm_execute_action_table:
         LDA [$00] : INC $00 : AND #$00FF : INC : STA $0A ; INC for convenience
         LDA [$00] : INC $00 : AND #$00FF : STA $0C
 
-        LDA [$00] : INC $00 : INC $00 : STA $20
+        ; 4x scroll speed if Y held
+        LDA !IH_CONTROLLER_PRI : AND #$4000 : BEQ +
+        LDA $0C : ASL #2 : STA $0C
+
++       LDA [$00] : INC $00 : INC $00 : STA $20
 
         LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
 
@@ -1475,7 +1479,11 @@ cm_execute_action_table:
         LDA [$00] : INC $00 : AND #$00FF : INC : STA $0A ; INC for convenience
         LDA [$00] : INC $00 : AND #$00FF : STA $0C
 
-        LDA [$00] : INC $00 : INC $00 : STA $20
+        ; 4x scroll speed if Y held
+        LDA !IH_CONTROLLER_PRI : AND #$4000 : BEQ +
+        LDA $0C : ASL #2 : STA $0C
+
++       LDA [$00] : INC $00 : INC $00 : STA $20
 
         LDA !ram_cm_controller : BIT #$4000 : BNE .jsr ; check for Y pressed
         LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
@@ -1525,7 +1533,11 @@ cm_execute_action_table:
         LDA [$00] : INC $00 : INC $00 : INC : STA $0A ; INC for convenience
         LDA [$00] : INC $00 : INC $00 : STA $0C
 
-        LDA [$00] : INC $00 : INC $00 : STA $20
+        ; 4x scroll speed if Y held
+        LDA !IH_CONTROLLER_PRI : AND #$4000 : BEQ +
+        LDA $0C : ASL #2 : STA $0C
+
++       LDA [$00] : INC $00 : INC $00 : STA $20
 
         LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
 
