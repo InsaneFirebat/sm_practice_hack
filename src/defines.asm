@@ -12,7 +12,7 @@
 !VERSION_MINOR = 3
 !VERSION_BUILD = 1
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 1
+!VERSION_REV_2 = 2
 
 
 ; ---------
@@ -328,8 +328,6 @@
 !ram_HUD_middle = $F02102
 !ram_HUD_bottom = $F02104
 
-!ram_watch_bank = $F02106
-
 ; FREE SPACE ^
 
 !ram_infinite_ammo = $F02110
@@ -348,6 +346,14 @@
 !ram_dboost_kb = $F0211C
 !ram_dboost_counter = $F0211E
 !ram_spark_icon = $F02120
+
+!ram_watch_bank = $F02106
+!ram_watch_left_index = $F02108
+!ram_watch_left_index_lo = $F02108
+!ram_watch_left_index_hi = $F0210A
+!ram_watch_right_index = $F0210C
+!ram_watch_right_index_lo = $F0210C
+!ram_watch_right_index_hi = $F0210E
 
 ; FREE SPACE ^
 
