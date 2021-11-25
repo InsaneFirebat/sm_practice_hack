@@ -419,9 +419,13 @@ endif
 !sram_ctrl_randomize_rng = $F02202
 !sram_ctrl_force_stand = $F02204
 
-!sram_countdamage = $F02210
-!sram_menu_background = $F02212
-!sram_healthalarm = $F0221A
+!sram_scroll_button = $F02210
+!sram_cm_scroll_button = $F02212
+!sram_cm_scroll_delay = $F02214
+
+!sram_countdamage = $F02220
+!sram_menu_background = $F02222
+!sram_healthalarm = $F02224
 
 ; FREE SPACE ^
 

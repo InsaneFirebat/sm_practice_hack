@@ -54,6 +54,8 @@ CustomizeMenu:
     dw #ifb_paletteprofile
     dw #ifb_palette2custom
     dw #ifb_customsfx
+    dw #ifb_menuscroll_button
+    dw #ifb_menuscroll_delay
     dw #$0000
     %cm_header("CUSTOMIZE PRACTICE MENU")
 
@@ -387,3 +389,31 @@ action_test_sfx:
     JSL !SFX_LIB1
     RTS
 }
+
+
+; -----------
+; Menu Config
+; -----------
+
+ifb_menuscroll_button:
+    dw !ACTION_CHOICE
+    dl #!sram_scroll_button
+    dw .routine
+    db #$28, "Fast-Scroll But", #$FF
+        db #$28, "ton       X", #$FF
+        db #$28, "ton       Y", #$FF
+    db #$FF
+  .routine
+    LDA !sram_scroll_button : BEQ +
+    LDA #$4000 : STA !sram_cm_scroll_button
+    RTS
++   LDA #$0040 : STA !sram_cm_scroll_button
+    RTS
+
+ifb_menuscroll_delay:
+    %cm_numfield("Menu Scroll Delay", !sram_cm_scroll_delay, 1, 10, 1, .routine)
+  .routine
+    LDA !sram_cm_scroll_delay : BNE +
+    LDA #$000A : STA !sram_cm_scroll_delay
++   RTS
+

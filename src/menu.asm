@@ -1070,15 +1070,13 @@ cm_loop:
     LDA !ram_cm_leave : BEQ +
     JMP .done
 
-    +
-    LDA !ram_cm_ctrl_mode : BEQ +
++   LDA !ram_cm_ctrl_mode : BEQ +
     JSR cm_ctrl_mode
     BRA .inputLoop
 
-    +
 ; repeating the cgram transfer for flash carts...
     ; don't do it if customizing (flashing colors)
-    LDA $7E0998 : CMP #$000C : BMI .check_stack
++   LDA $7E0998 : CMP #$000C : BMI .check_stack
     CMP #$0012 : BPL .check_stack
     BRA .skip_cgram
 
@@ -1253,8 +1251,7 @@ cm_get_inputs:
 
     JSL $809459 ; Read controller input
 
-    +
-    LDA $8F : BEQ .check_holding
++   LDA $8F : BEQ .check_holding
 
     ; Initial delay of $0E frames
     LDA #$000E : STA !ram_cm_input_timer
@@ -1271,7 +1268,7 @@ cm_get_inputs:
     LDA !ram_cm_input_timer : DEC : STA !ram_cm_input_timer : BNE .noinput
 
     ; Set new delay to 2 frames and return the input we're holding
-    LDA #$0002 : STA !ram_cm_input_timer
+    LDA !sram_cm_scroll_delay : STA !ram_cm_input_timer
     LDA $8B : AND #$0F00
     RTS
 
@@ -1427,7 +1424,7 @@ cm_execute_action_table:
         LDA [$00] : INC $00 : AND #$00FF : STA $0C
 
         ; 4x scroll speed if Y held
-        LDA !IH_CONTROLLER_PRI : AND #$4000 : BEQ +
+        LDA !IH_CONTROLLER_PRI : AND !sram_cm_scroll_button : BEQ +
         LDA $0C : ASL #2 : STA $0C
 
 +       LDA [$00] : INC $00 : INC $00 : STA $20
@@ -1480,7 +1477,7 @@ cm_execute_action_table:
         LDA [$00] : INC $00 : AND #$00FF : STA $0C
 
         ; 4x scroll speed if Y held
-        LDA !IH_CONTROLLER_PRI : AND #$4000 : BEQ +
+        LDA !IH_CONTROLLER_PRI : AND !sram_cm_scroll_button : BEQ +
         LDA $0C : ASL #2 : STA $0C
 
 +       LDA [$00] : INC $00 : INC $00 : STA $20
@@ -1534,7 +1531,7 @@ cm_execute_action_table:
         LDA [$00] : INC $00 : INC $00 : STA $0C
 
         ; 4x scroll speed if Y held
-        LDA !IH_CONTROLLER_PRI : AND #$4000 : BEQ +
+        LDA !IH_CONTROLLER_PRI : AND !sram_cm_scroll_button : BEQ +
         LDA $0C : ASL #2 : STA $0C
 
 +       LDA [$00] : INC $00 : INC $00 : STA $20
