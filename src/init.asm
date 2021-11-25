@@ -78,6 +78,9 @@ init_nonzero_wram:
     LDA #$000F : STA !ram_watch_left_hi : LDA #$008C : STA !ram_watch_left_lo
     LDA #$0009 : STA !ram_watch_right_hi : LDA #$00C2 : STA !ram_watch_right_lo
     LDA #$0000 : STA !ram_watch_bank
+    STA !ram_watch_left_index : STA !ram_watch_right_index
+    STA !ram_watch_left_index_hi : STA !ram_watch_left_index_lo
+    STA !ram_watch_right_index_hi : STA !ram_watch_right_index_lo
 
     ; Check if any less common controller shortcuts are configured
     JML GameModeExtras

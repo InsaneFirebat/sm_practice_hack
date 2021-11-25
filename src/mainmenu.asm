@@ -1826,12 +1826,16 @@ RAMWatchMenu:
     dw ramwatch_bank
     dw ramwatch_left_hi
     dw ramwatch_left_lo
+    dw ramwatch_left_index_hi
+    dw ramwatch_left_index_lo
     dw ramwatch_left_edit_hi
     dw ramwatch_left_edit_lo
     dw ramwatch_execute_left
     dw ramwatch_lock_left
     dw ramwatch_right_hi
     dw ramwatch_right_lo
+    dw ramwatch_right_index_hi
+    dw ramwatch_right_index_lo
     dw ramwatch_right_edit_hi
     dw ramwatch_right_edit_lo
     dw ramwatch_execute_right
@@ -1870,6 +1874,20 @@ ramwatch_left_lo:
         XBA : STA !ram_watch_left
         RTS
 
+ramwatch_left_index_hi:
+    %cm_numfield_hex("Offset 1 High", !ram_watch_left_index_hi, 0, 255, 1, #.routine)
+    .routine
+        XBA : ORA !ram_watch_left_index_lo
+        STA !ram_watch_left_index
+        RTS
+
+ramwatch_left_index_lo:
+    %cm_numfield_hex("Offset 1 Low", !ram_watch_left_index_lo, 0, 255, 1, #.routine)
+    .routine
+        XBA : ORA !ram_watch_left_index_hi
+        XBA : STA !ram_watch_left_index
+        RTS
+
 ramwatch_left_edit_hi:
     %cm_numfield_hex("Value 1 High", !ram_watch_edit_left_hi, 0, 255, 1, #.routine)
     .routine
@@ -1896,6 +1914,20 @@ ramwatch_right_lo:
     .routine
         XBA : ORA !ram_watch_right_hi
         XBA : STA !ram_watch_right
+        RTS
+
+ramwatch_right_index_hi:
+    %cm_numfield_hex("Offset 2 High", !ram_watch_right_index_hi, 0, 255, 1, #.routine)
+    .routine
+        XBA : ORA !ram_watch_right_index_lo
+        STA !ram_watch_right_index
+        RTS
+
+ramwatch_right_index_lo:
+    %cm_numfield_hex("Offset 2 Low", !ram_watch_right_index_lo, 0, 255, 1, #.routine)
+    .routine
+        XBA : ORA !ram_watch_right_index_hi
+        XBA : STA !ram_watch_right_index
         RTS
 
 ramwatch_right_edit_hi:
@@ -1926,7 +1958,7 @@ ramwatch_lock_right:
 
 action_ramwatch_edit_left:
 {
-    LDA !ram_watch_left : TAX
+    LDA !ram_watch_left : CLC : ADC !ram_watch_left_index : TAX
     LDA !ram_watch_bank : BEQ .bank7E
     CMP #$0001 : BEQ .bank7F : BRA .bankSRAM
   .bank7E
@@ -1942,7 +1974,7 @@ action_ramwatch_edit_left:
 
 action_ramwatch_edit_right:
 {
-    LDA !ram_watch_right : TAX
+    LDA !ram_watch_right : CLC : ADC !ram_watch_right_index : TAX
     LDA !ram_watch_bank : BEQ .bank7E
     CMP #$0001 : BEQ .bank7F : BRA .bankSRAM
   .bank7E

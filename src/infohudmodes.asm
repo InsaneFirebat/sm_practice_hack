@@ -1035,34 +1035,37 @@ status_ramwatch:
     BRA .readLeftSRAM
 
   .readLeft7E
-    LDA !ram_watch_left : TAX
+    LDA !ram_watch_left : CLC : ADC !ram_watch_left_index : TAX
     LDA $7E0000,X : CMP !ram_watch_left_hud : BEQ .readRight7E
     STA !ram_watch_left_hud : LDX #$0088 : JSR Draw4Hex
 
   .readRight7E
-    LDA !ram_watch_right : TAX
-    LDA $7E0000,X : CMP !ram_watch_right_hud : BEQ .drawLeft
+    LDA !ram_watch_right : CLC : ADC !ram_watch_right_index : TAX
+    LDA $7E0000,X : CMP !ram_watch_right_hud : BEQ .step_drawLeft
     STA !ram_watch_right_hud : LDX #$0092 : JSR Draw4Hex
     BRA .drawLeft
 
   .readLeft7F
-    LDA !ram_watch_left : TAX
+    LDA !ram_watch_left : CLC : ADC !ram_watch_left_index : TAX
     LDA $7F0000,X : CMP !ram_watch_left_hud : BEQ .readRight7F
     STA !ram_watch_left_hud : LDX #$0088 : JSR Draw4Hex
 
   .readRight7F
-    LDA !ram_watch_right : TAX
+    LDA !ram_watch_right : CLC : ADC !ram_watch_right_index : TAX
     LDA $7F0000,X : CMP !ram_watch_right_hud : BEQ .drawLeft
     STA !ram_watch_right_hud : LDX #$0092 : JSR Draw4Hex
     BRA .drawLeft
 
+  .step_drawLeft
+    BRA .drawLeft
+
   .readLeftSRAM
-    LDA !ram_watch_left : TAX
+    LDA !ram_watch_left : CLC : ADC !ram_watch_left_index : TAX
     LDA $F00000,X : CMP !ram_watch_left_hud : BEQ .readRightSRAM
     STA !ram_watch_left_hud : LDX #$0088 : JSR Draw4Hex
 
   .readRightSRAM
-    LDA !ram_watch_right : TAX
+    LDA !ram_watch_right : CLC : ADC !ram_watch_right_index : TAX
     LDA $F00000,X : CMP !ram_watch_right_hud : BEQ .drawLeft
     STA !ram_watch_right_hud : LDX #$0092 : JSR Draw4Hex
 
@@ -1082,34 +1085,34 @@ status_ramwatch:
 
   .writeLeft7E
     LDA !ram_watch_edit_lock_left : BEQ .writeRight7E
-    LDA !ram_watch_left : TAX
+    LDA !ram_watch_left : CLC : ADC !ram_watch_left_index : TAX
     LDA !ram_watch_edit_left : STA $7E0000,X
 
   .writeRight7E
     LDA !ram_watch_edit_lock_right : BEQ .done
-    LDA !ram_watch_right : TAX
+    LDA !ram_watch_right : CLC : ADC !ram_watch_right_index : TAX
     LDA !ram_watch_edit_right : STA $7E0000,X
     RTS
 
   .writeLeft7F
     LDA !ram_watch_edit_lock_left : BEQ .writeRight7F
-    LDA !ram_watch_left : TAX
+    LDA !ram_watch_left : CLC : ADC !ram_watch_left_index : TAX
     LDA !ram_watch_edit_left : STA $7F0000,X
 
   .writeRight7F
     LDA !ram_watch_edit_lock_right : BEQ .done
-    LDA !ram_watch_right : TAX
+    LDA !ram_watch_right : CLC : ADC !ram_watch_right_index : TAX
     LDA !ram_watch_edit_right : STA $7F0000,X
     RTS
 
   .writeLeftSRAM
     LDA !ram_watch_edit_lock_left : BEQ .writeRightSRAM
-    LDA !ram_watch_left : TAX
+    LDA !ram_watch_left : CLC : ADC !ram_watch_left_index : TAX
     LDA !ram_watch_edit_left : STA $F00000,X
 
   .writeRightSRAM
     LDA !ram_watch_edit_lock_right : BEQ .done
-    LDA !ram_watch_right : TAX
+    LDA !ram_watch_right : CLC : ADC !ram_watch_right_index : TAX
     LDA !ram_watch_edit_right : STA $F00000,X
 
   .done
