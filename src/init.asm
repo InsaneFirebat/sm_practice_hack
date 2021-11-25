@@ -167,6 +167,10 @@ init_sram:
     LDA #$0028 : STA !sram_customsfx_confirm
     LDA #$0007 : STA !sram_customsfx_goback
 
+    LDA #$0001 : STA !sram_scroll_button
+    LDA #$4000 : STA !sram_cm_scroll_button
+    LDA #$0002 : STA !sram_cm_scroll_delay
+
     LDA #$0000 : STA !sram_presetrando
     LDA #$0001 : STA !sram_presetrando_morph
     LDA #$0001 : STA !sram_presetrando_charge
