@@ -66,7 +66,15 @@ preset_load:
     ; Fix Samus' palette
     JSL $91DEBA
 
-    LDA !SRAM_MUSIC_BANK
+    ; Re-upload OOB viewer tiles if needed
+    LDA !ram_oob_watch_active : BEQ +
+    JSL upload_sprite_oob_tiles
+
+    ; Re-upload OOB viewer tiles if needed
++   LDA !ram_oob_watch_active : BEQ +
+    JSL upload_sprite_oob_tiles
+
++   LDA !SRAM_MUSIC_BANK
     CMP !MUSIC_BANK
     BEQ .load_music_track
 
@@ -81,24 +89,12 @@ preset_load:
     JSL reset_all_counters
     STZ $0795 ; clear door transition flag
 
-    ; Option to clear enemies, 1 = kill
-    LDA !sram_preset_enemies : BEQ .enemies
+    ; Kill non-solid enemies
     LDA #$0000
-
     ; 8000 = solid to Samus, 0400 = Ignore Samus projectiles
 -   TAX : LDA $0F86,X : BIT #$8400 : BNE +
     ORA #$0200 : STA $0F86,X
-
 +   TXA : CLC : ADC #$0040 : CMP #$0400 : BNE -
-    ; JSL $A08A6D ; Clear enemy data and process enemy set ;; Pinkus probably disabled this call because it's already been executed
-    BRA .done
-
-  .enemies
-    LDA !ram_custom_preset : BEQ .done
-    JSL custom_preset_enemy_data
-
-  .done
-    LDA #$0000 : STA !ram_custom_preset
     PLP
     RTL
 }
@@ -166,6 +162,7 @@ preset_load_preset:
     PLB
     RTL
 }
+
 preset_to_memory:
 {
     PHX
@@ -240,7 +237,9 @@ preset_start_gameplay:
     JSL $89AB82  ; Load FX1
     JSL $82E97C  ; Execute subroutine $82:E97C
 
-    JSR preset_scroll_fixes
+; Don't enable this unless the room layout is basically vanilla. Room IDs may need to be updated.
+;    JSR preset_scroll_fixes
+
     JSR $A2F9    ; Calculate layer 2 X position
     JSR $A33A    ; Calculate layer 2 Y position
     LDA $0917 : STA $0921  ; BG2 X scroll = layer 2 X scroll position
@@ -273,31 +272,89 @@ preset_scroll_fixes:
     ; is normally hidden until passing over a red scroll block.
     ; These fixes can often be found in nearby door asm.
     PHP : %a8() : %i16()
-    LDX $079B : LDA #$01
-+   CPX #$A011 : BNE +        ; bottom-left of Etecoons Etank
+    LDA #$01 : LDX $079B         ; X = room ID
+    CPX #$C000 : BPL .halfway    ; organized by room ID so we only have to check half
+
+    CPX #$A011 : BNE +           ; bottom-left of Etecoons Etank
     STA $7ECD25 : STA $7ECD26
     BRA .done
-+   CPX #$AE32 : BNE +        ; bottom of Volcano Room
-    STA $7ECD26
-    BRA .done
-+   CPX #$B07A : BNE +        ; top of Bat Cave
++   CPX #$AC83 : BNE +           ; left of Green Bubbles Missile Room (Norfair Reserve)
     STA $7ECD20
     BRA .done
-+   CPX #$B1E5 : BNE +        ; bottom of Acid Chozo Room
++   CPX #$AE32 : BNE +           ; bottom of Volcano Room
+    STA $7ECD26
+    BRA .done
++   CPX #$B07A : BNE +           ; top of Bat Cave
+    STA $7ECD20
+    BRA .done
++   CPX #$B1E5 : BNE +           ; bottom of Acid Chozo Room
     STA $7ECD26 : STA $7ECD27 : STA $7ECD28
     LDA #$00 : STA $7ECD23 : STA $7ECD24
     BRA .done
-+   CPX #$B3A5 : BNE +        ; bottom of Pre-Pillars
++   CPX #$B3A5 : BNE +           ; bottom of Pre-Pillars
+    LDY $0AFA : CPY #$0190       ; no scroll fix if Ypos < 400
+    BMI .done
     STA $7ECD22 : STA $7ECD24
     LDA #$00 : STA $7ECD21
-    BRA .done
-+   CPX #$CC6F : BNE +        ; right of Basement (Phantoon)
-    STA $7ECD24
-    BRA .done
-+   CPX #$D8C5 : BNE .done    ; Pants Room (door to Shaktool)
-    LDA #$00 : STA $7ECD22
+    JMP .done
++   CPX #$B4AD : BNE +        ; top of Worst Room in the Game
+    LDA #$02 : STA $7ECD20
 
   .done
+    PLP
+    RTS
+
+  .halfway
+    CPX #$DF45 : BPL .ceres      ; Ceres rooms set BG1 offsets manually
+    CPX #$CAF6 : BNE +           ; bottom of WS Shaft
+    LDA #$02
+    STA $7ECD48 : STA $7ECD4E
+    BRA .done
++   CPX #$CBD5 : BNE +           ; top of Electric Death Room (WS E-Tank)
+    LDA #$02
+    STA $7ECD20
+    BRA .done
++   CPX #$CC6F : BNE +           ; right of Basement (Phantoon)
+    STA $7ECD24
+    BRA .done
++   CPX #$D1A3 : BNE +           ; bottom of Crab Shaft
+    STA $7ECD26
+    LDA #$02 : STA $7ECD24
+    BRA .done
++   CPX #$D48E : BNE +           ; Oasis (bottom of Toilet)
+    LDA #$02
+    STA $7ECD20 : STA $7ECD21
+    BRA .done
++   CPX #$D8C5 : BNE .done       ; Pants Room (door to Shaktool)
+    LDA #$00 : STA $7ECD22
+    BRA .done
+
+  .ceres
+    LDA #$00 : STA $7E005F       ; Initialize mode 7
+    CPX #$DF45 : BNE +           ; Ceres Elevator
+    LDA #$00 : STA $7E091E : STA $7E0920
+    BRA .ceresdone
++   CPX #$DF8D : BNE +           ; Ceres Falling Tiles
+    LDA #$01 : STA $7E091E
+    LDA #$02 : STA $7E0920
+    BRA .ceresdone
++   CPX #$DFD7 : BNE +           ; Ceres Magnet Stairs
+    LDA #$03 : STA $7E091E
+    LDA #$02 : STA $7E0920
+    BRA .ceresdone
++   CPX #$E021 : BNE +           ; Ceres Dead Scientists
+    LDA #$04 : STA $7E091E
+    LDA #$03 : STA $7E0920
+    BRA .ceresdone
++   CPX #$E06B : BNE +           ; Ceres 58 Escape
+    LDA #$06 : STA $7E091E
+    LDA #$03 : STA $7E0920
+    BRA .ceresdone
++   CPX #$E0B5 : BNE .ceresdone  ; Ceres Ridley
+    LDA #$08 : STA $7E091E
+    LDA #$03 : STA $7E0920
+
+  .ceresdone
     PLP
     RTS
 }
@@ -312,9 +369,39 @@ transfer_cgram_long:
     RTL
 }
 
-print pc, " preset_start_gameplay end"
-warnpc $80FFC0
+;add_grapple_and_xray_to_hud:
+;{
+;    ; Copied from $809AB1 to $809AC9
+;    LDA $09A2 : BIT #$8000 : BEQ $04
+;    JSL $809A3E            ; Add x-ray to HUD tilemap
+;    LDA $09A2 : BIT #$4000 : BEQ $04
+;    JSL $809A2E            ; Add grapple to HUD tilemap
+;    JMP .resume_infohud_icon_initialization
+;}
 
+warnpc $80FFC0
+print pc, " preset_start_gameplay end"
+
+
+; $80:9AB1: Add x-ray and grapple HUD items if necessary
+;org $809AB1
+    ; Skip x-ray and grapple if max HP is a multiple of 4,
+    ; which is only possible if GT code was used
+;    LDA $09C4 : AND #$0003 : BEQ .resume_infohud_icon_initialization
+;    JMP add_grapple_and_xray_to_hud
+
+;warnpc $809AC9
+
+; $80:9AC9: Resume original logic
+;org $809AC9
+;  .resume_infohud_icon_initialization
+
+
+; -------------------
+; Category Menus/Data
+; -------------------
+
+; Preset data/menus can be anywhere in the rom, even in separate banks. 
 
 org $FD8000
 print pc, " custom presets start"

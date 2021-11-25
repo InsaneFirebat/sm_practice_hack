@@ -8,6 +8,20 @@ macro cm_header(title)
     table ../resources/normal.tbl
 endmacro
 
+macro cm_version_header(title, major, minor, build, rev_1, rev_2)
+    table ../resources/header.tbl
+if !VERSION_REV_1
+    db #$28, "<title> <major>.<minor>.<build>.<rev_1><rev_2>", #$FF
+else
+if !VERSION_REV_2
+    db #$28, "<title> <major>.<minor>.<build>.<rev_2>", #$FF
+else
+    db #$28, "<title> <major>.<minor>.<build>", #$FF
+endif
+endif
+    table ../resources/normal.tbl
+endmacro
+
 macro cm_numfield(title, addr, start, end, increment, jsrtarget)
     dw !ACTION_NUMFIELD
     dl <addr>
@@ -28,6 +42,13 @@ macro cm_numfield_hex(title, addr, start, end, increment, jsrtarget)
     dw !ACTION_NUMFIELD_HEX
     dl <addr>
     db <start>, <end>, <increment>
+    dw <jsrtarget>
+    db #$28, "<title>", #$FF
+endmacro
+
+macro cm_numfield_color(title, addr, jsrtarget)
+    dw !ACTION_NUMFIELD_COLOR
+    dl <addr>
     dw <jsrtarget>
     db #$28, "<title>", #$FF
 endmacro
@@ -135,10 +156,11 @@ MainMenu:
     dw #mm_goto_misc
     dw #mm_goto_infohud
     dw #mm_goto_gamemenu
+    dw #mm_goto_sprites
 ;    dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_header("HYPER INFOHUD 2.2.7 B2")
+    %cm_version_header("HYPER INFOHUD", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -147,7 +169,7 @@ mm_goto_presets:
     %cm_jsr("Category Presets", #action_presets_submenu, #$0000)
 
 mm_goto_presets_menu:
-    %cm_submenu("Presets Menu", #PresetsMenu)
+    %cm_submenu("Preset Options", #PresetsMenu)
 
 mm_goto_teleport:
     %cm_submenu("Teleport", #TeleportMenu)
@@ -164,16 +186,14 @@ mm_goto_infohud:
 mm_goto_gamemenu:
     %cm_submenu("Game", #GameMenu)
 
+mm_goto_sprites:
+    %cm_submenu("Sprite Features", #SpritesMenu)
+
 mm_goto_rngmenu:
     %cm_submenu("RNG Control", #RngMenu)
 
 mm_goto_ctrlsmenu:
     %cm_submenu("Controller Shortcuts", #CtrlMenu)
-
-
-; -------------
-; Presets menu
-; -------------
 
 
 ; -------------
@@ -186,7 +206,6 @@ PresetsMenu:
     dw #presets_custom_preset_slot
     dw #presets_save_custom_preset
     dw #presets_load_custom_preset
-    dw #presets_kill_enemies
     dw #$0000
     %cm_header("PRESET OPTIONS MENU")
 
@@ -194,16 +213,13 @@ presets_goto_select_preset_category:
     %cm_submenu("Select Preset Category", #SelectPresetCategoryMenu)
 
 presets_custom_preset_slot:
-    %cm_numfield("Custom Preset Slot", !sram_custom_preset_slot, 0, 19, 1, #0) ; update max slots in gamemode.asm
+    %cm_numfield("Custom Preset Slot", !sram_custom_preset_slot, 0, 39, 1, #0) ; update total slots in gamemode.asm
 
 presets_save_custom_preset:
     %cm_jsr("Save Custom Preset", #action_save_custom_preset, #$0000)
 
 presets_load_custom_preset:
     %cm_jsr("Load Custom Preset", #action_load_custom_preset, #$0000)
-
-presets_kill_enemies:
-    %cm_toggle("Auto-Kill Enemies", !sram_preset_enemies, #$0001, #0)
 
 SelectPresetCategoryMenu:
     dw #presets_current
@@ -216,11 +232,11 @@ presets_current:
     dl #!sram_preset_category
     dw #$0000
     db #$28, "CURRENT PRESET", #$FF
-        db #$28, "  ANY% PRKD", #$FF
+        db #$28, "PLACEHOLDER", #$FF
     db #$FF
 
 precat_prkd:
-    %cm_jsr("Any% PRKD", #action_select_preset_category, #$0000)
+    %cm_jsr("Any% PRKD (Placeholder)", #action_select_preset_category, #$0000)
 
 action_select_preset_category:
 {
@@ -234,17 +250,17 @@ action_save_custom_preset:
 {
     JSL custom_preset_save
     LDA #$0001 : STA !ram_cm_leave
-    LDA #!SOUND_MENU_MOVE : JSL $80903F
+    LDA !SOUND_MENU_MOVE : JSL !SFX_LIB1
     RTS
 }
 
 action_load_custom_preset:
 {
     ; check if slot is populated first
-    LDA !sram_custom_preset_slot : ASL : TAX
-    LDA.l PresetSlot,X : TAX
-    LDA $703000,X : CMP #$5AFE : BEQ .safe
-    LDA #$0007 : JSL $80903F
+    LDA !sram_custom_preset_slot
+    ASL : XBA : TAX
+    LDA $F03000,X : CMP #$5AFE : BEQ .safe
+    LDA #!SOUND_MENU_FAIL : JSL !SFX_LIB1
     RTS
 
   .safe
@@ -323,7 +339,9 @@ EquipmentMenu:
     dw #eq_toggle_category
     dw #eq_goto_toggleitems
     dw #eq_goto_togglebeams
+    dw #eq_currentenergy
     dw #eq_setetanks
+    dw #eq_currentreserves
     dw #eq_setreserves
     dw #eq_setammo
 ;    dw #eq_setmissiles
@@ -353,6 +371,9 @@ eq_goto_toggleitems:
 eq_goto_togglebeams:
     %cm_submenu("Toggle Beams", #ToggleBeamsMenu)
 
+eq_currentenergy:
+    %cm_numfield_word("Current Energy", $7E09C2, 0, 2100, 1, #0)
+
 eq_setetanks:
     %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 14, 1, .routine)
     .routine
@@ -367,6 +388,9 @@ eq_setetanks:
       .endloop
         STA $09C4 : STA $09C2
         RTS
+
+eq_currentreserves:
+    %cm_numfield_word("Current Reserves", $7E09D6, 0, 700, 1, #0)
 
 eq_setreserves:
     %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 5, 1, .routine)
@@ -413,7 +437,6 @@ ToggleCategoryMenu:
     dw #cat_nothing
     dw #$0000
     %cm_header("TOGGLE CATEGORY")
-
 
 cat_100:
     %cm_jsr("100%", action_category, #$0000)
@@ -489,31 +512,31 @@ ToggleItemsMenu:
     %cm_header("TOGGLE ITEMS")
 
 ti_variasuit:
-    %cm_toggle_bit("Varia Suit", $7E09A4, #$0001, #0)
+    %cm_toggle_bit("Varia Suit", $7E09A4, #$0001, #action_equip_collected_items)
 
 ti_gravitysuit:
-    %cm_toggle_bit("Gravity Suit", $7E09A4, #$0020, #0)
+    %cm_toggle_bit("Gravity Suit", $7E09A4, #$0020, #action_equip_collected_items)
 
 ti_morphball:
-    %cm_toggle_bit("Morphing Ball", $7E09A4, #$0004, #0)
+    %cm_toggle_bit("Morphing Ball", $7E09A4, #$0004, #action_equip_collected_items)
 
 ti_bomb:
-    %cm_toggle_bit("Bombs", $7E09A4, #$1000, #0)
+    %cm_toggle_bit("Bombs", $7E09A4, #$1000, #action_equip_collected_items)
 
 ti_springball:
-    %cm_toggle_bit("Spring Ball", $7E09A4, #$0002, #0)
+    %cm_toggle_bit("Spring Ball", $7E09A4, #$0002, #action_equip_collected_items)
 
 ti_screwattack:
-    %cm_toggle_bit("Screw Attack", $7E09A4, #$0008, #0)
+    %cm_toggle_bit("Screw Attack", $7E09A4, #$0008, #action_equip_collected_items)
 
 ti_hijumpboots:
-    %cm_toggle_bit("Hi Jump Boots", $7E09A4, #$0100, #0)
+    %cm_toggle_bit("Hi Jump Boots", $7E09A4, #$0100, #action_equip_collected_items)
 
 ti_spacejump:
-    %cm_toggle_bit("Space Jump", $7E09A4, #$0200, #0)
+    %cm_toggle_bit("Space Jump", $7E09A4, #$0200, #action_equip_collected_items)
 
 ti_speedbooster:
-    %cm_toggle_bit("Speed Booster", $7E09A4, #$2000, #0)
+    %cm_toggle_bit("Speed Booster", $7E09A4, #$2000, #action_equip_collected_items)
 
 ti_grapple:
     %cm_toggle_bit("Grapple", $7E09A2, #$4000, .routine)
@@ -527,10 +550,16 @@ ti_xray:
         LDA $09A4 : EOR #$8000 : STA $09A4
         RTS
 
+action_equip_collected_items:
+{
+    LDA $09A4 : STA $09A6
+    RTS
+}
 
-; ------------------
+
+; -----------------
 ; Toggle Beams menu
-; ------------------
+; -----------------
 
 ToggleBeamsMenu:
     dw tb_chargebeam
@@ -538,23 +567,74 @@ ToggleBeamsMenu:
     dw tb_wavebeam
     dw tb_spazerbeam
     dw tb_plasmabeam
+    dw tb_glitchedbeams
     dw #$0000
     %cm_header("TOGGLE BEAMS")
 
 tb_chargebeam:
-    %cm_toggle_bit("Charge", $7E09A8, #$1000, #0)
+    %cm_toggle_bit("Charge", $7E09A8, #$1000, #action_equip_collected_beams)
 
 tb_icebeam:
-    %cm_toggle_bit("Ice", $7E09A8, #$0002, #0)
+    %cm_toggle_bit("Ice", $7E09A8, #$0002, #action_equip_collected_beams)
 
 tb_wavebeam:
-    %cm_toggle_bit("Wave", $7E09A8, #$0001, #0)
+    %cm_toggle_bit("Wave", $7E09A8, #$0001, #action_equip_collected_beams)
 
 tb_spazerbeam:
-    %cm_toggle_bit("Spazer", $7E09A8, #$0004, #0)
+    %cm_toggle_bit("Spazer", $7E09A8, #$0004, #action_equip_collected_beams)
 
 tb_plasmabeam:
-    %cm_toggle_bit("Plasma", $7E09A8, #$0008, #0)
+    %cm_toggle_bit("Plasma", $7E09A8, #$0008, #action_equip_collected_beams)
+
+tb_glitchedbeams:
+    %cm_submenu("Glitched Beams", #GlitchedBeamsMenu)
+
+action_equip_collected_beams:
+{
+    LDA $09A8 : STA $09A6 : TAY
+    AND #$000C : CMP #$000C : BEQ .murderBeam
+    TYA : STA $7E09A6
+    RTS
+
+  .murderBeam
+    TYA : AND #$100B : STA $7E09A6
+
+  .done
+    RTS
+}
+
+
+; -------------------
+; Glitched Beams menu
+; -------------------
+
+GlitchedBeamsMenu:
+    dw #gb_murder
+    dw #gb_spacetime
+    dw #gb_chainsaw
+    dw #gb_unnamed
+    dw #$0000
+    %cm_header("GLITCHED BEAMS")
+
+gb_murder:
+    %cm_jsr("Murder Beam", action_glitched_beam, #$100F)
+
+gb_spacetime:
+    %cm_jsr("Spacetime Beam", action_glitched_beam, #$100E)
+
+gb_chainsaw:
+    %cm_jsr("Chainsaw Beam", action_glitched_beam, #$100D)
+
+gb_unnamed:
+    %cm_jsr("Unnamed Glitched Beam", action_glitched_beam, #$100C)
+
+action_glitched_beam:
+{
+    TYA
+    STA $09A6 : STA $09A8
+    LDA #$0042 : JSL !SFX_LIB1 ; unlabeled, song dependent sound
+    RTS
+}
 
 
 ; ---------------
@@ -723,7 +803,7 @@ tel_debug_area:
         db #$28, "  REQT SHIP", #$FF
         db #$28, "    MARIDIA", #$FF
         db #$28, "    TOURIAN", #$FF
-        db #$28, "    NORFAIR", #$FF
+        db #$28, "      CERES", #$FF
     db #$FF
 
 tel_debug_station:
@@ -744,8 +824,8 @@ action_teleport:
     LDA #$05 : STA $7ED914
     REP #$20
 
-    ; Clear morph and door transition flags
-    STZ $1F6B : STZ $0795
+    ; Clear morph/door transition flags and message box index
+    STZ $1F6B : STZ $0795 : STZ $1C1F
 
     JSL reset_all_counters
     JSL stop_all_sounds
@@ -771,13 +851,16 @@ MiscMenu:
     dw #misc_bluesuit
     dw #misc_flashsuit
     dw #misc_hyperbeam
-    dw #misc_babyslowdown
+    dw #misc_gooslowdown
     dw #misc_magicpants
     dw #misc_spacepants
+    dw #misc_loudpants
 ;    dw #misc_fanfare_toggle
     dw #misc_music_toggle
-    dw #misc_transparent
     dw #misc_invincibility
+    dw #misc_killenemies
+    dw #misc_suit_properties
+    dw #misc_forcestand
     dw #$0000
     %cm_header("MISC")
 
@@ -790,14 +873,17 @@ misc_flashsuit:
 misc_hyperbeam:
     %cm_toggle("Hyper Beam", $7E0A76, #$0001, #0)
 
-misc_babyslowdown:
-    %cm_toggle("Baby Slowdown", $7E0A66, #$0002, #0)
+misc_gooslowdown:
+    %cm_numfield("Goo Slowdown", $7E0A66, 0, 4, 1, #0)
 
 misc_magicpants:
     %cm_toggle_bit("Magic Pants", !ram_magic_pants_enabled, #$0001, GameLoopExtras)
 
 misc_spacepants:
     %cm_toggle_bit("Space Pants", !ram_magic_pants_enabled, #$0002, GameLoopExtras)
+
+misc_loudpants:
+    %cm_toggle_bit("Loud Pants", !ram_magic_pants_enabled, #$0004, GameLoopExtras)
 
 misc_fanfare_toggle:
     %cm_toggle("Fanfare", !sram_fanfare_toggle, #$0001, #0)
@@ -807,9 +893,7 @@ misc_music_toggle:
 
   .routine
     BIT #$0001 : BEQ .noMusic
-
     LDA $07F5 : STA $2140
-
     RTS
 
   .noMusic
@@ -826,16 +910,89 @@ misc_music_toggle:
     STA $2140
     RTS
 
-misc_transparent:
-    %cm_toggle_bit("Samus on Top", !sram_sprite_prio_flag, #$3000, #0)
-
 misc_invincibility:
     %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
+
+misc_killenemies:
+    %cm_jsr("Kill Enemies", #.kill_loop, #0)
+  .kill_loop
+    ; 8000 = solid to Samus, 0400 = Ignore Samus projectiles
+    TAX : LDA $0F86,X : BIT #$8400 : BNE +
+    ORA #$0200 : STA $0F86,X
++   TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
+
+    RTS
+
+misc_suit_properties:
+    dw !ACTION_CHOICE
+    dl #!sram_suit_properties
+    dw .routine
+    db #$28, "Suit Propertie", #$FF
+    db #$28, "s   VANILLA", #$FF
+    db #$28, "s  BALANCED", #$FF
+    db #$28, "s  PROGRESS", #$FF
+    db #$FF
+
+  .routine
+    JSL misc_init_suits_ram
+    RTS
+
+misc_init_suits_ram:
+{
+    LDA #$0021 : STA !ram_suits_enemy_damage_check : STA !ram_suits_periodic_damage_check
+
+    LDA !sram_suit_properties : CMP #$0002 : BNE .init_periodic_damage
+    LDA #$0001 : STA !ram_suits_enemy_damage_check
+
+  .init_periodic_damage
+    LDA !sram_suit_properties : BEQ .end
+    LDA #$0001 : STA !ram_suits_periodic_damage_check
+
+  .end
+    RTL
+}
+
+misc_forcestand:
+    %cm_jsr("Force Samus to Stand Up", .routine, #0)
+
+  .routine
+    JSL $90E2D4
+    LDA #!SOUND_MENU_JSR : JSL $80903F
+    RTS
+
+
+; ---------------
+; Sprite Features
+; ---------------
+
+SpritesMenu:
+    dw #sprites_samus_prio
+    dw #sprites_show_hitbox
+    dw #sprites_oob_viewer
+    dw #$0000
+    %cm_header("SPRITE FEATURES")
+
+sprites_samus_prio:
+    %cm_toggle_bit("Samus on Top", !sram_sprite_prio_flag, #$3000, #0)
+
+sprites_show_hitbox:
+    %cm_toggle("Show Samus Hitbox", !ram_sprite_hitbox_active, #1, #0)
+
+sprites_oob_viewer:
+    %cm_toggle("OOB Tile Viewer", !ram_oob_watch_active, #1, #toggle_oob_viewer)
+
+toggle_oob_viewer:
+{
+    LDA !ram_oob_watch_active : BEQ +
+    JSL upload_sprite_oob_tiles
++   RTS
+}
 
 
 ; -----------
 ; Events menu
 ; -----------
+
 EventsMenu:
     dw #events_resetevents
     dw #events_resetdoors
@@ -911,7 +1068,6 @@ events_zebesexploding:
 
 events_animals:
     %cm_toggle_bit("Animals Saved", $7ED820, #$8000, #0)
-
 
 action_reset_events:
 {
@@ -1012,16 +1168,6 @@ boss_ridley:
     %cm_toggle_bit("Ridley", #$7ED82A, #$0001, #0)
 
 
-; ------------
-; Config menu
-; ------------
-
-ConfigMenu:
-    dw #$0000
-    %cm_header("CONFIG")
-
-
-
 ; --------------
 ; Infohud menu
 ; --------------
@@ -1033,6 +1179,7 @@ InfoHudMenu:
 ;    dw #ih_room_strat
     dw #ih_room_counter
     dw #ih_reset_seg_later
+    dw #ih_status_icons
     dw #ih_lag
     dw #ih_ram_watch
     dw #$0000
@@ -1067,6 +1214,7 @@ DisplayModeMenu:
 ihmode_enemyhp:
     %cm_jsr("Enemy HP", #action_select_infohud_mode, #$0000)
 
+!IH_MODE_ROOMSTRAT_INDEX = $0001
 ihmode_roomstrat:
     %cm_jsr("Room Strat", #action_select_infohud_mode, #$0001)
 
@@ -1085,6 +1233,7 @@ ihmode_shinetimer:
 ihmode_dashcounter:
     %cm_jsr("Dash Counter", #action_select_infohud_mode, #$0006)
 
+!IH_MODE_SHINETUNE_INDEX = $0007
 ihmode_shinetune:
     %cm_jsr("Shine Tune", #action_select_infohud_mode, #$0007)
 
@@ -1106,6 +1255,7 @@ ihmode_ypos:
 ihmode_hspeed:
     %cm_jsr("Horizontal Speed", #action_select_infohud_mode, #$000D)
 
+!IH_MODE_VSPEED_INDEX = $000E
 ihmode_vspeed:
     %cm_jsr("Vertical Speed", #action_select_infohud_mode, #$000E)
 
@@ -1159,6 +1309,7 @@ ih_goto_room_strat:
     %cm_submenu("Select Room Strat", #RoomStratMenu)
 
 RoomStratMenu:
+    dw ihstrat_doorskip
     dw ihstrat_tacotank
     dw ihstrat_gateglitch
     dw ihstrat_moatcwj
@@ -1170,34 +1321,38 @@ RoomStratMenu:
     dw #$0000
     %cm_header("INFOHUD ROOM STRAT")
 
+ihstrat_doorskip:
+    %cm_jsr("Parlor-Climb Door Skip", #action_select_room_strat, #$0000)
+
 ihstrat_tacotank:
-    %cm_jsr("Taco Tank", #action_select_room_strat, #$0000)
+    %cm_jsr("Taco Tank", #action_select_room_strat, #$0001)
 
 ihstrat_gateglitch:
-    %cm_jsr("Gate Glitch", #action_select_room_strat, #$0001)
+    %cm_jsr("Gate Glitch", #action_select_room_strat, #$0002)
 
 ihstrat_moatcwj:
-    %cm_jsr("Moat CWJ", #action_select_room_strat, #$0002)
+    %cm_jsr("Moat CWJ", #action_select_room_strat, #$0003)
 
 ihstrat_robotflush:
-    %cm_jsr("Robot Flush", #action_select_room_strat, #$0003)
+    %cm_jsr("Robot Flush", #action_select_room_strat, #$0004)
 
 ihstrat_shinetopb:
-    %cm_jsr("Shine to PB", #action_select_room_strat, #$0004)
+    %cm_jsr("Shine to PB", #action_select_room_strat, #$0005)
 
 ihstrat_elevatorcf:
-    %cm_jsr("Elevator Crystal Flash", #action_select_room_strat, #$0005)
+    %cm_jsr("Elevator Crystal Flash", #action_select_room_strat, #$0006)
 
 ihstrat_botwooncf:
-    %cm_jsr("Botwoon Crystal Flash", #action_select_room_strat, #$0006)
+    %cm_jsr("Botwoon Crystal Flash", #action_select_room_strat, #$0007)
 
+!IH_STRAT_MBHP_INDEX = $0008
 ihstrat_mbhp:
-    %cm_jsr("Mother Brain HP", #action_select_room_strat, #$0007)
+    %cm_jsr("Mother Brain HP", #action_select_room_strat, #$0008)
 
 action_select_room_strat:
 {
     TYA : STA !sram_room_strat
-    LDA #$0001 : STA !sram_display_mode
+    LDA #!IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
     JSR cm_go_back
     JSR cm_calculate_max
     RTS
@@ -1208,6 +1363,7 @@ ih_room_strat:
     dl #!sram_room_strat
     dw #$0000
     db #$28, "Current Strat", #$FF
+    db #$28, "  DOOR SKIP", #$FF
     db #$28, "  TACO TANK", #$FF
     db #$28, "GATE GLITCH", #$FF
     db #$28, "   MOAT CWJ", #$FF
@@ -1226,6 +1382,15 @@ ih_room_counter:
     db #$28, "   REALTIME", #$FF
     db #$28, "     INGAME", #$FF
     db #$FF
+
+ih_status_icons:
+    %cm_toggle("Status Icons", !sram_status_icons, #1, #toggle_status_icons)
+
+toggle_status_icons:
+{
+    LDA !IH_BLANK : STA $7EC656 : STA $7EC658
+    RTS
+}
 
 ih_lag:
     %cm_numfield("Artificial Lag", !sram_artificial_lag, 0, 64, 1, #0)
@@ -1398,6 +1563,7 @@ game_clear_minimap:
     STA $7EDB1C,X : STA $7EDC1C,X
     STA $7EDD1C,X : STA $7E07F7,X
     DEX : DEX : BPL .clear_minimap_loop
+    LDA #!SOUND_MENU_JSR : JSL $80903F
     RTS
 
 game_metronome:
@@ -1558,19 +1724,19 @@ CtrlMenu:
         dw #ctrl_load_state
     endif
     dw #ctrl_load_last_preset
+    dw #ctrl_random_preset
     dw #ctrl_save_custom_preset
     dw #ctrl_load_custom_preset
     dw #ctrl_inc_custom_preset
     dw #ctrl_dec_custom_preset
-    dw #ctrl_random_preset
     dw #ctrl_reset_segment_timer
     dw #ctrl_reset_segment_later
     dw #ctrl_full_equipment
     dw #ctrl_kill_enemies
+    dw #ctrl_toggle_tileviewer
     dw #ctrl_clear_shortcuts
     dw #$0000
     %cm_header("CONTROLLER SHORTCUTS")
-
 
 ctrl_menu:
     %cm_ctrl_shortcut("Main menu", !sram_ctrl_menu)
@@ -1611,12 +1777,16 @@ ctrl_inc_custom_preset:
 ctrl_dec_custom_preset:
     %cm_ctrl_shortcut("Prev Preset Slot", !sram_ctrl_dec_custom_preset)
 
+ctrl_toggle_tileviewer:
+    %cm_ctrl_shortcut("Toggle OOB Tiles", !sram_ctrl_toggle_tileviewer)
+
 ctrl_clear_shortcuts:
     %cm_jsr("Clear Shortcuts", action_clear_shortcuts, #$0000)
 
 action_clear_shortcuts:
 {
     TYA
+    STA !ram_game_mode_extras
     STA !sram_ctrl_save_state
     STA !sram_ctrl_load_state
     STA !sram_ctrl_load_last_preset
@@ -1628,7 +1798,29 @@ action_clear_shortcuts:
     STA !sram_ctrl_inc_custom_preset
     STA !sram_ctrl_dec_custom_preset
     STA !sram_ctrl_reset_segment_timer
+    STA !sram_ctrl_reset_segment_later
+    STA !sram_ctrl_toggle_tileviewer
     ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
     RTS
+}
+
+GameModeExtras:
+{
+    ; Check if any less common shortcuts are configured
+    LDA !sram_ctrl_reset_segment_timer : BNE .enabled
+    LDA !sram_ctrl_reset_segment_later : BNE .enabled
+    LDA !sram_ctrl_kill_enemies : BNE .enabled
+    LDA !sram_ctrl_full_equipment : BNE .enabled
+    LDA !sram_ctrl_save_custom_preset : BNE .enabled
+    LDA !sram_ctrl_load_custom_preset : BNE .enabled
+    LDA !sram_ctrl_inc_custom_preset : BNE .enabled
+    LDA !sram_ctrl_dec_custom_preset : BNE .enabled
+    LDA !sram_ctrl_toggle_tileviewer : BNE .enabled
+    LDA #$0000 : STA !ram_game_mode_extras
+    RTL
+
+  .enabled
+    STA !ram_game_mode_extras
+    RTL
 }

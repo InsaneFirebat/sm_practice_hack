@@ -2,7 +2,7 @@
 !SPRITE_PRIO_FLAG = $
 
 ; $90:861C 22 AE 89 81 JSL $8189AE[$81:89AE]  ; Add Samus spritemap to OAM
-org $90861c
+org $90861C
     jsl oam_add_samus_sprite_with_prio
 
 ; $90:8643 22 AE 89 81 JSL $8189AE[$81:89AE]  ; Add Samus spritemap to OAM

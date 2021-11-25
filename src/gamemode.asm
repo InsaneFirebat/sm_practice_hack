@@ -8,9 +8,16 @@ org $828963
 org $82896E
     end_of_normal_gameplay:
 
-;org $85A000
+if !FEATURE_SD2SNES
+org $82E526
+    JSL gamemode_door_transition : NOP
+endif
+
+
+;org $85F800
 org $8596A7
 print pc, " gamemode start"
+
 gamemode_start:
 {
     PHB
@@ -21,7 +28,7 @@ gamemode_start:
     PHP
 
     ; don't load presets if we're in credits
-    LDA $0998 : CMP #$0027 : BEQ +
+    LDA $0998 : CMP #$0027 : BEQ ++
 
     LDA !ram_custom_preset : BNE +
     LDA !ram_load_preset : BEQ ++
@@ -51,13 +58,37 @@ gamemode_shortcuts:
         JMP .load_state
     endif
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_kill_enemies : CMP !sram_ctrl_kill_enemies : BNE +
-    AND !IH_CONTROLLER_PRI_NEW : BEQ +
-    JMP .kill_enemies
-
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .load_last_preset
+
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .random_preset
+
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_save_custom_preset : CMP !sram_ctrl_save_custom_preset : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .save_custom_preset
+
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_custom_preset : CMP !sram_ctrl_load_custom_preset : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .load_custom_preset
+
+    ; Check if any less common shortcuts are configured
+  + LDA !ram_game_mode_extras : BNE +
+    JMP .check_menu
+
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_inc_custom_preset : CMP !sram_ctrl_inc_custom_preset : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .next_preset_slot
+
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_dec_custom_preset : CMP !sram_ctrl_dec_custom_preset : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .prev_preset_slot
+
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_kill_enemies : CMP !sram_ctrl_kill_enemies : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .kill_enemies
 
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_reset_segment_timer : CMP !sram_ctrl_reset_segment_timer : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
@@ -71,26 +102,11 @@ gamemode_shortcuts:
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .full_equipment
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_save_custom_preset : CMP !sram_ctrl_save_custom_preset : BNE +
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_toggle_tileviewer : CMP !sram_ctrl_toggle_tileviewer : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
-    JMP .save_custom_preset
+    JMP .toggle_tileviewer
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_custom_preset : CMP !sram_ctrl_load_custom_preset : BNE +
-    AND !IH_CONTROLLER_PRI_NEW : BEQ +
-    JMP .load_custom_preset
-
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_inc_custom_preset : CMP !sram_ctrl_inc_custom_preset : BNE +
-    AND !IH_CONTROLLER_PRI_NEW : BEQ +
-    JMP .next_preset_slot
-
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_dec_custom_preset : CMP !sram_ctrl_dec_custom_preset : BNE +
-    AND !IH_CONTROLLER_PRI_NEW : BEQ +
-    JMP .prev_preset_slot
-
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
-    AND !IH_CONTROLLER_PRI_NEW : BEQ +
-    JMP .random_preset
-
+  .check_menu
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .menu
@@ -98,28 +114,26 @@ gamemode_shortcuts:
     ; No shortcuts matched, CLC so we won't skip normal gameplay
   + CLC : RTS
 
+if !FEATURE_SD2SNES
+; This if statement is to prevent an assembler error from an unknown method. The one on the call to this
+; prevents the button combo from being intercepted by the non-sd2snes rom
   .save_state
-    ; This if statement is to prevent an assembler error from an unknown method. The one on the call to this
-    ; prevents the button combo from being intercepted by the non-sd2snes rom
-    if !FEATURE_SD2SNES
-        JSL save_state
-    endif
+    JSL save_state
     ; SEC to skip normal gameplay for one frame after saving state
     SEC : RTS
 
   .load_state
-    if !FEATURE_SD2SNES
-        JSL load_state
-    endif
+    JSL load_state
     ; SEC to skip normal gameplay for one frame after loading state
     SEC : RTS
+endif
 
   .kill_enemies
     LDA #$0000
-    -
-    TAX
-    LDA $0F86,X : ORA #$0200 : STA $0F86,X
-    TXA : CLC : ADC #$0040 : CMP #$0400 : BNE -
+  .kill_loop
+    TAX : LDA $0F86,X : BIT #$8400 : BNE +
+    ORA #$0200 : STA $0F86,X
++   TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
     ; CLC to continue normal gameplay after killing enemies
     CLC : RTS
 
@@ -138,7 +152,7 @@ gamemode_shortcuts:
 
   .reset_segment_later
     LDA #$7FFF : STA !ram_reset_segment_later
-    ; CLC to continue normal gameplay after resetting segment timer
+    ; CLC to continue normal gameplay after setting segement timer reset
     CLC : RTS
 
   .full_equipment
@@ -153,15 +167,15 @@ gamemode_shortcuts:
   .save_custom_preset
     JSL custom_preset_save
     ; CLC to continue normal gameplay after saving preset
-    LDA #!SOUND_MENU_MOVE : JSL $80903F
+    LDA #!SOUND_MENU_MOVE : JSL !SFX_LIB1
     CLC : RTS
 
   .load_custom_preset
     ; check if slot is populated first
-    LDA !sram_custom_preset_slot : ASL : TAX
-    LDA.l PresetSlot,X : TAX
-    LDA $703000,X : CMP #$5AFE : BEQ .safe
-    LDA #$0007 : JSL $80903F
+    LDA !sram_custom_preset_slot
+    ASL : XBA : TAX
+    LDA $F03000,X : CMP #$5AFE : BEQ .safe
+    LDA #!SOUND_MENU_FAIL : JSL !SFX_LIB1
     ; CLC to continue normal gameplay after failing to load preset
     CLC : RTS
 
@@ -172,7 +186,7 @@ gamemode_shortcuts:
     SEC : RTS
 
   .next_preset_slot
-    LDA !sram_custom_preset_slot : CMP #$0013 ; max slots
+    LDA !sram_custom_preset_slot : CMP #$0027 ; total slots minus one
     BNE + : LDA #$FFFF
 +   INC : STA !sram_custom_preset_slot
     ASL : TAX : LDA.l NumberGFXTable,X : STA $7EC67C
@@ -181,7 +195,7 @@ gamemode_shortcuts:
 
   .prev_preset_slot
     LDA !sram_custom_preset_slot : BNE +
-    LDA #$0014 ; max slots + 1
+    LDA #$0028 ; total slots
 +   DEC : STA !sram_custom_preset_slot
     ASL : TAX : LDA.l NumberGFXTable,X : STA $7EC67C
     ; CLC to continue normal gameplay after decrementing preset slot
@@ -191,6 +205,17 @@ gamemode_shortcuts:
     JSL LoadRandomPreset
     ; SEC to skip normal gameplay for one frame after loading preset
     SEC : RTS
+
+  .toggle_tileviewer
+    LDA !ram_oob_watch_active : BEQ .turnOnTileViewer
+    LDA #$0000 : STA !ram_oob_watch_active
+    ; CLC to continue normal gameplay after disabling OOB Tile Viewer
+    CLC : RTS
+
+  .turnOnTileViewer
+    LDA #$0001 : STA !ram_oob_watch_active
+    JSL upload_sprite_oob_tiles
+    ; CLC to continue normal gameplay after enabling OOB Tile Viewer
 
   .menu
     ; Set IRQ vector
@@ -207,5 +232,20 @@ gamemode_shortcuts:
     SEC : RTS
 }
 
+if !FEATURE_SD2SNES
+gamemode_door_transition:
+{
+  .checkloadstate
+    LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_load_state : BNE .checktransition
+    PHB : PHK : PLB
+    JSL load_state
+    PLB : RTL
+
+  .checktransition
+    LDA $0931 : BPL .checkloadstate
+    RTL
+}
+endif
+
 print pc, " gamemode end"
-warnpc $85FE00
+warnpc $85FD00

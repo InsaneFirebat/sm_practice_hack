@@ -1,7 +1,5 @@
 lorom
 
-!FEATURE_SD2SNES ?= 1
-
 table ../resources/normal.tbl
 
 incsrc macros.asm
@@ -13,14 +11,15 @@ if !FEATURE_SD2SNES
     incsrc save.asm
 endif
 incsrc minimap.asm
-incsrc infohud.asm
 incsrc menu.asm
+incsrc infohud.asm
 ;incsrc rng.asm
 incsrc presets.asm
 incsrc misc.asm
 incsrc init.asm
 ;incsrc fanfare.asm ; Hyper doesn't need this
 incsrc spriteprio.asm
+incsrc spritefeat.asm
 
 ; Make sure the ROM expands to 4MB
 org $ffffff : db $ff
