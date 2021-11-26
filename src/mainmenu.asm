@@ -974,18 +974,14 @@ misc_loudpants:
 misc_suit_properties:
     dw !ACTION_CHOICE
     dl #!sram_suit_properties
-    dw .routine
+    dw init_suit_properties_ram
     db #$28, "Suit Properties", #$FF
     db #$28, "    VANILLA", #$FF
     db #$28, "   BALANCED", #$FF
     db #$28, "   PROGRESS", #$FF
     db #$FF
 
-  .routine
-    JSL misc_init_suits_ram
-    RTS
-
-misc_init_suits_ram:
+init_suit_properties_ram:
 {
     LDA #$0021 : STA !ram_suits_enemy_damage_check : STA !ram_suits_periodic_damage_check
 
@@ -997,7 +993,7 @@ misc_init_suits_ram:
     LDA #$0001 : STA !ram_suits_periodic_damage_check
 
   .end
-    RTL
+    RTS
 }
 
 misc_invincibility:
@@ -2486,6 +2482,12 @@ action_clear_shortcuts:
     LDA #$3000 : STA !sram_ctrl_menu
     %sfxquake()
     RTS
+}
+
+init_wram_based_on_sram:
+{
+    JSR init_suit_properties_ram
+    RTL
 }
 
 GameModeExtras:
