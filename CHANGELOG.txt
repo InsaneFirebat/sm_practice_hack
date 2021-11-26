@@ -1,6 +1,9 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.2]    Added Snail Clip room strat by idlechild
+* [2.3.2]    Check Load State shortcut during item fanfares by idlechild
+* [2.3.2]    Preloaded enemy addresses in RAM Watch by idlechild
 * [2.3.1.3]  Support menu footers and skip blank menu lines
 * [2.3.1.2]  Allow customizing the scroll delay and fast-scroll button
 * [2.3.1.2]  Support indexing/offsets with RAM Watch addresses
