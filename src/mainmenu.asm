@@ -1434,6 +1434,7 @@ RoomStratMenu:
     dw ihstrat_elevatorcf
     dw ihstrat_botwooncf
     dw ihstrat_doorskip
+    dw ihstrat_snailclip
     dw ihstrat_kihuntermanip
     dw ihstrat_kraidradar
     dw #$0000
@@ -1470,11 +1471,14 @@ ihstrat_botwooncf:
 ihstrat_doorskip:
     %cm_jsr("Parlor Door Skip", #action_select_room_strat, #$0009)
 
+ihstrat_snailclip:
+    %cm_jsr("Aqueduct Snail Clip", #action_select_room_strat, #$000A)
+
 ihstrat_kihuntermanip:
-    %cm_jsr("Kihunter Manipulation", #action_select_room_strat, #$000A)
+    %cm_jsr("Kihunter Manipulation", #action_select_room_strat, #$000B)
 
 ihstrat_kraidradar:
-    %cm_jsr("Kraid Nail Radar", #action_select_room_strat, #$000B)
+    %cm_jsr("Kraid Nail Radar", #action_select_room_strat, #$000C)
 
 action_select_room_strat:
 {
@@ -1500,6 +1504,7 @@ ih_room_strat:
     db #$28, "ELEVATOR CF", #$FF
     db #$28, " BOTWOON CF", #$FF
     db #$28, "  DOOR SKIP", #$FF
+    db #$28, " SNAIL CLIP", #$FF
     db #$28, "   KIHUNTER", #$FF
     db #$28, "KRAID RADAR", #$FF
     db #$FF
