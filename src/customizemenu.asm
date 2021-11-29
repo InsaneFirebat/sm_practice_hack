@@ -3,12 +3,12 @@
 ; ------
 
 macro examplemenu()
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
     dw #ifb_dummy_on
     dw #ifb_dummy_off
     dw #ifb_dummy_hexnum
@@ -22,15 +22,15 @@ macro palettemenu(title, pointer)
     dw #custompalettes_hex_red
     dw #custompalettes_hex_green
     dw #custompalettes_hex_blue
-    dw #ifb_notext
+    dw #$FFFF
     dw #custompalettes_dec_red
     dw #custompalettes_dec_green
     dw #custompalettes_dec_blue
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
     %examplemenu()
     dw #$0000
     %cm_header("<title>")
@@ -53,7 +53,9 @@ CustomizeMenu:
     dw #ifb_custompalettes_menu
     dw #ifb_paletteprofile
     dw #ifb_palette2custom
+    dw #$FFFF
     dw #ifb_customsfx
+    dw #$FFFF
     dw #ifb_menuscroll_button
     dw #ifb_menuscroll_delay
     dw #$0000
@@ -214,6 +216,7 @@ CustomPalettesDisplayMenu:
     dw #custompalettes_menunumsel_display
     dw #$0000
     %cm_header("SHARE YOUR COLORS")
+    %cm_footer("SEND A SCREENSHOT TO IFB")
 
 custompalettes_menutext_display:
     %cm_numfield_hex_word("Text", !sram_custompalette_menutext)
@@ -361,10 +364,9 @@ CustomMenuSFXMenu:
     dw #ifb_sfx_number
     dw #ifb_sfx_confirm
     dw #ifb_sfx_goback
-    dw #ifb_notext
-    dw #ifb_pressYtext
     dw #$0000
     %cm_header("CUSTOMIZE MENU SOUND FX")
+    %cm_footer("PRESS Y TO PLAY SOUNDS")
 
 ifb_sfx_move:
     %cm_numfield_sound("Move Cursor", !sram_customsfx_move, 1, 63, 1, #action_test_sfx)
@@ -380,9 +382,6 @@ ifb_sfx_goback:
 
 ifb_sfx_confirm:
     %cm_numfield_sound("Confirm Selection", !sram_customsfx_confirm, 1, 63, 1, #action_test_sfx)
-
-ifb_pressYtext:
-    %cm_jsr("Press Y to Play Sounds", #action_text, #0)
 
 action_test_sfx:
 {

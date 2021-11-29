@@ -8,6 +8,12 @@ macro cm_header(title)
     table ../resources/normal.tbl
 endmacro
 
+macro cm_footer(title)
+    table ../resources/header.tbl
+    dw #$F007 : db #$28, "<title>", #$FF
+    table ../resources/normal.tbl
+endmacro
+
 macro cm_version_header(title, major, minor, build, rev_1, rev_2)
     table ../resources/header.tbl
 if !VERSION_REV_1
@@ -259,6 +265,7 @@ mm_goto_IFBmenu:
 PresetsMenu:
     dw #presets_goto_select_preset_category
     dw #presets_current
+    dw #$FFFF
     dw #presets_custom_preset_slot
     dw #presets_save_custom_preset
     dw #presets_load_custom_preset
@@ -279,6 +286,7 @@ presets_load_custom_preset:
 
 SelectPresetCategoryMenu:
     dw #presets_current
+    dw #$FFFF
     dw #precat_spazer
     dw #precat_kpdr22
     dw #precat_prkd
@@ -487,6 +495,7 @@ EquipmentMenu:
     dw #eq_toggle_category
     dw #eq_goto_toggleitems
     dw #eq_goto_togglebeams
+    dw #$FFFF
     dw #eq_currentenergy
     dw #eq_setetanks
     dw #eq_currentreserves
@@ -496,6 +505,7 @@ EquipmentMenu:
     dw #eq_setpbs
     dw #$0000
     %cm_header("EQUIPMENT")
+    %cm_footer("HOLD Y FOR FAST SCROLL")
 
 eq_refill:
     %cm_jsr("Refill", .refill, #$0000)
@@ -511,7 +521,7 @@ eq_refill:
     RTS
 
 eq_toggle_category:
-    %cm_submenu("Category Presets", #ToggleCategoryMenu)
+    %cm_submenu("Category Loadouts", #ToggleCategoryMenu)
 
 eq_goto_toggleitems:
     %cm_submenu("Toggle Items", #ToggleItemsMenu)
@@ -680,13 +690,16 @@ action_category:
 ToggleItemsMenu:
     dw #ti_variasuit
     dw #ti_gravitysuit
+    dw #$FFFF
     dw #ti_morphball
     dw #ti_bomb
     dw #ti_springball
     dw #ti_screwattack
+    dw #$FFFF
     dw #ti_hijumpboots
     dw #ti_spacejump
     dw #ti_speedbooster
+    dw #$FFFF
     dw #ti_grapple
     dw #ti_xray
     dw #$0000
@@ -742,6 +755,7 @@ ToggleBeamsMenu:
     dw tb_wavebeam
     dw tb_spazerbeam
     dw tb_plasmabeam
+    dw #$FFFF
     dw tb_glitchedbeams
     dw #$0000
     %cm_header("TOGGLE BEAMS")
@@ -919,15 +933,16 @@ MiscMenu:
     dw #misc_bluesuit
     dw #misc_flashsuit
     dw #misc_hyperbeam
+    dw #$FFFF
+    dw #misc_invincibility
+    dw #misc_infiniteammo
     dw #misc_slowdownrate
+    dw #misc_suit_properties
+    dw #$FFFF
     dw #misc_magicpants
     dw #misc_spacepants
     dw #misc_loudpants
-    dw #misc_fanfare_toggle
-    dw #misc_music_toggle
-    dw #misc_suit_properties
-    dw #misc_invincibility
-    dw #misc_infiniteammo
+    dw #$FFFF
     dw #misc_magnetstairs
     dw #misc_killenemies
     dw #misc_forcestand
@@ -955,31 +970,6 @@ misc_spacepants:
 
 misc_loudpants:
     %cm_toggle_bit("Loud Pants", !ram_magic_pants_enabled, #$0004, GameLoopExtras)
-
-misc_fanfare_toggle:
-    %cm_toggle("Fanfare", !sram_fanfare_toggle, #$0001, #0)
-
-misc_music_toggle:
-    %cm_toggle("Music", !sram_music_toggle, #$0001, .routine)
-
-  .routine
-    BIT #$0001 : BEQ .noMusic
-    LDA $07F5 : STA $2140
-    RTS
-
-  .noMusic
-    LDA #$0000 
-    STA $0629
-    STA $062B
-    STA $062D
-    STA $062F
-    STA $0631
-    STA $0633
-    STA $0635
-    STA $0637
-    STA $063F
-    STA $2140
-    RTS
 
 misc_suit_properties:
     dw !ACTION_CHOICE
@@ -1104,7 +1094,9 @@ EventsMenu:
     dw #events_resetevents
     dw #events_resetdoors
     dw #events_resetitems
+    dw #$FFFF
     dw #events_goto_bosses
+    dw #$FFFF
     dw #events_zebesawake
     dw #events_maridiatubebroken
     dw #events_chozoacid
@@ -1268,13 +1260,17 @@ boss_ridley:
 InfoHudMenu:
     dw #ih_goto_display_mode
     dw #ih_display_mode
+    dw #$FFFF
     dw #ih_goto_room_strat
     dw #ih_room_strat
+    dw #$FFFF
     dw #ih_superhud
+    dw #$FFFF
     dw #ih_room_counter
     dw #ih_reset_seg_later
-    dw #ih_status_icons
     dw #ih_lag
+    dw #ih_status_icons
+    dw #$FFFF
     dw #ih_ram_watch
     dw #$0000
     %cm_header("INFOHUD")
@@ -1302,17 +1298,17 @@ DisplayModeMenu:
     dw ihmode_walljump
     dw ihmode_shottimer
     dw ihmode_countdamage
-    dw ihmode_GOTO_PAGE_TWO
+    dw ihmode_ridleygrab
+    dw ihmode_ramwatch
+;    dw ihmode_dboost (unfinished)
+;    dw ihmode_GOTO_PAGE_TWO
     dw #$0000
     %cm_header("INFOHUD DISPLAY MODE")
 
 DisplayModeMenu2:
-    dw ihmode_ridleygrab
-    dw ihmode_ramwatch
-;    dw ihmode_dboost
-    dw ihmode_GOTO_PAGE_ONE
-    dw #$0000
-    %cm_header("INFOHUD DISPLAY MODE")
+;    dw ihmode_GOTO_PAGE_ONE
+;    dw #$0000
+;    %cm_header("INFOHUD DISPLAY MODE")
 
 ihmode_enemyhp:
     %cm_jsr("Enemy HP", #action_select_infohud_mode, #$0000)
@@ -1384,11 +1380,11 @@ ihmode_ramwatch:
 ihmode_dboost:
     %cm_jsr("WIP - Damage Boost Trainer", #action_select_infohud_mode, #$0015)
 
-ihmode_GOTO_PAGE_ONE:
-    %cm_submenu("GOTO PAGE ONE", #DisplayModeMenu)
+;ihmode_GOTO_PAGE_ONE:
+;    %cm_submenu("GOTO PAGE ONE", #DisplayModeMenu)
 
-ihmode_GOTO_PAGE_TWO:
-    %cm_submenu("GOTO PAGE TWO", #DisplayModeMenu2)
+;ihmode_GOTO_PAGE_TWO:
+;    %cm_submenu("GOTO PAGE TWO", #DisplayModeMenu2)
     
 
 action_select_infohud_mode:
@@ -1518,10 +1514,13 @@ ih_superhud:
 SuperHUDMenu:
     dw #ih_superhud_bottom_selector
     dw #ih_superhud_bottom_submenu
+    dw #$FFFF
     dw #ih_superhud_middle_selector
     dw #ih_superhud_middle_submenu
+    dw #$FFFF
     dw #ih_superhud_top_selector
     dw #ih_superhud_top_submenu
+    dw #$FFFF
     dw #ih_superhud_enable
     dw #$0000
     %cm_header("CONFIGURE SUPER HUD")
@@ -1824,18 +1823,22 @@ ih_ram_watch:
 RAMWatchMenu:
     dw ramwatch_enable
     dw ramwatch_bank
+    dw #$FFFF
     dw ramwatch_left_hi
     dw ramwatch_left_lo
     dw ramwatch_left_index_hi
     dw ramwatch_left_index_lo
+    dw #$FFFF
     dw ramwatch_left_edit_hi
     dw ramwatch_left_edit_lo
     dw ramwatch_execute_left
     dw ramwatch_lock_left
+    dw #$FFFF
     dw ramwatch_right_hi
     dw ramwatch_right_lo
     dw ramwatch_right_index_hi
     dw ramwatch_right_index_lo
+    dw #$FFFF
     dw ramwatch_right_edit_hi
     dw ramwatch_right_edit_lo
     dw ramwatch_execute_right
@@ -2025,13 +2028,19 @@ GameMenu:
     dw #game_alternatetext
     dw #game_moonwalk
     dw #game_iconcancel
+    dw #$FFFF
+    dw #game_fanfare_toggle
+    dw #game_music_toggle
+    dw #$FFFF
     dw #game_debugmode
     dw #game_debugbrightness
 if !FEATURE_PAL
     dw #game_paldebug
 endif
+    dw #$FFFF
     dw #game_minimap
     dw #game_clear_minimap
+    dw #$FFFF
     dw #game_metronome
     dw #game_metronome_tickrate
     dw #game_metronome_sfx
@@ -2050,6 +2059,30 @@ game_moonwalk:
 
 game_iconcancel:
     %cm_toggle("Icon Cancel", $7E09EA, #$0001, #0)
+
+game_fanfare_toggle:
+    %cm_toggle("Fanfare", !sram_fanfare_toggle, #$0001, #0)
+
+game_music_toggle:
+    %cm_toggle("Music", !sram_music_toggle, #$0001, .routine)
+  .routine
+    BIT #$0001 : BEQ .noMusic
+    LDA $07F5 : STA $2140
+    RTS
+
+  .noMusic
+    LDA #$0000 
+    STA $0629
+    STA $062B
+    STA $062D
+    STA $062F
+    STA $0631
+    STA $0633
+    STA $0635
+    STA $0637
+    STA $063F
+    STA $2140
+    RTS
 
 game_debugmode:
     %cm_toggle("Debug Mode", $7E05D1, #$0001, #0)
@@ -2123,14 +2156,20 @@ GameLoopExtras:
 ; ----------
 
 RngMenu:
+if !FEATURE_SD2SNES
     dw #rng_rerandomize
+endif
     dw #rng_phan_first_phase
     dw #rng_phan_second_phase
     dw #rng_phan_eyeclose
+    dw #$FFFF
     dw #rng_botwoon_rng
+    dw #$FFFF
     dw #rng_draygon_rng_right
     dw #rng_draygon_rng_left
+    dw #$FFFF
     dw #rng_crocomire_rng
+    dw #$FFFF
     dw #rng_kraid_rng
     dw #$0000
     %cm_header("BOSS RNG CONTROL")
@@ -2257,9 +2296,11 @@ if !FEATURE_SD2SNES
 else
     dw #ctrl_randomize_rng
 endif
+    dw #$FFFF
     dw #ctrl_clear_shortcuts
     dw #$0000
     %cm_header("CONTROLLER SHORTCUTS")
+    %cm_footer("PRESS AND HOLD FOR 2 SEC")
 
 ctrl_menu:
     %cm_ctrl_shortcut("Main menu", !sram_ctrl_menu)

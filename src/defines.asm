@@ -12,7 +12,7 @@
 !VERSION_MINOR = 3
 !VERSION_BUILD = 1
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 2
+!VERSION_REV_2 = 3
 
 
 ; ---------
@@ -70,7 +70,7 @@
 !ram_magic_pants_pal1 = !WRAM_START+$54
 !ram_magic_pants_pal2 = !WRAM_START+$56
 !ram_magic_pants_pal3 = !WRAM_START+$58
- 
+
 !ram_room_has_set_rng = !WRAM_START+$5A
 !ram_kraid_rng = !WRAM_START+$5C
 !ram_crocomire_rng = !WRAM_START+$5E
@@ -105,7 +105,7 @@
 !ram_watch_edit_right_lo = !WRAM_START+$9A
 !ram_watch_edit_lock_left = !WRAM_START+$9C
 !ram_watch_edit_lock_right = !WRAM_START+$9E
- 
+
 !ram_HUD_check = !WRAM_START+$A0
 !ram_roomstrat_counter = !WRAM_START+$A2
 !ram_roomstrat_state = !WRAM_START+$A4
@@ -130,42 +130,42 @@
 !ram_vertical_speed = !WRAM_START+$CA
 !ram_quickdrop_counter = !WRAM_START+$CC
 !ram_walljump_counter = !WRAM_START+$CE
- 
+
 ; ^ FREE SPACE ^ up to +$FC
- 
+
 ; -----------------------
 ; RAM (Bank 7E required)
 ; -----------------------
 
 !ram_slowdown_mode = $7EFBFE
- 
+
 ; ---------
 ; RAM Menu
 ; ---------
- 
+
 !WRAM_MENU_START = $7EFC00
- 
-!ram_cm_stack_index = $5D5
+
+!ram_cm_stack_index = $05D5
 !ram_cm_menu_stack = !WRAM_MENU_START+$00         ; 16 bytes
 !ram_cm_cursor_stack = !WRAM_MENU_START+$10       ; 16 bytes
- 
+
 !ram_cm_cursor_max = !WRAM_MENU_START+$20
 !ram_cm_input_timer = !WRAM_MENU_START+$22
 !ram_cm_controller = !WRAM_MENU_START+$24
 !ram_cm_menu_bank = !WRAM_MENU_START+$26
- 
+
 !ram_cm_etanks = !WRAM_MENU_START+$28
 !ram_cm_reserve = !WRAM_MENU_START+$2A
 !ram_cm_leave = !WRAM_MENU_START+$2C
 !ram_cm_input_counter = !WRAM_MENU_START+$2E
 !ram_cm_last_nmi_counter = !WRAM_MENU_START+$30
- 
+
 !ram_cm_ctrl_mode = !WRAM_MENU_START+$32
 !ram_cm_ctrl_timer = !WRAM_MENU_START+$34
 !ram_cm_ctrl_last_input = !WRAM_MENU_START+$36
- 
+
 ; ^ FREE SPACE ^ up to +$CE
- 
+
 !ram_cgram_cache = !WRAM_MENU_START+$D0         ; 20 bytes
 
 !ram_hex2dec_first_digit = $14

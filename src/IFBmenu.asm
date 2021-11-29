@@ -4,19 +4,25 @@
 
 IFBMenu:
     dw #ifb_customizemenu
+    dw #$FFFF
     dw #ifb_soundtest
+    dw #$FFFF
     dw #ifb_presetrando
+    dw #$FFFF
+    dw #ifb_healthalarm
     if !FEATURE_EXTRAS
         dw #ifb_noclip
         dw #ifb_nosteam
     endif
-    dw #ifb_healthalarm
+    dw #$FFFF
     dw #ifb_debugteleport
     dw #ifb_lockout
     dw #ifb_fixcontrols
+    dw #$FFFF
     dw #ifb_credits
     dw #$0000
     %cm_header("CUSTOM ROMS ONLY")
+    %cm_footer("MODIFIED BY INSANEFIREBAT")
 
 ifb_soundtest:
     %cm_submenu("Sound Test", #SoundTestMenu)
@@ -77,35 +83,15 @@ incsrc customizemenu.asm
 LockoutConfirm:
     dw #ifb_lockout_abort
     dw #ifb_lockout_piracy
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ifb_notext
-    dw #ab_text_lockout
     dw #$0000
     %cm_header("THIS IS A FORCED RESET")
+    %cm_footer("REMEMBER TO CENTER CAMERA!")
 
 ifb_lockout_abort:
     %cm_jsr("ABORT", #action_text, #$0000)
 
 ifb_lockout_piracy:
     %cm_jsr("NINTENDO CAUGHT ME", #action_lockout, #$0000)
-
-ab_text_lockout:
-    %cm_jsr("REMEMBER TO CENTER CAMERA!", #action_text, #$0000)
 
 action_lockout:
 {
@@ -322,9 +308,11 @@ tel_debug:
 
 PresetRandoMenu:
     dw #presetrando_enable
+    dw #$FFFF
     dw #presetrando_morph
     dw #presetrando_charge
     dw #presetrando_beampref
+    dw #$FFFF
     dw #presetrando_etanks
     dw #presetrando_reserves
     dw #presetrando_missiles
@@ -346,10 +334,10 @@ presetrando_beampref:
     dw !ACTION_CHOICE
     dl #!sram_presetrando_beampref
     dw #$0000
-    db #$28, "Beam Preferenc", #$FF
-        db #$28, "e    RANDOM", #$FF
-        db #$28, "e    SPAZER", #$FF
-        db #$28, "e    PLASMA", #$FF
+    db #$28, "Beam Preference", #$FF
+        db #$28, "     RANDOM", #$FF
+        db #$28, "     SPAZER", #$FF
+        db #$28, "     PLASMA", #$FF
     db #$FF
 
 presetrando_etanks: 
@@ -374,15 +362,15 @@ presetrando_pbs:
 
 SoundTestMenu:
     dw #ifb_soundtest_goto_music
-    dw #misc_music_toggle
+    dw #game_music_toggle
+    dw #$FFFF
     dw #ifb_soundtest_lib1_sound
     dw #ifb_soundtest_lib2_sound
     dw #ifb_soundtest_lib3_sound
     dw #ifb_soundtest_silence
-    dw #ifb_notext
-    dw #ifb_pressYtext
     dw #$0000
     %cm_header("SOUND TEST MENU")
+    %cm_footer("PRESS Y TO PLAY SOUNDS")
 
 ifb_soundtest_lib1_sound:
     %cm_numfield_sound("Library One Sound", !ram_soundtest_lib1, 1, 66, 1, #action_soundtest_lib1_play)
@@ -625,24 +613,24 @@ action_fixcontrols:
 
 CreditsMenu:
     dw #ab_text_orig_author
-    dw #ab_notext
+    dw #$FFFF
     dw #ab_text_total
-    dw #ab_notext
-    dw #ab_notext
+    dw #$FFFF
+    dw #$FFFF
     dw #ab_text_v2_author
-    dw #ab_notext
+    dw #$FFFF
     dw #ab_text_pinkus
-    dw #ab_notext
-    dw #ab_notext
+    dw #$FFFF
+    dw #$FFFF
     dw #ab_text_contributors
-    dw #ab_notext
+    dw #$FFFF
     dw #ab_text_unhchabo
     dw #ab_text_idlechild
     dw #ab_text_insanefirebat
-    dw #ab_notext
-    dw #ab_notext
+    dw #$FFFF
+    dw #$FFFF
     dw #ab_text_website_header
-    dw #ab_notext
+    dw #$FFFF
     dw #ab_text_website
     dw #$0000
     %cm_header("     INFOHUD CREDITS")
