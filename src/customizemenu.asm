@@ -160,13 +160,13 @@ custompalettes_hex_blue:
     %cm_numfield_color("Hexadecimal Blue", !sram_custompalette_blue, #MixRGB)
 
 custompalettes_dec_red:
-    %cm_numfield("Decimal Red", !sram_custompalette_red, 0, 31, 1, #MixRGB)
+    %cm_numfield("Decimal Red", !sram_custompalette_red, 0, 31, 1, 2, #MixRGB)
 
 custompalettes_dec_green:
-    %cm_numfield("Decimal Green", !sram_custompalette_green, 0, 31, 1, #MixRGB)
+    %cm_numfield("Decimal Green", !sram_custompalette_green, 0, 31, 1, 2, #MixRGB)
 
 custompalettes_dec_blue:
-    %cm_numfield("Decimal Blue", !sram_custompalette_blue, 0, 31, 1, #MixRGB)
+    %cm_numfield("Decimal Blue", !sram_custompalette_blue, 0, 31, 1, 2, #MixRGB)
 
 MixRGB:
 {
@@ -410,7 +410,7 @@ ifb_menuscroll_button:
     RTS
 
 ifb_menuscroll_delay:
-    %cm_numfield("Menu Scroll Delay", !sram_cm_scroll_delay, 1, 10, 1, .routine)
+    %cm_numfield("Menu Scroll Delay", !sram_cm_scroll_delay, 1, 10, 1, 2, .routine)
   .routine
     LDA !sram_cm_scroll_delay : BNE +
     LDA #$000A : STA !sram_cm_scroll_delay

@@ -60,10 +60,10 @@ ifb_dummy_off:
     %cm_toggle("Example Toggle", !sram_dummy_off, #$0001, #0)
 
 ifb_dummy_hexnum:
-    %cm_numfield_hex("Example Hex Number", !sram_dummy_num, 0, 255, 1, #0)
+    %cm_numfield_hex("Example Hex Number", !sram_dummy_num, 0, 255, 1, 8, #0)
 
 ifb_dummy_num:
-    %cm_numfield("Example Number", !sram_dummy_num, 0, 255, 1, #0)
+    %cm_numfield("Example Number", !sram_dummy_num, 0, 255, 1, 8, #0)
 
 ifb_notext:
     %cm_jsr("", #action_text, #$0000)
@@ -341,19 +341,19 @@ presetrando_beampref:
     db #$FF
 
 presetrando_etanks: 
-    %cm_numfield("Max Energy Tanks", !sram_presetrando_max_etanks, 0, 14, 1, #0)
+    %cm_numfield("Max Energy Tanks", !sram_presetrando_max_etanks, 0, 14, 1, 2, #0)
 
 presetrando_reserves: 
-    %cm_numfield("Max Reserve Tanks", !sram_presetrando_max_reserves, 0, 4, 1, #0)
+    %cm_numfield("Max Reserve Tanks", !sram_presetrando_max_reserves, 0, 4, 1, 1, #0)
 
 presetrando_missiles: 
-    %cm_numfield("Max Missile Pickups", !sram_presetrando_max_missiles, 0, 50, 1, #0)
+    %cm_numfield("Max Missile Pickups", !sram_presetrando_max_missiles, 0, 50, 1, 5, #0)
 
 presetrando_supers: 
-    %cm_numfield("Max Super Pickups", !sram_presetrando_max_supers, 0, 50, 1, #0)
+    %cm_numfield("Max Super Pickups", !sram_presetrando_max_supers, 0, 50, 1, 5, #0)
 
 presetrando_pbs: 
-    %cm_numfield("Max Power Bomb Pickups", !sram_presetrando_max_pbs, 0, 50, 1, #0)
+    %cm_numfield("Max Power Bomb Pickups", !sram_presetrando_max_pbs, 0, 50, 1, 5, #0)
 
 
 ; ----------
