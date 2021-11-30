@@ -89,20 +89,13 @@
 
 ; ^ FREE SPACE ^ up to +$7E
 
+!ram_watch_bank = !WRAM_START+$80
 !ram_watch_left = !WRAM_START+$80
 !ram_watch_left_hud = !WRAM_START+$82
-!ram_watch_left_hi = !WRAM_START+$84
-!ram_watch_left_lo = !WRAM_START+$86
 !ram_watch_right = !WRAM_START+$88
 !ram_watch_right_hud = !WRAM_START+$8A
-!ram_watch_right_hi = !WRAM_START+$8C
-!ram_watch_right_lo = !WRAM_START+$8E
 !ram_watch_edit_left = !WRAM_START+$90
-!ram_watch_edit_left_hi = !WRAM_START+$92
-!ram_watch_edit_left_lo = !WRAM_START+$94
 !ram_watch_edit_right = !WRAM_START+$96
-!ram_watch_edit_right_hi = !WRAM_START+$98
-!ram_watch_edit_right_lo = !WRAM_START+$9A
 !ram_watch_edit_lock_left = !WRAM_START+$9C
 !ram_watch_edit_lock_right = !WRAM_START+$9E
 
@@ -163,6 +156,32 @@
 !ram_cm_ctrl_mode = !WRAM_MENU_START+$32
 !ram_cm_ctrl_timer = !WRAM_MENU_START+$34
 !ram_cm_ctrl_last_input = !WRAM_MENU_START+$36
+
+; ^ FREE SPACE ^ up to +$7E
+
+; ------------------
+; Reusable RAM Menu
+; ------------------
+
+; The following RAM may be used multiple times,
+; as long as it isn't used multiple times on the same menu page
+
+!ram_cm_watch_left_hi = !WRAM_MENU_START+$80
+!ram_cm_watch_left_lo = !WRAM_MENU_START+$82
+!ram_cm_watch_left_index_lo = !WRAM_MENU_START+$84
+!ram_cm_watch_left_index_hi = !WRAM_MENU_START+$86
+!ram_cm_watch_enemy_property = !WRAM_MENU_START+$88
+!ram_cm_watch_enemy_index = !WRAM_MENU_START+$8A
+!ram_cm_watch_right_hi = !WRAM_MENU_START+$8C
+!ram_cm_watch_right_lo = !WRAM_MENU_START+$8E
+!ram_cm_watch_right_index_lo = !WRAM_MENU_START+$90
+!ram_cm_watch_right_index_hi = !WRAM_MENU_START+$92
+!ram_cm_watch_edit_left_hi = !WRAM_MENU_START+$94
+!ram_cm_watch_edit_left_lo = !WRAM_MENU_START+$96
+!ram_cm_watch_edit_right_hi = !WRAM_MENU_START+$98
+!ram_cm_watch_edit_right_lo = !WRAM_MENU_START+$9A
+!ram_cm_watch_enemy_side = !WRAM_MENU_START+$9C
+!ram_cm_watch_bank = !WRAM_MENU_START+$9E
 
 ; ^ FREE SPACE ^ up to +$CE
 
@@ -349,11 +368,7 @@
 
 !ram_watch_bank = $F02106
 !ram_watch_left_index = $F02108
-!ram_watch_left_index_lo = $F02108
-!ram_watch_left_index_hi = $F0210A
 !ram_watch_right_index = $F0210C
-!ram_watch_right_index_lo = $F0210C
-!ram_watch_right_index_hi = $F0210E
 
 ; FREE SPACE ^
 
