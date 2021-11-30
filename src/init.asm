@@ -203,5 +203,11 @@ endif
     RTS
 }
 
+init_sram_long:
+{
+    JSR init_sram
+    RTL
+}
+
 print pc, " init end"
 warnpc $81FF00

@@ -364,6 +364,8 @@ CustomMenuSFXMenu:
     dw #ifb_sfx_number
     dw #ifb_sfx_confirm
     dw #ifb_sfx_goback
+    dw #$FFFF
+    dw #ifb_sfx_reset
     dw #$0000
     %cm_header("CUSTOMIZE MENU SOUND FX")
     %cm_footer("PRESS Y TO PLAY SOUNDS")
@@ -382,6 +384,17 @@ ifb_sfx_goback:
 
 ifb_sfx_confirm:
     %cm_numfield_sound("Confirm Selection", !sram_customsfx_confirm, 1, 63, 1, #action_test_sfx)
+
+ifb_sfx_reset:
+    %cm_jsr("Reset to Defaults", .routine, #$0000)
+  .routine
+    LDA #$0037 : STA !sram_customsfx_move
+    LDA #$0038 : STA !sram_customsfx_toggle
+    LDA #$002A : STA !sram_customsfx_number
+    LDA #$0028 : STA !sram_customsfx_confirm
+    LDA #$0007 : STA !sram_customsfx_goback
+    %sfxquake()
+    RTS
 
 action_test_sfx:
 {

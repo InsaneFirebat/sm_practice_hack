@@ -2399,6 +2399,7 @@ else
 endif
     dw #$FFFF
     dw #ctrl_clear_shortcuts
+    dw #ctrl_reset_defaults
     dw #$0000
     %cm_header("CONTROLLER SHORTCUTS")
     %cm_footer("PRESS AND HOLD FOR 2 SEC")
@@ -2455,10 +2456,8 @@ ctrl_force_stand:
     %cm_ctrl_shortcut("Force Stand", !sram_ctrl_force_stand)
 
 ctrl_clear_shortcuts:
-    %cm_jsr("Clear Shortcuts", action_clear_shortcuts, #$0000)
-
-action_clear_shortcuts:
-{
+    %cm_jsr("Clear Shortcuts", .routine, #$0000)
+  .routine
     TYA
     STA !ram_game_mode_extras
     STA !sram_ctrl_save_state
@@ -2481,7 +2480,29 @@ action_clear_shortcuts:
     LDA #$3000 : STA !sram_ctrl_menu
     %sfxquake()
     RTS
-}
+
+ctrl_reset_defaults:
+    %cm_jsr("Reset to Defaults", .routine, #$0000)
+  .routine
+    LDA #$3000 : STA !sram_ctrl_menu        ; Start + Select
+    LDA #$6010 : STA !sram_ctrl_save_state  ; Select + Y + R
+    LDA #$6020 : STA !sram_ctrl_load_state  ; Select + Y + L
+    LDA #$5020 : STA !sram_ctrl_load_last_preset  ; Start + Y + L
+    LDA #$0000 : STA !sram_ctrl_full_equipment
+    LDA #$0000 : STA !sram_ctrl_kill_enemies
+    LDA #$0000 : STA !sram_ctrl_reset_segment_timer
+    LDA #$0000 : STA !sram_ctrl_reset_segment_later
+    LDA #$0000 : STA !sram_ctrl_reveal_damage
+    LDA #$0000 : STA !sram_ctrl_random_preset
+    LDA #$0000 : STA !sram_ctrl_randomize_rng
+    LDA #$0000 : STA !sram_ctrl_save_custom_preset
+    LDA #$0000 : STA !sram_ctrl_load_custom_preset
+    LDA #$0000 : STA !sram_ctrl_inc_custom_preset
+    LDA #$0000 : STA !sram_ctrl_dec_custom_preset
+    LDA #$0000 : STA !sram_ctrl_toggle_tileviewer
+    LDA #$0000 : STA !sram_ctrl_force_stand
+    %sfxquake()
+    RTS
 
 init_wram_based_on_sram:
 {
