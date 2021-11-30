@@ -739,8 +739,8 @@ cm_draw_action_table:
         LDA [$04] : INC $04 : INC $04 : STA $08
         LDA [$04] : INC $04 : STA $0A
 
-        ; skip bounds and increment value
-        INC $04 : INC $04 : INC $04
+        ; skip bounds and increment values
+        INC $04 : INC $04 : INC $04; : INC $04
 
         ; increment past JSR
         INC $04 : INC $04
@@ -780,9 +780,9 @@ cm_draw_action_table:
         LDA [$04] : INC $04 : INC $04 : STA $08
         LDA [$04] : INC $04 : STA $0A
 
-        ; skip bounds and increment value
-        INC $04 : INC $04 : INC $04
-        INC $04 : INC $04 : INC $04
+        ; skip bounds and increment values
+        INC $04 : INC $04 : INC $04; : INC $04
+        INC $04 : INC $04 : INC $04; : INC $04
 
         ; increment past JSR
         INC $04 : INC $04
@@ -834,8 +834,8 @@ cm_draw_action_table:
         LDA [$04] : INC $04 : INC $04 : STA $08
         LDA [$04] : INC $04 : STA $0A
 
-        ; skip bounds and increment value
-        INC $04 : INC $04 : INC $04
+        ; skip bounds and increment values
+        INC $04 : INC $04 : INC $04; : INC $04
 
         ; increment past JSR
         INC $04 : INC $04
@@ -1132,7 +1132,6 @@ cm_loop:
     JSR cm_calculate_max
     BRA .redraw
 
-
   .pressedDown
     LDA #$0002
     JSR cm_move
@@ -1281,15 +1280,15 @@ cm_get_inputs:
     RTS
 
   .check_holding
-    ; Check if we're holding dpad
+    ; Check if we're holding the dpad
     LDA $8B : AND #$0F00 : BEQ .noinput
 
     ; Decrement delay timer and check if it's zero
     LDA !ram_cm_input_timer : DEC : STA !ram_cm_input_timer : BNE .noinput
 
-    ; Set new delay to 2 frames and return the input we're holding
+    ; Set new delay to two frames and return the input we're holding
     LDA !sram_cm_scroll_delay : STA !ram_cm_input_timer
-    LDA $8B : AND #$0F00
+    LDA $8B : AND #$0F00 : ORA !IH_INPUT_HELD
     RTS
 
   .noinput
@@ -1443,7 +1442,8 @@ cm_execute_action_table:
         ; $04[0x3] = memory address to manipulate
         ; $08[0x1] = min
         ; $0A[0x1] = max
-        ; $0C[0x1] = increment
+        ; $0C[0x1] = increment (normal)
+        ; $0C[0x1] = increment (input held)
         ; $20[0x2] = JSR target
         LDA [$00] : INC $00 : INC $00 : STA $04
         LDA [$00] : INC $00 : STA $06
@@ -1456,6 +1456,15 @@ cm_execute_action_table:
         LDA !IH_CONTROLLER_PRI : AND !sram_cm_scroll_button : BEQ +
         LDA $0C : ASL #2 : STA $0C
 
+        ; "hold dpad to fast-scroll" is disabled here
+;        LDA !ram_cm_controller : BIT !IH_INPUT_HELD : BNE .input_held
+;        LDA [$00] : INC $00 : INC $00; : AND #$00FF : STA $0C
+;        BRA .load_jsr_target
+
+      .input_held
+;        INC $00 : LDA [$00] : INC $00 : AND #$00FF : STA $0C
+
+      .load_jsr_target
 +       LDA [$00] : INC $00 : INC $00 : STA $20
 
         LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
@@ -1550,7 +1559,8 @@ cm_execute_action_table:
         ; $04[0x3] = memory address to manipulate
         ; $08[0x2] = min
         ; $0A[0x2] = max
-        ; $0C[0x2] = increment
+        ; $0C[0x2] = increment (normal)
+        ; $0C[0x2] = increment (input held)
         ; $20[0x2] = JSR target
         LDA [$00] : INC $00 : INC $00 : STA $04
         LDA [$00] : INC $00 : STA $06
@@ -1563,6 +1573,15 @@ cm_execute_action_table:
         LDA !IH_CONTROLLER_PRI : AND !sram_cm_scroll_button : BEQ +
         LDA $0C : ASL #2 : STA $0C
 
+        ; "hold dpad to fast-scroll" is disabled here
+;        LDA !ram_cm_controller : BIT !IH_INPUT_HELD : BNE .input_held
+;        LDA [$00] : INC $00 : INC $00; : AND #$00FF : STA $0C
+;        BRA .load_jsr_target
+
+      .input_held
+;        INC $00 : LDA [$00] : INC $00 : AND #$00FF : STA $0C
+
+      .load_jsr_target
 +       LDA [$00] : INC $00 : INC $00 : STA $20
 
         LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
@@ -1610,12 +1629,16 @@ cm_execute_action_table:
         LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
 
         LDA [$04] : INC : CMP #$0020 : BCS .set_to_min
+        STA [$04] : LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BEQ .jsr
 
+        LDA [$04] : INC : CMP #$0020 : BCS .set_to_min
         STA [$04] : BRA .jsr
 
       .pressed_left
         LDA [$04] : DEC : BMI .set_to_max
+        STA [$04] : LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BEQ .jsr
 
+        LDA [$04] : DEC : BMI .set_to_max
         STA [$04] : BRA .jsr
 
       .set_to_min
