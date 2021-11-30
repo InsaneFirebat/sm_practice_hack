@@ -4,24 +4,31 @@ org $85FD00
 print pc, " menu bank85 start"
 
 wait_for_lag_frame_long:
-  jsr $8136
-  rtl
+if !FEATURE_SD2SNES
+  ; Avoid messagebox_wait_for_lag_frame so we don't load save state from the menu,
+  ; which we want to avoid since you might be in the process of changing controller shortcuts
+  JSR vanilla_wait_for_lag_frame
+else
+  ; There is no vanilla_wait_for_lag_frame since we never modified the actual vanilla method
+  JSR $8136
+endif
+  RTL
 
 initialize_ppu_long:
-  jsr $8143
-  rtl
+  JSR $8143
+  RTL
 
 restore_ppu_long:
-  jsr $861A
-  rtl
+  JSR $861A
+  RTL
 
 play_music_long:
-  jsr $8574
-  rtl
+  JSR $8574
+  RTL
 
 maybe_trigger_pause_long:
-  jsr $80FA
-  rtl
+  JSR $80FA
+  RTL
 
 print pc, " menu bank85 end"
 warnpc $85FE00
@@ -1187,7 +1194,7 @@ cm_ctrl_mode:
     LDA $8B : BEQ .clear_and_draw
     CMP !ram_cm_ctrl_last_input : BNE .clear_and_draw
 
-    ; Holding an input for more than 1f
+    ; Holding an input for more than one second
     LDA !ram_cm_ctrl_timer : INC : STA !ram_cm_ctrl_timer : CMP.w #0060 : BNE .next_frame
 
     LDA $8B : STA [$C5]
@@ -1421,7 +1428,8 @@ cm_execute_action_table:
     execute_jsr:
     {
         ; <, > and X should do nothing here
-        LDA !ram_cm_controller : BIT #$0340 : BNE .end
+        ; also ignore input held flag
+        LDA !ram_cm_controller : BIT #$0341 : BNE .end
 
         ; $02 = JSR target
         LDA [$00] : INC $00 : INC $00 : STA $04
@@ -1728,7 +1736,8 @@ cm_execute_action_table:
     execute_ctrl_shortcut:
     {
         ; < and > should do nothing here
-        LDA !ram_cm_controller : BIT #$0300 : BNE .end
+        ; also ignore the input held flag
+        LDA !ram_cm_controller : BIT #$0301 : BNE .end
 
         LDA [$00] : STA $C5 : INC $00 : INC $00
         LDA [$00] : STA $C7 : INC $00
@@ -1739,7 +1748,7 @@ cm_execute_action_table:
         LDA #$0000 : STA !ram_cm_ctrl_timer
         RTS
 
-        .reset_shortcut
+      .reset_shortcut
         LDA.w #!sram_ctrl_menu : CMP $C5 : BEQ .end
         %sfxconfirm()
 
