@@ -2077,7 +2077,7 @@ action_ramwatch_edit_left:
     LDA !ram_watch_edit_left : STA $7F0000,X : BRA +
   .bankSRAM
     LDA !ram_watch_edit_left : STA $F00000,X
-+   LDA #$0014 : STA !sram_display_mode
++   LDA #!IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
     %sfxgrapple()
     RTS
 }
@@ -2093,7 +2093,7 @@ action_ramwatch_edit_right:
     LDA !ram_watch_edit_right : STA $7F0000,X : BRA +
   .bankSRAM
     LDA !ram_watch_edit_right : STA $F00000,X
-+   LDA #$0014 : STA !sram_display_mode
++   LDA #!IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
     %sfxgrapple()
     RTS
 }
