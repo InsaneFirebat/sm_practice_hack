@@ -19,6 +19,7 @@ IFBMenu:
     dw #ifb_lockout
     dw #ifb_fixcontrols
     dw #$FFFF
+    dw #ifb_factory_reset
     dw #ifb_credits
     dw #$0000
     %cm_header("CUSTOM ROMS ONLY")
@@ -64,9 +65,6 @@ ifb_dummy_hexnum:
 
 ifb_dummy_num:
     %cm_numfield("Example Number", !sram_dummy_num, 0, 255, 1, 8, #0)
-
-ifb_notext:
-    %cm_jsr("", #action_text, #$0000)
 
 
 ; ----------
@@ -611,6 +609,14 @@ action_fixcontrols:
     RTS
 }
 
+ifb_factory_reset:
+    %cm_jsr("Factory Reset", .routine, #$0000)
+  .routine
+    LDA #$FFFF : STA !sram_initialized
+    JSL init_sram_long
+    %sfxquake()
+    RTS
+
 CreditsMenu:
     dw #ab_text_orig_author
     dw #$FFFF
@@ -665,9 +671,6 @@ ab_text_website_header:
 
 ab_text_website:
     %cm_jsr("  smpractice.speedga.me   ", #action_text, #$0000)
-
-ab_notext:
-    %cm_jsr("                          ", #action_text, #$0000)
 
 action_text:
 {

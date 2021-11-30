@@ -146,7 +146,7 @@ init_sram:
     LDA #$0000 : STA !sram_superhud_bottom
     LDA #$0006 : STA !sram_superhud_middle
     LDA #$0008 : STA !sram_superhud_top
-    LDA #$0000 : STA !sram_status_icons
+    LDA #$0001 : STA !sram_status_icons
     LDA #$0000 : STA !sram_suit_properties
 
     LDA #$0003 : STA !sram_custompalette_profile ; 3 - Firebat
@@ -203,6 +203,12 @@ endif
     LDA #!SRAM_VERSION : STA !sram_initialized
 
     RTS
+}
+
+init_sram_long:
+{
+    JSR init_sram
+    RTL
 }
 
 print pc, " init end"
