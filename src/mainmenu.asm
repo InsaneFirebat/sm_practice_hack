@@ -1058,6 +1058,8 @@ SpritesMenu:
     dw #sprites_samus_prio
     dw #sprites_show_samus_hitbox
     dw #sprites_show_enemy_hitbox
+    dw #sprites_show_enemyproj_hitbox
+    dw #sprites_show_samusproj_hitbox
     dw #sprites_oob_viewer
     dw #$0000
     %cm_header("SPRITE FEATURES")
@@ -1066,19 +1068,41 @@ sprites_samus_prio:
     %cm_toggle_bit("Samus on Top", !sram_sprite_prio_flag, #$3000, #0)
 
 sprites_show_samus_hitbox:
-    %cm_toggle("Show Samus Hitbox", !ram_sprite_samus_hitbox_active, #1, #0)
+    %cm_toggle("Show Samus Hitbox", !ram_sprite_samus_hitbox_active, #1, #action_sprite_features)
 
 sprites_show_enemy_hitbox:
-    %cm_toggle("Show Enemy Hitboxes", !ram_sprite_enemy_hitbox_active, #1, #0)
+    %cm_toggle("Show Enemy Hitboxes", !ram_sprite_enemy_hitbox_active, #1, #action_sprite_features)
+
+sprites_show_enemyproj_hitbox:
+    %cm_toggle("Enemy Projectile Hitbox", !ram_sprite_enemyproj_hitbox_active, #1, #action_sprite_features)
+
+sprites_show_samusproj_hitbox:
+    %cm_toggle("Samus Projectile Hitbox", !ram_sprite_samusproj_hitbox_active, #1, #action_sprite_features)
 
 sprites_oob_viewer:
-    %cm_toggle("OOB Tile Viewer", !ram_oob_watch_active, #1, #toggle_oob_viewer)
+    %cm_toggle("OoB Tile Viewer", !ram_oob_watch_active, #1, #toggle_oob_viewer)
 
 toggle_oob_viewer:
 {
     LDA !ram_oob_watch_active : BEQ +
     JSL upload_sprite_oob_tiles
+    STA !ram_sprite_features_active
 +   RTS
+}
+
+action_sprite_features:
+{
+    LDA !ram_sprite_samus_hitbox_active : BNE .enabled
+    LDA !ram_sprite_enemy_hitbox_active : BNE .enabled
+    LDA !ram_sprite_enemyproj_hitbox_active : BNE .enabled
+    LDA !ram_sprite_samusproj_hitbox_active : BNE .enabled
+    LDA !ram_oob_watch_active : BNE .enabled
+    LDA #$0000 : STA !ram_sprite_features_active
+    RTS
+
+  .enabled
+    STA !ram_sprite_features_active
+    RTS
 }
 
 
@@ -2144,6 +2168,7 @@ GameMenu:
 if !FEATURE_PAL
     dw #game_paldebug
 endif
+    dw game_debugprojectiles
     dw #$FFFF
     dw #game_minimap
     dw #game_clear_minimap
@@ -2160,6 +2185,9 @@ if !FEATURE_PAL
 else
     %cm_toggle("Japanese Text", $7E09E2, #$0001, #0)
 endif
+
+game_debugprojectiles:
+    %cm_toggle("Enable Projectiles", $7E198D, #$8000, #0)
 
 game_moonwalk:
     %cm_toggle("Moon Walk", $7E09E4, #$0001, #0)

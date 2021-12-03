@@ -12,7 +12,7 @@
 !VERSION_MINOR = 3
 !VERSION_BUILD = 2
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 1
+!VERSION_REV_2 = 2
 
 
 ; ---------
@@ -62,6 +62,8 @@
 !ram_oob_watch_active = !WRAM_START+$40
 !ram_suits_enemy_damage_check = !WRAM_START+$42
 !ram_suits_periodic_damage_check = !WRAM_START+$44
+!ram_sprite_enemyproj_hitbox_active = !WRAM_START+$46
+!ram_sprite_samusproj_hitbox_active = !WRAM_START+$48
 
 ; ^ FREE SPACE ^
 
@@ -83,9 +85,10 @@
 
 !ram_game_loop_extras = !WRAM_START+$6C
 !ram_game_mode_extras = !WRAM_START+$6E
+!ram_sprite_features_active = !WRAM_START+$70
 
-!ram_metronome = !WRAM_START+$70
-!ram_metronome_counter = !WRAM_START+$72
+!ram_metronome = !WRAM_START+$72
+!ram_metronome_counter = !WRAM_START+$74
 
 ; ^ FREE SPACE ^ up to +$7E
 
@@ -505,8 +508,16 @@ endif
 !SAMUS_X_RADIUS = $0AFE
 !SAMUS_Y_RADIUS = $0B00
 !SAMUS_SPRITEMAP_X = $0B04
+!SAMUS_PROJ_X = $0B64
+!SAMUS_PROJ_Y = $0B78
+!SAMUS_PROJ_RADIUS_X = $0BB4
+!SAMUS_PROJ_RADIUS_Y = $0BC8
 !ENEMY_X = $0F7A
 !ENEMY_Y = $0F7E
 !ENEMY_X_RADIUS = $0F82
 !ENEMY_Y_RADIUS = $0F84
+!ENEMY_PROJ_ID = $1997
+!ENEMY_PROJ_X = $1A4B
+!ENEMY_PROJ_Y = $1A93
+!ENEMY_PROJ_RADIUS = $1BB3
 

@@ -1,6 +1,9 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.2.2]  Added options to draw hitboxes on Samus and/or enemy projectiles
+* [2.3.2.2]  Added debug option to disable enemy projectiles
+* [2.3.2.1]  Added options to reset controller shortcuts and custom sounds to default, or factory reset
 * [2.3.2]    Added Snail Clip room strat by idlechild
 * [2.3.2]    Check Load State shortcut during item fanfares by idlechild
 * [2.3.2]    Preloaded enemy addresses in RAM Watch by idlechild
