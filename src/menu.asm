@@ -932,8 +932,6 @@ cm_ctrl_mode:
     LDA !sram_ctrl_reset_segment_later : BNE .enabled
     LDA !sram_ctrl_kill_enemies : BNE .enabled 
     LDA !sram_ctrl_full_equipment : BNE .enabled
-    LDA !sram_ctrl_reveal_damage : BNE .enabled
-    LDA !sram_ctrl_randomize_rng : BNE .enabled
     LDA #!SOUND_MENU_MOVE : JSL $80903F
     BRA .exit
 

@@ -94,16 +94,8 @@ gamemode_shortcuts:
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .reset_segment_later
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_reveal_damage : CMP !sram_ctrl_reveal_damage : BNE +
-    AND !IH_CONTROLLER_PRI_NEW : BEQ +
-    JMP .reveal_damage
-
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_randomize_rng : CMP !sram_ctrl_randomize_rng : BNE +
-    AND !IH_CONTROLLER_PRI_NEW : BEQ .check_menu
-    JMP .randomize_rng
-
   .check_menu
-    LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .menu
 
