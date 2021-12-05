@@ -656,7 +656,7 @@ FactoryResetConfirm:
     %cm_footer("TECHNICALLY REVERSABLE")
 
 ifb_factory_reset_keep_presets:
-    cm_jsr("Yes, keep my presets", .routine, #$0000)
+    %cm_jsr("Yes, keep my presets", .routine, #$0000)
   .routine
     JSR cm_go_back
     JSR cm_calculate_max
