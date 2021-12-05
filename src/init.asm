@@ -55,6 +55,11 @@ else
     STA !WRAM_START,X
     DEX : DEX : BPL .wram_loop
 
+    ; Clear custom build SRAM
+    LDX #$01FE
+-   STA $F02100,X
+    DEX #2 : BPL -
+
     JSL init_nonzero_wram
 endif
 

@@ -610,12 +610,47 @@ action_fixcontrols:
 }
 
 ifb_factory_reset:
-    %cm_jsr("Factory Reset", .routine, #$0000)
+    %cm_jsr("Factory Reset", .routine, #FactoryResetConfirm)
   .routine
+    LDA #$0000 : LDX !WRAM_SIZE-2
+-   STA !WRAM_START,X
+    DEX #2 : BPL -
+
+    LDX #$01FE
+-   STA $F02100,X
+    DEX #2 : BPL -
+
     LDA #$FFFF : STA !sram_initialized
     JSL init_sram_long
     %sfxquake()
+    JMP action_submenu
+
+FactoryResetConfirm:
+    dw #ifb_factory_reset_keep_presets
+    dw #ifb_factory_reset_delete_presets
+    dw #$0000
+    %cm_header("KEEP CUSTOM PRESETS?")
+    %cm_footer("TECHNICALLY REVERSABLE")
+
+ifb_factory_reset_keep_presets:
+    cm_jsr("Yes, keep my presets", .routine, #$0000)
+  .routine
+    JSR cm_go_back
+    JSR cm_calculate_max
     RTS
+
+ifb_factory_reset_delete_presets:
+    %cm_jsr("No, mark them as empty", .routine, #$0000)
+  .routine
+    TYX : TXA
+-   STA !PRESET_SLOTS,X ; overwrite "5AFE" words
+    INY : TYA : ASL : XBA : TAX
+    CPY #$0020 : BNE -
+    %sfxquake()
+    JSR cm_go_back
+    JSR cm_calculate_max
+    RTS
+
 
 CreditsMenu:
     dw #ab_text_orig_author

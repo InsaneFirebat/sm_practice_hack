@@ -413,8 +413,8 @@ action_load_custom_preset:
     ; check if slot is populated first
     LDA !sram_custom_preset_slot
     ASL : XBA : TAX
-    LDA $F03000,X : CMP #$5AFE : BEQ .safe
-    LDA #!SOUND_MENU_FAIL : JSL !SFX_LIB1
+    LDA !PRESET_SLOTS,X : CMP #$5AFE : BEQ .safe
+    %sfxgoback()
     RTS
 
   .safe
