@@ -283,7 +283,6 @@ action_copy_palette:
     LDA ($16),Y : STA !sram_custompalette_menunumsel : INY #2
 
     ; play a happy sound and refresh current profile
-    %ai16()
     JSR action_custompalettes_refresh
     %sfxbubble()
     BRA .done

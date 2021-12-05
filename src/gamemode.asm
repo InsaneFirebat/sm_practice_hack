@@ -201,7 +201,7 @@ endif
     ; check if slot is populated first
     LDA !sram_custom_preset_slot
     ASL : XBA : TAX
-    LDA $F03000,X : CMP #$5AFE : BEQ .safe
+    LDA !PRESET_SLOTS,X : CMP #$5AFE : BEQ .safe
     %sfxgoback()
     ; CLC to continue normal gameplay after failing to load preset
     CLC : RTS

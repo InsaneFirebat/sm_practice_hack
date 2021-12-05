@@ -12,7 +12,7 @@
 !VERSION_MINOR = 3
 !VERSION_BUILD = 2
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 2
+!VERSION_REV_2 = 3
 
 
 ; ---------
@@ -428,6 +428,8 @@ endif
 ; ---------
 ; Pointers
 ; ---------
+
+!PRESET_SLOTS = $F03000
 
 
 ; -----
