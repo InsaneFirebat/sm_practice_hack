@@ -12,7 +12,7 @@
 !VERSION_MINOR = 3
 !VERSION_BUILD = 2
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 4
+!VERSION_REV_2 = 5
 
 
 ; ---------
@@ -62,10 +62,10 @@
 !ram_oob_watch_active = !WRAM_START+$40
 !ram_suits_enemy_damage_check = !WRAM_START+$42
 !ram_suits_periodic_damage_check = !WRAM_START+$44
-!ram_sprite_enemyproj_hitbox_active = !WRAM_START+$46
-!ram_sprite_samusproj_hitbox_active = !WRAM_START+$48
+!ram_sprite_samusproj_hitbox_active = !WRAM_START+$46
+!ram_sprite_enemyproj_hitbox_active = !WRAM_START+$48
 
-; ^ FREE SPACE ^
+; ^ FREE SPACE ^ up to +$4E
 
 !ram_magic_pants_enabled = !WRAM_START+$50
 !ram_magic_pants_state = !WRAM_START+$52
@@ -270,11 +270,38 @@
 !IH_INPUT_ANGLE_UP = $7E09BC
 !IH_INPUT_ANGLE_DOWN = $7E09BE
 
-; Pointers to single queue soundfx/music
+
+; --------------
+; Vanilla Labels
+; --------------
+
+!MUSIC_ROUTINE = $808FC1
 !SFX_LIB1 = $80903F
 !SFX_LIB2 = $8090C1
 !SFX_LIB3 = $809143
-;!MUSIC_ROUTINE = $808FC1  ; duplicated here for reference
+
+!OAM_STACK_POINTER = $0590
+!MUSIC_BANK = $07F3
+!MUSIC_TRACK = $07F5
+!LAYER1_X = $0911
+!LAYER1_Y = $0915
+!SAMUS_X = $0AF6
+!SAMUS_Y = $0AFA
+!SAMUS_X_RADIUS = $0AFE
+!SAMUS_Y_RADIUS = $0B00
+!SAMUS_SPRITEMAP_X = $0B04
+!SAMUS_PROJ_X = $0B64
+!SAMUS_PROJ_Y = $0B78
+!SAMUS_PROJ_RADIUS_X = $0BB4
+!SAMUS_PROJ_RADIUS_Y = $0BC8
+!ENEMY_X = $0F7A
+!ENEMY_Y = $0F7E
+!ENEMY_X_RADIUS = $0F82
+!ENEMY_Y_RADIUS = $0F84
+!ENEMY_PROJ_ID = $1997
+!ENEMY_PROJ_X = $1A4B
+!ENEMY_PROJ_Y = $1A93
+!ENEMY_PROJ_RADIUS = $1BB3
 
 
 ; -----
@@ -335,11 +362,8 @@
 !SRAM_SAVED_SP = $774004
 
 ; SM specific things
-!SRAM_MUSIC_BANK = $F01FD0
-!SRAM_MUSIC_TRACK = $F01FD2
-!MUSIC_BANK = $07F3
-!MUSIC_TRACK = $07F5
-!MUSIC_ROUTINE = $808FC1
+!SRAM_MUSIC_BANK = $701FD0
+!SRAM_MUSIC_TRACK = $701FD2
 
 
 
@@ -496,30 +520,4 @@ endif
 !sram_customsfx_number = $F022F4
 !sram_customsfx_confirm = $F022F6
 !sram_customsfx_goback = $F022F8
-
-
-; --------------
-; Vanilla Labels
-; --------------
-
-!OAM_STACK_POINTER = $0590
-!LAYER1_X = $0911
-!LAYER1_Y = $0915
-!SAMUS_X = $0AF6
-!SAMUS_Y = $0AFA
-!SAMUS_X_RADIUS = $0AFE
-!SAMUS_Y_RADIUS = $0B00
-!SAMUS_SPRITEMAP_X = $0B04
-!SAMUS_PROJ_X = $0B64
-!SAMUS_PROJ_Y = $0B78
-!SAMUS_PROJ_RADIUS_X = $0BB4
-!SAMUS_PROJ_RADIUS_Y = $0BC8
-!ENEMY_X = $0F7A
-!ENEMY_Y = $0F7E
-!ENEMY_X_RADIUS = $0F82
-!ENEMY_Y_RADIUS = $0F84
-!ENEMY_PROJ_ID = $1997
-!ENEMY_PROJ_X = $1A4B
-!ENEMY_PROJ_Y = $1A93
-!ENEMY_PROJ_RADIUS = $1BB3
 

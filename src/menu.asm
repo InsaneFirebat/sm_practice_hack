@@ -1344,6 +1344,7 @@ cm_execute:
     ; Increment past the action index
     LDA [$00] : INC $00 : INC $00 : TAX
 
+    ; Safety net incase blank line selected
     CPX #$FFFF : BEQ +
 
     ; Execute action
