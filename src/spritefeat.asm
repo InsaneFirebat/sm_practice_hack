@@ -459,9 +459,16 @@ update_enemyproj_sprite_hitbox:
     LDA #$BA47 : STA $037A,Y ; %10111010 bottom-left
     LDA #$FA47 : STA $037E,Y ; %11111010 bottom-right
 
-    ; inc oam stack
-    TYA : CLC : ADC #$0010 : STA !OAM_STACK_POINTER : TAY
+    ; inc OAM stack
+    ; vanilla routines use AND #$01FF to wrap the stack after 1FCh
+    ; our routines start at zero so we exit when OAM is full
+    TYA : CLC : ADC #$0010
+    CMP #$01FC : BPL .fullStack
+    STA !OAM_STACK_POINTER : TAY
     JMP .skipProjectile
+
+  .fullStack
+    RTS
 }
 
 ; draw hitboxes around Samus projectiles
@@ -518,9 +525,16 @@ update_samusproj_sprite_hitbox:
     LDA #$BA47 : STA $037A,Y ; %10111010 bottom-left
     LDA #$FA47 : STA $037E,Y ; %11111010 bottom-right
 
-    ; inc oam stack
-    TYA : CLC : ADC #$0010 : STA !OAM_STACK_POINTER : TAY
+    ; inc OAM stack
+    ; vanilla routines use AND #$01FF to wrap the stack after 1FCh
+    ; our routines start at zero so we exit when OAM is full
+    TYA : CLC : ADC #$0010
+    CMP #$0200 : BPL .fullStack
+    STA !OAM_STACK_POINTER : TAY
     JMP .skipProjectile
+
+  .fullStack
+    RTS
 }
 
 sprite_tiles:

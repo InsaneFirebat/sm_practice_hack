@@ -794,6 +794,7 @@ GlitchedBeamsMenu:
     dw #gb_unnamed
     dw #$0000
     %cm_header("GL1TC#ED %E4MS")
+    %cm_footer("BEWARE OF CRASHES")
 
 gb_murder:
     %cm_jsr("Murder Beam", action_glitched_beam, #$100F)
@@ -1467,6 +1468,7 @@ RoomStratMenu:
     dw ihstrat_kraidradar
     dw #$0000
     %cm_header("INFOHUD ROOM STRAT")
+    %cm_footer("ROOM STRAT MUST BE ACTIVE")
 
 ihstrat_superhud:
     %cm_jsr("Super HUD", #action_select_room_strat, #$0000)
@@ -1520,7 +1522,7 @@ action_select_room_strat:
 ih_room_strat:
     dw !ACTION_CHOICE
     dl #!sram_room_strat
-    dw #$0000
+    dw #.routine
     db #$28, "Current Strat", #$FF
     db #$28, "  SUPER HUD", #$FF
     db #$28, "      MB HP", #$FF
@@ -1536,6 +1538,9 @@ ih_room_strat:
     db #$28, "   KIHUNTER", #$FF
     db #$28, "KRAID RADAR", #$FF
     db #$FF
+    .routine
+        LDA #$0001 : STA !sram_display_mode
+        RTS
 
 ih_superhud:
     %cm_submenu("Configure Super HUD", #SuperHUDMenu)
@@ -1934,6 +1939,7 @@ action_ramwatch_common_enemy:
     CLC : ADC #$0F78 : STA !ram_watch_left
 
   .done
+    LDA #$0000 : STA !ram_watch_bank
     JSR ih_prepare_ram_watch_menu
     %sfxconfirm()
     RTS
@@ -2000,87 +2006,87 @@ ramwatch_bank:
 
 ramwatch_left_hi:
     %cm_numfield_hex("Address 1 High", !ram_cm_watch_left_hi, 0, 255, 1, 8, #.routine)
-    .routine
-        XBA : ORA !ram_cm_watch_left_lo
-        STA !ram_watch_left
-        RTS
+  .routine
+    XBA : ORA !ram_cm_watch_left_lo
+    STA !ram_watch_left
+    RTS
 
 ramwatch_left_lo:
     %cm_numfield_hex("Address 1 Low", !ram_cm_watch_left_lo, 0, 255, 1, 8, #.routine)
-    .routine
-        XBA : ORA !ram_cm_watch_left_hi
-        XBA : STA !ram_watch_left
-        RTS
+  .routine
+    XBA : ORA !ram_cm_watch_left_hi
+    XBA : STA !ram_watch_left
+    RTS
 
 ramwatch_left_index_hi:
     %cm_numfield_hex("Offset 1 High", !ram_cm_watch_left_index_hi, 0, 255, 1, 8, #.routine)
-    .routine
-        XBA : ORA !ram_cm_watch_left_index_lo
-        STA !ram_watch_left_index
-        RTS
+  .routine
+    XBA : ORA !ram_cm_watch_left_index_lo
+    STA !ram_watch_left_index
+    RTS
 
 ramwatch_left_index_lo:
     %cm_numfield_hex("Offset 1 Low", !ram_cm_watch_left_index_lo, 0, 255, 1, 8, #.routine)
-    .routine
-        XBA : ORA !ram_cm_watch_left_index_hi
-        XBA : STA !ram_watch_left_index
-        RTS
+  .routine
+    XBA : ORA !ram_cm_watch_left_index_hi
+    XBA : STA !ram_watch_left_index
+    RTS
 
 ramwatch_left_edit_hi:
     %cm_numfield_hex("Value 1 High", !ram_cm_watch_edit_left_hi, 0, 255, 1, 8, #.routine)
-    .routine
-        XBA : ORA !ram_cm_watch_edit_left_lo
-        STA !ram_watch_edit_left
-        RTS
+  .routine
+    XBA : ORA !ram_cm_watch_edit_left_lo
+    STA !ram_watch_edit_left
+    RTS
 
 ramwatch_left_edit_lo:
     %cm_numfield_hex("Value 1 Low", !ram_cm_watch_edit_left_lo, 0, 255, 1, 8, #.routine)
-    .routine
-        XBA : ORA !ram_cm_watch_edit_left_hi
-        XBA : STA !ram_watch_edit_left
-        RTS
+  .routine
+    XBA : ORA !ram_cm_watch_edit_left_hi
+    XBA : STA !ram_watch_edit_left
+    RTS
 
 ramwatch_right_hi:
     %cm_numfield_hex("Address 2 High", !ram_cm_watch_right_hi, 0, 255, 1, 8, #.routine)
-    .routine
-        XBA : ORA !ram_cm_watch_right_lo
-        STA !ram_watch_right
-        RTS
+  .routine
+    XBA : ORA !ram_cm_watch_right_lo
+    STA !ram_watch_right
+    RTS
 
 ramwatch_right_lo:
     %cm_numfield_hex("Address 2 Low", !ram_cm_watch_right_lo, 0, 255, 1, 8, #.routine)
-    .routine
-        XBA : ORA !ram_cm_watch_right_hi
-        XBA : STA !ram_watch_right
-        RTS
+  .routine
+    XBA : ORA !ram_cm_watch_right_hi
+    XBA : STA !ram_watch_right
+    RTS
 
 ramwatch_right_index_hi:
     %cm_numfield_hex("Offset 2 High", !ram_cm_watch_right_index_hi, 0, 255, 1, 8, #.routine)
-    .routine
-        XBA : ORA !ram_cm_watch_right_index_lo
-        STA !ram_watch_right_index
-        RTS
+  .routine
+    XBA : ORA !ram_cm_watch_right_index_lo
+    STA !ram_watch_right_index
+    RTS
 
 ramwatch_right_index_lo:
     %cm_numfield_hex("Offset 2 Low", !ram_cm_watch_right_index_lo, 0, 255, 1, 8, #.routine)
-    .routine
-        XBA : ORA !ram_cm_watch_right_index_hi
-        XBA : STA !ram_watch_right_index
-        RTS
+  .routine
+    XBA : ORA !ram_cm_watch_right_index_hi
+    XBA : STA !ram_watch_right_index
+    RTS
 
 ramwatch_right_edit_hi:
     %cm_numfield_hex("Value 2 High", !ram_cm_watch_edit_right_hi, 0, 255, 1, 8, #.routine)
-    .routine
-        XBA : ORA !ram_cm_watch_edit_right_lo
-        STA !ram_watch_edit_right
-        RTS
+  .routine
+    XBA : ORA !ram_cm_watch_edit_right_lo
+    STA !ram_watch_edit_right
+    RTS
 
 ramwatch_right_edit_lo:
     %cm_numfield_hex("Value 2 Low", !ram_cm_watch_edit_right_lo, 0, 255, 1, 8, #.routine)
-    .routine
-        XBA : ORA !ram_cm_watch_edit_right_hi
-        XBA : STA !ram_watch_edit_right
-        RTS
+  .routine
+    XBA : ORA !ram_cm_watch_edit_right_hi
+    XBA : STA !ram_watch_edit_right
+    RTS
 
 ramwatch_execute_left:
     %cm_jsr("Write to Address 1", #action_ramwatch_edit_left, #$0000)
@@ -2142,17 +2148,21 @@ ih_room_counter:
     db #$FF
 
 ih_status_icons:
-    %cm_toggle("Status Icons", !sram_status_icons, #$0001, #0)
+    %cm_toggle("Status Icons", !sram_status_icons, #$0001, #.routine)
+  .routine
+    LDA !IH_BLANK
+    STA $7EC654 : STA $7EC656 : STA $7EC658
+    RTS
 
 ih_lag:
     %cm_numfield("Artificial Lag", !sram_artificial_lag, 0, 64, 1, 4, #0)
 
 ih_reset_seg_later:
     %cm_jsr("Reset Segment in Next Room", #.routine, #$FFFF)
-    .routine
-        TYA : STA !ram_reset_segment_later
-        %sfxquake()
-        RTS
+  .routine
+    TYA : STA !ram_reset_segment_later
+    %sfxquake()
+    RTS
 
 
 ; ----------
@@ -2189,9 +2199,6 @@ if !FEATURE_PAL
 else
     %cm_toggle("Japanese Text", $7E09E2, #$0001, #0)
 endif
-
-game_debugprojectiles:
-    %cm_toggle("Enable Projectiles", $7E198D, #$8000, #0)
 
 game_moonwalk:
     %cm_toggle("Moon Walk", $7E09E4, #$0001, #0)
@@ -2234,6 +2241,9 @@ game_paldebug:
     %cm_toggle_inverted("PAL Debug Movement", $7E09E6, #$0001, #0)
 endif
 
+game_debugprojectiles:
+    %cm_toggle_bit("Enable Projectiles", $7E198D, #$8000, #0)
+
 game_minimap:
     %cm_toggle("Minimap", !ram_minimap, #$0001, #0)
 
@@ -2261,9 +2271,9 @@ game_metronome:
 
 game_metronome_tickrate:
     %cm_numfield("Metronome Tickrate", !sram_metronome_tickrate, 1, 255, 1, 8, #.routine)
-    .routine
-        LDA #$0000 : STA !ram_metronome_counter
-        RTS
+  .routine
+    LDA #$0000 : STA !ram_metronome_counter
+    RTS
 
 game_metronome_sfx:
     dw !ACTION_CHOICE
