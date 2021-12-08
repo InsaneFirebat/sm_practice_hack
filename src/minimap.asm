@@ -147,7 +147,7 @@ print pc, " minimap bank82 end"
 ; Placed in bank 90 so that the jumps work
 ;org $90F640
 org $90FF6B
-print pc, " minimap bank90 start"
+print pc, " minimap bank90-pt1 start"
 
 mm_initialize_minimap:
 {
@@ -179,8 +179,10 @@ mm_initialize_minimap:
   .skip_minimap
     RTL
 }
+print pc, " minimap bank90-pt1 end"
 
 org $90F861
+print pc, " minimap bank90-pt2 start"
 mm_update_minimap:
 {
     PHP
@@ -192,14 +194,17 @@ mm_update_minimap:
     PLP
     RTL
 }
+print pc, " minimap bank90-pt2 end"
 
 org $90F72A
+print pc, " minimap bank90-pt3 start"
 ; bank 90 is full of Axeil code
 mm_inc_tile_count_helper:
     JML mm_inc_tile_count
 
 mm_clear_boss_room_tiles_helper:
     JML mm_clear_boss_room_tiles
+print pc, " minimap bank90-pt3 end"
 
 org $92F530
 mm_inc_tile_count:
@@ -231,5 +236,4 @@ mm_clear_boss_room_tiles:
     JML $90A80A
 }
 
-print pc, " minimap bank90 end"
 

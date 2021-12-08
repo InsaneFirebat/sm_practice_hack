@@ -34,12 +34,8 @@ maybe_trigger_pause_long:
 print pc, " menu bank85 end"
 warnpc $85FFBF
 
-if !FEATURE_REDESIGN
-org $B88000
-else
 ;org $B8A2E5
 org $B8C470
-endif
 print pc, " menu start"
 
 cm_start:

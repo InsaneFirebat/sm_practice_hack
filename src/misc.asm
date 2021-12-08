@@ -191,13 +191,8 @@ stop_all_sounds:
     LDA #$0000 : STA $0A6A
     RTL
 }
-print pc, " misc end"
 
-
-if !PRESERVE_WRAM_DURING_SPACETIME
-org $90FF90
-print pc, " misc bank90 start"
-original_load_projectile_palette:
+original_load_projectile_palette_long:
 {
     AND #$0FFF : ASL : TAY
     LDA #$0090 : XBA : STA $01
@@ -210,10 +205,10 @@ original_load_projectile_palette:
     STA $7EC1C0,X
     INX : INX : INY : INY
     CPY #$0020 : BMI .original_load_palette_loop
-    RTS
+    RTL
 }
 
-spacetime_routine:
+spacetime_routine_long:
 {
     ; The normal routine shouldn't come here, but sanity check just in case
     ; Also skips out if spacetime but Y value is positive
@@ -246,13 +241,25 @@ spacetime_routine:
   .normal_load_palette
     INX : INX
     CPY #$0020 : BMI .normal_load_loop
-    RTS
+    RTL
 }
+print pc, " misc start"
+
+
+if !PRESERVE_WRAM_DURING_SPACETIME
+;org $90FF90
+org $90F6C1
+print pc, " misc bank90 start"
+original_load_projectile_palette:
+    JSL original_load_projectile_palette_long
+    RTS
+
+spacetime_routine:
+    JSL spacetime_routine_long
+    RTS
+
 print pc, " misc bank90 end"
 endif
-
-
-print pc, " misc bankA0 end"
 
 
 ; -----------
