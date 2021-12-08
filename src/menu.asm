@@ -27,9 +27,12 @@ maybe_trigger_pause_long:
 print pc, " menu bank85 end"
 warnpc $85FFBF
 
-;org $B88000
+if !FEATURE_REDESIGN
+org $B88000
+else
 ;org $B8A2E5
 org $B8C470
+endif
 print pc, " menu start"
 
 cm_start:
@@ -1468,5 +1471,5 @@ incbin ../resources/cm_gfx.bin
 HexMenuGFXTable:
     dw $2C70, $2C71, $2C72, $2C73, $2C74, $2C75, $2C76, $2C77, $2C78, $2C79, $2C50, $2C51, $2C52, $2C53, $2C54, $2C55
 
-warnpc $B8C458 ; There's a small chunk of Redesign code at $B8C459
+warnpc $B8C458 ; There's a small chunk of Axeil code at $B8C459
 print pc, " menu gfx end"

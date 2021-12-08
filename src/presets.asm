@@ -245,7 +245,7 @@ preset_start_gameplay:
     JSL $89AB82  ; Load FX1
     JSL $82E97C  ; Execute subroutine $82:E97C
 
-    JSR preset_scroll_fixes
+;    JSR preset_scroll_fixes
     JSR $A2F9    ; Calculate layer 2 X position
     JSR $A33A    ; Calculate layer 2 Y position
     LDA $0917 : STA $0921  ; BG2 X scroll = layer 2 X scroll position

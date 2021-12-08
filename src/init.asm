@@ -107,4 +107,4 @@ init_sram:
 }
 
 print pc, " init end"
-warnpc $81F3CF
+warnpc $81F1FF

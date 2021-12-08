@@ -543,7 +543,7 @@ ti_bomb:
     %cm_toggle_bit("Bombs", $7E09A4, #$1000, #action_equip_collected_items)
 
 ti_springball:
-    %cm_toggle_bit("Spring Ball", $7E09A4, #$0002, #action_equip_collected_items)
+    %cm_toggle_bit("Beam Combo", $7E09A4, #$0002, #action_equip_collected_items)
 
 ti_screwattack:
     %cm_toggle_bit("Screw Attack", $7E09A4, #$0008, #action_equip_collected_items)
