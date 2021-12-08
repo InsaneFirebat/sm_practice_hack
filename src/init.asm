@@ -67,8 +67,6 @@ endif
 
 init_nonzero_wram:
 {
-    JSL init_wram_based_on_sram
-
     ; RAM $7E0000 fluctuates so it is not a good default value
     LDA #$0F8C : STA !ram_watch_left   ; Enemy HP
     LDA #$09C2 : STA !ram_watch_right  ; Samus HP
@@ -78,20 +76,6 @@ init_nonzero_wram:
 }
 
 init_sram:
-{
-    CMP #$0009 : BEQ .sram_upgrade_9to10
-    JSR init_sram_upto9
-
-  .sram_upgrade_9to10
-    LDA #$0000 : STA !sram_ctrl_toggle_tileviewer
-    LDA #$0000 : STA !sram_status_icons
-    LDA #$0000 : STA !sram_suit_properties
-
-    LDA #!SRAM_VERSION : STA !sram_initialized
-    RTS
-}
-
-init_sram_upto9:
 {
     ; Controllers
     LDA #$3000 : STA !sram_ctrl_menu                  ; Start + Select
@@ -107,6 +91,7 @@ init_sram_upto9:
     LDA #$0000 : STA !sram_ctrl_load_custom_preset
     LDA #$0000 : STA !sram_ctrl_inc_custom_preset
     LDA #$0000 : STA !sram_ctrl_dec_custom_preset
+    LDA #$0000 : STA !sram_ctrl_toggle_tileviewer
 
     ; Input Cheat Sheet  ($4218)
     ; $8000 = B
@@ -139,6 +124,9 @@ init_sram_upto9:
 
     LDA #$000A : STA !sram_metronome_tickrate
     LDA #$0002 : STA !sram_metronome_sfx
+    LDA #$0000 : STA !sram_status_icons
+
+    LDA #!SRAM_VERSION : STA !sram_initialized
     RTS
 }
 

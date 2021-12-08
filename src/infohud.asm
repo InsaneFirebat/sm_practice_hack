@@ -1241,7 +1241,7 @@ post_ceres_timers:
 }
 
 print pc, " infohud end"
-warnpc $F0E000
+warnpc $FEE000
 
 
 ; Stuff that needs to be placed in bank 80

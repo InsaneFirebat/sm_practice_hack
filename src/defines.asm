@@ -285,6 +285,7 @@
 !sram_ctrl_load_custom_preset = $702A16
 !sram_ctrl_inc_custom_preset = $702A18
 !sram_ctrl_dec_custom_preset = $702A1A
+!sram_ctrl_toggle_tileviewer = $702A1C
 
 ; FREE SPACE ^
 
