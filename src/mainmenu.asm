@@ -793,7 +793,6 @@ MiscMenu:
     dw #misc_music_toggle
     dw #misc_invincibility
     dw #misc_killenemies
-    dw #misc_suit_properties
     dw #misc_forcestand
     dw #$0000
     %cm_header("MISC")
@@ -857,34 +856,8 @@ misc_killenemies:
 
     RTS
 
-misc_suit_properties:
-    dw !ACTION_CHOICE
-    dl #!sram_suit_properties
-    dw init_suit_properties_ram
-    db #$28, "Suit Propertie", #$FF
-    db #$28, "s   VANILLA", #$FF
-    db #$28, "s  BALANCED", #$FF
-    db #$28, "s  PROGRESS", #$FF
-    db #$FF
-
-init_suit_properties_ram:
-{
-    LDA #$0021 : STA !ram_suits_enemy_damage_check : STA !ram_suits_periodic_damage_check
-
-    LDA !sram_suit_properties : CMP #$0002 : BNE .init_periodic_damage
-    LDA #$0001 : STA !ram_suits_enemy_damage_check
-
-  .init_periodic_damage
-    LDA !sram_suit_properties : BEQ .end
-    LDA #$0001 : STA !ram_suits_periodic_damage_check
-
-  .end
-    RTS
-}
-
 misc_forcestand:
     %cm_jsr("Force Samus to Stand Up", .routine, #0)
-
   .routine
     JSL $90E2D4
     LDA #!SOUND_MENU_JSR : JSL $80903F
@@ -1894,12 +1867,6 @@ action_clear_shortcuts:
     ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
     RTS
-}
-
-init_wram_based_on_sram:
-{
-    JSR init_suit_properties_ram
-    RTL
 }
 
 GameModeExtras:
