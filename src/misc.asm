@@ -52,88 +52,6 @@ org $8C9607
     dw #$0E2F
 
 
-; Suit periodic damage
-org $8DE37C
-    ; Replaced the check and also take one additional byte
-    ; Thus the following logic is the same but shifted down
-    AND !ram_suits_periodic_damage_check : BNE $29
-    LDA $0A4E : CLC : ADC #$4000 : STA $0A4E
-    ; We don't have enough space to add the carry bit inline,
-    ; so we need to jump to freespace, but only do that if the carry bit is set
-    BCC $06
-    JMP increment_periodic_damage
-
-
-org $8DFFF1
-print pc, " misc bank8D start"
-
-increment_periodic_damage:
-{
-    LDA $0A50 : INC : STA $0A50
-    JMP $E394
-}
-
-print pc, " misc bank8D end"
-
-
-; We now have three separate periodic damage routines,
-; so we need to load an index to jump to the correct routine
-org $90E72B
-    LDA !sram_suit_properties : ASL : PHA
-    JSR misc_overwritten_movement_routine
-
-; Handle periodic damage based on suit properties
-; Overwritten logic will be transferred
-org $90E74D
-    PLA : PHX : TAX
-    JSR (periodic_damage_table,X)
-    PLX : NOP : NOP
-
-; Transfer logic here by overwriting redundant end of periodic damage
-; Also repoint jump and branch to avoid the redundant section
-org $90E9D6
-    JMP $EA35
-
-org $90EA2D
-    BPL $06
-
-; Optimize CPU by overwriting our PLP/RTS
-; and skipping over the PHP/REP #$30 in the pause check routine
-org $90EA3B
-    ; The optimizations were too good,
-    ; now need to waste 6 cycles to balance CPU
-    NOP : NOP : NOP
-    BRA $08
-
-; Optimize CPU by removing RTS so we go straight to the low health check
-org $90EA7E
-    NOP
-
-
-; Suit enemy damage
-org $A0A463
-    BIT #$0020 : BEQ .checksuit
-    LSR $12
-  .checksuit
-    AND !ram_suits_enemy_damage_check : BEQ .return
-    LSR $12
-  .return
-    LDA $12
-    RTL
-
-
-; Suit metroid damage
-org $A3EED8
-    LDA #$C000 : STA $12
-    LDA $09A2 : AND !ram_suits_enemy_damage_check : BEQ .metroidcheckgravity
-    LSR $12
-  .metroidcheckgravity
-    LDA $09A2 : BIT #$0020 : BEQ .metroidnogravity
-    LSR $12
-  .metroidnogravity
-    ; Continue vanilla routine
-
-
 if !PRESERVE_WRAM_DURING_SPACETIME
 org $90ACF6
     JSR original_load_projectile_palette
@@ -202,11 +120,9 @@ org $808F24
 ;}
 warnpc $8FFFFF
 
-print pc, " misc bank8F end"
 
-
-org $90F800
-print pc, " misc bank90 start"
+org $87D000
+print pc, " misc start"
 
 hook_set_music_track:
 {
@@ -279,56 +195,12 @@ stop_all_sounds:
     LDA #$0000 : STA $0A6A
     RTL
 }
-
-
-misc_overwritten_movement_routine:
-    ; We overwrote an unnecessary JSR, a STZ command, and a jump to the movement routine
-    STZ $0A6E
-    JMP ($0A58)
-
-periodic_damage_table:
-    dw $E9CE   ; vanilla routine
-    dw periodic_damage_balanced
-    dw periodic_damage_progressive
-
-; Make our minor adjustments and jump back to the vanilla routine
-periodic_damage_balanced:
-{
-    PHP : REP #$30
-    LDA $0A78 : BEQ $03
-    JMP $EA35
-    LDA $09A2 : BIT #$0001 : BNE $03
-    JMP $EA11   ; Varia not equipped
-    JMP $E9FC   ; Varia equipped
-}
-
-periodic_damage_progressive:
-{
-    PHP : REP #$30
-    LDA $0A78 : BEQ $03
-    ; Nothing to do, jump back to vanilla routine
-    JMP $EA35
-
-    LDA $09A2 : BIT #$0020 : BEQ .nogravity
-    ; Gravity equipped, so halve damage
-    LDA $0A4F : LSR
-    PHA : XBA : AND #$FF00 : STA $0A4E
-    PLA : XBA : AND #$00FF : STA $0A50
-
-  .nogravity
-    LDA $09A2 : BIT #$0001 : BEQ .novaria
-    ; Varia equipped, so halve damage
-    LDA $0A4F : LSR
-    PHA : XBA : AND #$FF00 : STA $0A4E
-    PLA : XBA : AND #$00FF : STA $0A50
-
-  .novaria
-    ; Jump back into the vanilla routine
-    JMP $EA11
-}
+print pc, " misc end"
 
 
 if !PRESERVE_WRAM_DURING_SPACETIME
+org $90FF90
+print pc, " misc bank90 start"
 original_load_projectile_palette:
 {
     AND #$0FFF : ASL : TAY
@@ -380,7 +252,7 @@ spacetime_routine:
     CPY #$0020 : BMI .normal_load_loop
     RTS
 }
+print pc, " misc bank90 end"
 endif
 
-print pc, " misc bank90 end"
 
