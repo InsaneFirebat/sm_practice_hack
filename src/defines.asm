@@ -12,7 +12,7 @@
 !VERSION_MINOR = 3
 !VERSION_BUILD = 2
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 5
+!VERSION_REV_2 = 6
 
 
 ; ---------
@@ -79,16 +79,18 @@
 !ram_phantoon_rng_1 = !WRAM_START+$60
 !ram_phantoon_rng_2 = !WRAM_START+$62
 !ram_phantoon_rng_3 = !WRAM_START+$64
-!ram_botwoon_rng = !WRAM_START+$66
-!ram_draygon_rng_left = !WRAM_START+$68
-!ram_draygon_rng_right = !WRAM_START+$6A
+!ram_phantoon_rng_4 = !WRAM_START+$66
+!ram_phantoon_rng_5 = !WRAM_START+$68
+!ram_botwoon_rng = !WRAM_START+$6A
+!ram_draygon_rng_left = !WRAM_START+$6C
+!ram_draygon_rng_right = !WRAM_START+$6E
 
-!ram_game_loop_extras = !WRAM_START+$6C
-!ram_game_mode_extras = !WRAM_START+$6E
-!ram_sprite_features_active = !WRAM_START+$70
+!ram_game_loop_extras = !WRAM_START+$70
+!ram_game_mode_extras = !WRAM_START+$72
+!ram_sprite_features_active = !WRAM_START+$74
 
-!ram_metronome = !WRAM_START+$72
-!ram_metronome_counter = !WRAM_START+$74
+!ram_metronome = !WRAM_START+$76
+!ram_metronome_counter = !WRAM_START+$78
 
 ; ^ FREE SPACE ^ up to +$7E
 
@@ -185,6 +187,8 @@
 !ram_cm_watch_edit_right_lo = !WRAM_MENU_START+$9A
 !ram_cm_watch_enemy_side = !WRAM_MENU_START+$9C
 !ram_cm_watch_bank = !WRAM_MENU_START+$9E
+
+!ram_cm_botwoon_rng = !WRAM_MENU_START+$A0
 
 ; ^ FREE SPACE ^ up to +$CE
 

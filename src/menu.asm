@@ -1028,7 +1028,7 @@ cm_draw_text:
     INY : JMP .loop
 
   .end
-  %a16()
+    %a16()
     RTS
 
 ; --------------
