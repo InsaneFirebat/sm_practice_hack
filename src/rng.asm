@@ -2,107 +2,114 @@
 {
     ; 1st pattern
 if !FEATURE_PAL
-    org $A7D5E9
+org $A7D5E9
 else
-    org $A7D5B5
+org $A7D5B5
 endif
-        ; $A7:D5B5 22 11 81 80 JSL $808111[$80:8111]
-        JSL hook_phantoon_1st_dir_rng
+    ; $A7:D5B5 22 11 81 80 JSL $808111[$80:8111]
+    JSL hook_phantoon_1st_dir_rng
 
 if !FEATURE_PAL
-    org $A7D5DA
+org $A7D5DA
 else
-    org $A7D5A6
+org $A7D5A6
 endif
-        ; $A7:D5A6 AD B6 05    LDA $05B6  [$7E:05B6] ; Frame counter
-        ; $A7:D5A9 4A          LSR A
-        JSL hook_phantoon_1st_pat
+    ; $A7:D5A6 AD B6 05    LDA $05B6  [$7E:05B6] ; Frame counter
+    ; $A7:D5A9 4A          LSR A
+    JSL hook_phantoon_1st_pat
 
     ; 2nd pattern
 if !FEATURE_PAL
-    org $A7D716
+org $A7D716
 else
-    org $A7D6E2
+org $A7D6E2
 endif
-        ; $A7:D6E2 22 11 81 80 JSL $808111[$80:8111]
-        JSL hook_phantoon_2nd_dir_rng
+    ; $A7:D6E2 22 11 81 80 JSL $808111[$80:8111]
+    JSL hook_phantoon_2nd_dir_rng
 
 if !FEATURE_PAL
-    org $A7D0BF
+org $A7D0BF
 else
-    org $A7D08B
+org $A7D08B
 endif
-        ; $A7:D08B AD B6 05    LDA $05B6  [$7E:05B6] ; Frame counter
-        ; $A7:D08E 89 01 00    BIT #$0001
-        JSL hook_phantoon_2nd_dir_2
-        NOP : NOP
+    ; $A7:D08B AD B6 05    LDA $05B6  [$7E:05B6] ; Frame counter
+    ; $A7:D08E 89 01 00    BIT #$0001
+    JSL hook_phantoon_2nd_dir_2
+    NOP : NOP
 
 if !FEATURE_PAL
-    org $A7D0B0 ; hijack, RNG call for second pattern
+org $A7D0B0 ; hijack, RNG call for second pattern
 else
-    org $A7D07C ; hijack, RNG call for second pattern
+org $A7D07C ; hijack, RNG call for second pattern
 endif
-        ; $A7:D07C 22 11 81 80 JSL $808111[$80:8111]
-        JSL hook_phantoon_2nd_pat
+    ; $A7:D07C 22 11 81 80 JSL $808111[$80:8111]
+    JSL hook_phantoon_2nd_pat
 
 if !FEATURE_PAL
-    org $A7D098 ; Phantoon eye close timer
+org $A7D098 ; Phantoon eye close timer
 else
-    org $A7D064 ; Phantoon eye close timer
+org $A7D064 ; Phantoon eye close timer
 endif
-        JSL hook_phantoon_eyeclose
+    JSL hook_phantoon_eyeclose
+
+if !FEATURE_PAL
+org $A7D00A ; Phantoon flame pattern
+else
+org $A7CFD6 ; Phantoon flame pattern
+endif
+    JSL hook_phantoon_flame_pattern
 }
 
 
 ; Botwoon hijacks
 {
 if !FEATURE_PAL
-    org $B39953
+org $B39953
 else
-    org $B39943
+org $B39943
 endif
-        ; $B3:9943 22 11 81 80 JSL $808111[$80:8111]
-        JSL hook_botwoon_rng
+    ; $B3:9943 22 11 81 80 JSL $808111[$80:8111]
+    JSL hook_botwoon_rng
 }
 
 
 ; Draygon hijacks
 {
 if !FEATURE_PAL
-    org $A58AEC
+org $A58AEC
 else
-    org $A58ADC
+org $A58ADC
 endif
-        JSR hook_draygon_rng_left
+    JSR hook_draygon_rng_left
 
 if !FEATURE_PAL
-    org $A589AD
+org $A589AD
 else
-    org $A5899D
+org $A5899D
 endif
-        JSR hook_draygon_rng_right
+    JSR hook_draygon_rng_right
 }
 
 
 ; Crocomire hijack
 {
 if !FEATURE_PAL
-    org $A48763
+org $A48763
 else
-    org $A48753
+org $A48753
 endif
-        JSR hook_crocomire_rng
+    JSR hook_crocomire_rng
 }
 
 
 ; Kraid hijack
 {
 if !FEATURE_PAL
-    org $A7BDF3
+org $A7BDF3
 else
-    org $A7BDBF
+org $A7BDBF
 endif
-        JSR hook_kraid_rng
+    JSR hook_kraid_rng
 }
 
 
@@ -112,31 +119,31 @@ endif
     ; $A3:AB0F 8D E5 05    STA $05E5  [$7E:05E5]
     ; $A3:AB12 22 11 81 80 JSL $808111[$80:8111]
 if !FEATURE_PAL
-    org $A3AB2E
+org $A3AB2E
 else
-    org $A3AB12
+org $A3AB12
 endif
-        JSL hook_hopper_set_rng
+    JSL hook_hopper_set_rng
 
     ; $A2:B588 A9 11 00    LDA #$0011
     ; $A2:B58B 8D E5 05    STA $05E5  [$7E:05E5]
 if !FEATURE_PAL
-    org $A2B5A0
+org $A2B5A0
 else
-    org $A2B588
+org $A2B588
 endif
-        JSL hook_lavarocks_set_rng
-        NOP #2
+    JSL hook_lavarocks_set_rng
+    NOP #2
 
     ; $A8:B798 A9 17 00    LDA #$0017
     ; $A8:B79B 8D E5 05    STA $05E5  [$7E:05E5]
 if !FEATURE_PAL
-    org $A8B7A8
+org $A8B7A8
 else
-    org $A8B798
+org $A8B798
 endif
-        JSL hook_beetom_set_rng
-        NOP #2
+    JSL hook_beetom_set_rng
+    NOP #2
 }
 
 
@@ -237,6 +244,21 @@ hook_phantoon_eyeclose:
     RTL
 }
 
+hook_phantoon_flame_pattern:
+{
+    JSL $808111 ; Trying to preserve the number of RNG calls being done in the frame
+
+    LDA !ram_phantoon_rng_4 : TAY
+    LDA !ram_phantoon_rng_5 : STA !ram_phantoon_rng_4
+    TYA : STA !ram_phantoon_rng_5 : BEQ .no_manip
+    DEC
+    RTL
+
+  .no_manip
+    LDA $05E5 ; return with random number
+    RTL
+}
+
 phantoon_dirs:
 db $FF
 db $01, $01, $01
@@ -253,8 +275,6 @@ hook_botwoon_rng:
     JSL $808111 ; Trying to preserve the number of RNG calls being done in the frame
 
     LDA !ram_botwoon_rng : BEQ .no_manip
-
-    DEC : ASL #3 : INC
     RTL
 
   .no_manip

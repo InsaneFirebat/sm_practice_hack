@@ -487,7 +487,14 @@ action_load_preset:
     RTS
 }
 
+pushpc
+
+org $89E000
+print pc, " custom presets start"
 incsrc custompresets.asm
+print pc, " custom presets end"
+
+pullpc
 
 
 ; ----------------
@@ -1464,6 +1471,7 @@ RoomStratMenu:
     dw ihstrat_botwooncf
     dw ihstrat_doorskip
     dw ihstrat_snailclip
+    dw ihstrat_threejumpskip
     dw ihstrat_kihuntermanip
     dw ihstrat_kraidradar
     dw #$0000
@@ -1504,11 +1512,14 @@ ihstrat_doorskip:
 ihstrat_snailclip:
     %cm_jsr("Aqueduct Snail Clip", #action_select_room_strat, #$000A)
 
+ihstrat_threejumpskip:
+    %cm_jsr("Three Jump Baby Skip", #action_select_room_strat, #$000B)
+
 ihstrat_kihuntermanip:
-    %cm_jsr("Kihunter Manipulation", #action_select_room_strat, #$000B)
+    %cm_jsr("Kihunter Manipulation", #action_select_room_strat, #$000C)
 
 ihstrat_kraidradar:
-    %cm_jsr("Kraid Nail Radar", #action_select_room_strat, #$000C)
+    %cm_jsr("Kraid Nail Radar", #action_select_room_strat, #$000D)
 
 action_select_room_strat:
 {
@@ -1535,6 +1546,7 @@ ih_room_strat:
     db #$28, " BOTWOON CF", #$FF
     db #$28, "  DOOR SKIP", #$FF
     db #$28, " SNAIL CLIP", #$FF
+    db #$28, "3J BABYSKIP", #$FF
     db #$28, "   KIHUNTER", #$FF
     db #$28, "KRAID RADAR", #$FF
     db #$FF
@@ -2311,6 +2323,8 @@ endif
     dw #rng_phan_first_phase
     dw #rng_phan_second_phase
     dw #rng_phan_eyeclose
+    dw #rng_phan_flamepattern
+    dw #rng_next_flamepattern
     dw #$FFFF
     dw #rng_botwoon_rng
     dw #$FFFF
@@ -2325,18 +2339,6 @@ endif
 
 rng_rerandomize:
     %cm_toggle("Rerandomize", !sram_rerandomize, #$0001, #0)
-
-rng_botwoon_rng:
-    dw !ACTION_CHOICE
-    dl #!ram_botwoon_rng
-    dw #$0000
-    db #$28, "Botwoon RNG", #$FF
-    db #$28, "     RANDOM", #$FF
-    db #$28, "       DOWN", #$FF
-    db #$28, "         UP", #$FF
-    db #$28, "      RIGHT", #$FF
-    db #$28, "       LEFT", #$FF
-    db #$FF
 
 rng_phan_first_phase:
     dw !ACTION_CHOICE
@@ -2376,6 +2378,47 @@ rng_phan_eyeclose:
     db #$28, "        MID", #$FF
     db #$28, "       FAST", #$FF
     db #$FF
+
+rng_phan_flamepattern:
+    dw !ACTION_CHOICE
+    dl #!ram_phantoon_rng_4
+    dw #$0000
+    db #$28, "Phan Flame Patt", #$FF
+    db #$28, "ern  RANDOM", #$FF
+    db #$28, "ern   22222", #$FF
+    db #$28, "ern     111", #$FF
+    db #$28, "ern 3333333", #$FF
+    db #$28, "ern 1424212", #$FF
+    db #$FF
+
+rng_next_flamepattern:
+    dw !ACTION_CHOICE
+    dl #!ram_phantoon_rng_5
+    dw #$0000
+    db #$28, "Next Flame Patt", #$FF
+    db #$28, "ern  RANDOM", #$FF
+    db #$28, "ern   22222", #$FF
+    db #$28, "ern     111", #$FF
+    db #$28, "ern 3333333", #$FF
+    db #$28, "ern 1424212", #$FF
+    db #$FF
+
+rng_botwoon_rng:
+    dw !ACTION_CHOICE
+    dl #!ram_cm_botwoon_rng
+    dw #.routine
+    db #$28, "Botwoon RNG", #$FF
+    db #$28, "     RANDOM", #$FF
+    db #$28, "       DOWN", #$FF
+    db #$28, "         UP", #$FF
+    db #$28, "      RIGHT", #$FF
+    db #$28, "       LEFT", #$FF
+    db #$FF
+  .routine
+    LDA !ram_cm_botwoon_rng : BEQ +
+    DEC : ASL #3 : INC
+    STA !ram_botwoon_rng
++   RTS
 
 rng_draygon_rng_right:
     dw !ACTION_CHOICE
