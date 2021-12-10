@@ -467,6 +467,7 @@ endif
 !sram_ctrl_reveal_damage = $F02200
 !sram_ctrl_randomize_rng = $F02202
 !sram_ctrl_force_stand = $F02204
+!sram_ctrl_update_timers = $F02206
 
 !sram_scroll_button = $F02210
 !sram_cm_scroll_button = $F02212
