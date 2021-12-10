@@ -121,6 +121,10 @@ endif
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .force_stand
 
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_update_timers : CMP !sram_ctrl_update_timers : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .update_timers
+
   .check_menu
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
@@ -261,6 +265,11 @@ endif
     JSL $90E2D4
     %sfxconfirm()
     ; CLC to continue normal gameplay after forced stand
+    CLC : RTS
+
+  .update_timers
+    JSL ih_update_hud_early
+    ; CLC to continue normal gameplay after updating HUD timers
     CLC : RTS
 
   .menu

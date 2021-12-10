@@ -2482,6 +2482,7 @@ if !FEATURE_SD2SNES
 else
     dw #ctrl_randomize_rng
 endif
+    dw #ctrl_update_timers
     dw #$FFFF
     dw #ctrl_clear_shortcuts
     dw #ctrl_reset_defaults
@@ -2540,6 +2541,9 @@ ctrl_toggle_tileviewer:
 ctrl_force_stand:
     %cm_ctrl_shortcut("Force Stand", !sram_ctrl_force_stand)
 
+ctrl_update_timers:
+    %cm_ctrl_shortcut("Update Timers", !sram_ctrl_update_timers)
+
 ctrl_clear_shortcuts:
     %cm_jsr("Clear Shortcuts", .routine, #$0000)
   .routine
@@ -2561,6 +2565,7 @@ ctrl_clear_shortcuts:
     STA !sram_ctrl_randomize_rng
     STA !sram_ctrl_toggle_tileviewer
     STA !sram_ctrl_force_stand
+    STA !sram_ctrl_update_timers
     ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
     %sfxquake()
@@ -2586,6 +2591,7 @@ ctrl_reset_defaults:
     LDA #$0000 : STA !sram_ctrl_dec_custom_preset
     LDA #$0000 : STA !sram_ctrl_toggle_tileviewer
     LDA #$0000 : STA !sram_ctrl_force_stand
+    LDA #$0000 : STA !sram_ctrl_update_timers
     %sfxquake()
     RTS
 
@@ -2608,6 +2614,7 @@ GameModeExtras:
     LDA !sram_ctrl_dec_custom_preset : BNE .enabled
     LDA !sram_ctrl_toggle_tileviewer : BNE .enabled
     LDA !sram_ctrl_force_stand : BNE .enabled
+    LDA !sram_ctrl_update_timers : BNE .enabled
     RTL
 
   .enabled
