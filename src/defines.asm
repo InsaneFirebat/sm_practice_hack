@@ -10,9 +10,9 @@
 
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 3
-!VERSION_BUILD = 2
+!VERSION_BUILD = 3
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 7
+!VERSION_REV_2 = 0
 
 
 ; ---------
@@ -328,8 +328,7 @@
 !sram_ctrl_inc_custom_preset = $F02018
 !sram_ctrl_dec_custom_preset = $F0201A
 !sram_ctrl_toggle_tileviewer = $F0201C
-
-; ^ FREE SPACE ^
+!sram_ctrl_update_timers = $F0201E
 
 !sram_artificial_lag = $F02020
 !sram_rerandomize = $F02022
@@ -467,7 +466,6 @@ endif
 !sram_ctrl_reveal_damage = $F02200
 !sram_ctrl_randomize_rng = $F02202
 !sram_ctrl_force_stand = $F02204
-!sram_ctrl_update_timers = $F02206
 
 !sram_scroll_button = $F02210
 !sram_cm_scroll_button = $F02212
