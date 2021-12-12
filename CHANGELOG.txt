@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.2.7]  Fixes for background glitches with presets involving scrolling sky by idlechild
+* [2.3.2.6]  Added controller shortcut to update the HUD timers during gameplay
 * [2.3.2.6]  Added Phantoon flame patterns to RNG Controls by idlechild
 * [2.3.2.6]  Added 3-Jump Baby Skip trainer to room strats by idlechild
 * [2.3.2.5]  Prevent potential crash from drawing too many hitboxes
