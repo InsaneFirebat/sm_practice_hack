@@ -210,8 +210,8 @@ cm_transfer_original_tileset:
     LDA #$04 : STA $210C ; BG3 starts at $4000 (8000 in vram)
     LDA #$80 : STA $2115 ; word-access, incr by 1
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
-    LDX #$E000 : STX $4302 ; Source offset
-    LDA #$FD : STA $4304 ; Source bank
+    LDX #$D000 : STX $4302 ; Source offset
+    LDA #$FF : STA $4304 ; Source bank
     LDX #$1000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
@@ -224,8 +224,8 @@ cm_transfer_original_tileset:
     LDA #$02 : STA $210C ; BG3 starts at $2000 (4000 in vram)
     LDA #$80 : STA $2115 ; word-access, incr by 1
     LDX #$2000 : STX $2116 ; VRAM address (4000 in vram)
-    LDX #$D500 : STX $4302 ; Source offset
-    LDA #$FD : STA $4304 ; Source bank
+    LDX #$D000 : STX $4302 ; Source offset
+    LDA #$FF : STA $4304 ; Source bank
     LDX #$1000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)

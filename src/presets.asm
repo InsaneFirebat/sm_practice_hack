@@ -199,7 +199,7 @@ preset_to_memory:
 
 preset_banks:
 {
-  dw preset_prkd_crateria_ship>>16
+  dw presets_redesign_crateria_ceres_elevator>>16
 }
 warnpc $81F77F
 print pc, " presets end"
@@ -396,11 +396,25 @@ warnpc $80FDFD
 org $85B000
 incsrc custompresets.asm
 
-org $FD99D0
-print pc, " prkd data start"
-incsrc presets/prkd_data.asm
-print pc, " prkd data end"
+if !FEATURE_REDESIGN
+org $FC8000
+print pc, " Redesign any% data start"
+incsrc presets/redesign_data.asm
+print pc, " Redesign any% data end"
 
-print pc, " prkd menu start"
-incsrc presets/prkd_menu.asm
-print pc, " prkd menu end"
+print pc, " Redesign any% menu start"
+incsrc presets/redesign_menu.asm
+print pc, " Redesign any% menu end"
+else
+; Using Redesign Presets as the new placeholder
+; Most of them will still work to some degree
+org $FD99D0
+print pc, " Redesign any% data start"
+incsrc presets/redesign_data.asm
+print pc, " Redesign any% data end"
+
+print pc, " Redesign any% menu start"
+incsrc presets/redesign_menu.asm
+print pc, " Redesign any% menu end"
+endif
+

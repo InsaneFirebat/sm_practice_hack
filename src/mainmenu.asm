@@ -132,13 +132,21 @@ action_presets_submenu:
 
 preset_category_submenus:
 {
+if !FEATURE_REDESIGN
+    dw #PresetsMenuRedesign
+else
     dw #PresetsMenuPrkd
+endif
     dw #$0000
 }
 
 preset_category_banks:
 {
+if !FEATURE_REDESIGN
+    dw #PresetsMenuRedesign>>16
+else
     dw #PresetsMenuPrkd>>16
+endif
     dw #$0000
 
 }
@@ -204,21 +212,6 @@ mm_goto_ctrlsmenu:
 ; Presets menu
 ; -------------
 
-; moved to presets.asm
-;pushpc
-
-;org $FE8000
-;  print pc, " prkd menu start"
-;  incsrc presets/prkd_menu.asm
-;  print pc, " prkd menu end"
-
-;pullpc
-
-
-; -------------
-; Presets menu
-; -------------
-
 PresetsMenu:
     dw #presets_goto_select_preset_category
     dw #presets_current
@@ -242,7 +235,11 @@ presets_load_custom_preset:
 
 SelectPresetCategoryMenu:
     dw #presets_current
+if !FEATURE_REDESIGN
+    dw #precat_redesign
+else
     dw #precat_prkd
+endif
     dw #$0000
     %cm_header("SELECT PRESET CATEGORY")
 
@@ -251,11 +248,11 @@ presets_current:
     dl #!sram_preset_category
     dw #$0000
     db #$28, "CURRENT PRESET", #$FF
-        db #$28, "PLACEHOLDER", #$FF
+        db #$28, "   REDESIGN", #$FF
     db #$FF
 
-precat_prkd:
-    %cm_jsr("PLACEHOLDER - Do Not Use!", #action_select_preset_category, #$0000)
+precat_redesign:
+    %cm_jsr("Redesign Any%", #action_select_preset_category, #$0000)
 
 action_select_preset_category:
 {
@@ -1177,8 +1174,7 @@ events_animals:
 action_reset_events:
 {
     LDA #$0000
-    STA $7ED820
-    STA $7ED822
+    STA $7ED820 : STA $7ED822
     LDA #!SOUND_MENU_JSR : JSL $80903F
     RTS
 }
@@ -1187,12 +1183,9 @@ action_reset_doors:
 {
     PHP
     %ai8()
-    LDX #$B0
-    LDA #$00
--   STA $7ED800, X
-    INX
-    CPX #$D0
-    BNE -
+    LDX #$B0 : LDA #$00
+-   STA $7ED800,X
+    INX : CPX #$D0 : BNE -
     PLP
     LDA #!SOUND_MENU_JSR : JSL $80903F
     RTS
@@ -1202,12 +1195,9 @@ action_reset_items:
 {
     PHP
     %ai8()
-    LDX #$70
-    LDA #$00
--   STA $7ED800, X
-    INX
-    CPX #$90
-    BNE -
+    LDX #$70 : LDA #$00
+-   STA $7ED800,X
+    INX : CPX #$90 : BNE -
     PLP
     LDA #!SOUND_MENU_JSR : JSL $80903F
     RTS
