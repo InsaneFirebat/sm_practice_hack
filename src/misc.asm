@@ -118,7 +118,6 @@ org $808F24
 ;  .done
 ;    RTS
 ;}
-warnpc $8FFFFF
 
 
 org $87D000
@@ -170,13 +169,23 @@ gamemode_end:
     LDA !ram_minimap : BNE .endlag
 
     ; Ignore artifical lag if OOB viewer is active
-    LDA !ram_oob_watch_active : BNE .endlag
+    LDA !ram_sprite_features_active : BNE .endlag
 
     ; Artificial lag, multiplied by 16 to get loop count
     ; Each loop takes 5 clock cycles (assuming branch taken)
     ; For reference, 41 loops ~= 1 scanline
     LDA !sram_artificial_lag : BEQ .endlag
-    ASL #4 : TAX
+
+    ; To account for various changes, we may need to tack on more clock cycles
+    ; These can be removed as code is added to maintain CPU parity during normal gameplay
+    ASL
+    ASL
+    INC  ; Add 4 loops (22 clock cycles including the INC)
+    ASL
+    INC  ; Add 2 loops (12 clock cycles including the INC)
+    ASL
+    NOP  ; Add 2 more clock cycles
+    TAX
   .lagloop
     DEX : BNE .lagloop
   .endlag

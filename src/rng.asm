@@ -27,6 +27,13 @@
 
     org $A7D064 ; Phantoon eye close timer
         JSL hook_phantoon_eyeclose
+
+if !FEATURE_PAL
+    org $A7D00A ; Phantoon flame pattern
+else
+    org $A7CFD6 ; Phantoon flame pattern
+endif
+        JSL hook_phantoon_flame_pattern
 }
 
 
@@ -90,25 +97,29 @@ org $83B000
 print pc, " rng start"
 
 hook_hopper_set_rng:
+{
     LDA #$0001 : STA !ram_room_has_set_rng
     JML $808111
-
+}
 
 hook_lavarocks_set_rng:
+{
     LDA #$0001 : STA !ram_room_has_set_rng
     LDA #$0011
     STA $05E5
     RTL
-
+}
 
 hook_beetom_set_rng:
+{
     LDA #$0001 : STA !ram_room_has_set_rng
     LDA #$0017
     STA $05E5
     RTL
-
+}
 
 hook_phantoon_1st_dir_rng:
+{
     JSL $808111 ; Trying to preserve the number of RNG calls being done in the frame
 
     LDA !ram_phantoon_rng_1 : BEQ .no_manip
@@ -118,9 +129,10 @@ hook_phantoon_1st_dir_rng:
   .no_manip
     LDA $05E5
     RTL
-
+}
 
 hook_phantoon_1st_pat:
+{
     LDA !ram_phantoon_rng_1 : BEQ .no_manip
     PHX : TAX : LDA.l phantoon_pats,X : PLX : AND #$00FF
     RTL
@@ -128,9 +140,10 @@ hook_phantoon_1st_pat:
   .no_manip
     LDA $05B6 : LSR A
     RTL
-
+}
 
 hook_phantoon_2nd_dir_rng:
+{
     JSL $808111 ; Trying to preserve the number of RNG calls being done in the frame
 
     LDA !ram_phantoon_rng_2 : BEQ .no_manip
@@ -142,9 +155,10 @@ hook_phantoon_2nd_dir_rng:
   .no_manip
     LDA $05E5
     RTL
-
+}
 
 hook_phantoon_2nd_dir_2:
+{
     LDA !ram_phantoon_rng_2 : BEQ .no_manip
 
     ; I don't quite understand this part, but it works ¯\_(ツ)_/¯
@@ -155,9 +169,10 @@ hook_phantoon_2nd_dir_2:
   .no_manip
     LDA $05B6 : BIT #$0001
     RTL
-
+}
 
 hook_phantoon_2nd_pat:
+{
     JSL $808111 ; Trying to preserve the number of RNG calls being done in the frame
 
     LDA !ram_phantoon_rng_2 : BEQ .no_manip
@@ -168,6 +183,7 @@ hook_phantoon_2nd_pat:
   .no_manip
     LDA $05E5
     RTL
+}
 
 hook_phantoon_eyeclose:
 {
@@ -181,19 +197,33 @@ hook_phantoon_eyeclose:
     RTL
 }
 
+hook_phantoon_flame_pattern:
+{
+    JSL $808111 ; Trying to preserve the number of RNG calls being done in the frame
+
+    LDA !ram_phantoon_rng_4 : TAY
+    LDA !ram_phantoon_rng_5 : STA !ram_phantoon_rng_4
+    TYA : STA !ram_phantoon_rng_5 : BEQ .no_manip
+    DEC
+    RTL
+
+  .no_manip
+    LDA $05E5 ; return with random number
+    RTL
+}
+
 phantoon_dirs:
 db $FF
 db $01, $01, $01
 db $00, $00, $00
-
 
 phantoon_pats:
 db $FF
 db $01, $02, $03
 db $01, $02, $03
 
-
 hook_botwoon_rng:
+{
     JSL $808111 ; Trying to preserve the number of RNG calls being done in the frame
 
     LDA !ram_botwoon_rng : BEQ .no_manip
@@ -204,6 +234,7 @@ hook_botwoon_rng:
   .no_manip
     LDA $05E5
     RTL
+}
 
 print pc, " rng end"
 
