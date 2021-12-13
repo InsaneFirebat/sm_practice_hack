@@ -413,8 +413,10 @@ print pc, " Redesign any% data start"
 incsrc presets/redesign_data.asm
 print pc, " Redesign any% data end"
 
+org $F4C7F2
 print pc, " Redesign any% menu start"
 incsrc presets/redesign_menu.asm
 print pc, " Redesign any% menu end"
+warnpc $F4EFFF
 endif
 
