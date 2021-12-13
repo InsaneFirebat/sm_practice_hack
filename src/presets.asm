@@ -134,6 +134,7 @@ preset_load_preset:
     LDA #$0000
     STA $7E09D2 ; Current selected weapon
     STA $7E0A04 ; Auto-cancel item
+    LDA #$5AFE : STA $0917 ; Load garbage into Layer 2 X position
 
     ; check if custom preset is being loaded
     LDA !ram_custom_preset : BEQ .normal_preset
@@ -215,6 +216,10 @@ preset_load_bank82:
 }
 warnpc $82FD9B
 
+org $82E8D9
+    JSL preset_room_setup_asm_fixes
+
+
 ;org $80F000
 org $80F62E
 print pc, " preset_start_gameplay start"
@@ -241,6 +246,13 @@ preset_start_gameplay:
     JSR $A12B    ; Play 14h frames of music
     JSL $878016  ; Clear animated tile objects
     JSL $88829E  ; Wait until the end of a v-blank and clear (H)DMA enable flags
+
+    ; Preserve layer 2 values we may have loaded from presets
+    LDA $0923 : PHA
+    LDA $0921 : PHA
+    LDA $0919 : PHA
+    LDA $0917 : PHA
+
     JSL $8882C1  ; Initialize special effects for new room
     JSL $8483C3  ; Clear PLMs
     JSL $868016  ; Clear enemy projectiles
@@ -257,13 +269,25 @@ preset_start_gameplay:
     JSL $89AB82  ; Load FX
     JSL $82E97C  ; Load library background
 
-; Don't enable this unless the room layout is basically vanilla. Room IDs may need to be updated.
-;    JSR preset_scroll_fixes
+    ; Enabled for Ceres only
+    JSR preset_scroll_fixes
 
-    JSR $A2F9    ; Calculate layer 2 X position
-    JSR $A33A    ; Calculate layer 2 Y position
+    ; Pull layer 2 values, and use them if they are valid
+    PLA : CMP #$5AFE : BEQ .calculate_layer_2
+    STA $0917
+    PLA : STA $0919
+    PLA : STA $0921
+    PLA : STA $0923
+    BRA .layer_2_loaded
+
+  .calculate_layer_2
+    PLA : PLA : PLA        ; Values are not useful, but still need to pull them out of the stack
+    JSR $A2F9              ; Calculate layer 2 X position
+    JSR $A33A              ; Calculate layer 2 Y position
     LDA $0917 : STA $0921  ; BG2 X scroll = layer 2 X scroll position
     LDA $0919 : STA $0923  ; BG2 Y scroll = layer 2 Y scroll position
+
+  .layer_2_loaded
     JSR $A37B    ; Calculate BG positions
     JSL $80A176  ; Display the viewable part of the room
     JSL $80834B  ; Enable NMI
@@ -286,6 +310,37 @@ preset_start_gameplay:
     RTL
 }
 
+preset_room_setup_asm_fixes:
+{
+    ; Start with original logic
+    PHP : PHB
+    %ai16()
+    LDX $07BB
+    LDA $0018,X : BEQ .end
+
+    ; Check if this is scrolling sky
+    CMP #$91C9 : BEQ .scrolling_sky
+    CMP #$91CE : BEQ .scrolling_sky
+
+  .execute_setup_asm
+    ; Resume execution
+    JML $8FE89B
+
+  .scrolling_sky
+    ; If we got here through normal gameplay, allow scrolling sky
+    LDA $0998 : CMP #$0006 : BEQ .execute_setup_asm
+    CMP #$001F : BEQ .execute_setup_asm
+    CMP #$0028 : BEQ .execute_setup_asm
+
+    ; Disable scrolling sky asm
+    STZ $07DF
+    ; Clear layer 2 library bits (change 0181 to 0080)
+    LDA #$0080 : STA $091B
+
+  .end
+    PLB : PLP : RTL
+}
+
 preset_scroll_fixes:
 {
     ; Fixes bad scrolling caused by a loading into a position that
@@ -293,88 +348,33 @@ preset_scroll_fixes:
     ; These fixes can often be found in nearby door asm.
     PHP : %a8() : %i16()
     LDA #$01 : LDX $079B         ; X = room ID
-    CPX #$C000 : BPL .halfway    ; organized by room ID so we only have to check half
+    CPX #$DF45 : BMI .done      ; Ceres rooms set BG1 offsets manually
 
-    CPX #$A011 : BNE +           ; bottom-left of Etecoons Etank
-    STA $7ECD25 : STA $7ECD26
-    BRA .done
-+   CPX #$AC83 : BNE +           ; left of Green Bubbles Missile Room (Norfair Reserve)
-    STA $7ECD20
-    BRA .done
-+   CPX #$AE32 : BNE +           ; bottom of Volcano Room
-    STA $7ECD26
-    BRA .done
-+   CPX #$B07A : BNE +           ; top of Bat Cave
-    STA $7ECD20
-    BRA .done
-+   CPX #$B1E5 : BNE +           ; bottom of Acid Chozo Room
-    STA $7ECD26 : STA $7ECD27 : STA $7ECD28
-    LDA #$00 : STA $7ECD23 : STA $7ECD24
-    BRA .done
-+   CPX #$B3A5 : BNE +           ; bottom of Pre-Pillars
-    LDY $0AFA : CPY #$0190       ; no scroll fix if Ypos < 400
-    BMI .done
-    STA $7ECD22 : STA $7ECD24
-    LDA #$00 : STA $7ECD21
-    JMP .done
-+   CPX #$B4AD : BNE +        ; top of Worst Room in the Game
-    LDA #$02 : STA $7ECD20
-
-  .done
-    PLP
-    RTS
-
-  .halfway
-    CPX #$DF45 : BPL .ceres      ; Ceres rooms set BG1 offsets manually
-    CPX #$CAF6 : BNE +           ; bottom of WS Shaft
-    LDA #$02
-    STA $7ECD48 : STA $7ECD4E
-    BRA .done
-+   CPX #$CBD5 : BNE +           ; top of Electric Death Room (WS E-Tank)
-    LDA #$02
-    STA $7ECD20
-    BRA .done
-+   CPX #$CC6F : BNE +           ; right of Basement (Phantoon)
-    STA $7ECD24
-    BRA .done
-+   CPX #$D1A3 : BNE +           ; bottom of Crab Shaft
-    STA $7ECD26
-    LDA #$02 : STA $7ECD24
-    BRA .done
-+   CPX #$D48E : BNE +           ; Oasis (bottom of Toilet)
-    LDA #$02
-    STA $7ECD20 : STA $7ECD21
-    BRA .done
-+   CPX #$D8C5 : BNE .done       ; Pants Room (door to Shaktool)
-    LDA #$00 : STA $7ECD22
-    BRA .done
-
-  .ceres
     LDA #$00 : STA $7E005F       ; Initialize mode 7
     CPX #$DF45 : BNE +           ; Ceres Elevator
     LDA #$00 : STA $7E091E : STA $7E0920
-    BRA .ceresdone
+    BRA .done
 +   CPX #$DF8D : BNE +           ; Ceres Falling Tiles
     LDA #$01 : STA $7E091E
     LDA #$02 : STA $7E0920
-    BRA .ceresdone
+    BRA .done
 +   CPX #$DFD7 : BNE +           ; Ceres Magnet Stairs
     LDA #$03 : STA $7E091E
     LDA #$02 : STA $7E0920
-    BRA .ceresdone
+    BRA .done
 +   CPX #$E021 : BNE +           ; Ceres Dead Scientists
     LDA #$04 : STA $7E091E
     LDA #$03 : STA $7E0920
-    BRA .ceresdone
+    BRA .done
 +   CPX #$E06B : BNE +           ; Ceres 58 Escape
     LDA #$06 : STA $7E091E
     LDA #$03 : STA $7E0920
-    BRA .ceresdone
-+   CPX #$E0B5 : BNE .ceresdone  ; Ceres Ridley
+    BRA .done
++   CPX #$E0B5 : BNE .done  ; Ceres Ridley
     LDA #$08 : STA $7E091E
     LDA #$03 : STA $7E0920
 
-  .ceresdone
+  .done
     PLP
     RTS
 }

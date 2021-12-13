@@ -1,4 +1,4 @@
-!SRAM_VERSION = $000A
+!SRAM_VERSION = $000B
 
 
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values
@@ -92,6 +92,7 @@ init_sram:
     LDA #$0000 : STA !sram_ctrl_inc_custom_preset
     LDA #$0000 : STA !sram_ctrl_dec_custom_preset
     LDA #$0000 : STA !sram_ctrl_toggle_tileviewer
+    LDA #$0000 : STA !sram_ctrl_update_timers
 
     ; Input Cheat Sheet  ($4218)
     ; $8000 = B

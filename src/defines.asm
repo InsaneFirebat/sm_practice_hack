@@ -9,7 +9,7 @@
 
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 3
-!VERSION_BUILD = 2
+!VERSION_BUILD = 3
 !VERSION_REV_1 = 0
 !VERSION_REV_2 = 0
 
@@ -58,34 +58,44 @@
 !ram_map_counter = !WRAM_START+$38
 !ram_vcounter_data = !WRAM_START+$3A
 
-!ram_sprite_hitbox_active = !WRAM_START+$3C
-!ram_oob_watch_active = !WRAM_START+$3E
-!ram_custom_preset = !WRAM_START+$40
+!ram_sprite_samus_hitbox_active = !WRAM_START+$3C
+!ram_sprite_enemy_hitbox_active = !WRAM_START+$3E
+!ram_oob_watch_active = !WRAM_START+$40
+!ram_sprite_samusproj_hitbox_active = !WRAM_START+$42
+!ram_sprite_enemyproj_hitbox_active = !WRAM_START+$44
+!ram_custom_preset = !WRAM_START+$46
 
-!ram_magic_pants_enabled = !WRAM_START+$42
-!ram_magic_pants_state = !WRAM_START+$44
-!ram_magic_pants_pal1 = !WRAM_START+$46
-!ram_magic_pants_pal2 = !WRAM_START+$48
-!ram_magic_pants_pal3 = !WRAM_START+$4A
+; ^ FREE SPACE ^ up to +$4E
 
-!ram_room_has_set_rng = !WRAM_START+$4C
-!ram_kraid_rng = !WRAM_START+$4E
-!ram_crocomire_rng = !WRAM_START+$50
-!ram_phantoon_rng_1 = !WRAM_START+$52
-!ram_phantoon_rng_2 = !WRAM_START+$54
-!ram_phantoon_rng_3 = !WRAM_START+$56
-!ram_botwoon_rng = !WRAM_START+$58
-!ram_draygon_rng_left = !WRAM_START+$5A
-!ram_draygon_rng_right = !WRAM_START+$5C
+!ram_magic_pants_enabled = !WRAM_START+$50
+!ram_magic_pants_state = !WRAM_START+$52
+!ram_magic_pants_pal1 = !WRAM_START+$54
+!ram_magic_pants_pal2 = !WRAM_START+$56
+!ram_magic_pants_pal3 = !WRAM_START+$58
+!ram_draygon_rng_left = !WRAM_START+$5E
+!ram_draygon_rng_right = !WRAM_START+$60
 
-!ram_game_loop_extras = !WRAM_START+$5E
-!ram_game_mode_extras = !WRAM_START+$60
+!ram_room_has_set_rng = !WRAM_START+$5A
+!ram_kraid_rng = !WRAM_START+$5C
+!ram_crocomire_rng = !WRAM_START+$5E
+!ram_phantoon_rng_1 = !WRAM_START+$60
+!ram_phantoon_rng_2 = !WRAM_START+$62
+!ram_phantoon_rng_3 = !WRAM_START+$64
+!ram_phantoon_rng_4 = !WRAM_START+$66
+!ram_phantoon_rng_5 = !WRAM_START+$68
+!ram_botwoon_rng = !WRAM_START+$6A
+!ram_draygon_rng_left = !WRAM_START+$6C
+!ram_draygon_rng_right = !WRAM_START+$6E
 
-!ram_metronome = !WRAM_START+$62
-!ram_metronome_counter = !WRAM_START+$64
+!ram_game_loop_extras = !WRAM_START+$70
+!ram_game_mode_extras = !WRAM_START+$72
+!ram_sprite_features_active = !WRAM_START+$74
 
-!ram_suits_enemy_damage_check = !WRAM_START+$66
-!ram_suits_periodic_damage_check = !WRAM_START+$68
+!ram_suits_enemy_damage_check = !WRAM_START+$76
+!ram_suits_periodic_damage_check = !WRAM_START+$78
+
+!ram_metronome = !WRAM_START+$7A
+!ram_metronome_counter = !WRAM_START+$7C
 
 !ram_tel_debug_area = !WRAM_START+$8A
 !ram_tel_debug_station = !WRAM_START+$8C
@@ -141,7 +151,7 @@
 
 !WRAM_MENU_START = $7EFC00
 
-!ram_cm_stack_index = $5D5
+!ram_cm_stack_index = $05D5
 !ram_cm_menu_stack = !WRAM_MENU_START+$00         ; 16 bytes
 !ram_cm_cursor_stack = !WRAM_MENU_START+$10       ; 16 bytes
 
@@ -261,52 +271,83 @@
 !IH_INPUT_ANGLE_UP = $7E09BC
 !IH_INPUT_ANGLE_DOWN = $7E09BE
 
+
+; --------------
+; Vanilla Labels
+; --------------
+
+!MUSIC_ROUTINE = $808FC1
 !SFX_LIB1 = $80903F
 !SFX_LIB2 = $8090C1
 !SFX_LIB3 = $809143
+
+!OAM_STACK_POINTER = $0590
+!MUSIC_BANK = $07F3
+!MUSIC_TRACK = $07F5
+!LAYER1_X = $0911
+!LAYER1_Y = $0915
+!SAMUS_X = $0AF6
+!SAMUS_Y = $0AFA
+!SAMUS_X_RADIUS = $0AFE
+!SAMUS_Y_RADIUS = $0B00
+!SAMUS_SPRITEMAP_X = $0B04
+!SAMUS_PROJ_X = $0B64
+!SAMUS_PROJ_Y = $0B78
+!SAMUS_PROJ_RADIUS_X = $0BB4
+!SAMUS_PROJ_RADIUS_Y = $0BC8
+!ENEMY_X = $0F7A
+!ENEMY_Y = $0F7E
+!ENEMY_X_RADIUS = $0F82
+!ENEMY_Y_RADIUS = $0F84
+!ENEMY_PROJ_ID = $1997
+!ENEMY_PROJ_X = $1A4B
+!ENEMY_PROJ_Y = $1A93
+!ENEMY_PROJ_RADIUS = $1BB3
 
 
 ; -----
 ; SRAM
 ; -----
 
-!sram_initialized = $702A00
+!sram_initialized = $F02A00
 
-!sram_ctrl_menu = $702A02
-!sram_ctrl_kill_enemies = $702A04
-!sram_ctrl_full_equipment = $702A06
-!sram_ctrl_reset_segment_timer = $702A08
-!sram_ctrl_reset_segment_later = $702A0A
-!sram_ctrl_load_state = $702A0C
-!sram_ctrl_save_state = $702A0E
-!sram_ctrl_load_last_preset = $702A10
-!sram_ctrl_random_preset = $702A12
-!sram_ctrl_save_custom_preset = $702A14
-!sram_ctrl_load_custom_preset = $702A16
-!sram_ctrl_inc_custom_preset = $702A18
-!sram_ctrl_dec_custom_preset = $702A1A
-!sram_ctrl_toggle_tileviewer = $702A1C
+!sram_ctrl_menu = $F02A02
+!sram_ctrl_kill_enemies = $F02A04
+!sram_ctrl_full_equipment = $F02A06
+!sram_ctrl_reset_segment_timer = $F02A08
+!sram_ctrl_reset_segment_later = $F02A0A
+!sram_ctrl_load_state = $F02A0C
+!sram_ctrl_save_state = $F02A0E
+!sram_ctrl_load_last_preset = $F02A10
+!sram_ctrl_random_preset = $F02A12
+!sram_ctrl_save_custom_preset = $F02A14
+!sram_ctrl_load_custom_preset = $F02A16
+!sram_ctrl_inc_custom_preset = $F02A18
+!sram_ctrl_dec_custom_preset = $F02A1A
+!sram_ctrl_toggle_tileviewer = $F02A1C
+!sram_ctrl_update_timers = $F02A1E
 
 ; FREE SPACE ^
 
-!sram_artificial_lag = $702A20
-!sram_rerandomize = $702A22
-!sram_fanfare_toggle = $702A24
-!sram_frame_counter_mode = $702A26
-!sram_display_mode = $702A28
-!sram_music_toggle = $702A2A
-!sram_last_preset = $702A2C
-!sram_save_has_set_rng = $702A2E
-!sram_preset_category = $702A30
-!sram_custom_preset_slot = $702A32
-!sram_room_strat = $702A34
-!sram_sprite_prio_flag = $702A36
-!sram_metronome_tickrate = $702A38
-!sram_metronome_sfx = $702A3A
+!sram_artificial_lag = $F02A20
+!sram_rerandomize = $F02A22
+!sram_fanfare_toggle = $F02A24
+!sram_frame_counter_mode = $F02A26
+!sram_display_mode = $F02A28
+!sram_music_toggle = $F02A2A
+!sram_last_preset = $F02A2C
+!sram_save_has_set_rng = $F02A2E
+!sram_preset_category = $F02A30
+!sram_custom_preset_slot = $F02A32
+!sram_room_strat = $F02A34
+!sram_sprite_prio_flag = $F02A36
+!sram_metronome_tickrate = $F02A38
+!sram_metronome_sfx = $F02A3A
 !sram_status_icons = $F02A3C
-!sram_suit_properties = $F02A3E
 
 ; FREE SPACE ^
+
+!PRESET_SLOTS = $F03000
 
 
 ; ----------
@@ -314,8 +355,6 @@
 ; ----------
 
 ; Savestate code variables
-!SS_BANK = $8000
-
 !SS_INPUT_CUR = $8B
 !SS_INPUT_NEW = $8F
 !SS_INPUT_PREV = $97
@@ -324,8 +363,6 @@
 !SRAM_SAVED_SP = $774004
 
 ; SM specific things
-!SRAM_MUSIC_BANK = $F01FD0
-!SRAM_MUSIC_TRACK = $F01FD2
-!MUSIC_BANK = $07F3
-!MUSIC_TRACK = $07F5
-!MUSIC_ROUTINE = $808FC1
+!SRAM_MUSIC_BANK = $701FD0
+!SRAM_MUSIC_TRACK = $701FD2
+
