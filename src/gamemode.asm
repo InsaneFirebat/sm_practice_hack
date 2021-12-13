@@ -108,6 +108,10 @@ gamemode_shortcuts:
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .toggle_tileviewer
 
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_update_timers : CMP !sram_ctrl_update_timers : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .update_timers
+
   .check_menu
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
@@ -166,6 +170,23 @@ endif
     ; CLC to continue normal gameplay after equipment refill
     CLC : RTS
 
+  .toggle_tileviewer
+    LDA !ram_oob_watch_active : BEQ .turnOnTileViewer
+    LDA #$0000 : STA !ram_oob_watch_active : STA !ram_sprite_features_active
+    ; CLC to continue normal gameplay after disabling OOB Tile Viewer
+    CLC : RTS
+
+  .turnOnTileViewer
+    LDA #$0001 : STA !ram_oob_watch_active : STA !ram_sprite_features_active
+    JSL upload_sprite_oob_tiles
+    ; CLC to continue normal gameplay after enabling OOB Tile Viewer
+    CLC : RTS
+
+  .random_preset
+    JSL LoadRandomPreset
+    ; SEC to skip normal gameplay for one frame after loading preset
+    SEC : RTS
+
   .save_custom_preset
     JSL custom_preset_save
     ; CLC to continue normal gameplay after saving preset
@@ -203,21 +224,10 @@ endif
     ; CLC to continue normal gameplay after decrementing preset slot
     CLC : RTS
 
-  .random_preset
-    JSL LoadRandomPreset
-    ; SEC to skip normal gameplay for one frame after loading preset
-    SEC : RTS
-
-  .toggle_tileviewer
-    LDA !ram_oob_watch_active : BEQ .turnOnTileViewer
-    LDA #$0000 : STA !ram_oob_watch_active
-    ; CLC to continue normal gameplay after disabling OOB Tile Viewer
+  .update_timers
+    JSL ih_update_hud_early
+    ; CLC to continue normal gameplay after updating HUD timers
     CLC : RTS
-
-  .turnOnTileViewer
-    LDA #$0001 : STA !ram_oob_watch_active
-    JSL upload_sprite_oob_tiles
-    ; CLC to continue normal gameplay after enabling OOB Tile Viewer
 
   .menu
     ; Set IRQ vector
