@@ -666,44 +666,47 @@ incsrc presets/100map_menu.asm   ; 1670h bytes
 print pc, " preset_menu.asm bankFF end"
 
 org $EF8000
-incsrc presets/prkd_data.asm ; 2EAAh bytes
-incsrc presets/hundo_data.asm ; 42A2h bytes
+incsrc presets/prkd_data.asm ; 3C95h bytes
+incsrc presets/hundo_data.asm ; 42B9h bytes
 print pc, " preset_data.asm BankEF end"
 
 org $EE8000
-incsrc presets/kpdr22_data.asm ; 2FF6h bytes
-incsrc presets/kpdr25_data.asm ; 1E3Ah bytes
-incsrc presets/nintendopower_data.asm ; 20F8h bytes
+incsrc presets/kpdr22_data.asm ; 3B17h bytes
+incsrc presets/kpdr25_data.asm ; 1E39h bytes
+incsrc presets/nintendopower_data.asm ; 2109h bytes
 print pc, " preset_data.asm BankEE end"
 
 org $ED8000
-incsrc presets/gtclassic_data.asm ; 2B5Eh bytes
-incsrc presets/14ice_data.asm ; 1E95h bytes
-incsrc presets/14speed_data.asm ; 1EE6h bytes
+incsrc presets/gtclassic_data.asm ; 35B5h bytes
+incsrc presets/14ice_data.asm ; 1EC1h bytes
+incsrc presets/14speed_data.asm ; 1F2Ch bytes
 print pc, " preset_data.asm BankED end"
 
 org $EC8000
-incsrc presets/allbosskpdr_data.asm ; 2400h bytes
-incsrc presets/allbosspkdr_data.asm ; 2484h bytes
-incsrc presets/allbossprkd_data.asm ; 2568h bytes
+incsrc presets/allbosskpdr_data.asm ; 2435h bytes
+incsrc presets/allbosspkdr_data.asm ; 24ADh bytes
+incsrc presets/allbossprkd_data.asm ; 2539h bytes
 print pc, " preset_data.asm BankEC end"
 
 org $EB8000
-incsrc presets/100early_data.asm ; 423Ch bytes
-incsrc presets/spazer_data.asm ; 3024h bytes
-print pc, " preset_data.asm BankE5 end"
+incsrc presets/100early_data.asm ; 4E29h bytes
+incsrc presets/spazer_data.asm ; 313Dh bytes
+print pc, " preset_data.asm BankEB end"
 
 org $EA8000
-incsrc presets/gtmax_data.asm ; 420Ah bytes
-incsrc presets/rbo_data.asm ; 3274h bytes
+incsrc presets/gtmax_data.asm ; 4E9Fh bytes
 print pc, " preset_data.asm BankEA end"
 
 org $E98000
-incsrc presets/100map_data.asm ; 492Eh bytes
-incsrc presets/ngplasma_data.asm ; 1B5Ah bytes
-incsrc presets/nghyper_data.asm ; 1B70h bytes
+incsrc presets/rbo_data.asm ; 327Fh bytes
+incsrc presets/pkrd_data.asm ; 2EE5h bytes
 print pc, " preset_data.asm BankE9 end"
 
 org $E88000
-incsrc presets/pkrd_data.asm ; 2EBCh bytes
-print pc, " preset_data.asm BankEB end"
+incsrc presets/100map_data.asm ; 57E5h bytes
+print pc, " preset_data.asm BankE8 end"
+
+org $E78000
+incsrc presets/nghyper_data.asm ; 1B6Bh bytes
+incsrc presets/ngplasma_data.asm ; 1B5Fh bytes
+print pc, " preset_data.asm BankE7 end"
