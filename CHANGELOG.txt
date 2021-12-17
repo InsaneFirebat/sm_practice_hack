@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.3.2]  Added option to draw proper hitboxes for Phantoon and Draygon
 * [2.3.3.1]  Update presets with new background data
 * [2.3.3]    Fixes for background glitches with presets involving scrolling sky by idlechild
 * [2.3.2.6]  Added controller shortcut to update the HUD timers during gameplay
