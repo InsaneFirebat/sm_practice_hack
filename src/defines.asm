@@ -97,17 +97,18 @@
 !ram_magnetstairs = !WRAM_START+$7C
 !ram_arearando = !WRAM_START+$7E
 
-; ^ FREE SPACE ^ up to +$7E
-
 !ram_watch_bank = !WRAM_START+$80
-!ram_watch_left = !WRAM_START+$80
-!ram_watch_left_hud = !WRAM_START+$82
+!ram_watch_write_mode = !WRAM_START+$82
+!ram_watch_left = !WRAM_START+$84
+!ram_watch_left_hud = !WRAM_START+$86
 !ram_watch_right = !WRAM_START+$88
 !ram_watch_right_hud = !WRAM_START+$8A
-!ram_watch_edit_left = !WRAM_START+$90
-!ram_watch_edit_right = !WRAM_START+$96
-!ram_watch_edit_lock_left = !WRAM_START+$9C
-!ram_watch_edit_lock_right = !WRAM_START+$9E
+!ram_watch_edit_left = !WRAM_START+$8C
+!ram_watch_edit_right = !WRAM_START+$8E
+!ram_watch_edit_lock_left = !WRAM_START+$90
+!ram_watch_edit_lock_right = !WRAM_START+$92
+
+; ^ FREE SPACE ^ up to +$9E
 
 !ram_HUD_check = !WRAM_START+$A0
 !ram_roomstrat_counter = !WRAM_START+$A2

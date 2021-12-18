@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.3.3]  Allow 8-bit writes with RAM Watch
 * [2.3.3.3]  Added Room Layout menu with options to match randomizer patches by idlechild
 * [2.3.3.2]  Added option to draw proper hitboxes for Phantoon and Draygon
 * [2.3.3.1]  Update presets with new background data
