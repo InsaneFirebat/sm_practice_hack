@@ -211,6 +211,7 @@ MainMenu:
     dw #mm_goto_events
     dw #mm_goto_misc
     dw #mm_goto_sprites
+    dw #mm_goto_layout
     dw #mm_goto_infohud
     dw #mm_goto_gamemenu
     dw #mm_goto_rngmenu
@@ -239,6 +240,9 @@ mm_goto_misc:
 
 mm_goto_sprites:
     %cm_submenu("Sprite Features", #SpritesMenu)
+
+mm_goto_layout:
+    %cm_submenu("Room Layouts", #LayoutMenu)
 
 mm_goto_infohud:
     %cm_submenu("InfoHUD", #InfoHudMenu)
@@ -950,7 +954,6 @@ MiscMenu:
     dw #misc_spacepants
     dw #misc_loudpants
     dw #$FFFF
-    dw #misc_magnetstairs
     dw #misc_killenemies
     dw #misc_forcestand
     dw #misc_elevatorfix
@@ -1008,29 +1011,6 @@ misc_invincibility:
 
 misc_infiniteammo:
     %cm_toggle_bit("Infinite Ammo", !ram_infinite_ammo, #$0001, #GameLoopExtras)
-
-misc_magnetstairs:
-    %cm_toggle("Magnet Stairs Fix", !ram_magnetstairs, #$0001, #.routine)
-  .routine
-    LDA $079B : CMP #$DFD7 : BNE .done
-    LDA !ram_magnetstairs : BEQ .broken
-
-    ; change tile type and BTS
-    PHP : %a8()
-    LDA #$10 : STA $7F01F9 : STA $7F02EB
-    LDA #$53 : STA $7F64FD : STA $7F6576
-    PLP
-    RTS
-
-  .broken
-    ; change tile type and BTS
-    PHP : %a8()
-    LDA #$80 : STA $7F01F9 : STA $7F02EB
-    LDA #$00 : STA $7F64FD : STA $7F6576
-    PLP
-
-  .done
-    RTS
 
 misc_killenemies:
     %cm_jsr("Kill Enemies", .kill_loop, #0)
@@ -1114,6 +1094,45 @@ action_sprite_features:
     STA !ram_sprite_features_active
     RTS
 }
+
+
+; ----------------
+; Room Layout Menu
+; ----------------
+
+LayoutMenu:
+    dw #layout_magnetstairs
+    dw #$FFFF
+    dw #layout_arearando
+    dw #$0000
+    %cm_header("ROOM LAYOUTS")
+    %cm_footer("APPLIED WHEN ROOM RELOADED")
+
+layout_magnetstairs:
+    %cm_toggle("Magnet Stairs Fix", !ram_magnetstairs, #$0001, #.routine)
+  .routine
+    LDA $079B : CMP #$DFD7 : BNE .done
+    LDA !ram_magnetstairs : BEQ .broken
+
+    ; change tile type and BTS
+    PHP : %a8()
+    LDA #$10 : STA $7F01F9 : STA $7F02EB
+    LDA #$53 : STA $7F64FD : STA $7F6576
+    PLP
+    RTS
+
+  .broken
+    ; change tile type and BTS
+    PHP : %a8()
+    LDA #$80 : STA $7F01F9 : STA $7F02EB
+    LDA #$00 : STA $7F64FD : STA $7F6576
+    PLP
+
+  .done
+    RTS
+
+layout_arearando:
+    %cm_toggle("Area Rando Patches", !ram_arearando, #$0001, #0)
 
 
 ; -----------
@@ -2191,7 +2210,8 @@ GameMenu:
 if !FEATURE_PAL
     dw #game_paldebug
 endif
-    dw game_debugprojectiles
+    dw #game_debugprojectiles
+    dw #game_debugfixscrolloffsets
     dw #$FFFF
     dw #game_minimap
     dw #game_clear_minimap
@@ -2252,6 +2272,9 @@ endif
 
 game_debugprojectiles:
     %cm_toggle_bit("Enable Projectiles", $7E198D, #$8000, #0)
+
+game_debugfixscrolloffsets:
+    %cm_toggle_bit("Fix Scroll Offsets", !ram_fix_scroll_offsets, #$0001, #0)
 
 game_minimap:
     %cm_toggle("Minimap", !ram_minimap, #$0001, #0)

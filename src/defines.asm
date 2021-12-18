@@ -12,7 +12,7 @@
 !VERSION_MINOR = 3
 !VERSION_BUILD = 3
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 2
+!VERSION_REV_2 = 3
 
 
 ; ---------
@@ -93,6 +93,10 @@
 !ram_metronome = !WRAM_START+$76
 !ram_metronome_counter = !WRAM_START+$78
 
+!ram_fix_scroll_offsets = !WRAM_START+$7A
+!ram_magnetstairs = !WRAM_START+$7C
+!ram_arearando = !WRAM_START+$7E
+
 ; ^ FREE SPACE ^ up to +$7E
 
 !ram_watch_bank = !WRAM_START+$80
@@ -135,6 +139,7 @@
 ; -----------------------
 ; RAM (Bank 7E required)
 ; -----------------------
+
 
 !ram_slowdown_mode = $7EFBFE
 
