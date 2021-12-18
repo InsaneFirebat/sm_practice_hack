@@ -837,7 +837,7 @@ ih_hud_code:
 
     ; health bomb
 +   LDA $0E1A : BEQ .clearHealthBomb
-    LDA !IH_LETTER_E : STA $7EC654
+    LDA !IH_HEALTHBOMB : STA $7EC654
     BRA +
 
   .clearHealthBomb
