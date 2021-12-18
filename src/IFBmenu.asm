@@ -51,6 +51,9 @@ ifb_lockout:
 ifb_fixcontrols:
     %cm_jsr("Fix My Controls", #action_fixcontrols, #$4000)
 
+ifb_factory_reset:
+    %cm_submenu("Factory Reset", #FactoryResetConfirm)
+
 ifb_credits:
     %cm_submenu("InfoHUD Credits", #CreditsMenu)
 
@@ -494,7 +497,10 @@ ifb_soundtest_music_tourian:
     %cm_jsr("Tourian", #action_soundtest_playmusic, #$1E05)
 
 ifb_soundtest_music_goto_2:
-    %cm_submenu("GOTO PAGE TWO", #MusicSelectMenu2)
+    %cm_jsr("GOTO PAGE TWO", .routine, #MusicSelectMenu2)
+  .routine
+    JSR cm_go_back
+    JMP action_submenu
 
 MusicSelectMenu2:
     dw #ifb_soundtest_music_preboss1
@@ -562,7 +568,10 @@ ifb_soundtest_music_galaxypeace:
     %cm_jsr("The Galaxy is at Peace", #action_soundtest_playmusic, #$4205)
 
 ifb_soundtest_music_goto_1:
-    %cm_submenu("GOTO PAGE ONE", #MusicSelectMenu1)
+    %cm_jsr("GOTO PAGE ONE", .routine, #MusicSelectMenu1)
+  .routine
+    JSR cm_go_back
+    JMP action_submenu
 
 action_soundtest_playmusic:
 {
@@ -609,9 +618,41 @@ action_fixcontrols:
     RTS
 }
 
-ifb_factory_reset:
-    %cm_jsr("Factory Reset", .routine, #FactoryResetConfirm)
+FactoryResetConfirm:
+    dw #ifb_factory_reset_abort
+    dw #$FFFF
+    dw #ifb_factory_reset_keep_presets
+    dw #ifb_factory_reset_delete_presets
+    dw #$0000
+    %cm_header("KEEP CUSTOM PRESETS?")
+    %cm_footer("THIS WILL REBOOT THE GAME")
+
+ifb_factory_reset_abort:
+    %cm_jsr("ABORT", #.routine, #$0000)
   .routine
+    %sfxgoback()
+    JSR cm_go_back
+    JSR cm_calculate_max
+    RTS
+
+ifb_factory_reset_keep_presets:
+    %cm_jsr("Yes, keep my presets", #action_factory_reset, #$0000)
+
+ifb_factory_reset_delete_presets:
+    %cm_jsr("No, mark them as empty", .routine, #$0000)
+  .routine
+    TYX : TXA
+-   STA !PRESET_SLOTS,X ; overwrite "5AFE" words
+    INY : TYA : ASL : XBA : TAX
+    CPY #$0020 : BNE -
+
+    %sfxquake()
+    JSR cm_go_back
+    JSR cm_calculate_max
+    ; continue into action_factory_reset
+
+action_factory_reset:
+{
     LDA #$0000 : LDX !WRAM_SIZE-2
 -   STA !WRAM_START,X
     DEX #2 : BPL -
@@ -622,34 +663,9 @@ ifb_factory_reset:
 
     LDA #$FFFF : STA !sram_initialized
     JSL init_sram_long
-    %sfxquake()
-    JMP action_submenu
 
-FactoryResetConfirm:
-    dw #ifb_factory_reset_keep_presets
-    dw #ifb_factory_reset_delete_presets
-    dw #$0000
-    %cm_header("KEEP CUSTOM PRESETS?")
-    %cm_footer("TECHNICALLY REVERSABLE")
-
-ifb_factory_reset_keep_presets:
-    %cm_jsr("Yes, keep my presets", .routine, #$0000)
-  .routine
-    JSR cm_go_back
-    JSR cm_calculate_max
-    RTS
-
-ifb_factory_reset_delete_presets:
-    %cm_jsr("No, mark them as empty", .routine, #$0000)
-  .routine
-    TYX : TXA
--   STA !PRESET_SLOTS,X ; overwrite "5AFE" words
-    INY : TYA : ASL : XBA : TAX
-    CPY #$0020 : BNE -
-    %sfxquake()
-    JSR cm_go_back
-    JSR cm_calculate_max
-    RTS
+    JML $808462 ; reboot
+}
 
 
 CreditsMenu:
