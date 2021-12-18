@@ -1328,6 +1328,20 @@ warnpc $FEE000
 org $80E3E0
 print pc, " infohud bank80 start"
 
+ih_fix_scroll_offsets:
+{
+    LDA !ram_fix_scroll_offsets : BEQ .done
+    %a8()
+    LDA $0911 : STA $B1 : STA $B5
+    LDA $0915 : STA $B3 : STA $B7
+    %a16()
+
+  .done
+    ; overwritten code
+    LDA $B1 : SEC
+    RTS
+}
+
 ih_hud_code_paused:
 {
     ; overwritten code

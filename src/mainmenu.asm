@@ -1895,7 +1895,7 @@ action_HUD_ramwatch:
 
 GameMenu:
     dw #game_alternatetext
-;    dw #game_moonwalk ; doesn't work even if enabled
+    dw #game_moonwalk ; doesn't work even if enabled
     dw #game_iconcancel
     dw #$FFFF
     dw #game_fanfare_toggle
@@ -1903,7 +1903,11 @@ GameMenu:
     dw #$FFFF
     dw #game_debugmode
     dw #game_debugbrightness
-    dw game_debugprojectiles
+if !FEATURE_PAL
+    dw #game_paldebug
+endif
+    dw #game_debugprojectiles
+    dw #game_debugfixscrolloffsets
     dw #$FFFF
     dw #game_minimap
     dw #game_clear_minimap
@@ -1919,6 +1923,9 @@ game_alternatetext:
 
 game_debugprojectiles:
     %cm_toggle_bit("Enable Projectiles", $7E198D, #$8000, #0)
+
+game_debugfixscrolloffsets:
+    %cm_toggle_bit("Fix Scroll Offsets", !ram_fix_scroll_offsets, #$0001, #0)
 
 game_moonwalk:
     %cm_toggle("Moon Walk", $7E09E4, #$0001, #0)
