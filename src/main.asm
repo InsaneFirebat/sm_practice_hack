@@ -16,6 +16,7 @@ incsrc infohud.asm
 incsrc rng.asm
 incsrc presets.asm
 incsrc misc.asm
+incsrc layout.asm
 incsrc init.asm
 incsrc fanfare.asm
 incsrc spriteprio.asm

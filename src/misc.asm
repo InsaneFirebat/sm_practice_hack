@@ -484,45 +484,6 @@ warnpc $91FFFF
 print pc, " misc bank91 end"
 
 
-org $83AB92 ; Magnet Stairs (bottom) door asm pointer
-    dw #MagnetStairFix
-
-org $83AB6E ; Magnet Stairs (top) door asm pointer
-    dw #MagnetStairFix
-
-org $83AAD2
-    dw #MotherBrainHP
-
-org $8FEA00 ; free space for door asm
-print pc, " misc door asm start"
-MagnetStairFix:
-{
-    LDA !ram_magnetstairs : BEQ .done
-
-    ; change tile type and BTS
-    PHP : %a8()
-    LDA #$10 : STA $7F01F9 : STA $7F02EB
-    LDA #$53 : STA $7F64FD : STA $7F6576
-    PLP
-
-  .done
-    RTS
-}
-
-MotherBrainHP:
-{
-    LDA !sram_display_mode : BNE .done
-    LDA #!IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
-    LDA #!IH_STRAT_MBHP_INDEX : STA !sram_room_strat
-
-  .done
-    RTS
-}
-
-warnpc $8FFFFF
-print pc, " misc door asm end"
-
-
 org $A6FEBC      ; free space
 print pc, " misc bankA6 start"
 ResetCountDamageRid:
