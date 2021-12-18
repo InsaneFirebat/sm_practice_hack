@@ -1903,6 +1903,7 @@ ih_prepare_ram_watch_menu:
 RAMWatchMenu:
     dw ramwatch_enable
     dw ramwatch_bank
+    dw ramwatch_write_mode
     dw ramwatch_goto_common
     dw #$FFFF
     dw ramwatch_left_hi
@@ -2032,6 +2033,15 @@ ramwatch_bank:
     db #$28, "       SRAM", #$FF
     db #$FF
 
+ramwatch_write_mode:
+    dw !ACTION_CHOICE
+    dl #!ram_watch_write_mode
+    dw #$0000
+    db #$28, "Write Mode", #$FF
+    db #$28, "16BIT HI+LO", #$FF
+    db #$28, "    8BIT LO", #$FF
+    db #$FF
+
 ramwatch_left_hi:
     %cm_numfield_hex("Address 1 High", !ram_cm_watch_left_hi, 0, 255, 1, 8, #.routine)
   .routine
@@ -2131,7 +2141,9 @@ ramwatch_lock_right:
 action_ramwatch_edit_left:
 {
     LDA !ram_watch_left : CLC : ADC !ram_watch_left_index : TAX
-    LDA !ram_watch_bank : BEQ .bank7E
+    LDA !ram_watch_write_mode : BEQ +
+    %a8()
++   LDA !ram_watch_bank : BEQ .bank7E
     CMP #$0001 : BEQ .bank7F : BRA .bankSRAM
   .bank7E
     LDA !ram_watch_edit_left : STA $7E0000,X : BRA +
@@ -2139,7 +2151,8 @@ action_ramwatch_edit_left:
     LDA !ram_watch_edit_left : STA $7F0000,X : BRA +
   .bankSRAM
     LDA !ram_watch_edit_left : STA $F00000,X
-+   LDA #!IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
++   %a16()
+    LDA #!IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
     %sfxgrapple()
     RTS
 }
@@ -2147,6 +2160,8 @@ action_ramwatch_edit_left:
 action_ramwatch_edit_right:
 {
     LDA !ram_watch_right : CLC : ADC !ram_watch_right_index : TAX
+    LDA !ram_watch_write_mode : BEQ +
+    %a8()
     LDA !ram_watch_bank : BEQ .bank7E
     CMP #$0001 : BEQ .bank7F : BRA .bankSRAM
   .bank7E
@@ -2155,7 +2170,8 @@ action_ramwatch_edit_right:
     LDA !ram_watch_edit_right : STA $7F0000,X : BRA +
   .bankSRAM
     LDA !ram_watch_edit_right : STA $F00000,X
-+   LDA #!IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
++   %a16()
+    LDA #!IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
     %sfxgrapple()
     RTS
 }
