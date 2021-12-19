@@ -122,6 +122,7 @@ init_sram:
     LDA #$0000 : STA !sram_room_strat
     LDA #$0000 : STA !sram_sprite_prio_flag
     LDA #$0000 : STA !sram_top_display_mode
+    LDA #$0001 : STA !sram_healthalarm
 
     LDA #$000A : STA !sram_metronome_tickrate
     LDA #$0002 : STA !sram_metronome_sfx

@@ -367,6 +367,7 @@
 !sram_metronome_sfx = $F02A3A
 !sram_status_icons = $F02A3C
 !sram_top_display_mode = $F02A3E
+!sram_healthalarm = $F02A40
 
 ; FREE SPACE ^
 
