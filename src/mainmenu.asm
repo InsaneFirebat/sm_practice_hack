@@ -1062,7 +1062,7 @@ sprites_show_enemy_hitbox:
     %cm_toggle("Show Enemy Hitboxes", !ram_sprite_enemy_hitbox_active, #1, #action_sprite_features)
 
 sprites_show_extended_spritemap_hitbox:
-    %cm_toggle("Show Boss Hitboxes", !ram_sprite_extended_hitbox_active, #1, #action_sprite_features)
+    %cm_toggle("Ext. Spritemap Hitboxes", !ram_sprite_extended_hitbox_active, #1, #action_sprite_features)
 
 sprites_show_enemyproj_hitbox:
     %cm_toggle("Enemy Projectile Hitbox", !ram_sprite_enemyproj_hitbox_active, #1, #action_sprite_features)
