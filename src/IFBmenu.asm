@@ -17,6 +17,7 @@ IFBMenu:
     dw #$FFFF
     dw #ifb_debugteleport
     dw #ifb_lockout
+    dw #$FFFF
     dw #ifb_fixcontrols
     dw #$FFFF
     dw #ifb_factory_reset
@@ -35,11 +36,11 @@ ifb_debugteleport:
     %cm_submenu("Hidden Dev Load Stations", #DebugTeleportMenu)
 
 if !FEATURE_EXTRAS
-    ifb_noclip:
-        %cm_toggle("Walk Through Walls", !ram_noclip, #$0001, #0)
+ifb_noclip:
+    %cm_toggle("Walk Through Walls", !ram_noclip, #$0001, #0)
 
-    ifb_nosteam:
-        %cm_toggle("No Steam Collision", !ram_steamcollision, #$0001, #0)
+ifb_nosteam:
+    %cm_toggle("No Steam Collision", !ram_steamcollision, #$0001, #0)
 endif
 
 ifb_healthalarm:
@@ -89,15 +90,17 @@ LockoutConfirm:
     %cm_footer("REMEMBER TO CENTER CAMERA!")
 
 ifb_lockout_abort:
-    %cm_jsr("ABORT", #action_text, #$0000)
+    %cm_jsr("ABORT", #.routine, #$0000)
+  .routine
+    %sfxgoback()
+    JSR cm_go_back
+    JSR cm_calculate_max
+    RTS
 
 ifb_lockout_piracy:
-    %cm_jsr("NINTENDO CAUGHT ME", #action_lockout, #$0000)
-
-action_lockout:
-{
+    %cm_jsr("NINTENDO CAUGHT ME", #.routine, #$0000)
+  .routine
     JSL $8086E3
-}
 
 
 ; ----------
@@ -645,26 +648,32 @@ ifb_factory_reset_delete_presets:
 -   STA !PRESET_SLOTS,X ; overwrite "5AFE" words
     INY : TYA : ASL : XBA : TAX
     CPY #$0020 : BNE -
-
-    %sfxquake()
-    JSR cm_go_back
-    JSR cm_calculate_max
     ; continue into action_factory_reset
 
 action_factory_reset:
 {
+    ; Mark save files as corrupt
+;    LDX #$000A
+;-   LDA $8082AD,X : STA $F01FE0,X
+;    DEX #2 : BPL -
+    ; InfoHUD probably skips the routine that checks this
+
+    ; Wipe standard practice hack memory
     LDA #$0000 : LDX !WRAM_SIZE-2
 -   STA !WRAM_START,X
     DEX #2 : BPL -
 
+    ; Wipe custom practice hack memory
     LDX #$01FE
 -   STA $F02100,X
     DEX #2 : BPL -
 
+    ; Mark practice hack SRAM as outdated
     LDA #$FFFF : STA !sram_initialized
-    JSL init_sram_long
 
-    JML $808462 ; reboot
+    ; Reboot
+    ; I'd like to silence audio before doing this, but there isn't enough time
+    JML $80841C
 }
 
 
@@ -691,7 +700,6 @@ CreditsMenu:
     dw #ab_text_website
     dw #$0000
     %cm_header("     INFOHUD CREDITS")
-
 
 ab_text_orig_author:
     %cm_jsr("     ORIGINAL AUTHOR      ", #action_text, #$0000)

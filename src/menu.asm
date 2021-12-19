@@ -64,7 +64,11 @@ cm_start:
 
     JSL play_music_long ; Play 2 lag frames of music and sound effects
 
+    LDA $05E5 : STA !ram_cm_rng
+
     JSR cm_loop         ; Handle message box interaction
+
+    LDA !ram_cm_rng : STA $05E5
 
     JSR cm_transfer_original_tileset
     JSR cm_transfer_original_cgram
@@ -1087,6 +1091,8 @@ cm_loop:
 {
   .inputLoop
     %ai16()
+
+    JSL $808111 ; Let the RNG flow
 
     JSL wait_for_lag_frame_long  ; Wait for lag frame
 
