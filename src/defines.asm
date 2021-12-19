@@ -9,9 +9,9 @@
 
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 3
-!VERSION_BUILD = 3
+!VERSION_BUILD = 4
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 8
+!VERSION_REV_2 = 0
 
 ; ---------
 ; Work RAM
@@ -98,11 +98,12 @@
 !ram_metronome = !WRAM_START+$7A
 !ram_metronome_counter = !WRAM_START+$7C
 
+; ^ FREE SPACE ^ up to +$88
+
 !ram_tel_debug_area = !WRAM_START+$8A
 !ram_tel_debug_station = !WRAM_START+$8C
 
-; ^ FREE SPACE ^ up to +$88
-
+!ram_watch_write_mode = !WRAM_START+$8C
 !ram_watch_bank = !WRAM_START+$8E
 !ram_watch_left = !WRAM_START+$90
 !ram_watch_left_hud = !WRAM_START+$92
