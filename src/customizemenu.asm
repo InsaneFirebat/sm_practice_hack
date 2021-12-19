@@ -53,6 +53,7 @@ CustomizeMenu:
     dw #ifb_custompalettes_menu
     dw #ifb_paletteprofile
     dw #ifb_palette2custom
+    dw #ifb_paletterando
     dw #$FFFF
     dw #ifb_customsfx
     dw #$FFFF
@@ -95,9 +96,57 @@ ifb_paletteprofile:
 ifb_palette2custom:
     %cm_jsr("Copy Palette to Custom", action_copy_palette, #$0000)
 
+ifb_paletterando:
+    %cm_submenu("Randomize Custom Palette", #PaletteRandoConfirm)
+
+PaletteRandoConfirm:
+    dw #paletterando_abort
+    dw #$FFFF
+    dw #paletterando_confirm
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    %examplemenu()
+    dw #$0000
+    %cm_header("CONFIRM PALETTE RANDO")
+    %cm_footer("YOU WILL LOSE SAVED COLORS")
+
+paletterando_abort:
+    %cm_jsr("ABORT", #.routine, #$0000)
+  .routine
+    %sfxgoback()
+    JSR cm_go_back
+    JSR cm_calculate_max
+    RTS
+
+paletterando_confirm:
+    %cm_jsr("RANDOMIZE!", #.routine, #$0000)
+  .routine
+    LDA $05E5 : AND #$7FFF : STA !sram_custompalette_menuborder : DEC $05E5
+    JSL $808111 : AND #$7FFF : STA !sram_custompalette_menuheaderoutline : INC $05E5
+    JSL $808111 : AND #$7FFF : STA !sram_custompalette_menutext : ASL : AND #$7ECD : STA $05E5
+    JSL $808111 : AND #$7FFF : STA !sram_custompalette_menubackground : INC $05E5
+    JSL $808111 : AND #$7FFF : STA !sram_custompalette_menunumoutline : DEC $05E5
+    JSL $808111 : LSR : STA !sram_custompalette_menunumfill : STA $05E5
+    JSL $808111 : AND #$7FFF : STA !sram_custompalette_menutoggleon : AND #$DEAD : STA $05E5
+    JSL $808111 : XBA : AND #$7FFF : STA !sram_custompalette_menuseltext : DEC $05E5
+    JSL $808111 : LSR : STA !sram_custompalette_menuseltextbg : AND #$BEEF : STA $05E5
+    JSL $808111 : AND #$7FFF : STA !sram_custompalette_menunumseloutline : INC $05E5
+    JSL $808111 : AND #$7FFF : STA !sram_custompalette_menunumsel
+
+    ; play a happy sound and refresh current profile
+    %ai16()
+    JSR PrepMenuPalette_customPalette ; points to a branch within PrepMenuPalette
+    JSR action_custompalettes_refresh
+    %sfxbubble()
+    RTS
+
 ifb_customsfx:
     %cm_submenu("Customize Menu Sounds", #CustomMenuSFXMenu)
-
 
 CustomPalettesMenu:
     dw #custompalettes_menutext

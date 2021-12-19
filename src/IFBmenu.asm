@@ -17,6 +17,7 @@ IFBMenu:
     dw #$FFFF
     dw #ifb_debugteleport
     dw #ifb_lockout
+    dw #$FFFF
     dw #ifb_factory_reset
     dw #ifb_credits
     dw #$0000
@@ -71,42 +72,6 @@ ifb_dummy_num:
 
 incsrc customizemenu.asm
 
-action_palette_randomizer:
-{
-    LDA $05E5 : STA !sram_custompalette_menuborder : DEC $05E5
-    JSL $808111 : STA !sram_custompalette_menuheaderoutline : INC $05E5
-    JSL $808111 : STA !sram_custompalette_menutext : AND #$FECD : STA $05E5
-    JSL $808111 : STA !sram_custompalette_menubackground : INC $05E5
-    JSL $808111 : STA !sram_custompalette_menunumoutline : DEC $05E5
-    JSL $808111 : STA !sram_custompalette_menunumfill
-    JSL $808111 : STA !sram_custompalette_menutoggleon : AND #$DEAD : STA $05E5
-    JSL $808111 : STA !sram_custompalette_menuseltext : DEC $05E5
-    JSL $808111 : STA !sram_custompalette_menuseltextbg : AND #$BEEF : STA $05E5
-    JSL $808111 : STA !sram_custompalette_menunumseloutline : INC $05E5
-    JSL $808111 : STA !sram_custompalette_menunumsel
-
-    ; split hi and lo bytes into separate addresses
-    %ai8()
-    LDX #$00
-
-  .loop
-    ; load lo, then hi
-    LDA !sram_custompalette_menuborder,X : XBA
-    INX : LDA !sram_custompalette_menuborder,X
-    ; store hi, then lo
-    INX : STA !sram_custompalette_menuborder,X
-    INX #2 : XBA : STA !sram_custompalette_menuborder,X
-    ; next word
-    INX #2 : CPX #$42 : BNE .loop
-
-    ; play a happy sound and refresh current profile
-    %ai16()
-    JSR PrepMenuPalette_customPalette
-    JSR action_custompalettes_refresh
-    %sfxbubble()
-    RTS
-}
-
 
 ; ----------
 ; Lockout Menu
@@ -120,15 +85,17 @@ LockoutConfirm:
     %cm_footer("REMEMBER TO CENTER CAMERA!")
 
 ifb_lockout_abort:
-    %cm_jsr("ABORT", #action_text, #$0000)
+    %cm_jsr("ABORT", #.routine, #$0000)
+  .routine
+    %sfxgoback()
+    JSR cm_go_back
+    JSR cm_calculate_max
+    RTS
 
 ifb_lockout_piracy:
-    %cm_jsr("NINTENDO CAUGHT ME", #action_lockout, #$0000)
-
-action_lockout:
-{
+    %cm_jsr("NINTENDO CAUGHT ME", #.routine, #$0000)
+  .routine
     JSL $8086E3
-}
 
 
 ; ----------
@@ -668,26 +635,32 @@ ifb_factory_reset_delete_presets:
 -   STA !PRESET_SLOTS,X ; overwrite "5AFE" words
     INY : TYA : ASL : XBA : TAX
     CPY #$0020 : BNE -
-
-    %sfxquake()
-    JSR cm_go_back
-    JSR cm_calculate_max
     ; continue into action_factory_reset
 
 action_factory_reset:
 {
+    ; Mark save files as corrupt
+;    LDX #$000A
+;-   LDA $8082AD,X : STA $F01FE0,X
+;    DEX #2 : BPL -
+    ; InfoHUD probably skips the routine that checks this
+
+    ; Wipe standard practice hack memory
     LDA #$0000 : LDX !WRAM_SIZE-2
 -   STA !WRAM_START,X
     DEX #2 : BPL -
 
+    ; Wipe custom practice hack memory
     LDX #$01FE
 -   STA $F02100,X
     DEX #2 : BPL -
 
+    ; Mark practice hack SRAM as outdated
     LDA #$FFFF : STA !sram_initialized
-    JSL init_sram_long
 
-    JML $808462 ; reboot
+    ; Reboot
+    ; I'd like to silence audio before doing this, but there isn't enough time
+    JML $80841C
 }
 
 
@@ -714,7 +687,6 @@ CreditsMenu:
     dw #ab_text_website
     dw #$0000
     %cm_header("     INFOHUD CREDITS")
-
 
 ab_text_orig_author:
     %cm_jsr("     ORIGINAL AUTHOR      ", #action_text, #$0000)
