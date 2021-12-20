@@ -358,6 +358,8 @@
 !sram_metronome_sfx = $F0203A
 !sram_status_icons = $F0203C
 !sram_suit_properties = $F0203E
+!sram_room_layout = $702040
+!sram_healthalarm = $702042
 
 ; ^ FREE SPACE ^ up to $F03000
 
@@ -490,7 +492,6 @@ endif
 
 !sram_countdamage = $F02220
 !sram_menu_background = $F02222
-!sram_healthalarm = $F02224
 
 ; FREE SPACE ^
 

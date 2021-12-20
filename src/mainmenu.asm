@@ -1108,8 +1108,11 @@ LayoutMenu:
     %cm_header("ROOM LAYOUTS")
     %cm_footer("APPLIED WHEN ROOM RELOADED")
 
+!ROOM_LAYOUT_MAGNET_STAIRS = #$0001
+!ROOM_LAYOUT_AREA_RANDO = #$0002
+
 layout_magnetstairs:
-    %cm_toggle("Magnet Stairs Fix", !ram_magnetstairs, #$0001, #.routine)
+    %cm_toggle("Magnet Stairs Fix", !sram_room_layout, #$0001, #.routine)
   .routine
     LDA $079B : CMP #$DFD7 : BNE .done
     LDA !ram_magnetstairs : BEQ .broken
@@ -1132,7 +1135,7 @@ layout_magnetstairs:
     RTS
 
 layout_arearando:
-    %cm_toggle("Area Rando Patches", !ram_arearando, #$0001, #0)
+    %cm_toggle("Area Rando Patches", !sram_room_layout, #$0001, #0)
 
 
 ; -----------
@@ -2221,6 +2224,7 @@ GameMenu:
     dw #$FFFF
     dw #game_fanfare_toggle
     dw #game_music_toggle
+    dw #game_healthalarm
     dw #$FFFF
     dw #game_debugmode
     dw #game_debugbrightness
@@ -2275,6 +2279,17 @@ game_music_toggle:
     STA $063F
     STA $2140
     RTS
+
+game_healthalarm:
+    dw !ACTION_CHOICE
+    dl #!sram_healthalarm
+    dw #$0000
+    db #$28, "Low Health Ala", #$FF
+    db #$28, "rm    NEVER", #$FF
+    db #$28, "rm  VANILLA", #$FF
+    db #$28, "rm   PB FIX", #$FF
+    db #$28, "rm IMPROVED", #$FF
+    db #$FF
 
 game_debugmode:
     %cm_toggle("Debug Mode", $7E05D1, #$0001, #0)
