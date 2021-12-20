@@ -414,6 +414,8 @@
 !ram_dboost_kb = $F0211C
 !ram_dboost_counter = $F0211E
 !ram_spark_icon = $F02120
+!ram_lag_counter = $F02122
+!ram_lag_counter_HUD = $F02124
 
 ; FREE SPACE ^
 

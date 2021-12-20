@@ -584,6 +584,14 @@ status_spikesuit:
 
 status_lagcounter:
 {
+    LDA $05A0 : BEQ .cpu_usage
+    CLC : ADC !ram_lag_counter : STA !ram_lag_counter : STZ $05A0
+    CMP !ram_lag_counter_HUD : BEQ .cpu_usage : STA !ram_lag_counter_HUD
+    CMP #$19C8 : BPL + ; if max 3 digit value
+    LDX #$0012 : JSR Draw3 : BRA .cpu_usage
++   LDX #$0014 : JSR Draw4
+
+  .cpu_usage
     LDA !ram_vcounter_data : AND #$00FF
     %a8() : STA $211B : XBA : STA $211B : LDA #$64 : STA $211C : %a16()
     LDA $2134 : STA $4204
@@ -592,7 +600,6 @@ status_lagcounter:
     LDX #$0088 : JSR Draw3
     LDA !IH_PERCENT : STA $7EC68E
 
-  .done
     RTS
 }
 

@@ -168,6 +168,9 @@ org $90F339      ; hijack low health alarm, unknown (maybe when too many sounds 
 org $91E6D7      ; hijack low health alarm, unpause
     JMP HealthAlarm3
 
+org $809606      ; inc lag counter
+    STX $05BA : INC $05A0
+
 org $A6A17C      ; Ridley AI init, reset !ram_countdamage
     JSR ResetCountDamageRid
 
@@ -181,12 +184,12 @@ org $A0A862      ; hijack damage routine to count total damage dealt
     JSR CountDamage
 
 if !FEATURE_EXTRAS
-    org $948F49        ; RTS this routine to enable walk through walls
-        JSR NoClip
-        RTS
+org $948F49        ; RTS this routine to enable walk through walls
+    JSR NoClip
+    RTS
 
-    org $A6F135
-        JSR SteamCollision
+org $A6F135
+    JSR SteamCollision
 endif
 
 ; Main bank stuff
@@ -324,10 +327,11 @@ ih_after_room_transition:
 
     LDA !ram_transition_counter : STA !ram_last_door_lag_frames
     LDA #$0000 : STA !ram_transition_flag
+    STA $05A0
 
     ; Check if MBHP needs to be disabled
-    LDA !sram_display_mode : CMP #!IH_MODE_ROOMSTRAT_INDEX : BNE +
-    LDA !sram_room_strat : CMP #!IH_STRAT_MBHP_INDEX : BNE +
+    LDA !sram_display_mode : CMP !IH_MODE_ROOMSTRAT_INDEX : BNE +
+    LDA !sram_room_strat : CMP !IH_STRAT_MBHP_INDEX : BNE +
     LDA $079B : CMP #$DD58 : BEQ +
     LDA #$0000 : STA !sram_display_mode
 
@@ -336,6 +340,8 @@ ih_after_room_transition:
     LDA #$0000 : STA !ram_reset_segment_later
     STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds
     STA !ram_seg_rt_minutes
+    STA !ram_lag_counter
+    LDA #$FFFF : STA !ram_lag_counter_HUD
 
     ; Update HUD
 +   JSL ih_update_hud_code
@@ -363,7 +369,7 @@ ih_before_room_transition:
 
     ; Save and reset timers
     LDA !ram_transition_flag : CMP #$0001 : BEQ .done
-    LDA #$0001 : STA !ram_transition_flag
+    LDA #$0001 : STA !ram_transition_flag : STA !ram_lag_counter_HUD
     LDA #$0000 : STA !ram_room_has_set_rng
 
     ; Lag
@@ -505,7 +511,7 @@ ih_update_hud_code:
   .minimap_hud
     ; Map visible, so draw map counter over item%
     LDA !ram_map_counter : LDX #$0014 : JSR Draw3
-    LDA !sram_display_mode : CMP #!IH_MODE_SHINETUNE_INDEX : BNE .minimap_roomtimer
+    LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BNE .minimap_roomtimer
     BRL .map_doorlag
 
   .minimap_roomtimer
@@ -656,8 +662,9 @@ ih_update_hud_code:
     ; Draw Item percent
     .pct
     {
-        ; skip item% if display mode = vspeed
-        LDA !sram_display_mode : CMP #$000E : BEQ .skipToLag
+        ; skip item% if display mode = lagcounter or vspeed
+        LDA !sram_display_mode : CMP !IH_MODE_LAGCOUNTER_INDEX : BEQ .skipToLag
+        LDA !sram_display_mode : CMP !IH_MODE_VSPEED_INDEX : BEQ .skipToLag
 
         LDA #$0000 : STA !ram_pct_1
 
@@ -687,7 +694,7 @@ ih_update_hud_code:
     LDA !ram_last_room_lag : LDX #$0080 : JSR Draw4
 
     ; Skip door lag and segment timer when shinetune enabled
-    LDA !sram_display_mode : CMP #!IH_MODE_SHINETUNE_INDEX : BEQ .end
+    LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BEQ .end
 
     ; Door lag
     LDA !ram_last_door_lag_frames : LDX #$00C2 : JSR Draw3
