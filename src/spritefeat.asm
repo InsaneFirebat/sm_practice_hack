@@ -356,7 +356,7 @@ update_enemy_sprite_hitbox:
     CMP !ENEMY_Y,X : BPL .drawHitbox
 
   .skipEnemy
-    CPX #$0200 : BEQ .end ; limit # of hitboxes drawn
+    CPX #$0300 : BEQ .end ; limit # of hitboxes drawn
     TXA : CLC : ADC #$0040 : TAX : BRA .loopEnemies
 
   .end
@@ -394,7 +394,7 @@ update_enemy_sprite_hitbox:
     ; inc oam stack
     TYA : CLC : ADC #$0010 : STA !OAM_STACK_POINTER : TAY
 
-    CPX #$0200 : BEQ .done ; limit # of hitboxes drawn
+    CPX #$0300 : BEQ .done ; limit # of hitboxes drawn
     TXA : CLC : ADC #$0040 : TAX : JMP .loopEnemies
 
   .done
@@ -416,7 +416,7 @@ update_extended_spritemap_hitbox:
     LDA !ENEMY_PROPERTIES_2,X : AND #$0004 : BNE .extended
 
   .nextEnemy
-    TXA : CLC : ADC #$0040 : CMP #$0200 : BEQ .end
+    TXA : CLC : ADC #$0040 : CMP #$0340 : BEQ .end
     TAX : BRA .loopEnemies
 
   .end
@@ -453,7 +453,7 @@ update_extended_spritemap_hitbox:
     LDA !ENEMY_Y,X : SEC : SBC #$0018
     CMP !LAYER1_Y : BMI .decHitbox
     LDA !LAYER1_Y : CLC : ADC #$00F8
-    CMP !ENEMY_Y,X : BMI .drawHitbox
+    CMP !ENEMY_Y,X : BPL .drawHitbox
 
   .decHitbox
     ; check for remaining hitboxes
@@ -497,7 +497,7 @@ update_extended_spritemap_hitbox:
     PHA : JMP .nextHitbox
 
   .nextEnemy2
-    CPX #$01C0 : BEQ .done ; limit # of hitboxes drawn
+    CPX #$0300 : BEQ .done ; limit # of hitboxes drawn
     TXA : CLC : ADC #$0040 : TAX : JMP .loopEnemies
 
   .done
