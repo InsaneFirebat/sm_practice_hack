@@ -8,9 +8,8 @@ IFBMenu:
     dw #ifb_soundtest
     dw #$FFFF
     dw #ifb_presetrando
-    dw #$FFFF
-    dw #ifb_healthalarm
     if !FEATURE_EXTRAS
+    dw #$FFFF
         dw #ifb_noclip
         dw #ifb_nosteam
     endif
@@ -42,9 +41,6 @@ ifb_noclip:
 ifb_nosteam:
     %cm_toggle("No Steam Collision", !ram_steamcollision, #$0001, #0)
 endif
-
-ifb_healthalarm:
-    %cm_toggle("Low Health Alarm", !sram_healthalarm, #$0001, #0)
 
 ifb_lockout:
     %cm_submenu("Trigger Piracy Warning", #LockoutConfirm)

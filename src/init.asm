@@ -1,4 +1,4 @@
-!SRAM_VERSION = $000B
+!SRAM_VERSION = $000C
 
 
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values
@@ -140,6 +140,7 @@ init_sram:
     LDA #$0000 : STA !sram_room_strat
     LDA #$0000 : STA !sram_sprite_prio_flag
     LDA #$0000 : STA !sram_custom_preset_slot
+    LDA #$0001 : STA !sram_healthalarm
 
     LDA #$0000 : STA !sram_countdamage
     LDA #$0000 : STA !sram_menu_background
@@ -147,7 +148,6 @@ init_sram:
     LDA #$0000 : STA !sram_custom_preset_slot
     LDA #$000A : STA !sram_metronome_tickrate
     LDA #$0002 : STA !sram_metronome_sfx
-    LDA #$0001 : STA !sram_healthalarm
     LDA #$0000 : STA !sram_superhud
     LDA #$0000 : STA !sram_superhud_bottom
     LDA #$0006 : STA !sram_superhud_middle

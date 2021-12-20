@@ -159,15 +159,6 @@ endif
 org $90D340      ; update timers when shinespark bonk sound plays
     JSL ih_shinespark_segment
 
-org $90EA98      ; hijack low health alarm
-    JMP HealthAlarm
-
-org $90F339      ; hijack low health alarm, unknown (maybe when too many sounds queued?)
-    JMP HealthAlarm2
-
-org $91E6D7      ; hijack low health alarm, unpause
-    JMP HealthAlarm3
-
 org $809606      ; inc lag counter
     STX $05BA : INC $05A0
 
