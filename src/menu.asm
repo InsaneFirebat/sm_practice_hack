@@ -1128,8 +1128,8 @@ cm_loop:
     BIT #$0080 : BEQ + : JMP .pressedA ; more wiggle room with branch limits...
 +   BIT #$8000 : BEQ + : JMP .pressedB
 ;    BIT #$0040 : BNE .pressedX
-+   BIT #$4000 : BNE .pressedY
-    BIT #$2000 : BNE .pressedSelect
+;   BIT #$4000 : BNE .pressedY
++   BIT #$2000 : BNE .pressedSelect
     BIT #$1000 : BNE .pressedStart
     BIT #$0800 : BNE .pressedUp
     BIT #$0400 : BNE .pressedDown
@@ -1169,7 +1169,7 @@ cm_loop:
 
   .pressedA
 ;  .pressedX
-  .pressedY
+;  .pressedY
   .pressedLeft
   .pressedRight
     JSR cm_execute
