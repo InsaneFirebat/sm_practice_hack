@@ -1368,7 +1368,7 @@ ihmode_enemyhp:
     %cm_jsr("Enemy HP", #action_select_infohud_mode, #$0000)
 
 ihmode_roomstrat:
-!IH_MODE_ROOMSTRAT_INDEX = $0001
+!IH_MODE_ROOMSTRAT_INDEX = #$0001
     %cm_jsr("Room Strat", #action_select_infohud_mode, #$0001)
 
 ihmode_chargetimer:
@@ -1387,7 +1387,7 @@ ihmode_dashcounter:
     %cm_jsr("Dash Counter", #action_select_infohud_mode, #$0006)
 
 ihmode_shinetune:
-!IH_MODE_SHINETUNE_INDEX = $0007
+!IH_MODE_SHINETUNE_INDEX = #$0007
     %cm_jsr("Shine Tune", #action_select_infohud_mode, #$0007)
 
 ihmode_iframecounter:
@@ -1396,6 +1396,7 @@ ihmode_iframecounter:
 ihmode_spikesuit:
     %cm_jsr("Spikesuit Trainer", #action_select_infohud_mode, #$0009)
 
+!IH_MODE_LAGCOUNTER_INDEX = #$000A
 ihmode_lagcounter:
     %cm_jsr("CPU Usage", #action_select_infohud_mode, #$000A)
 
@@ -1408,7 +1409,7 @@ ihmode_ypos:
 ihmode_hspeed:
     %cm_jsr("Horizontal Speed", #action_select_infohud_mode, #$000D)
 
-!IH_MODE_VSPEED_INDEX = $000E
+!IH_MODE_VSPEED_INDEX = #$000E
 ihmode_vspeed:
     %cm_jsr("Vertical Speed", #action_select_infohud_mode, #$000E)
 
@@ -1427,7 +1428,7 @@ ihmode_countdamage:
 ihmode_ridleygrab:
     %cm_jsr("Ridley Death Grab Attempts", #action_select_infohud_mode, #$0013)
 
-!IH_MODE_RAMWATCH_INDEX = $0014
+!IH_MODE_RAMWATCH_INDEX = #$0014
 ihmode_ramwatch:
     %cm_jsr("Custom RAM Watch", #action_select_infohud_mode, #$0014)
 
@@ -2023,7 +2024,7 @@ ramwatch_common_enemy_index:
     %cm_numfield_hex("Set to Enemy Index", !ram_cm_watch_enemy_index, 0, 31, 1, 8, #$0000)
 
 ramwatch_enable:
-    %cm_jsr("Turn On RAM Watch", .routine, #!IH_MODE_RAMWATCH_INDEX)
+    %cm_jsr("Turn On RAM Watch", .routine, !IH_MODE_RAMWATCH_INDEX)
   .routine
     TYA : STA !sram_display_mode
     %sfxconfirm()
@@ -2158,7 +2159,7 @@ action_ramwatch_edit_left:
   .bankSRAM
     LDA !ram_watch_edit_left : STA $F00000,X
 +   %a16()
-    LDA #!IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
+    LDA !IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
     %sfxgrapple()
     RTS
 }
@@ -2177,14 +2178,14 @@ action_ramwatch_edit_right:
   .bankSRAM
     LDA !ram_watch_edit_right : STA $F00000,X
 +   %a16()
-    LDA #!IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
+    LDA !IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
     %sfxgrapple()
     RTS
 }
 
 action_HUD_ramwatch:
 {
-    LDA #!IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
+    LDA !IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
     RTS
 }
 

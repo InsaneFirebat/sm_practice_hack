@@ -201,6 +201,7 @@ init_sram:
     STA !ram_dboost_kbmax
     STA !ram_dboost_kb
     STA !ram_dboost_counter
+    STA !ram_lag_counter
 if !FEATURE_EXTRAS
     STA !ram_noclip
     STA !ram_steamcollision

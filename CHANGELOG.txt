@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.3.4]  Added a lag counter to the CPU Usage mode that updates during gameplay
 * [2.3.3.4]  Fixed most of the screen wrapping with extended spritemap hitboxes
 * [2.3.3.4]  Return of Palette Randomizer with better RNG throughout the menu
 * [2.3.3.3]  Allow 8-bit writes with RAM Watch
