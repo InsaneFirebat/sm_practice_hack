@@ -5,14 +5,7 @@ org $85FE9C
 print pc, " menu bank85 start"
 
 wait_for_lag_frame_long:
-if !FEATURE_SD2SNES
-  ; Avoid messagebox_wait_for_lag_frame so we don't load save state from the menu,
-  ; which we want to avoid since you might be in the process of changing controller shortcuts
-  jsr vanilla_wait_for_lag_frame
-else
-  ; There is no vanilla_wait_for_lag_frame since we never modified the actual vanilla method
   jsr $8136
-endif
   rtl
 
 initialize_ppu_long:

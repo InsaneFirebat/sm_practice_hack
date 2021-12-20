@@ -54,13 +54,13 @@ hook_message_box_wait:
     LDX #$0020       ; shorten message box length
 
   .nofanfareloop     ; skipping fanfare, so no need to mess with sound
-    JSR $8136
+    JSR hook_message_box_wait_for_lag_frame
     DEX
     BNE .nofanfareloop
     RTS
 
   .fanfareloop       ; original logic
-    JSR $8136
+    JSR hook_message_box_wait_for_lag_frame
     PHX
     JSL $808F0C
     JSL $8289EF
@@ -69,6 +69,26 @@ hook_message_box_wait:
     BNE .fanfareloop
     RTS
 
+
+hook_message_box_wait_for_lag_frame:
+{
+    PHP
+if !FEATURE_SD2SNES
+    %a8()
+  .wait_for_auto_joypad_read
+    LDA $4212 : BIT #$01 : BNE .wait_for_auto_joypad_read
+
+    %a16()
+    LDA $4218 : BEQ .wait_for_lag_frame
+    CMP !sram_ctrl_load_state : BNE .wait_for_lag_frame
+    PHB : PHK : PLB
+    JML load_state
+
+  .wait_for_lag_frame
+endif
+    ; Jump to vanilla routine
+    JMP $8137
+}
 
 hook_resume_room_music:
     LDA !sram_fanfare_toggle : BNE .resume
