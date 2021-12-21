@@ -1117,7 +1117,7 @@ LayoutMenu:
 !ROOM_LAYOUT_AREA_RANDO = #$0002
 
 layout_magnetstairs:
-    %cm_toggle("Magnet Stairs Fix", !sram_room_layout, #$0001, #.routine)
+    %cm_toggle_bit("Magnet Stairs Fix", !sram_room_layout, #$0001, #.routine)
   .routine
     LDA $079B : CMP #$DFD7 : BNE .done
     LDA !ram_magnetstairs : BEQ .broken
@@ -1140,7 +1140,7 @@ layout_magnetstairs:
     RTS
 
 layout_arearando:
-    %cm_toggle("Area Rando Patches", !sram_room_layout, #$0001, #0)
+    %cm_toggle_bit("Area Rando Patches", !sram_room_layout, #$0002, #0)
 
 
 ; -----------
