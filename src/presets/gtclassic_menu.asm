@@ -91,7 +91,7 @@ presets_submenu_gtclassic_kraid:
     dw #presets_gtclassic_kraid_kraid_etank
     dw #presets_gtclassic_kraid_leaving_kraids_lair
     dw #$0000
-    %cm_header("KRAID")
+    %cm_header("KRAID'S LAIR")
 
 presets_submenu_gtclassic_bootless_upper_norfair:
     dw #presets_gtclassic_bootless_upper_norfair_business_center
