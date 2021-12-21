@@ -841,6 +841,22 @@ ih_hud_code:
   .clearHealthBomb
     LDA !IH_BLANK : STA $7EC654
 
+    ; reserve tank
++   LDA !SAMUS_RESERVE_MODE : CMP #$0001 : BNE .clearReserve
+    LDA !SAMUS_RESERVE_ENERGY : BEQ .empty
+
+    LDA !SAMUS_RESERVE_MAX : BEQ .clearReserve
+    LDA !IH_RESERVE_AUTO : STA $7EC65A
+    BRA +
+
+  .empty
+    LDA !SAMUS_RESERVE_MAX : BEQ .clearReserve
+    LDA !IH_RESERVE_EMPTY : STA $7EC65A
+    BRA +
+
+  .clearReserve
+    LDA !IH_BLANK : STA $7EC65A
+
   .end
 +   PLB
     ; overwritten code
