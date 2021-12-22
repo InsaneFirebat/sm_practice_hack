@@ -1,4 +1,4 @@
-!SRAM_VERSION = $000C
+!SRAM_VERSION = $F00C
 
 
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values
@@ -133,6 +133,7 @@ init_sram:
     LDA #$0001 : STA !sram_music_toggle
     LDA #$0000 : STA !sram_frame_counter_mode
     LDA #$0000 : STA !sram_display_mode
+    LDA #$0000 : STA !sram_top_display_mode
     LDA #$0000 : STA !sram_last_preset
     LDA #$0000 : STA !sram_save_has_set_rng
     LDA #$0000 : STA !sram_preset_category
