@@ -552,7 +552,6 @@ ResetCountDamagePhan:
     PLA
     RTS
 }
-
 print pc, " misc bankA7 end"
 
 
@@ -573,8 +572,16 @@ CountDamageShinespark:
     LDA $0F8C,X ; original code
     RTS
 }
-
 print pc, " misc bankA0 end"
+
+
+org $91A7F6         ; overwrite unused instruction list
+refresh_reserve_mode:
+{
+    STA $09C0
+    LDA #$FFFF : STA !ram_reserves_last
+    JMP $DF4E
+}
 
 
 ;;;;;;;;; Custom Build Hijacks ;;;;;;;;;

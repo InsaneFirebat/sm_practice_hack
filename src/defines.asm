@@ -56,15 +56,16 @@
 !ram_minimap = !WRAM_START+$36
 !ram_map_counter = !WRAM_START+$38
 !ram_vcounter_data = !WRAM_START+$3A
+!ram_reserves_last = !WRAM_START+$3C
 
-!ram_sprite_samus_hitbox_active = !WRAM_START+$3C
-!ram_sprite_enemy_hitbox_active = !WRAM_START+$3E
-!ram_sprite_extended_hitbox_active = !WRAM_START+$40
-!ram_oob_watch_active = !WRAM_START+$42
-!ram_suits_enemy_damage_check = !WRAM_START+$44
-!ram_suits_periodic_damage_check = !WRAM_START+$46
-!ram_sprite_samusproj_hitbox_active = !WRAM_START+$48
-!ram_sprite_enemyproj_hitbox_active = !WRAM_START+$4A
+!ram_sprite_samus_hitbox_active = !WRAM_START+$3E
+!ram_sprite_enemy_hitbox_active = !WRAM_START+$40
+!ram_sprite_extended_hitbox_active = !WRAM_START+$42
+!ram_oob_watch_active = !WRAM_START+$44
+!ram_suits_enemy_damage_check = !WRAM_START+$46
+!ram_suits_periodic_damage_check = !WRAM_START+$48
+!ram_sprite_samusproj_hitbox_active = !WRAM_START+$4A
+!ram_sprite_enemyproj_hitbox_active = !WRAM_START+$4C
 
 ; ^ FREE SPACE ^ up to +$4E
 
@@ -504,10 +505,7 @@ endif
 !sram_superhud_bottom = $F02284
 !sram_superhud_middle = $F02286
 !sram_superhud_top = $F02288
-
-!sram_dummy_on = $F0228A
-!sram_dummy_off = $F0228C
-!sram_dummy_num = $F0228E
+!sram_top_display_mode = $F0228A
 
 !sram_presetrando = $F02290
 !sram_presetrando_morph = $F02292
@@ -522,6 +520,10 @@ endif
 !sram_custompalette_blue = $F022A2
 !sram_custompalette_green = $F022A4
 !sram_custompalette_red = $F022A6
+
+!sram_dummy_on = $F022FA
+!sram_dummy_off = $F022FC
+!sram_dummy_num = $F022FE
 
 ; FREE SPACE ^
 

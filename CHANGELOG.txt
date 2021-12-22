@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.3.5]  Add an option to display reserve energy instead of item%
 * [2.3.3.5]  More rooms added to Area Rando setting by idlechild (still WIP)
 * [2.3.3.4]  Added a status icon for reserves: icon when set to auto, green when energy is stored
 * [2.3.3.4]  Moved Health Alarm toggle to Game Settings and fixed some of its vanilla bugs

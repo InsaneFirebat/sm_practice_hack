@@ -48,6 +48,9 @@ org $84889F      ; hijack, runs every time an item is picked up
 org $8095FC      ; hijack, end of NMI routine to update realtime frames
     JML ih_nmi_end
 
+org $91DF45
+    JMP refresh_reserve_mode
+
 if !FEATURE_PAL
 org $91DA3D      ; hijack, runs after a shinespark has been charged
 else
@@ -615,7 +618,7 @@ ih_update_hud_code:
         LDA HexToNumberGFX1, X : STA $7EC644
         LDA HexToNumberGFX2, X : STA $7EC646
 
-        BRA .pct
+        BRA .topLeftHUD
     }
 
     ; Room time
@@ -650,13 +653,17 @@ ih_update_hud_code:
         LDA HexToNumberGFX2, X : STA $7EC646
     }
 
-    ; Draw Item percent
-    .pct
+    ; 3 tiles between input display and missile icon
+    .topLeftHUD
     {
         ; skip item% if display mode = lagcounter or vspeed
         LDA !sram_display_mode : CMP !IH_MODE_LAGCOUNTER_INDEX : BEQ .skipToLag
         LDA !sram_display_mode : CMP !IH_MODE_VSPEED_INDEX : BEQ .skipToLag
 
+        LDA !sram_top_display_mode : BNE .skipToLag
+
+        ; Draw Item percent
+      .pct
         LDA #$0000 : STA !ram_pct_1
 
         ; Max HP (E tanks)
@@ -767,7 +774,7 @@ ih_hud_code:
     PLB
     PLB
 
-    ; -- input display --
+; -- input display --
     ; -- check if we want to update --
     LDA !IH_CONTROLLER_PRI : CMP !ram_ih_controller : BEQ .status_display
 
@@ -808,12 +815,34 @@ ih_hud_code:
     LDA !sram_display_mode : ASL : TAX
     JSR (.status_display_table,X)
 
-    ; Samus' HP
-    LDA $09C2 : CMP !ram_last_hp : BEQ .statusIcons : STA !ram_last_hp
+; Samus' HP
+    LDA $09C2 : CMP !ram_last_hp : BEQ .reserves : STA !ram_last_hp
     LDX #$0092 : JSR Draw4
     LDA !IH_BLANK : STA $7EC690 : STA $7EC69A
 
-    ; Status Icons
+; Reserve energy counter
+  .reserves
+    LDA !sram_top_display_mode : BEQ .statusIcons
+
+print pc, " <------------- RESERVE ENERGY"
+    LDA !SAMUS_RESERVE_MAX : BEQ .noReserves
+    LDA !SAMUS_RESERVE_ENERGY : CMP !ram_reserves_last : BEQ .statusIcons
+    STA !ram_reserves_last : LDX #$0014 : JSR Draw3
+
+    LDA !SAMUS_RESERVE_MODE : CMP #$0001 : BNE .statusIcons
+    %a8()
+    LDA $7EC614 : CMP #$0F : BEQ +
+    LDA #$10 : STA $7EC615
++   LDA $7EC616 : CMP #$0F : BEQ +
+    LDA #$10 : STA $7EC617
++   LDA #$10 : STA $7EC619
+    %a16()
+    BRA .statusIcons
+
+  .noReserves
+    LDA !IH_BLANK : STA $7EC614 : STA $7EC616 : STA $7EC618
+
+; Status Icons
   .statusIcons
     LDA !sram_status_icons : BEQ .end
 
@@ -1435,7 +1464,11 @@ ih_hud_code_paused:
     PLX : PLY
     LDA !IH_BLANK : STA $7EC690 : STA $7EC69A
 
+
   .end
+    ; Force Samus' Reserves to update after pause
+    STA !ram_reserves_last
+
     LDA $7E09C0 ; overwritten code
     JMP $9B51
 }

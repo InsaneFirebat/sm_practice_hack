@@ -1320,6 +1320,7 @@ InfoHudMenu:
     dw #ih_room_counter
     dw #ih_reset_seg_later
     dw #ih_lag
+    dw #ih_top_HUD_mode
     dw #ih_status_icons
     dw #$FFFF
     dw #ih_ram_watch
@@ -2211,6 +2212,17 @@ ih_reset_seg_later:
     TYA : STA !ram_reset_segment_later
     %sfxquake()
     RTS
+
+ih_top_HUD_mode:
+    dw !ACTION_CHOICE
+    dl #!sram_top_display_mode
+    dw #$0000
+    db #$28, "Top-Left Display", #$FF
+    db #$28, "     ITEM %", #$FF
+    db #$28, "   RESERVES", #$FF
+    db #$FF
+
+!TOP_HUD_RESERVES_INDEX = #$0001
 
 
 ; ----------
