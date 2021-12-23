@@ -129,7 +129,7 @@ cm_transfer_custom_tileset:
 {
     PHP
     %a16()
-    LDA $079B : CMP #$A59F : BEQ .kraid_vram
+    LDA !ROOM_ID : CMP #$A59F : BEQ .kraid_vram
 
     ; Load custom vram to normal location
     %a8()
@@ -165,7 +165,7 @@ cm_transfer_original_tileset:
 {
     PHP
     %a16()
-    LDA $079B : CMP #$A59F : BEQ .kraid_vram
+    LDA !ROOM_ID : CMP #$A59F : BEQ .kraid_vram
 
     %a8()
     LDA !ram_minimap : CMP #$00 : BNE .minimap_vram
@@ -438,7 +438,7 @@ cm_tilemap_bg:
         ; background is optional
         LDA !sram_menu_background : BNE .fill_interior
         ; fill if paused
-        LDA $0998 : CMP #$000C : BMI .check_ceres
+        LDA !GAMEMODE : CMP #$000C : BMI .check_ceres
         BEQ .fill_interior : CMP #$0012 : BMI .fill_interior
         ; fill if Ceres
       .check_ceres
