@@ -985,6 +985,8 @@ action_teleport:
     STZ $0280 ; metroid latched (Redesign)
     STZ $1F6B ; morph (Redesign)
 
+    LDA $09A1 : AND #$7FFF : STA $09A1
+
     JSL reset_all_counters
     JSL stop_all_sounds
 
@@ -1058,7 +1060,7 @@ misc_killenemies:
     ; 8000 = solid to Samus, 0400 = Ignore Samus projectiles
     TAX : LDA $0F86,X : BIT #$8400 : BNE +
     ORA #$0200 : STA $0F86,X
-+   TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
++   TXA : CLC : ADC #$0040 : CMP #$0800 : BNE .kill_loop
     LDA #!SOUND_MENU_JSR : JSL !SFX_LIB1
     RTS
 
@@ -1309,7 +1311,7 @@ InfoHudMenu:
     dw #$FFFF
 ;    dw #ih_goto_room_strat
 ;    dw #ih_room_strat
-    dw #$FFFF
+;    dw #$FFFF
     dw #ih_room_counter
     dw #ih_reset_seg_later
     dw #ih_lag
@@ -1350,7 +1352,7 @@ ihmode_enemyhp:
 
 !IH_MODE_ROOMSTRAT_INDEX = $0001
 ihmode_roomstrat:
-    %cm_jsr("Room Strat", #action_select_infohud_mode, #$0001)
+    %cm_jsr("Mother Brain HP", #action_select_infohud_mode, #$0001)
 
 ihmode_chargetimer:
     %cm_jsr("Charge Timer", #action_select_infohud_mode, #$0002)
@@ -1420,7 +1422,7 @@ ih_display_mode:
     dw #$0000
     db #$28, "Current Mode", #$FF
     db #$28, "   ENEMY HP", #$FF
-    db #$28, " ROOM STRAT", #$FF
+    db #$28, "      MB HP", #$FF
     db #$28, "     CHARGE", #$FF
     db #$28, "   X FACTOR", #$FF
     db #$28, "   COOLDOWN", #$FF
@@ -1459,8 +1461,8 @@ RoomStratMenu:
     %cm_header("INFOHUD ROOM STRAT")
     %cm_footer("ROOM STRAT MUST BE ACTIVE")
 
-ihstrat_doorskip:
-    %cm_jsr("Parlor-Climb Door Skip", #action_select_room_strat, #$0000)
+ihstrat_doorskip: ; changed to MB HP
+    %cm_jsr("Parlor-Climb Doorskip", #action_select_room_strat, #$0000)
 
 ihstrat_tacotank:
     %cm_jsr("Taco Tank", #action_select_room_strat, #$0001)
@@ -1507,6 +1509,7 @@ ih_room_strat:
     dl #!sram_room_strat
     dw #.routine
     db #$28, "Current Strat", #$FF
+    db #$28, "      MB HP", #$FF
     db #$28, "  DOOR SKIP", #$FF
     db #$28, "  TACO TANK", #$FF
     db #$28, "GATE GLITCH", #$FF
@@ -1517,7 +1520,6 @@ ih_room_strat:
     db #$28, " BOTWOON CF", #$FF
     db #$28, " SNAIL CLIP", #$FF
     db #$28, "3 JUMP SKIP", #$FF
-    db #$28, "      MB HP", #$FF
     db #$FF
     .routine
         LDA #$0001 : STA !sram_display_mode

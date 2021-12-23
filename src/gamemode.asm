@@ -1,3 +1,9 @@
+
+; --------------------
+; Controller Shortcuts
+; Morph Lock Resistent
+; --------------------
+
 ; $82:8963 AD 98 09    LDA $0998  [$7E:0998]
 ; $82:8966 29 FF 00    AND #$00FF
 org $828963
@@ -44,6 +50,85 @@ gamemode_start:
     RTL
 }
 
+if !FEATURE_REDESIGN
+
+gamemode_shortcuts:
+{
+    LDA !IH_CONTROLLER_ML_NEW : BNE +
+
+    ; No shortcuts configured, CLC so we won't skip normal gameplay
+    CLC : RTS
+
+    if !FEATURE_SD2SNES
+  + LDA !IH_CONTROLLER_ML : CMP !sram_ctrl_save_state : BNE +
+    AND !IH_CONTROLLER_ML_NEW : BEQ +
+    JMP .save_state
+
+  + LDA !IH_CONTROLLER_ML : CMP !sram_ctrl_load_state : BNE +
+    AND !IH_CONTROLLER_ML_NEW : BEQ +
+    JMP .load_state
+    endif
+
+  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
+    AND !IH_CONTROLLER_ML_NEW : BEQ +
+    JMP .load_last_preset
+
+  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
+    AND !IH_CONTROLLER_ML_NEW : BEQ +
+    JMP .random_preset
+
+  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_save_custom_preset : CMP !sram_ctrl_save_custom_preset : BNE +
+    AND !IH_CONTROLLER_ML_NEW : BEQ +
+    JMP .save_custom_preset
+
+  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_load_custom_preset : CMP !sram_ctrl_load_custom_preset : BNE +
+    AND !IH_CONTROLLER_ML_NEW : BEQ +
+    JMP .load_custom_preset
+
+    ; Check if any less common shortcuts are configured
+  + LDA !ram_game_mode_extras : BNE +
+    JMP .check_menu
+
+  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_inc_custom_preset : CMP !sram_ctrl_inc_custom_preset : BNE +
+    AND !IH_CONTROLLER_ML_NEW : BEQ +
+    JMP .next_preset_slot
+
+  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_dec_custom_preset : CMP !sram_ctrl_dec_custom_preset : BNE +
+    AND !IH_CONTROLLER_ML_NEW : BEQ +
+    JMP .prev_preset_slot
+
+  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_kill_enemies : CMP !sram_ctrl_kill_enemies : BNE +
+    AND !IH_CONTROLLER_ML_NEW : BEQ +
+    JMP .kill_enemies
+
+  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_reset_segment_timer : CMP !sram_ctrl_reset_segment_timer : BNE +
+    AND !IH_CONTROLLER_ML_NEW : BEQ +
+    JMP .reset_segment_timer
+
+  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_reset_segment_later : CMP !sram_ctrl_reset_segment_later : BNE +
+    AND !IH_CONTROLLER_ML_NEW : BEQ +
+    JMP .reset_segment_later
+
+  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_full_equipment : CMP !sram_ctrl_full_equipment : BNE +
+    AND !IH_CONTROLLER_ML_NEW : BEQ +
+    JMP .full_equipment
+
+  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_toggle_tileviewer : CMP !sram_ctrl_toggle_tileviewer : BNE +
+    AND !IH_CONTROLLER_ML_NEW : BEQ +
+    JMP .toggle_tileviewer
+
+  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_update_timers : CMP !sram_ctrl_update_timers : BNE +
+    AND !IH_CONTROLLER_ML_NEW : BEQ +
+    JMP .update_timers
+
+  .check_menu
+  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
+    AND !IH_CONTROLLER_ML_NEW : BEQ +
+    JMP .menu
+
+    ; No shortcuts matched, CLC so we won't skip normal gameplay
+  + CLC : RTS
+else
 gamemode_shortcuts:
 {
     LDA !IH_CONTROLLER_PRI_NEW : BNE +
@@ -54,11 +139,11 @@ gamemode_shortcuts:
     if !FEATURE_SD2SNES
   + LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_save_state : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
-        JMP .save_state
+    JMP .save_state
 
   + LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_load_state : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
-        JMP .load_state
+    JMP .load_state
     endif
 
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
@@ -120,6 +205,7 @@ gamemode_shortcuts:
 
     ; No shortcuts matched, CLC so we won't skip normal gameplay
   + CLC : RTS
+endif
 
 if !FEATURE_SD2SNES
 ; This if statement is to prevent an assembler error from an unknown method. The one on the call to this
@@ -140,7 +226,7 @@ endif
   .kill_loop
     TAX : LDA $0F86,X : BIT #$8400 : BNE +
     ORA #$0200 : STA $0F86,X
-+   TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
++   TXA : CLC : ADC #$0040 : CMP #$0800 : BNE .kill_loop
     ; CLC to continue normal gameplay after killing enemies
     CLC : RTS
 

@@ -93,13 +93,14 @@ preset_load:
 
     ; Clear morph and door transition flags
     STZ $1F6B : STZ $0795
+    LDA $09A1 : AND #$7FFF : STA $09A1
 
     ; Kill non-solid enemies
     LDA #$0000
     ; 8000 = solid to Samus, 0400 = Ignore Samus projectiles
 -   TAX : LDA $0F86,X : BIT #$8400 : BNE +
     ORA #$0200 : STA $0F86,X
-+   TXA : CLC : ADC #$0040 : CMP #$0400 : BNE -
++   TXA : CLC : ADC #$0040 : CMP #$0800 : BNE -
     PLP
     RTL
 }

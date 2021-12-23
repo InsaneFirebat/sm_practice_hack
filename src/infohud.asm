@@ -3,11 +3,14 @@
 ;=======================================================
 
 org $809490
-    jmp $9497    ; skip resetting player 2 inputs
+    JMP $9497    ; skip resetting player 2 inputs
 
 org $8094DF
     PLP          ; patch out resetting of controller 2 buttons and enable debug mode
     RTL
+
+org $80AE29      ; fix for scroll offset misalignment
+    JSR ih_fix_scroll_offsets
 
 org $828B4B      ; disable debug functions
     JML ih_debug_patch
@@ -711,21 +714,21 @@ ih_hud_code:
     ; health bomb
     LDA $0E1A : BEQ .clear_healthbomb
     LDA !IH_LETTER_E : STA $7EC654
-    BRA .check_elevator
+    BRA .check_morphlock
 
   .clear_healthbomb
     LDA !IH_BLANK : STA $7EC654
 
-  .check_elevator
-    ; Elevator
-    LDA $0E16 : BEQ .clear_elevator
-    LDA !IH_ELEVATOR : STA $7EC656
+  .check_morphlock
+    ; morph lock
+    LDA $09A1 : AND #$8000 : BEQ .clear_morphlock
+    LDA !IH_MORPHBALL : STA $7EC656
     BRA .check_shinetimer
 
-  .clear_elevator
+  .clear_morphlock
     LDA !IH_BLANK : STA $7EC656
 
-    ; Shine timer
+    ; shine timer
   .check_shinetimer
     LDA $0A68 : BEQ .clear_shinetimer
     LDA !IH_SHINETIMER : STA $7EC658
@@ -1271,6 +1274,19 @@ ih_hud_code_paused:
     ; overwritten code
     LDA $7E09C0
     JMP $9B51
+}
+
+ih_fix_scroll_offsets:
+{
+    %a8()
+    LDA $0911 : STA $B1 : STA $B5
+    LDA $0915 : STA $B3 : STA $B7
+    %a16()
+
+  .done
+    ; overwritten code
+    LDA $B1 : SEC
+    RTS
 }
 
 NumberGFXTable:

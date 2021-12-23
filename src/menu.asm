@@ -66,7 +66,16 @@ cm_start:
 
     JSL play_music_long ; Play 2 lag frames of music and sound effects
 
+    %a8()
+    LDA $09A1 : STA !ram_cm_morphlock : AND #$7FFF : STA $09A1 ; store morph lock flag and clear it while in menu
+    %a16()
+
     JSR cm_loop         ; Handle message box interaction
+
+    %a8()
+    STA !ram_cm_morphlock : STA $09A1 ; restore morph lock flag
+    %a16()
+    LDA #$0000 : STA !ram_cm_menu_active ; for morph lock in Redesign
 
     JSR cm_transfer_original_tileset
     JSR cm_transfer_original_cgram
@@ -113,6 +122,8 @@ cm_init:
     STA.l !ram_cm_menu_stack
     LDA.w #MainMenu>>16
     STA.l !ram_cm_menu_bank
+
+    STA !ram_cm_menu_active ; for morph lock in Redesign
 
     JSR cm_calculate_max
     JSR cm_set_etanks_and_reserve

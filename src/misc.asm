@@ -296,3 +296,44 @@ org $90F88F
   .jump_AC1C
     JMP $AC1C
 warnpc $90F8A7
+
+
+; --------------
+; Redesign Hacks
+; --------------
+
+if !FEATURE_REDESIGN
+; Rewrite morph lock code
+org $80D000
+    LDA !ram_cm_menu_active : BEQ +
+    LDA $4218
+    RTS
+
++   LDA $4218 : STA $CB
+    EOR $C7 : AND $CB : STA $CF
+
+    ; check for morph lock flag
+    LDA $09A1 : BMI .gameMode
+    LDA $4218
+    RTS
+
+  .gameMode
+    LDA $0998 : CMP #$0008 : BEQ .morphLock
+    CMP #$000C : BEQ .morphLock
+    CMP #$0012 : BEQ .morphLock
+    CMP #$001A : BNE +
+    LDA $09A1 : AND #$7FFF : STA $09A1
++   LDA $4218
+    RTS 
+
+  .morphLock
+    LDA $09A2 : AND #$0100 : BNE +
+    LDA #$FFFF : EOR $09B4 : AND $4218
+    AND #$F3FF
+    RTS
+
++   LDA $4218
+    AND #$F3FF
+    RTS
+endif
+
