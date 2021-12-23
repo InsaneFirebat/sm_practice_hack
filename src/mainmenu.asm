@@ -2217,9 +2217,9 @@ ih_top_HUD_mode:
     dw !ACTION_CHOICE
     dl #!sram_top_display_mode
     dw #$0000
-    db #$28, "Top-Left Display", #$FF
-    db #$28, "     ITEM %", #$FF
-    db #$28, "   RESERVES", #$FF
+    db #$28, "Top-Left Displa", #$FF
+    db #$28, "y    ITEM %", #$FF
+    db #$28, "y  RESERVES", #$FF
     db #$FF
 
 !TOP_HUD_RESERVES_INDEX = #$0001

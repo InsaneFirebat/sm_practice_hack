@@ -575,15 +575,6 @@ CountDamageShinespark:
 print pc, " misc bankA0 end"
 
 
-org $91A7F6         ; overwrite unused instruction list
-refresh_reserve_mode:
-{
-    STA $09C0
-    LDA #$FFFF : STA !ram_reserves_last
-    JMP $DF4E
-}
-
-
 ;;;;;;;;; Custom Build Hijacks ;;;;;;;;;
 
 if !FEATURE_EXTRAS
