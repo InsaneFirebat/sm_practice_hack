@@ -48,9 +48,6 @@ org $84889F      ; hijack, runs every time an item is picked up
 org $8095FC      ; hijack, end of NMI routine to update realtime frames
     JML ih_nmi_end
 
-org $91DF45
-    JMP refresh_reserve_mode
-
 if !FEATURE_PAL
 org $91DA3D      ; hijack, runs after a shinespark has been charged
 else
@@ -824,23 +821,24 @@ ih_hud_code:
   .reserves
     LDA !sram_top_display_mode : BEQ .statusIcons
 
-print pc, " <------------- RESERVE ENERGY"
     LDA !SAMUS_RESERVE_MAX : BEQ .noReserves
-    LDA !SAMUS_RESERVE_ENERGY : CMP !ram_reserves_last : BEQ .statusIcons
+    LDA !SAMUS_RESERVE_ENERGY : CMP !ram_reserves_last : BEQ .checkAuto
     STA !ram_reserves_last : LDX #$0014 : JSR Draw3
 
-    LDA !SAMUS_RESERVE_MODE : CMP #$0001 : BNE .statusIcons
-    %a8()
-    LDA $7EC614 : CMP #$0F : BEQ +
-    LDA #$10 : STA $7EC615
-+   LDA $7EC616 : CMP #$0F : BEQ +
-    LDA #$10 : STA $7EC617
-+   LDA #$10 : STA $7EC619
-    %a16()
-    BRA .statusIcons
+  .checkAuto
+    LDA !SAMUS_RESERVE_MODE : CMP #$0001 : BEQ .autoOn
+
+    LDA !IH_BLANK : STA $7EC61A : BRA .statusIcons
+
+  .autoOn
+    LDA !SAMUS_RESERVE_ENERGY : BEQ .autoEmpty
+    LDA !IH_RESERVE_AUTO : STA $7EC61A : BRA .statusIcons
+
+  .autoEmpty
+    LDA !IH_RESERVE_EMPTY : STA $7EC61A : BRA .statusIcons
 
   .noReserves
-    LDA !IH_BLANK : STA $7EC614 : STA $7EC616 : STA $7EC618
+    LDA !IH_BLANK : STA $7EC614 : STA $7EC616 : STA $7EC618 : STA $7EC61A
 
 ; Status Icons
   .statusIcons
@@ -875,16 +873,16 @@ print pc, " <------------- RESERVE ENERGY"
     LDA !SAMUS_RESERVE_ENERGY : BEQ .empty
 
     LDA !SAMUS_RESERVE_MAX : BEQ .clearReserve
-    LDA !IH_RESERVE_AUTO : STA $7EC65A
+    LDA !IH_RESERVE_AUTO : STA $7EC61A
     BRA +
 
   .empty
     LDA !SAMUS_RESERVE_MAX : BEQ .clearReserve
-    LDA !IH_RESERVE_EMPTY : STA $7EC65A
+    LDA !IH_RESERVE_EMPTY : STA $7EC61A
     BRA +
 
   .clearReserve
-    LDA !IH_BLANK : STA $7EC65A
+    LDA !IH_BLANK : STA $7EC61A
 
   .end
 +   PLB
