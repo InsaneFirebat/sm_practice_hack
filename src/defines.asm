@@ -11,7 +11,7 @@
 !VERSION_MINOR = 3
 !VERSION_BUILD = 3
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 1
+!VERSION_REV_2 = 2
 
 ; ---------
 ; Work RAM

@@ -96,7 +96,7 @@ preset_load:
     LDA $09A1 : AND #$7FFF : STA $09A1
 
     ; Kill non-solid enemies
-    LDA #$0000
+    LDA #$0000 : STA $0E52 ; unlock grey doors that require killing enemies
     ; 8000 = solid to Samus, 0400 = Ignore Samus projectiles
 -   TAX : LDA $0F86,X : BIT #$8400 : BNE +
     ORA #$0200 : STA $0F86,X
@@ -270,7 +270,7 @@ preset_start_gameplay:
     JSL $89AB82  ; Load FX
     JSL $82E97C  ; Load library background
 
-    ; Enabled for Ceres only
+    ; Careful about Redesign vs Axeil rooms
     JSR preset_scroll_fixes
 
     ; Pull layer 2 values, and use them if they are valid
@@ -348,9 +348,35 @@ preset_scroll_fixes:
     ; is normally hidden until passing over a red scroll block.
     ; These fixes can often be found in nearby door asm.
     PHP : %a8() : %i16()
-    LDA #$01 : LDX $079B         ; X = room ID
-    CPX #$DF45 : BMI .done      ; Ceres rooms set BG1 offsets manually
+    LDA #$02 : LDX $079B         ; X = room ID
+    CPX #$DF45 : BPL .ceres      ; Ceres rooms set BG1 offsets manually
 
+if !FEATURE_REDESIGN
+    CPX #$9D19 : BNE +           ; Preset: Hi Jump Boots - Charge Hoppers
+    LDA #$02 : STA $7ECD2C : STA $7ECD2D
+    STA $7ECD26 : STA $7ECD27 : STA $7ECD28
+    BRA .end
++   CPX #$A923 : BNE +           ; Preset: Hi Jump Boots - Lake Spark
+    LDA #$00 : STA $7ECD21
+    BRA .end
++   CPX #$AB64 : BNE +           ; Preset: Lower Norfair - After Super Blockade
+    LDA #$00 : STA $7ECD26 : STA $7ECD2B
+    BRA .end
++   CPX #$ACB3 : BNE +           ; Preset: Grapple - Guardian Runback
+    STA $7ECD23
+    BRA .end
++   CPX #$CAF6 : BNE +           ; Preset: Tourian - M10 Kill 3
+    STA $7ECD26 : STA $7ECD26
+    STA $7ECD26 : STA $7ECD23
++   CPX #$CE8A : BNE +           ; Preset: Final Escape - Mushroom Run
+    LDA #$00 : STA $7ECD21
+endif
+
+  .end
+    PLP
+    RTS
+
+  .ceres
     LDA #$00 : STA $7E005F       ; Initialize mode 7
     CPX #$DF45 : BNE +           ; Ceres Elevator
     LDA #$00 : STA $7E091E : STA $7E0920

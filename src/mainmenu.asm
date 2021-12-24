@@ -270,6 +270,7 @@ if !FEATURE_REDESIGN
 precat_redesign:
     %cm_jsr("Redesign Any%", #action_select_preset_category, #$0000)
 else
+; let it be for now, decent placeholder
 precat_redesign:
     %cm_jsr("Redesign Any%", #action_select_preset_category, #$0000)
 endif
