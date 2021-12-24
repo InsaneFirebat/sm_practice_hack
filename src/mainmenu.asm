@@ -1024,6 +1024,7 @@ MiscMenu:
     dw #$FFFF
     dw #misc_magicpants
     dw #misc_spacepants
+    dw #misc_springpants
     dw #misc_loudpants
     dw #$FFFF
     dw #misc_killenemies
@@ -1048,6 +1049,9 @@ misc_magicpants:
 
 misc_spacepants:
     %cm_toggle_bit("Space Pants", !ram_magic_pants_enabled, #$0002, GameLoopExtras)
+
+misc_springpants:
+    %cm_toggle_bit("Spring Pants", !ram_magic_pants_enabled, #$0008, GameLoopExtras)
 
 misc_loudpants:
     %cm_toggle_bit("Loud Pants", !ram_magic_pants_enabled, #$0004, GameLoopExtras)
@@ -1962,7 +1966,7 @@ game_metronome_sfx:
 
 GameLoopExtras:
 {
-    LDA !ram_magic_pants_enabled : BNE .enabled
+    LDA !ram_magic_pants_enabled : AND #$000B : BNE .enabled
     LDA !ram_metronome : BNE .enabled
     LDA #$0000 : STA !ram_game_loop_extras
     RTS

@@ -56,7 +56,7 @@ status_roomstrat:
 
 status_chargetimer:
 {
-    LDA #$003D : SEC : SBC $0CD0 : CMP !ram_HUD_check : BEQ .done : STA !ram_HUD_check
+    LDA #$0051 : SEC : SBC $0CD0 : CMP !ram_HUD_check : BEQ .done : STA !ram_HUD_check
     CMP #$0000 : BPL .charging : LDA #$0000
 
   .charging

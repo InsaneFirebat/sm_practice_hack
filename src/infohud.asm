@@ -1011,12 +1011,12 @@ ih_game_loop_code:
     LDA !ram_transition_counter : INC : STA !ram_transition_counter
 
     ; preserve CPU timing by gating new features behind a common flag
-    LDA !ram_game_loop_extras : BEQ .handleinputs
+    LDA !ram_game_loop_extras : BEQ .springpants
 
     LDA !ram_metronome : BEQ +
     JSR metronome
 
-+   LDA !ram_magic_pants_enabled : AND #$0003 : BEQ .handleinputs
++   LDA !ram_magic_pants_enabled : AND #$0003 : BEQ .springpants
     CMP #$0001 : BEQ .magicpants
     CMP #$0002 : BEQ .spacepants
 
@@ -1025,10 +1025,14 @@ ih_game_loop_code:
 
   .spacepants
     JSR space_pants
-    BRA .handleinputs
+    BRA .springpants
 
   .magicpants
     JSR magic_pants
+
+  .springpants
+    LDA !ram_magic_pants_enabled : AND #$0008 : BEQ .handleinputs
+    JSR spring_pants
 
   .handleinputs
     LDA !IH_CONTROLLER_SEC_NEW : BEQ .done
@@ -1212,6 +1216,42 @@ space_pants:
     ; then flash
     LDA #$FFFF
     STA $7EC194 : STA $7EC196 : STA $7EC198
+    STA !ram_magic_pants_state
+    RTS
+}
+
+spring_pants:
+{
+    LDA $0A56 : AND #$0800 : BNE .check
+    LDA !ram_magic_pants_state : BEQ +
+    LDA !ram_magic_pants_pal1 : STA $7EC194
+    LDA !ram_magic_pants_pal2 : STA $7EC196
+    LDA !ram_magic_pants_pal3 : STA $7EC19E
+    LDA #$0000 : STA !ram_magic_pants_state
++   RTS
+
+  .check
+    ; check if starting bomb jump
+    LDA $0A58 : CMP #$E025 : BEQ .done
+    ; check speed
+    LDA $0B2E : BEQ .flash : CMP #$FFFF : BEQ .flash
+
+  .done
+    RTS
+
+  .flash
+    LDA !ram_magic_pants_state : BNE ++
+
+    ; if loudpants are enabled, click
+    LDA !ram_magic_pants_enabled : AND #$0004 : BEQ +
+    LDA !sram_metronome_sfx : ASL : TAX
+    LDA.l MetronomeSFX,X : JSL !SFX_LIB1
+
++   LDA $7EC194 : STA !ram_magic_pants_pal1
+    LDA $7EC196 : STA !ram_magic_pants_pal2
+    LDA $7EC19E : STA !ram_magic_pants_pal3
+++  LDA #$FFFF
+    STA $7EC194 : STA $7EC196 : STA $7EC19E
     STA !ram_magic_pants_state
     RTS
 }

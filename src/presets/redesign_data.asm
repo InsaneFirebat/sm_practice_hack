@@ -2043,8 +2043,8 @@ preset_redesign_grapple_prescrew:
     dl $7E09CA : db $02 : dw $0005 ; Supers
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
-    dl $7E0AF6 : db $02 : dw $0038 ; Samus X
-    dl $7E0AFA : db $02 : dw $058B ; Samus Y
+    dl $7E0AF6 : db $02 : dw $00C8 ; Samus X
+    dl $7E0AFA : db $02 : dw $059B ; Samus Y
     dl $7ED8BA : db $02 : dw $0181 ; Events, Items, Doors
     dl $7ED8D8 : db $02 : dw $10C0 ; Events, Items, Doors
     dl $7ED91A : db $02 : dw $00A9 ; Events, Items, Doors
@@ -3361,7 +3361,7 @@ preset_redesign_botwoon_botwoon_2:
     dl $7E09CA : db $02 : dw $0002 ; Supers
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
-    dl $7E0AF6 : db $02 : dw $03D1 ; Samus X
+    dl $7E0AF6 : db $02 : dw $03C4 ; Samus X
     dl $7E0AFA : db $02 : dw $018B ; Samus Y
     dl $7ED8A8 : db $02 : dw $1A08 ; Events, Items, Doors
     dl $7ED8C0 : db $02 : dw $1040 ; Events, Items, Doors
@@ -3448,7 +3448,6 @@ preset_redesign_cleanup_snail_highway:
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
     dl $7E0AF6 : db $02 : dw $00E1 ; Samus X
     dl $7E0AFA : db $02 : dw $048B ; Samus Y
-    dl $7ED8BF : db $02 : dw $C616 ; Events, Items, Doors
     dl $7ED91A : db $02 : dw $0108 ; Events, Items, Doors
     dw #$FFFF
 .after
@@ -3471,6 +3470,7 @@ preset_redesign_cleanup_green_brin_pb_blockade:
     dl $7E0AF6 : db $02 : dw $02C0 ; Samus X
     dl $7E0AFA : db $02 : dw $008B ; Samus Y
     dl $7ED89E : db $02 : dw $0001 ; Events, Items, Doors
+    dl $7ED8BF : db $02 : dw $C656 ; Events, Items, Doors
     dl $7ED91A : db $02 : dw $010A ; Events, Items, Doors
     dw #$FFFF
 .after
