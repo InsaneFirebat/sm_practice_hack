@@ -28,11 +28,7 @@
     org $A7D064 ; Phantoon eye close timer
         JSL hook_phantoon_eyeclose
 
-if !FEATURE_PAL
-    org $A7D00A ; Phantoon flame pattern
-else
     org $A7CFD6 ; Phantoon flame pattern
-endif
         JSL hook_phantoon_flame_pattern
 }
 
@@ -65,7 +61,8 @@ endif
 ; Kraid hijack
 {
     org $A7BDBF
-        JSR hook_kraid_rng
+        JSL hook_kraid_rng
+        NOP #2
 }
 
 
@@ -93,7 +90,8 @@ endif
 
 ; Hooks
 
-org $83B000
+;org $83B000
+org $83CA00
 print pc, " rng start"
 
 hook_hopper_set_rng:
@@ -222,6 +220,7 @@ db $FF
 db $01, $02, $03
 db $01, $02, $03
 
+
 hook_botwoon_rng:
 {
     JSL $808111 ; Trying to preserve the number of RNG calls being done in the frame
@@ -236,9 +235,23 @@ hook_botwoon_rng:
     RTL
 }
 
+
+hook_kraid_rng:
+{
+    LDA !ram_kraid_rng : BEQ .no_manip
+    DEC : DEC     ; return -1 (laggy) or 0 (laggier)
+    RTL
+
+  .no_manip
+    LDA $05E5     ; return with random number (overwritten code)
+    BIT #$0001
+    RTL
+}
+
 print pc, " rng end"
 
-org $A5F960
+;org $A5F960
+org $A5FD50
 print pc, " draygon rng start"
 hook_draygon_rng_left:
 {
@@ -264,7 +277,8 @@ hook_draygon_rng_right:
 
 print pc, " draygon rng end"
 
-org $A4F700
+;org $A4F700
+org $A4FFA0
 print pc, " crocomire rng start"
 hook_crocomire_rng:
 {
@@ -283,19 +297,4 @@ hook_crocomire_rng:
 }
 
 print pc, " crocomire rng end"
-
-org $A7FFB6
-print pc, " kraid rng start"
-hook_kraid_rng:
-{
-    LDA !ram_kraid_rng : BEQ .no_manip
-    DEC : DEC     ; return -1 (laggy) or 0 (laggier)
-    RTS
-
-  .no_manip
-    LDA $05E5     ; return with random number (overwritten code)
-    RTS
-}
-
-print pc, " kraid rng end"
 

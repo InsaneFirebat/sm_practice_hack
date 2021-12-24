@@ -171,7 +171,7 @@ MainMenu:
     dw #mm_goto_infohud
     dw #mm_goto_sprites
     dw #mm_goto_gamemenu
-;    dw #mm_goto_rngmenu
+    dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
 if !FEATURE_REDESIGN
