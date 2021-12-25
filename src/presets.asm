@@ -199,7 +199,7 @@ preset_to_memory:
 
 preset_banks:
 {
-  dw preset_prkd_crateria_ship>>16
+  dw preset_SZM101_bombs_landing_site>>16
 }
 
 print pc, " presets end"
@@ -257,8 +257,7 @@ preset_start_gameplay:
     JSL $89AB82  ; Load FX
     JSL $82E97C  ; Load library background
 
-; Don't enable this unless the room layout is basically vanilla. Room IDs may need to be updated.
-;    JSR preset_scroll_fixes
+    JSR preset_scroll_fixes
 
     ; Pull layer 2 values, and use them if they are valid
     PLA : CMP #$5AFE : BEQ .calculate_layer_2
@@ -336,89 +335,23 @@ preset_scroll_fixes:
     ; These fixes can often be found in nearby door asm.
     PHP : %a8() : %i16()
     LDA #$01 : LDX $079B         ; X = room ID
-    CPX #$C000 : BPL .halfway    ; organized by room ID so we only have to check half
+;    CPX #$C000 : BPL .halfway    ; organized by room ID so we only have to check half
 
-    CPX #$A011 : BNE +           ; bottom-left of Etecoons Etank
-    STA $7ECD25 : STA $7ECD26
-    BRA .done
-+   CPX #$AC83 : BNE +           ; left of Green Bubbles Missile Room (Norfair Reserve)
-    STA $7ECD20
-    BRA .done
-+   CPX #$AE32 : BNE +           ; bottom of Volcano Room
-    STA $7ECD26
-    BRA .done
-+   CPX #$B07A : BNE +           ; top of Bat Cave
-    STA $7ECD20
-    BRA .done
-+   CPX #$B1E5 : BNE +           ; bottom of Acid Chozo Room
-    STA $7ECD26 : STA $7ECD27 : STA $7ECD28
-    LDA #$00 : STA $7ECD23 : STA $7ECD24
-    BRA .done
-+   CPX #$B3A5 : BNE +           ; bottom of Pre-Pillars
-    LDY $0AFA : CPY #$0190       ; no scroll fix if Ypos < 400
-    BMI .done
-    STA $7ECD22 : STA $7ECD24
-    LDA #$00 : STA $7ECD21
-    JMP .done
-+   CPX #$B4AD : BNE +        ; top of Worst Room in the Game
-    LDA #$02 : STA $7ECD20
+    CPX #$C9E3 : BNE +           ; Preset: Pirate Ship Ridley - Kihunter Zoo
+    STA $7ECD2A : STA $7ECD2B
+    STA $7ECD2D : STA $7ECD2E
+;    BRA .done
+;+   CPX #$B3A5 : BNE +           ; bottom of Pre-Pillars
+;    LDY $0AFA : CPY #$0190       ; no scroll fix if Ypos < 400
+;    BMI .done
+;    STA $7ECD22 : STA $7ECD24
+;    LDA #$00 : STA $7ECD21
+;    JMP .done
+;+   CPX #$B4AD : BNE +           ; top of Worst Room in the Game
+;    LDA #$02 : STA $7ECD20
 
   .done
-    PLP
-    RTS
-
-  .halfway
-    CPX #$DF45 : BPL .ceres      ; Ceres rooms set BG1 offsets manually
-    CPX #$CAF6 : BNE +           ; bottom of WS Shaft
-    LDA #$02
-    STA $7ECD48 : STA $7ECD4E
-    BRA .done
-+   CPX #$CBD5 : BNE +           ; top of Electric Death Room (WS E-Tank)
-    LDA #$02
-    STA $7ECD20
-    BRA .done
-+   CPX #$CC6F : BNE +           ; right of Basement (Phantoon)
-    STA $7ECD24
-    BRA .done
-+   CPX #$D1A3 : BNE +           ; bottom of Crab Shaft
-    STA $7ECD26
-    LDA #$02 : STA $7ECD24
-    BRA .done
-+   CPX #$D48E : BNE +           ; Oasis (bottom of Toilet)
-    LDA #$02
-    STA $7ECD20 : STA $7ECD21
-    BRA .done
-+   CPX #$D8C5 : BNE .done       ; Pants Room (door to Shaktool)
-    LDA #$00 : STA $7ECD22
-    BRA .done
-
-  .ceres
-    LDA #$00 : STA $7E005F       ; Initialize mode 7
-    CPX #$DF45 : BNE +           ; Ceres Elevator
-    LDA #$00 : STA $7E091E : STA $7E0920
-    BRA .ceresdone
-+   CPX #$DF8D : BNE +           ; Ceres Falling Tiles
-    LDA #$01 : STA $7E091E
-    LDA #$02 : STA $7E0920
-    BRA .ceresdone
-+   CPX #$DFD7 : BNE +           ; Ceres Magnet Stairs
-    LDA #$03 : STA $7E091E
-    LDA #$02 : STA $7E0920
-    BRA .ceresdone
-+   CPX #$E021 : BNE +           ; Ceres Dead Scientists
-    LDA #$04 : STA $7E091E
-    LDA #$03 : STA $7E0920
-    BRA .ceresdone
-+   CPX #$E06B : BNE +           ; Ceres 58 Escape
-    LDA #$06 : STA $7E091E
-    LDA #$03 : STA $7E0920
-    BRA .ceresdone
-+   CPX #$E0B5 : BNE .ceresdone  ; Ceres Ridley
-    LDA #$08 : STA $7E091E
-    LDA #$03 : STA $7E0920
-
-  .ceresdone
-    PLP
++   PLP
     RTS
 }
 
@@ -474,7 +407,7 @@ print pc, " custom presets end"
 
 org $FE8000
 print pc, " preset menu/data start"
-incsrc presets/prkd_menu.asm
-incsrc presets/prkd_data.asm
+incsrc presets/szm101_menu.asm
+incsrc presets/szm101_data.asm
 print pc, " preset menu/data end"
 

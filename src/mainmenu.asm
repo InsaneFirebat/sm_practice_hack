@@ -138,13 +138,13 @@ action_presets_submenu:
 
 preset_category_submenus:
 {
-    dw #PresetsMenuPrkd
+    dw #PresetsMenuSzm101
     dw #$0000
 }
 
 preset_category_banks:
 {
-    dw #PresetsMenuPrkd>>16
+    dw #PresetsMenuSzm101>>16
     dw #$0000
 
 }
@@ -231,7 +231,7 @@ presets_load_custom_preset:
 SelectPresetCategoryMenu:
     dw #presets_current
     dw #$FFFF
-    dw #precat_prkd
+    dw #precat_szm101
     dw #$0000
     %cm_header("SELECT PRESET CATEGORY")
 
@@ -240,14 +240,14 @@ presets_current:
     dl #!sram_preset_category
     dw #.routine
     db #$28, "CURRENT PRESET", #$FF
-        db #$28, "PLACEHOLDER", #$FF
+        db #$28, " 101% ITEMS", #$FF
     db #$FF
   .routine
     LDA #$0000 : STA !sram_last_preset
     RTS
 
-precat_prkd:
-    %cm_jsr("Any% PRKD (Placeholder)", #action_select_preset_category, #$0000)
+precat_szm101:
+    %cm_jsr("101% Item Collection", #action_select_preset_category, #$0000)
 
 action_select_preset_category:
 {
