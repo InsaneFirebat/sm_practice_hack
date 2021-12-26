@@ -48,8 +48,7 @@
 !ram_tmp_4 = !WRAM_START+$2A
 
 !ram_last_hp = !WRAM_START+$2C
-
-; ^ FREE SPACE ^
+!ram_reserves_last = !WRAM_START+$2E
 
 !ram_pct_1 = !WRAM_START+$30
 !ram_pct_2 = !WRAM_START+$32
@@ -244,6 +243,8 @@
 !IH_PERCENT = #$0C0A
 !IH_DECIMAL = #$0CCB
 !IH_HYPHEN = #$0C60
+!IH_RESERVE_AUTO = #$0C32
+!IH_RESERVE_EMPTY = #$0C33
 !IH_BOMB = #$0058
 !IH_MORPHBALL = #$1CC9
 !IH_ELEVATOR = #$1CCE
@@ -299,6 +300,10 @@
 !MUSIC_TRACK = $07F5
 !LAYER1_X = $0911
 !LAYER1_Y = $0915
+!SAMUS_RESERVE_MODE = $09C0
+!SAMUS_HP = $09C2
+!SAMUS_RESERVE_MAX = $09D4
+!SAMUS_RESERVE_ENERGY = $09D6
 !SAMUS_X = $0AF6
 !SAMUS_Y = $0AFA
 !SAMUS_X_RADIUS = $0AFE
@@ -360,6 +365,7 @@
 !sram_metronome_tickrate = $F02A38
 !sram_metronome_sfx = $F02A3A
 !sram_status_icons = $F02A3C
+!sram_top_display_mode = $F02A3E
 
 ; FREE SPACE ^
 
