@@ -1,11 +1,12 @@
 # Redesign and Axeil
 
 Redesign: https://metroidconstruction.com/hack.php?id=34
+
 Axeil: https://metroidconstruction.com/hack.php?id=205
 
 ## Special Thanks
 
-Thanks to Osse for making the Redesign presets, reporting bugs, and testing.
+Thanks to Osse for making the Redesign presets, reporting bugs, and testing throughout the process.
 
 ## Notes
 
