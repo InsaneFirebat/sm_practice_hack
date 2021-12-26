@@ -627,7 +627,7 @@ preset_SZM101_varia_super_ceiling_bomb_jump:
     dl $7E09C4 : db $02 : dw $00C7 ; Max health
     dl $7E0A1C : db $02 : dw $0041 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0404 ; More position/state
-    dl $7E0AF6 : db $02 : dw $0215 ; Samus X
+    dl $7E0AF6 : db $02 : dw $0206 ; Samus X
     dl $7E0AFA : db $02 : dw $0049 ; Samus Y
     dl $7ED87C : db $02 : dw $0108 ; Events, Items, Doors
     dw #$FFFF
@@ -1100,9 +1100,9 @@ preset_SZM101_upper_norfair_leaving_power_bomb_room:
     dl $7E09D0 : db $02 : dw $0002 ; Max pbs
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
-    dl $7E0A68 : db $02 : dw $0049 ; Flash suit
     dl $7E0AF6 : db $02 : dw $0031 ; Samus X
     dl $7E0AFA : db $02 : dw $018B ; Samus Y
+    dl $7E0B3F : db $02 : dw $0004 ; Blue suit
     dl $7ED878 : db $02 : dw $4001 ; Events, Items, Doors
     dl $7ED8C6 : db $02 : dw $4020 ; Events, Items, Doors
     dl $7ED91A : db $02 : dw $0041 ; Events, Items, Doors
@@ -1122,9 +1122,9 @@ preset_SZM101_upper_norfair_pre_ice:
     dl $7E0923 : db $02 : dw $F800 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $00E6 ; Health
     dl $7E09CA : db $02 : dw $0006 ; Supers
-    dl $7E0A68 : db $02 : dw $0000 ; Flash suit
     dl $7E0AF6 : db $02 : dw $0082 ; Samus X
     dl $7E0AFA : db $02 : dw $008B ; Samus Y
+    dl $7E0B3F : db $02 : dw $0000 ; Blue suit
     dl $7ED91A : db $02 : dw $0042 ; Events, Items, Doors
     dw #$FFFF
 .after
@@ -1199,9 +1199,9 @@ preset_SZM101_upper_norfair_pre_hi_jump:
     dl $7E09CC : db $02 : dw $000A ; Max supers
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
-    dl $7E0A68 : db $02 : dw $00A7 ; Flash suit
     dl $7E0AF6 : db $02 : dw $03D1 ; Samus X
     dl $7E0AFA : db $02 : dw $0484 ; Samus Y
+    dl $7E0B3F : db $02 : dw $0004 ; Blue suit
     dl $7ED878 : db $02 : dw $4003 ; Events, Items, Doors
     dl $7ED87C : db $02 : dw $A11E ; Events, Items, Doors
     dl $7ED91A : db $02 : dw $0046 ; Events, Items, Doors
@@ -1226,7 +1226,6 @@ preset_SZM101_upper_norfair_leaving_hi_jump:
     dl $7E09C6 : db $02 : dw $0016 ; Missiles
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
-    dl $7E0A68 : db $02 : dw $0000 ; Flash suit
     dl $7E0AF6 : db $02 : dw $0098 ; Samus X
     dl $7E0AFA : db $02 : dw $007B ; Samus Y
     dl $7ED880 : db $02 : dw $01F3 ; Events, Items, Doors
@@ -1249,6 +1248,7 @@ preset_SZM101_upper_norfair_springball:
     dl $7E09CA : db $02 : dw $0009 ; Supers
     dl $7E0AF6 : db $02 : dw $003D ; Samus X
     dl $7E0AFA : db $02 : dw $008B ; Samus Y
+    dl $7E0B3F : db $02 : dw $0000 ; Blue suit
     dl $7ED91A : db $02 : dw $0049 ; Events, Items, Doors
     dw #$FFFF
 .after
@@ -1258,23 +1258,24 @@ preset_SZM101_upper_norfair_big_dessgeegas:
     dl $7E078D : db $02 : dw $949E ; DDB
     dl $7E078F : db $02 : dw $0003 ; DoorOut Index
     dl $7E079B : db $02 : dw $ADDE ; MDB
-    dl $7E090F : db $02 : dw $AC00 ; Screen subpixel X position.
-    dl $7E0911 : db $02 : dw $01B7 ; Screen X position in pixels
-    dl $7E0915 : db $02 : dw $04DD ; Screen Y position in pixels
-    dl $7E0917 : db $02 : dw $01B7 ; Layer 2 X scroll in room in pixels?
-    dl $7E0919 : db $02 : dw $04DD ; Layer 2 Y scroll in room in pixels? (up = positive)
+    dl $7E090F : db $02 : dw $1C00 ; Screen subpixel X position.
+    dl $7E0911 : db $02 : dw $0220 ; Screen X position in pixels
+    dl $7E0913 : db $02 : dw $9800 ; Screen subpixel Y position
+    dl $7E0915 : db $02 : dw $0500 ; Screen Y position in pixels
+    dl $7E0917 : db $02 : dw $0220 ; Layer 2 X scroll in room in pixels?
+    dl $7E0919 : db $02 : dw $0500 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0921 : db $02 : dw $F900 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09A2 : db $02 : dw $7107 ; Equipped Items
     dl $7E09A4 : db $02 : dw $7107 ; Collected Items
     dl $7E09C2 : db $02 : dw $01BC ; Health
-    dl $7E09C6 : db $02 : dw $0007 ; Missiles
+    dl $7E09C6 : db $02 : dw $0006 ; Missiles
     dl $7E09CE : db $02 : dw $0004 ; Pbs
     dl $7E09D0 : db $02 : dw $0004 ; Max pbs
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
-    dl $7E0AF6 : db $02 : dw $0248 ; Samus X
-    dl $7E0AFA : db $02 : dw $054B ; Samus Y
+    dl $7E0AF6 : db $02 : dw $0298 ; Samus X
+    dl $7E0AFA : db $02 : dw $057B ; Samus Y
     dl $7ED878 : db $02 : dw $C003 ; Events, Items, Doors
     dl $7ED880 : db $02 : dw $41F3 ; Events, Items, Doors
     dl $7ED91A : db $02 : dw $004B ; Events, Items, Doors
@@ -1296,7 +1297,6 @@ preset_SZM101_upper_norfair_wave_block_pit:
     dl $7E0919 : db $02 : dw $0000 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0921 : db $02 : dw $0100 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $018A ; Health
-    dl $7E09C6 : db $02 : dw $0006 ; Missiles
     dl $7E09CA : db $02 : dw $0008 ; Supers
     dl $7E0AF6 : db $02 : dw $0039 ; Samus X
     dl $7E0AFA : db $02 : dw $008B ; Samus Y
@@ -1893,7 +1893,9 @@ preset_SZM101_cleanup_1_caterpiller_short_charge:
     dl $7E0921 : db $02 : dw $0000 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $FE00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $01DA ; Health
-    dl $7E09CE : db $02 : dw $000B ; Pbs
+    dl $7E09C6 : db $02 : dw $0036 ; Missiles
+    dl $7E09CA : db $02 : dw $000F ; Supers
+    dl $7E09CE : db $02 : dw $0009 ; Pbs
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
     dl $7E0AF6 : db $02 : dw $007A ; Samus X
@@ -1941,7 +1943,8 @@ preset_SZM101_cleanup_1_spikesuit_hallway:
     dl $7E0919 : db $02 : dw $00ED ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0921 : db $02 : dw $0000 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $FE00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dl $7E09CA : db $02 : dw $000E ; Supers
+    dl $7E09CA : db $02 : dw $0012 ; Supers
+    dl $7E09CE : db $02 : dw $000B ; Pbs
     dl $7E0AF6 : db $02 : dw $00B1 ; Samus X
     dl $7E0AFA : db $02 : dw $018B ; Samus Y
     dl $7ED91A : db $02 : dw $00A3 ; Events, Items, Doors
@@ -1964,6 +1967,7 @@ preset_SZM101_cleanup_1_chasm_supers:
     dl $7E0921 : db $02 : dw $F900 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $FD00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $0289 ; Health
+    dl $7E09C6 : db $02 : dw $0035 ; Missiles
     dl $7E09D6 : db $02 : dw $00A3 ; Reserves
     dl $7E0AF6 : db $02 : dw $024A ; Samus X
     dl $7E0AFA : db $02 : dw $007B ; Samus Y
@@ -1989,7 +1993,6 @@ preset_SZM101_cleanup_1_speed_keep_descent:
     dl $7E0919 : db $02 : dw $0000 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0921 : db $02 : dw $FE00 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dl $7E09CA : db $02 : dw $000F ; Supers
     dl $7E09CC : db $02 : dw $0014 ; Max supers
     dl $7E09CE : db $02 : dw $000A ; Pbs
     dl $7E0AF6 : db $02 : dw $0172 ; Samus X
@@ -2035,7 +2038,7 @@ preset_SZM101_cleanup_1_eticoon_entry:
     dl $7E0921 : db $02 : dw $FC00 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $FE00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $02B1 ; Health
-    dl $7E09C6 : db $02 : dw $0022 ; Missiles
+    dl $7E09C6 : db $02 : dw $003B ; Missiles
     dl $7E09C8 : db $02 : dw $0050 ; Max missiles
     dl $7E09D6 : db $02 : dw $00B7 ; Reserves
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
@@ -2087,9 +2090,9 @@ preset_SZM101_cleanup_1_crumble_pillers:
     dl $7E0923 : db $02 : dw $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $02DE ; Health
     dl $7E09C4 : db $02 : dw $02ED ; Max health
-    dl $7E09C6 : db $02 : dw $0020 ; Missiles
-    dl $7E09CA : db $02 : dw $000E ; Supers
-    dl $7E09CE : db $02 : dw $000E ; Pbs
+    dl $7E09C6 : db $02 : dw $0037 ; Missiles
+    dl $7E09CA : db $02 : dw $0011 ; Supers
+    dl $7E09CE : db $02 : dw $000C ; Pbs
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
     dl $7E0AF6 : db $02 : dw $0027 ; Samus X
@@ -2111,8 +2114,7 @@ preset_SZM101_cleanup_1_post_sporespawn_room:
     dl $7E0921 : db $02 : dw $FF00 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $FE00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $02E3 ; Health
-    dl $7E09C6 : db $02 : dw $001F ; Missiles
-    dl $7E09CA : db $02 : dw $0010 ; Supers
+    dl $7E09CA : db $02 : dw $0013 ; Supers
     dl $7E09CC : db $02 : dw $0016 ; Max supers
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
@@ -2139,7 +2141,7 @@ preset_SZM101_cleanup_1_spazer:
     dl $7E0921 : db $02 : dw $F900 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $FD00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $02BB ; Health
-    dl $7E09C6 : db $02 : dw $0024 ; Missiles
+    dl $7E09C6 : db $02 : dw $003C ; Missiles
     dl $7E09C8 : db $02 : dw $0055 ; Max missiles
     dl $7E0AF6 : db $02 : dw $00F1 ; Samus X
     dl $7E0AFA : db $02 : dw $019B ; Samus Y
@@ -2162,9 +2164,9 @@ preset_SZM101_cleanup_1_spazer_exit:
     dl $7E0923 : db $02 : dw $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09A6 : db $02 : dw $0007 ; Beams
     dl $7E09A8 : db $02 : dw $0007 ; Beams
-    dl $7E09C6 : db $02 : dw $002D ; Missiles
+    dl $7E09C6 : db $02 : dw $0044 ; Missiles
     dl $7E09C8 : db $02 : dw $005F ; Max missiles
-    dl $7E09CA : db $02 : dw $000E ; Supers
+    dl $7E09CA : db $02 : dw $0011 ; Supers
     dl $7E0AF6 : db $02 : dw $0075 ; Samus X
     dl $7E0AFA : db $02 : dw $029B ; Samus Y
     dl $7ED872 : db $02 : dw $E9BD ; Events, Items, Doors
@@ -2175,7 +2177,7 @@ preset_SZM101_cleanup_1_spazer_exit:
     dw #$FFFF
 .after
 
-preset_SZM101_cleanup_1_space_jump_:
+preset_SZM101_cleanup_1_leaving_tourian:
     dw #preset_SZM101_cleanup_1_spazer_exit ; Cleanup 1: Spazer Exit
     dl $7E078D : db $02 : dw $AA5C ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
@@ -2188,8 +2190,8 @@ preset_SZM101_cleanup_1_space_jump_:
     dl $7E0921 : db $02 : dw $0000 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $00E0 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $0243 ; Health
-    dl $7E09CA : db $02 : dw $000D ; Supers
-    dl $7E09CE : db $02 : dw $000C ; Pbs
+    dl $7E09CA : db $02 : dw $0010 ; Supers
+    dl $7E09CE : db $02 : dw $000A ; Pbs
     dl $7E0A1C : db $02 : dw $009B ; Samus position/state
     dl $7E0A1E : db $02 : dw $0000 ; More position/state
     dl $7E0AF6 : db $02 : dw $0080 ; Samus X
@@ -2202,7 +2204,7 @@ preset_SZM101_cleanup_1_space_jump_:
 .after
 
 preset_SZM101_cleanup_1_bomb_hole_missiles:
-    dw #preset_SZM101_cleanup_1_space_jump_ ; Cleanup 1: Space Jump 
+    dw #preset_SZM101_cleanup_1_leaving_tourian ; Cleanup 1: Leaving Tourian
     dl $7E078D : db $02 : dw $B684 ; DDB
     dl $7E079B : db $02 : dw $9D19 ; MDB
     dl $7E090F : db $02 : dw $6980 ; Screen subpixel X position.
@@ -2215,8 +2217,8 @@ preset_SZM101_cleanup_1_bomb_hole_missiles:
     dl $7E0923 : db $02 : dw $FD00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $031F ; Health
     dl $7E09C4 : db $02 : dw $031F ; Max health
-    dl $7E09CA : db $02 : dw $000A ; Supers
-    dl $7E09CE : db $02 : dw $000A ; Pbs
+    dl $7E09CA : db $02 : dw $000E ; Supers
+    dl $7E09CE : db $02 : dw $0008 ; Pbs
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
     dl $7E0AF6 : db $02 : dw $014E ; Samus X
@@ -2238,11 +2240,11 @@ preset_SZM101_cleanup_1_mini_kraid_big_lag:
     dl $7E0919 : db $02 : dw $030C ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0921 : db $02 : dw $F700 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $FE00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dl $7E09C6 : db $02 : dw $0037 ; Missiles
+    dl $7E09C6 : db $02 : dw $004E ; Missiles
     dl $7E09C8 : db $02 : dw $0069 ; Max missiles
     dl $7E09CA : db $02 : dw $000C ; Supers
-    dl $7E09CC : db $02 : dw $0018 ; Max supers
-    dl $7E09CE : db $02 : dw $000C ; Pbs
+    dl $7E09CC : db $02 : dw $0010 ; Max supers
+    dl $7E09CE : db $02 : dw $0009 ; Pbs
     dl $7E09D6 : db $02 : dw $00C8 ; Reserves
     dl $7E0AF6 : db $02 : dw $06B4 ; Samus X
     dl $7E0AFA : db $02 : dw $0481 ; Samus Y
@@ -2266,10 +2268,10 @@ preset_SZM101_cleanup_1_pink_room_exit_spark:
     dl $7E0921 : db $02 : dw $F800 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $0315 ; Health
-    dl $7E09C6 : db $02 : dw $0038 ; Missiles
+    dl $7E09C6 : db $02 : dw $0051 ; Missiles
     dl $7E09C8 : db $02 : dw $006E ; Max missiles
-    dl $7E09CA : db $02 : dw $0009 ; Supers
-    dl $7E09CE : db $02 : dw $000E ; Pbs
+    dl $7E09CA : db $02 : dw $0015 ; Supers
+    dl $7E09CE : db $02 : dw $000B ; Pbs
     dl $7E09D0 : db $02 : dw $0010 ; Max pbs
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
@@ -2322,9 +2324,9 @@ preset_SZM101_chozodia_robot_clip_with_speed:
     dl $7E0919 : db $02 : dw $041D ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0923 : db $02 : dw $FA00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $030F ; Health
-    dl $7E09C6 : db $02 : dw $0041 ; Missiles
+    dl $7E09C6 : db $02 : dw $0057 ; Missiles
     dl $7E09C8 : db $02 : dw $0073 ; Max missiles
-    dl $7E09CA : db $02 : dw $000B ; Supers
+    dl $7E09CA : db $02 : dw $0017 ; Supers
     dl $7E09CC : db $02 : dw $001A ; Max supers
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
@@ -2347,9 +2349,9 @@ preset_SZM101_chozodia_charge_entry:
     dl $7E0921 : db $02 : dw $FD00 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $FF00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $0301 ; Health
-    dl $7E09C6 : db $02 : dw $0044 ; Missiles
+    dl $7E09C6 : db $02 : dw $005A ; Missiles
     dl $7E09C8 : db $02 : dw $0078 ; Max missiles
-    dl $7E09CE : db $02 : dw $000D ; Pbs
+    dl $7E09CE : db $02 : dw $000A ; Pbs
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
     dl $7E0AF6 : db $02 : dw $013E ; Samus X
@@ -2400,6 +2402,7 @@ preset_SZM101_chozodia_shoot_the_floor:
     dl $7E0917 : db $02 : dw $0240 ; Layer 2 X scroll in room in pixels?
     dl $7E0923 : db $02 : dw $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $02EA ; Health
+    dl $7E09CA : db $02 : dw $0015 ; Supers
     dl $7E0AF6 : db $02 : dw $03BF ; Samus X
     dl $7E0AFA : db $02 : dw $0194 ; Samus Y
     dl $7ED91A : db $02 : dw $00D7 ; Events, Items, Doors
@@ -2420,9 +2423,8 @@ preset_SZM101_chozodia_map_room:
     dl $7E0915 : db $02 : dw $0000 ; Screen Y position in pixels
     dl $7E0917 : db $02 : dw $0000 ; Layer 2 X scroll in room in pixels?
     dl $7E0919 : db $02 : dw $0000 ; Layer 2 Y scroll in room in pixels? (up = positive)
-    dl $7E09C6 : db $02 : dw $0048 ; Missiles
+    dl $7E09C6 : db $02 : dw $005E ; Missiles
     dl $7E09C8 : db $02 : dw $007D ; Max missiles
-    dl $7E09CA : db $02 : dw $000D ; Supers
     dl $7E0AF6 : db $02 : dw $00A7 ; Samus X
     dl $7E0AFA : db $02 : dw $009B ; Samus Y
     dl $7ED872 : db $02 : dw $E9FD ; Events, Items, Doors
@@ -2447,6 +2449,7 @@ preset_SZM101_chozodia_white_room_etank:
     dl $7E0919 : db $02 : dw $0019 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0923 : db $02 : dw $FF00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $015B ; Health
+    dl $7E09C6 : db $02 : dw $0060 ; Missiles
     dl $7E09D0 : db $02 : dw $0012 ; Max pbs
     dl $7E0AF6 : db $02 : dw $01C9 ; Samus X
     dl $7E0AFA : db $02 : dw $0092 ; Samus Y
@@ -2476,8 +2479,7 @@ preset_SZM101_chozodia_ship_entry_chain_spark:
     dl $7E0923 : db $02 : dw $FE00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $0351 ; Health
     dl $7E09C4 : db $02 : dw $0351 ; Max health
-    dl $7E09C6 : db $02 : dw $004A ; Missiles
-    dl $7E09CE : db $02 : dw $000C ; Pbs
+    dl $7E09CE : db $02 : dw $0009 ; Pbs
     dl $7E0AF6 : db $02 : dw $0272 ; Samus X
     dl $7E0AFA : db $02 : dw $01BB ; Samus Y
     dl $7ED87C : db $02 : dw $E75E ; Events, Items, Doors
@@ -2503,7 +2505,7 @@ preset_SZM101_chozodia_waterway_speedkeep:
     dl $7E0919 : db $02 : dw $020B ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0921 : db $02 : dw $0100 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $FF00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dl $7E09CE : db $02 : dw $000B ; Pbs
+    dl $7E09CE : db $02 : dw $0008 ; Pbs
     dl $7E0A1C : db $02 : dw $0079 ; Samus position/state
     dl $7E0A1E : db $02 : dw $1108 ; More position/state
     dl $7E0AF6 : db $02 : dw $01E4 ; Samus X
@@ -2550,7 +2552,7 @@ preset_SZM101_chozodia_bang:
     dl $7E0919 : db $02 : dw $00D7 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0921 : db $02 : dw $0000 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $00E0 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dl $7E09CE : db $02 : dw $000A ; Pbs
+    dl $7E09CE : db $02 : dw $000B ; Pbs
     dl $7E0A1C : db $02 : dw $0027 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0508 ; More position/state
     dl $7E0AF6 : db $02 : dw $0352 ; Samus X
@@ -2575,8 +2577,8 @@ preset_SZM101_chozodia_botwoon:
     dl $7E0923 : db $02 : dw $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09A6 : db $02 : dw $1001 ; Beams
     dl $7E09C2 : db $02 : dw $02ED ; Health
-    dl $7E09C6 : db $02 : dw $004D ; Missiles
-    dl $7E09CE : db $02 : dw $0008 ; Pbs
+    dl $7E09C6 : db $02 : dw $0062 ; Missiles
+    dl $7E09CE : db $02 : dw $0009 ; Pbs
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
     dl $7E0AF6 : db $02 : dw $01B8 ; Samus X
@@ -2599,8 +2601,9 @@ preset_SZM101_chozodia_gravity:
     dl $7E0919 : db $02 : dw $0300 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0923 : db $02 : dw $FD00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $0122 ; Health
-    dl $7E09C6 : db $02 : dw $000C ; Missiles
-    dl $7E09CA : db $02 : dw $0000 ; Supers
+    dl $7E09C6 : db $02 : dw $001A ; Missiles
+    dl $7E09CA : db $02 : dw $0017 ; Supers
+    dl $7E09CE : db $02 : dw $0007 ; Pbs
     dl $7E09D6 : db $02 : dw $0000 ; Reserves
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
@@ -3644,6 +3647,7 @@ preset_SZM101_cleanup_2_rock_pipes:
     dl $7E0919 : db $02 : dw $0321 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0921 : db $02 : dw $0000 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $00E0 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dl $7E09A6 : db $02 : dw $1009 ; Beams
     dl $7E09C6 : db $02 : dw $007A ; Missiles
     dl $7E09C8 : db $02 : dw $00B9 ; Max missiles
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
@@ -3946,7 +3950,6 @@ preset_SZM101_pirate_ship_ridley_kihunter_zoo:
     dl $7E0919 : db $02 : dw $0300 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0921 : db $02 : dw $0100 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $FF00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dl $7E09A6 : db $02 : dw $1009 ; Beams
     dl $7E09C2 : db $02 : dw $04D8 ; Health
     dl $7E09C6 : db $02 : dw $0098 ; Missiles
     dl $7E09CA : db $02 : dw $0021 ; Supers

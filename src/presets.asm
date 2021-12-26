@@ -257,6 +257,7 @@ preset_start_gameplay:
     JSL $89AB82  ; Load FX
     JSL $82E97C  ; Load library background
 
+print pc, " <----- preset_scroll_fixes"
     JSR preset_scroll_fixes
 
     ; Pull layer 2 values, and use them if they are valid
@@ -340,7 +341,18 @@ preset_scroll_fixes:
     CPX #$C9E3 : BNE +           ; Preset: Pirate Ship Ridley - Kihunter Zoo
     STA $7ECD2A : STA $7ECD2B
     STA $7ECD2D : STA $7ECD2E
-;    BRA .done
+    BRA .done
++   CPX #$B5EE : BNE +           ; Preset: Lower Norfair - Chain Spark Puzzle
+    STA $7ECD27
++   CPX #$A507 : BNE +           ; Preset: Lower Norfair - Leaving Spark Puzzle
+    STA $7ECD20 : STA $7ECD21 : STA $7ECD22
++   CPX #$8AD8 : BNE +           ; Preset: Cleanup 1 - Super Door Over Crumples
+    STA $7ECD39 : STA $7ECD3D
+    LDA #$00 : STA $7ECD38
++   CPX #$992C : BNE +           ; Preset: Cleanup 1 - Crumble Pillers
+    STA $7ECD26
++   CPX #$9929 : BNE +           ; Preset: Chozodia - Waterway Speedkeep
+    LDA #$02 : STA $7ECD25
 ;+   CPX #$B3A5 : BNE +           ; bottom of Pre-Pillars
 ;    LDY $0AFA : CPY #$0190       ; no scroll fix if Ypos < 400
 ;    BMI .done

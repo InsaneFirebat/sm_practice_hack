@@ -11,7 +11,7 @@ PresetsMenuSzm101:
     dw #presets_goto_SZM101_pirate_ship_ridley
     dw #presets_goto_SZM101_pirate_ship_draygon
     dw #$0000
-    %cm_header("101% ITEMS COLLECTION")
+    %cm_header("101% ITEM COLLECTION")
     %cm_footer("PRESETS BY OSSE")
 
 presets_goto_SZM101_bombs:
@@ -153,7 +153,7 @@ presets_submenu_SZM101_cleanup_1:
     dw #presets_SZM101_cleanup_1_post_sporespawn_room
     dw #presets_SZM101_cleanup_1_spazer
     dw #presets_SZM101_cleanup_1_spazer_exit
-    dw #presets_SZM101_cleanup_1_space_jump_
+    dw #presets_SZM101_cleanup_1_leaving_tourian
     dw #presets_SZM101_cleanup_1_bomb_hole_missiles
     dw #presets_SZM101_cleanup_1_mini_kraid_big_lag
     dw #presets_SZM101_cleanup_1_pink_room_exit_spark
@@ -476,7 +476,7 @@ presets_SZM101_lower_norfair_fallen_hero_super:
     %cm_preset("Fallen Hero Super", #preset_SZM101_lower_norfair_fallen_hero_super)
 
 presets_SZM101_lower_norfair_morph_maze_pipes:
-    %cm_preset("morph maze pipes", #preset_SZM101_lower_norfair_morph_maze_pipes)
+    %cm_preset("Morph Maze Pipes", #preset_SZM101_lower_norfair_morph_maze_pipes)
 
 presets_SZM101_lower_norfair_build_your_speedway:
     %cm_preset("Build Your Speedway", #preset_SZM101_lower_norfair_build_your_speedway)
@@ -540,8 +540,8 @@ presets_SZM101_cleanup_1_spazer:
 presets_SZM101_cleanup_1_spazer_exit:
     %cm_preset("Spazer Exit", #preset_SZM101_cleanup_1_spazer_exit)
 
-presets_SZM101_cleanup_1_space_jump_:
-    %cm_preset("Space Jump ", #preset_SZM101_cleanup_1_space_jump_)
+presets_SZM101_cleanup_1_leaving_tourian:
+    %cm_preset("Leaving Tourian", #preset_SZM101_cleanup_1_leaving_tourian)
 
 presets_SZM101_cleanup_1_bomb_hole_missiles:
     %cm_preset("Bomb Hole Missiles", #preset_SZM101_cleanup_1_bomb_hole_missiles)

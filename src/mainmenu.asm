@@ -703,10 +703,10 @@ tel_goto_norf:
     %cm_submenu("Norfair", #TeleportNorfairMenu)
 
 tel_goto_ship:
-    %cm_submenu("Wrecked Ship", #TeleportWreckedShipMenu)
+    %cm_submenu("Pirate Ship", #TeleportWreckedShipMenu)
 
 tel_goto_mari:
-    %cm_submenu("Maridia", #TeleportMaridiaMenu)
+    %cm_submenu("Chozodia", #TeleportMaridiaMenu)
 
 tel_goto_tour:
     %cm_submenu("Tourian", #TeleportTourianMenu)
