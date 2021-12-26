@@ -1,5 +1,11 @@
 # HACK
 
+Normal v2.3: https://metroidconstruction.com/hack.php?id=19
+
+## Special Thanks
+
+Thanks to Osse for making the 101% presets, reporting bugs, and testing throughout the process.
+
 ## Notes
 
 Always use the UNHEADERED (UH) version of the hack for the practice rom.
