@@ -338,20 +338,20 @@ preset_scroll_fixes:
     LDA #$01 : LDX $079B         ; X = room ID
 ;    CPX #$C000 : BPL .halfway    ; organized by room ID so we only have to check half
 
-    CPX #$C9E3 : BNE +           ; Preset: Pirate Ship Ridley - Kihunter Zoo
+    CPX #$C0E4 : BNE +           ; Preset: Pirate Ship Ridley - Kihunter Zoo
     STA $7ECD2A : STA $7ECD2B
     STA $7ECD2D : STA $7ECD2E
     BRA .done
-+   CPX #$B5EE : BNE +           ; Preset: Lower Norfair - Chain Spark Puzzle
-    STA $7ECD27
-+   CPX #$A507 : BNE +           ; Preset: Lower Norfair - Leaving Spark Puzzle
++   CPX #$B6EE : BNE +           ; Preset: Lower Norfair - Chain Spark Puzzle
+    STA $7ECD37
++   CPX #$A618 : BNE +           ; Preset: Lower Norfair - Leaving Spark Puzzle
     STA $7ECD20 : STA $7ECD21 : STA $7ECD22
-+   CPX #$8AD8 : BNE +           ; Preset: Cleanup 1 - Super Door Over Crumples
++   CPX #$9AD9 : BNE +           ; Preset: Cleanup 1 - Super Door Over Crumples
     STA $7ECD39 : STA $7ECD3D
     LDA #$00 : STA $7ECD38
-+   CPX #$992C : BNE +           ; Preset: Cleanup 1 - Crumble Pillers
++   CPX #$A011 : BNE +           ; Preset: Cleanup 1 - Crumble Pillers
     STA $7ECD26
-+   CPX #$9929 : BNE +           ; Preset: Chozodia - Waterway Speedkeep
++   CPX #$87B7 : BNE +           ; Preset: Chozodia - Waterway Speedkeep
     LDA #$02 : STA $7ECD25
 ;+   CPX #$B3A5 : BNE +           ; bottom of Pre-Pillars
 ;    LDY $0AFA : CPY #$0190       ; no scroll fix if Ypos < 400

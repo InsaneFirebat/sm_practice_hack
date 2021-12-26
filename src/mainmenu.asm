@@ -384,10 +384,10 @@ eq_goto_togglebeams:
     %cm_submenu("Toggle Beams", #ToggleBeamsMenu)
 
 eq_currentenergy:
-    %cm_numfield_word("Current Energy", $7E09C2, 0, 2100, 1, 20, #0)
+    %cm_numfield_word("Current Energy", $7E09C2, 0, 1499, 1, 20, #0)
 
 eq_setetanks:
-    %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 21, 1, 1, .routine)
+    %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 14, 1, 1, .routine)
     .routine
         TAX
         LDA #$0000
@@ -402,10 +402,10 @@ eq_setetanks:
         RTS
 
 eq_currentreserves:
-    %cm_numfield_word("Current Reserves", $7E09D6, 0, 700, 1, 20, #0)
+    %cm_numfield_word("Current Reserves", $7E09D6, 0, 400, 1, 20, #0)
 
 eq_setreserves:
-    %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 7, 1, 1, .routine)
+    %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 4, 1, 1, .routine)
     .routine
         TAX
         LDA #$0000
@@ -418,19 +418,19 @@ eq_setreserves:
         RTS
 
 eq_setmissiles:
-    %cm_numfield_word("Missiles", $7E09C8, 0, 325, 5, 20, .routine)
+    %cm_numfield_word("Missiles", $7E09C8, 0, 225, 5, 20, .routine)
     .routine
         LDA $09C8 : STA $09C6 ; missiles
         RTS
 
 eq_setsupers:
-    %cm_numfield("Super Missiles", $7E09CC, 0, 65, 2, 10, .routine)
+    %cm_numfield("Super Missiles", $7E09CC, 0, 50, 2, 10, .routine)
     .routine
         LDA $09CC : STA $09CA ; supers
         RTS
 
 eq_setpbs:
-    %cm_numfield("Power Bombs", $7E09D0, 0, 65, 2, 10, .routine)
+    %cm_numfield("Power Bombs", $7E09D0, 0, 50, 2, 10, .routine)
     .routine
         LDA $09D0 : STA $09CE ; pbs
         RTS
@@ -453,7 +453,7 @@ ToggleCategoryMenu:
     %cm_header("TOGGLE CATEGORY")
 
 cat_100:
-    %cm_jsr("100%", action_category, #$0000)
+    %cm_jsr("101%", action_category, #$0000)
 
 cat_any_new:
     %cm_jsr("Any% PRKD", action_category, #$0001)
@@ -516,7 +516,7 @@ action_category:
 
   .table
     ;  Items,  Beams,  Health, Miss,   Supers, PBs,    Reserv, Dummy
-    dw #$F32F, #$100F, #$05DB, #$00E6, #$0032, #$0032, #$0190, #$0000        ; 100%
+    dw #$F32F, #$100F, #$05DB, #$00EB, #$0032, #$0032, #$0190, #$0000        ; 101%
     dw #$3125, #$1007, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% new
     dw #$3325, #$100B, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% old
     dw #$1025, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% ice
@@ -1225,7 +1225,7 @@ InfoHudMenu:
     dw #$FFFF
 ;    dw #ih_goto_room_strat
 ;    dw #ih_room_strat
-    dw #$FFFF
+;    dw #$FFFF
     dw #ih_room_counter
     dw #ih_reset_seg_later
     dw #ih_lag

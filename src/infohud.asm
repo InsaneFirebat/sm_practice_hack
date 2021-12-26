@@ -1235,7 +1235,7 @@ NumberGFXTable:
     dw #$0C2D, #$0C2E, #$0C2F, #$0C91, #$0C92, #$0C9B
 
 HexGFXTable:
-    dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
+    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
     dw #$0CB4, #$0CB5, #$0CAA, #$0CAB, #$0CAC, #$0CAD
 
 ControllerTable1:
