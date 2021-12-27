@@ -711,7 +711,8 @@ preset_SZM101_varia_acid_dive:
     dl $7E0923 : db $02 : dw $FD00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C6 : db $02 : dw $0009 ; Missiles
     dl $7E09D6 : db $02 : dw $0064 ; Reserves
-    dl $7E0AF6 : db $02 : dw $02B2 ; Samus X
+    dl $7E0AF6 : db $02 : dw $0292 ; Samus X
+    dl $7E0AFA : db $02 : dw $009B ; Samus Y
     dl $7ED8C4 : db $02 : dw $0040 ; Events, Items, Doors
     dw #$FFFF
 .after
@@ -1100,6 +1101,7 @@ preset_SZM101_upper_norfair_leaving_power_bomb_room:
     dl $7E09D0 : db $02 : dw $0002 ; Max pbs
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
+    dl $7E0A68 : db $02 : dw $0000 ; Flash suit
     dl $7E0AF6 : db $02 : dw $0031 ; Samus X
     dl $7E0AFA : db $02 : dw $018B ; Samus Y
     dl $7E0B3F : db $02 : dw $0004 ; Blue suit
@@ -1199,6 +1201,7 @@ preset_SZM101_upper_norfair_pre_hi_jump:
     dl $7E09CC : db $02 : dw $000A ; Max supers
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
+    dl $7E0A68 : db $02 : dw $0000 ; Flash suit
     dl $7E0AF6 : db $02 : dw $03D1 ; Samus X
     dl $7E0AFA : db $02 : dw $0484 ; Samus Y
     dl $7E0B3F : db $02 : dw $0004 ; Blue suit
@@ -2602,7 +2605,7 @@ preset_SZM101_chozodia_gravity:
     dl $7E0923 : db $02 : dw $FD00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $0122 ; Health
     dl $7E09C6 : db $02 : dw $001A ; Missiles
-    dl $7E09CA : db $02 : dw $0017 ; Supers
+    dl $7E09CA : db $02 : dw $000F ; Supers
     dl $7E09CE : db $02 : dw $0007 ; Pbs
     dl $7E09D6 : db $02 : dw $0000 ; Reserves
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
@@ -2661,7 +2664,7 @@ preset_SZM101_chozodia_tricky_chain_spark:
     dw #$FFFF
 .after
 
-preset_SZM101_chozodia_gt:
+preset_SZM101_chozodia_gold_torizo:
     dw #preset_SZM101_chozodia_tricky_chain_spark ; Chozodia: Tricky Chain Spark
     dl $7E078D : db $02 : dw $C1F8 ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
@@ -2689,7 +2692,7 @@ preset_SZM101_chozodia_gt:
 .after
 
 preset_SZM101_chozodia_reflector_puzzle:
-    dw #preset_SZM101_chozodia_gt ; Chozodia: GT
+    dw #preset_SZM101_chozodia_gold_torizo ; Chozodia: Gold Torizo
     dl $7E078D : db $02 : dw $A2C4 ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $B283 ; MDB
@@ -2821,7 +2824,7 @@ preset_SZM101_tourian_landing_site_spark:
     dl $7E0923 : db $02 : dw $FF00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C6 : db $02 : dw $0085 ; Missiles
     dl $7E09C8 : db $02 : dw $0087 ; Max missiles
-    dl $7E09CA : db $02 : dw $0000 ; Supers
+    dl $7E09CA : db $02 : dw $000E ; Supers
     dl $7E09D6 : db $02 : dw $0073 ; Reserves
     dl $7E0A68 : db $02 : dw $0096 ; Flash suit
     dl $7E0AF6 : db $02 : dw $0841 ; Samus X
@@ -2865,7 +2868,7 @@ preset_SZM101_tourian_morph_room:
     dw #$FFFF
 .after
 
-preset_SZM101_tourian_tourian_room_2:
+preset_SZM101_tourian_ninja_pirate_fall:
     dw #preset_SZM101_tourian_morph_room ; Tourian: Morph Room
     dl $7E078D : db $02 : dw $91C2 ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
@@ -2895,7 +2898,7 @@ preset_SZM101_tourian_tourian_room_2:
 .after
 
 preset_SZM101_tourian_xray:
-    dw #preset_SZM101_tourian_tourian_room_2 ; Tourian: Tourian Room 2
+    dw #preset_SZM101_tourian_ninja_pirate_fall ; Tourian: Ninja Pirate Fall
     dl $7E078D : db $02 : dw $AA14 ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $DBCD ; MDB
@@ -3174,7 +3177,7 @@ preset_SZM101_tourian_ninja_pirates:
     dl $7E09D6 : db $02 : dw $0000 ; Reserves
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
-    dl $7E0A68 : db $02 : dw $008A ; Flash suit
+    dl $7E0A68 : db $02 : dw $0001 ; Flash suit
     dl $7E0AF6 : db $02 : dw $0079 ; Samus X
     dl $7E0AFA : db $02 : dw $016B ; Samus Y
     dl $7ED82C : db $02 : dw $0106 ; Events, Items, Doors
@@ -3184,7 +3187,7 @@ preset_SZM101_tourian_ninja_pirates:
     dw #$FFFF
 .after
 
-preset_SZM101_tourian_technical_missile:
+preset_SZM101_tourian_vault_missile:
     dw #preset_SZM101_tourian_ninja_pirates ; Tourian: Ninja Pirates
     dl $7E078D : db $02 : dw $AAF8 ; DDB
     dl $7E079B : db $02 : dw $DE4D ; MDB
@@ -3205,7 +3208,7 @@ preset_SZM101_tourian_technical_missile:
 .after
 
 preset_SZM101_tourian_ninja_pirate_room:
-    dw #preset_SZM101_tourian_technical_missile ; Tourian: Technical Missile
+    dw #preset_SZM101_tourian_vault_missile ; Tourian: Vault Missile
     dl $7E078D : db $02 : dw $A48C ; DDB
     dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
     dl $7E0911 : db $02 : dw $000B ; Screen X position in pixels
@@ -3250,7 +3253,7 @@ preset_SZM101_tourian_under_mb_speedkeep:
     dw #$FFFF
 .after
 
-preset_SZM101_tourian_metroids_foreward:
+preset_SZM101_tourian_metroids_forward:
     dw #preset_SZM101_tourian_under_mb_speedkeep ; Tourian: Under MB speedkeep
     dl $7E078D : db $02 : dw $BE40 ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
@@ -3279,7 +3282,7 @@ preset_SZM101_tourian_metroids_foreward:
 .after
 
 preset_SZM101_tourian_metroids_backward:
-    dw #preset_SZM101_tourian_metroids_foreward ; Tourian: Metroids Foreward
+    dw #preset_SZM101_tourian_metroids_forward ; Tourian: Metroids Forward
     dl $7E078D : db $02 : dw $B510 ; DDB
     dl $7E078F : db $02 : dw $0004 ; DoorOut Index
     dl $7E079B : db $02 : dw $CD5C ; MDB
@@ -3330,7 +3333,7 @@ preset_SZM101_tourian_tourian_escape:
 .after
 
 preset_SZM101_cleanup_2_brinstar_secret_item:
-    dw #preset_SZM101_tourian_tourian_escape ; Tourian: Tourian escape
+    dw #preset_SZM101_tourian_tourian_escape ; Tourian: Tourian Escape
     dl $7E078D : db $02 : dw $AA5C ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $83E8 ; MDB
@@ -3402,7 +3405,7 @@ preset_SZM101_cleanup_2_mini_kraid_boss_fight:
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
     dl $7E0AF6 : db $02 : dw $0B31 ; Samus X
-    dl $7E0AFA : db $02 : dw $038B ; Samus Y
+    dl $7E0AFA : db $02 : dw $0389 ; Samus Y
     dl $7ED8C2 : db $02 : dw $52F2 ; Events, Items, Doors
     dl $7ED8CE : db $02 : dw $5950 ; Events, Items, Doors
     dl $7ED91A : db $02 : dw $0131 ; Events, Items, Doors
@@ -3429,8 +3432,8 @@ preset_SZM101_cleanup_2_kraid:
     dl $7E0923 : db $02 : dw $FA00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $0442 ; Health
     dl $7E09C4 : db $02 : dw $044B ; Max health
-    dl $7E0A1C : db $02 : dw $0079 ; Samus position/state
-    dl $7E0A1E : db $02 : dw $1108 ; More position/state
+    dl $7E0A1C : db $02 : dw $0027 ; Samus position/state
+    dl $7E0A1E : db $02 : dw $0508 ; More position/state
     dl $7E0AF6 : db $02 : dw $00D0 ; Samus X
     dl $7E0AFA : db $02 : dw $0849 ; Samus Y
     dl $7ED87C : db $02 : dw $EF7E ; Events, Items, Doors
@@ -3708,8 +3711,8 @@ preset_SZM101_cleanup_2_crocs_hideaway:
     dw #$FFFF
 .after
 
-preset_SZM101_cleanup_2_croc:
-    dw #preset_SZM101_cleanup_2_crocs_hideaway ; Cleanup 2: Crocs hideaway
+preset_SZM101_cleanup_2_crocomire:
+    dw #preset_SZM101_cleanup_2_crocs_hideaway ; Cleanup 2: Croc's Hideaway
     dl $7E078D : db $02 : dw $BECC ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $A8F8 ; MDB
@@ -3734,7 +3737,7 @@ preset_SZM101_cleanup_2_croc:
 .after
 
 preset_SZM101_cleanup_2_broken_grapple_blocks:
-    dw #preset_SZM101_cleanup_2_croc ; Cleanup 2: Croc
+    dw #preset_SZM101_cleanup_2_crocomire ; Cleanup 2: Crocomire
     dl $7E078D : db $02 : dw $8DA2 ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $A7DE ; MDB
@@ -3957,9 +3960,9 @@ preset_SZM101_pirate_ship_ridley_kihunter_zoo:
     dl $7E09D0 : db $02 : dw $002A ; Max pbs
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
-    dl $7E0A68 : db $02 : dw $003E ; Flash suit
     dl $7E0AF6 : db $02 : dw $0250 ; Samus X
     dl $7E0AFA : db $02 : dw $03AB ; Samus Y
+    dl $7E0B3F : db $02 : dw $0004 ; Blue suit
     dl $7ED87A : db $02 : dw $E2FF ; Events, Items, Doors
     dl $7ED91A : db $02 : dw $0165 ; Events, Items, Doors
     dw #$FFFF
@@ -3982,9 +3985,9 @@ preset_SZM101_pirate_ship_ridley_under_the_ship:
     dl $7E09D4 : db $02 : dw $0190 ; Max reserves
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
-    dl $7E0A68 : db $02 : dw $0000 ; Flash suit
     dl $7E0AF6 : db $02 : dw $020E ; Samus X
     dl $7E0AFA : db $02 : dw $02AB ; Samus Y
+    dl $7E0B3F : db $02 : dw $0000 ; Blue suit
     dl $7ED876 : db $02 : dw $FFBD ; Events, Items, Doors
     dl $7ED87E : db $02 : dw $FC9F ; Events, Items, Doors
     dl $7ED8CA : db $02 : dw $0F50 ; Events, Items, Doors
@@ -4256,7 +4259,7 @@ preset_SZM101_pirate_ship_ridley_two_gate:
     dl $7E09C2 : db $02 : dw $0577 ; Health
     dl $7E09C4 : db $02 : dw $0577 ; Max health
     dl $7E09CA : db $02 : dw $0025 ; Supers
-    dl $7E0AF6 : db $02 : dw $00E1 ; Samus X
+    dl $7E0AF6 : db $02 : dw $00C7 ; Samus X
     dl $7E0AFA : db $02 : dw $008B ; Samus Y
     dl $7ED87E : db $02 : dw $FFDF ; Events, Items, Doors
     dw #$FFFF
@@ -4365,7 +4368,7 @@ preset_SZM101_pirate_ship_draygon_underground_path:
 .after
 
 preset_SZM101_pirate_ship_draygon_green_lazers:
-    dw #preset_SZM101_pirate_ship_draygon_underground_path ; Pirate Ship Draygon: Underground path
+    dw #preset_SZM101_pirate_ship_draygon_underground_path ; Pirate Ship Draygon: Underground Path
     dl $7E078D : db $02 : dw $B798 ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $9879 ; MDB
@@ -4462,7 +4465,7 @@ preset_SZM101_pirate_ship_draygon_boss_missile:
     dl $7E0915 : db $02 : dw $001D ; Screen Y position in pixels
     dl $7E0917 : db $02 : dw $0001 ; Layer 2 X scroll in room in pixels?
     dl $7E0923 : db $02 : dw $FF00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dl $7E09C2 : db $02 : dw $007B ; Health
+    dl $7E09C2 : db $02 : dw $0190 ; Health
     dl $7E09C6 : db $02 : dw $0022 ; Missiles
     dl $7E09CA : db $02 : dw $0012 ; Supers
     dl $7E09CE : db $02 : dw $0029 ; Pbs
@@ -4533,7 +4536,6 @@ preset_SZM101_pirate_ship_draygon_in_the_way_blocks:
     dl $7E0911 : db $02 : dw $0000 ; Screen X position in pixels
     dl $7E0917 : db $02 : dw $0000 ; Layer 2 X scroll in room in pixels?
     dl $7E0919 : db $02 : dw $0180 ; Layer 2 Y scroll in room in pixels? (up = positive)
-    dl $7E09C2 : db $02 : dw $00F6 ; Health
     dl $7E09D6 : db $02 : dw $0000 ; Reserves
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
@@ -4554,7 +4556,6 @@ preset_SZM101_pirate_ship_draygon_animal_room:
     dl $7E0919 : db $02 : dw $0000 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0921 : db $02 : dw $0000 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $00E0 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dl $7E09C2 : db $02 : dw $00B7 ; Health
     dl $7E09CE : db $02 : dw $0028 ; Pbs
     dl $7E0AF6 : db $02 : dw $0025 ; Samus X
     dl $7E0AFA : db $02 : dw $00BB ; Samus Y
@@ -4575,7 +4576,6 @@ preset_SZM101_pirate_ship_draygon_crash_room:
     dl $7E0919 : db $02 : dw $01FF ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0921 : db $02 : dw $FF00 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $FD00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dl $7E09C2 : db $02 : dw $0078 ; Health
     dl $7E0AF6 : db $02 : dw $0056 ; Samus X
     dl $7E0AFA : db $02 : dw $028B ; Samus Y
     dl $7ED91A : db $02 : dw $018B ; Events, Items, Doors
@@ -4595,7 +4595,6 @@ preset_SZM101_pirate_ship_draygon_dachora_room:
     dl $7E0919 : db $02 : dw $0000 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0921 : db $02 : dw $FD00 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $FE00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dl $7E09C2 : db $02 : dw $0096 ; Health
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
     dl $7E0AF6 : db $02 : dw $00F6 ; Samus X

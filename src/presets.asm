@@ -336,23 +336,60 @@ preset_scroll_fixes:
     ; These fixes can often be found in nearby door asm.
     PHP : %a8() : %i16()
     LDA #$01 : LDX $079B         ; X = room ID
-;    CPX #$C000 : BPL .halfway    ; organized by room ID so we only have to check half
+    CPX #$A4B1 : BPL .halfway    ; organized by room ID so we only have to check half
 
++   CPX #$8091 : BNE +           ; Preset: Pirate Ship Ridley - Ridley
+    STA $7ECD21
+    LDA #$00 : STA $7ECD20
+    BRA .end
++   CPX #$87B7 : BNE +           ; Preset: Chozodia - Waterway Speedkeep
+    LDA #$02 : STA $7ECD25
+    BRA .end
++   CPX #$96BA : BNE +           ; Preset: Tourian - Tourian Escape
+    STA $7ECD3E
+    BRA .end
++   CPX #$9AD9 : BNE +           ; Preset: Cleanup 1 - Super Door Over Crumples
+    STA $7ECD39 : STA $7ECD3D
+    LDA #$00 : STA $7ECD38
+    BRA .end
++   CPX #$9F11 : BNE +
+    LDY $0AFA : CPY #$029A       ; two presets, each with scroll issues
+    BMI ++                       ; branch if Ypos < 666
+    STA $7ECD21                  ; Preset: Pirate Ship Ridley - Two Gate
+    BRA .end
++   CPX #$A011 : BNE +           ; Preset: Cleanup 1 - Crumble Pillers
+    STA $7ECD26
+    BRA .end
++   CPX #$A3AE : BNE +           ; Preset: Cleanup 2 - Slick Space Boost
+    LDA #$00 : STA $7ECD32
+
+  .end
+    PLP
+    RTS
+
+  .halfway
++   CPX #$A4B1 : BNE +           ; Preset: Cleanup 2 - Mini Kraid Long Room
+    STA $7ECD28 : STA $7ECD29
+    BRA .done
++   CPX #$A618 : BNE +           ; Preset: Lower Norfair - Leaving Spark Puzzle
+    STA $7ECD20 : STA $7ECD21 : STA $7ECD22
+    BRA .done
++   CPX #$B6EE : BNE +           ; Preset: Lower Norfair - Chain Spark Puzzle
+    STA $7ECD37
+    BRA .done
     CPX #$C0E4 : BNE +           ; Preset: Pirate Ship Ridley - Kihunter Zoo
     STA $7ECD2A : STA $7ECD2B
     STA $7ECD2D : STA $7ECD2E
     BRA .done
-+   CPX #$B6EE : BNE +           ; Preset: Lower Norfair - Chain Spark Puzzle
-    STA $7ECD37
-+   CPX #$A618 : BNE +           ; Preset: Lower Norfair - Leaving Spark Puzzle
-    STA $7ECD20 : STA $7ECD21 : STA $7ECD22
-+   CPX #$9AD9 : BNE +           ; Preset: Cleanup 1 - Super Door Over Crumples
-    STA $7ECD39 : STA $7ECD3D
-    LDA #$00 : STA $7ECD38
-+   CPX #$A011 : BNE +           ; Preset: Cleanup 1 - Crumble Pillers
-    STA $7ECD26
-+   CPX #$87B7 : BNE +           ; Preset: Chozodia - Waterway Speedkeep
-    LDA #$02 : STA $7ECD25
++   CPX #$DB31 : BNE +           ; Preset: Tourian - Blind Speedkeep
+    STA $7ECD22
+    LDA #$00 : STA $7ECD21
+    BRA .done
++   CPX #$DE4D : BNE +           ; Preset: Tourian - Vault Missile
+    STA $7ECD22
+    BRA .done
+++  STA $7ECD25 : STA $7ECD26    ; Preset: Pirate Ship Draygon - Underground Path
+    STA $7ECD27 : STA $7ECD28 : STA $7ECD29
 ;+   CPX #$B3A5 : BNE +           ; bottom of Pre-Pillars
 ;    LDY $0AFA : CPY #$0190       ; no scroll fix if Ypos < 400
 ;    BMI .done

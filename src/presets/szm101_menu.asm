@@ -176,7 +176,7 @@ presets_submenu_SZM101_chozodia:
     dw #presets_SZM101_chozodia_gravity
     dw #presets_SZM101_chozodia_pb_speedball
     dw #presets_SZM101_chozodia_tricky_chain_spark
-    dw #presets_SZM101_chozodia_gt
+    dw #presets_SZM101_chozodia_gold_torizo
     dw #presets_SZM101_chozodia_reflector_puzzle
     dw #presets_SZM101_chozodia_lost_maze_down
     dw #presets_SZM101_chozodia_big_space_boost
@@ -188,7 +188,7 @@ presets_submenu_SZM101_tourian:
     dw #presets_SZM101_tourian_pancake_missiles
     dw #presets_SZM101_tourian_landing_site_spark
     dw #presets_SZM101_tourian_morph_room
-    dw #presets_SZM101_tourian_tourian_room_2
+    dw #presets_SZM101_tourian_ninja_pirate_fall
     dw #presets_SZM101_tourian_xray
     dw #presets_SZM101_tourian_xray_standup_clip
     dw #presets_SZM101_tourian_blind_speedkeep
@@ -200,10 +200,10 @@ presets_submenu_SZM101_tourian:
     dw #presets_SZM101_tourian_parlor_fall
     dw #presets_SZM101_tourian_phantoon
     dw #presets_SZM101_tourian_ninja_pirates
-    dw #presets_SZM101_tourian_technical_missile
+    dw #presets_SZM101_tourian_vault_missile
     dw #presets_SZM101_tourian_ninja_pirate_room
     dw #presets_SZM101_tourian_under_mb_speedkeep
-    dw #presets_SZM101_tourian_metroids_foreward
+    dw #presets_SZM101_tourian_metroids_forward
     dw #presets_SZM101_tourian_metroids_backward
     dw #presets_SZM101_tourian_tourian_escape
     dw #$0000
@@ -225,7 +225,7 @@ presets_submenu_SZM101_cleanup_2:
     dw #presets_SZM101_cleanup_2_rock_pipes
     dw #presets_SZM101_cleanup_2_maze_skip
     dw #presets_SZM101_cleanup_2_crocs_hideaway
-    dw #presets_SZM101_cleanup_2_croc
+    dw #presets_SZM101_cleanup_2_crocomire
     dw #presets_SZM101_cleanup_2_broken_grapple_blocks
     dw #presets_SZM101_cleanup_2_lava_dive_pbs
     dw #presets_SZM101_cleanup_2_super_gate_shot
@@ -599,8 +599,8 @@ presets_SZM101_chozodia_pb_speedball:
 presets_SZM101_chozodia_tricky_chain_spark:
     %cm_preset("Tricky Chain Spark", #preset_SZM101_chozodia_tricky_chain_spark)
 
-presets_SZM101_chozodia_gt:
-    %cm_preset("GT", #preset_SZM101_chozodia_gt)
+presets_SZM101_chozodia_gold_torizo:
+    %cm_preset("Gold Torizo", #preset_SZM101_chozodia_gold_torizo)
 
 presets_SZM101_chozodia_reflector_puzzle:
     %cm_preset("Reflector Puzzle", #preset_SZM101_chozodia_reflector_puzzle)
@@ -625,8 +625,8 @@ presets_SZM101_tourian_landing_site_spark:
 presets_SZM101_tourian_morph_room:
     %cm_preset("Morph Room", #preset_SZM101_tourian_morph_room)
 
-presets_SZM101_tourian_tourian_room_2:
-    %cm_preset("Tourian Room 2", #preset_SZM101_tourian_tourian_room_2)
+presets_SZM101_tourian_ninja_pirate_fall:
+    %cm_preset("Tourian Room 2", #preset_SZM101_tourian_ninja_pirate_fall)
 
 presets_SZM101_tourian_xray:
     %cm_preset("Xray", #preset_SZM101_tourian_xray)
@@ -661,23 +661,23 @@ presets_SZM101_tourian_phantoon:
 presets_SZM101_tourian_ninja_pirates:
     %cm_preset("Ninja Pirates", #preset_SZM101_tourian_ninja_pirates)
 
-presets_SZM101_tourian_technical_missile:
-    %cm_preset("Technical Missile", #preset_SZM101_tourian_technical_missile)
+presets_SZM101_tourian_vault_missile:
+    %cm_preset("Vault Missile", #preset_SZM101_tourian_vault_missile)
 
 presets_SZM101_tourian_ninja_pirate_room:
     %cm_preset("Ninja Pirate Room", #preset_SZM101_tourian_ninja_pirate_room)
 
 presets_SZM101_tourian_under_mb_speedkeep:
-    %cm_preset("Under MB speedkeep", #preset_SZM101_tourian_under_mb_speedkeep)
+    %cm_preset("Under MB Speedkeep", #preset_SZM101_tourian_under_mb_speedkeep)
 
-presets_SZM101_tourian_metroids_foreward:
-    %cm_preset("Metroids Foreward", #preset_SZM101_tourian_metroids_foreward)
+presets_SZM101_tourian_metroids_forward:
+    %cm_preset("Metroids Forward", #preset_SZM101_tourian_metroids_forward)
 
 presets_SZM101_tourian_metroids_backward:
     %cm_preset("Metroids Backward", #preset_SZM101_tourian_metroids_backward)
 
 presets_SZM101_tourian_tourian_escape:
-    %cm_preset("Tourian escape", #preset_SZM101_tourian_tourian_escape)
+    %cm_preset("Tourian Escape", #preset_SZM101_tourian_tourian_escape)
 
 
 ; Cleanup 2
@@ -724,10 +724,10 @@ presets_SZM101_cleanup_2_maze_skip:
     %cm_preset("Maze Skip", #preset_SZM101_cleanup_2_maze_skip)
 
 presets_SZM101_cleanup_2_crocs_hideaway:
-    %cm_preset("Crocs hideaway", #preset_SZM101_cleanup_2_crocs_hideaway)
+    %cm_preset("Croc's Hideaway", #preset_SZM101_cleanup_2_crocs_hideaway)
 
-presets_SZM101_cleanup_2_croc:
-    %cm_preset("Croc", #preset_SZM101_cleanup_2_croc)
+presets_SZM101_cleanup_2_crocomire:
+    %cm_preset("Crocomire", #preset_SZM101_cleanup_2_crocomire)
 
 presets_SZM101_cleanup_2_broken_grapple_blocks:
     %cm_preset("Broken Grapple Blocks", #preset_SZM101_cleanup_2_broken_grapple_blocks)
@@ -806,7 +806,7 @@ presets_SZM101_pirate_ship_draygon_gunship_room:
     %cm_preset("Gunship Room", #preset_SZM101_pirate_ship_draygon_gunship_room)
 
 presets_SZM101_pirate_ship_draygon_underground_path:
-    %cm_preset("Underground path", #preset_SZM101_pirate_ship_draygon_underground_path)
+    %cm_preset("Underground Path", #preset_SZM101_pirate_ship_draygon_underground_path)
 
 presets_SZM101_pirate_ship_draygon_green_lazers:
     %cm_preset("Green Lazers", #preset_SZM101_pirate_ship_draygon_green_lazers)
