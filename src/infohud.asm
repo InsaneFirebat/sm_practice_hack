@@ -862,6 +862,11 @@ ih_hud_code:
 
     ; health bomb
 +   LDA $0E1A : BEQ .clearHealthBomb
+    LDA !SAMUS_HP : CMP #$0032 : BMI .pink
+    LDA !IH_LETTER_E : STA $7EC654
+    BRA +
+
+  .pink
     LDA !IH_HEALTHBOMB : STA $7EC654
     BRA +
 
