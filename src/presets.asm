@@ -18,6 +18,7 @@ preset_load:
     JSL preset_start_gameplay  ; Start gameplay
 
     JSL $809A79  ; HUD routine when game is loading
+    JSL $90AD22  ; Reset projectile data
 
     PHP
     REP #$30
