@@ -680,10 +680,14 @@ ih_hud_code:
 
   .status_icons
     LDA !sram_status_icons : BEQ .end
-
     ; health bomb
     LDA $0E1A : BEQ .clear_healthbomb
+    LDA !SAMUS_HP : CMP #$0032 : BMI .pink
     LDA !IH_LETTER_E : STA $7EC654
+    BRA .check_elevator
+
+  .pink
+    LDA !IH_LETTER_E_PINK : STA $7EC654
     BRA .check_elevator
 
   .clear_healthbomb
