@@ -353,7 +353,7 @@ preset_scroll_fixes:
     BRA .end
 +   CPX #$9F11 : BNE +
     LDY $0AFA : CPY #$029A       ; two presets, each with scroll issues
-    BMI ++                       ; branch if Ypos < 666
+    BPL ++                       ; branch if Ypos > 666
     STA $7ECD21                  ; Preset: Pirate Ship Ridley - Two Gate
     BRA .end
 ++  STA $7ECD25 : STA $7ECD26    ; Preset: Pirate Ship Draygon - Underground Path
