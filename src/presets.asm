@@ -257,7 +257,6 @@ preset_start_gameplay:
     JSL $89AB82  ; Load FX
     JSL $82E97C  ; Load library background
 
-print pc, " <----- preset_scroll_fixes"
     JSR preset_scroll_fixes
 
     ; Pull layer 2 values, and use them if they are valid
@@ -357,6 +356,9 @@ preset_scroll_fixes:
     BMI ++                       ; branch if Ypos < 666
     STA $7ECD21                  ; Preset: Pirate Ship Ridley - Two Gate
     BRA .end
+++  STA $7ECD25 : STA $7ECD26    ; Preset: Pirate Ship Draygon - Underground Path
+    STA $7ECD27 : STA $7ECD28 : STA $7ECD29
+    BRA .end
 +   CPX #$A011 : BNE +           ; Preset: Cleanup 1 - Crumble Pillers
     STA $7ECD26
     BRA .end
@@ -377,10 +379,14 @@ preset_scroll_fixes:
 +   CPX #$B6EE : BNE +           ; Preset: Lower Norfair - Chain Spark Puzzle
     STA $7ECD37
     BRA .done
-    CPX #$C0E4 : BNE +           ; Preset: Pirate Ship Ridley - Kihunter Zoo
++   CPX #$C0E4 : BNE +           ; Preset: Pirate Ship Ridley - Kihunter Zoo
     STA $7ECD2A : STA $7ECD2B
     STA $7ECD2D : STA $7ECD2E
     BRA .done
++   CPX #$C2B0 : BNE +           ; Preset: Pirate Shipe Ridley - Inside Outside Spark
+    LDA #$04 : STA $1982
+    STA $1984 : STA $1986
+    BRA +
 +   CPX #$DB31 : BNE +           ; Preset: Tourian - Blind Speedkeep
     STA $7ECD22
     LDA #$00 : STA $7ECD21
@@ -388,16 +394,6 @@ preset_scroll_fixes:
 +   CPX #$DE4D : BNE +           ; Preset: Tourian - Vault Missile
     STA $7ECD22
     BRA .done
-++  STA $7ECD25 : STA $7ECD26    ; Preset: Pirate Ship Draygon - Underground Path
-    STA $7ECD27 : STA $7ECD28 : STA $7ECD29
-;+   CPX #$B3A5 : BNE +           ; bottom of Pre-Pillars
-;    LDY $0AFA : CPY #$0190       ; no scroll fix if Ypos < 400
-;    BMI .done
-;    STA $7ECD22 : STA $7ECD24
-;    LDA #$00 : STA $7ECD21
-;    JMP .done
-;+   CPX #$B4AD : BNE +           ; top of Worst Room in the Game
-;    LDA #$02 : STA $7ECD20
 
   .done
 +   PLP

@@ -2246,7 +2246,7 @@ preset_SZM101_cleanup_1_mini_kraid_big_lag:
     dl $7E09C6 : db $02 : dw $004E ; Missiles
     dl $7E09C8 : db $02 : dw $0069 ; Max missiles
     dl $7E09CA : db $02 : dw $000C ; Supers
-    dl $7E09CC : db $02 : dw $0010 ; Max supers
+    dl $7E09CC : db $02 : dw $0018 ; Max supers
     dl $7E09CE : db $02 : dw $0009 ; Pbs
     dl $7E09D6 : db $02 : dw $00C8 ; Reserves
     dl $7E0AF6 : db $02 : dw $06B4 ; Samus X
@@ -2680,7 +2680,6 @@ preset_SZM101_chozodia_gold_torizo:
     dl $7E09A6 : db $02 : dw $100B ; Beams
     dl $7E09C2 : db $02 : dw $0351 ; Health
     dl $7E09C6 : db $02 : dw $007D ; Missiles
-    dl $7E09CA : db $02 : dw $0002 ; Supers
     dl $7E09CC : db $02 : dw $001C ; Max supers
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
@@ -3623,8 +3622,8 @@ preset_SZM101_cleanup_2_slick_space_boost:
     dl $7E09C2 : db $02 : dw $047D ; Health
     dl $7E09C4 : db $02 : dw $047D ; Max health
     dl $7E09C6 : db $02 : dw $0075 ; Missiles
-    dl $7E0A1C : db $02 : dw $008D ; Samus position/state
-    dl $7E0A1E : db $02 : dw $0E04 ; More position/state
+    dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
+    dl $7E0A1E : db $02 : dw $0008 ; More position/state
     dl $7E0A68 : db $02 : dw $00D5 ; Flash suit
     dl $7E0AF6 : db $02 : dw $016F ; Samus X
     dl $7E0AFA : db $02 : dw $069B ; Samus Y
@@ -3889,8 +3888,8 @@ preset_SZM101_pirate_ship_ridley_inside_outside_spark:
     dl $7E0923 : db $02 : dw $FC00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C6 : db $02 : dw $0096 ; Missiles
     dl $7E09C8 : db $02 : dw $00D2 ; Max missiles
-    dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
-    dl $7E0A1E : db $02 : dw $0008 ; More position/state
+    dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
+    dl $7E0A1E : db $02 : dw $0004 ; More position/state
     dl $7E0AF6 : db $02 : dw $0609 ; Samus X
     dl $7E0AFA : db $02 : dw $023B ; Samus Y
     dl $7ED822 : db $02 : dw $0021 ; Events, Items, Doors
