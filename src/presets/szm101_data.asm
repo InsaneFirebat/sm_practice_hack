@@ -3875,36 +3875,37 @@ preset_SZM101_pirate_ship_ridley_shortest_charge:
 
 preset_SZM101_pirate_ship_ridley_inside_outside_spark:
     dw #preset_SZM101_pirate_ship_ridley_shortest_charge ; Pirate Ship Ridley: Shortest Charge
-    dl $7E0911 : db $02 : dw $03EB ; Screen X position in pixels
-    dl $7E0913 : db $02 : dw $0000 ; Screen subpixel Y position
-    dl $7E0915 : db $02 : dw $003A ; Screen Y position in pixels
-    dl $7E0917 : db $02 : dw $03EB ; Layer 2 X scroll in room in pixels?
-    dl $7E0919 : db $02 : dw $003A ; Layer 2 Y scroll in room in pixels? (up = positive)
-    dl $7E09C6 : db $02 : dw $0096 ; Missiles
-    dl $7E09C8 : db $02 : dw $00D2 ; Max missiles
-    dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
-    dl $7E0A1E : db $02 : dw $0008 ; More position/state
-    dl $7E0AF6 : db $02 : dw $044B ; Samus X
-    dl $7E0AFA : db $02 : dw $00AB ; Samus Y
-    dl $7ED874 : db $02 : dw $C5FF ; Events, Items, Doors
-    dw #$FFFF
-.after
-
-preset_SZM101_pirate_ship_ridley_plasma_sba:
-    dw #preset_SZM101_pirate_ship_ridley_inside_outside_spark ; Pirate Ship Ridley: Inside Outside Spark
     dl $7E078D : db $02 : dw $A51C ; DDB
     dl $7E078F : db $02 : dw $0003 ; DoorOut Index
     dl $7E079B : db $02 : dw $C2B0 ; MDB
     dl $7E07F3 : db $02 : dw $000C ; Music Bank
     dl $7E07F5 : db $02 : dw $0005 ; Music Track
-    dl $7E090F : db $02 : dw $F380 ; Screen subpixel X position.
-    dl $7E0911 : db $02 : dw $0000 ; Screen X position in pixels
-    dl $7E0913 : db $02 : dw $4C00 ; Screen subpixel Y position
-    dl $7E0915 : db $02 : dw $02B7 ; Screen Y position in pixels
-    dl $7E0917 : db $02 : dw $0000 ; Layer 2 X scroll in room in pixels?
-    dl $7E0919 : db $02 : dw $02B7 ; Layer 2 Y scroll in room in pixels? (up = positive)
+    dl $7E090F : db $02 : dw $A000 ; Screen subpixel X position.
+    dl $7E0911 : db $02 : dw $05A7 ; Screen X position in pixels
+    dl $7E0915 : db $02 : dw $01CD ; Screen Y position in pixels
+    dl $7E0917 : db $02 : dw $05A7 ; Layer 2 X scroll in room in pixels?
+    dl $7E0919 : db $02 : dw $01CD ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0921 : db $02 : dw $FD00 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $FC00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dl $7E09C6 : db $02 : dw $0096 ; Missiles
+    dl $7E09C8 : db $02 : dw $00D2 ; Max missiles
+    dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
+    dl $7E0A1E : db $02 : dw $0008 ; More position/state
+    dl $7E0AF6 : db $02 : dw $0609 ; Samus X
+    dl $7E0AFA : db $02 : dw $023B ; Samus Y
+    dl $7ED822 : db $02 : dw $0021 ; Events, Items, Doors
+    dl $7ED874 : db $02 : dw $C5FF ; Events, Items, Doors
+    dl $7ED91A : db $02 : dw $0164 ; Events, Items, Doors
+    dw #$FFFF
+.after
+
+preset_SZM101_pirate_ship_ridley_plasma_sba:
+    dw #preset_SZM101_pirate_ship_ridley_inside_outside_spark ; Pirate Ship Ridley: Inside Outside Spark
+    dl $7E090F : db $02 : dw $F380 ; Screen subpixel X position.
+    dl $7E0911 : db $02 : dw $0000 ; Screen X position in pixels
+    dl $7E0915 : db $02 : dw $02BB ; Screen Y position in pixels
+    dl $7E0917 : db $02 : dw $0000 ; Layer 2 X scroll in room in pixels?
+    dl $7E0919 : db $02 : dw $02BB ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E09C2 : db $02 : dw $04E1 ; Health
     dl $7E09C4 : db $02 : dw $04E1 ; Max health
     dl $7E09CA : db $02 : dw $0027 ; Supers
@@ -3913,10 +3914,9 @@ preset_SZM101_pirate_ship_ridley_plasma_sba:
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
     dl $7E0AF6 : db $02 : dw $0030 ; Samus X
     dl $7E0AFA : db $02 : dw $032B ; Samus Y
-    dl $7ED822 : db $02 : dw $0021 ; Events, Items, Doors
     dl $7ED876 : db $02 : dw $FBBD ; Events, Items, Doors
     dl $7ED87E : db $02 : dw $7C9F ; Events, Items, Doors
-    dl $7ED91A : db $02 : dw $0163 ; Events, Items, Doors
+    dl $7ED91A : db $02 : dw $0165 ; Events, Items, Doors
     dw #$FFFF
 .after
 
@@ -4026,22 +4026,21 @@ preset_SZM101_pirate_ship_ridley_flappy_birds:
     dl $7E078D : db $02 : dw $A21C ; DDB
     dl $7E078F : db $02 : dw $0003 ; DoorOut Index
     dl $7E079B : db $02 : dw $8B64 ; MDB
-    dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
-    dl $7E0911 : db $02 : dw $0118 ; Screen X position in pixels
-    dl $7E0913 : db $02 : dw $0000 ; Screen subpixel Y position
-    dl $7E0915 : db $02 : dw $032B ; Screen Y position in pixels
-    dl $7E0917 : db $02 : dw $00D2 ; Layer 2 X scroll in room in pixels?
-    dl $7E0919 : db $02 : dw $0260 ; Layer 2 Y scroll in room in pixels? (up = positive)
+    dl $7E090F : db $02 : dw $F000 ; Screen subpixel X position.
+    dl $7E0911 : db $02 : dw $0000 ; Screen X position in pixels
+    dl $7E0915 : db $02 : dw $0322 ; Screen Y position in pixels
+    dl $7E0917 : db $02 : dw $0000 ; Layer 2 X scroll in room in pixels?
+    dl $7E0919 : db $02 : dw $0259 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0921 : db $02 : dw $0000 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $04E1 ; Health
     dl $7E09D6 : db $02 : dw $00CE ; Reserves
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
     dl $7E0A68 : db $02 : dw $0021 ; Flash suit
-    dl $7E0AF6 : db $02 : dw $01B8 ; Samus X
-    dl $7E0AFA : db $02 : dw $039B ; Samus Y
+    dl $7E0AF6 : db $02 : dw $005F ; Samus X
+    dl $7E0AFA : db $02 : dw $038B ; Samus Y
     dl $7ED890 : db $02 : dw $0101 ; Events, Items, Doors
-    dl $7ED91A : db $02 : dw $016C ; Events, Items, Doors
+    dl $7ED91A : db $02 : dw $016E ; Events, Items, Doors
     dw #$FFFF
 .after
 
@@ -4050,7 +4049,7 @@ preset_SZM101_pirate_ship_ridley_flappy_exit:
     dl $7E078D : db $02 : dw $B870 ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $D055 ; MDB
-    dl $7E090F : db $02 : dw $D000 ; Screen subpixel X position.
+    dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
     dl $7E0911 : db $02 : dw $0E00 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $7C00 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $001B ; Screen Y position in pixels
@@ -4065,7 +4064,6 @@ preset_SZM101_pirate_ship_ridley_flappy_exit:
     dl $7E0AF6 : db $02 : dw $0EC1 ; Samus X
     dl $7E0AFA : db $02 : dw $008B ; Samus Y
     dl $7ED874 : db $02 : dw $E5FF ; Events, Items, Doors
-    dl $7ED91A : db $02 : dw $016D ; Events, Items, Doors
     dw #$FFFF
 .after
 
@@ -4452,49 +4450,47 @@ preset_SZM101_pirate_ship_draygon_draygon:
 
 preset_SZM101_pirate_ship_draygon_boss_missile:
     dw #preset_SZM101_pirate_ship_draygon_draygon ; Pirate Ship Draygon: Draygon
-    dl $7E078D : db $02 : dw $AA44 ; DDB
-    dl $7E079B : db $02 : dw $DA60 ; MDB
+    dl $7E078D : db $02 : dw $A96C ; DDB
+    dl $7E078F : db $02 : dw $0000 ; DoorOut Index
+    dl $7E079B : db $02 : dw $A07B ; MDB
     dl $7E07C3 : db $02 : dw $9DEA ; GFX Pointers
     dl $7E07C5 : db $02 : dw $2CBF ; GFX Pointers
     dl $7E07C7 : db $02 : dw $C2BA ; GFX Pointers
-    dl $7E07F3 : db $02 : dw $0024 ; Music Bank
-    dl $7E07F5 : db $02 : dw $0003 ; Music Track
-    dl $7E090F : db $02 : dw $6000 ; Screen subpixel X position.
-    dl $7E0911 : db $02 : dw $0100 ; Screen X position in pixels
-    dl $7E0913 : db $02 : dw $0000 ; Screen subpixel Y position
-    dl $7E0915 : db $02 : dw $001D ; Screen Y position in pixels
-    dl $7E0917 : db $02 : dw $0001 ; Layer 2 X scroll in room in pixels?
-    dl $7E0923 : db $02 : dw $FF00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dl $7E07F3 : db $02 : dw $002D ; Music Bank
+    dl $7E07F5 : db $02 : dw $0006 ; Music Track
+    dl $7E090F : db $02 : dw $9000 ; Screen subpixel X position.
     dl $7E09C2 : db $02 : dw $0190 ; Health
     dl $7E09C6 : db $02 : dw $0022 ; Missiles
     dl $7E09CA : db $02 : dw $0012 ; Supers
     dl $7E09CE : db $02 : dw $0029 ; Pbs
-    dl $7E0AF6 : db $02 : dw $01C3 ; Samus X
+    dl $7E0AF6 : db $02 : dw $0034 ; Samus X
     dl $7ED82A : db $02 : dw $0103 ; Events, Items, Doors
     dl $7ED848 : db $02 : dw $0101 ; Events, Items, Doors
     dl $7ED8B2 : db $02 : dw $0002 ; Events, Items, Doors
-    dl $7ED91A : db $02 : dw $0188 ; Events, Items, Doors
+    dl $7ED91A : db $02 : dw $0189 ; Events, Items, Doors
     dw #$FFFF
 .after
 
 preset_SZM101_pirate_ship_draygon_four_key_shutters:
     dw #preset_SZM101_pirate_ship_draygon_boss_missile ; Pirate Ship Draygon: Boss Missile
     dl $7E078D : db $02 : dw $BFDC ; DDB
+    dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $BD50 ; MDB
     dl $7E07C3 : db $02 : dw $E78D ; GFX Pointers
     dl $7E07C5 : db $02 : dw $2EBE ; GFX Pointers
     dl $7E07C7 : db $02 : dw $C2B9 ; GFX Pointers
+    dl $7E07F3 : db $02 : dw $0024 ; Music Bank
     dl $7E07F5 : db $02 : dw $0007 ; Music Track
     dl $7E090F : db $02 : dw $E000 ; Screen subpixel X position.
-    dl $7E0911 : db $02 : dw $0000 ; Screen X position in pixels
-    dl $7E0913 : db $02 : dw $2800 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $0100 ; Screen Y position in pixels
-    dl $7E0917 : db $02 : dw $0000 ; Layer 2 X scroll in room in pixels?
     dl $7E0919 : db $02 : dw $0100 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0921 : db $02 : dw $0000 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $FFE0 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dl $7E09C2 : db $02 : dw $0190 ; Health
     dl $7E09C6 : db $02 : dw $0027 ; Missiles
     dl $7E09C8 : db $02 : dw $00E6 ; Max missiles
+    dl $7E09CA : db $02 : dw $0012 ; Supers
+    dl $7E09CE : db $02 : dw $0029 ; Pbs
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
     dl $7E0AF6 : db $02 : dw $0035 ; Samus X
@@ -4502,7 +4498,6 @@ preset_SZM101_pirate_ship_draygon_four_key_shutters:
     dl $7ED820 : db $02 : dw $4925 ; Events, Items, Doors
     dl $7ED82A : db $02 : dw $0303 ; Events, Items, Doors
     dl $7ED882 : db $02 : dw $0001 ; Events, Items, Doors
-    dl $7ED91A : db $02 : dw $0189 ; Events, Items, Doors
     dw #$FFFF
 .after
 
