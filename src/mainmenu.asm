@@ -542,14 +542,14 @@ action_category:
 
   .table
     ;  Items,  Beams,  Health, Miss,   Supers, PBs,    Reserv, Dummy
-    dw #$F32F, #$100F, #$05DB, #$00E6, #$0032, #$0032, #$0190, #$0000        ; 100%
-    dw #$3125, #$1007, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% new
-    dw #$3325, #$100B, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% old
-    dw #$1025, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% ice
-    dw #$3025, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% speed
-    dw #$F32F, #$100F, #$02BC, #$0064, #$0014, #$0014, #$012C, #$0000        ; gt code
-    dw #$710C, #$1001, #$031F, #$001E, #$0019, #$0014, #$0064, #$0000        ; rbo
-    dw #$9004, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0000, #$0000        ; any% glitched
+    dw #$F72F, #$100F, #$05DB, #$00E6, #$0032, #$0032, #$0190, #$0000        ; 100%
+    dw #$3525, #$1007, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% new
+    dw #$3725, #$100B, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% old
+    dw #$1425, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% ice
+    dw #$3425, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% speed
+    dw #$F72F, #$100F, #$02BC, #$0064, #$0014, #$0014, #$012C, #$0000        ; gt code
+    dw #$740C, #$1001, #$031F, #$001E, #$0019, #$0014, #$0064, #$0000        ; rbo
+    dw #$9404, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0000, #$0000        ; any% glitched
     dw #$0000, #$0000, #$0063, #$0000, #$0000, #$0000, #$0000, #$0000        ; nothing
 }
 
@@ -599,7 +599,7 @@ ti_hijumpboots:
     %cm_toggle_bit("Hi Jump Boots", $7E09A4, #$0100, #action_equip_collected_items)
 
 ti_walljumpboots:
-    %cm_toggle_bit("Wall Jump Boots", $7E09A4, #$4000, #action_equip_collected_items)
+    %cm_toggle_bit("Wall Jump Boots", $7E09A4, #$0400, #action_equip_collected_items)
 
 ti_spacejump:
     %cm_toggle_bit("Space Jump", $7E09A4, #$0200, #action_equip_collected_items)
@@ -621,7 +621,7 @@ ti_xray:
 
 action_equip_collected_items:
 {
-    LDA $09A4 : STA $09A6
+    LDA $09A4 : STA $09A2
     RTS
 }
 

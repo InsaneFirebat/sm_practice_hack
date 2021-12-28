@@ -1234,7 +1234,7 @@ spring_pants:
     ; check if starting bomb jump
     LDA $0A58 : CMP #$E025 : BEQ .done
     ; check speed
-    LDA $0B2E : BEQ .flash : CMP #$FFFF : BEQ .flash
+    LDA $0B2E : BEQ .flash
 
   .done
     RTS
