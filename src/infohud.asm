@@ -713,7 +713,12 @@ ih_hud_code:
 
     ; health bomb
     LDA $0E1A : BEQ .clear_healthbomb
+    LDA $09C2 : CMP #$0032 : BMI .pink
     LDA !IH_LETTER_E : STA $7EC654
+    BRA .check_morphlock
+
+  .pink
+    LDA !IH_HEALTHBOMB : STA $7EC654
     BRA .check_morphlock
 
   .clear_healthbomb
