@@ -842,10 +842,11 @@ ih_hud_code:
 
 ; Status Icons
   .statusIcons
-    LDA !sram_status_icons : BEQ .end
+    LDA !sram_status_icons : BNE +
+    JMP .end
 
     ; elevator
-    LDA $0E16 : BEQ .clearElevator
++   LDA $0E16 : BEQ .clearElevator
     LDA !IH_ELEVATOR : STA $7EC656
     BRA +
 
