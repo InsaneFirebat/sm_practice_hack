@@ -48,9 +48,6 @@ org $8C9607
     dw #$0E2F
 
 
-
-
-
 ; Turn off health alarm
 if !FEATURE_PAL
 org $90EA89
@@ -86,15 +83,6 @@ else
 org $91E6DA
 endif
     JML healthalarm_turn_on_remote
-
-
-if !PRESERVE_WRAM_DURING_SPACETIME
-org $90ACF6
-    JSR original_load_projectile_palette
-
-org $90AD18
-    JMP spacetime_routine
-endif
 
 
 ; Skips the waiting time after teleporting
@@ -144,17 +132,38 @@ org $808F24
 ;org $83AAD2 ; Where is MB's room? Probably not here
 ;    dw #MotherBrainHP
 
+
+; Ceres Ridley modified state check to support presets
+org $8FE0C0
+    dw layout_asm_ceres_ridley_room_state_check
+
+
+org $8FEA00 ; free space for door asm
+print pc, " misc bank8F start"
 ;org $8FEA00 ; free space for door asm
 ;org $8FF9F9 ; This org is safe but all of this is commented out because I don't even know where MB's room is -IFB
-;MotherBrainHP:
-;{
+MotherBrainHP:
+{
+;    LDA !sram_display_mode : BNE .done
+;    LDA #!IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
+;    LDA #!IH_STRAT_MBHP_INDEX : STA !sram_room_strat
 
-;    LDA !sram_display_mode : BNE .done    ; if 0 (enemy HP)
-;    LDA #$0001 : STA !sram_display_mode   ; set 1 (MB HP)
-
-;  .done
+  .done
 ;    RTS
-;}
+}
+
+
+layout_asm_ceres_ridley_room_state_check:
+{
+    LDA $0943 : BEQ .no_timer
+    LDA $0001,X : TAX
+    JMP $E5E6
+  .no_timer
+    STZ $093F
+    INX : INX : INX
+    RTS
+}
+print pc, " misc bank8F end"
 
 
 org $87D000

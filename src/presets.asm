@@ -74,19 +74,17 @@ preset_load:
     +
 
     ; Re-upload OOB viewer tiles if needed
-    LDA !ram_oob_watch_active : BEQ +
-      JSL upload_sprite_oob_tiles
-    +
+    LDA !ram_oob_watch_active : BEQ .done_upload_sprite_oob_tiles
+    JSL upload_sprite_oob_tiles
 
-    LDA !SRAM_MUSIC_BANK
-    CMP !MUSIC_BANK
-    BEQ .load_music_track
+  .done_upload_sprite_oob_tiles
+    LDA !SRAM_MUSIC_BANK : CMP !MUSIC_BANK : BEQ .done_load_music_track
 
     ; loads new music bank
     LDA #$FF00 : CLC : ADC !MUSIC_BANK
     JSL !MUSIC_ROUTINE
 
-  .load_music_track
+  .done_load_music_track
     LDA !MUSIC_TRACK
     JSL !MUSIC_ROUTINE
 
@@ -96,14 +94,25 @@ preset_load:
     STZ $1F6B : STZ $0795
     LDA $09A1 : AND #$7FFF : STA $09A1
 
-    ; Kill non-solid enemies
-    LDA #$0000 : STA $0E52 ; unlock grey doors that require killing enemies
-    ; 8000 = solid to Samus, 0400 = Ignore Samus projectiles
--   TAX : LDA $0F86,X : BIT #$8400 : BNE +
-    ORA #$0200 : STA $0F86,X
-+   TXA : CLC : ADC #$0040 : CMP #$0800 : BNE -
+    ; Clear enemies if not in certain rooms
+    LDA $079B : CMP #$DD58 : BEQ .done_clearing_enemies
+    JSR clear_all_enemies
+
+  .done_clearing_enemies
     PLP
     RTL
+}
+
+clear_all_enemies:
+{
+    ; Clear enemies (8000 = solid to Samus, 0400 = Ignore Samus projectiles)
+    LDA #$0000
+  .loop
+    TAX : LDA $0F86,X : BIT #$8400 : BNE .done_clearing
+    ORA #$0200 : STA $0F86,X
+  .done_clearing
+    TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .loop
+    RTS
 }
 
 reset_all_counters:
@@ -303,7 +312,7 @@ preset_start_gameplay:
     LDA #$E725 : STA $0A44 ; Unlock Samus
     STZ $0E18    ; Set elevator to inactive
 
-+   LDA #$0000 : STA $05F5  ; Enable sounds
+    LDA #$0000 : STA $05F5  ; Enable sounds
     JSL stop_all_sounds
 
     LDA #$E737 : STA $099C  ; Pointer to next frame's room transition code = $82:E737
@@ -379,6 +388,12 @@ endif
 
   .ceres
     LDA #$00 : STA $7E005F       ; Initialize mode 7
+    STA $7E0078 : STA $7E0079
+    STA $7E007A : STA $7E007B
+    STA $7E007C : STA $7E007D
+    STA $7E007E : STA $7E007F
+    STA $7E0080 : STA $7E0081
+    STA $7E0082 : STA $7E0083
     CPX #$DF45 : BNE +           ; Ceres Elevator
     LDA #$00 : STA $7E091E : STA $7E0920
     BRA .done
