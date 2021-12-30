@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.3.7]  Smarter health bomb status icon
 * [2.3.3.6]  Changed reserve icons and finalized reserve display
 * [2.3.3.5]  Add an option to display reserve energy instead of item%
 * [2.3.3.5]  More rooms added to Area Rando setting by idlechild (still WIP)
