@@ -1532,7 +1532,7 @@ status_gateglitch:
     BRA .checkglitch
 
   .hijumpredgate
-    LDA #$0A15 : STA !ram_xpos
+    LDA #$0A14 : STA !ram_xpos
     BRA .checkglitch
 
   .beamcombo
@@ -1546,16 +1546,16 @@ status_gateglitch:
     ; The gate location is hard-coded depending on the room
     LDA $079B : CMP #$D461 : BEQ .crabbyGGG ;: CMP #$CE40 : BEQ .morphmaze
     CMP #$9D9C : BEQ .hijumpredgate : CMP #$D913 : BEQ .beamcombo
-    CMP #$D4C2 : BEQ .twinredgates; : CMP #$B2DA : BEQ .fastripper : CMP #$D08A : BEQ .crabtunnel
+    CMP #$D4C2 : BEQ .twinredgates : CMP #$B40A : BEQ .ripperibj : CMP #$D08A : BEQ .crabtunnel
     BRA .done
 
   .twinredgates
     LDA #$02F4 : STA !ram_xpos
     BRA .checkglitch
 
-  .fastripper
-;    LDA #$0354 : STA !ram_xpos
-;    BRA .checkglitch
+  .ripperibj
+    LDA #$06B5 : STA !ram_xpos
+    BRA .checkglitch
 
   .crabtunnel
 ;    LDA #$00F4 : STA !ram_xpos

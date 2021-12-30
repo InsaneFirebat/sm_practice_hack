@@ -643,7 +643,7 @@ preset_redesign_bombs_landing_site_2:
     dl $7E0923 : db $02 : dw $FB00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
-    dl $7E0AF6 : db $02 : dw $01C8 ; Samus X
+    dl $7E0AF6 : db $02 : dw $01D8 ; Samus X
     dl $7E0AFA : db $02 : dw $028B ; Samus Y
     dl $7ED91A : db $02 : dw $0037 ; Events, Items, Doors
     dw #$FFFF

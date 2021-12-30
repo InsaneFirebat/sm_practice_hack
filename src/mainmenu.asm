@@ -410,10 +410,10 @@ eq_goto_togglebeams:
     %cm_submenu("Toggle Beams", #ToggleBeamsMenu)
 
 eq_currentenergy:
-    %cm_numfield_word("Current Energy", $7E09C2, 0, 2100, 1, 20, #0)
+    %cm_numfield_word("Current Energy", $7E09C2, 0, 1499, 1, 20, #0)
 
 eq_setetanks:
-    %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 21, 1, 1, .routine)
+    %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 14, 1, 1, .routine)
     .routine
         TAX
         LDA #$0000
@@ -428,10 +428,10 @@ eq_setetanks:
         RTS
 
 eq_currentreserves:
-    %cm_numfield_word("Current Reserves", $7E09D6, 0, 700, 1, 20, #0)
+    %cm_numfield_word("Current Reserves", $7E09D6, 0, 400, 1, 20, #0)
 
 eq_setreserves:
-    %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 7, 1, 1, .routine)
+    %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 4, 1, 1, .routine)
     .routine
         TAX
         LDA #$0000
@@ -444,19 +444,19 @@ eq_setreserves:
         RTS
 
 eq_setmissiles:
-    %cm_numfield_word("Missiles", $7E09C8, 0, 325, 5, 20, .routine)
+    %cm_numfield_word("Missiles", $7E09C8, 0, 300, 2, 5, .routine)
     .routine
         LDA $09C8 : STA $09C6 ; missiles
         RTS
 
 eq_setsupers:
-    %cm_numfield("Super Missiles", $7E09CC, 0, 65, 5, 5, .routine)
+    %cm_numfield("Super Missiles", $7E09CC, 0, 30, 2, 2, .routine)
     .routine
         LDA $09CC : STA $09CA ; supers
         RTS
 
 eq_setpbs:
-    %cm_numfield("Power Bombs", $7E09D0, 0, 65, 5, 5, .routine)
+    %cm_numfield("Power Bombs", $7E09D0, 0, 30, 1, 1, .routine)
     .routine
         LDA $09D0 : STA $09CE ; pbs
         RTS
@@ -542,7 +542,7 @@ action_category:
 
   .table
     ;  Items,  Beams,  Health, Miss,   Supers, PBs,    Reserv, Dummy
-    dw #$F72F, #$100F, #$05DB, #$00E6, #$0032, #$0032, #$0190, #$0000        ; 100%
+    dw #$F72F, #$100F, #$05DB, #$012C, #$001E, #$001E, #$0190, #$0000        ; 100%
     dw #$3525, #$1007, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% new
     dw #$3725, #$100B, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% old
     dw #$1425, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% ice
