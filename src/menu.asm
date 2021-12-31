@@ -1166,7 +1166,7 @@ cm_loop:
 
     BIT #$0080 : BEQ + : JMP .pressedA ; more wiggle room with branch limits...
 +   BIT #$8000 : BEQ + : JMP .pressedB
-;    BIT #$0040 : BNE .pressedX
+;   BIT #$0040 : BNE .pressedX
 ;   BIT #$4000 : BNE .pressedY
 +   BIT #$2000 : BNE .pressedSelect
     BIT #$1000 : BNE .pressedStart
@@ -1340,11 +1340,11 @@ cm_get_inputs:
 
     ; Set new delay to two frames and return the input we're holding
     LDA !sram_cm_scroll_delay : STA !ram_cm_input_timer
-    LDA $8B : AND #$0F00 : ORA !IH_INPUT_HELD
+    LDA $8B : AND #$4F00 : ORA !IH_INPUT_HELD
     RTS
 
   .noinput
-    LDA #$0000
+    LDA $8B : AND #$4000 ; allow Y to pass
     RTS
 }
 

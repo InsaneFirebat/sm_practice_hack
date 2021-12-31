@@ -2458,7 +2458,7 @@ controls_save_to_file:
     LDA $09BA : STA $F00000,X : INX #2
     LDA $09BC : STA $F00000,X : INX #2
     LDA $09BE : STA $F00000,X
-    %sfxstatue()
+    %sfxsave()
     RTS
 
 AssignControlsMenu:
@@ -2473,25 +2473,25 @@ AssignControlsMenu:
     %cm_header("ASSIGN AN INPUT")
 
 controls_assign_A:
-    %cm_jsr("A", action_assign_input, #$0080)
+    %cm_jsr("A", action_assign_input, !CTRL_A)
 
 controls_assign_B:
-    %cm_jsr("B", action_assign_input, #$8000)
+    %cm_jsr("B", action_assign_input, !CTRL_B)
 
 controls_assign_X:
-    %cm_jsr("X", action_assign_input, #$0040)
+    %cm_jsr("X", action_assign_input, !CTRL_X)
 
 controls_assign_Y:
-    %cm_jsr("Y", action_assign_input, #$4000)
+    %cm_jsr("Y", action_assign_input, !CTRL_Y)
 
 controls_assign_Select:
-    %cm_jsr("Select", action_assign_input, #$2000)
+    %cm_jsr("Select", action_assign_input, !CTRL_SELECT)
 
 controls_assign_L:
-    %cm_jsr("L", action_assign_input, #$0020)
+    %cm_jsr("L", action_assign_input, !CTRL_L)
 
 controls_assign_R:
-    %cm_jsr("R", action_assign_input, #$0010)
+    %cm_jsr("R", action_assign_input, !CTRL_R)
 
 AssignAngleControlsMenu:
     dw #controls_assign_L
@@ -2518,9 +2518,9 @@ action_assign_input:
 check_duplicate_inputs:
 {
     ; ram_cm_ctrl_assign = word address of input being assigned
-    ; ram_cm_ctrl_swap = previous input bit being moved
+    ; ram_cm_ctrl_swap = previous input bitmask being moved
     ; X / $C0 = word address of new input
-    ; Y / $C4 = new input bit
+    ; Y / $C4 = new input bitmask
 
     LDA #$09B2 : CMP $C0 : BEQ .check_jump      ; check if we just assigned shot
     LDA $09B2 : BEQ +                           ; check if shot is unassigned
@@ -2565,11 +2565,10 @@ check_duplicate_inputs:
 
   .not_detected
     %sfxgoback()
-    ; pull return address to skip success sfx
+    ; pull return address to skip success-sfx
     PLA : PLA
     JSR cm_go_back
-    JSR cm_calculate_max
-    RTS
+    JMP cm_calculate_max
 
   .shot
     LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +  ; check if old input is L or R
@@ -2613,14 +2612,14 @@ check_duplicate_inputs:
     RTS
 
   .unbind_up
-    STA $09BE                                            ; unassign up
+    STA $09BE               ; unassign up
     RTS
 
   .swap_down
-    CMP #$0020 : BNE +                                   ; check if angle up is assigned to L
-    LDA #$0010 : STA $09BC                               ; assign R to angle down
+    CMP #$0020 : BNE +      ; check if angle up is assigned to L
+    LDA #$0010 : STA $09BC  ; assign R to angle down
     RTS
-+   LDA #$0020 : STA $09BC                               ; assign L to angle down
++   LDA #$0020 : STA $09BC  ; assign L to angle down
     RTS
 
   .down
@@ -2630,7 +2629,7 @@ check_duplicate_inputs:
     RTS
 
   .unbind_down
-    STA $09BC ; unassign down
+    STA $09BC               ; unassign down
     RTS
 
   .swap_up
@@ -2682,12 +2681,12 @@ action_set_common_controls:
     RTS
 
 ControllerLayoutTable:
-    ;  shot   jump   dash   cancel select up     down
-    dw $0040, $0080, $8000, $4000, $2000, $0010, $0020 ; Default (D1)
-    dw $0040, $0080, $8000, $2000, $4000, $0010, $0020 ; Select+Cancel Swap (D2)
-    dw $4000, $0080, $8000, $2000, $0040, $0010, $0020 ; D2 + Shot+Select Swap (D3)
-    dw $4000, $8000, $0080, $2000, $0040, $0010, $0020 ; MMX Style (D4)
-    dw $0040, $8000, $4000, $2000, $0080, $0010, $0020 ; SMW Style (D5)
+    ;  shot     jump     dash     cancel        select        up       down
+    dw !CTRL_X, !CTRL_A, !CTRL_B, !CTRL_Y,      !CTRL_SELECT, !CTRL_R, !CTRL_L ; Default (D1)
+    dw !CTRL_X, !CTRL_A, !CTRL_B, !CTRL_SELECT, !CTRL_Y,      !CTRL_R, !CTRL_L ; Select+Cancel Swap (D2)
+    dw !CTRL_Y, !CTRL_A, !CTRL_B, !CTRL_SELECT, !CTRL_X,      !CTRL_R, !CTRL_L ; D2 + Shot+Select Swap (D3)
+    dw !CTRL_Y, !CTRL_B, !CTRL_A, !CTRL_SELECT, !CTRL_X,      !CTRL_R, !CTRL_L ; MMX Style (D4)
+    dw !CTRL_X, !CTRL_B, !CTRL_Y, !CTRL_SELECT, !CTRL_A,      !CTRL_R, !CTRL_L ; SMW Style (D5)
 }
 
 

@@ -395,16 +395,13 @@ action_soundtest_lib3_play:
 }
 
 ifb_soundtest_silence:
-    %cm_jsr("Silence Sound FX", #action_soundtest_silence, #$0002)
-    
-action_soundtest_silence:
-{
+    %cm_jsr("Silence Sound FX", .routine, #$0002)
+  .routine
     ; silence all 3 libs at once
     TYA : JSL !SFX_LIB1
     LDA #$0071 : JSL !SFX_LIB2
     LDA #$0001 : JSL !SFX_LIB3
     RTS
-}
 
 ifb_soundtest_goto_music:
     %cm_submenu("Music Selection", #MusicSelectMenu1)
@@ -580,29 +577,6 @@ action_soundtest_playmusic:
     RTS
 }
 
-ifb_soundtest_music_toggle:
-    %cm_toggle("Music", !sram_music_toggle, #$0001, MusicToggle)
-
-MusicToggle:
-{
-    BIT #$0001 : BEQ .noMusic
-    LDA $07F5 : STA $2140
-    RTS
-
-  .noMusic
-    LDA #$0000 
-    STA $0629
-    STA $062B
-    STA $062D
-    STA $062F
-    STA $0631
-    STA $0633
-    STA $0635
-    STA $0637
-    STA $063F
-    STA $2140
-    RTS
-}
 
 FactoryResetConfirm:
     dw #ifb_factory_reset_abort
