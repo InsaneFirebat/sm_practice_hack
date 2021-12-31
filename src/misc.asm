@@ -137,6 +137,10 @@ org $808F24
 org $8FE0C0
     dw layout_asm_ceres_ridley_room_state_check
 
+; Ceres Ridley room setup asm when timer is not running
+org $8FE0DF
+    dw layout_asm_ceres_ridley_room_no_timer
+
 
 org $8FEA00 ; free space for door asm
 print pc, " misc bank8F start"
@@ -163,6 +167,19 @@ layout_asm_ceres_ridley_room_state_check:
     INX : INX : INX
     RTS
 }
+
+layout_asm_ceres_ridley_room_no_timer:
+{
+    ; Same as original setup asm, except force blue background
+    PHP
+    SEP #$20
+    LDA #$66 : STA $5D
+    PLP
+    JSL $88DDD0
+    LDA #$0009 : STA $07EB
+    RTS
+}
+
 print pc, " misc bank8F end"
 
 
