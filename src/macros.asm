@@ -102,6 +102,10 @@ macro sfxbeep() ; play minimap movement beep sound lib1
     LDA #$0036 : JSL !SFX_LIB1
 endmacro
 
+macro sfxsave() ; play save station sound lib1
+    LDA #$002E : JSL !SFX_LIB1
+endmacro
+
 macro sfxmove() ; Move Cursor
     LDA !sram_customsfx_move : JSL !SFX_LIB1
 endmacro

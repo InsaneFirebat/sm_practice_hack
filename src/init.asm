@@ -140,7 +140,6 @@ init_sram:
     LDA #$0000 : STA !sram_custom_preset_slot
     LDA #$0000 : STA !sram_room_strat
     LDA #$0000 : STA !sram_sprite_prio_flag
-    LDA #$0000 : STA !sram_custom_preset_slot
     LDA #$0001 : STA !sram_healthalarm
 
     LDA #$0000 : STA !sram_countdamage
