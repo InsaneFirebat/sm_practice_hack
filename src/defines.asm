@@ -12,7 +12,7 @@
 !VERSION_MINOR = 3
 !VERSION_BUILD = 3
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 7
+!VERSION_REV_2 = 8
 
 
 ; ---------
@@ -169,6 +169,8 @@
 !ram_cm_ctrl_mode = !WRAM_MENU_START+$32
 !ram_cm_ctrl_timer = !WRAM_MENU_START+$34
 !ram_cm_ctrl_last_input = !WRAM_MENU_START+$36
+!ram_cm_ctrl_assign = !WRAM_MENU_START+$38
+!ram_cm_ctrl_swap = !WRAM_MENU_START+$3A
 
 ; ^ FREE SPACE ^ up to +$7E
 
@@ -219,6 +221,7 @@
 !ACTION_NUMFIELD_COLOR    = #$0012
 !ACTION_NUMFIELD_HEX_WORD = #$0014
 !ACTION_NUMFIELD_SOUND    = #$0016
+!ACTION_CTRL_INPUT        = #$0018
 
 ; using macros instead of these in custom builds
 !SOUND_MENU_MOVE = $0039
@@ -282,8 +285,8 @@
 !IH_INPUT_RUN = $7E09B6
 !IH_INPUT_ITEM_CANCEL = $7E09B8
 !IH_INPUT_ITEM_SELECT = $7E09BA
-!IH_INPUT_ANGLE_UP = $7E09BC
-!IH_INPUT_ANGLE_DOWN = $7E09BE
+!IH_INPUT_ANGLE_UP = $7E09BE
+!IH_INPUT_ANGLE_DOWN = $7E09BC
 
 
 ; --------------
