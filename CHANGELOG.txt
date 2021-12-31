@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.3.8]  New menu in Game Options to configure controls
 * [2.3.3.7]  Smarter health bomb status icon
 * [2.3.3.6]  Changed reserve icons and finalized reserve display
 * [2.3.3.5]  Add an option to display reserve energy instead of item%
