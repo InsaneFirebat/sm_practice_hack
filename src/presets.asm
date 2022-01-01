@@ -84,8 +84,6 @@ preset_load:
     TXA : CMP $063B : BNE .music_queue_data_search
 
     ; No music data found, treat same as empty queue
-    BRA .music_queue_empty
-
   .music_queue_empty
     LDA !SRAM_MUSIC_DATA
 
