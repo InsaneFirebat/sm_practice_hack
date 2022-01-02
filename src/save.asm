@@ -4,55 +4,105 @@
 
 org $80F800
 print pc, " save start"
+
 ; These can be modified to do game-specific things before and after saving and loading
 ; Both A and X/Y are 16-bit here
-
-; SM specific features to restore the correct music when loading a state below
 pre_load_state:
-    LDA !MUSIC_BANK : STA !SRAM_MUSIC_BANK
+{
+    LDA !MUSIC_DATA : STA !SRAM_MUSIC_DATA
     LDA !MUSIC_TRACK : STA !SRAM_MUSIC_TRACK
+    LDA !SOUND_TIMER : STA !SRAM_SOUND_TIMER
 
     ; Rerandomize
-    LDA !sram_save_has_set_rng : BNE +
-    LDA !sram_rerandomize : AND #$00FF : BEQ +
+    LDA !sram_save_has_set_rng : BNE .done
+    LDA !sram_rerandomize : AND #$00FF : BEQ .done
     LDA $05E5 : STA $770080
     LDA $05B6 : STA $770082
-+   RTS
+
+  .done
+    RTS
+}
 
 post_load_state:
+{
     JSL stop_all_sounds
 
-    LDA !SRAM_MUSIC_BANK : CMP !MUSIC_BANK : BNE music_load_bank
-    LDA !SRAM_MUSIC_TRACK : CMP !MUSIC_TRACK : BNE music_load_track
-    BRA music_done
+    ; Fix the music
+    LDA $0639 : CMP $063B : BEQ .music_queue_empty
 
-music_load_bank:
-    LDA #$FF00 : CLC : ADC !MUSIC_BANK
-    JSL !MUSIC_ROUTINE
+  .music_queue_data_search
+    DEC : DEC : AND #$000E : TAX
+    LDA $0619,X : BMI .queued_music_data
+    TXA : CMP $063B : BNE .music_queue_data_search
 
-music_load_track:
-    LDA !MUSIC_TRACK
-    JSL !MUSIC_ROUTINE
+    ; No data found in queue, check if we need to insert it
+    LDA !SRAM_MUSIC_DATA : CMP !MUSIC_DATA : BEQ .music_queue_increase_timer
 
-music_done:
+    ; Insert queued music data
+    DEX : DEX : TXA : AND #$000E : TAX
+    LDA #$FF00 : CLC : ADC !MUSIC_DATA : STA $0619,X
+    LDA #$0008 : STA $0629,X
+
+  .queued_music_data
+    ; Insert clear track before queued music data and start queue there
+    DEX : DEX : TXA : AND #$000E : STA $063B : TAX
+    LDA #$0000 : STA $0619,X : STA $063D
+
+  .queued_music_prepare_set_timer
+    LDA !SRAM_SOUND_TIMER : BNE .queued_music_set_timer
+    INC
+
+  .queued_music_set_timer
+    STA $0629,X : STA $0686 : STA $063F
+    BRA .music_done
+
+  .music_queue_increase_timer
+    ; Data is correct, but we may need to increase our sound timer
+    LDA !SRAM_SOUND_TIMER : CMP $063F : BMI .music_done
+    STA $063F : STA $0686
+    BRA .music_done
+
+  .music_queue_empty
+    LDA !SRAM_MUSIC_DATA : CMP !MUSIC_DATA : BEQ .music_check_track
+
+    ; Don't bother loading the music if it's disabled
+    LDA !sram_music_toggle : BNE .load_music : JMP .music_done
+
+  .load_music
+    ; Clear track and load data
+    LDA #$0000 : JSL !MUSIC_ROUTINE
+    LDA #$FF00 : CLC : ADC !MUSIC_DATA : JSL !MUSIC_ROUTINE
+    BRA .music_load_track
+
+  .music_check_track
+    LDA !SRAM_MUSIC_TRACK : CMP !MUSIC_TRACK : BEQ .music_done
+
+  .music_load_track
+    LDA !MUSIC_TRACK : JSL !MUSIC_ROUTINE
+
+  .music_done
     ; Rerandomize
-    LDA !sram_save_has_set_rng : BNE +
-    LDA !sram_rerandomize : AND #$00FF : BEQ +
-    LDA $770080 : sta $05E5
-    LDA $770082 : sta $05B6
-+   JSL init_wram_based_on_sram
-    RTS
-; end of post_load_state
+    LDA !sram_save_has_set_rng : BNE .done
+    LDA !sram_rerandomize : AND #$00FF : BEQ .done
+    LDA $770080 : STA $05E5
+    LDA $770082 : STA $05B6
 
+  .done
+    JSL init_wram_based_on_sram
+    RTS
+}
 
 ; These restored registers are game-specific and needs to be updated for different games
 register_restore_return:
+{
     %a8()
     LDA $84 : STA $4200
     LDA #$0F : STA $13 : STA $2100
     RTL
+}
 
 save_state:
+{
     PEA $0000
     PLB : PLB
 
@@ -68,13 +118,24 @@ save_dma_regs:
     INX #5 : LDY #$0000
     BRA save_dma_regs
 
-save_dma_regs_done:
+  .save_dma_regs
+    LDA $4300,X : STA !SRAM_DMA_BANK,X
+    INX : INY
+    CPY #$000B : BNE .save_dma_regs
+    CPX #$007B : BEQ .save_dma_regs_done
+    INX #5 : LDY #$0000
+    BRA .save_dma_regs
+
+  .save_dma_regs_done
     %ai16()
     LDX #save_write_table
+}
 
 run_vm:
+{
     PHK : PLB
     JMP vm
+}
 
 save_write_table:
     ; Turn PPU off
@@ -138,17 +199,20 @@ save_write_table:
     dw $0000, save_return
 
 save_return:
+{
     PEA $0000
     PLB : PLB
 
     %ai16()
     LDA !ram_room_has_set_rng : STA !sram_save_has_set_rng
 
-    TSC : STA !SRAM_SAVED_SP
+    TSC
+    STA !SRAM_SAVED_SP
     JMP register_restore_return
-
+}
 
 load_state:
+{
     JSR pre_load_state
     PEA $0000
     PLB : PLB
@@ -156,6 +220,7 @@ load_state:
     %a8()
     LDX #load_write_table
     JMP run_vm
+}
 
 load_write_table:
     ; Disable HDMA
@@ -219,6 +284,7 @@ load_write_table:
     dw $0000, load_return
 
 load_return:
+{
     %ai16()
     LDA !SRAM_SAVED_SP : TCS
 
@@ -232,22 +298,23 @@ load_return:
     %a8()
     LDX #$0000 : TXY
 
-load_dma_regs:
-    LDA !SRAM_DMA_BANK,X
-    STA $4300,X
+  .load_dma_regs
+    LDA !SRAM_DMA_BANK,X : STA $4300,X
     INX : INY
-    CPY #$000B : BNE load_dma_regs
-    CPX #$007B : BEQ load_dma_regs_done
+    CPY #$000B : BNE .load_dma_regs
+    CPX #$007B : BEQ .load_dma_regs_done
     INX #5 : LDY #$0000
-    JMP load_dma_regs
+    BRA .load_dma_regs
 
-load_dma_regs_done:
+  .load_dma_regs_done
     ; Restore registers and return.
     %ai16()
     JSR post_load_state
     JMP register_restore_return
+}
 
 vm:
+{
     ; Data format: xx xx yy yy
     ; xxxx = little-endian address to write to .vm's bank
     ; yyyy = little-endian value to write
@@ -257,32 +324,32 @@ vm:
     ; write instead of a word write.  If xxxx is $0000, end the VM.
     %ai16()
     ; Read address to write to
-    LDA.w $0000,X : BEQ vm_done
+    LDA.w $0000,X : BEQ .vm_done
     TAY
     INX #2
     ; Check for byte mode
     BIT.w #$1000 : BEQ vm_word_mode
     AND.w #$EFFF : TAY
     %a8()
-vm_word_mode:
+  .vm_word_mode
     ; Read value
     LDA.w $0000,X
     INX #2
-vm_write:
+  .vm_write
     ; Check for read mode (high bit of address)
-    CPY.w #$8000 : BCS vm_read
+    CPY.w #$8000 : BCS .vm_read
     STA $0000,Y
     BRA vm
-vm_read:
+  .vm_read
     ; "Subtract" $8000 from Y by taking advantage of bank wrapping.
     LDA $8000,Y
     BRA vm
-
-vm_done:
+  .vm_done
     ; A, X and Y are 16-bit at exit.
     ; Return to caller.  The word in the table after the terminator is the
     ; code address to return to.
-    JMP ($0002,x)
+    JMP ($0002,X)
+}
 
 print pc, " save end"
 warnpc $80FC00

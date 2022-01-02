@@ -15,6 +15,48 @@ org $82CA17
 org $82CA1B
     db #$58, #$00, #$78, #$00
 
+; Hijack room transition between loading level data and setting up scrolling
+org $82E388
+    dw hijack_after_load_level_data
+
+; Hijack call to create door closing PLM
+org $82E4C9
+    JSR hijack_door_closing_plm
+
+
+org $82F800
+print pc, " layout bank82 start"
+
+hijack_after_load_level_data:
+{
+    LDA $079B : CMP #$D6FD : BNE .done
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ .done
+
+    ; Aqueduct Farm Sand Pit needs to be handled before the door scroll
+    JSL layout_asm_aqueductfarmsandpit_external
+
+  .done
+    JMP $E38E
+}
+
+hijack_door_closing_plm:
+{
+    PHP : PHB
+    %ai16()
+    LDA $078D : CMP #$A654 : BNE .done
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BNE .done
+
+    ; Aqueduct Farm Sand Pit should not have a door closing PLM
+    ; if using the warp door while Area Rando off
+    PLB : PLP : RTS
+
+  .done
+    JMP $E8EF
+}
+
+print pc, " layout bank82 end"
+warnpc $82FA00
+
 
 ; East Ocean left door asm pointer
 org $838A88
@@ -114,8 +156,31 @@ org $83A502
 org $83A51A
     dw #layout_asm_easttunnel_no_scrolls
 
-; Swap Enemy HP to MB HP when entering MB's room
+; West Sand Hall left door asm pointer
+org $83A53E
+    dw #layout_asm_westsandhall
+
+; West Sand Hall unused door definition
+org $83A654
+    dw #$D6FD
+    db #$00, #$05, #$3E, #$06, #$03, #$00
+    dw #$8000
+    dw #$0000
+
+; West Sand Hall right door asm pointer
+org $83A66A
+    dw #layout_asm_westsandhall
+
+; West Sand Hall top sand door asm pointer
+org $83A6BE
+    dw #layout_asm_westsandhall
+
+; Mother Brain right door asm pointer
 org $83AAD2
+    dw #layout_asm_mbhp
+
+; Mother Brain left door asm pointer
+org $83AAEA
     dw #layout_asm_mbhp
 
 ; Magnet Stairs left door asm pointer
@@ -125,6 +190,11 @@ org $83AB6E
 ; Magnet Stairs right door asm pointer
 org $83AB92
     dw #layout_asm_magnetstairs
+
+
+; Allow debug save stations to be used
+org $848D0C
+    AND #$000F
 
 
 ; Caterpillar elevator and middle-left door asm
@@ -137,6 +207,18 @@ org $8FBE18
     ; Overwrite PLP : RTS with jump
     ; Okay to overwrite $BE1A since we freed up that space
     JMP layout_asm_caterpillar_after_scrolls
+
+; Aqueduct Farm Sand Pit header
+org $8FD706
+    dw layout_asm_aqueductfarmsandpit_door_list
+
+; Ceres Ridley modified state check to support presets
+org $8FE0C0
+    dw layout_asm_ceres_ridley_room_state_check
+
+; Ceres Ridley room setup asm when timer is not running
+org $8FE0DF
+    dw layout_asm_ceres_ridley_room_no_timer
 
 ; East Tunnel bottom-left and bottom-right door asm
 org $8FE34E
@@ -171,6 +253,29 @@ layout_asm_mbhp:
     RTS
 }
 
+layout_asm_ceres_ridley_room_state_check:
+{
+    LDA $0943 : BEQ .no_timer
+    LDA $0001,X : TAX
+    JMP $E5E6
+  .no_timer
+    STZ $093F
+    INX : INX : INX
+    RTS
+}
+
+layout_asm_ceres_ridley_room_no_timer:
+{
+    ; Same as original setup asm, except force blue background
+    PHP
+    SEP #$20
+    LDA #$66 : STA $5D
+    PLP
+    JSL $88DDD0
+    LDA #$0009 : STA $07EB
+    RTS
+}
+
 layout_asm_magnetstairs:
 {
     PHP
@@ -181,7 +286,6 @@ layout_asm_magnetstairs:
     PHP : %a8()
     LDA #$10 : STA $7F01F9 : STA $7F02EB
     LDA #$53 : STA $7F64FD : STA $7F6576
-    PLP
 
   .done
     PLP
@@ -212,9 +316,8 @@ layout_asm_greenhillzone:
     ; Normal BTS for gate tiles
     LDA #$00 : STA $7F7FE5 : STA $7F7FE6
     STA $7F8066 : STA $7F80E6 : STA $7F8166 : STA $7F81E6
-}
 
-layout_asm_greenhillzone_done:
+  .done
     PLP
     RTS
 
@@ -435,6 +538,50 @@ layout_asm_mainstreet_done:
 
 layout_asm_mainstreet_plm_data:
     db #$6F, #$B7, #$18, #$59, #$0A, #$00
+
+layout_asm_aqueductfarmsandpit_door_list:
+    dw #$A7D4, #$A534
+
+layout_asm_aqueductfarmsandpit_external:
+{
+    ; Place door BTS
+    %a8()
+    LDA #$40 : STA $7F65C0 : LDA #$FF : STA $7F6600
+    DEC : STA $7F6640 : DEC : STA $7F6680 : LDA #$01
+    STA $7F65C1 : STA $7F6601 : STA $7F6641 : STA $7F6681
+
+    ; Move right wall one to the left
+    %a16()
+    LDA #$8A09 : STA $7F01FE : LDA #$820E : STA $7F067E
+    LDA #$820A : STA $7F027E : STA $7F05FE
+    LDA #$8A0B : STA $7F02FE : LDA #$8A07 : STA $7F0300
+    LDA #$820B : STA $7F057E : LDA #$8207 : STA $7F0580
+
+    ; Fill in area behind the wall
+    LDA #$8210 : STA $7F0200 : STA $7F0280 : STA $7F0600 : STA $7F0680
+
+    ; Place the door
+    LDA #$C00C : STA $7F037E : LDA #$9040 : STA $7F0380
+    LDA #$D02C : STA $7F03FE : LDA #$9060 : STA $7F0400
+    LDA #$D82C : STA $7F047E : LDA #$9860 : STA $7F0480
+    LDA #$D80C : STA $7F04FE : LDA #$9840 : STA $7F0500
+    RTL
+}
+
+layout_asm_westsandhall:
+{
+    PHP
+    %a16()
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ layout_asm_westsandhall_done
+
+    ; Change left door BTS to previously unused door
+    %a8()
+    LDA #$02 : STA $7F6582 : STA $7F65C2 : STA $7F6602 : STA $7F6642
+}
+
+layout_asm_westsandhall_done:
+    PLP
+    RTS
 
 print pc, " layout end"
 
