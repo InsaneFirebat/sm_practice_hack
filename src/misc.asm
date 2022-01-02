@@ -248,26 +248,47 @@ org $CF8BBF       ; Set map scroll beep to high priority
     dw $2A97
 
 
-; $80:8F24 9C F6 07    STZ $07F6  [$7E:07F6]  ;/
-; $80:8F27 8D 40 21    STA $2140  [$7E:2140]  ; APU IO 0 = [music track]
 org $808F24
     JSL hook_set_music_track
     NOP #2
 
+org $808F65
+    JML hook_set_music_data
+
+
 org $87D000
 print pc, " misc start"
+
 hook_set_music_track:
+; $80:8F24 9C F6 07    STZ $07F6  [$7E:07F6]  ;/
+; $80:8F27 8D 40 21    STA $2140  [$7E:2140]  ; APU IO 0 = [music track]
 {
     STZ $07F6
-
     PHA
-    LDA !sram_music_toggle : BEQ .noMusic
+    LDA !sram_music_toggle : CMP #$02 : BEQ .fast_no_music
+    CMP #$01 : BNE .no_music
+    LDA $07F3 : BEQ .no_music
     PLA : STA $2140
     RTL
 
-  .noMusic
+  .fast_no_music
+    STZ $07F5
+  .no_music
     PLA
     RTL
+}
+
+hook_set_music_data:
+; $80:8F65 8D F3 07    STA $07F3  [$7E:07F3]  ;} Music data = [music entry] & FFh
+; $80:8F68 AA          TAX                    ; X = [music data]
+{
+    TAX
+    LDA !sram_music_toggle : CMP #$0002 : BEQ .fast_no_music
+    TXA : STA $07F3
+    JML $808F69
+
+  .fast_no_music
+    JML $808F89
 }
 
 hook_unpause:

@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.3.10] Add current ammo selectors to equipment menu
 * [2.3.3.9]  Fixed background color after opening the practice menu while paused
 * [2.3.3.9]  Support for custom presets at MB1 and Ceres Escape by idlechild
 * [2.3.3.9]  Fixes for loading music after presets and load states by idlechild

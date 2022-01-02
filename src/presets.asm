@@ -84,6 +84,13 @@ endif
     JSL upload_sprite_oob_tiles
 
   .done_upload_sprite_oob_tiles
+
+    ; Skip fixing the music for load/save off option
+    ; Note: This may cause the game to crash if music is later turned on
+    LDA !sram_music_toggle : CMP #$0003 : BNE .load_music
+    BRL .music_done
+
+  .load_music
     LDA $0639 : CMP $063B : BEQ .music_queue_empty
 
   .music_queue_data_search
@@ -112,10 +119,6 @@ endif
   .music_queue_empty
     LDA !SRAM_MUSIC_DATA : CMP !MUSIC_DATA : BEQ .done_load_music_data
 
-    ; Don't bother with music if it's disabled
-    LDA !sram_music_toggle : BNE .load_music : JMP .done_load_music_track
-
-  .load_music
     ; Clear track and load data
     LDA #$0000 : JSL !MUSIC_ROUTINE
     LDA #$FF00 : CLC : ADC !MUSIC_DATA : JSL !MUSIC_ROUTINE
@@ -130,6 +133,7 @@ endif
     JSL reset_all_counters
     STZ $0795 ; clear door transition flag
 
+  .music_done
     ; Clear enemies if not in certain rooms
     LDA $079B : CMP #$DD58 : BEQ .done_clearing_enemies
     JSR clear_all_enemies

@@ -470,8 +470,6 @@ endif
 
 print pc, " ridley rng end"
 
-print pc, " ridley rng end"
-
 
 org $A7FFB6
 print pc, " kraid rng start"
