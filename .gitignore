@@ -14,4 +14,3 @@ tools/asar.exe
 tools/dll/*
 .vscode/launch.json
 .vscode/tasks.json
-build/HACK/*
