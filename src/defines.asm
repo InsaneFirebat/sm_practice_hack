@@ -12,7 +12,7 @@
 !VERSION_MINOR = 3
 !VERSION_BUILD = 3
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 8
+!VERSION_REV_2 = 9
 
 
 ; ---------
@@ -202,7 +202,7 @@
 
 ; ^ FREE SPACE ^ up to +$CE
 
-!ram_cgram_cache = !WRAM_MENU_START+$D0         ; 20 bytes
+!ram_cgram_cache = !WRAM_MENU_START+$D0         ; 30 bytes
 
 !ram_hex2dec_first_digit = $14
 !ram_hex2dec_second_digit = $16
@@ -309,7 +309,8 @@
 
 !OAM_STACK_POINTER = $0590
 !ROOM_ID = $079B
-!MUSIC_BANK = $07F3
+!SOUND_TIMER = $0686
+!MUSIC_DATA = $07F3
 !MUSIC_TRACK = $07F5
 !LAYER1_X = $0911
 !LAYER1_Y = $0915
@@ -402,8 +403,10 @@
 !sram_metronome_sfx = $F0203A
 !sram_status_icons = $F0203C
 !sram_suit_properties = $F0203E
-!sram_room_layout = $702040
+!sram_top_display_mode = $F02040
 !sram_healthalarm = $702042
+!sram_room_layout = $702044
+!sram_cutscenes = $702046
 
 ; ^ FREE SPACE ^ up to $F03000
 
@@ -423,8 +426,9 @@
 !SRAM_SAVED_SP = $774004
 
 ; SM specific things
-!SRAM_MUSIC_BANK = $701FD0
+!SRAM_MUSIC_DATA = $701FD0
 !SRAM_MUSIC_TRACK = $701FD2
+!SRAM_SOUND_TIMER = $701FD4
 
 
 
@@ -542,7 +546,6 @@ endif
 !sram_superhud_bottom = $F02284
 !sram_superhud_middle = $F02286
 !sram_superhud_top = $F02288
-!sram_top_display_mode = $F0228A
 
 !sram_presetrando = $F02290
 !sram_presetrando_morph = $F02292

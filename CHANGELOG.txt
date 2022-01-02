@@ -1,6 +1,11 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.3.9]  Fixed background color after opening the practice menu while paused
+* [2.3.3.9]  Support for custom presets at MB1 and Ceres Escape by idlechild
+* [2.3.3.9]  Fixes for loading music after presets and load states by idlechild
+* [2.3.3.9]  New options added to the health alarm toggle by idlechild
+* [2.3.3.9]  Option to fix bad graphics from misaligned doors from PJBoy and idlechild
 * [2.3.3.8]  New menu in Game Options to configure controls
 * [2.3.3.7]  Smarter health bomb status icon
 * [2.3.3.6]  Changed reserve icons and finalized reserve display
