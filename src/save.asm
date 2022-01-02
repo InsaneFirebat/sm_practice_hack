@@ -27,7 +27,12 @@ post_load_state:
 {
     JSL stop_all_sounds
 
-    ; Fix the music
+    ; Skip fixing the music for load/save off option
+    ; Note: This may cause the game to crash if music is later turned on
+    LDA !sram_music_toggle : CMP #$0003 : BNE .fix_music
+    BRL .music_done
+
+  .fix_music
     LDA $0639 : CMP $063B : BEQ .music_queue_empty
 
   .music_queue_data_search
@@ -65,10 +70,6 @@ post_load_state:
   .music_queue_empty
     LDA !SRAM_MUSIC_DATA : CMP !MUSIC_DATA : BEQ .music_check_track
 
-    ; Don't bother loading the music if it's disabled
-    LDA !sram_music_toggle : BNE .load_music : JMP .music_done
-
-  .load_music
     ; Clear track and load data
     LDA #$0000 : JSL !MUSIC_ROUTINE
     LDA #$FF00 : CLC : ADC !MUSIC_DATA : JSL !MUSIC_ROUTINE
