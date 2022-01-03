@@ -10,9 +10,9 @@
 
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 3
-!VERSION_BUILD = 3
+!VERSION_BUILD = 4
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 10
+!VERSION_REV_2 = 0
 
 
 ; ---------
@@ -66,8 +66,7 @@
 !ram_suits_periodic_damage_check = !WRAM_START+$48
 !ram_sprite_samusproj_hitbox_active = !WRAM_START+$4A
 !ram_sprite_enemyproj_hitbox_active = !WRAM_START+$4C
-
-; ^ FREE SPACE ^ up to +$4E
+!ram_fix_scroll_offsets = !WRAM_START+$4E
 
 !ram_magic_pants_enabled = !WRAM_START+$50
 !ram_magic_pants_state = !WRAM_START+$52
@@ -405,9 +404,9 @@
 !sram_status_icons = $F0203C
 !sram_suit_properties = $F0203E
 !sram_top_display_mode = $F02040
-!sram_healthalarm = $702042
-!sram_room_layout = $702044
-!sram_cutscenes = $702046
+!sram_healthalarm = $F02042
+!sram_room_layout = $F02044
+!sram_cutscenes = $F02046
 
 ; ^ FREE SPACE ^ up to $F03000
 
