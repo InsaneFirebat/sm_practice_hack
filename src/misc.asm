@@ -52,13 +52,25 @@ org $8C9607
     dw #$0E2F
 
 
-if !PRESERVE_WRAM_DURING_SPACETIME
-org $90ACF6
-    JSR original_load_projectile_palette
+; Turn off health alarm
+org $90EA8C
+    LDA !sram_healthalarm : ASL : PHX : TAX
+    JMP.w (healthalarm_turn_off_table,X)
 
-org $90AD18
-    JMP spacetime_routine
-endif
+; Turn on health alarm
+org $90EA9D
+    LDA !sram_healthalarm : ASL : PHX : TAX
+    JMP.w (healthalarm_turn_on_table,X)
+
+; Turn on health alarm
+org $90F339
+    JSR $EA9D
+    BRA $02
+
+; Turn on health alarm from bank 91
+org $91E6DA
+    JML healthalarm_turn_on_remote
+
 
 
 ; Skips the waiting time after teleporting
@@ -103,21 +115,59 @@ org $808F24
     JSL hook_set_music_track
     NOP #2
 
+; $80:8F65 8D F3 07    STA $07F3  [$7E:07F3]  ;} Music data = [music entry] & FFh
+; $80:8F68 AA          TAX                    ; X = [music data]
+org $808F65
+    JML hook_set_music_data
+
 
 ; swap Enemy HP to MB HP when entering MB's room
 ;org $83AAD2
 ;    dw #MotherBrainHP
 
-;org $8FEA00 ; free space for door asm
+
+; Ceres Ridley modified state check to support presets
+org $8FE0C0
+    dw layout_asm_ceres_ridley_room_state_check
+
+; Ceres Ridley room setup asm when timer is not running
+org $8FE0DF
+    dw layout_asm_ceres_ridley_room_no_timer
+
+
+org $8FEA00 ; free space for door asm
+print pc, " misc bank8F start"
+
 ;MotherBrainHP:
 ;{
 ;    LDA !sram_display_mode : BNE .done
-;    LDA #$0001 : STA !sram_display_mode
-;    LDA #$0007 : STA !sram_room_strat
+;    LDA !IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
+;    LDA !IH_STRAT_MBHP_INDEX : STA !sram_room_strat
 
-;  .done
-;    RTS
-;}
+layout_asm_ceres_ridley_room_state_check:
+{
+    LDA $0943 : BEQ .no_timer
+    LDA $0001,X : TAX
+    JMP $E5E6
+  .no_timer
+    STZ $093F
+    INX : INX : INX
+    RTS
+}
+
+layout_asm_ceres_ridley_room_no_timer:
+{
+    ; Same as original setup asm, except force blue background
+    PHP
+    SEP #$20
+    LDA #$66 : STA $5D
+    PLP
+    JSL $88DDD0
+    LDA #$0009 : STA $07EB
+    RTS
+}
+
+print pc, " misc bank8F end"
 
 
 org $87D000
@@ -126,15 +176,29 @@ print pc, " misc start"
 hook_set_music_track:
 {
     STZ $07F6
-
     PHA
-    LDA !sram_music_toggle : BEQ .noMusic
+    LDA !sram_music_toggle : CMP #$02 : BEQ .fast_no_music
+    CMP #$01 : BNE .no_music
+    LDA $07F3 : BEQ .no_music
     PLA : STA $2140
     RTL
 
-  .noMusic
+  .fast_no_music
+    STZ $07F5
+  .no_music
     PLA
     RTL
+}
+
+hook_set_music_data:
+{
+    TAX
+    LDA !sram_music_toggle : CMP #$0002 : BEQ .fast_no_music
+    TXA : STA $07F3
+    JML $808F69
+
+  .fast_no_music
+    JML $808F89
 }
 
 hook_unpause:
@@ -207,61 +271,52 @@ stop_all_sounds:
 print pc, " misc end"
 
 
-if !PRESERVE_WRAM_DURING_SPACETIME
-org $90FF90
-print pc, " misc bank90 start"
-original_load_projectile_palette:
-{
-    AND #$0FFF : ASL : TAY
-    LDA #$0090 : XBA : STA $01
-    LDA $C3C9,Y : STA $00
-    LDY #$0000
-    LDX #$0000
+healthalarm_turn_on_table:
+    dw healthalarm_turn_on_never
+    dw healthalarm_turn_on_vanilla
+    dw healthalarm_turn_on_pb_fix
+    dw healthalarm_turn_on_improved
 
-  .original_load_palette_loop
-    LDA [$00],Y
-    STA $7EC1C0,X
-    INX : INX : INY : INY
-    CPY #$0020 : BMI .original_load_palette_loop
-    RTS
-}
+healthalarm_turn_on_improved:
+    ; Do not sound alarm until below 30 combined health
+    LDA $09C2 : CLC : ADC $09D6 : CMP #$001E : BPL healthalarm_turn_on_done
 
-spacetime_routine:
-{
-    ; The normal routine shouldn't come here, but sanity check just in case
-    ; Also skips out if spacetime but Y value is positive
-    INY : INY : CPY #$0000 : BPL .normal_load_palette
+healthalarm_turn_on_pb_fix:
+    ; Do not sound alarm if it won't play due to power bomb explosion
+    LDA $0592 : BMI healthalarm_turn_on_done
 
-    ; Spacetime, sanity check that X is 0 (if not then do the original routine)
-    CPX #$0000 : BNE .normal_load_palette
+healthalarm_turn_on_vanilla:
+    LDA #$0002 : JSL $80914D
 
-    ; Spacetime, check if Y will cause us to reach WRAM
-    TYA : CLC : ADC #(!WRAM_START-$7EC1E2) : CMP #$0000 : BPL .normal_load_palette
+healthalarm_turn_on_never:
+    LDA #$0001 : STA $0A6A
 
-    ; It will, so run our own loop
-    INX : INX
-  .loop_before_wram
-    LDA [$00],Y
-    STA $7EC1C0,X
-    INX : INX : INY : INY
-    CPX #(!WRAM_START-$7EC1C0) : BMI .loop_before_wram
+healthalarm_turn_on_done:
+    PLX : RTS
 
-    ; Skip over WRAM and resume normal loop
-    TXA : CLC : ADC !WRAM_SIZE : TAX
-    TYA : CLC : ADC !WRAM_SIZE : TAY
-    CPY #$0020 : BMI .normal_load_loop
-    RTS
 
-  .normal_load_loop
-    LDA [$00],Y
-    STA $7EC1C0,X
-    INY : INY
-  .normal_load_palette
-    INX : INX
-    CPY #$0020 : BMI .normal_load_loop
-    RTS
-}
-print pc, " misc bank90 end"
-endif
+healthalarm_turn_off_table:
+    dw healthalarm_turn_off_never
+    dw healthalarm_turn_off_vanilla
+    dw healthalarm_turn_off_pb_fix
+    dw healthalarm_turn_off_improved
 
+healthalarm_turn_off_improved:
+healthalarm_turn_off_pb_fix:
+    ; Do not stop alarm if it won't stop due to power bomb explosion
+    LDA $0592 : BMI healthalarm_turn_off_done
+
+healthalarm_turn_off_vanilla:
+    LDA #$0001 : JSL $80914D
+
+healthalarm_turn_off_never:
+    STZ $0A6A
+
+healthalarm_turn_off_done:
+    PLX : RTS
+
+
+healthalarm_turn_on_remote:
+    JSR $EA9D
+    PLB : PLP : RTL
 

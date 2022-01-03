@@ -1,7 +1,7 @@
 *.srm
 *.bst
 *.s[mf]c
-build/*.ips
+build/*
 build/HACK/*
 !build/HACK/.gitkeep
 *.sw[op]
@@ -12,4 +12,3 @@ tools/asar.exe
 tools/dll/*
 .vscode/launch.json
 .vscode/tasks.json
-build/HACK/*.sfc

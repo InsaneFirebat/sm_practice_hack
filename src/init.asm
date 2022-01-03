@@ -1,4 +1,4 @@
-!SRAM_VERSION = $000B
+!SRAM_VERSION = $000C
 
 
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values
@@ -80,7 +80,7 @@ init_sram:
     LDA #$3000 : STA !sram_ctrl_menu                  ; Start + Select
     LDA #$6010 : STA !sram_ctrl_save_state            ; Select + Y + R
     LDA #$6020 : STA !sram_ctrl_load_state            ; Select + Y + L
-    LDA #$5020 : STA !sram_ctrl_load_last_preset      ; Start + Y + L
+    LDA #$0000 : STA !sram_ctrl_load_last_preset      ; Start + Y + L
     LDA #$0000 : STA !sram_ctrl_full_equipment
     LDA #$0000 : STA !sram_ctrl_kill_enemies
     LDA #$0000 : STA !sram_ctrl_reset_segment_timer
@@ -92,6 +92,10 @@ init_sram:
     LDA #$0000 : STA !sram_ctrl_dec_custom_preset
     LDA #$0000 : STA !sram_ctrl_toggle_tileviewer
     LDA #$0000 : STA !sram_ctrl_update_timers
+    LDA #$0000 : STA !sram_status_icons
+    LDA #$0000 : STA !sram_top_display_mode
+    LDA #$0001 : STA !sram_healthalarm
+    LDA #$0003 : STA !sram_cutscenes
 
     ; Input Cheat Sheet  ($4218)
     ; $8000 = B
@@ -124,7 +128,6 @@ init_sram:
 
     LDA #$000A : STA !sram_metronome_tickrate
     LDA #$0002 : STA !sram_metronome_sfx
-    LDA #$0000 : STA !sram_status_icons
 
     LDA #!SRAM_VERSION : STA !sram_initialized
     RTS
