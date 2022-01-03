@@ -5,9 +5,7 @@ print pc, " presets start"
 preset_load:
 {
     PHP
-
-    LDA !MUSIC_BANK : STA !SRAM_MUSIC_BANK
-    LDA !MUSIC_TRACK : STA !SRAM_MUSIC_TRACK
+    LDA !MUSIC_DATA : STA !SRAM_MUSIC_DATA
 
     JSL $809E93  ; Clear timer RAM
     JSR $819B    ; Initialize IO registers
@@ -20,6 +18,7 @@ preset_load:
     JSL preset_start_gameplay  ; Start gameplay
 
     JSL $809A79  ; HUD routine when game is loading
+    JSL $90AD22  ; Reset projectile data
 
     PHP
     REP #$30
@@ -75,33 +74,71 @@ preset_load:
     +
 
     ; Re-upload OOB viewer tiles if needed
-    LDA !ram_oob_watch_active : BEQ +
-      JSL upload_sprite_oob_tiles
-    +
+    LDA !ram_oob_watch_active : BEQ .done_upload_sprite_oob_tiles
+    JSL upload_sprite_oob_tiles
 
-    LDA !SRAM_MUSIC_BANK
-    CMP !MUSIC_BANK
-    BEQ .load_music_track
+  .done_upload_sprite_oob_tiles
+    LDA $0639 : CMP $063B : BEQ .music_queue_empty
 
-    ; loads new music bank
-    LDA #$FF00 : CLC : ADC !MUSIC_BANK
-    JSL !MUSIC_ROUTINE
+  .music_queue_data_search
+    DEC : DEC : AND #$000E : TAX
+    LDA $0619,X : BMI .music_check_data
+    TXA : CMP $063B : BNE .music_queue_data_search
 
-  .load_music_track
-    LDA !MUSIC_TRACK
-    JSL !MUSIC_ROUTINE
+    ; No music data found in queue
+    LDA !SRAM_MUSIC_DATA
 
+  .music_check_data
+    CMP !MUSIC_DATA : BEQ .done_load_music_data
+
+    ; Reset music queue, clear track and load data
+    LDX $063B : LDA $0629,X : BNE .music_reset_queue_keep_timer
+    LDA #$0008 : STA $0629,X
+
+  .music_reset_queue_keep_timer
+    LDA #0000 : STA $0619,X : STA $063D
+    INX : INX : TXA : AND #$000E : TAX
+    LDA #$FF00 : CLC : ADC !MUSIC_DATA : STA $0619,X
+    LDA #$0008 : STA $0629,X
+    INX : INX : TXA : AND #$000E : STA $0639
+    BRA .done_fixing_music_data
+
+  .music_queue_empty
+    LDA !SRAM_MUSIC_DATA : CMP !MUSIC_DATA : BEQ .done_load_music_data
+
+    ; Clear track and load data
+    LDA #$0000 : JSL !MUSIC_ROUTINE
+    LDA #$FF00 : CLC : ADC !MUSIC_DATA : JSL !MUSIC_ROUTINE
+
+  .done_fixing_music_data
+    LDA !MUSIC_TRACK : BEQ .done_load_music_track
+
+  .done_load_music_data
+    LDA !MUSIC_TRACK : JSL !MUSIC_ROUTINE
+
+  .done_load_music_track
     JSL reset_all_counters
     STZ $0795 ; clear door transition flag
 
-    ; Kill non-solid enemies
-    LDA #$0000
-    ; 8000 = solid to Samus, 0400 = Ignore Samus projectiles
--   TAX : LDA $0F86,X : BIT #$8400 : BNE +
-    ORA #$0200 : STA $0F86,X
-+   TXA : CLC : ADC #$0040 : CMP #$0400 : BNE -
+    ; Clear enemies if not in certain rooms
+    LDA $079B : CMP #$DD58 : BEQ .done_clearing_enemies
+    JSR clear_all_enemies
+
+  .done_clearing_enemies
     PLP
     RTL
+}
+
+clear_all_enemies:
+{
+    ; Clear enemies (8000 = solid to Samus, 0400 = Ignore Samus projectiles)
+    LDA #$0000
+  .loop
+    TAX : LDA $0F86,X : BIT #$8400 : BNE .done_clearing
+    ORA #$0200 : STA $0F86,X
+  .done_clearing
+    TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .loop
+    RTS
 }
 
 reset_all_counters:
@@ -290,7 +327,7 @@ preset_start_gameplay:
     LDA #$E725 : STA $0A44 ; Unlock Samus
     STZ $0E18    ; Set elevator to inactive
 
-+   LDA #$0000 : STA $05F5  ; Enable sounds
+    LDA #$0000 : STA $05F5  ; Enable sounds
     JSL stop_all_sounds
 
     LDA #$E737 : STA $099C  ; Pointer to next frame's room transition code = $82:E737
@@ -397,8 +434,14 @@ preset_scroll_fixes:
     LDA #$00 : STA $7E005F       ; Initialize mode 7
     CPX #$DF45 : BNE +           ; Ceres Elevator
     LDA #$00 : STA $7E091E : STA $7E0920
-    BRA .ceresdone
-+   CPX #$DF8D : BNE +           ; Ceres Falling Tiles
+    BRL .ceresdone
++   STA $7E0078 : STA $7E0079    ; Ceres Elevator room already does this
+    STA $7E007A : STA $7E007B    ; Other rooms should zero out the values
+    STA $7E007C : STA $7E007D
+    STA $7E007E : STA $7E007F
+    STA $7E0080 : STA $7E0081
+    STA $7E0082 : STA $7E0083
+    CPX #$DF8D : BNE +           ; Ceres Falling Tiles
     LDA #$01 : STA $7E091E
     LDA #$02 : STA $7E0920
     BRA .ceresdone
