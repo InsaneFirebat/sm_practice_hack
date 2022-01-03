@@ -400,96 +400,85 @@ cm_tilemap_clear:
     ; top right corner = $07C
     ; bot left corner  = $682
     ; bot right corner = $6BC
-	 ; Empty out !ram_tilemap_buffer
-    {
-        LDX #$07FE
-        LDA #$000E
+	; Empty out !ram_tilemap_buffer
+    LDX #$07FE
+    LDA #$000E
 
-        -
-        STA !ram_tilemap_buffer,X
-        DEX #2 : BPL -
-    }
+-   STA !ram_tilemap_buffer,X
+    DEX #2 : BPL -
     RTS
 }
 
 cm_tilemap_bg:
 {
     ; Vertical edges
-    {
-        LDX #$0000
-        LDY #$0019
+    LDX #$0000
+    LDY #$0019
 
-        -
-        LDA.w #$647A : STA !ram_tilemap_buffer+$082,X
-        LDA.w #$247A : STA !ram_tilemap_buffer+$0BC,X
-        TXA : CLC : ADC #$0040 : TAX
-        DEY : BPL -
-    }
+-   LDA.w #$647A : STA !ram_tilemap_buffer+$082,X
+    LDA.w #$247A : STA !ram_tilemap_buffer+$0BC,X
+    TXA : CLC : ADC #$0040 : TAX
+    DEY : BPL -
 
     ; Horizontal edges
-    {
-        LDX.w #$0000
-        LDY.w #$001B
+    LDX.w #$0000
+    LDY.w #$001B
 
-        -
-        LDA.w #$A47B : STA !ram_tilemap_buffer+$044,X
-        LDA.w #$247B : STA !ram_tilemap_buffer+$704,X
+-   LDA.w #$A47B : STA !ram_tilemap_buffer+$044,X
+    LDA.w #$247B : STA !ram_tilemap_buffer+$704,X
 
-        INX #2
-        DEY : BPL -
-    }
+    INX #2
+    DEY : BPL -
 
     ; Interior
-    {
-        ; background is optional
-        LDA !sram_menu_background : BNE .fill_interior
-        ; fill if paused
-        LDA !GAMEMODE : CMP #$000C : BMI .check_ceres
-        BEQ .fill_interior : CMP #$0012 : BMI .fill_interior
-        ; fill if Ceres
-      .check_ceres
-        LDA $079F : CMP #$0006 : BMI .done
-        ; transparent otherwise ------^
-      .fill_interior
-        LDX.w #$0000
-        LDY.w #$001B
-        LDA.w #$281F
+    ; background is optional
+    LDA !sram_menu_background : BNE .fill_interior
+    ; fill if paused
+    LDA !GAMEMODE : CMP #$000C : BMI .check_ceres
+    BEQ .fill_interior : CMP #$0012 : BMI .fill_interior
+    ; fill if Ceres
+  .check_ceres
+    LDA $079F : CMP #$0006 : BMI .done
+    ; transparent otherwise ------^
+  .fill_interior
+    LDX.w #$0000
+    LDY.w #$001B
+    LDA.w #$281F
 
       .interior_loop
-        STA !ram_tilemap_buffer+$004,X
-        STA !ram_tilemap_buffer+$084,X
-        STA !ram_tilemap_buffer+$0C4,X
-        STA !ram_tilemap_buffer+$104,X
-        STA !ram_tilemap_buffer+$144,X
-        STA !ram_tilemap_buffer+$184,X
-        STA !ram_tilemap_buffer+$1C4,X
-        STA !ram_tilemap_buffer+$204,X
-        STA !ram_tilemap_buffer+$244,X
-        STA !ram_tilemap_buffer+$284,X
-        STA !ram_tilemap_buffer+$2C4,X
-        STA !ram_tilemap_buffer+$304,X
-        STA !ram_tilemap_buffer+$344,X
-        STA !ram_tilemap_buffer+$384,X
-        STA !ram_tilemap_buffer+$3C4,X
-        STA !ram_tilemap_buffer+$404,X
-        STA !ram_tilemap_buffer+$444,X
-        STA !ram_tilemap_buffer+$484,X
-        STA !ram_tilemap_buffer+$4C4,X
-        STA !ram_tilemap_buffer+$504,X
-        STA !ram_tilemap_buffer+$544,X
-        STA !ram_tilemap_buffer+$584,X
-        STA !ram_tilemap_buffer+$5C4,X
-        STA !ram_tilemap_buffer+$604,X
-        STA !ram_tilemap_buffer+$644,X
-        STA !ram_tilemap_buffer+$684,X
-        STA !ram_tilemap_buffer+$6C4,X
+    STA !ram_tilemap_buffer+$004,X
+    STA !ram_tilemap_buffer+$084,X
+    STA !ram_tilemap_buffer+$0C4,X
+    STA !ram_tilemap_buffer+$104,X
+    STA !ram_tilemap_buffer+$144,X
+    STA !ram_tilemap_buffer+$184,X
+    STA !ram_tilemap_buffer+$1C4,X
+    STA !ram_tilemap_buffer+$204,X
+    STA !ram_tilemap_buffer+$244,X
+    STA !ram_tilemap_buffer+$284,X
+    STA !ram_tilemap_buffer+$2C4,X
+    STA !ram_tilemap_buffer+$304,X
+    STA !ram_tilemap_buffer+$344,X
+    STA !ram_tilemap_buffer+$384,X
+    STA !ram_tilemap_buffer+$3C4,X
+    STA !ram_tilemap_buffer+$404,X
+    STA !ram_tilemap_buffer+$444,X
+    STA !ram_tilemap_buffer+$484,X
+    STA !ram_tilemap_buffer+$4C4,X
+    STA !ram_tilemap_buffer+$504,X
+    STA !ram_tilemap_buffer+$544,X
+    STA !ram_tilemap_buffer+$584,X
+    STA !ram_tilemap_buffer+$5C4,X
+    STA !ram_tilemap_buffer+$604,X
+    STA !ram_tilemap_buffer+$644,X
+    STA !ram_tilemap_buffer+$684,X
+    STA !ram_tilemap_buffer+$6C4,X
 
-        INX #2
-        DEY : BPL .interior_loop
+    INX #2
+    DEY : BPL .interior_loop
 
-      .done
-        RTS
-    }
+  .done
+    RTS
 }
 
 cm_tilemap_menu:
@@ -1172,9 +1161,9 @@ cm_loop:
 
     BIT #$0080 : BEQ + : JMP .pressedA ; more wiggle room with branch limits...
 +   BIT #$8000 : BEQ + : JMP .pressedB
-;   BIT #$0040 : BNE .pressedX
-;   BIT #$4000 : BNE .pressedY
-+   BIT #$2000 : BNE .pressedSelect
+;    BIT #$0040 : BNE .pressedX
++   BIT #$4000 : BNE .pressedY
+    BIT #$2000 : BNE .pressedSelect
     BIT #$1000 : BNE .pressedStart
     BIT #$0800 : BNE .pressedUp
     BIT #$0400 : BNE .pressedDown
@@ -1214,7 +1203,7 @@ cm_loop:
 
   .pressedA
 ;  .pressedX
-;  .pressedY
+  .pressedY
   .pressedLeft
   .pressedRight
     JSR cm_execute

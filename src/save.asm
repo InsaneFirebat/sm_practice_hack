@@ -111,23 +111,15 @@ save_state:
     %a8()
     LDY #$0000 : TYX
 
-save_dma_regs:
-    LDA $4300,X : STA !SRAM_DMA_BANK,X
-    INX : INY
-    CPY #$000B : BNE save_dma_regs
-    CPX #$007B : BEQ save_dma_regs_done
-    INX #5 : LDY #$0000
-    BRA save_dma_regs
-
   .save_dma_regs
     LDA $4300,X : STA !SRAM_DMA_BANK,X
     INX : INY
     CPY #$000B : BNE .save_dma_regs
-    CPX #$007B : BEQ .save_dma_regs_done
+    CPX #$007B : BEQ .done
     INX #5 : LDY #$0000
     BRA .save_dma_regs
 
-  .save_dma_regs_done
+  .done
     %ai16()
     LDX #save_write_table
 }
@@ -329,7 +321,7 @@ vm:
     TAY
     INX #2
     ; Check for byte mode
-    BIT.w #$1000 : BEQ vm_word_mode
+    BIT.w #$1000 : BEQ .vm_word_mode
     AND.w #$EFFF : TAY
     %a8()
   .vm_word_mode

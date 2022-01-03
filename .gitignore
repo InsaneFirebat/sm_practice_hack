@@ -3,3 +3,4 @@
 build/*
 tools/asar.exe
 tools/dll/*
+build/HACK/*
