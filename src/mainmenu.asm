@@ -1535,7 +1535,7 @@ ihstrat_superhud:
     %cm_jsr("Super HUD", #action_select_room_strat, #$0000)
 
 ihstrat_mbhp:
-!IH_STRAT_MBHP_INDEX = $0001
+!IH_STRAT_MBHP_INDEX = #$0001
     %cm_jsr("Mother Brain HP", #action_select_room_strat, #$0001)
 
 ihstrat_moatcwj:
@@ -2312,7 +2312,7 @@ game_music_toggle:
     dl #!sram_music_toggle
     dw .routine
     db #$28, "Music", #$FF
-    db #$28, "VANILLA OFF", #$FF
+    db #$28, "        OFF", #$FF
     db #$28, "         ON", #$FF
     db #$28, "   FAST OFF", #$FF
     db #$28, "LOADSAVEOFF", #$FF

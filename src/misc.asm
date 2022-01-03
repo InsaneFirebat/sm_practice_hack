@@ -548,7 +548,7 @@ print pc, " misc bank90 end"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-org $A6FEBC      ; free space
+org $A6FFE0      ; free space
 print pc, " misc bankA6 start"
 ResetCountDamageRid:
 {
@@ -558,11 +558,20 @@ ResetCountDamageRid:
     PLA
     RTS
 }
-warnpc $A6FFE0
+
+if !FEATURE_EXTRAS
+SteamCollision:
+{
+    LDA !ram_steamcollision : BEQ .originalcode
+    PLA : LDA $0F86,x : JMP $F13B
+  .originalcode
+    LDA $0F86,x : RTS
+}
+endif
 print pc, " misc bankA6 end"
 
 
-org $A7FF90         ; free space
+org $A7FFE0         ; free space
 print pc, " misc bankA7 start"
 ResetCountDamagePhan:
 {
@@ -576,7 +585,7 @@ ResetCountDamagePhan:
 print pc, " misc bankA7 end"
 
 
-org $A0F9DC         ; count damage in free space at end of bank
+org $A0FFDC         ; count damage in free space at end of bank
 print pc, " misc bankA0 start"
 CountDamage:
 {
@@ -596,10 +605,7 @@ CountDamageShinespark:
 print pc, " misc bankA0 end"
 
 
-;;;;;;;;; Custom Build Hijacks ;;;;;;;;;
-
 if !FEATURE_EXTRAS
-
 org $94DC00
 print pc, " EXTRAS=1 misc bank94 start"
 NoClip:
@@ -610,18 +616,6 @@ NoClip:
     STZ $14 : LDA $20
     JMP $8F4D
 }
-
+endif
 print pc, " EXTRAS=1 misc bank94 end"
 
-
-org $A6FFE0
-print pc, " EXTRAS=1 misc bankA6 end"
-SteamCollision:
-{
-    LDA !ram_steamcollision : BEQ .originalcode
-    PLA : LDA $0F86,x : JMP $F13B
-  .originalcode
-    LDA $0F86,x : RTS
-}
-print pc, " EXTRAS=1 misc bankA6 end"
-endif

@@ -368,31 +368,22 @@ SoundTestMenu:
     %cm_footer("PRESS Y TO PLAY SOUNDS")
 
 ifb_soundtest_lib1_sound:
-    %cm_numfield_sound("Library One Sound", !ram_soundtest_lib1, 1, 66, 1, #action_soundtest_lib1_play)
-
-action_soundtest_lib1_play:
-{
+    %cm_numfield_sound("Library One Sound", !ram_soundtest_lib1, 1, 66, 1, .routine)
+  .routine
     LDA !ram_soundtest_lib1 : JSL !SFX_LIB1
     RTS
-}
 
 ifb_soundtest_lib2_sound:
-    %cm_numfield_sound("Library Two Sound", !ram_soundtest_lib2, 1, 127, 1, #action_soundtest_lib2_play)
-
-action_soundtest_lib2_play:
-{
+    %cm_numfield_sound("Library Two Sound", !ram_soundtest_lib2, 1, 127, 1, .routine)
+  .routine
     LDA !ram_soundtest_lib2 : JSL !SFX_LIB2
     RTS
-}
 
 ifb_soundtest_lib3_sound:
-    %cm_numfield_sound("Library Three Sound", !ram_soundtest_lib3, 1, 47, 1, #action_soundtest_lib3_play)
-
-action_soundtest_lib3_play:
-{
+    %cm_numfield_sound("Library Three Sound", !ram_soundtest_lib3, 1, 47, 1, .routine)
+  .routine
     LDA !ram_soundtest_lib3 : JSL !SFX_LIB3
     RTS
-}
 
 ifb_soundtest_silence:
     %cm_jsr("Silence Sound FX", .routine, #$0002)
