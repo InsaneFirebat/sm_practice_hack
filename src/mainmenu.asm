@@ -991,6 +991,10 @@ MiscMenu:
     dw #misc_spacepants
     dw #misc_loudpants
     dw #$FFFF
+    dw #misc_metronome
+    dw #misc_metronome_tickrate
+    dw #misc_metronome_sfx
+    dw #$FFFF
     dw #misc_killenemies
     dw #misc_forcestand
     dw #misc_elevatorfix
@@ -1004,7 +1008,7 @@ misc_flashsuit:
     %cm_toggle("Flash Suit", $7E0A68, #$0001, #0)
 
 misc_hyperbeam:
-    %cm_toggle("Hyper Beam", $7E0A76, #$0001, #0)
+    %cm_toggle_bit("Hyper Beam", $7E0A76, #$8000, #0)
 
 misc_slowdownrate:
     %cm_numfield("Samus Slowdown Rate", $7E0A66, 0, 4, 1, 1, #0)
@@ -1048,6 +1052,27 @@ misc_invincibility:
 
 misc_infiniteammo:
     %cm_toggle_bit("Infinite Ammo", !ram_infinite_ammo, #$0001, #GameLoopExtras)
+
+misc_metronome:
+    %cm_toggle("Metronome", !ram_metronome, #$0001, GameLoopExtras)
+
+misc_metronome_tickrate:
+    %cm_numfield("Metronome Tickrate", !sram_metronome_tickrate, 1, 255, 1, 8, #.routine)
+  .routine
+    LDA #$0000 : STA !ram_metronome_counter
+    RTS
+
+misc_metronome_sfx:
+    dw !ACTION_CHOICE
+    dl #!sram_metronome_sfx
+    dw #$0000
+    db #$28, "Metronome SFX", #$FF
+        db #$28, "    MISSILE", #$FF
+        db #$28, "      CLICK", #$FF
+        db #$28, "       BEEP", #$FF
+        db #$28, " POWER BEAM", #$FF
+        db #$28, "     SPAZER", #$FF
+    db #$FF
 
 misc_killenemies:
     %cm_jsr("Kill Enemies", .kill_loop, #0)
@@ -1146,8 +1171,6 @@ LayoutMenu:
     %cm_footer("APPLIED WHEN ROOM RELOADED")
 
 !ROOM_LAYOUT_MAGNET_STAIRS = #$0001
-!ROOM_LAYOUT_AREA_RANDO = #$0002
-
 layout_magnetstairs:
     %cm_toggle_bit("Magnet Stairs Fix", !sram_room_layout, !ROOM_LAYOUT_MAGNET_STAIRS, #.routine)
   .routine
@@ -1171,6 +1194,7 @@ layout_magnetstairs:
   .done
     RTS
 
+!ROOM_LAYOUT_AREA_RANDO = #$0002
 layout_arearando:
     %cm_toggle_bit("Area Rando Patches", !sram_room_layout, !ROOM_LAYOUT_AREA_RANDO, #0)
 
@@ -1198,6 +1222,7 @@ EventsMenu:
     dw #events_zeb1
     dw #events_zeb2
     dw #events_zeb3
+    dw #events_mb1glass
     dw #events_zebesexploding
     dw #events_animals
     dw #$0000
@@ -1251,6 +1276,9 @@ events_zeb2:
 events_zeb3:
     %cm_toggle_bit("Zebetite Bit 20", $7ED820, #$0020, #0)
 
+events_mb1glass:
+    %cm_toggle_bit("MB1 Glass Broken", $7ED820, #$0004, #0)
+
 events_zebesexploding:
     %cm_toggle_bit("Zebes Set Ablaze", $7ED820, #$4000, #0)
 
@@ -1302,6 +1330,7 @@ action_reset_items:
 ; ------------
 
 BossesMenu:
+    dw #boss_ceresridley
     dw #boss_bombtorizo
     dw #boss_spospo
     dw #boss_kraid
@@ -1311,8 +1340,12 @@ BossesMenu:
     dw #boss_crocomire
     dw #boss_gt
     dw #boss_ridley
+    dw #boss_mb
     dw #$0000
     %cm_header("BOSSES")
+
+boss_ceresridley:
+    %cm_toggle_bit("Ceres Ridley", #$7ED82E, #$0001, #0)
 
 boss_bombtorizo:
     %cm_toggle_bit("Bomb Torizo", #$7ED828, #$0004, #0)
@@ -1340,6 +1373,9 @@ boss_gt:
 
 boss_ridley:
     %cm_toggle_bit("Ridley", #$7ED82A, #$0001, #0)
+
+boss_mb:
+    %cm_toggle_bit("Mother Brain", #$7ED82C, #$0200, #0)
 
 
 ; --------------
@@ -2288,9 +2324,7 @@ endif
     dw #game_minimap
     dw #game_clear_minimap
     dw #$FFFF
-    dw #game_metronome
-    dw #game_metronome_tickrate
-    dw #game_metronome_sfx
+    dw #game_cutscenes
     dw #$0000
     %cm_header("GAME OPTIONS")
 
@@ -2396,26 +2430,8 @@ game_clear_minimap:
     %sfxquake()
     RTS
 
-game_metronome:
-    %cm_toggle("Metronome", !ram_metronome, #$0001, GameLoopExtras)
-
-game_metronome_tickrate:
-    %cm_numfield("Metronome Tickrate", !sram_metronome_tickrate, 1, 255, 1, 8, #.routine)
-  .routine
-    LDA #$0000 : STA !ram_metronome_counter
-    RTS
-
-game_metronome_sfx:
-    dw !ACTION_CHOICE
-    dl #!sram_metronome_sfx
-    dw #$0000
-    db #$28, "Metronome SFX", #$FF
-        db #$28, "    MISSILE", #$FF
-        db #$28, "      CLICK", #$FF
-        db #$28, "       BEEP", #$FF
-        db #$28, " POWER BEAM", #$FF
-        db #$28, "     SPAZER", #$FF
-    db #$FF
+game_cutscenes:
+    %cm_submenu("Cutscenes", #CutscenesMenu)
 
 GameLoopExtras:
 {
@@ -2428,6 +2444,32 @@ GameLoopExtras:
     LDA #$0001 : STA !ram_game_loop_extras
     RTS
 }
+
+
+; ---------------
+; Cutscenes menu
+; ---------------
+
+CutscenesMenu:
+    dw #cutscenes_skip_intro
+    dw #cutscenes_skip_ceres_arrival
+    dw #$FFFF
+    dw #cutscenes_fast_mb
+    dw #$0000
+    %cm_header("CUTSCENES")
+
+!CUTSCENE_SKIP_INTRO = #$0001
+cutscenes_skip_intro:
+    %cm_toggle_bit("Skip Intro", !sram_cutscenes, !CUTSCENE_SKIP_INTRO, #0)
+
+!CUTSCENE_SKIP_CERES_ARRIVAL = #$0002
+cutscenes_skip_ceres_arrival:
+    %cm_toggle_bit("Skip Ceres Arrival", !sram_cutscenes, !CUTSCENE_SKIP_CERES_ARRIVAL, #0)
+
+!CUTSCENE_FAST_MB = #$0100
+cutscenes_fast_mb:
+    %cm_toggle_bit("Fast Mother Brain", !sram_cutscenes, !CUTSCENE_FAST_MB, #0)
+
 
 ; -------------------
 ; Controller Settings

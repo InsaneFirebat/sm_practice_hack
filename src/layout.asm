@@ -283,7 +283,9 @@ layout_asm_magnetstairs:
     LDA !sram_room_layout : BIT !ROOM_LAYOUT_MAGNET_STAIRS : BEQ .done
 
     ; change tile type and BTS
-    PHP : %a8()
+    %a8()
+
+    ; Convert solid tiles to slope tiles
     LDA #$10 : STA $7F01F9 : STA $7F02EB
     LDA #$53 : STA $7F64FD : STA $7F6576
 
@@ -296,7 +298,7 @@ layout_asm_greenhillzone:
 {
     PHP
     %a16()
-    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ layout_asm_magnetstairs_done
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ .done
 
     ; Remove gate and corner tile next to gate
     LDA #$00FF : STA $7F37C8 : STA $7F37CA : STA $7F37CC
@@ -320,6 +322,7 @@ layout_asm_greenhillzone:
   .done
     PLP
     RTS
+}
 
 layout_asm_caterpillar_no_scrolls:
     PHP
@@ -331,7 +334,7 @@ layout_asm_caterpillar_update_scrolls:
 layout_asm_caterpillar_after_scrolls:
 {
     %a16()
-    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ layout_asm_greenhillzone_done
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ .done
 
     ; Decorate gap with blocks
     LDA #$8562 : STA $7F145E : STA $7F1460 : STA $7F151E : STA $7F1520
@@ -353,17 +356,17 @@ layout_asm_caterpillar_after_scrolls:
     %a8()
     LDA #$00 : STA $7F6E17 : STA $7F6E18 : STA $7F6E19
     STA $7F6E48 : STA $7F6E78 : STA $7F6EA8 : STA $7F6ED8
-}
 
-layout_asm_caterpillar_done:
+  .done
     PLP
     RTS
+}
 
 layout_asm_singlechamber:
 {
     PHP
     %a16()
-    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ layout_asm_caterpillar_done
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ .done
 
     ; Move right wall back one to create a ledge
     LDA #$810C : STA $7F06E0 : STA $7F0A9E
@@ -387,17 +390,17 @@ layout_asm_singlechamber:
     %a8()
     LDA #$00 : STA $7F66F1 : STA $7F66F2
     STA $7F6751 : STA $7F6752 : STA $7F67B1 : STA $7F67B2
-}
 
-layout_asm_singlechamber_done:
+  .done
     PLP
     RTS
+}
 
 layout_asm_crabtunnel:
 {
     PHP
     %a16()
-    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ layout_asm_singlechamber_done
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ .done
 
     ; Replace top of gate with slope tiles
     LDA #$1D87 : STA $7F039C : LDA #$1194 : STA $7F039E
@@ -417,11 +420,11 @@ layout_asm_crabtunnel:
 
     ; Normal BTS for remaining gate tiles
     LDA #$00 : STA $7F6610 : STA $7F6650 : STA $7F6690 : STA $7F66D0
-}
 
-layout_asm_crabtunnel_done:
+  .done
     PLP
     RTS
+}
 
 layout_asm_easttunnel_no_scrolls:
     PHP
@@ -429,10 +432,10 @@ layout_asm_easttunnel_no_scrolls:
 layout_asm_easttunnel_after_scrolls:
 {
     %a16()
-    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ layout_asm_crabtunnel_done
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BNE + : JMP .done
 
     ; Clear gate PLMs and projectiles
-    LDA #$0000 : STA $1C7B : STA $1C7D : STA $19B9
++   LDA #$0000 : STA $1C7B : STA $1C7D : STA $19B9
 
     ; Remove gate tiles
     LDA #$00FF : STA $7F02AE : STA $7F02B0
@@ -458,17 +461,17 @@ layout_asm_easttunnel_after_scrolls:
     STA $7F090B : STA $7F098B : STA $7F0A0B
     STA $7F0A8A : STA $7F0A8E
     LDA #$8D : STA $7F0A8B
-}
 
-layout_asm_easttunnel_done:
+  .done
     PLP
     RTS
+}
 
 layout_asm_eastocean:
 {
     PHP
     %a16()
-    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ layout_asm_easttunnel_done
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ .done
 
     ; Add platforms for ease of access to right door
     LDA #$8100 : STA $7F4506 : STA $7F4876
@@ -486,11 +489,11 @@ layout_asm_eastocean:
     INC : STA $7F86F5 : STA $7F88AD
     LDA #$D5 : STA $7F86F6 : STA $7F88AE
     DEC : STA $7F86F7 : STA $7F88AF
-}
 
-layout_asm_eastocean_done:
+  .done
     PLP
     RTS
+}
 
 layout_asm_crabshaft_no_scrolls:
     PHP
@@ -502,7 +505,7 @@ layout_asm_crabshaft_update_scrolls:
 layout_asm_crabshaft_after_scrolls:
 {
     %a16()
-    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ layout_asm_eastocean_done
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ .done
 
     ; Clear space above save station
     LDA #$00FF : STA $7F095C : STA $7F095E
@@ -513,7 +516,7 @@ layout_asm_crabshaft_after_scrolls:
     JSL $84846A : PLX
 }
 
-layout_asm_crabshaft_done:
+  .done
     PLP
     RTS
 
@@ -524,17 +527,17 @@ layout_asm_mainstreet:
 {
     PHP
     %a16()
-    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ layout_asm_crabshaft_done
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ .done
 
     ; Add save station PLM
     %ai16()
     PHX : LDX #layout_asm_mainstreet_plm_data
     JSL $84846A : PLX
-}
 
-layout_asm_mainstreet_done:
+  .done
     PLP
     RTS
+}
 
 layout_asm_mainstreet_plm_data:
     db #$6F, #$B7, #$18, #$59, #$0A, #$00
@@ -572,16 +575,16 @@ layout_asm_westsandhall:
 {
     PHP
     %a16()
-    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ layout_asm_westsandhall_done
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ .done
 
     ; Change left door BTS to previously unused door
     %a8()
     LDA #$02 : STA $7F6582 : STA $7F65C2 : STA $7F6602 : STA $7F6642
-}
 
-layout_asm_westsandhall_done:
+  .done
     PLP
     RTS
+}
 
 print pc, " layout end"
 
