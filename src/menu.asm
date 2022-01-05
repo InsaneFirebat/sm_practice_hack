@@ -1340,7 +1340,7 @@ cm_get_inputs:
     RTS
 
   .noinput
-    LDA $8B : AND #$4000 ; allow Y to pass
+    LDA $8B : AND #$0000 ; allow Y to pass
     RTS
 }
 
