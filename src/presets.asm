@@ -306,7 +306,7 @@ preset_start_gameplay:
     JSL $80835D  ; Disable NMI
     JSL $80985F  ; Disable horizontal and vertical timer interrupts
     JSL $82E76B  ; Load destination room CRE bitset, door/room/state headers, tiles
-    JSR $A12B    ; Play 14h frames of music
+;    JSR $A12B    ; Play 14h frames of music
     JSL $878016  ; Clear animated tile objects
     JSL $88829E  ; Wait until the end of a v-blank and clear (H)DMA enable flags
 
@@ -328,10 +328,10 @@ if !FEATURE_PAL
 else
     JSL $A08A1E  ; Load enemies
 endif
-    JSL $82E071  ; Load room music
-    JSR $A12B    ; Play 14h frames of music
-    JSL $82E09B  ; Update music track index
-    JSL $82E113  ; RTL
+;    JSL $82E071  ; Load room music
+;    JSR $A12B    ; Play 14h frames of music
+;    JSL $82E09B  ; Update music track index
+;    JSL $82E113  ; RTL
     JSL $80A23F  ; Clear BG2 tilemap
     JSL $82E7D3  ; Load level data, CRE, tile table, scroll data, create PLMs and execute door ASM and room setup ASM
     JSL $89AB82  ; Load FX
@@ -362,7 +362,7 @@ endif
     LDA #$0004 : STA $A7  ; Set optional next interrupt to Main gameplay
 
     JSL $80982A  ; Enable horizontal and vertical timer interrupts
-    JSR $A12B    ; Play 14h frames of music
+;    JSR $A12B    ; Play 14h frames of music
 
     LDA #$E695 : STA $0A42 ; Unlock Samus
     LDA #$E725 : STA $0A44 ; Unlock Samus
