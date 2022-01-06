@@ -1,6 +1,11 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.4.4]  Moved some temporary preset data to avoid changing out of bounds tiles
+* [2.3.4.3]  Fixed a bug that prevented setting controller shortcuts that included Y
+* [2.3.4.2]  Removed some music loading delay to speedup preset loading times by idlechild
+* [2.3.4.1]  Added Cutscene options to Game Settings menu by idlechild
+* [2.3.4]    Just a version number
 * [2.3.3.10] Add current ammo selectors to equipment menu
 * [2.3.3.9]  Fixed background color after opening the practice menu while paused
 * [2.3.3.9]  Support for custom presets at MB1 and Ceres Escape by idlechild

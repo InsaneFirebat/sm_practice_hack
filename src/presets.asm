@@ -208,7 +208,7 @@ preset_load_preset:
 
     LDX #$0000
   .loop_path
-    LDA $C1 : STA $7FF000,X
+    LDA $C1 : STA $7F0002,X
     INX #2
     LDA ($C1) : STA $C1 : BNE .loop_path
 
@@ -231,7 +231,7 @@ preset_to_memory:
 {
     PHX
     STZ $00
-    LDA $7FF000,X
+    LDA $7F0002,X
     INC #2 : TAY
 
   .loop
