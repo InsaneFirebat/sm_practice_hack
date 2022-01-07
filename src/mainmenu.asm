@@ -1980,7 +1980,6 @@ ih_prepare_ram_watch_menu:
 +   JMP action_submenu
 
 RAMWatchMenu:
-print pc, " <----------- DEBUG RAMWatchMenu"
     dw ramwatch_enable
     dw ramwatch_bank
     dw ramwatch_write_mode
@@ -2119,8 +2118,21 @@ RAMWatchCommonSamusMenu1:
     dw ramwatch_common_samus_09A4
     dw ramwatch_common_samus_09A6
     dw ramwatch_common_samus_09A8
+    dw ramwatch_common_samus_0A1C
+    dw ramwatch_common_samus_0A1E
+    dw ramwatch_common_samus_0A1F
+    dw ramwatch_common_samus_0A4C
+    dw ramwatch_common_samus_0A94
+    dw ramwatch_common_samus_0A96
+    dw ramwatch_common_samus_0AA2
+    dw ramwatch_common_samus_0CD4
+    dw ramwatch_common_samus_0CE2
+    dw ramwatch_common_samus_0CE4
+    dw ramwatch_common_samus_0DEC
+    dw ramwatch_common_samus_18AA
     dw #$0000
     %cm_header("SELECT FROM SAMUS RAM")
+    %cm_footer("SEE INFOHUD MODES FOR MORE")
 
 ramwatch_common_samus_09A2:
     %cm_jsr("Equipped Items", action_select_common_address, #$09A2)
@@ -2134,17 +2146,89 @@ ramwatch_common_samus_09A6:
 ramwatch_common_samus_09A8:
     %cm_jsr("Collected Beams", action_select_common_address, #$09A8)
 
+ramwatch_common_samus_0A1C:
+    %cm_jsr("Pose", action_select_common_address, #$0A1C)
+
+ramwatch_common_samus_0A1E:
+    %cm_jsr("Pose X Direction", action_select_common_address, #$0A1E)
+
+ramwatch_common_samus_0A1F:
+    %cm_jsr("Movement Type", action_select_common_address, #$0A1F)
+
+ramwatch_common_samus_0A4C:
+    %cm_jsr("Subunit Energy", action_select_common_address, #$0A4C)
+
+ramwatch_common_samus_0A94:
+    %cm_jsr("Animation Frame Timer", action_select_common_address, #$0A94)
+
+ramwatch_common_samus_0A96:
+    %cm_jsr("Animation Frame", action_select_common_address, #$0A96)
+
+ramwatch_common_samus_0AA2:
+    %cm_jsr("Shinespark Delay Timer", action_select_common_address, #$0AA2)
+
+ramwatch_common_samus_0CD4:
+    %cm_jsr("Bomb Spread Charge Timer", action_select_common_address, #$0CD4)
+
+ramwatch_common_samus_0CE2:
+    %cm_jsr("Power Bomb X Position", action_select_common_address, #$0CE2)
+
+ramwatch_common_samus_0CE4:
+    %cm_jsr("Power Bomb Y Position", action_select_common_address, #$0CE4)
+
+ramwatch_common_samus_0DEC:
+    %cm_jsr("CF + Draygon Grab Counter", action_select_common_address, #$0DEC)
+
+ramwatch_common_samus_18AA:
+    %cm_jsr("Knockback Timer", action_select_common_address, #$18AA)
+
 RAMWatchCommonMiscMenu:
+    dw ramwatch_common_misc_05E5
     dw ramwatch_common_misc_079B
     dw ramwatch_common_misc_0998
+    dw ramwatch_common_misc_09DA
+    dw ramwatch_common_misc_09DC
+    dw ramwatch_common_misc_09DE
+    dw ramwatch_common_misc_09E0
+    dw ramwatch_common_misc_0E50
+    dw ramwatch_common_misc_0E52
+    dw ramwatch_common_misc_1840
+    dw ramwatch_common_misc_1842
     dw #$0000
     %cm_header("SELECT FROM MISC RAM")
+
+ramwatch_common_misc_05E5:
+    %cm_jsr("RNG Seed Value", action_select_common_address, #$05E5)
 
 ramwatch_common_misc_079B:
     %cm_jsr("Room ID", action_select_common_address, #$079B)
 
 ramwatch_common_misc_0998:
     %cm_jsr("Game State", action_select_common_address, #$0998)
+
+ramwatch_common_misc_09DA:
+    %cm_jsr("Game Time, Frames", action_select_common_address, #$09DA)
+
+ramwatch_common_misc_09DC:
+    %cm_jsr("Game Time, Seconds", action_select_common_address, #$09DC)
+
+ramwatch_common_misc_09DE:
+    %cm_jsr("Game Time, Minutes", action_select_common_address, #$09DE)
+
+ramwatch_common_misc_09E0:
+    %cm_jsr("Game Time, Hours", action_select_common_address, #$09E0)
+
+ramwatch_common_misc_0E50:
+    %cm_jsr("Room Enemies Killed", action_select_common_address, #$0E50)
+
+ramwatch_common_misc_0E52:
+    %cm_jsr("Enemy Kills to Unlock Door", action_select_common_address, #$0E50)
+
+ramwatch_common_misc_1840:
+    %cm_jsr("Earthquake Timer", action_select_common_address, #$1840)
+
+ramwatch_common_misc_1842:
+    %cm_jsr("Frame Counter", action_select_common_address, #$1842)
 
 action_select_common_address:
 {

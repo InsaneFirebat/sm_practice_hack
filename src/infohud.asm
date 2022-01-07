@@ -159,30 +159,6 @@ endif
 org $90D340      ; update timers when shinespark bonk sound plays
     JSL ih_shinespark_segment
 
-org $809606      ; inc lag counter
-    STX $05BA : INC $05A0
-
-org $A6A17C      ; Ridley AI init, reset !ram_countdamage
-    JSR ResetCountDamageRid
-
-org $A7CE64      ;Phantoon AI init
-    JSR ResetCountDamagePhan
-
-org $A0A54C
-    JSR CountDamageShinespark
-
-org $A0A862      ; hijack damage routine to count total damage dealt
-    JSR CountDamage
-
-if !FEATURE_EXTRAS
-org $948F49        ; RTS this routine to enable walk through walls
-    JSR NoClip
-    RTS
-
-org $A6F135
-    JSR SteamCollision
-endif
-
 ; Main bank stuff
 org $F08000
 print pc, " infohud start"
