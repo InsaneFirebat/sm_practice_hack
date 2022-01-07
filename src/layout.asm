@@ -432,7 +432,7 @@ layout_asm_easttunnel_no_scrolls:
 layout_asm_easttunnel_after_scrolls:
 {
     %a16()
-    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BNE + : JMP .done
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ layout_asm_crabtunnel_done
 
     ; Clear gate PLMs and projectiles
 +   LDA #$0000 : STA $1C7B : STA $1C7D : STA $19B9

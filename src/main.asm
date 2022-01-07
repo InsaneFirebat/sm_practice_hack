@@ -13,6 +13,7 @@ endif
 incsrc minimap.asm
 incsrc menu.asm
 incsrc infohud.asm
+incsrc IFBhijacks.asm
 incsrc rng.asm
 incsrc presets.asm
 incsrc misc.asm

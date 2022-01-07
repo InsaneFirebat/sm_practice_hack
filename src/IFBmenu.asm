@@ -386,12 +386,9 @@ ifb_soundtest_lib3_sound:
     RTS
 
 ifb_soundtest_silence:
-    %cm_jsr("Silence Sound FX", .routine, #$0002)
+    %cm_jsr("Silence Sound FX", .routine, #0)
   .routine
-    ; silence all 3 libs at once
-    TYA : JSL !SFX_LIB1
-    LDA #$0071 : JSL !SFX_LIB2
-    LDA #$0001 : JSL !SFX_LIB3
+    JSL stop_all_sounds
     RTS
 
 ifb_soundtest_goto_music:
