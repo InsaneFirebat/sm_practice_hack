@@ -12,7 +12,7 @@
 !VERSION_MINOR = 3
 !VERSION_BUILD = 4
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 4
+!VERSION_REV_2 = 5
 
 
 ; ---------
@@ -196,6 +196,7 @@
 !ram_cm_watch_edit_right_lo = !WRAM_MENU_START+$9A
 !ram_cm_watch_enemy_side = !WRAM_MENU_START+$9C
 !ram_cm_watch_bank = !WRAM_MENU_START+$9E
+!ram_cm_watch_common_address = !WRAM_MENU_START+$A0
 
 !ram_cm_botwoon_rng = !WRAM_MENU_START+$80
 
