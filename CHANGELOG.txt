@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.4.5]  Potentially fixed menu color issues with flash carts
 * [2.3.4.5]  Added menus to select commonly used RAM Watch addresses (more to come)
 * [2.3.4.4]  Moved some temporary preset data to avoid changing out of bounds tiles
 * [2.3.4.3]  Fixed a bug that prevented setting controller shortcuts that included Y
