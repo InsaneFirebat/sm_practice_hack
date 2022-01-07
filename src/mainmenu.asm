@@ -1980,6 +1980,7 @@ ih_prepare_ram_watch_menu:
 +   JMP action_submenu
 
 RAMWatchMenu:
+print pc, " <----------- DEBUG RAMWatchMenu"
     dw ramwatch_enable
     dw ramwatch_bank
     dw ramwatch_write_mode
@@ -2006,7 +2007,23 @@ RAMWatchMenu:
     %cm_header("READ AND WRITE TO MEMORY")
 
 ramwatch_goto_common:
-    %cm_submenu("Select Common Addresses", #RAMWatchCommonEnemyMenu)
+    %cm_submenu("Select Common Addresses", #RAMWatchCommonMenu)
+
+RAMWatchCommonMenu:
+    dw ramwatch_common_enemy
+    dw ramwatch_common_samus
+    dw ramwatch_common_misc
+    dw #$0000
+    %cm_header("CHOOSE RAM CATEGORY")
+
+ramwatch_common_enemy:
+    %cm_submenu("Enemy Addresses", #RAMWatchCommonEnemyMenu)
+
+ramwatch_common_samus:
+    %cm_submenu("Samus Addresses", #RAMWatchCommonSamusMenu1)
+
+ramwatch_common_misc:
+    %cm_submenu("Misc Addresses", #RAMWatchCommonMiscMenu)
 
 RAMWatchCommonEnemyMenu:
     dw ramwatch_common_enemy_side
@@ -2027,10 +2044,8 @@ ramwatch_common_enemy_side:
     db #$FF
 
 ramwatch_common_enemy_apply:
-    %cm_jsr("Apply to RAM Watch", #action_ramwatch_common_enemy, #$0000)
-
-action_ramwatch_common_enemy:
-{
+    %cm_jsr("Apply to RAM Watch", .routine, #$0000)
+  .routine
     LDA !ram_cm_watch_enemy_index
     XBA : LSR : LSR : TAX ; index * 40h = X
 
@@ -2048,10 +2063,14 @@ action_ramwatch_common_enemy:
 
   .done
     LDA #$0000 : STA !ram_watch_bank
+    LDY #RAMWatchMenu
+    LDA !ram_cm_stack_index : DEC #4
+    STA !ram_cm_stack_index
+    JSR cm_go_back
+    JSR cm_calculate_max
     JSR ih_prepare_ram_watch_menu
     %sfxconfirm()
     RTS
-}
 
 ramwatch_common_enemy_property:
     dw !ACTION_CHOICE
@@ -2094,6 +2113,85 @@ ramwatch_common_enemy_property:
 
 ramwatch_common_enemy_index:
     %cm_numfield_hex("Set to Enemy Index", !ram_cm_watch_enemy_index, 0, 31, 1, 8, #$0000)
+
+RAMWatchCommonSamusMenu1:
+    dw ramwatch_common_samus_09A2
+    dw ramwatch_common_samus_09A4
+    dw ramwatch_common_samus_09A6
+    dw ramwatch_common_samus_09A8
+    dw #$0000
+    %cm_header("SELECT FROM SAMUS RAM")
+
+ramwatch_common_samus_09A2:
+    %cm_jsr("Equipped Items", action_select_common_address, #$09A2)
+
+ramwatch_common_samus_09A4:
+    %cm_jsr("Collected Items", action_select_common_address, #$09A4)
+
+ramwatch_common_samus_09A6:
+    %cm_jsr("Equipped Beams", action_select_common_address, #$09A6)
+
+ramwatch_common_samus_09A8:
+    %cm_jsr("Collected Beams", action_select_common_address, #$09A8)
+
+RAMWatchCommonMiscMenu:
+    dw ramwatch_common_misc_079B
+    dw ramwatch_common_misc_0998
+    dw #$0000
+    %cm_header("SELECT FROM MISC RAM")
+
+ramwatch_common_misc_079B:
+    %cm_jsr("Room ID", action_select_common_address, #$079B)
+
+ramwatch_common_misc_0998:
+    %cm_jsr("Game State", action_select_common_address, #$0998)
+
+action_select_common_address:
+{
+    TYA : STA !ram_cm_watch_common_address
+    LDY #RAMWatchCommonConfirm : JMP action_submenu
+}
+
+RAMWatchCommonConfirm:
+    dw ramwatch_common_addr1
+    dw ramwatch_common_addr2
+    dw ramwatch_common_back
+    dw #$0000
+    %cm_header("SELECT FROM ENEMY RAM")
+
+ramwatch_common_addr1:
+    %cm_jsr("Address 1 (Left)", .routine, #$0000)
+  .routine
+    LDA !ram_cm_watch_common_address : STA !ram_watch_left
+    LDA #$0000
+    STA !ram_watch_left_index : STA !ram_watch_bank
+    BRA ramwatch_common_addr_done
+
+ramwatch_common_addr2:
+    %cm_jsr("Address 2 (Right)", .routine, #$0000)
+  .routine
+    LDA !ram_cm_watch_common_address : STA !ram_watch_right
+    LDA #$0000
+    STA !ram_watch_right_index : STA !ram_watch_bank
+
+ramwatch_common_addr_done:
+    LDY #RAMWatchMenu
+    LDA !ram_cm_stack_index : DEC #6
+    STA !ram_cm_stack_index
+    JSR cm_go_back
+    JSR cm_calculate_max
+    JSR ih_prepare_ram_watch_menu
+    %sfxconfirm()
+    RTS
+
+ramwatch_common_back:
+    %cm_jsr("Go Back", .routine, #0)
+  .routine
+    LDA !ram_cm_stack_index : DEC #4
+    STA !ram_cm_stack_index
+    JSR cm_go_back
+    JSR cm_calculate_max
+    RTS
 
 ramwatch_enable:
     %cm_jsr("Turn On RAM Watch", .routine, !IH_MODE_RAMWATCH_INDEX)

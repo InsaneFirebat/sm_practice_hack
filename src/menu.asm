@@ -1275,7 +1275,7 @@ cm_go_back:
     LDA #$0000 : STA !ram_cm_cursor_stack,X
 
     ; make sure we dont set a negative number
-    LDA !ram_cm_stack_index : DEC : DEC : BPL .done
+    LDA !ram_cm_stack_index : DEC #2 : BPL .done
 
     ; leave menu 
     LDA #$0001 : STA !ram_cm_leave
@@ -1284,10 +1284,10 @@ cm_go_back:
   .done
     STA !ram_cm_stack_index    
     LDA !ram_cm_stack_index
-    BNE +
+    BNE .end
     LDA.w #MainMenu>>16       ; Reset submenu bank when back at main menu
     STA.l !ram_cm_menu_bank
-  +
+
   .end
     %sfxgoback()
     RTS
