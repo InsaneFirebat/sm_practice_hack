@@ -330,10 +330,11 @@ PaletteProfileTables:
     dw #DarkXoaProfileTable       ; 8
     dw #MelonaxProfileTable       ; 9
     dw #TopsyTurveProfileTable    ; A
-    dw #GreyProfileTable          ; B
-    dw #RedProfileTable           ; C
-    dw #PurpleProfileTable        ; D
-    dw #HUDProfileTable           ; E
+    dw #OSTProfileTable           ; B
+    dw #GreyProfileTable          ; C
+    dw #RedProfileTable           ; D
+    dw #PurpleProfileTable        ; E
+    dw #HUDProfileTable           ; F
     dw #$0000
 
 ; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
@@ -369,6 +370,9 @@ MelonaxProfileTable:
 
 TopsyTurveProfileTable:
     dw $7264, $7264, $7FFF, $0000, $0000, $7FFF, $7264, $7264, $0000, $0000, $7264
+
+OSTProfileTable:
+    dw $7FFF, $7FFF, $0010, $0000, $0010, $7FFF, $001F, $001E, $0000, $7FFF, $001E
 
 GreyProfileTable:
     dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $0012, $0C63, $1CE7, $3DEF
