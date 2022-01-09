@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.4.7]  Added many new options for KPDR Early Ice presets by UNHchabo
 * [2.3.4.7]  Clear health bomb flag when loading presets
 * [2.3.4.7]  Load presets from pre-decompressed room data by idlechild
 * [2.3.4.6]  Temp fix for sound glitch when loading from a save file

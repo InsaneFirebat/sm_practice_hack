@@ -749,7 +749,6 @@ print pc, " preset_data.asm BankEF end"
 
 org $EE8000
 incsrc presets/kpdr22_data.asm ; 3B17h bytes
-incsrc presets/kpdr25_data.asm ; 1E39h bytes
 incsrc presets/nintendopower_data.asm ; 2109h bytes
 print pc, " preset_data.asm BankEE end"
 
@@ -772,6 +771,7 @@ print pc, " preset_data.asm BankEB end"
 
 org $EA8000
 incsrc presets/gtmax_data.asm ; 4E9Fh bytes
+incsrc presets/kpdr25_data.asm ; 2F09h bytes
 print pc, " preset_data.asm BankEA end"
 
 org $E98000
