@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.4.7]  Clear health bomb flag when loading presets
+* [2.3.4.7]  Load presets from pre-decompressed room data by idlechild
 * [2.3.4.6]  Temp fix for sound glitch when loading from a save file
 * [2.3.4.5]  Potentially fixed menu color issues with flash carts
 * [2.3.4.5]  Added menus to select commonly used RAM Watch addresses (more to come)
