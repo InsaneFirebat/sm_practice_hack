@@ -384,9 +384,15 @@ preset_scroll_fixes:
     ; Fixes bad scrolling caused by a loading into a position that
     ; is normally hidden until passing over a red scroll block.
     ; These fixes can often be found in nearby door asm.
-    PHP : %a8() : %i16()
-    LDA #$02 : LDX $079B         ; X = room ID
-    CPX #$DF45 : BPL .ceres      ; Ceres rooms set BG1 offsets manually
+    PHP
+    %ai16()
+    LDA !ram_custom_preset : CMP #$5AFE : BNE .category_presets
+    JMP .custom_presets
+
+  .category_presets
+    %a8() : %i16()
+    LDA #$01 : LDX $079B         ; X = room ID
+    CPX #$C000 : BPL .halfway    ; organized by room ID so we only have to check half
 
 if !FEATURE_REDESIGN
     CPX #$9D19 : BNE +           ; Preset: Hi Jump Boots - Charge Hoppers
@@ -444,7 +450,19 @@ endif
     LDA #$08 : STA $7E091E
     LDA #$03 : STA $7E0920
 
-  .done
+  .ceresdone
+    PLP
+    RTS
+
+  .custom_presets
+    PHB
+    LDA !sram_custom_preset_slot
+    ASL : XBA
+    CLC : ADC #$31E9 : TAX       ; X = Source
+    LDY #$CD52 : LDA #$0031      ; Y = Destination, A = Size-1
+    MVP $F07E                    ; srcBank, destBank
+    LDA #$0000 : STA !ram_custom_preset
+    PLB
     PLP
     RTS
 }
