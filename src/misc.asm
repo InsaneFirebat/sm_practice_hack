@@ -256,18 +256,15 @@ hook_set_music_track:
     STZ $07F6
     PHA
 
-    ; replaced with old code to avoid odd sound when loading the game
-    ; this doesn't occur in the main branch ??
-    LDA !sram_music_toggle : BEQ .no_music
-;    LDA !sram_music_toggle : CMP #$02 : BEQ .fast_no_music
-;    CMP #$01 : BNE .no_music
-;    LDA $07F3 : BEQ .no_music
+    LDA !sram_music_toggle : CMP #$02 : BEQ .fast_no_music
+    CMP #$01 : BNE .no_music
+    LDA $07F3 : BEQ .no_music
 
     PLA : STA $2140
     RTL
 
-;  .fast_no_music
-;    STZ $07F5
+  .fast_no_music
+    STZ $07F5
 
   .no_music
     PLA
