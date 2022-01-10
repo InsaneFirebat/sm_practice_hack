@@ -751,10 +751,6 @@ ih_hud_code:
     LDA !IH_HEALTHBOMB : STA $7EC654
     BRA .check_morphlock
 
-  .pink
-    LDA !IH_HEALTHBOMB : STA $7EC654
-    BRA .check_elevator
-
   .clear_healthbomb
     LDA !IH_BLANK : STA $7EC654
 
@@ -1391,19 +1387,6 @@ ih_hud_code_paused:
 
     LDA $7E09C0 ; overwritten code
     JMP $9B51
-}
-
-ih_fix_scroll_offsets:
-{
-    %a8()
-    LDA $0911 : STA $B1 : STA $B5
-    LDA $0915 : STA $B3 : STA $B7
-    %a16()
-
-  .done
-    ; overwritten code
-    LDA $B1 : SEC
-    RTS
 }
 
 NumberGFXTable:

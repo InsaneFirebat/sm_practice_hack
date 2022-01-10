@@ -301,45 +301,24 @@ print pc, " draygon rng end"
 
 ; This is actually for preset support instead of RNG
 ; Keep Ceres Ridley enemy alive even if the main boss flag is set
-if !FEATURE_PAL
-org $A6A10C
-else
 org $A6A0FC
-endif
     LSR : BCC $0F
     CPX #$0006 : BEQ $0A
     LDA $0F86
 
-if !FEATURE_PAL
-org $A6A302
-else
 org $A6A2F2
-endif
     JMP ceres_ridley_draw_metroid
 
-if !FEATURE_PAL
-org $A6A371
-else
 org $A6A361
-endif
     dw ridley_init_hook
 
 ; Fix ceres ridley door instruction list to keep door visible when skipping ridley fight
-if !FEATURE_PAL
-org $A6F533
-    dw $F64F, ridley_ceres_door_original_instructions
-else
 org $A6F55C
     dw $F678, ridley_ceres_door_original_instructions
-endif
     dw $80ED, ridley_ceres_door_escape_instructions
 
 ; Lock ceres ridley door if timer not started or if boss not dead
-if !FEATURE_PAL
-org $A6F641
-else
 org $A6F66A
-endif
     LDA $0943 : BEQ $F6
     LDA $7ED82E
 
@@ -360,20 +339,12 @@ ridley_init_hook:
     ; Clear out the room main asm so it doesn't also trigger the escape
     STZ $07DF
     LDA #$0001 : STA $093F
-if !FEATURE_PAL
-    LDA #$AB47
-else
     LDA #$AB37
-endif
     STA $0FA8
     JMP ($0FA8)
 
   .continue
-if !FEATURE_PAL
-    LDA #$A387
-else
     LDA #$A377
-endif
     STA $0FA8
     JMP ($0FA8)
 }
@@ -382,47 +353,24 @@ ceres_ridley_draw_metroid:
 {
     LDA $7ED82E : BIT #$0001 : BNE .end
     LDA $093F : BNE .end
-if !FEATURE_PAL
-    JSR $BF2A
-else
     JSR $BF1A
-endif
 
   .end
-if !FEATURE_PAL
-    JMP $A30A
-else
     JMP $A2FA
-endif
 }
 
 ridley_ceres_door_original_instructions:
-if !FEATURE_PAL
-    dw $F67D
-    dw #$0002, $F9EA
-    dw $F641, $F533
-    dw $F687
-    dw $80ED, $F56F
-else
     dw $F6A6
     dw #$0002, $FA13
     dw $F66A, $F55C
     dw $F6B0
     dw $80ED, $F598
-endif
 
 ridley_ceres_door_escape_instructions:
-if !FEATURE_PAL
-    dw $F687
-    dw #$0002, $F9EA
-    dw $F641, $F533
-    dw $80ED, $F56F
-else
     dw $F6B0
     dw #$0002, $FA13
     dw $F66A, $F55C
     dw $80ED, $F598
-endif
 
 print pc, " ridley rng end"
 

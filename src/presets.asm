@@ -392,7 +392,7 @@ preset_scroll_fixes:
   .category_presets
     %a8() : %i16()
     LDA #$01 : LDX $079B         ; X = room ID
-    CPX #$C000 : BPL .halfway    ; organized by room ID so we only have to check half
+    CPX #$C000 : BPL .ceres      ; organized by room ID so we only have to check half
 
 if !FEATURE_REDESIGN
     CPX #$9D19 : BNE +           ; Preset: Hi Jump Boots - Charge Hoppers
@@ -433,20 +433,20 @@ endif
     CPX #$DF8D : BNE +           ; Ceres Falling Tiles
     LDA #$01 : STA $7E091E
     LDA #$02 : STA $7E0920
-    BRA .done
+    BRA .ceresdone
 +   CPX #$DFD7 : BNE +           ; Ceres Magnet Stairs
     LDA #$03 : STA $7E091E
     LDA #$02 : STA $7E0920
-    BRA .done
+    BRA .ceresdone
 +   CPX #$E021 : BNE +           ; Ceres Dead Scientists
     LDA #$04 : STA $7E091E
     LDA #$03 : STA $7E0920
-    BRA .done
+    BRA .ceresdone
 +   CPX #$E06B : BNE +           ; Ceres 58 Escape
     LDA #$06 : STA $7E091E
     LDA #$03 : STA $7E0920
-    BRA .done
-+   CPX #$E0B5 : BNE .done  ; Ceres Ridley
+    BRA .ceresdone
++   CPX #$E0B5 : BNE .ceresdone  ; Ceres Ridley
     LDA #$08 : STA $7E091E
     LDA #$03 : STA $7E0920
 
