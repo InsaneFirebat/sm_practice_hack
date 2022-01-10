@@ -435,12 +435,13 @@ preset_scroll_fixes:
     PHP
     %ai16()
     LDA !ram_custom_preset : CMP #$5AFE : BNE .category_presets
-    JMP .custom_presets
+    BRL .custom_presets
 
   .category_presets
     %a8() : %i16()
     LDA #$01 : LDX !ROOM_ID      ; X = room ID
-    CPX #$C000 : BPL .halfway    ; organized by room ID so we only have to check half
+    CPX #$C000 : BMI +           ; organized by room ID so we only have to check half
+    BRL .halfway
 
     CPX #$A011 : BNE +           ; bottom-left of Etecoons Etank
     STA $7ECD25 : STA $7ECD26
@@ -459,13 +460,18 @@ preset_scroll_fixes:
     LDA #$00 : STA $7ECD23 : STA $7ECD24
     BRA .done
 +   CPX #$B3A5 : BNE +           ; bottom of Pre-Pillars
-    LDY !SAMUS_X : CPY #$0190       ; no scroll fix if Ypos < 400
+    LDY !SAMUS_X : CPY #$0190       ; no scroll fix if Xpos < 400
     BMI .done
     STA $7ECD22 : STA $7ECD24
     LDA #$00 : STA $7ECD21
     BRA .done
-+   CPX #$B4AD : BNE .done       ; top of Worst Room in the Game
++   CPX #$B4AD : BNE +           ; top of Worst Room in the Game
     LDA #$02 : STA $7ECD20
++   CPX #$B585 : BNE .done
+    LDY !SAMUS_Y : CPY #$008C       ; no scroll fix if Ypos > 140
+    BPL .done
+    STA $7ECD20
+    LDA #$00 : STA $7ECD23
 
   .done
     PLP
@@ -492,7 +498,8 @@ preset_scroll_fixes:
     LDA #$02
     STA $7ECD20 : STA $7ECD21
     BRA .done
-+   CPX #$D8C5 : BNE .done       ; Pants Room (door to Shaktool)
++   CPX #$D69A : BNE .done       ; Pants Room (door to Shaktool)
+    STA $7ECD21
     LDA #$00 : STA $7ECD22
     BRA .done
 
@@ -761,7 +768,6 @@ print pc, " preset_menu.asm bankFF end"
 
 org $EF8000
 incsrc presets/prkd_data.asm ; 3C95h bytes
-incsrc presets/hundo_data.asm ; 42B9h bytes
 print pc, " preset_data.asm BankEF end"
 
 org $EE8000
@@ -804,3 +810,9 @@ incsrc presets/spazer_data.asm ; 313Dh bytes
 incsrc presets/nghyper_data.asm ; 1B6Bh bytes
 incsrc presets/ngplasma_data.asm ; 1B5Fh bytes
 print pc, " preset_data.asm BankE7 end"
+
+org $E68000
+incsrc presets/hundo_data.asm ; 42B9h bytes
+print pc, " preset_data.asm BankE6 end"
+
+
