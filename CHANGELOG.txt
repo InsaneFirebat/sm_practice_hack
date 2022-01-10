@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.4.9]  Fixed background and scrolling issues with 100% Late Croc presets
 * [2.3.4.8]  Fixed bad room scrolls with custom presets
 * [2.3.4.7]  Added many new options for KPDR Early Ice presets by UNHchabo
 * [2.3.4.7]  Clear health bomb flag when loading presets
