@@ -1238,6 +1238,9 @@ spring_pants:
   .check
     ; check if starting bomb jump
     LDA $0A58 : CMP #$E025 : BEQ .done
+    ; check if right/left falling pose
+    LDA $0A1C : AND #$00FF : CMP #$007D : BEQ .done
+    CMP #$007E : BEQ .done
     ; check speed
     LDA $0B2E : BEQ .flash
 
