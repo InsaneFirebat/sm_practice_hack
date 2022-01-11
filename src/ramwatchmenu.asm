@@ -155,6 +155,7 @@ ramwatch_common_enemy_index:
     %cm_numfield_hex("Set to Enemy Index", !ram_cm_watch_enemy_index, 0, 31, 1, 8, #$0000)
 
 RAMWatchCommonSamusMenu1:
+    dw ramwatch_common_samus_09C2
     dw ramwatch_common_samus_09A2
     dw ramwatch_common_samus_09A4
     dw ramwatch_common_samus_09A6
@@ -166,6 +167,8 @@ RAMWatchCommonSamusMenu1:
     dw ramwatch_common_samus_0A94
     dw ramwatch_common_samus_0A96
     dw ramwatch_common_samus_0AA2
+    dw ramwatch_common_samus_0CCE
+    dw ramwatch_common_samus_0CD2
     dw ramwatch_common_samus_0CD4
     dw ramwatch_common_samus_0CE2
     dw ramwatch_common_samus_0CE4
@@ -173,7 +176,32 @@ RAMWatchCommonSamusMenu1:
     dw ramwatch_common_samus_18AA
     dw #$0000
     %cm_header("SELECT FROM SAMUS RAM")
-    %cm_footer("SEE INFOHUD MODES FOR MORE")
+
+RAMWatchCommonSamusMenu2:
+    dw ramwatch_common_samus_0AF4
+    dw ramwatch_common_samus_0AF6
+    dw ramwatch_common_samus_0AF8
+    dw ramwatch_common_samus_0AFA
+    dw ramwatch_common_samus_0AFC
+    dw ramwatch_common_samus_0AFE
+    dw ramwatch_common_samus_0B00
+    dw ramwatch_common_samus_0B2C
+    dw ramwatch_common_samus_0B2E
+    dw ramwatch_common_samus_0B32
+    dw ramwatch_common_samus_0B34
+    dw ramwatch_common_samus_0B36
+    dw ramwatch_common_samus_0B3F
+    dw ramwatch_common_samus_0B42
+    dw ramwatch_common_samus_0B44
+    dw ramwatch_common_samus_0B46
+    dw ramwatch_common_samus_0B48
+    dw ramwatch_common_samus_0CCC
+    dw #$0000
+    %cm_header("SELECT FROM SAMUS RAM")
+    %cm_header("ALSO SEE INFOHUD MODES")
+
+ramwatch_common_samus_09C2:
+    %cm_jsr("Samus Energy", action_select_common_address, #$09C2)
 
 ramwatch_common_samus_09A2:
     %cm_jsr("Equipped Items", action_select_common_address, #$09A2)
@@ -208,6 +236,12 @@ ramwatch_common_samus_0A96:
 ramwatch_common_samus_0AA2:
     %cm_jsr("Shinespark Delay Timer", action_select_common_address, #$0AA2)
 
+ramwatch_common_samus_0CCE:
+    %cm_jsr("Projectile Counter", action_select_common_address, #$0CCE)
+
+ramwatch_common_samus_0CD2:
+    %cm_jsr("Bomb Counter", action_select_common_address, #$0CD2)
+
 ramwatch_common_samus_0CD4:
     %cm_jsr("Bomb Spread Charge Timer", action_select_common_address, #$0CD4)
 
@@ -222,6 +256,60 @@ ramwatch_common_samus_0DEC:
 
 ramwatch_common_samus_18AA:
     %cm_jsr("Knockback Timer", action_select_common_address, #$18AA)
+
+ramwatch_common_samus_0AF4:
+    %cm_jsr("Auto-Jump Timer", action_select_common_address, #$0AF4)
+
+ramwatch_common_samus_0AF6:
+    %cm_jsr("X Position", action_select_common_address, #$0AF6)
+
+ramwatch_common_samus_0AF8:
+    %cm_jsr("X Subposition", action_select_common_address, #$0AF8)
+
+ramwatch_common_samus_0AFA:
+    %cm_jsr("Y Position", action_select_common_address, #$0AFA)
+
+ramwatch_common_samus_0AFC:
+    %cm_jsr("Y Subposition", action_select_common_address, #$0AFC)
+
+ramwatch_common_samus_0AFE:
+    %cm_jsr("Hitbox X Radius", action_select_common_address, #$0AFE)
+
+ramwatch_common_samus_0B00:
+    %cm_jsr("Hitbox Y Radius", action_select_common_address, #$0B00)
+
+ramwatch_common_samus_0B2C:
+    %cm_jsr("Y Subspeed", action_select_common_address, #$0B2C)
+
+ramwatch_common_samus_0B2E:
+    %cm_jsr("Y Speed", action_select_common_address, #$0B2E)
+
+ramwatch_common_samus_0B32:
+    %cm_jsr("Y Subacceleration", action_select_common_address, #$0B32)
+
+ramwatch_common_samus_0B34:
+    %cm_jsr("Y Acceleration", action_select_common_address, #$0B34)
+
+ramwatch_common_samus_0B36:
+    %cm_jsr("Y Direction", action_select_common_address, #$0B36)
+
+ramwatch_common_samus_0B3F:
+    %cm_jsr("Speed Boost (Dash) Counter", action_select_common_address, #$0B3F)
+
+ramwatch_common_samus_0B42:
+    %cm_jsr("X Extra Run Speed", action_select_common_address, #$0B42)
+
+ramwatch_common_samus_0B44:
+    %cm_jsr("X Extra Run Subspeed", action_select_common_address, #$0B44)
+
+ramwatch_common_samus_0B46:
+    %cm_jsr("X Base Speed", action_select_common_address, #$0B46)
+
+ramwatch_common_samus_0B48:
+    %cm_jsr("X Base Subspeed", action_select_common_address, #$0B48)
+
+ramwatch_common_samus_0CCC:
+    %cm_jsr("Cooldown Timer", action_select_common_address, #$0CCC)
 
 RAMWatchCommonMiscMenu:
     dw ramwatch_common_misc_05E5
