@@ -355,6 +355,27 @@ stop_all_sounds:
   .RTL
     RTL
 }
+
+GameModeExtras:
+{
+    ; Check if any less common shortcuts are configured
+    LDA !sram_ctrl_reset_segment_timer : BNE .enabled
+    LDA !sram_ctrl_reset_segment_later : BNE .enabled
+    LDA !sram_ctrl_kill_enemies : BNE .enabled
+    LDA !sram_ctrl_full_equipment : BNE .enabled
+    LDA !sram_ctrl_save_custom_preset : BNE .enabled
+    LDA !sram_ctrl_load_custom_preset : BNE .enabled
+    LDA !sram_ctrl_inc_custom_preset : BNE .enabled
+    LDA !sram_ctrl_dec_custom_preset : BNE .enabled
+    LDA !sram_ctrl_toggle_tileviewer : BNE .enabled
+    LDA !sram_ctrl_force_stand : BNE .enabled
+    LDA !sram_ctrl_update_timers : BNE .enabled
+    RTL
+
+  .enabled
+    STA !ram_game_mode_extras
+    RTL
+}
 print pc, " misc end"
 
 
