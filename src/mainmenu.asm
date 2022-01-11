@@ -1164,7 +1164,7 @@ InfoHudMenu:
     dw #$FFFF
 ;    dw #ih_goto_room_strat
 ;    dw #ih_room_strat
-    dw #$FFFF
+;    dw #$FFFF
     dw #ih_top_HUD_mode
     dw #$FFFF
     dw #ih_room_counter
@@ -1740,7 +1740,6 @@ GameMenu:
     dw #$FFFF
     dw #game_fanfare_toggle
     dw #game_music_toggle
-    dw #game_healthalarm
     dw #$FFFF
     dw #game_debugmode
     dw #game_debugbrightness
@@ -1808,17 +1807,6 @@ endif
     STZ $063F
     STZ $2140
     RTS
-
-game_healthalarm:
-    dw !ACTION_CHOICE
-    dl #!sram_healthalarm
-    dw #$0000
-    db #$28, "Low Health Ala", #$FF
-    db #$28, "rm    NEVER", #$FF
-    db #$28, "rm  VANILLA", #$FF
-    db #$28, "rm   PB FIX", #$FF
-    db #$28, "rm IMPROVED", #$FF
-    db #$FF
 
 game_debugmode:
     %cm_toggle("Debug Mode", $7E05D1, #$0001, #0)
