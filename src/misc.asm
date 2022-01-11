@@ -52,27 +52,6 @@ org $8C9607
     dw #$0E2F
 
 
-; Turn off health alarm
-org $90EA8C
-    LDA !sram_healthalarm : ASL : PHX : TAX
-    JMP.w (healthalarm_turn_off_table,X)
-
-; Turn on health alarm
-org $90EA9D
-    LDA !sram_healthalarm : ASL : PHX : TAX
-    JMP.w (healthalarm_turn_on_table,X)
-
-; Turn on health alarm
-org $90F339
-    JSR $EA9D
-    BRA $02
-
-; Turn on health alarm from bank 91
-org $91E6DA
-    JML healthalarm_turn_on_remote
-
-
-
 ; Skips the waiting time after teleporting
 org $90E877
     BRA $1F
@@ -271,52 +250,71 @@ stop_all_sounds:
 print pc, " misc end"
 
 
-healthalarm_turn_on_table:
-    dw healthalarm_turn_on_never
-    dw healthalarm_turn_on_vanilla
-    dw healthalarm_turn_on_pb_fix
-    dw healthalarm_turn_on_improved
+org $90FFA0
+original_load_projectile_palette_long:
+{
+    AND #$0FFF : ASL : TAY
+    LDA #$0090 : XBA : STA $01
+    LDA $C3C9,Y : STA $00
+    LDY #$0000
+    LDX #$0000
 
-healthalarm_turn_on_improved:
-    ; Do not sound alarm until below 30 combined health
-    LDA $09C2 : CLC : ADC $09D6 : CMP #$001E : BPL healthalarm_turn_on_done
+  .original_load_palette_loop
+    LDA [$00],Y
+    STA $7EC1C0,X
+    INX : INX : INY : INY
+    CPY #$0020 : BMI .original_load_palette_loop
+    RTL
+}
 
-healthalarm_turn_on_pb_fix:
-    ; Do not sound alarm if it won't play due to power bomb explosion
-    LDA $0592 : BMI healthalarm_turn_on_done
+spacetime_routine_long:
+{
+    ; The normal routine shouldn't come here, but sanity check just in case
+    ; Also skips out if spacetime but Y value is positive
+    INY : INY : CPY #$0000 : BPL .normal_load_palette
 
-healthalarm_turn_on_vanilla:
-    LDA #$0002 : JSL $80914D
+    ; Spacetime, sanity check that X is 0 (if not then do the original routine)
+    CPX #$0000 : BNE .normal_load_palette
 
-healthalarm_turn_on_never:
-    LDA #$0001 : STA $0A6A
+    ; Spacetime, check if Y will cause us to reach WRAM
+    TYA : CLC : ADC #(!WRAM_START-$7EC1E2) : CMP #$0000 : BPL .normal_load_palette
 
-healthalarm_turn_on_done:
-    PLX : RTS
+    ; It will, so run our own loop
+    INX : INX
+  .loop_before_wram
+    LDA [$00],Y
+    STA $7EC1C0,X
+    INX : INX : INY : INY
+    CPX #(!WRAM_START-$7EC1C0) : BMI .loop_before_wram
+
+    ; Skip over WRAM and resume normal loop
+    TXA : CLC : ADC !WRAM_SIZE : TAX
+    TYA : CLC : ADC !WRAM_SIZE : TAY
+    CPY #$0020 : BMI .normal_load_loop
+    RTS
+
+  .normal_load_loop
+    LDA [$00],Y
+    STA $7EC1C0,X
+    INY : INY
+  .normal_load_palette
+    INX : INX
+    CPY #$0020 : BMI .normal_load_loop
+    RTL
+}
+print pc, " misc start"
 
 
-healthalarm_turn_off_table:
-    dw healthalarm_turn_off_never
-    dw healthalarm_turn_off_vanilla
-    dw healthalarm_turn_off_pb_fix
-    dw healthalarm_turn_off_improved
+;org $90FF90
+org $90F6C1
+print pc, " misc bank90 start"
+original_load_projectile_palette:
+    JSL original_load_projectile_palette_long
+    RTS
 
-healthalarm_turn_off_improved:
-healthalarm_turn_off_pb_fix:
-    ; Do not stop alarm if it won't stop due to power bomb explosion
-    LDA $0592 : BMI healthalarm_turn_off_done
+spacetime_routine:
+    JSL spacetime_routine_long
+    RTS
 
-healthalarm_turn_off_vanilla:
-    LDA #$0001 : JSL $80914D
-
-healthalarm_turn_off_never:
-    STZ $0A6A
-
-healthalarm_turn_off_done:
-    PLX : RTS
-
-
-healthalarm_turn_on_remote:
-    JSR $EA9D
-    PLB : PLP : RTL
+print pc, " misc bank90 end"
 

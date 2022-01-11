@@ -8,7 +8,7 @@
 
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 3
-!VERSION_BUILD = 3
+!VERSION_BUILD = 4
 !VERSION_REV_1 = 0
 !VERSION_REV_2 = 6
 
@@ -239,6 +239,7 @@
 !IH_RESERVE_AUTO = #$0C32
 !IH_RESERVE_EMPTY = #$0C33
 !IH_HEALTHBOMB = #$085A
+!IH_MORPHBALL = #$1CC9
 !IH_LETTER_A = #$0CB4
 !IH_LETTER_B = #$0CB5
 !IH_LETTER_C = #$0CAA
@@ -359,8 +360,6 @@
 !sram_metronome_sfx = $F0223A
 !sram_status_icons = $F0223C
 !sram_top_display_mode = $F0203E
-!sram_healthalarm = $F02040
-!sram_cutscenes = $F02042
 
 ; ^ FREE SPACE ^ up to $F02FFF
 

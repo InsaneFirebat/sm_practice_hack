@@ -121,7 +121,6 @@ preset_load:
 
     ; Clear enemies if not in certain rooms
     LDA $079B : CMP #$DD58 : BEQ .done_clearing_enemies
-    JSR clear_all_enemies
 
   .done_clearing_enemies
     PLP
@@ -370,7 +369,13 @@ preset_scroll_fixes:
     ; Fixes bad scrolling caused by a loading into a position that
     ; is normally hidden until passing over a red scroll block.
     ; These fixes can often be found in nearby door asm.
-    PHP : %a8() : %i16()
+    PHP
+    %ai16()
+    LDA !ram_custom_preset : CMP #$5AFE : BNE .category_presets
+    JMP .custom_presets
+
+  .category_presets
+    %a8() : %i16()
     LDA #$01 : LDX $079B         ; X = room ID
     CPX #$A4B1 : BPL .halfway    ; organized by room ID so we only have to check half
 
@@ -434,6 +439,18 @@ preset_scroll_fixes:
 
   .done
 +   PLP
+    RTS
+
+  .custom_presets
+    PHB
+    LDA !sram_custom_preset_slot
+    ASL : XBA
+    CLC : ADC #$31E9 : TAX       ; X = Source
+    LDY #$CD52 : LDA #$0031      ; Y = Destination, A = Size-1
+    MVP $F07E                    ; srcBank, destBank
+    LDA #$0000 : STA !ram_custom_preset
+    PLB
+    PLP
     RTS
 }
 
