@@ -432,54 +432,6 @@ action_load_custom_preset:
     RTS
 }
 
-LoadRandomPreset:
-{
-    PHY : PHX
-    JSL $808111 : STA $12
-
-    LDA #$00B8 : STA $18                       ; bank in $18
-    LDA !sram_preset_category : ASL : TAY      ; selected category index in Y
-    LDA #preset_category_submenus : STA $16    ; pointer to category list in $16
-    LDA [$16],Y : TAX                          ; pointer to submenu table in X
-    LDA #preset_category_banks : STA $16       ; bank of submenu table in $16
-    LDA [$16],Y : STA $18                      ; pointer to category grouping table in $18
-
-    STX $16 : LDY #$0000                       ; pointer to submenu table in $16, reset Y
-  .toploop                                     ; count number of preset groups in Y
-    INY #2
-    LDA [$16],Y : BNE .toploop
-    TYA : LSR : TAY
-
-    LDA $12 : XBA : AND #$00FF : STA $4204     ; divide random number...
-    %a8()
-    STY $4206                                  ; by number of preset groups
-    %a16()
-    PEA $0000 : PLA
-    LDA $4216 : ASL : TAY                      ; random preset group index in Y
-    LDA [$16],Y : STA $16                      ; random preset group macro pointer in $16
-    LDY #$0004 : LDA [$16],Y : STA $16         ; preset group table pointer in $16
-
-    LDY #$0000
-  .subloop                                     ; count number of presets in the group in Y
-    INY #2
-    LDA [$16],Y : BNE .subloop
-    TYA : LSR : TAY
-
-    LDA $12 : AND #$00FF : STA $4204           ; divide random number...
-    %a8()
-    STY $4206                                  ; by number of presets in the group
-    %a16()
-    PEA $0000 : PLA
-    LDA $4216 : ASL : TAY                      ; random preset index in Y
-    LDA [$16],Y : STA $16                      ; random preset macro pointer in $16
-    LDY #$0004 : LDA [$16],Y                   ; finally reached the pointer to the preset
-
-    STA !ram_load_preset
-
-    PLX : PLY
-    RTL
-}
-
 action_load_preset:
 {
     PHB
@@ -2459,14 +2411,6 @@ action_set_common_controls:
     JSR cm_go_back
     JSR cm_calculate_max
     RTS
-
-ControllerLayoutTable:
-    ;  shot     jump     dash     cancel        select        up       down
-    dw !CTRL_X, !CTRL_A, !CTRL_B, !CTRL_Y,      !CTRL_SELECT, !CTRL_R, !CTRL_L ; Default (D1)
-    dw !CTRL_X, !CTRL_A, !CTRL_B, !CTRL_SELECT, !CTRL_Y,      !CTRL_R, !CTRL_L ; Select+Cancel Swap (D2)
-    dw !CTRL_Y, !CTRL_A, !CTRL_B, !CTRL_SELECT, !CTRL_X,      !CTRL_R, !CTRL_L ; D2 + Shot+Select Swap (D3)
-    dw !CTRL_Y, !CTRL_B, !CTRL_A, !CTRL_SELECT, !CTRL_X,      !CTRL_R, !CTRL_L ; MMX Style (D4)
-    dw !CTRL_X, !CTRL_B, !CTRL_Y, !CTRL_SELECT, !CTRL_A,      !CTRL_R, !CTRL_L ; SMW Style (D5)
 }
 
 
@@ -2762,27 +2706,6 @@ ctrl_reset_defaults:
 init_wram_based_on_sram:
 {
     JSR init_suit_properties_ram
-    RTL
-}
-
-GameModeExtras:
-{
-    ; Check if any less common shortcuts are configured
-    LDA !sram_ctrl_reset_segment_timer : BNE .enabled
-    LDA !sram_ctrl_reset_segment_later : BNE .enabled
-    LDA !sram_ctrl_kill_enemies : BNE .enabled
-    LDA !sram_ctrl_full_equipment : BNE .enabled
-    LDA !sram_ctrl_save_custom_preset : BNE .enabled
-    LDA !sram_ctrl_load_custom_preset : BNE .enabled
-    LDA !sram_ctrl_inc_custom_preset : BNE .enabled
-    LDA !sram_ctrl_dec_custom_preset : BNE .enabled
-    LDA !sram_ctrl_toggle_tileviewer : BNE .enabled
-    LDA !sram_ctrl_force_stand : BNE .enabled
-    LDA !sram_ctrl_update_timers : BNE .enabled
-    RTL
-
-  .enabled
-    STA !ram_game_mode_extras
     RTL
 }
 
