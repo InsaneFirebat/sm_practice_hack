@@ -121,7 +121,6 @@ preset_load:
 
     ; Clear enemies if not in certain rooms
     LDA $079B : CMP #$DD58 : BEQ .done_clearing_enemies
-    JSR clear_all_enemies
 
   .done_clearing_enemies
     PLP
@@ -371,9 +370,15 @@ preset_scroll_fixes:
     ; Fixes bad scrolling caused by a loading into a position that
     ; is normally hidden until passing over a red scroll block.
     ; These fixes can often be found in nearby door asm.
-    PHP : %a8() : %i16()
+    PHP
+    %ai16()
+    LDA !ram_custom_preset : CMP #$5AFE : BNE .category_presets
+    JMP .custom_presets
+
+  .category_presets
+    %a8() : %i16()
     LDA #$01 : LDX $079B         ; X = room ID
-    CPX #$C000 : BPL .halfway    ; organized by room ID so we only have to check half
+    CPX #$C000 : BPL .ceres      ; organized by room ID so we only have to check half
 
     CPX #$A011 : BNE +           ; bottom-left of Etecoons Etank
     STA $7ECD25 : STA $7ECD26
@@ -403,31 +408,6 @@ preset_scroll_fixes:
   .done
     PLP
     RTS
-
-  .halfway
-    CPX #$DF45 : BPL .ceres      ; Ceres rooms set BG1 offsets manually
-    CPX #$CAF6 : BNE +           ; bottom of WS Shaft
-    LDA #$02
-    STA $7ECD48 : STA $7ECD4E
-    BRA .done
-+   CPX #$CBD5 : BNE +           ; top of Electric Death Room (WS E-Tank)
-    LDA #$02
-    STA $7ECD20
-    BRA .done
-+   CPX #$CC6F : BNE +           ; right of Basement (Phantoon)
-    STA $7ECD24
-    BRA .done
-+   CPX #$D1A3 : BNE +           ; bottom of Crab Shaft
-    STA $7ECD26
-    LDA #$02 : STA $7ECD24
-    BRA .done
-+   CPX #$D48E : BNE +           ; Oasis (bottom of Toilet)
-    LDA #$02
-    STA $7ECD20 : STA $7ECD21
-    BRA .done
-+   CPX #$D8C5 : BNE .done       ; Pants Room (door to Shaktool)
-    LDA #$00 : STA $7ECD22
-    BRA .done
 
   .ceres
     LDA #$00 : STA $7E005F       ; Initialize mode 7
@@ -461,6 +441,18 @@ preset_scroll_fixes:
     LDA #$03 : STA $7E0920
 
   .ceresdone
+    PLP
+    RTS
+
+  .custom_presets
+    PHB
+    LDA !sram_custom_preset_slot
+    ASL : XBA
+    CLC : ADC #$31E9 : TAX       ; X = Source
+    LDY #$CD52 : LDA #$0031      ; Y = Destination, A = Size-1
+    MVP $F07E                    ; srcBank, destBank
+    LDA #$0000 : STA !ram_custom_preset
+    PLB
     PLP
     RTS
 }
