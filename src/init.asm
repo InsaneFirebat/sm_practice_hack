@@ -133,7 +133,7 @@ init_sram:
     LDA #$0001 : STA !sram_music_toggle
     LDA #$0000 : STA !sram_frame_counter_mode
     LDA #$0000 : STA !sram_display_mode
-    LDA #$0000 : STA !sram_top_display_mode
+    LDA #$0001 : STA !sram_top_display_mode ; 1 - Reserves
     LDA #$0000 : STA !sram_last_preset
     LDA #$0000 : STA !sram_save_has_set_rng
     LDA #$0000 : STA !sram_preset_category
@@ -145,14 +145,13 @@ init_sram:
     LDA #$0000 : STA !sram_countdamage
     LDA #$0000 : STA !sram_menu_background
     LDA #$0000 : STA !sram_sprite_prio_flag
-    LDA #$0000 : STA !sram_custom_preset_slot
     LDA #$000A : STA !sram_metronome_tickrate
     LDA #$0002 : STA !sram_metronome_sfx
     LDA #$0000 : STA !sram_superhud
     LDA #$0000 : STA !sram_superhud_bottom
     LDA #$0006 : STA !sram_superhud_middle
     LDA #$0008 : STA !sram_superhud_top
-    LDA #$0001 : STA !sram_status_icons
+    LDA #$0001 : STA !sram_status_icons ; 1 - On
     LDA #$0000 : STA !sram_suit_properties
     LDA #$0000 : STA !sram_room_layout
     LDA #$0003 : STA !sram_cutscenes
