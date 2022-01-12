@@ -255,16 +255,9 @@ hook_set_music_track:
 {
     STZ $07F6
     PHA
-
-    LDA !sram_music_toggle : CMP #$02 : BEQ .fast_no_music
-    CMP #$01 : BNE .no_music
-    LDA $07F3 : BEQ .no_music
-
+    LDA !sram_music_toggle : CMP #$01 : BNE .no_music
     PLA : STA $2140
     RTL
-
-  .fast_no_music
-    STZ $07F5
 
   .no_music
     PLA
@@ -275,9 +268,8 @@ hook_set_music_data:
 ; $80:8F65 8D F3 07    STA $07F3  [$7E:07F3]  ;} Music data = [music entry] & FFh
 ; $80:8F68 AA          TAX                    ; X = [music data]
 {
-    TAX
+    STA $07F3 : TAX
     LDA !sram_music_toggle : CMP #$0002 : BEQ .fast_no_music
-    TXA : STA $07F3
     JML $808F69
 
   .fast_no_music
