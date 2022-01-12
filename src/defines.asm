@@ -13,7 +13,7 @@
 !VERSION_MINOR = 3
 !VERSION_BUILD = 4
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 9
+!VERSION_REV_2 = 10
 
 
 ; ---------
@@ -171,6 +171,7 @@
 !ram_cm_ctrl_last_input = !WRAM_MENU_START+$36
 !ram_cm_ctrl_assign = !WRAM_MENU_START+$38
 !ram_cm_ctrl_swap = !WRAM_MENU_START+$3A
+!ram_cm_slow_graphics = !WRAM_MENU_START+$3C
 
 ; ^ FREE SPACE ^ up to +$7E
 
