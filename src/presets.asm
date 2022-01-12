@@ -467,15 +467,15 @@ preset_scroll_fixes:
     LDA #$00 : STA $7ECD23 : STA $7ECD24
     BRA .done
 +   CPX #$B3A5 : BNE +           ; bottom of Pre-Pillars
-    LDY !SAMUS_X : CPY #$0190       ; no scroll fix if Xpos < 400
+    LDY !SAMUS_Y : CPY #$0190    ; no scroll fix if Ypos < 400
     BMI .done
     STA $7ECD22 : STA $7ECD24
     LDA #$00 : STA $7ECD21
     BRA .done
 +   CPX #$B4AD : BNE +           ; top of Worst Room in the Game
     LDA #$02 : STA $7ECD20
-+   CPX #$B585 : BNE .done
-    LDY !SAMUS_Y : CPY #$008C       ; no scroll fix if Ypos > 140
++   CPX #$B585 : BNE .done       ; top of Kihunter Stairs
+    LDY !SAMUS_Y : CPY #$008C    ; no scroll fix if Ypos > 140
     BPL .done
     STA $7ECD20
     LDA #$00 : STA $7ECD23
