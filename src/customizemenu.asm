@@ -127,17 +127,17 @@ paletterando_abort:
 paletterando_confirm:
     %cm_jsr("RANDOMIZE!", #.routine, #$0000)
   .routine
-    LDA $05E5 : AND #$7FFF : STA !sram_custompalette_menuborder : DEC $05E5
-    JSL $808111 : AND #$7FFF : STA !sram_custompalette_menuheaderoutline : INC $05E5
-    JSL $808111 : AND #$7FFF : STA !sram_custompalette_menutext : ASL : AND #$7ECD : STA $05E5
-    JSL $808111 : AND #$7FFF : STA !sram_custompalette_menubackground : INC $05E5
-    JSL $808111 : AND #$7FFF : STA !sram_custompalette_menunumoutline : DEC $05E5
-    JSL $808111 : LSR : STA !sram_custompalette_menunumfill : STA $05E5
-    JSL $808111 : AND #$7FFF : STA !sram_custompalette_menutoggleon : AND #$DEAD : STA $05E5
-    JSL $808111 : XBA : AND #$7FFF : STA !sram_custompalette_menuseltext : DEC $05E5
-    JSL $808111 : LSR : STA !sram_custompalette_menuseltextbg : AND #$BEEF : STA $05E5
-    JSL $808111 : AND #$7FFF : STA !sram_custompalette_menunumseloutline : INC $05E5
-    JSL $808111 : AND #$7FFF : STA !sram_custompalette_menunumsel
+    LDA !ram_seed_Y : AND #$7FFF : STA !sram_custompalette_menuborder
+    JSL MenuRNG : AND #$7FFF : STA !sram_custompalette_menuheaderoutline
+    LDA !ram_seed_X : AND #$7FFF : STA !sram_custompalette_menutext
+    JSL MenuRNG2 : AND #$7FFF : STA !sram_custompalette_menubackground
+    JSL MenuRNG : AND #$7FFF : STA !sram_custompalette_menunumoutline
+    JSL MenuRNG : AND #$7FFF : STA !sram_custompalette_menunumfill
+    LDA !ram_seed_X : AND #$7FFF : STA !sram_custompalette_menutoggleon
+    JSL MenuRNG2 : AND #$7FFF : STA !sram_custompalette_menuseltext
+    JSL MenuRNG : AND #$7FFF : STA !sram_custompalette_menuseltextbg
+    JSL MenuRNG2 : AND #$7FFF : STA !sram_custompalette_menunumseloutline
+    JSL MenuRNG : AND #$7FFF : STA !sram_custompalette_menunumsel
 
     ; play a happy sound and refresh current profile
     %ai16()

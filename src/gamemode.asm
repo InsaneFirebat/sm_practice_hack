@@ -237,11 +237,9 @@ endif
     SEC : RTS
 
   .randomize_rng
-    LDA $7E1842 : AND #$00FF : STA $12
-    LDA $05B6 : AND #$FF00 : ORA $12 : STA $05B5 ; little extra for Phantoon
-    LDA $7E05E5 : AND #$0FF0 : ASL #4
-    ORA $12 : STA $7E05E5
-    JSL $808111
+    JSL MenuRNG2
+    AND #$00FF : STA $05B5 ; little extra for Phantoon
+    JSL MenuRNG : STA $7E05E5
     %sfxbeep()
     ; CLC to continue normal gameplay after reseeding RNG
     CLC : RTS
