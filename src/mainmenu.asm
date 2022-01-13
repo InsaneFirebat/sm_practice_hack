@@ -2520,8 +2520,8 @@ rng_botwoon_rng:
   .routine
     LDA !ram_cm_botwoon_rng : BEQ +
     DEC : ASL #3 : INC
-    STA !ram_botwoon_rng
-+   RTS
++   STA !ram_botwoon_rng
+    RTS
 
 rng_draygon_rng_right:
     dw !ACTION_CHOICE
