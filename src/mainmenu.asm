@@ -2235,7 +2235,7 @@ AssignAngleControlsMenu:
 
 action_assign_input:
 {
-    LDA !ram_cm_ctrl_assign : STA $C0 : TAX  ; input address in $C0 and X
+    LDA !ram_cm_ctrl_assign : STA $C2 : TAX  ; input address in $C2 and X
     LDA $7E0000,X : STA !ram_cm_ctrl_swap    ; save old input for later
     TYA : STA $7E0000,X                      ; store new input
     STY $C4                                  ; saved new input for later
@@ -2252,46 +2252,46 @@ check_duplicate_inputs:
 {
     ; ram_cm_ctrl_assign = word address of input being assigned
     ; ram_cm_ctrl_swap = previous input bitmask being moved
-    ; X / $C0 = word address of new input
+    ; X / $C2 = word address of new input
     ; Y / $C4 = new input bitmask
 
-    LDA #$09B2 : CMP $C0 : BEQ .check_jump      ; check if we just assigned shot
+    LDA #$09B2 : CMP $C2 : BEQ .check_jump      ; check if we just assigned shot
     LDA $09B2 : BEQ +                           ; check if shot is unassigned
     CMP $C4 : BNE .check_jump                   ; skip to check_jump if not a duplicate assignment
 +   JMP .shot                                   ; swap with shot
 
   .check_jump
-    LDA #$09B4 : CMP $C0 : BEQ .check_dash
+    LDA #$09B4 : CMP $C2 : BEQ .check_dash
     LDA $09B4 : BEQ +
     CMP $C4 : BNE .check_dash
 +   JMP .jump
 
   .check_dash
-    LDA #$09B6 : CMP $C0 : BEQ .check_cancel
+    LDA #$09B6 : CMP $C2 : BEQ .check_cancel
     LDA $09B6 : BEQ +
     CMP $C4 : BNE .check_cancel
 +   JMP .dash
 
   .check_cancel
-    LDA #$09B8 : CMP $C0 : BEQ .check_select
+    LDA #$09B8 : CMP $C2 : BEQ .check_select
     LDA $09B8 : BEQ +
     CMP $C4 : BNE .check_select
 +   JMP .cancel
 
   .check_select
-    LDA #$09BA : CMP $C0 : BEQ .check_up
+    LDA #$09BA : CMP $C2 : BEQ .check_up
     LDA $09BA : BEQ +
     CMP $C4 : BNE .check_up
 +   JMP .select
 
   .check_up
-    LDA #$09BE : CMP $C0 : BEQ .check_down
+    LDA #$09BE : CMP $C2 : BEQ .check_down
     LDA $09BE : BEQ +
     CMP $C4 : BNE .check_down
 +   JMP .up
 
   .check_down
-    LDA #$09BC : CMP $C0 : BEQ .not_detected
+    LDA #$09BC : CMP $C2 : BEQ .not_detected
     LDA $09BC : BEQ +
     CMP $C4 : BNE .not_detected
 +   JMP .down
