@@ -197,6 +197,25 @@ org $848D0C
     AND #$000F
 
 
+; Moat setup asm
+org $8F9624
+    dw #layout_asm_moat
+
+; Dachora setup asm
+org $8F9CD8
+    dw #layout_asm_dachora
+
+; Big Pink setup asm
+org $8F9D3E
+    dw #layout_asm_bigpink
+
+; Mission Impossible setup asm
+org $8F9E36
+    dw #layout_asm_missionimpossible
+
+org $8FA278
+    dw #layout_asm_redtower
+
 ; Caterpillar elevator and middle-left door asm
 org $8FBA26
     ; Replace STA with jump to STA
@@ -435,7 +454,7 @@ layout_asm_easttunnel_after_scrolls:
     LDA !sram_room_layout : BIT !ROOM_LAYOUT_AREA_RANDO : BEQ layout_asm_crabtunnel_done
 
     ; Clear gate PLMs and projectiles
-+   LDA #$0000 : STA $1C7B : STA $1C7D : STA $19B9
+    LDA #$0000 : STA $1C7B : STA $1C7D : STA $19B9
 
     ; Remove gate tiles
     LDA #$00FF : STA $7F02AE : STA $7F02B0
@@ -514,11 +533,11 @@ layout_asm_crabshaft_after_scrolls:
     %ai16()
     PHX : LDX #layout_asm_crabshaft_plm_data
     JSL $84846A : PLX
-}
 
   .done
     PLP
     RTS
+}
 
 layout_asm_crabshaft_plm_data:
     db #$6F, #$B7, #$0D, #$29, #$09, #$00
@@ -580,6 +599,127 @@ layout_asm_westsandhall:
     ; Change left door BTS to previously unused door
     %a8()
     LDA #$02 : STA $7F6582 : STA $7F65C2 : STA $7F6602 : STA $7F6642
+
+  .done:
+    PLP
+    RTS
+}
+
+layout_asm_bigpink:
+{
+    PHP
+    %a16()
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_ANTISOFTLOCK : BEQ layout_asm_westsandhall_done
+
+    ; Clear out path to save room
+    LDA #$00FF : STA $7F03F2 : STA $7F03F8 : STA $7F03FA
+    STA $7F03FC : STA $7F03FE : STA $7F0400 : STA $7F0402
+    STA $7F0404 : STA $7F0406 : STA $7F0408 : STA $7F0492
+    STA $7F0496 : STA $7F0498 : STA $7F049A : STA $7F049C
+    STA $7F049E : STA $7F04A0 : STA $7F04A2 : STA $7F04A4
+    STA $7F04A6 : STA $7F04A8 : STA $7F0542
+
+    ; A small part of the path is decorated
+    LDA #$0B24 : STA $7F03F4
+    LDA #$0B02 : STA $7F03F6
+    LDA #$0B05 : STA $7F0494
+
+    ; Decorate wall above path
+    LDA #$8B08 : STA $7F0354 : STA $7F0356 : STA $7F0358
+    STA $7F035A : STA $7F035C : STA $7F035E : STA $7F0360
+    STA $7F0362 : STA $7F0364 : STA $7F0366
+
+    ; Fade in wall above path
+    LDA #$8B28 : STA $7F02B4 : STA $7F02B6 : STA $7F02B8
+    STA $7F02BA : STA $7F02BC : STA $7F02BE : STA $7F02C0
+    STA $7F02C2 : STA $7F02C4
+
+    ; Decorate the corner
+    LDA #$8B17 : STA $7F0368
+    LDA #$8B29 : STA $7F02C6
+
+    ; Normal BTS for path replacing scrolls
+    %a8()
+    LDA #$00 : STA $7F66A1 : STA $7F66A2 : STA $7F66A3
+
+    ; Allow screen scrolling along the path
+    LDA #$02 : STA $7ECD21
+
+  .done
+    PLP
+    RTS
+}
+
+layout_asm_dachora:
+{
+    PHP
+    %a16()
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_ANTISOFTLOCK : BEQ .done
+
+    ; Use non-respawning speed booster block BTS for dachora pitfall
+    %a8()
+    LDA #$0F : STA $7F6987 : STA $7F6988 : STA $7F6989
+    STA $7F698A : STA $7F698B : STA $7F698C
+
+  .done
+    PLP
+    RTS
+}
+
+layout_asm_moat:
+{
+    PHP
+    %a16()
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_ANTISOFTLOCK : BEQ .done
+
+    ; Use shootable blocks on the moat pillar
+    %a8()
+    LDA #$C0 : STA $7F059F : STA $7F061F
+    LDA #$BE : STA $7F05DE
+    LDA #$D0 : STA $7F05DF
+
+    ; Set BTS so the top block is 1x2
+    LDA #$02 : STA $7F66D0
+    LDA #$FF : STA $7F66F0
+
+  .done
+    PLP
+    RTS
+}
+
+layout_asm_missionimpossible:
+{
+    PHP
+    %a16()
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_ANTISOFTLOCK : BEQ .done
+
+    ; Use shootable block
+    %a8()
+    LDA #$C0 : STA $7F0687
+
+  .done
+    PLP
+    RTS
+}
+
+layout_asm_redtower:
+{
+    PHP
+    %a16()
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_ANTISOFTLOCK : BEQ .done
+
+    ; Create opening along bottom left of red tower
+    LDA #$00FF : STA $7F0E66 : STA $7F0E88 : STA $7F0EA6 : STA $7F0EA8
+    STA $7F0EC6 : STA $7F0EC8 : STA $7F0ECA : STA $7F0EE8
+
+    ; Decorate opening background
+    LDA #$014B : STA $7F0E68 : STA $7F0EAA : LDA #$0169 : STA $7F0E6A
+    LDA #$014A : STA $7F0E8A : LDA #$094B : STA $7F0EEA
+
+    ; Move the wall further to the left
+    LDA #$8101 : STA $7F0E64 : LDA #$8121 : STA $7F0EC4
+    LDA #$8103 : STA $7F0E84 : STA $7F0EA4
+    LDA #$8143 : STA $7F0EE6 : LDA #$072D : STA $7F0E86
 
   .done
     PLP
