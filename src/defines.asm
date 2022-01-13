@@ -173,7 +173,10 @@
 !ram_cm_ctrl_swap = !WRAM_MENU_START+$3A
 !ram_cm_slow_graphics = !WRAM_MENU_START+$3C
 
-; ^ FREE SPACE ^ up to +$7E
+; ^ FREE SPACE ^ up to +$7A
+
+!ram_seed_X = !WRAM_MENU_START+$7C
+!ram_seed_Y = !WRAM_MENU_START+$7E
 
 ; ------------------
 ; Reusable RAM Menu

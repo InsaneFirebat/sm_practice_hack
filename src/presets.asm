@@ -616,12 +616,12 @@ Randomize_Preset_Equipment:
   .randomize
     PHX
     ; equipment
-    LDA $05E5 : AND #$F32F                                             ; get current random number
+    LDA !ram_seed_Y : AND #$F32F                                       ; get current random number
     STA $09A2 : STA $09A4                                              ; store equipment
     LDA !sram_presetrando_morph : BEQ +                                ; check if morph forced
     LDA $09A2 : ORA #$0004 : STA $09A2 : STA $09A4                     ; turn on morph
     ; beams
-+   JSL $808111                                                        ; get new random number
++   JSL MenuRNG                                                        ; get new random number
     AND #$100F : STA $09A8                                             ; collected beams
     AND #$000C : CMP #$000C : BNE .beams_done                          ; check for Spazer+Plasma
     LDA !sram_presetrando_beampref : BEQ .random_pref                  ; check beam preference, 0 = random
@@ -631,7 +631,7 @@ Randomize_Preset_Equipment:
   .spazer
     LDA $09A8 : AND #$1007 : STA $09A6 : BRA +                         ; unequip Plasma
   .random_pref
-    LDA $05B6 : AND #$0001 : BEQ .spazer                               ; get random bit
+    LDA !ram_seed_X : AND #$0001 : BEQ .spazer                         ; get random bit
     BRA .plasma
   .beams_done
     LDA $09A8 : STA $09A6
@@ -643,7 +643,7 @@ Randomize_Preset_Equipment:
 
     ; reserves
 +   LDA !sram_presetrando_max_reserves : BEQ .no_reserves              ; check if max = 0
-    LDA $05E5 : AND #$F000 : LSR #4 : XBA                              ; reuse random number
+    LDA !ram_seed_Y : AND #$F000 : LSR #4 : XBA                        ; reuse random number
     CMP !sram_presetrando_max_reserves : BPL .cap_reserves             ; check if capped
     ASL : TAX : LDA presetrando_reservetable,X                         ; load value from table
     STA $09D4 : STA $09D6 : BRA +                                      ; store reserves
@@ -660,7 +660,7 @@ Randomize_Preset_Equipment:
 
     ; missiles
 +   LDA !sram_presetrando_max_missiles : BEQ .no_missiles              ; check if max = 0
-    LDA $05E5 : AND #$0FF0 : LSR #4                                    ; reuse random number
+    LDA !ram_seed_X : AND #$0FF0 : LSR #4                              ; reuse random number
     CMP !sram_presetrando_max_missiles : BPL .cap_missiles             ; check if capped
     ASL : TAX : LDA presetrando_missiletable,X                         ; load a proper value from table
     STA $09C6 : STA $09C8 : BRA +                                      ; store random missiles
@@ -677,7 +677,7 @@ Randomize_Preset_Equipment:
 
     ; supers
 +   LDA !sram_presetrando_max_supers : BEQ .no_supers                  ; check if max = 0
-    JSL $808111 : AND #$00FF                                           ; get new random number
+    JSL MenuRNG : AND #$00FF                                           ; get new random number
     CMP !sram_presetrando_max_supers : BPL .cap_supers                 ; check if capped
     ASL : TAX : LDA presetrando_supertable,X
     STA $09CA : STA $09CC : BRA +                                      ; store random supers
@@ -694,7 +694,7 @@ Randomize_Preset_Equipment:
 
     ; pbs
 +   LDA !sram_presetrando_max_pbs : BEQ .no_pbs                        ; check if max = 0
-    LDA $05E5 : XBA : AND #$00FF                                       ; get new random number
+    LDA !ram_seed_Y : XBA : AND #$00FF                                 ; get new random number
     CMP !sram_presetrando_max_pbs : BPL .cap_pbs                       ; check if capped
     ASL : TAX : LDA presetrando_pbtable,X
     STA $09CE : STA $09D0 : BRA +                                      ; store random pbs
@@ -711,7 +711,7 @@ Randomize_Preset_Equipment:
 
     ; etanks
 +   LDA !sram_presetrando_max_etanks : BEQ .no_etanks                  ; check if max = 0
-    JSL $808111 : AND #$000F                                           ; get new random number
+    JSL MenuRNG2 : AND #$000F                                          ; get new random number
     CMP !sram_presetrando_max_etanks : BPL .cap_etanks                 ; check if capped
     ASL : TAX : LDA presetrando_etanktable,X                           ; load value from table
     STA $09C2 : STA $09C4 : BRA .done                                  ; store energy

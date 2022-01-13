@@ -86,6 +86,9 @@ init_nonzero_wram:
     STA !ram_cm_watch_right_index_hi : STA !ram_cm_watch_right_index_lo
     STA !ram_cm_watch_enemy_property : STA !ram_cm_watch_enemy_index
 
+    LDA #$FEED : STA !ram_seed_X
+    LDA #$5EED : STA !ram_seed_Y
+
     ; Check if any less common controller shortcuts are configured
     JML GameModeExtras
 }

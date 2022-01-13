@@ -152,6 +152,44 @@ endif
 org $83B000
 print pc, " rng start"
 
+MenuRNG:
+; Generates new random number
+; 32-bit period (uses two 16-bit seeds)
+; Make sure ram_seed_X and ram_seed_Y is initialized to something other than zero
+    LDA.l !ram_seed_X
+	ASL #5
+	EOR.l !ram_seed_X
+	STA $16
+
+	LDA.l !ram_seed_Y
+	STA.l !ram_seed_X
+
+	LDA $16
+	LSR #3
+	EOR $16
+	STA $16
+
+	LDA !ram_seed_Y
+	LSR
+	EOR !ram_seed_Y
+	EOR $16
+	STA !ram_seed_Y
+
+	; return y (in a)
+	RTL	
+
+; 16-bit period xorshift (uses only ram_seed_X)
+; Make sure ram_seed_X is not zero
+MenuRNG2:
+	LDA !ram_seed_X
+	STA $16
+	ASL #2 : EOR $16 : STA $16
+	LSR #5 : EOR $16 : STA $16
+	ASL : EOR $16
+	STA !ram_seed_X
+	RTL
+
+
 hook_hopper_set_rng:
 {
     LDA #$0001 : STA !ram_room_has_set_rng
