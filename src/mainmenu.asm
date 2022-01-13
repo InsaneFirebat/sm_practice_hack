@@ -1127,6 +1127,7 @@ LayoutMenu:
     dw #layout_magnetstairs
     dw #$FFFF
     dw #layout_arearando
+    dw #layout_antisoftlock
     dw #$0000
     %cm_header("ROOM LAYOUTS")
     %cm_footer("APPLIED WHEN ROOM RELOADED")
@@ -1158,6 +1159,10 @@ layout_magnetstairs:
 !ROOM_LAYOUT_AREA_RANDO = #$0002
 layout_arearando:
     %cm_toggle_bit("Area Rando Patches", !sram_room_layout, !ROOM_LAYOUT_AREA_RANDO, #0)
+
+!ROOM_LAYOUT_ANTISOFTLOCK = #$0004
+layout_antisoftlock:
+    %cm_toggle_bit("Anti-Softlock Patches", !sram_room_layout, !ROOM_LAYOUT_ANTISOFTLOCK, #0)
 
 
 ; -----------
