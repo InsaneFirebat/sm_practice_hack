@@ -2109,6 +2109,7 @@ CutscenesMenu:
     dw #cutscenes_skip_intro
     dw #cutscenes_skip_ceres_arrival
     dw #$FFFF
+    dw #cutscenes_g4_skip
     dw #cutscenes_fast_mb
     dw #$0000
     %cm_header("CUTSCENES")
@@ -2120,6 +2121,10 @@ cutscenes_skip_intro:
 !CUTSCENE_SKIP_CERES_ARRIVAL = #$0002
 cutscenes_skip_ceres_arrival:
     %cm_toggle_bit("Skip Ceres Arrival", !sram_cutscenes, !CUTSCENE_SKIP_CERES_ARRIVAL, #0)
+
+!CUTSCENE_SKIP_G4 = #$0080
+cutscenes_g4_skip:
+    %cm_toggle_bit("Skip G4", !sram_cutscenes, !CUTSCENE_SKIP_G4, #0)
 
 !CUTSCENE_FAST_MB = #$0100
 cutscenes_fast_mb:
