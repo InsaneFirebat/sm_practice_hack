@@ -201,6 +201,10 @@ org $848D0C
 org $8F9624
     dw #layout_asm_moat
 
+; Early Supers setup asm
+org $8F9BED
+    dw #layout_asm_earlysupers
+
 ; Dachora setup asm
 org $8F9CD8
     dw #layout_asm_dachora
@@ -213,8 +217,25 @@ org $8F9D3E
 org $8F9E36
     dw #layout_asm_missionimpossible
 
+; Red Tower setup asm
 org $8FA278
     dw #layout_asm_redtower
+
+; Below Spazer setup asm
+org $8FA42D
+    dw #layout_asm_belowspazer
+
+; Warehouse Kihunters setup asm
+org $8FA4FF
+    dw #layout_asm_warehousekihunters
+
+; Cathedral Entrance setup asm
+org $8FA7D8
+    dw #layout_asm_cathedralentrance
+
+; Hi-Jump Boots E-Tank setup asm
+org $8FAA66
+    dw #layout_asm_hjbetank
 
 ; Caterpillar elevator and middle-left door asm
 org $8FBA26
@@ -720,6 +741,92 @@ layout_asm_redtower:
     LDA #$8101 : STA $7F0E64 : LDA #$8121 : STA $7F0EC4
     LDA #$8103 : STA $7F0E84 : STA $7F0EA4
     LDA #$8143 : STA $7F0EE6 : LDA #$072D : STA $7F0E86
+
+  .done
+    PLP
+    RTS
+}
+
+layout_asm_belowspazer:
+{
+    PHP
+    %a16()
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_ANTISOFTLOCK : BEQ .done
+
+    ; Use shootable block
+    LDA #$C1EB : STA $7F018E
+
+  .done
+    PLP
+    RTS
+}
+
+layout_asm_warehousekihunters:
+{
+    PHP
+    %a16()
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_ANTISOFTLOCK : BEQ .done
+
+    ; Use shootable block
+    %a8()
+    LDA #$C5 : STA $7F064F
+
+  .done
+    PLP
+    RTS
+}
+
+layout_asm_cathedralentrance:
+{
+    PHP
+    %a16()
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_ANTISOFTLOCK : BEQ .done
+
+    ; Remove protruding ledge
+    LDA #$8106 : STA $7F040C
+    LDA #$00FF : STA $7F03AC : STA $7F040E : STA $7F0410
+
+    ; Remove slope BTS
+    %a8()
+    LDA #$00 : STA $7F65B7 : STA $7F6609
+
+  .done
+    PLP
+    RTS
+}
+
+layout_asm_hjbetank:
+{
+    PHP
+    %a16()
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_ANTISOFTLOCK : BEQ .done
+
+    ; Use shootable block
+    %a8()
+    LDA #$C5 : STA $7F015D
+
+  .done
+    PLP
+    RTS
+}
+
+layout_asm_earlysupers:
+{
+    PHP
+    %a16()
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_ANTISOFTLOCK : BEQ .done
+
+    ; Use shootable block on the bridge
+    %a8()
+    LDA #$C1 : STA $7F08BD
+
+    ; Use shootable blocks on the divider
+    STA $7F0935 : STA $7F09F5
+    LDA #$D1 : STA $7F0995 : STA $7F0A55
+
+    ; Set BTS to make 1x2 blocks
+    LDA #$02 : STA $7F689B : STA $7F68FB
+    LDA #$FF : STA $7F68CB : STA $7F692B
 
   .done
     PLP
