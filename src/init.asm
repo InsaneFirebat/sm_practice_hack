@@ -88,6 +88,7 @@ init_nonzero_wram:
 
     LDA #$FEED : STA !ram_seed_X
     LDA #$5EED : STA !ram_seed_Y
+    LDA #$0001 : STA !ram_nodamage
 
     ; Check if any less common controller shortcuts are configured
     JML GameModeExtras

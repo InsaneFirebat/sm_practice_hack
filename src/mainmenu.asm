@@ -1137,7 +1137,7 @@ layout_magnetstairs:
     %cm_toggle_bit("Magnet Stairs Fix", !sram_room_layout, !ROOM_LAYOUT_MAGNET_STAIRS, #.routine)
   .routine
     LDA !ROOM_ID : CMP #$DFD7 : BNE .done
-    LDA !ram_magnetstairs : BEQ .broken
+    LDA !sram_room_layout : AND !ROOM_LAYOUT_MAGNET_STAIRS : BEQ .broken
 
     ; change tile type and BTS
     PHP : %a8()
@@ -1986,6 +1986,7 @@ GameMenu:
 if !FEATURE_PAL
     dw #game_paldebug
 endif
+    dw #game_nodamage
     dw #game_debugprojectiles
     dw #game_debugfixscrolloffsets
     dw #$FFFF
@@ -2058,6 +2059,9 @@ if !FEATURE_PAL
 game_paldebug:
     %cm_toggle_inverted("PAL Debug Movement", $7E09E6, #$0001, #0)
 endif
+
+game_nodamage:
+    %cm_toggle_inverted("Disable Samus Damage", !ram_nodamage, #$0001, #0)
 
 game_debugprojectiles:
     %cm_toggle_bit("Enable Projectiles", $7E198D, #$8000, #0)
