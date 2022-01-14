@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.3.4.12] Yet another music change to stop me from crashing the sound engine by idlechild
 * [2.3.4.11] Fix setting Botwoon RNG back to RANDOM
 * [2.3.4.11] First round of anti-softlock randomizer patches by idlechild
 * [2.3.4.11] New RNG routine for non-gameplay randomness by total
