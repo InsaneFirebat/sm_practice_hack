@@ -2,6 +2,7 @@
 ## Changelog since v2.2.7
 
 * [2.3.4.12] Added an option to disable damage dealt by Samus (except Power Bombs and grapple)
+* [2.3.4.12] Added option to skip the G4 cutscene by idlechild
 * [2.3.4.12] More anti-softlock randomizer patches by idlechild
 * [2.3.4.12] Yet another music change to stop me from crashing the sound engine by idlechild
 * [2.3.4.11] Fix setting Botwoon RNG back to RANDOM
