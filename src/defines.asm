@@ -461,9 +461,8 @@
 !ram_ammo_powerbombs = $05CD
 
 !ram_countdamage = $0B0C
-!ram_display_backup = $F02114
-
-!ram_magnetstairs = $F02116
+!ram_nodamage = $F02114
+!ram_display_backup = $F02116
 
 !ram_dboost_state = $F02118
 !ram_dboost_kbmax = $F0211A
