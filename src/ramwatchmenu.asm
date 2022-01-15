@@ -15,10 +15,24 @@ ih_prepare_ram_watch_menu:
     LDA !ram_watch_left_index : AND #$00FF : STA !ram_cm_watch_left_index_lo
     LDA !ram_watch_right_index : XBA : AND #$00FF : STA !ram_cm_watch_right_index_hi
     LDA !ram_watch_right_index : AND #$00FF : STA !ram_cm_watch_right_index_lo
-    LDA $12 : BNE +
     LDA #$0000 : STA !ram_cm_watch_enemy_property : STA !ram_cm_watch_enemy_index
-    STA !ram_cm_watch_enemy_side : STA $12
-+   JMP action_submenu
+    STA !ram_cm_watch_enemy_side
+
+    ; See if we can better initialize enemy properties and indices
+    LDA !ram_watch_left : CMP #$0F78 : BCC .checkright : CMP #$1778 : BCS .checkright
+    BRA .found_enemy_ram
+
+  .checkright
+    LDA !ram_watch_right : CMP #$0F78 : BCC .submenu : CMP #$1778 : BCS .submenu
+
+  .found_enemy_ram
+    SEC : SBC #$0F78 : STA !ram_cm_watch_enemy_index
+    AND #$003E : LSR : STA !ram_cm_watch_enemy_property
+    LDA !ram_cm_watch_enemy_index : AND #$07C0
+    ASL : ASL : XBA : STA !ram_cm_watch_enemy_index
+
+  .submenu
+    JMP action_submenu
 
 RAMWatchMenu:
     dw ramwatch_enable
@@ -571,3 +585,4 @@ action_HUD_ramwatch:
     LDA !IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
     RTS
 }
+
