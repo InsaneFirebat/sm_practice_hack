@@ -1026,7 +1026,7 @@ cm_draw_action_table:
 
         LDA ($08) : AND #$E0F0 : BEQ .unbound
 
-        ; Draw input
+        ; determine which input to draw, using Y to refresh A
         TAY : AND #$0080 : BEQ + : LDY #$0000 : BRA .draw
 +       TYA : AND #$8000 : BEQ + : LDY #$0002 : BRA .draw
 +       TYA : AND #$0040 : BEQ + : LDY #$0004 : BRA .draw
