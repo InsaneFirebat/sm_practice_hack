@@ -5,6 +5,7 @@ preset_load:
 {
     PHP
     LDA !MUSIC_DATA : STA !SRAM_MUSIC_DATA
+    LDA !MUSIC_TRACK : STA !SRAM_MUSIC_TRACK
 
     JSL $809E93  ; Clear timer RAM
     JSR $819B    ; Initialize IO registers
@@ -49,7 +50,7 @@ preset_load:
     DEC $0DA0    ; Decrement $0DA0
     BPL .loopSomething
 
-    LDA #$0008 : STA $0998
+    LDA #$0008 : STA !GAMEMODE
     %a8() : LDA #$0F : STA $51 : %a16()
 
     PHP
@@ -77,50 +78,19 @@ preset_load:
     JSL upload_sprite_oob_tiles
 
   .done_upload_sprite_oob_tiles
-    LDA $0639 : CMP $063B : BEQ .music_queue_empty
-
-  .music_queue_data_search
-    DEC : DEC : AND #$000E : TAX
-    LDA $0619,X : BMI .music_check_data
-    TXA : CMP $063B : BNE .music_queue_data_search
-
-    ; No music data found in queue
-    LDA !SRAM_MUSIC_DATA
-
-  .music_check_data
-    CMP !MUSIC_DATA : BEQ .done_load_music_data
-
-    ; Reset music queue, clear track and load data
-    LDX $063B : LDA $0629,X : BNE .music_reset_queue_keep_timer
-    LDA #$0008 : STA $0629,X
-
-  .music_reset_queue_keep_timer
-    LDA #0000 : STA $0619,X : STA $063D
-    INX : INX : TXA : AND #$000E : TAX
-    LDA #$FF00 : CLC : ADC !MUSIC_DATA : STA $0619,X
-    LDA #$0008 : STA $0629,X
-    INX : INX : TXA : AND #$000E : STA $0639
-    BRA .done_fixing_music_data
-
-  .music_queue_empty
-    LDA !SRAM_MUSIC_DATA : CMP !MUSIC_DATA : BEQ .done_load_music_data
-
-    ; Clear track and load data
-    LDA #$0000 : JSL !MUSIC_ROUTINE
-    LDA #$FF00 : CLC : ADC !MUSIC_DATA : JSL !MUSIC_ROUTINE
-
-  .done_fixing_music_data
-    LDA !MUSIC_TRACK : BEQ .done_load_music_track
-
-  .done_load_music_data
-    LDA !MUSIC_TRACK : JSL !MUSIC_ROUTINE
-
-  .done_load_music_track
     JSL reset_all_counters
     STZ $0795 ; clear door transition flag
 
     ; Clear enemies if not in certain rooms
-    LDA $079B : CMP #$DD58 : BEQ .done_clearing_enemies
+    LDA !ROOM_ID : CMP #$DD58 : BEQ .set_mb_state
+    JSR clear_all_enemies
+    BRA .done_clearing_enemies
+
+  .set_mb_state
+    ; If glass is broken, assume we should skip MB1
+    LDA $7ED820 : BIT #$0004 : BEQ .done_clearing_enemies
+    ; Set health to 1 as a hint this was done by a preset
+    LDA #$0001 : STA $0FCC
 
   .done_clearing_enemies
     PLP
@@ -137,6 +107,20 @@ clear_all_enemies:
   .done_clearing
     TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .loop
     RTS
+}
+
+preset_load_destination_state_and_tiles:
+{
+    ; Original logic from $82E76B
+    PHP : PHB
+    REP #$30
+    PEA $8F00
+    PLB : PLB
+    JSR $DDF1  ; Load destination room CRE bitset
+    JSR $DE12  ; Load door header
+    JSR $DE6F  ; Load room header
+    JSR $DEF2  ; Load state header
+    JMP $E78C
 }
 
 reset_all_counters:
@@ -185,14 +169,13 @@ preset_load_preset:
 
     LDX #$0000
   .loop_path
-    LDA $C1 : STA $7FF000,X
+    LDA $C1 : STA $7F0002,X
     INX #2
     LDA ($C1) : STA $C1 : BNE .loop_path
 
-  ; then traverse $7FF000 from the first preset until the last one, and apply them
+  ; then traverse from the first preset until the last one, and apply them
   .loop_presets
     DEX #2 : BMI .done
-
     JSR preset_to_memory
     BRA .loop_presets
 
@@ -206,9 +189,8 @@ preset_load_preset:
 
 preset_to_memory:
 {
-    PHX
     STZ $00
-    LDA $7FF000,X
+    LDA $7F0002,X
     INC #2 : TAY
 
   .loop
@@ -218,18 +200,15 @@ preset_to_memory:
 
   .two
     LDA ($00),Y : INY : INY : STA [$C3]
-    INX #6
     BRA .loop
 
   .one
     %a8()
     LDA ($00),Y : INY : STA [$C3]
     %a16()
-    INX #5
     BRA .loop
 
   .done
-    PLX
     RTS
 }
 
@@ -267,7 +246,6 @@ preset_start_gameplay:
     JSL $80835D  ; Disable NMI
     JSL $80985F  ; Disable horizontal and vertical timer interrupts
     JSL $82E76B  ; Load destination room CRE bitset, door/room/state headers, tiles
-    JSR $A12B    ; Play 14h frames of music
     JSL $878016  ; Clear animated tile objects
     JSL $88829E  ; Wait until the end of a v-blank and clear (H)DMA enable flags
 
@@ -284,10 +262,6 @@ preset_start_gameplay:
     JSL $90AC8D  ; Update beam graphics
     JSL $82E139  ; Load target colours for common sprites, beams and slashing enemies / pickups
     JSL $A08A1E  ; Load enemies
-    JSL $82E071  ; Load room music
-    JSR $A12B    ; Play 14h frames of music
-    JSL $82E09B  ; Update music track index
-    JSL $82E113  ; RTL
     JSL $80A23F  ; Clear BG2 tilemap
     JSL $82E7D3  ; Load level data, CRE, tile table, scroll data, create PLMs and execute door ASM and room setup ASM
     JSL $89AB82  ; Load FX
@@ -314,19 +288,50 @@ preset_start_gameplay:
   .layer_2_loaded
     JSR $A37B    ; Calculate BG positions
     JSL $80A176  ; Display the viewable part of the room
+
+    LDA #$0000 : STA $05F5  ; Enable sounds
+    JSL stop_all_sounds
+
+    ; Clear music queue
+    STZ $0629 : STZ $062B : STZ $062D : STZ $062F
+    STZ $0631 : STZ $0633 : STZ $0635 : STZ $0637
+    STZ $0639 : STZ $063B : STZ $063D : STZ $063F
+
+    ; If music off, treat music as already loaded
+    LDA !sram_music_toggle : CMP #$0001 : BNE .done_music
+
+    ; Compare to currently loaded music data
+    LDA !SRAM_MUSIC_DATA : CMP !MUSIC_DATA : BEQ .done_load_music_data
+
+    ; Clear track if necessary
+    LDA !SRAM_MUSIC_TRACK : BEQ .load_music_data
+    LDA #$0000 : JSL !MUSIC_ROUTINE
+
+  .load_music_data
+    LDA !MUSIC_DATA : TAX
+    LDA !SRAM_MUSIC_DATA : STA !MUSIC_DATA
+    TXA : CLC : ADC #$FF00 : JSL !MUSIC_ROUTINE
+    BRA .load_music_track
+
+  .done_load_music_data
+    ; Compare to currently playing music
+    LDA !SRAM_MUSIC_TRACK : CMP !MUSIC_TRACK : BEQ .done_music
+
+  .load_music_track
+    LDA !MUSIC_TRACK : TAX
+    LDA !SRAM_MUSIC_TRACK : STA !MUSIC_TRACK
+    TXA : JSL !MUSIC_ROUTINE
+
+  .done_music
     JSL $80834B  ; Enable NMI
 
     LDA #$0004 : STA $A7  ; Set optional next interrupt to Main gameplay
 
     JSL $80982A  ; Enable horizontal and vertical timer interrupts
-    JSR $A12B    ; Play 14h frames of music
 
     LDA #$E695 : STA $0A42 ; Unlock Samus
     LDA #$E725 : STA $0A44 ; Unlock Samus
     STZ $0E18    ; Set elevator to inactive
-
-    LDA #$0000 : STA $05F5  ; Enable sounds
-    JSL stop_all_sounds
 
     LDA #$E737 : STA $099C  ; Pointer to next frame's room transition code = $82:E737
     PLB
@@ -352,7 +357,7 @@ preset_room_setup_asm_fixes:
 
   .scrolling_sky
     ; If we got here through normal gameplay, allow scrolling sky
-    LDA $0998 : CMP #$0006 : BEQ .execute_setup_asm
+    LDA !GAMEMODE : CMP #$0006 : BEQ .execute_setup_asm
     CMP #$001F : BEQ .execute_setup_asm
     CMP #$0028 : BEQ .execute_setup_asm
 
@@ -373,14 +378,15 @@ preset_scroll_fixes:
     PHP
     %ai16()
     LDA !ram_custom_preset : CMP #$5AFE : BNE .category_presets
-    JMP .custom_presets
+    BRL .custom_presets
 
   .category_presets
-    %a8() : %i16()
-    LDA #$01 : LDX $079B         ; X = room ID
-    CPX #$C000 : BPL .ceres      ; organized by room ID so we only have to check half
+    %a8()
+    LDA #$01 : LDX !ROOM_ID      ; X = room ID
+    CPX #$C000 : BMI +           ; organized by room ID so we only have to check half
+    BRL .halfway
 
-    CPX #$A011 : BNE +           ; bottom-left of Etecoons Etank
++   CPX #$A011 : BNE +           ; bottom-left of Etecoons Etank
     STA $7ECD25 : STA $7ECD26
     BRA .done
 +   CPX #$AC83 : BNE +           ; left of Green Bubbles Missile Room (Norfair Reserve)
@@ -397,17 +403,48 @@ preset_scroll_fixes:
     LDA #$00 : STA $7ECD23 : STA $7ECD24
     BRA .done
 +   CPX #$B3A5 : BNE +           ; bottom of Pre-Pillars
-    LDY $0AFA : CPY #$0190       ; no scroll fix if Ypos < 400
+    LDY !SAMUS_Y : CPY #$0190    ; no scroll fix if Ypos < 400
     BMI .done
     STA $7ECD22 : STA $7ECD24
     LDA #$00 : STA $7ECD21
-    JMP .done
-+   CPX #$B4AD : BNE +        ; top of Worst Room in the Game
+    BRA .done
++   CPX #$B4AD : BNE +           ; top of Worst Room in the Game
     LDA #$02 : STA $7ECD20
++   CPX #$B585 : BNE .done       ; top of Kihunter Stairs
+    LDY !SAMUS_Y : CPY #$008C    ; no scroll fix if Ypos > 140
+    BPL .done
+    STA $7ECD20
+    LDA #$00 : STA $7ECD23
 
   .done
     PLP
     RTS
+
+  .halfway
+    CPX #$DF45 : BPL .ceres      ; Ceres rooms set BG1 offsets manually
+    CPX #$CAF6 : BNE +           ; bottom of WS Shaft
+    LDA #$02
+    STA $7ECD48 : STA $7ECD4E
+    BRA .done
++   CPX #$CBD5 : BNE +           ; top of Electric Death Room (WS E-Tank)
+    LDA #$02
+    STA $7ECD20
+    BRA .done
++   CPX #$CC6F : BNE +           ; right of Basement (Phantoon)
+    STA $7ECD24
+    BRA .done
++   CPX #$D1A3 : BNE +           ; bottom of Crab Shaft
+    STA $7ECD26
+    LDA #$02 : STA $7ECD24
+    BRA .done
++   CPX #$D48E : BNE +           ; Oasis (bottom of Toilet)
+    LDA #$02
+    STA $7ECD20 : STA $7ECD21
+    BRA .done
++   CPX #$D69A : BNE .done       ; Pants Room (door to Shaktool)
+    STA $7ECD21
+    LDA #$00 : STA $7ECD22
+    BRA .done
 
   .ceres
     LDA #$00 : STA $7E005F       ; Initialize mode 7
@@ -505,7 +542,7 @@ print pc, " custom presets end"
 ; Category Menus/Data
 ; -------------------
 
-; Preset data/menus can be anywhere in the rom, even in separate banks. 
+; Preset data/menus can be anywhere in the rom, even in separate banks
 
 org $FE8000
 print pc, " preset menu/data start"
