@@ -61,7 +61,7 @@ custom_preset_save:
     LDA $7ED820,X : PLX : STA !PRESET_SLOTS+$B0,X
     DEX : TXA : BIT #$0100 : BEQ .save_events_items_doors_loop
 
-    INX                          ; Restore X for sanity
+    INX                                     ; Restore X for sanity
     LDA $0917 : STA !PRESET_SLOTS+$1B0,X    ; Layer 2 X position
     LDA $0919 : STA !PRESET_SLOTS+$1B2,X    ; Layer 2 Y position
     LDA $0921 : STA !PRESET_SLOTS+$1B4,X    ; BG2 X offset
