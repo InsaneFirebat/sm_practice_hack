@@ -18,7 +18,6 @@ IFBMenu:
     dw #ifb_lockout
     dw #$FFFF
     dw #ifb_factory_reset
-    dw #ifb_credits
     dw #$0000
     %cm_header("CUSTOM ROMS ONLY")
     %cm_footer("MODIFIED BY INSANEFIREBAT")
@@ -45,9 +44,6 @@ ifb_lockout:
 
 ifb_factory_reset:
     %cm_submenu("Factory Reset", #FactoryResetConfirm)
-
-ifb_credits:
-    %cm_submenu("InfoHUD Credits", #CreditsMenu)
 
 ifb_dummy_on:
     %cm_toggle("Example Toggle", !sram_dummy_on, #$0001, #0)
@@ -619,65 +615,4 @@ action_factory_reset:
     ; Reboot
     ; I'd like to silence audio before doing this, but there isn't enough time
     JML $80841C
-}
-
-
-CreditsMenu:
-    dw #ab_text_orig_author
-    dw #$FFFF
-    dw #ab_text_total
-    dw #$FFFF
-    dw #$FFFF
-    dw #ab_text_v2_author
-    dw #$FFFF
-    dw #ab_text_pinkus
-    dw #$FFFF
-    dw #$FFFF
-    dw #ab_text_contributors
-    dw #$FFFF
-    dw #ab_text_unhchabo
-    dw #ab_text_idlechild
-    dw #ab_text_insanefirebat
-    dw #$FFFF
-    dw #$FFFF
-    dw #ab_text_website_header
-    dw #$FFFF
-    dw #ab_text_website
-    dw #$0000
-    %cm_header("     INFOHUD CREDITS")
-
-ab_text_orig_author:
-    %cm_jsr("     ORIGINAL AUTHOR      ", #action_text, #$0000)
-
-ab_text_total:
-    %cm_jsr("          Total           ", #action_text, #$0000)
-
-ab_text_v2_author:
-    %cm_jsr("    V2 REWRITE AUTHOR     ", #action_text, #$0000)
-
-ab_text_pinkus:
-    %cm_jsr("          Pinkus          ", #action_text, #$0000)
-
-ab_text_contributors:
-    %cm_jsr("       CONTRIBUTORS       ", #action_text, #$0000)
-
-ab_text_unhchabo:
-    %cm_jsr("         UNHchabo         ", #action_text, #$0000)
-
-ab_text_idlechild:
-    %cm_jsr("         idlechild        ", #action_text, #$0000)
-
-ab_text_insanefirebat:
-    %cm_jsr("       InsaneFirebat      ", #action_text, #$0000)
-
-ab_text_website_header:
-    %cm_jsr("         WEBSITE          ", #action_text, #$0000)
-
-ab_text_website:
-    %cm_jsr("  smpractice.speedga.me   ", #action_text, #$0000)
-
-action_text:
-{
-    ; do nothing
-    RTS
 }
