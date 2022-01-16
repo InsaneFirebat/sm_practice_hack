@@ -10,10 +10,10 @@
 !RAW_TILE_GRAPHICS ?= 1
 
 !VERSION_MAJOR = 2
-!VERSION_MINOR = 3
-!VERSION_BUILD = 4
-!VERSION_REV_1 = 1
-!VERSION_REV_2 = 2
+!VERSION_MINOR = 4
+!VERSION_BUILD = 0
+!VERSION_REV_1 = 0
+!VERSION_REV_2 = 0
 
 
 ; ---------
@@ -171,7 +171,8 @@
 !ram_cm_ctrl_last_input = !WRAM_MENU_START+$36
 !ram_cm_ctrl_assign = !WRAM_MENU_START+$38
 !ram_cm_ctrl_swap = !WRAM_MENU_START+$3A
-!ram_cm_slow_graphics = !WRAM_MENU_START+$3C
+!ram_cm_botwoon_rng = !WRAM_MENU_START+$8C
+!ram_cm_slow_graphics = !WRAM_MENU_START+$3E
 
 ; ^ FREE SPACE ^ up to +$7A
 
@@ -202,8 +203,6 @@
 !ram_cm_watch_enemy_side = !WRAM_MENU_START+$9C
 !ram_cm_watch_bank = !WRAM_MENU_START+$9E
 !ram_cm_watch_common_address = !WRAM_MENU_START+$A0
-
-!ram_cm_botwoon_rng = !WRAM_MENU_START+$80
 
 ; ^ FREE SPACE ^ up to +$CE
 
@@ -412,6 +411,8 @@
 !sram_healthalarm = $F02042
 !sram_room_layout = $F02044
 !sram_cutscenes = $F02046
+!sram_compressed_graphics = $F02048
+!sram_lag_counter_mode = $F0204A
 
 ; ^ FREE SPACE ^ up to $F03000
 
