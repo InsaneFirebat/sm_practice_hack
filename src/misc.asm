@@ -112,18 +112,6 @@ org $8FE0DF
 
 org $8FEA00 ; free space for door asm
 print pc, " misc bank8F start"
-;org $8FEA00 ; free space for door asm
-;org $8FF9F9 ; This org is safe but all of this is commented out because I don't even know where MB's room is -IFB
-MotherBrainHP:
-{
-;    LDA !sram_display_mode : BNE .done
-;    LDA #!IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
-;    LDA #!IH_STRAT_MBHP_INDEX : STA !sram_room_strat
-
-  .done
-;    RTS
-}
-
 
 layout_asm_ceres_ridley_room_state_check:
 {
@@ -158,14 +146,10 @@ hook_set_music_track:
 {
     STZ $07F6
     PHA
-    LDA !sram_music_toggle : CMP #$02 : BEQ .fast_no_music
-    CMP #$01 : BNE .no_music
-    LDA $07F3 : BEQ .no_music
+    LDA !sram_music_toggle : CMP #$01 : BNE .no_music
     PLA : STA $2140
     RTL
 
-  .fast_no_music
-    STZ $07F5
   .no_music
     PLA
     RTL
@@ -173,9 +157,8 @@ hook_set_music_track:
 
 hook_set_music_data:
 {
-    TAX
+    STA $07F3 : TAX
     LDA !sram_music_toggle : CMP #$0002 : BEQ .fast_no_music
-    TXA : STA $07F3
     JML $808F69
 
   .fast_no_music
@@ -296,9 +279,9 @@ spacetime_routine_long:
   .normal_load_loop
     LDA [$00],Y
     STA $7EC1C0,X
-    INY : INY
+    INY #2
   .normal_load_palette
-    INX : INX
+    INX #2
     CPY #$0020 : BMI .normal_load_loop
     RTL
 }
