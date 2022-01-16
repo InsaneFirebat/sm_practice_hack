@@ -281,10 +281,12 @@ PresetsMenu:
     dw #presets_load_custom_preset
 if !RAW_TILE_GRAPHICS
     dw #$FFFF
-    dw #presets_slow_graphics
+    dw #presets_compressed_graphics
+    dw #presets_compressed_palettes
 endif
     dw #$0000
     %cm_header("PRESET OPTIONS MENU")
+    %cm_footer("COMPRESSED OFF IS FASTER")
 
 presets_goto_select_preset_category:
     %cm_submenu("Select Preset Category", #SelectPresetCategoryMenu)
@@ -299,8 +301,14 @@ presets_load_custom_preset:
     %cm_jsr("Load Custom Preset", #action_load_custom_preset, #$0000)
 
 if !RAW_TILE_GRAPHICS
-presets_slow_graphics:
-    %cm_toggle("Slower Graphics Load", !ram_cm_slow_graphics, #$0001, #0)
+!COMPRESSED_GRAPHICS = #$0001
+presets_compressed_graphics:
+    %cm_toggle_bit("Compressed Graphics", !sram_compressed_graphics, !COMPRESSED_GRAPHICS, #0)
+
+!COMPRESSED_PALETTES = #$0002
+!COMPRESSED_PALETTES_8BIT = #$02
+presets_compressed_palettes:
+    %cm_toggle_bit("Compressed Palettes", !sram_compressed_graphics, !COMPRESSED_PALETTES, #0)
 endif
 
 SelectPresetCategoryMenu:
@@ -1377,6 +1385,7 @@ InfoHudMenu:
     dw #ih_superhud
     dw #$FFFF
     dw #ih_room_counter
+    dw #ih_lag_counter
     dw #ih_reset_seg_later
     dw #ih_lag
     dw #ih_top_HUD_mode
@@ -1955,6 +1964,15 @@ ih_room_counter:
     db #$28, "Frame Counters", #$FF
     db #$28, "   REALTIME", #$FF
     db #$28, "     INGAME", #$FF
+    db #$FF
+
+ih_lag_counter:
+    dw !ACTION_CHOICE
+    dl #!sram_lag_counter_mode
+    dw #$0000
+    db #$28, "Transition Lag", #$FF
+    db #$28, "       DOOR", #$FF
+    db #$28, "       FULL", #$FF
     db #$FF
 
 ih_status_icons:

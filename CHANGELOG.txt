@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.0]    Added an option to the door transition counter to include the full door time by idlechild
+* [2.4.0]    Added pre-decompressed palette data for faster preset loads with option to disable by idlechild
 * [2.3.4.12] Added an option to disable damage dealt by Samus (except Power Bombs and grapple)
 * [2.3.4.12] Added option to skip the G4 cutscene by idlechild
 * [2.3.4.12] More anti-softlock randomizer patches by idlechild

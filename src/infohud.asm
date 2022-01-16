@@ -293,6 +293,10 @@ ih_after_room_transition:
     PHY
 
     LDA !ram_transition_counter : STA !ram_last_door_lag_frames
+    LDA !sram_lag_counter_mode : BEQ .done_set_door_lag
+    LDA !ram_realtime_room : STA !ram_last_door_lag_frames
+
+  .done_set_door_lag
     LDA #$0000 : STA !ram_transition_flag
     STA $05A0
 

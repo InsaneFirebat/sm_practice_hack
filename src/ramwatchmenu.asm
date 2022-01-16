@@ -65,7 +65,8 @@ ramwatch_goto_common:
 
 RAMWatchCommonMenu:
     dw ramwatch_common_enemy
-    dw ramwatch_common_samus
+    dw ramwatch_common_samus1
+    dw ramwatch_common_samus2
     dw ramwatch_common_misc
     dw #$0000
     %cm_header("CHOOSE RAM CATEGORY")
@@ -73,8 +74,11 @@ RAMWatchCommonMenu:
 ramwatch_common_enemy:
     %cm_submenu("Enemy Addresses", #RAMWatchCommonEnemyMenu)
 
-ramwatch_common_samus:
-    %cm_submenu("Samus Addresses", #RAMWatchCommonSamusMenu1)
+ramwatch_common_samus1:
+    %cm_submenu("Samus Addresses 1", #RAMWatchCommonSamusMenu1)
+
+ramwatch_common_samus2:
+    %cm_submenu("Samus Addresses 2", #RAMWatchCommonSamusMenu2)
 
 ramwatch_common_misc:
     %cm_submenu("Misc Addresses", #RAMWatchCommonMiscMenu)

@@ -1,4 +1,4 @@
-!SRAM_VERSION = $F00C
+!SRAM_VERSION = $000D
 
 
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values
@@ -80,7 +80,9 @@ init_nonzero_wram:
     ; RAM $7E0000 fluctuates so it is not a good default value
     LDA #$0F8C : STA !ram_watch_left ; Enemy HP
     LDA #$09C2 : STA !ram_watch_right ; Samus HP
-    LDA #$0000 : STA !ram_watch_bank : STA !ram_cm_watch_enemy_side
+
+    LDA #$0000
+    STA !ram_watch_bank : STA !ram_cm_watch_enemy_side
     STA !ram_watch_left_index : STA !ram_watch_right_index
     STA !ram_cm_watch_left_index_hi : STA !ram_cm_watch_left_index_lo
     STA !ram_cm_watch_right_index_hi : STA !ram_cm_watch_right_index_lo
@@ -88,7 +90,10 @@ init_nonzero_wram:
 
     LDA #$FEED : STA !ram_seed_X
     LDA #$5EED : STA !ram_seed_Y
-    LDA #$0001 : STA !ram_nodamage
+
+    LDA #$0001
+    STA !ram_nodamage : STA !ram_soundtest_lib1
+    STA !ram_soundtest_lib2 : STA !ram_soundtest_lib3
 
     ; Check if any less common controller shortcuts are configured
     JML GameModeExtras
@@ -144,7 +149,13 @@ init_sram:
     LDA #$0000 : STA !sram_custom_preset_slot
     LDA #$0000 : STA !sram_room_strat
     LDA #$0000 : STA !sram_sprite_prio_flag
+    LDA #$0000 : STA !sram_status_icons
+    LDA #$0000 : STA !sram_suit_properties
     LDA #$0001 : STA !sram_healthalarm
+    LDA #$0000 : STA !sram_room_layout
+    LDA #$0003 : STA !sram_cutscenes
+    LDA #$0000 : STA !sram_compressed_graphics
+    LDA #$0000 : STA !sram_lag_counter_mode
 
     LDA #$0000 : STA !sram_countdamage
     LDA #$0001 : STA !sram_menu_background
@@ -154,10 +165,6 @@ init_sram:
     LDA #$0000 : STA !sram_superhud_bottom
     LDA #$0000 : STA !sram_superhud_middle
     LDA #$0000 : STA !sram_superhud_top
-    LDA #$0000 : STA !sram_status_icons
-    LDA #$0000 : STA !sram_suit_properties
-    LDA #$0000 : STA !sram_room_layout
-    LDA #$0003 : STA !sram_cutscenes
 
     LDA #$0001 : STA !sram_custompalette_profile ; 1 - Twitch
     LDA #$7277 : STA !sram_custompalette_menuborder
