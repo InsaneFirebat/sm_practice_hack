@@ -1410,6 +1410,7 @@ DisplayModeMenu:
     dw ihmode_iframecounter
     dw ihmode_spikesuit
     dw ihmode_lagcounter
+    dw ihmode_cpuusage
     dw ihmode_xpos
     dw ihmode_ypos
     dw ihmode_hspeed
@@ -1462,44 +1463,46 @@ ihmode_iframecounter:
 ihmode_spikesuit:
     %cm_jsr("Spikesuit Trainer", #action_select_infohud_mode, #$0009)
 
-!IH_MODE_LAGCOUNTER_INDEX = #$000A
 ihmode_lagcounter:
     %cm_jsr("CPU Usage", #action_select_infohud_mode, #$000A)
 
+ihmode_cpuusage:
+    %cm_jsr("Lag Counter", #action_select_infohud_mode, #$000B)
+
 ihmode_xpos:
-    %cm_jsr("X Position", #action_select_infohud_mode, #$000B)
+    %cm_jsr("X Position", #action_select_infohud_mode, #$000C)
 
 ihmode_ypos:
-    %cm_jsr("Y Position", #action_select_infohud_mode, #$000C)
+    %cm_jsr("Y Position", #action_select_infohud_mode, #$000D)
 
 ihmode_hspeed:
-    %cm_jsr("Horizontal Speed", #action_select_infohud_mode, #$000D)
+    %cm_jsr("Horizontal Speed", #action_select_infohud_mode, #$000E)
 
-!IH_MODE_VSPEED_INDEX = #$000E
+!IH_MODE_VSPEED_INDEX = #$000F
 ihmode_vspeed:
-    %cm_jsr("Vertical Speed", #action_select_infohud_mode, #$000E)
+    %cm_jsr("Vertical Speed", #action_select_infohud_mode, #$000F)
 
 ihmode_quickdrop:
-    %cm_jsr("Quickdrop Trainer", #action_select_infohud_mode, #$000F)
+    %cm_jsr("Quickdrop Trainer", #action_select_infohud_mode, #$0010)
 
 ihmode_walljump:
-    %cm_jsr("Walljump Trainer", #action_select_infohud_mode, #$0010)
+    %cm_jsr("Walljump Trainer", #action_select_infohud_mode, #$0011)
 
 ihmode_shottimer:
-    %cm_jsr("Shot Timer", #action_select_infohud_mode, #$0011)
+    %cm_jsr("Shot Timer", #action_select_infohud_mode, #$0012)
 
 ihmode_countdamage:
-    %cm_jsr("Boss Damage Counter", #action_select_infohud_mode, #$0012)
+    %cm_jsr("Boss Damage Counter", #action_select_infohud_mode, #$0013)
 
 ihmode_ridleygrab:
-    %cm_jsr("Ridley Death Grab Attempts", #action_select_infohud_mode, #$0013)
+    %cm_jsr("Ridley Death Grab Attempts", #action_select_infohud_mode, #$0014)
 
-!IH_MODE_RAMWATCH_INDEX = #$0014
+!IH_MODE_RAMWATCH_INDEX = #$0015
 ihmode_ramwatch:
-    %cm_jsr("Custom RAM Watch", #action_select_infohud_mode, #$0014)
+    %cm_jsr("Custom RAM Watch", #action_select_infohud_mode, #$0015)
 
-ihmode_dboost:
-    %cm_jsr("WIP - Damage Boost Trainer", #action_select_infohud_mode, #$0015)
+;ihmode_dboost:
+;    %cm_jsr("WIP - Damage Boost Trainer", #action_select_infohud_mode, #$0016)
 
 ;ihmode_GOTO_PAGE_ONE:
 ;    %cm_submenu("GOTO PAGE ONE", #DisplayModeMenu)
@@ -1531,6 +1534,7 @@ ih_display_mode:
     db #$28, " SHINE TUNE", #$FF
     db #$28, "   I FRAMES", #$FF
     db #$28, "  SPIKESUIT", #$FF
+    db #$28, "LAG COUNTER", #$FF
     db #$28, "  CPU USAGE", #$FF
     db #$28, " X POSITION", #$FF
     db #$28, " Y POSITION", #$FF
@@ -1806,6 +1810,7 @@ ih_superhud_middle_selector:
     db #$28, "   X FACTOR", #$FF
     db #$28, " SHINESPARK", #$FF
     db #$28, "   I FRAMES", #$FF
+    db #$28, "LAG COUNTER", #$FF
     db #$28, " CPU USAGE%", #$FF
     db #$28, " SHOT TIMER", #$FF
     db #$28, "     CHARGE", #$FF
@@ -1823,6 +1828,7 @@ SuperHUDMiddleMenu:
     dw ih_superhud_middle_shinetimer
     dw ih_superhud_middle_iframecounter
     dw ih_superhud_middle_lagcounter
+    dw ih_superhud_middle_cpuusage
     dw ih_superhud_middle_shottimer
     dw ih_superhud_middle_chargetimer
     dw ih_superhud_middle_dashcounter
@@ -1844,22 +1850,25 @@ ih_superhud_middle_iframecounter:
     %cm_jsr("I-Frame Counter", #action_select_superhud_middle, #$0003)
 
 ih_superhud_middle_lagcounter:
-    %cm_jsr("CPU Usage", #action_select_superhud_middle, #$0004)
+    %cm_jsr("Lag Counter", #action_select_superhud_middle, #$0004)
+
+ih_superhud_middle_cpuusage:
+    %cm_jsr("CPU Usage", #action_select_superhud_middle, #$0005)
 
 ih_superhud_middle_shottimer:
-    %cm_jsr("Shot Timer", #action_select_superhud_middle, #$0005)
+    %cm_jsr("Shot Timer", #action_select_superhud_middle, #$0006)
 
 ih_superhud_middle_chargetimer:
-    %cm_jsr("Charge Timer", #action_select_superhud_middle, #$0006)
+    %cm_jsr("Charge Timer", #action_select_superhud_middle, #$0007)
 
 ih_superhud_middle_dashcounter:
-    %cm_jsr("Dash Counter", #action_select_superhud_middle, #$0007)
+    %cm_jsr("Dash Counter", #action_select_superhud_middle, #$0008)
 
 ih_superhud_middle_cooldowncounter:
-    %cm_jsr("Cooldown Timer", #action_select_superhud_middle, #$0008)
+    %cm_jsr("Cooldown Timer", #action_select_superhud_middle, #$0009)
 
 ih_superhud_middle_ridleygrab:
-    %cm_jsr("Ridley Death Grab Attempts", #action_select_superhud_middle, #$0009)
+    %cm_jsr("Ridley Death Grab Attempts", #action_select_superhud_middle, #$000A)
     
 action_select_superhud_middle:
 {
@@ -1878,6 +1887,7 @@ ih_superhud_top_selector:
     db #$28, "   X FACTOR", #$FF
     db #$28, " SHINESPARK", #$FF
     db #$28, "   I FRAMES", #$FF
+    db #$28, "LAG COUNTER", #$FF
     db #$28, " CPU USAGE%", #$FF
     db #$28, " SHOT TIMER", #$FF
     db #$28, "     CHARGE", #$FF
@@ -1895,6 +1905,7 @@ SuperHUDTopMenu:
     dw ih_superhud_top_shinetimer
     dw ih_superhud_top_iframecounter
     dw ih_superhud_top_lagcounter
+    dw ih_superhud_top_cpuusage
     dw ih_superhud_top_shottimer
     dw ih_superhud_top_chargetimer
     dw ih_superhud_top_dashcounter
@@ -1916,22 +1927,25 @@ ih_superhud_top_iframecounter:
     %cm_jsr("I-Frame Counter", #action_select_superhud_top, #$0003)
 
 ih_superhud_top_lagcounter:
-    %cm_jsr("CPU Usage", #action_select_superhud_top, #$0004)
+    %cm_jsr("Lag Counter", #action_select_superhud_top, #$0004)
+
+ih_superhud_top_cpuusage:
+    %cm_jsr("CPU Usage", #action_select_superhud_top, #$0005)
 
 ih_superhud_top_shottimer:
-    %cm_jsr("Shot Timer", #action_select_superhud_top, #$0005)
+    %cm_jsr("Shot Timer", #action_select_superhud_top, #$0006)
 
 ih_superhud_top_chargetimer:
-    %cm_jsr("Charge Timer", #action_select_superhud_top, #$0006)
+    %cm_jsr("Charge Timer", #action_select_superhud_top, #$0007)
 
 ih_superhud_top_dashcounter:
-    %cm_jsr("Dash Counter", #action_select_superhud_top, #$0007)
+    %cm_jsr("Dash Counter", #action_select_superhud_top, #$0008)
 
 ih_superhud_top_cooldowncounter:
-    %cm_jsr("Cooldown Timer", #action_select_superhud_top, #$0008)
+    %cm_jsr("Cooldown Timer", #action_select_superhud_top, #$0009)
 
 ih_superhud_top_ridleygrab:
-    %cm_jsr("Ridley Death Grab Attempts", #action_select_superhud_top, #$0009)
+    %cm_jsr("Ridley Death Grab Attempts", #action_select_superhud_top, #$000A)
     
 action_select_superhud_top:
 {
