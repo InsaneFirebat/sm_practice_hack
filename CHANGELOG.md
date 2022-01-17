@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.0.1]  Added a submenu for Phantoon RNG with more precise controls by NobodyNada
+* [2.4.0.1]  Added an option to skip Phantoon's intro cutscene by NobodyNada
 * [2.4.0.1]  Added a Lag Counter InfoHUD mode to count lag frames in the HUD during gameplay
 * [2.4.0]    Added an option to the door transition counter to include the full door time by idlechild
 * [2.4.0]    Added pre-decompressed palette data for faster preset loads with option to disable by idlechild

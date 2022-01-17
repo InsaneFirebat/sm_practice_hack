@@ -2172,6 +2172,8 @@ CutscenesMenu:
     dw #cutscenes_skip_intro
     dw #cutscenes_skip_ceres_arrival
     dw #$FFFF
+    dw #phan_skip_intro
+    dw #$FFFF
     dw #cutscenes_g4_skip
     dw #cutscenes_fast_mb
     dw #$0000
@@ -2496,12 +2498,18 @@ action_set_common_controls:
 RngMenu:
 if !FEATURE_SD2SNES
     dw #rng_rerandomize
+    dw #$FFFF
 endif
+if !NEW_PHANTOON_RNG
+    dw #rng_goto_phanmenu
+else
     dw #rng_phan_first_phase
     dw #rng_phan_second_phase
-    dw #rng_phan_eyeclose
-    dw #rng_phan_flamepattern
-    dw #rng_next_flamepattern
+    dw #phan_eyeclose
+    dw #phan_flamepattern
+    dw #phan_next_flamepattern
+    dw #phan_skip_intro
+endif
     dw #$FFFF
     dw #rng_botwoon_rng
     dw #$FFFF
@@ -2517,6 +2525,48 @@ endif
 rng_rerandomize:
     %cm_toggle("Rerandomize", !sram_rerandomize, #$0001, #0)
 
+if !NEW_PHANTOON_RNG
+; new Phantoon RNG starts here
+rng_goto_phanmenu:
+    %cm_submenu("Phantoon RNG Controls", #PhantoonMenu)
+
+PhantoonMenu:
+    dw #phan_fast_left
+    dw #phan_mid_left
+    dw #phan_slow_left
+    dw #phan_fast_right
+    dw #phan_mid_right
+    dw #phan_slow_right
+    dw #$FFFF
+    dw #phan_eyeclose
+    dw #$FFFF
+    dw #phan_flamepattern
+    dw #phan_next_flamepattern
+    dw #$FFFF
+    dw #phan_skip_intro
+    dw #$0000
+    %cm_header("PHANTOON RNG CONTROL")
+
+phan_fast_left:
+    %cm_toggle_bit("Fast Left", !ram_phantoon_rng_1, #$0020, 0)
+
+phan_mid_left:
+    %cm_toggle_bit("Mid Left", !ram_phantoon_rng_1, #$0008, 0)
+
+phan_slow_left:
+    %cm_toggle_bit("Slow Left", !ram_phantoon_rng_1, #$0002, 0)
+
+phan_fast_right:
+    %cm_toggle_bit("Fast Right", !ram_phantoon_rng_1, #$0010, 0)
+
+phan_mid_right:
+    %cm_toggle_bit("Mid Right", !ram_phantoon_rng_1, #$0004, 0)
+
+phan_slow_right:
+    %cm_toggle_bit("Slow Right", !ram_phantoon_rng_1, #$0001, 0)
+; new Phantoon RNG ends here
+else
+; old Phantoon RNG starts here
 rng_phan_first_phase:
     dw !ACTION_CHOICE
     dl #!ram_phantoon_rng_1
@@ -2544,8 +2594,10 @@ rng_phan_second_phase:
     db #$28, "  MID RIGHT", #$FF
     db #$28, " SLOW RIGHT", #$FF
     db #$FF
+; old Phantoon RNG ends here
+endif
 
-rng_phan_eyeclose:
+phan_eyeclose:
     dw !ACTION_CHOICE
     dl #!ram_phantoon_rng_3
     dw #$0000
@@ -2556,29 +2608,32 @@ rng_phan_eyeclose:
     db #$28, "       FAST", #$FF
     db #$FF
 
-rng_phan_flamepattern:
+phan_flamepattern:
     dw !ACTION_CHOICE
     dl #!ram_phantoon_rng_4
     dw #$0000
-    db #$28, "Phan Flame Patt", #$FF
-    db #$28, "ern  RANDOM", #$FF
-    db #$28, "ern   22222", #$FF
-    db #$28, "ern     111", #$FF
-    db #$28, "ern 3333333", #$FF
-    db #$28, "ern 1424212", #$FF
+    db #$28, "Phan Flames", #$FF
+    db #$28, "     RANDOM", #$FF
+    db #$28, "      22222", #$FF
+    db #$28, "        111", #$FF
+    db #$28, "    3333333", #$FF
+    db #$28, "    1424212", #$FF
     db #$FF
 
-rng_next_flamepattern:
+phan_next_flamepattern:
     dw !ACTION_CHOICE
     dl #!ram_phantoon_rng_5
     dw #$0000
-    db #$28, "Next Flame Patt", #$FF
-    db #$28, "ern  RANDOM", #$FF
-    db #$28, "ern   22222", #$FF
-    db #$28, "ern     111", #$FF
-    db #$28, "ern 3333333", #$FF
-    db #$28, "ern 1424212", #$FF
+    db #$28, "Next Flames", #$FF
+    db #$28, "     RANDOM", #$FF
+    db #$28, "      22222", #$FF
+    db #$28, "        111", #$FF
+    db #$28, "    3333333", #$FF
+    db #$28, "    1424212", #$FF
     db #$FF
+
+phan_skip_intro:
+    %cm_toggle_bit("Skip Phantoon Intro", !ram_phantoon_intro, #$0001, 0)
 
 rng_botwoon_rng:
     dw !ACTION_CHOICE

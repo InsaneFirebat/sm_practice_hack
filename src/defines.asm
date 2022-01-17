@@ -8,6 +8,7 @@
 !ORIGINAL_MESSAGE_TEXT ?= 0
 !PRESERVE_WRAM_DURING_SPACETIME ?= 1
 !RAW_TILE_GRAPHICS ?= 1
+!NEW_PHANTOON_RNG ?= 0
 
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 4
@@ -451,6 +452,8 @@
 !ram_watch_right_index = $F0210A
 
 !ram_cm_rng = $F0210C
+
+!ram_phantoon_intro = $F0210E
 
 ; FREE SPACE ^
 
