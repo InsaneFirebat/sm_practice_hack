@@ -16,6 +16,7 @@
     dw status_iframecounter
     dw status_spikesuit
     dw status_lagcounter
+    dw status_cpuusage
     dw status_xpos
     dw status_ypos
     dw status_hspeed
@@ -584,14 +585,17 @@ status_spikesuit:
 
 status_lagcounter:
 {
-    LDA $05A0 : BEQ .cpu_usage ; unused RAM
+    LDA $05A0 : BEQ .done ; unused RAM
     CLC : ADC !ram_lag_counter : STA !ram_lag_counter : STZ $05A0
-    CMP !ram_lag_counter_HUD : BEQ .cpu_usage : STA !ram_lag_counter_HUD
-    CMP #$19C8 : BPL + ; max 3 digit value
-    LDX #$0012 : JSR Draw3 : BRA .cpu_usage
-+   LDX #$0014 : JSR Draw4
+    CMP !ram_lag_counter_HUD : BEQ .done : STA !ram_lag_counter_HUD
+    LDX #$0082 : JSR Draw3
 
-  .cpu_usage
+  .done
+    RTS
+}
+
+status_cpuusage:
+{
     LDA !ram_vcounter_data : AND #$00FF
     %a8() : STA $211B : XBA : STA $211B : LDA #$64 : STA $211C : %a16()
     LDA $2134 : STA $4204
@@ -599,7 +603,6 @@ status_lagcounter:
     PHA : PLA : PHA : PLA : LDA $4214
     LDX #$0088 : JSR Draw3
     LDA !IH_PERCENT : STA $7EC68E
-
     RTS
 }
 

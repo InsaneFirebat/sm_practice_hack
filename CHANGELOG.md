@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.0.1]  Added a Lag Counter InfoHUD mode to count lag frames in the HUD during gameplay
 * [2.4.0]    Added an option to the door transition counter to include the full door time by idlechild
 * [2.4.0]    Added pre-decompressed palette data for faster preset loads with option to disable by idlechild
 * [2.3.4.12] Added an option to disable damage dealt by Samus (except Power Bombs and grapple)

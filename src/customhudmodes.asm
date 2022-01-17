@@ -154,7 +154,8 @@ superhud_top_table:
     dw topHUD_xfactor
     dw topHUD_shinetimer
     dw topHUD_iframecounter
-    dw topHUD_lagcounter
+    dw status_lagcounter
+    dw topHUD_cpuusage
     dw topHUD_shottimer
     dw topHUD_chargetimer
     dw topHUD_dashcounter
@@ -166,7 +167,8 @@ superhud_middle_table:
     dw middleHUD_xfactor
     dw middleHUD_shinetimer
     dw middleHUD_iframecounter
-    dw middleHUD_lagcounter
+    dw status_lagcounter
+    dw middleHUD_cpuusage
     dw middleHUD_shottimer
     dw middleHUD_chargetimer
     dw middleHUD_dashcounter
@@ -320,7 +322,7 @@ middleHUD_iframecounter:
     RTS
 }
 
-topHUD_lagcounter:
+topHUD_cpuusage:
 {
     LDA !ram_vcounter_data : AND #$00FF
     %a8() : STA $211B : XBA : STA $211B : LDA #$64 : STA $211C : %a16()
@@ -333,7 +335,7 @@ topHUD_lagcounter:
     RTS
 }
 
-middleHUD_lagcounter:
+middleHUD_cpuusage:
 {
     LDA !ram_vcounter_data : AND #$00FF
     %a8() : STA $211B : XBA : STA $211B : LDA #$64 : STA $211C : %a16()

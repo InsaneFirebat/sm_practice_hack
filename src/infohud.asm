@@ -298,7 +298,7 @@ ih_after_room_transition:
 
   .done_set_door_lag
     LDA #$0000 : STA !ram_transition_flag
-    STA $05A0
+    STA $05A0 : STA !ram_lag_counter
 
     ; Check if MBHP needs to be disabled
     LDA !sram_display_mode : CMP !IH_MODE_ROOMSTRAT_INDEX : BNE +
@@ -633,8 +633,7 @@ ih_update_hud_code:
     ; 3 tiles between input display and missile icon
     .topLeftHUD
     {
-        ; skip item% if display mode = lagcounter or vspeed
-        LDA !sram_display_mode : CMP !IH_MODE_LAGCOUNTER_INDEX : BEQ .skipToLag
+        ; skip item% if display mode = vspeed
         LDA !sram_display_mode : CMP !IH_MODE_VSPEED_INDEX : BEQ .skipToLag
 
         LDA !sram_top_display_mode : BNE .skipToLag
