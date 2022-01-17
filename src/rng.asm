@@ -1,5 +1,28 @@
 ; Phantoon hijacks
 {
+if !NEW_PHANTOON_RNG
+; new Phantoon RNG starts here
+print "NEW_PHANTOON_RNG enabled!"
+    ; 1st pattern
+if !FEATURE_PAL
+    org $A7D5DA
+else
+    org $A7D5A6
+endif
+    JSL hook_phantoon_1st_rng
+    REP $12 : NOP
+
+    ; 2nd pattern
+if !FEATURE_PAL
+    org $A7D0B0
+else
+    org $A7D07C
+endif
+    JSL hook_phantoon_2nd_rng
+    REP $0B : NOP
+; new Phantoon RNG ends here
+else
+; old Phantoon RNG starts here
     ; 1st pattern
 if !FEATURE_PAL
 org $A7D5E9
@@ -44,21 +67,33 @@ org $A7D07C ; hijack, RNG call for second pattern
 endif
     ; $A7:D07C 22 11 81 80 JSL $808111[$80:8111]
     JSL hook_phantoon_2nd_pat
+; old Phantoon RNG ends here
+endif
+
 
 if !FEATURE_PAL
-org $A7D098 ; Phantoon eye close timer
+    org $A7D098 ; Phantoon eye close timer
 else
-org $A7D064 ; Phantoon eye close timer
+    org $A7D064 ; Phantoon eye close timer
 endif
     JSL hook_phantoon_eyeclose
 
 if !FEATURE_PAL
-org $A7D00A ; Phantoon flame pattern
+    org $A7D00A ; Phantoon flame pattern
 else
-org $A7CFD6 ; Phantoon flame pattern
+    org $A7CFD6 ; Phantoon flame pattern
 endif
     JSL hook_phantoon_flame_pattern
 }
+
+
+if !FEATURE_PAL
+    org $A7D4DD ; Intro
+else
+    org $A7D4A9 ; Intro
+endif
+    JSL hook_phantoon_init
+    NOP : BNE $3D
 
 
 ; Botwoon hijacks
@@ -212,6 +247,180 @@ hook_beetom_set_rng:
     RTL
 }
 
+hook_phantoon_init:
+; Patch to the following code (which waits a few frames
+; before spawning flames in a circle)
+; $A7:D4A9 DE B0 0F    DEC $0FB0,x[$7E:0FB0]    ; decrement timer
+; $A7:D4AC F0 02       BEQ $02    [$D4B0]       ; if zero, proceed
+; $A7:D4AE 10 3D       BPL $3D    [$D4ED]       ; else, return
+{
+    ; skip cutscene flag
+    LDA !ram_phantoon_intro : BNE .skip_cutscene
+    DEC $0FB0,X
+    RTL
+
+.skip_cutscene:
+    ; get rid of the return address
+    PLA ; pop 16 bytes
+    PHP ; push 8
+    PLA ; pop 16
+
+    ; start boss music & fade-in animation
+if !FEATURE_PAL
+    JML $A7D543
+else
+    JML $A7D50F
+endif
+}
+
+
+if !NEW_PHANTOON_RNG
+; new Phantoon RNG starts here
+
+; Table of Phantoon pattern durations & directions
+; bit 0 is direction, remaining bits are duration
+; Note that later entries in the table will tend to occur slightly more often.
+phan_pattern_table:
+    dw $003C<<1|1 ; fast left
+    dw $003C<<1|0 ; fast right
+    dw $0168<<1|1 ;  mid left
+    dw $0168<<1|0 ;  mid right
+    dw $02D0<<1|1 ; slow left
+    dw $02D0<<1|0 ; slow right
+
+
+; Patch to the following code, to determine Phantoon's first-round direction and pattern
+; $A7:D5A6 AD B6 05    LDA $05B6  [$7E:05B6]    ; Frame counter
+; $A7:D5A9 4A          LSR A
+; $A7:D5AA 29 03 00    AND #$0003
+; $A7:D5AD 0A          ASL A
+; $A7:D5AE A8          TAY
+; $A7:D5AF B9 53 CD    LDA $CD53,y[$A7:CD59]    ; Number of frames to figure-8
+; $A7:D5B2 8D E8 0F    STA $0FE8  [$7E:0FE8]
+; $A7:D5B5 22 11 81 80 JSL $808111[$80:8111]    ; RNG
+; $A7:D5B9 89 01 00    BIT #$0001               ; Sets Z for left pattern, !Z for right
+hook_phantoon_1st_rng:
+{
+    ; If set to all-on or all-off, don't mess with RNG
+    LDA !ram_phantoon_rng_1 : BEQ .no_manip
+    CMP #$003F : BNE choose_phantoon_pattern
+
+  .no_manip
+    LDA $05B6 : LSR
+    AND #$0003 : ASL : TAY
+if !FEATURE_PAL
+    LDA $CD87,Y
+else
+    LDA $CD53,Y
+endif
+    STA $0FE8
+    JSL $808111
+    BIT #$0001
+    RTL
+}
+
+; Patch to the following code, to determine Phantoon's second-round direction and pattern
+; Also affects patterns during Phantoon's invisible phase
+; $A7:D07C 22 11 81 80 JSL $808111[$80:8111]
+; $A7:D080 29 07 00    AND #$0007
+; $A7:D083 0A          ASL A
+; $A7:D084 A8          TAY
+; $A7:D085 B9 53 CD    LDA $CD53,y[$A7:CD5B]
+; $A7:D088 8D E8 0F    STA $0FE8  [$7E:0FE8]
+; $A7:D08B AD B6 05    LDA $05B6  [$7E:05B6]
+; $A7:D08E 89 01 00    BIT #$0001
+hook_phantoon_2nd_rng:
+{
+    ; If set to all-on or all-off, don't mess with RNG
+    LDA !ram_phantoon_rng_1 : BEQ .no_manip
+    CMP #$003F : BNE choose_phantoon_pattern
+
+  .no_manip
+    JSL $808111
+    AND #$0007 : ASL : TAY
+if !FEATURE_PAL
+    LDA $CD87,Y
+else
+    LDA $CD53,Y
+endif
+    STA $0FE8
+    LDA $05B6 : BIT #$0001
+    RTL
+}
+
+choose_phantoon_pattern:
+{
+    ; get random number in range 0-7
+    JSL $808111
+    AND #$0007
+
+    PHX : TAX
+    ; play a game of eeny-meeny-miny-moe with the enabled patterns
+    ; X = number of enabled patterns to find before stopping
+    ; Y = index in phan_pattern_table of pattern currently being checked
+    ; A = bitmask of enabled patterns
+  .reload
+    LDY #$0006  ; number of patterns (decremented immediately to index of last pattern)
+    LDA !ram_phantoon_rng_1
+
+  .loop
+    DEY
+    LSR
+    BCC .skip
+
+    ; Pattern index Y is enabled
+    DEX : BMI .done ; is this the last one?
+    BRA .loop   ; no, keep looping
+
+  .skip
+    ; Pattern Y is not enabled, try the next pattern
+    BEQ .reload ; if we've tried all the patterns, start over
+    BRA .loop
+
+  .done
+    ; We've found the pattern to use.
+    TYA : ASL : TAX
+    LDA.l phan_pattern_table,X
+    PLX
+
+    ; Check if Phantoon is in the round 2 AI state
+    LDY $0FB2
+if !FEATURE_PAL
+    CPY #$D716
+else
+    CPY #$D6E2
+endif
+    BEQ .round2
+
+    ; If not, save the pattern timer and return the direction in the zero flag
+    ; shift direction into carry
+    LSR : STA $0FE8
+
+    ; shift carry into A (and zero flag)
+    LDA #$0000 : ROL
+    RTL
+
+  .round2
+    ; Save the pattern timer, check the direction, and
+    ; set Phantoon's starting point and pattern index.
+    LSR : STA $0FE8 : BCS .left
+
+    ; Right pattern
+    LDA #$0088 : LDY #$00D0
+    BRA .round2done
+
+  .left
+    LDA #$018F : LDY #$0030
+
+  .round2done
+    STA $0FA8  ; Index into figure-8 movement table
+    STY $0F7A  ; X position
+    LDA #$0060 : STA $0F7E  ; Y position
+    RTL
+}
+; new Phantoon RNG ends here
+else
+; old Phantoon RNG starts here
 hook_phantoon_1st_dir_rng:
 {
     JSL $808111 ; Trying to preserve the number of RNG calls being done in the frame
@@ -278,6 +487,9 @@ hook_phantoon_2nd_pat:
     LDA $05E5
     RTL
 }
+; old Phantoon RNG ends here
+endif
+
 
 hook_phantoon_eyeclose:
 {
@@ -315,6 +527,7 @@ phantoon_pats:
     db #$FF
     db #$01, #$02, #$03
     db #$01, #$02, #$03
+
 
 hook_botwoon_rng:
 {

@@ -80,6 +80,11 @@ init_nonzero_wram:
     ; RAM $7E0000 fluctuates so it is not a good default value
     LDA #$0F8C : STA !ram_watch_left ; Enemy HP
     LDA #$09C2 : STA !ram_watch_right ; Samus HP
+    LDA #$FEED : STA !ram_seed_X
+    LDA #$5EED : STA !ram_seed_Y
+if !NEW_PHANTOON_RNG
+    LDA #$003F : STA !ram_phantoon_rng_1    ; Enable all Phantoon patterns
+endif
 
     LDA #$0000
     STA !ram_watch_bank : STA !ram_cm_watch_enemy_side
@@ -87,9 +92,6 @@ init_nonzero_wram:
     STA !ram_cm_watch_left_index_hi : STA !ram_cm_watch_left_index_lo
     STA !ram_cm_watch_right_index_hi : STA !ram_cm_watch_right_index_lo
     STA !ram_cm_watch_enemy_property : STA !ram_cm_watch_enemy_index
-
-    LDA #$FEED : STA !ram_seed_X
-    LDA #$5EED : STA !ram_seed_Y
 
     LDA #$0001
     STA !ram_nodamage : STA !ram_soundtest_lib1
