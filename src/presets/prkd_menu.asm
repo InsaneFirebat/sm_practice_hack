@@ -32,7 +32,7 @@ presets_goto_prkd_lower_norfair:
     %cm_submenu("Lower Norfair", #presets_submenu_prkd_lower_norfair)
 
 presets_goto_prkd_lower_norfair_nox:
-    %cm_submenu("Lower Norfair No-X", #presets_submenu_prkd_lower_norfair_nox)
+    %cm_submenu("Lower Norfair No-X Ridley", #presets_submenu_prkd_lower_norfair_nox)
 
 presets_goto_prkd_kraid:
     %cm_submenu("Kraid", #presets_submenu_prkd_kraid)
@@ -189,7 +189,7 @@ presets_submenu_prkd_lower_norfair_nox:
     dw #presets_prkd_lower_norfair_frog_speedway
     dw #presets_prkd_lower_norfair_business_center_final
     dw #$0000
-    %cm_header("LOWER NORFAIR NO-X")
+    %cm_header("LOWER NORFAIR NO-X RIDLEY")
 
 presets_submenu_prkd_kraid:
     dw #presets_prkd_kraid_entering_kraids_lair

@@ -283,10 +283,13 @@ if !RAW_TILE_GRAPHICS
     dw #$FFFF
     dw #presets_compressed_graphics
     dw #presets_compressed_palettes
+    dw #presets_compressed_tables
 endif
     dw #$0000
     %cm_header("PRESET OPTIONS MENU")
+if !RAW_TILE_GRAPHICS
     %cm_footer("COMPRESSED OFF IS FASTER")
+endif
 
 presets_goto_select_preset_category:
     %cm_submenu("Select Preset Category", #SelectPresetCategoryMenu)
@@ -309,6 +312,10 @@ presets_compressed_graphics:
 !COMPRESSED_PALETTES_8BIT = #$02
 presets_compressed_palettes:
     %cm_toggle_bit("Compressed Palettes", !sram_compressed_graphics, !COMPRESSED_PALETTES, #0)
+
+!COMPRESSED_TABLES = #$0004
+presets_compressed_tables:
+    %cm_toggle_bit("Compressed Tables", !sram_compressed_graphics, !COMPRESSED_TABLES, #0)
 endif
 
 SelectPresetCategoryMenu:

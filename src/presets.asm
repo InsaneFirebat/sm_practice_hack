@@ -1,5 +1,5 @@
 org $82FA00
-print pc, " presets start"
+print pc, " presets  bank82 start"
 
 preset_load:
 {
@@ -168,29 +168,12 @@ preset_load_preset:
     LDA #$5AFE : STA $0917 ; Load garbage into Layer 2 X position
 
     ; check if custom preset is being loaded
-    LDA !ram_custom_preset : BEQ .normal_preset
+    LDA !ram_custom_preset : BEQ .category_preset
     JSL custom_preset_load
     BRA .done
 
-  .normal_preset
-    LDA !sram_preset_category : ASL : TAX
-    LDA.l preset_banks,X : %a8() : PHA : PLB : %a16()
-
-    LDA !ram_load_preset : STA !sram_last_preset : STA $C1
-    LDA #$0000 : STA !ram_load_preset
-
-    LDX #$0000
-  .loop_path
-    LDA $C1 : STA $7F0002,X
-    INX #2
-    LDA ($C1) : STA $C1 : BNE .loop_path
-
-  ; then traverse $7FF000 from the first preset until the last one, and apply them
-  .loop_presets
-    DEX #2 : BMI .done
-
-    JSR preset_to_memory
-    BRA .loop_presets
+  .category_preset
+    JSR category_preset_load
 
   .done
     LDA #$0000
@@ -200,57 +183,114 @@ preset_load_preset:
     RTL
 }
 
-preset_to_memory:
+category_preset_load:
 {
-    PHX
-    STZ $00
-    LDA $7F0002,X
-    INC #2 : TAY
+    ; Get offset into preset data table
+    LDA !sram_preset_category : STA $C3
+    ASL : CLC : ADC $C3 : TAX
 
-  .loop
-    LDA ($00),Y : INY : INY : CMP #$FFFF : BEQ .done : STA $C3
-    LDA ($00),Y : INY : STA $C5
-    LDA ($00),Y : INY : AND #$00FF : CMP #$0001 : BEQ .one
+    ; Get starting preset data bank into $C5
+    INX : LDA.l category_preset_data_table,X : STA $C4 : DEX
 
-  .two
-    LDA ($00),Y : INY : INY : STA [$C3]
-    INX #6
-    BRA .loop
+    ; Get preset address to load into $C3
+    LDA !ram_load_preset : STA !sram_last_preset : STA $C3 : STA $7F0002
+    LDA #$0000 : STA !ram_load_preset
 
-  .one
-    %a8()
-    LDA ($00),Y : INY : STA [$C3]
-    %a16()
-    INX #5
-    BRA .loop
+    ; Get start of preset data into $C1
+    LDA.l category_preset_data_table,X : LDX #$0000 : STA $C1
 
-  .done
-    PLX
+    ; If start of preset data is greater than preset address,
+    ; then our preset address is in the next bank
+    CMP $C3 : BCC .build_list_loop : BEQ .build_list_loop
+    INC $C5
+
+  .build_list_loop
+    ; Build list of presets to traverse
+    LDA [$C3] : BEQ .prepare_traverse_list_loop
+    INX : INX : STA $7F0002,X
+    CMP $C3 : STA $C3 : BCC .build_list_loop
+    ; We just crossed back into the starting bank
+    DEC $C5
+    BRA .build_list_loop
+
+  .prepare_traverse_list_loop
+    ; Set bank to read data from
+    STZ $00 : %a8() : LDA $C5 : PHA : PLB
+    ; Set bank to store data to
+    LDA #$7E : STA $C5 : %a16()
+
+  .traverse_list_loop_with_bank_check
+    ; Now traverse from the first preset until the last one
+    LDA $7F0002,X : TAY : CMP $C1 : BCC .increment_bank_before_inner_loop
+    INY : INY
+    BRA .inner_loop_with_bank_check_load_address
+
+    ; For each preset, load and store address and value pairs
+  .inner_loop_with_bank_check
+    STA $C3 : INY : INY
+    CPY #$0000 : BEQ .increment_bank_before_load_value
+    LDA ($00),Y : STA [$C3] : INY : INY
+  .inner_loop_with_bank_check_load_address
+    CPY #$0000 : BEQ .increment_bank_before_load_address
+    LDA ($00),Y : CMP #$FFFF : BNE .inner_loop_with_bank_check
+
+    DEX : DEX : BPL .traverse_list_loop_with_bank_check
+    RTS
+
+  .increment_bank_before_inner_loop
+    %a8() : PHB : PLA : INC : PHA : PLB : %a16()
+    INY : INY
+    BRA .inner_loop_load_address
+
+  .increment_bank_before_load_address
+    %a8() : PHB : PLA : INC : PHA : PLB : %a16()
+    LDY #$8000
+    BRA .inner_loop_load_address
+
+  .increment_bank_before_load_value
+    %a8() : PHB : PLA : INC : PHA : PLB : %a16()
+    LDY #$8000
+    BRA .inner_loop_load_value
+
+  .traverse_list_loop
+    ; Continue traversing from the first preset until the last one
+    LDA $7F0002,X : TAY : INY : INY
+    BRA .inner_loop_load_address
+
+    ; For each preset, load and store address and value pairs
+  .inner_loop
+    STA $C3 : INY : INY
+  .inner_loop_load_value
+    LDA ($00),Y : STA [$C3] : INY : INY
+  .inner_loop_load_address
+    LDA ($00),Y : CMP #$FFFF : BNE .inner_loop
+
+    DEX : DEX : BPL .traverse_list_loop
     RTS
 }
 
-preset_banks:
+category_preset_data_table:
 {
-  dw preset_kpdr21_crateria_ship>>16
-  dw preset_prkd_crateria_ship>>16
-  dw preset_pkrd_crateria_ship>>16
-  dw preset_kpdr25_bombs_ceres_elevator>>16
-  dw preset_gtclassic_crateria_ship>>16
-  dw preset_gtmax_crateria_ship>>16
-  dw preset_100early_crateria_ceres_elevator>>16
-  dw preset_hundo_bombs_ceres_elevator>>16
-  dw preset_100map_varia_landing_site>>16
-  dw preset_14ice_crateria_ceres_elevator>>16
-  dw preset_14speed_crateria_ceres_elevator>>16
-  dw preset_rbo_bombs_ceres_elevator>>16
-  dw preset_ngplasma_ceres_station_ceres_elevator>>16
-  dw preset_nghyper_ceres_station_ceres_elevator>>16
-  dw preset_nintendopower_crateria_ship>>16
-  dw preset_allbosskpdr_crateria_ceres_elevator>>16
-  dw preset_allbosspkdr_crateria_ceres_elevator>>16
-  dw preset_allbossprkd_crateria_ceres_elevator>>16
+  dl preset_kpdr21_crateria_ship
+  dl preset_prkd_crateria_ship
+  dl preset_pkrd_crateria_ship
+  dl preset_kpdr25_bombs_ceres_elevator
+  dl preset_gtclassic_crateria_ship
+  dl preset_gtmax_crateria_ship
+  dl preset_100early_crateria_ceres_elevator
+  dl preset_hundo_bombs_ceres_elevator
+  dl preset_100map_varia_landing_site
+  dl preset_14ice_crateria_ceres_elevator
+  dl preset_14speed_crateria_ceres_elevator
+  dl preset_rbo_bombs_ceres_elevator
+  dl preset_ngplasma_ceres_station_ceres_elevator
+  dl preset_nghyper_ceres_station_ceres_elevator
+  dl preset_nintendopower_crateria_ship
+  dl preset_allbosskpdr_crateria_ceres_elevator
+  dl preset_allbosspkdr_crateria_ceres_elevator
+  dl preset_allbossprkd_crateria_ceres_elevator
 }
-print pc, " presets end"
+print pc, " presets bank82 end"
 
 
 org $82E8D9
@@ -258,7 +298,7 @@ org $82E8D9
 
 
 org $80F000
-print pc, " preset_start_gameplay start"
+print pc, " presets bank80 start"
 
 ; This method is very similar to $80A07B (start gameplay)
 preset_start_gameplay:
@@ -279,7 +319,6 @@ preset_start_gameplay:
     JSL $80835D  ; Disable NMI
     JSL $80985F  ; Disable horizontal and vertical timer interrupts
     JSL preset_load_destination_state_and_tiles
-;    JSR $A12B    ; Play 14h frames of music
     JSL $878016  ; Clear animated tile objects
     JSL $88829E  ; Wait until the end of a v-blank and clear (H)DMA enable flags
 
@@ -301,10 +340,6 @@ if !FEATURE_PAL
 else
     JSL $A08A1E  ; Load enemies
 endif
-;    JSL $82E071  ; Load room music
-;    JSR $A12B    ; Play 14h frames of music
-;    JSL $82E09B  ; Update music track index
-;    JSL $82E113  ; RTL
     JSL $80A23F  ; Clear BG2 tilemap
     JSL $82E7D3  ; Load level data, CRE, tile table, scroll data, create PLMs and execute door ASM and room setup ASM
     JSL $89AB82  ; Load FX
@@ -370,14 +405,12 @@ endif
     LDA #$0004 : STA $A7  ; Set optional next interrupt to Main gameplay
 
     JSL $80982A  ; Enable horizontal and vertical timer interrupts
-;    JSR $A12B    ; Play 14h frames of music
 
     LDA #$E695 : STA $0A42 ; Unlock Samus
     LDA #$E725 : STA $0A44 ; Unlock Samus
     STZ $0E18    ; Set elevator to inactive
     STZ $0E1A    ; Clear health bomb flag
 
-    LDA #$E737 : STA $099C  ; Pointer to next frame's room transition code = $82:E737
     PLB
     PLP
     RTL
@@ -755,7 +788,7 @@ add_grapple_and_xray_to_hud:
     JMP .resume_infohud_icon_initialization
 }
 
-print pc, " preset_start_gameplay end"
+print pc, " presets bank80 end"
 warnpc $80FC00
 
 
@@ -780,16 +813,17 @@ org $809AC9
 org $F18000    ; 7603h bytes used / 9FEh bytes free
 incsrc presets/prkd_menu.asm   ; E6Ah bytes
 incsrc presets/kpdr21_menu.asm   ; F91h bytes
+incsrc presets/kpdr22_menu.asm   ; F91h bytes
 incsrc presets/hundo_menu.asm   ; 1220h bytes
 incsrc presets/100early_menu.asm   ; 1320h bytes
 incsrc presets/pkrd_menu.asm   ; E6Ah bytes
 incsrc presets/kpdr25_menu.asm   ; 69Fh bytes
 incsrc presets/gtclassic_menu.asm   ; D7Ch bytes
-incsrc presets/14ice_menu.asm   ; 7C6h bytes
-incsrc presets/14speed_menu.asm   ; 7EBh bytes
-print pc, " preset_menu.asm bankFE end"
+print pc, " preset_menu.asm bankF1 end"
 
 org $F28000    ; 6CDFh bytes used / 1321h bytes free
+incsrc presets/14ice_menu.asm   ; 7C6h bytes
+incsrc presets/14speed_menu.asm   ; 7EBh bytes
 incsrc presets/rbo_menu.asm   ; D97h bytes
 incsrc presets/allbosskpdr_menu.asm   ; 942h bytes
 incsrc presets/allbosspkdr_menu.asm   ; 9B0h bytes
@@ -799,55 +833,30 @@ incsrc presets/nghyper_menu.asm   ; 864h bytes
 incsrc presets/nintendopower_menu.asm   ; 70Ch bytes
 incsrc presets/gtmax_menu.asm   ; 1378h bytes
 incsrc presets/100map_menu.asm   ; 1670h bytes
-print pc, " preset_menu.asm bankFF end"
+print pc, " preset_menu.asm bankF2 end"
 
-org $EF8000
+org $EAE000
+check bankcross off
 incsrc presets/prkd_data.asm ; 3C95h bytes
-print pc, " preset_data.asm BankEF end"
-
-org $EE8000
 incsrc presets/kpdr21_data.asm ; 3B17h bytes
+incsrc presets/kpdr22_data.asm ; 3B17h bytes
 incsrc presets/nintendopower_data.asm ; 2109h bytes
-print pc, " preset_data.asm BankEE end"
-
-org $ED8000
 incsrc presets/gtclassic_data.asm ; 35B5h bytes
 incsrc presets/14ice_data.asm ; 1EC1h bytes
 incsrc presets/14speed_data.asm ; 1F2Ch bytes
-print pc, " preset_data.asm BankED end"
-
-org $EC8000
 incsrc presets/allbosskpdr_data.asm ; 2435h bytes
 incsrc presets/allbosspkdr_data.asm ; 24ADh bytes
 incsrc presets/allbossprkd_data.asm ; 2539h bytes
-print pc, " preset_data.asm BankEC end"
-
-org $EB8000
 incsrc presets/100early_data.asm ; 4E29h bytes
-print pc, " preset_data.asm BankEB end"
-
-org $EA8000
 incsrc presets/gtmax_data.asm ; 4E9Fh bytes
 incsrc presets/kpdr25_data.asm ; 2F09h bytes
-print pc, " preset_data.asm BankEA end"
-
-org $E98000
 incsrc presets/rbo_data.asm ; 327Fh bytes
 incsrc presets/pkrd_data.asm ; 2EE5h bytes
-print pc, " preset_data.asm BankE9 end"
-
-org $E88000
 incsrc presets/100map_data.asm ; 57E5h bytes
-print pc, " preset_data.asm BankE8 end"
-
-org $E78000
 incsrc presets/spazer_data.asm ; 313Dh bytes
 incsrc presets/nghyper_data.asm ; 1B6Bh bytes
 incsrc presets/ngplasma_data.asm ; 1B5Fh bytes
-print pc, " preset_data.asm BankE7 end"
-
-org $E68000
 incsrc presets/hundo_data.asm ; 42B9h bytes
-print pc, " preset_data.asm BankE6 end"
+print pc, " crossbank preset_data.asm end"
 
 
