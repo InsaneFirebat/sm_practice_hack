@@ -1,5 +1,5 @@
 
-preset_prkd_crateria_ceres_elevator:
+preset_prkd15_crateria_ceres_elevator:
     dw #$0000
     dl $7E078B : db $02 : dw $0000 ; Elevator Index
     dl $7E078D : db $02 : dw $AB58 ; DDB
@@ -222,8 +222,8 @@ preset_prkd_crateria_ceres_elevator:
     dw #$FFFF
 .after
 
-preset_prkd_crateria_ceres_last_3_rooms:
-    dw #preset_prkd_crateria_ceres_elevator ; Crateria: Ceres Elevator
+preset_prkd15_crateria_ceres_last_3_rooms:
+    dw #preset_prkd15_crateria_ceres_elevator ; Crateria: Ceres Elevator
     dl $7E078D : db $02 : dw $ABA0 ; DDB
     dl $7E079B : db $02 : dw $E021 ; MDB
     dl $7E07C3 : db $02 : dw $B004 ; GFX Pointers
@@ -242,8 +242,8 @@ preset_prkd_crateria_ceres_last_3_rooms:
     dw #$FFFF
 .after
 
-preset_prkd_crateria_ship:
-    dw #preset_prkd_crateria_ceres_last_3_rooms ; Crateria: Ceres Last 3 Rooms
+preset_prkd15_crateria_ship:
+    dw #preset_prkd15_crateria_ceres_last_3_rooms ; Crateria: Ceres Last 3 Rooms
     dl $7E078D : db $02 : dw $88FE ; DDB
     dl $7E079B : db $02 : dw $91F8 ; MDB
     dl $7E079F : db $02 : dw $0000 ; Region
@@ -274,8 +274,8 @@ preset_prkd_crateria_ship:
     dw #$FFFF
 .after
 
-preset_prkd_crateria_parlor:
-    dw #preset_prkd_crateria_ship ; Crateria: Ship
+preset_prkd15_crateria_parlor:
+    dw #preset_prkd15_crateria_ship ; Crateria: Ship
     dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
     dl $7E0911 : db $02 : dw $0000 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $1400 ; Screen subpixel Y position
@@ -288,8 +288,8 @@ preset_prkd_crateria_parlor:
     dw #$FFFF
 .after
 
-preset_prkd_crateria_parlor_downback:
-    dw #preset_prkd_crateria_parlor ; Crateria: Parlor
+preset_prkd15_crateria_parlor_downback:
+    dw #preset_prkd15_crateria_parlor ; Crateria: Parlor
     dl $7E078D : db $02 : dw $8916 ; DDB
     dl $7E079B : db $02 : dw $92FD ; MDB
     dl $7E090F : db $02 : dw $C000 ; Screen subpixel X position.
@@ -304,8 +304,8 @@ preset_prkd_crateria_parlor_downback:
     dw #$FFFF
 .after
 
-preset_prkd_crateria_climb_down:
-    dw #preset_prkd_crateria_parlor_downback ; Crateria: Parlor Downback
+preset_prkd15_crateria_climb_down:
+    dw #preset_prkd15_crateria_parlor_downback ; Crateria: Parlor Downback
     dl $7E090F : db $02 : dw $3000 ; Screen subpixel X position.
     dl $7E0913 : db $02 : dw $4000 ; Screen subpixel Y position
     dl $7E0915 : db $02 : dw $041F ; Screen Y position in pixels
@@ -317,8 +317,8 @@ preset_prkd_crateria_climb_down:
     dw #$FFFF
 .after
 
-preset_prkd_crateria_pit_room:
-    dw #preset_prkd_crateria_climb_down ; Crateria: Climb Down
+preset_prkd15_crateria_pit_room:
+    dw #preset_prkd15_crateria_climb_down ; Crateria: Climb Down
     dl $7E078D : db $02 : dw $898E ; DDB
     dl $7E078F : db $02 : dw $0004 ; DoorOut Index
     dl $7E079B : db $02 : dw $96BA ; MDB
@@ -338,8 +338,8 @@ preset_prkd_crateria_pit_room:
     dw #$FFFF
 .after
 
-preset_prkd_crateria_morph:
-    dw #preset_prkd_crateria_pit_room ; Crateria: Pit Room
+preset_prkd15_crateria_morph:
+    dw #preset_prkd15_crateria_pit_room ; Crateria: Pit Room
     dl $7E078D : db $02 : dw $8B9E ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $9E9F ; MDB
@@ -363,8 +363,8 @@ preset_prkd_crateria_morph:
     dw #$FFFF
 .after
 
-preset_prkd_crateria_construction_zone_down:
-    dw #preset_prkd_crateria_morph ; Crateria: Morph
+preset_prkd15_crateria_construction_zone_down:
+    dw #preset_prkd15_crateria_morph ; Crateria: Morph
     dl $7E078F : db $02 : dw $0003 ; DoorOut Index
     dl $7E090F : db $02 : dw $2000 ; Screen subpixel X position.
     dl $7E0911 : db $02 : dw $0700 ; Screen X position in pixels
@@ -380,8 +380,8 @@ preset_prkd_crateria_construction_zone_down:
     dw #$FFFF
 .after
 
-preset_prkd_crateria_construction_zone_up:
-    dw #preset_prkd_crateria_construction_zone_down ; Crateria: Construction Zone Down
+preset_prkd15_crateria_construction_zone_up:
+    dw #preset_prkd15_crateria_construction_zone_down ; Crateria: Construction Zone Down
     dl $7E078D : db $02 : dw $8EDA ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $A107 ; MDB
@@ -402,8 +402,8 @@ preset_prkd_crateria_construction_zone_up:
     dw #$FFFF
 .after
 
-preset_prkd_crateria_pit_room_revisit:
-    dw #preset_prkd_crateria_construction_zone_up ; Crateria: Construction Zone Up
+preset_prkd15_crateria_pit_room_revisit:
+    dw #preset_prkd15_crateria_construction_zone_up ; Crateria: Construction Zone Up
     dl $7E078D : db $02 : dw $8EB6 ; DDB
     dl $7E079B : db $02 : dw $97B5 ; MDB
     dl $7E079F : db $02 : dw $0000 ; Region
@@ -424,8 +424,8 @@ preset_prkd_crateria_pit_room_revisit:
     dw #$FFFF
 .after
 
-preset_prkd_crateria_climb_up:
-    dw #preset_prkd_crateria_pit_room_revisit ; Crateria: Pit Room Revisit
+preset_prkd15_crateria_climb_up:
+    dw #preset_prkd15_crateria_pit_room_revisit ; Crateria: Pit Room Revisit
     dl $7E078D : db $02 : dw $8B92 ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $975C ; MDB
@@ -445,8 +445,8 @@ preset_prkd_crateria_climb_up:
     dw #$FFFF
 .after
 
-preset_prkd_crateria_parlor_revisit:
-    dw #preset_prkd_crateria_climb_up ; Crateria: Climb Up
+preset_prkd15_crateria_parlor_revisit:
+    dw #preset_prkd15_crateria_climb_up ; Crateria: Climb Up
     dl $7E078D : db $02 : dw $8B7A ; DDB
     dl $7E079B : db $02 : dw $96BA ; MDB
     dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
@@ -460,8 +460,8 @@ preset_prkd_crateria_parlor_revisit:
     dw #$FFFF
 .after
 
-preset_prkd_crateria_flyway:
-    dw #preset_prkd_crateria_parlor_revisit ; Crateria: Parlor Revisit
+preset_prkd15_crateria_flyway:
+    dw #preset_prkd15_crateria_parlor_revisit ; Crateria: Parlor Revisit
     dl $7E078D : db $02 : dw $8B3E ; DDB
     dl $7E079B : db $02 : dw $92FD ; MDB
     dl $7E07C3 : db $02 : dw $C629 ; GFX Pointers
@@ -482,8 +482,8 @@ preset_prkd_crateria_flyway:
     dw #$FFFF
 .after
 
-preset_prkd_crateria_bomb_torizo:
-    dw #preset_prkd_crateria_flyway ; Crateria: Flyway
+preset_prkd15_crateria_bomb_torizo:
+    dw #preset_prkd15_crateria_flyway ; Crateria: Flyway
     dl $7E078D : db $02 : dw $8982 ; DDB
     dl $7E078F : db $02 : dw $0003 ; DoorOut Index
     dl $7E079B : db $02 : dw $9879 ; MDB
@@ -505,8 +505,8 @@ preset_prkd_crateria_bomb_torizo:
     dw #$FFFF
 .after
 
-preset_prkd_crateria_alcatraz:
-    dw #preset_prkd_crateria_bomb_torizo ; Crateria: Bomb Torizo
+preset_prkd15_crateria_alcatraz:
+    dw #preset_prkd15_crateria_bomb_torizo ; Crateria: Bomb Torizo
     dl $7E078D : db $02 : dw $8BAA ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E090F : db $02 : dw $2001 ; Screen subpixel X position.
@@ -526,8 +526,8 @@ preset_prkd_crateria_alcatraz:
     dw #$FFFF
 .after
 
-preset_prkd_crateria_terminator:
-    dw #preset_prkd_crateria_alcatraz ; Crateria: Alcatraz
+preset_prkd15_crateria_terminator:
+    dw #preset_prkd15_crateria_alcatraz ; Crateria: Alcatraz
     dl $7E078D : db $02 : dw $8BB6 ; DDB
     dl $7E079B : db $02 : dw $92FD ; MDB
     dl $7E07C3 : db $02 : dw $C629 ; GFX Pointers
@@ -544,8 +544,8 @@ preset_prkd_crateria_terminator:
     dw #$FFFF
 .after
 
-preset_prkd_crateria_green_pirate_shaft:
-    dw #preset_prkd_crateria_terminator ; Crateria: Terminator
+preset_prkd15_crateria_green_pirate_shaft:
+    dw #preset_prkd15_crateria_terminator ; Crateria: Terminator
     dl $7E078D : db $02 : dw $895E ; DDB
     dl $7E079B : db $02 : dw $990D ; MDB
     dl $7E07C3 : db $02 : dw $F911 ; GFX Pointers
@@ -569,8 +569,8 @@ preset_prkd_crateria_green_pirate_shaft:
     dw #$FFFF
 .after
 
-preset_prkd_brinstar_green_brinstar_elevator:
-    dw #preset_prkd_crateria_green_pirate_shaft ; Crateria: Green Pirate Shaft
+preset_prkd15_brinstar_green_brinstar_elevator:
+    dw #preset_prkd15_crateria_green_pirate_shaft ; Crateria: Green Pirate Shaft
     dl $7E078D : db $02 : dw $8C22 ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $9938 ; MDB
@@ -587,8 +587,8 @@ preset_prkd_brinstar_green_brinstar_elevator:
     dw #$FFFF
 .after
 
-preset_prkd_brinstar_early_supers:
-    dw #preset_prkd_brinstar_green_brinstar_elevator ; Brinstar: Green Brinstar Elevator
+preset_prkd15_brinstar_early_supers:
+    dw #preset_prkd15_brinstar_green_brinstar_elevator ; Brinstar: Green Brinstar Elevator
     dl $7E078D : db $02 : dw $8C0A ; DDB
     dl $7E078F : db $02 : dw $0009 ; DoorOut Index
     dl $7E079B : db $02 : dw $9AD9 ; MDB
@@ -614,8 +614,8 @@ preset_prkd_brinstar_early_supers:
     dw #$FFFF
 .after
 
-preset_prkd_brinstar_dachora_room:
-    dw #preset_prkd_brinstar_early_supers ; Brinstar: Early Supers
+preset_prkd15_brinstar_dachora_room:
+    dw #preset_prkd15_brinstar_early_supers ; Brinstar: Early Supers
     dl $7E078D : db $02 : dw $8D4E ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E090F : db $02 : dw $8000 ; Screen subpixel X position.
@@ -634,8 +634,8 @@ preset_prkd_brinstar_dachora_room:
     dw #$FFFF
 .after
 
-preset_prkd_brinstar_big_pink:
-    dw #preset_prkd_brinstar_dachora_room ; Brinstar: Dachora Room
+preset_prkd15_brinstar_big_pink:
+    dw #preset_prkd15_brinstar_dachora_room ; Brinstar: Dachora Room
     dl $7E078D : db $02 : dw $8CE2 ; DDB
     dl $7E078F : db $02 : dw $0005 ; DoorOut Index
     dl $7E079B : db $02 : dw $9CB3 ; MDB
@@ -654,8 +654,8 @@ preset_prkd_brinstar_big_pink:
     dw #$FFFF
 .after
 
-preset_prkd_brinstar_green_hill_zone:
-    dw #preset_prkd_brinstar_big_pink ; Brinstar: Big Pink
+preset_prkd15_brinstar_green_hill_zone:
+    dw #preset_prkd15_brinstar_big_pink ; Brinstar: Big Pink
     dl $7E078D : db $02 : dw $8DAE ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $9D19 ; MDB
@@ -680,8 +680,8 @@ preset_prkd_brinstar_green_hill_zone:
     dw #$FFFF
 .after
 
-preset_prkd_brinstar_noob_bridge:
-    dw #preset_prkd_brinstar_green_hill_zone ; Brinstar: Green Hill Zone
+preset_prkd15_brinstar_noob_bridge:
+    dw #preset_prkd15_brinstar_green_hill_zone ; Brinstar: Green Hill Zone
     dl $7E078D : db $02 : dw $8DEA ; DDB
     dl $7E078F : db $02 : dw $0003 ; DoorOut Index
     dl $7E079B : db $02 : dw $9E52 ; MDB
@@ -700,8 +700,8 @@ preset_prkd_brinstar_noob_bridge:
     dw #$FFFF
 .after
 
-preset_prkd_brinstar_red_tower:
-    dw #preset_prkd_brinstar_noob_bridge ; Brinstar: Noob Bridge
+preset_prkd15_brinstar_red_tower:
+    dw #preset_prkd15_brinstar_noob_bridge ; Brinstar: Noob Bridge
     dl $7E078D : db $02 : dw $8E92 ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $9FBA ; MDB
@@ -718,8 +718,8 @@ preset_prkd_brinstar_red_tower:
     dw #$FFFF
 .after
 
-preset_prkd_brinstar_hellway:
-    dw #preset_prkd_brinstar_red_tower ; Brinstar: Red Tower
+preset_prkd15_brinstar_hellway:
+    dw #preset_prkd15_brinstar_red_tower ; Brinstar: Red Tower
     dl $7E078D : db $02 : dw $8F0A ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $A253 ; MDB
@@ -738,8 +738,8 @@ preset_prkd_brinstar_hellway:
     dw #$FFFF
 .after
 
-preset_prkd_brinstar_caterpillars_down:
-    dw #preset_prkd_brinstar_hellway ; Brinstar: Hellway
+preset_prkd15_brinstar_caterpillars_down:
+    dw #preset_prkd15_brinstar_hellway ; Brinstar: Hellway
     dl $7E078D : db $02 : dw $901E ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $A2F7 ; MDB
@@ -755,8 +755,8 @@ preset_prkd_brinstar_caterpillars_down:
     dw #$FFFF
 .after
 
-preset_prkd_brinstar_alpha_power_bombs:
-    dw #preset_prkd_brinstar_caterpillars_down ; Brinstar: Caterpillars Down
+preset_prkd15_brinstar_alpha_power_bombs:
+    dw #preset_prkd15_brinstar_caterpillars_down ; Brinstar: Caterpillars Down
     dl $7E078D : db $02 : dw $908A ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $A322 ; MDB
@@ -776,8 +776,8 @@ preset_prkd_brinstar_alpha_power_bombs:
     dw #$FFFF
 .after
 
-preset_prkd_brinstar_caterpillars_up:
-    dw #preset_prkd_brinstar_alpha_power_bombs ; Brinstar: Alpha Power Bombs
+preset_prkd15_brinstar_caterpillars_up:
+    dw #preset_prkd15_brinstar_alpha_power_bombs ; Brinstar: Alpha Power Bombs
     dl $7E078D : db $02 : dw $9096 ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $A3AE ; MDB
@@ -803,8 +803,8 @@ preset_prkd_brinstar_caterpillars_up:
     dw #$FFFF
 .after
 
-preset_prkd_brinstar_crateria_kihunters:
-    dw #preset_prkd_brinstar_caterpillars_up ; Brinstar: Caterpillars Up
+preset_prkd15_brinstar_crateria_kihunters:
+    dw #preset_prkd15_brinstar_caterpillars_up ; Brinstar: Caterpillars Up
     dl $7E078D : db $02 : dw $90BA ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $962A ; MDB
@@ -829,8 +829,8 @@ preset_prkd_brinstar_crateria_kihunters:
     dw #$FFFF
 .after
 
-preset_prkd_brinstar_continuous_wall_jump:
-    dw #preset_prkd_brinstar_crateria_kihunters ; Brinstar: Crateria Kihunters
+preset_prkd15_brinstar_continuous_wall_jump:
+    dw #preset_prkd15_brinstar_crateria_kihunters ; Brinstar: Crateria Kihunters
     dl $7E078D : db $02 : dw $8AF6 ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $948C ; MDB
@@ -854,8 +854,8 @@ preset_prkd_brinstar_continuous_wall_jump:
     dw #$FFFF
 .after
 
-preset_prkd_brinstar_horizontal_bomb_jump:
-    dw #preset_prkd_brinstar_continuous_wall_jump ; Brinstar: Continuous Wall Jump
+preset_prkd15_brinstar_horizontal_bomb_jump:
+    dw #preset_prkd15_brinstar_continuous_wall_jump ; Brinstar: Continuous Wall Jump
     dl $7E078D : db $02 : dw $8A36 ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $95FF ; MDB
@@ -875,8 +875,8 @@ preset_prkd_brinstar_horizontal_bomb_jump:
     dw #$FFFF
 .after
 
-preset_prkd_brinstar_ocean:
-    dw #preset_prkd_brinstar_horizontal_bomb_jump ; Brinstar: Horizontal Bomb Jump
+preset_prkd15_brinstar_ocean:
+    dw #preset_prkd15_brinstar_horizontal_bomb_jump ; Brinstar: Horizontal Bomb Jump
     dl $7E090F : db $02 : dw $8000 ; Screen subpixel X position.
     dl $7E0911 : db $02 : dw $0100 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $3C00 ; Screen subpixel Y position
@@ -885,8 +885,8 @@ preset_prkd_brinstar_ocean:
     dw #$FFFF
 .after
 
-preset_prkd_wrecked_ship_shaft_down:
-    dw #preset_prkd_brinstar_ocean ; Brinstar: Ocean
+preset_prkd15_wrecked_ship_shaft_down:
+    dw #preset_prkd15_brinstar_ocean ; Brinstar: Ocean
     dl $7E078D : db $02 : dw $89D6 ; DDB
     dl $7E079B : db $02 : dw $CA08 ; MDB
     dl $7E079F : db $02 : dw $0003 ; Region
@@ -905,8 +905,8 @@ preset_prkd_wrecked_ship_shaft_down:
     dw #$FFFF
 .after
 
-preset_prkd_wrecked_ship_basement:
-    dw #preset_prkd_wrecked_ship_shaft_down ; Wrecked Ship: Shaft Down
+preset_prkd15_wrecked_ship_basement:
+    dw #preset_prkd15_wrecked_ship_shaft_down ; Wrecked Ship: Shaft Down
     dl $7E078D : db $02 : dw $A1BC ; DDB
     dl $7E079B : db $02 : dw $CAF6 ; MDB
     dl $7E090F : db $02 : dw $6000 ; Screen subpixel X position.
@@ -925,8 +925,8 @@ preset_prkd_wrecked_ship_basement:
     dw #$FFFF
 .after
 
-preset_prkd_wrecked_ship_phantoon:
-    dw #preset_prkd_wrecked_ship_basement ; Wrecked Ship: Basement
+preset_prkd15_wrecked_ship_phantoon:
+    dw #preset_prkd15_wrecked_ship_basement ; Wrecked Ship: Basement
     dl $7E078D : db $02 : dw $A21C ; DDB
     dl $7E078F : db $02 : dw $0003 ; DoorOut Index
     dl $7E079B : db $02 : dw $CC6F ; MDB
@@ -943,8 +943,8 @@ preset_prkd_wrecked_ship_phantoon:
     dw #$FFFF
 .after
 
-preset_prkd_wrecked_ship_leaving_phantoon:
-    dw #preset_prkd_wrecked_ship_phantoon ; Wrecked Ship: Phantoon
+preset_prkd15_wrecked_ship_leaving_phantoon:
+    dw #preset_prkd15_wrecked_ship_phantoon ; Wrecked Ship: Phantoon
     dl $7E078D : db $02 : dw $A2C4 ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E07C5 : db $02 : dw $E7BB ; GFX Pointers
@@ -965,8 +965,8 @@ preset_prkd_wrecked_ship_leaving_phantoon:
     dw #$FFFF
 .after
 
-preset_prkd_wrecked_ship_shaft_to_supers:
-    dw #preset_prkd_wrecked_ship_leaving_phantoon ; Wrecked Ship: Leaving Phantoon
+preset_prkd15_wrecked_ship_shaft_to_supers:
+    dw #preset_prkd15_wrecked_ship_leaving_phantoon ; Wrecked Ship: Leaving Phantoon
     dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
     dl $7E0911 : db $02 : dw $0226 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $FC00 ; Screen subpixel Y position
@@ -977,8 +977,8 @@ preset_prkd_wrecked_ship_shaft_to_supers:
     dw #$FFFF
 .after
 
-preset_prkd_wrecked_ship_shaft_up:
-    dw #preset_prkd_wrecked_ship_shaft_to_supers ; Wrecked Ship: Shaft to Supers
+preset_prkd15_wrecked_ship_shaft_up:
+    dw #preset_prkd15_wrecked_ship_shaft_to_supers ; Wrecked Ship: Shaft to Supers
     dl $7E078D : db $02 : dw $A210 ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $CDA8 ; MDB
@@ -1000,8 +1000,8 @@ preset_prkd_wrecked_ship_shaft_up:
     dw #$FFFF
 .after
 
-preset_prkd_wrecked_ship_attic:
-    dw #preset_prkd_wrecked_ship_shaft_up ; Wrecked Ship: Shaft Up
+preset_prkd15_wrecked_ship_attic:
+    dw #preset_prkd15_wrecked_ship_shaft_up ; Wrecked Ship: Shaft Up
     dl $7E078D : db $02 : dw $A2E8 ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $CAF6 ; MDB
@@ -1017,8 +1017,8 @@ preset_prkd_wrecked_ship_attic:
     dw #$FFFF
 .after
 
-preset_prkd_wrecked_ship_upper_west_ocean:
-    dw #preset_prkd_wrecked_ship_attic ; Wrecked Ship: Attic
+preset_prkd15_wrecked_ship_upper_west_ocean:
+    dw #preset_prkd15_wrecked_ship_attic ; Wrecked Ship: Attic
     dl $7E078D : db $02 : dw $A228 ; DDB
     dl $7E078F : db $02 : dw $0004 ; DoorOut Index
     dl $7E079B : db $02 : dw $CA52 ; MDB
@@ -1042,8 +1042,8 @@ preset_prkd_wrecked_ship_upper_west_ocean:
     dw #$FFFF
 .after
 
-preset_prkd_wrecked_ship_pancakes_and_wavers:
-    dw #preset_prkd_wrecked_ship_upper_west_ocean ; Wrecked Ship: Upper West Ocean
+preset_prkd15_wrecked_ship_pancakes_and_wavers:
+    dw #preset_prkd15_wrecked_ship_upper_west_ocean ; Wrecked Ship: Upper West Ocean
     dl $7E078D : db $02 : dw $A1E0 ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $93FE ; MDB
@@ -1070,8 +1070,8 @@ preset_prkd_wrecked_ship_pancakes_and_wavers:
     dw #$FFFF
 .after
 
-preset_prkd_wrecked_ship_bowling_alley:
-    dw #preset_prkd_wrecked_ship_pancakes_and_wavers ; Wrecked Ship: Pancakes and Wavers
+preset_prkd15_wrecked_ship_bowling_alley:
+    dw #preset_prkd15_wrecked_ship_pancakes_and_wavers ; Wrecked Ship: Pancakes and Wavers
     dl $7E078D : db $02 : dw $89E2 ; DDB
     dl $7E079B : db $02 : dw $9461 ; MDB
     dl $7E090F : db $02 : dw $1800 ; Screen subpixel X position.
@@ -1087,8 +1087,8 @@ preset_prkd_wrecked_ship_bowling_alley:
     dw #$FFFF
 .after
 
-preset_prkd_wrecked_ship_leaving_gravity:
-    dw #preset_prkd_wrecked_ship_bowling_alley ; Wrecked Ship: Bowling Alley
+preset_prkd15_wrecked_ship_leaving_gravity:
+    dw #preset_prkd15_wrecked_ship_bowling_alley ; Wrecked Ship: Bowling Alley
     dl $7E078D : db $02 : dw $A1A4 ; DDB
     dl $7E079B : db $02 : dw $CE40 ; MDB
     dl $7E079F : db $02 : dw $0003 ; Region
@@ -1114,8 +1114,8 @@ preset_prkd_wrecked_ship_leaving_gravity:
     dw #$FFFF
 .after
 
-preset_prkd_wrecked_ship_reverse_moat:
-    dw #preset_prkd_wrecked_ship_leaving_gravity ; Wrecked Ship: Leaving Gravity
+preset_prkd15_wrecked_ship_reverse_moat:
+    dw #preset_prkd15_wrecked_ship_leaving_gravity ; Wrecked Ship: Leaving Gravity
     dl $7E078D : db $02 : dw $A300 ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $93FE ; MDB
@@ -1140,8 +1140,8 @@ preset_prkd_wrecked_ship_reverse_moat:
     dw #$FFFF
 .after
 
-preset_prkd_wrecked_ship_crateria_kihunters_return:
-    dw #preset_prkd_wrecked_ship_reverse_moat ; Wrecked Ship: Reverse Moat
+preset_prkd15_wrecked_ship_crateria_kihunters_return:
+    dw #preset_prkd15_wrecked_ship_reverse_moat ; Wrecked Ship: Reverse Moat
     dl $7E078D : db $02 : dw $89CA ; DDB
     dl $7E079B : db $02 : dw $95FF ; MDB
     dl $7E090F : db $02 : dw $F000 ; Screen subpixel X position.
@@ -1155,8 +1155,8 @@ preset_prkd_wrecked_ship_crateria_kihunters_return:
     dw #$FFFF
 .after
 
-preset_prkd_red_brinstar_revisit_red_brinstar_elevator:
-    dw #preset_prkd_wrecked_ship_crateria_kihunters_return ; Wrecked Ship: Crateria Kihunters Return
+preset_prkd15_red_brinstar_revisit_red_brinstar_elevator:
+    dw #preset_prkd15_wrecked_ship_crateria_kihunters_return ; Wrecked Ship: Crateria Kihunters Return
     dl $7E078D : db $02 : dw $8A42 ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $962A ; MDB
@@ -1178,8 +1178,8 @@ preset_prkd_red_brinstar_revisit_red_brinstar_elevator:
     dw #$FFFF
 .after
 
-preset_prkd_red_brinstar_revisit_hellway_revisit:
-    dw #preset_prkd_red_brinstar_revisit_red_brinstar_elevator ; Red Brinstar Revisit: Red Brinstar Elevator
+preset_prkd15_red_brinstar_revisit_hellway_revisit:
+    dw #preset_prkd15_red_brinstar_revisit_red_brinstar_elevator ; Red Brinstar Revisit: Red Brinstar Elevator
     dl $7E078D : db $02 : dw $8B02 ; DDB
     dl $7E078F : db $02 : dw $0005 ; DoorOut Index
     dl $7E079B : db $02 : dw $A322 ; MDB
@@ -1202,8 +1202,8 @@ preset_prkd_red_brinstar_revisit_hellway_revisit:
     dw #$FFFF
 .after
 
-preset_prkd_red_brinstar_revisit_red_tower_down:
-    dw #preset_prkd_red_brinstar_revisit_hellway_revisit ; Red Brinstar Revisit: Hellway Revisit
+preset_prkd15_red_brinstar_revisit_red_tower_down:
+    dw #preset_prkd15_red_brinstar_revisit_hellway_revisit ; Red Brinstar Revisit: Hellway Revisit
     dl $7E078D : db $02 : dw $90AE ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $A2F7 ; MDB
@@ -1219,8 +1219,8 @@ preset_prkd_red_brinstar_revisit_red_tower_down:
     dw #$FFFF
 .after
 
-preset_prkd_red_brinstar_revisit_skree_boost:
-    dw #preset_prkd_red_brinstar_revisit_red_tower_down ; Red Brinstar Revisit: Red Tower Down
+preset_prkd15_red_brinstar_revisit_skree_boost:
+    dw #preset_prkd15_red_brinstar_revisit_red_tower_down ; Red Brinstar Revisit: Red Tower Down
     dl $7E078D : db $02 : dw $907E ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $A253 ; MDB
@@ -1236,8 +1236,8 @@ preset_prkd_red_brinstar_revisit_skree_boost:
     dw #$FFFF
 .after
 
-preset_prkd_red_brinstar_revisit_below_spazer:
-    dw #preset_prkd_red_brinstar_revisit_skree_boost ; Red Brinstar Revisit: Skree Boost
+preset_prkd15_red_brinstar_revisit_below_spazer:
+    dw #preset_prkd15_red_brinstar_revisit_skree_boost ; Red Brinstar Revisit: Skree Boost
     dl $7E078D : db $02 : dw $9042 ; DDB
     dl $7E078F : db $02 : dw $0003 ; DoorOut Index
     dl $7E079B : db $02 : dw $A3DD ; MDB
@@ -1254,8 +1254,8 @@ preset_prkd_red_brinstar_revisit_below_spazer:
     dw #$FFFF
 .after
 
-preset_prkd_red_brinstar_revisit_leaving_spazer:
-    dw #preset_prkd_red_brinstar_revisit_below_spazer ; Red Brinstar Revisit: Below Spazer
+preset_prkd15_red_brinstar_revisit_leaving_spazer:
+    dw #preset_prkd15_red_brinstar_revisit_below_spazer ; Red Brinstar Revisit: Below Spazer
     dl $7E078D : db $02 : dw $9126 ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $A447 ; MDB
@@ -1276,8 +1276,8 @@ preset_prkd_red_brinstar_revisit_leaving_spazer:
     dw #$FFFF
 .after
 
-preset_prkd_red_brinstar_revisit_breaking_tube:
-    dw #preset_prkd_red_brinstar_revisit_leaving_spazer ; Red Brinstar Revisit: Leaving Spazer
+preset_prkd15_red_brinstar_revisit_breaking_tube:
+    dw #preset_prkd15_red_brinstar_revisit_leaving_spazer ; Red Brinstar Revisit: Leaving Spazer
     dl $7E078D : db $02 : dw $9132 ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $A408 ; MDB
@@ -1298,8 +1298,8 @@ preset_prkd_red_brinstar_revisit_breaking_tube:
     dw #$FFFF
 .after
 
-preset_prkd_red_brinstar_revisit_business_center_preelev:
-    dw #preset_prkd_red_brinstar_revisit_breaking_tube ; Red Brinstar Revisit: Breaking Tube
+preset_prkd15_red_brinstar_revisit_business_center_preelev:
+    dw #preset_prkd15_red_brinstar_revisit_breaking_tube ; Red Brinstar Revisit: Breaking Tube
     dl $7E078D : db $02 : dw $A384 ; DDB
     dl $7E078F : db $02 : dw $0003 ; DoorOut Index
     dl $7E079B : db $02 : dw $A6A1 ; MDB
@@ -1316,8 +1316,8 @@ preset_prkd_red_brinstar_revisit_business_center_preelev:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_business_center_postelev:
-    dw #preset_prkd_red_brinstar_revisit_business_center_preelev ; Red Brinstar Revisit: Business Center Pre-Elev
+preset_prkd15_upper_norfair_business_center_postelev:
+    dw #preset_prkd15_red_brinstar_revisit_business_center_preelev ; Red Brinstar Revisit: Business Center Pre-Elev
     dl $7E078D : db $02 : dw $9246 ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $A7DE ; MDB
@@ -1342,8 +1342,8 @@ preset_prkd_upper_norfair_business_center_postelev:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_hi_jump_etank:
-    dw #preset_prkd_upper_norfair_business_center_postelev ; Upper Norfair: Business Center
+preset_prkd15_upper_norfair_hi_jump_etank:
+    dw #preset_prkd15_upper_norfair_business_center_postelev ; Upper Norfair: Business Center
     dl $7E078D : db $02 : dw $9246 ; DDB
     dl $7E078F : db $02 : dw $0005 ; DoorOut Index
     dl $7E079B : db $02 : dw $A7DE ; MDB
@@ -1366,8 +1366,8 @@ preset_prkd_upper_norfair_hi_jump_etank:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_leaving_hi_jump:
-    dw #preset_prkd_upper_norfair_hi_jump_etank ; Upper Norfair: Hi Jump E-tank
+preset_prkd15_upper_norfair_leaving_hi_jump:
+    dw #preset_prkd15_upper_norfair_hi_jump_etank ; Upper Norfair: Hi Jump E-tank
     dl $7E078D : db $02 : dw $9426 ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $A9E5 ; MDB
@@ -1392,8 +1392,8 @@ preset_prkd_upper_norfair_leaving_hi_jump:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_business_center_2:
-    dw #preset_prkd_upper_norfair_leaving_hi_jump ; Upper Norfair: Leaving Hi Jump
+preset_prkd15_upper_norfair_business_center_2:
+    dw #preset_prkd15_upper_norfair_leaving_hi_jump ; Upper Norfair: Leaving Hi Jump
     dl $7E078D : db $02 : dw $93F6 ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $AA41 ; MDB
@@ -1413,8 +1413,8 @@ preset_prkd_upper_norfair_business_center_2:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_ice_beam_gates:
-    dw #preset_prkd_upper_norfair_business_center_2 ; Upper Norfair: Business Center 2
+preset_prkd15_upper_norfair_ice_beam_gates:
+    dw #preset_prkd15_upper_norfair_business_center_2 ; Upper Norfair: Business Center 2
     dl $7E078D : db $02 : dw $941A ; DDB
     dl $7E079B : db $02 : dw $A7DE ; MDB
     dl $7E090F : db $02 : dw $5000 ; Screen subpixel X position.
@@ -1433,8 +1433,8 @@ preset_prkd_upper_norfair_ice_beam_gates:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_ice_maze_up:
-    dw #preset_prkd_upper_norfair_ice_beam_gates ; Upper Norfair: Ice Beam Gates
+preset_prkd15_upper_norfair_ice_maze_up:
+    dw #preset_prkd15_upper_norfair_ice_beam_gates ; Upper Norfair: Ice Beam Gates
     dl $7E078D : db $02 : dw $931E ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $A75D ; MDB
@@ -1451,8 +1451,8 @@ preset_prkd_upper_norfair_ice_maze_up:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_ice_maze_down:
-    dw #preset_prkd_upper_norfair_ice_maze_up ; Upper Norfair: Ice Maze Up
+preset_prkd15_upper_norfair_ice_maze_down:
+    dw #preset_prkd15_upper_norfair_ice_maze_up ; Upper Norfair: Ice Maze Up
     dl $7E078D : db $02 : dw $937E ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $A890 ; MDB
@@ -1471,8 +1471,8 @@ preset_prkd_upper_norfair_ice_maze_down:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_ice_escape:
-    dw #preset_prkd_upper_norfair_ice_maze_down ; Upper Norfair: Ice Maze Down
+preset_prkd15_upper_norfair_ice_escape:
+    dw #preset_prkd15_upper_norfair_ice_maze_down ; Upper Norfair: Ice Maze Down
     dl $7E078D : db $02 : dw $935A ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $A8B9 ; MDB
@@ -1493,8 +1493,8 @@ preset_prkd_upper_norfair_ice_escape:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_precathedral:
-    dw #preset_prkd_upper_norfair_ice_escape ; Upper Norfair: Ice Escape
+preset_prkd15_upper_norfair_precathedral:
+    dw #preset_prkd15_upper_norfair_ice_escape ; Upper Norfair: Ice Escape
     dl $7E078D : db $02 : dw $932A ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $A7DE ; MDB
@@ -1511,8 +1511,8 @@ preset_prkd_upper_norfair_precathedral:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_cathedral:
-    dw #preset_prkd_upper_norfair_precathedral ; Upper Norfair: Pre-Cathedral
+preset_prkd15_upper_norfair_cathedral:
+    dw #preset_prkd15_upper_norfair_precathedral ; Upper Norfair: Pre-Cathedral
     dl $7E078D : db $02 : dw $92CA ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $A7B3 ; MDB
@@ -1534,8 +1534,8 @@ preset_prkd_upper_norfair_cathedral:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_rising_tide:
-    dw #preset_prkd_upper_norfair_cathedral ; Upper Norfair: Cathedral
+preset_prkd15_upper_norfair_rising_tide:
+    dw #preset_prkd15_upper_norfair_cathedral ; Upper Norfair: Cathedral
     dl $7E078D : db $02 : dw $92B2 ; DDB
     dl $7E079B : db $02 : dw $A788 ; MDB
     dl $7E090F : db $02 : dw $C000 ; Screen subpixel X position.
@@ -1551,8 +1551,8 @@ preset_prkd_upper_norfair_rising_tide:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_bubble_mountain:
-    dw #preset_prkd_upper_norfair_rising_tide ; Upper Norfair: Rising Tide
+preset_prkd15_upper_norfair_bubble_mountain:
+    dw #preset_prkd15_upper_norfair_rising_tide ; Upper Norfair: Rising Tide
     dl $7E078D : db $02 : dw $929A ; DDB
     dl $7E079B : db $02 : dw $AFA3 ; MDB
     dl $7E090F : db $02 : dw $3000 ; Screen subpixel X position.
@@ -1567,8 +1567,8 @@ preset_prkd_upper_norfair_bubble_mountain:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_bat_cave:
-    dw #preset_prkd_upper_norfair_bubble_mountain ; Upper Norfair: Bubble Mountain
+preset_prkd15_upper_norfair_bat_cave:
+    dw #preset_prkd15_upper_norfair_bubble_mountain ; Upper Norfair: Bubble Mountain
     dl $7E078D : db $02 : dw $973E ; DDB
     dl $7E079B : db $02 : dw $ACB3 ; MDB
     dl $7E090F : db $02 : dw $E000 ; Screen subpixel X position.
@@ -1584,8 +1584,8 @@ preset_prkd_upper_norfair_bat_cave:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_leaving_speedbooster:
-    dw #preset_prkd_upper_norfair_bat_cave ; Upper Norfair: Bat Cave
+preset_prkd15_upper_norfair_leaving_speedbooster:
+    dw #preset_prkd15_upper_norfair_bat_cave ; Upper Norfair: Bat Cave
     dl $7E078D : db $02 : dw $95B2 ; DDB
     dl $7E079B : db $02 : dw $AD1B ; MDB
     dl $7E07F5 : db $02 : dw $0003 ; Music Track
@@ -1606,8 +1606,8 @@ preset_prkd_upper_norfair_leaving_speedbooster:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_single_chamber:
-    dw #preset_prkd_upper_norfair_leaving_speedbooster ; Upper Norfair: Leaving Speedbooster
+preset_prkd15_upper_norfair_single_chamber:
+    dw #preset_prkd15_upper_norfair_leaving_speedbooster ; Upper Norfair: Leaving Speedbooster
     dl $7E078D : db $02 : dw $97AA ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $ACB3 ; MDB
@@ -1631,8 +1631,8 @@ preset_prkd_upper_norfair_single_chamber:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_double_chamber:
-    dw #preset_prkd_upper_norfair_single_chamber ; Upper Norfair: Single Chamber
+preset_prkd15_upper_norfair_double_chamber:
+    dw #preset_prkd15_upper_norfair_single_chamber ; Upper Norfair: Single Chamber
     dl $7E078D : db $02 : dw $9582 ; DDB
     dl $7E078F : db $02 : dw $0004 ; DoorOut Index
     dl $7E079B : db $02 : dw $AD5E ; MDB
@@ -1649,8 +1649,8 @@ preset_prkd_upper_norfair_double_chamber:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_double_chamber_revisited:
-    dw #preset_prkd_upper_norfair_double_chamber ; Upper Norfair: Double Chamber
+preset_prkd15_upper_norfair_double_chamber_revisited:
+    dw #preset_prkd15_upper_norfair_double_chamber ; Upper Norfair: Double Chamber
     dl $7E078D : db $02 : dw $961E ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $ADDE ; MDB
@@ -1672,8 +1672,8 @@ preset_prkd_upper_norfair_double_chamber_revisited:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_single_chamber_revisited:
-    dw #preset_prkd_upper_norfair_double_chamber_revisited ; Upper Norfair: Double Chamber Revisited
+preset_prkd15_upper_norfair_single_chamber_revisited:
+    dw #preset_prkd15_upper_norfair_double_chamber_revisited ; Upper Norfair: Double Chamber Revisited
     dl $7E078D : db $02 : dw $962A ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $ADAD ; MDB
@@ -1691,8 +1691,8 @@ preset_prkd_upper_norfair_single_chamber_revisited:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_volcano_room:
-    dw #preset_prkd_upper_norfair_single_chamber_revisited ; Upper Norfair: Single Chamber Revisited
+preset_prkd15_upper_norfair_volcano_room:
+    dw #preset_prkd15_upper_norfair_single_chamber_revisited ; Upper Norfair: Single Chamber Revisited
     dl $7E078D : db $02 : dw $95EE ; DDB
     dl $7E078F : db $02 : dw $0003 ; DoorOut Index
     dl $7E079B : db $02 : dw $AE07 ; MDB
@@ -1711,8 +1711,8 @@ preset_prkd_upper_norfair_volcano_room:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_kronic_boost:
-    dw #preset_prkd_upper_norfair_volcano_room ; Upper Norfair: Volcano Room
+preset_prkd15_upper_norfair_kronic_boost:
+    dw #preset_prkd15_upper_norfair_volcano_room ; Upper Norfair: Volcano Room
     dl $7E078D : db $02 : dw $9642 ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $AE32 ; MDB
@@ -1731,8 +1731,8 @@ preset_prkd_upper_norfair_kronic_boost:
     dw #$FFFF
 .after
 
-preset_prkd_upper_norfair_lava_spark:
-    dw #preset_prkd_upper_norfair_kronic_boost ; Upper Norfair: Kronic Boost
+preset_prkd15_upper_norfair_lava_spark:
+    dw #preset_prkd15_upper_norfair_kronic_boost ; Upper Norfair: Kronic Boost
     dl $7E078D : db $02 : dw $965A ; DDB
     dl $7E079B : db $02 : dw $AE74 ; MDB
     dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
@@ -1749,8 +1749,8 @@ preset_prkd_upper_norfair_lava_spark:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_ln_main_hall:
-    dw #preset_prkd_upper_norfair_lava_spark ; Upper Norfair: Lava Spark
+preset_prkd15_lower_norfair_ln_main_hall:
+    dw #preset_prkd15_upper_norfair_lava_spark ; Upper Norfair: Lava Spark
     dl $7E078D : db $02 : dw $96F6 ; DDB
     dl $7E079B : db $02 : dw $B236 ; MDB
     dl $7E07F3 : db $02 : dw $0018 ; Music Bank
@@ -1771,8 +1771,8 @@ preset_prkd_lower_norfair_ln_main_hall:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_prepillars:
-    dw #preset_prkd_lower_norfair_ln_main_hall ; Lower Norfair: LN Main Hall
+preset_prkd15_lower_norfair_prepillars:
+    dw #preset_prkd15_lower_norfair_ln_main_hall ; Lower Norfair: LN Main Hall
     dl $7E078F : db $02 : dw $0003 ; DoorOut Index
     dl $7E090F : db $02 : dw $3000 ; Screen subpixel X position.
     dl $7E0911 : db $02 : dw $0700 ; Screen X position in pixels
@@ -1785,8 +1785,8 @@ preset_prkd_lower_norfair_prepillars:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_worst_room_in_the_game:
-    dw #preset_prkd_lower_norfair_prepillars ; Lower Norfair: Pre-Pillars
+preset_prkd15_lower_norfair_worst_room_in_the_game:
+    dw #preset_prkd15_lower_norfair_prepillars ; Lower Norfair: Pre-Pillars
     dl $7E078D : db $02 : dw $9912 ; DDB
     dl $7E078F : db $02 : dw $0004 ; DoorOut Index
     dl $7E079B : db $02 : dw $B457 ; MDB
@@ -1804,8 +1804,8 @@ preset_prkd_lower_norfair_worst_room_in_the_game:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_amphitheatre:
-    dw #preset_prkd_lower_norfair_worst_room_in_the_game ; Lower Norfair: Worst Room in the Game
+preset_prkd15_lower_norfair_amphitheatre:
+    dw #preset_prkd15_lower_norfair_worst_room_in_the_game ; Lower Norfair: Worst Room in the Game
     dl $7E078D : db $02 : dw $994E ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $B4AD ; MDB
@@ -1823,8 +1823,8 @@ preset_prkd_lower_norfair_amphitheatre:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_kihunter_stairs_down:
-    dw #preset_prkd_lower_norfair_amphitheatre ; Lower Norfair: Amphitheatre
+preset_prkd15_lower_norfair_kihunter_stairs_down:
+    dw #preset_prkd15_lower_norfair_amphitheatre ; Lower Norfair: Amphitheatre
     dl $7E078D : db $02 : dw $997E ; DDB
     dl $7E079B : db $02 : dw $B4E5 ; MDB
     dl $7E0911 : db $02 : dw $0270 ; Screen X position in pixels
@@ -1838,8 +1838,8 @@ preset_prkd_lower_norfair_kihunter_stairs_down:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_wasteland:
-    dw #preset_prkd_lower_norfair_kihunter_stairs_down ; Lower Norfair: Kihunter Stairs Down
+preset_prkd15_lower_norfair_wasteland:
+    dw #preset_prkd15_lower_norfair_kihunter_stairs_down ; Lower Norfair: Kihunter Stairs Down
     dl $7E078D : db $02 : dw $99A2 ; DDB
     dl $7E079B : db $02 : dw $B585 ; MDB
     dl $7E090F : db $02 : dw $A980 ; Screen subpixel X position.
@@ -1859,8 +1859,8 @@ preset_prkd_lower_norfair_wasteland:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_metal_ninja_pirates:
-    dw #preset_prkd_lower_norfair_wasteland ; Lower Norfair: Wasteland
+preset_prkd15_lower_norfair_metal_ninja_pirates:
+    dw #preset_prkd15_lower_norfair_wasteland ; Lower Norfair: Wasteland
     dl $7E078D : db $02 : dw $99EA ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $B5D5 ; MDB
@@ -1884,8 +1884,8 @@ preset_prkd_lower_norfair_metal_ninja_pirates:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_plowerhouse:
-    dw #preset_prkd_lower_norfair_metal_ninja_pirates ; Lower Norfair: Metal Ninja Pirates
+preset_prkd15_lower_norfair_plowerhouse:
+    dw #preset_prkd15_lower_norfair_metal_ninja_pirates ; Lower Norfair: Metal Ninja Pirates
     dl $7E078D : db $02 : dw $9A1A ; DDB
     dl $7E079B : db $02 : dw $B62B ; MDB
     dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
@@ -1904,8 +1904,8 @@ preset_prkd_lower_norfair_plowerhouse:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_ridley_farming_room:
-    dw #preset_prkd_lower_norfair_plowerhouse ; Lower Norfair: Plowerhouse
+preset_prkd15_lower_norfair_ridley_farming_room:
+    dw #preset_prkd15_lower_norfair_plowerhouse ; Lower Norfair: Plowerhouse
     dl $7E078D : db $02 : dw $9A32 ; DDB
     dl $7E079B : db $02 : dw $B482 ; MDB
     dl $7E090F : db $02 : dw $9000 ; Screen subpixel X position.
@@ -1917,8 +1917,8 @@ preset_prkd_lower_norfair_ridley_farming_room:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_ridley:
-    dw #preset_prkd_lower_norfair_ridley_farming_room ; Lower Norfair: Ridley Farming Room
+preset_prkd15_lower_norfair_ridley:
+    dw #preset_prkd15_lower_norfair_ridley_farming_room ; Lower Norfair: Ridley Farming Room
     dl $7E078D : db $02 : dw $995A ; DDB
     dl $7E079B : db $02 : dw $B37A ; MDB
     dl $7E090F : db $02 : dw $1000 ; Screen subpixel X position.
@@ -1931,8 +1931,8 @@ preset_prkd_lower_norfair_ridley:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_nox_ln_main_hall:
-    dw #preset_prkd_upper_norfair_lava_spark ; Upper Norfair: Lava Spark
+preset_prkd15_lower_norfair_nox_ln_main_hall:
+    dw #preset_prkd15_upper_norfair_lava_spark ; Upper Norfair: Lava Spark
     dl $7E078D : db $02 : dw $96F6 ; DDB
     dl $7E079B : db $02 : dw $B236 ; MDB
     dl $7E07F3 : db $02 : dw $0018 ; Music Bank
@@ -1952,8 +1952,8 @@ preset_prkd_lower_norfair_nox_ln_main_hall:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_nox_prepillars:
-    dw #preset_prkd_lower_norfair_nox_ln_main_hall ; Lower Norfair: LN Main Hall
+preset_prkd15_lower_norfair_nox_prepillars:
+    dw #preset_prkd15_lower_norfair_nox_ln_main_hall ; Lower Norfair: LN Main Hall
     dl $7E078F : db $02 : dw $0003 ; DoorOut Index
     dl $7E090F : db $02 : dw $3000 ; Screen subpixel X position.
     dl $7E0911 : db $02 : dw $0700 ; Screen X position in pixels
@@ -1966,8 +1966,8 @@ preset_prkd_lower_norfair_nox_prepillars:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_nox_worst_room_in_the_game:
-    dw #preset_prkd_lower_norfair_nox_prepillars ; Lower Norfair: Pre-Pillars
+preset_prkd15_lower_norfair_nox_worst_room_in_the_game:
+    dw #preset_prkd15_lower_norfair_nox_prepillars ; Lower Norfair: Pre-Pillars
     dl $7E078D : db $02 : dw $9912 ; DDB
     dl $7E078F : db $02 : dw $0004 ; DoorOut Index
     dl $7E079B : db $02 : dw $B457 ; MDB
@@ -1985,8 +1985,8 @@ preset_prkd_lower_norfair_nox_worst_room_in_the_game:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_nox_amphitheatre:
-    dw #preset_prkd_lower_norfair_nox_worst_room_in_the_game ; Lower Norfair: Worst Room in the Game
+preset_prkd15_lower_norfair_nox_amphitheatre:
+    dw #preset_prkd15_lower_norfair_nox_worst_room_in_the_game ; Lower Norfair: Worst Room in the Game
     dl $7E078D : db $02 : dw $994E ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $B4AD ; MDB
@@ -2004,8 +2004,8 @@ preset_prkd_lower_norfair_nox_amphitheatre:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_nox_kihunter_stairs_down:
-    dw #preset_prkd_lower_norfair_nox_amphitheatre ; Lower Norfair: Amphitheatre
+preset_prkd15_lower_norfair_nox_kihunter_stairs_down:
+    dw #preset_prkd15_lower_norfair_nox_amphitheatre ; Lower Norfair: Amphitheatre
     dl $7E078D : db $02 : dw $997E ; DDB
     dl $7E079B : db $02 : dw $B4E5 ; MDB
     dl $7E0911 : db $02 : dw $0270 ; Screen X position in pixels
@@ -2019,8 +2019,8 @@ preset_prkd_lower_norfair_nox_kihunter_stairs_down:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_nox_wasteland:
-    dw #preset_prkd_lower_norfair_nox_kihunter_stairs_down ; Lower Norfair: Kihunter Stairs Down
+preset_prkd15_lower_norfair_nox_wasteland:
+    dw #preset_prkd15_lower_norfair_nox_kihunter_stairs_down ; Lower Norfair: Kihunter Stairs Down
     dl $7E078D : db $02 : dw $99A2 ; DDB
     dl $7E079B : db $02 : dw $B585 ; MDB
     dl $7E090F : db $02 : dw $A980 ; Screen subpixel X position.
@@ -2040,8 +2040,8 @@ preset_prkd_lower_norfair_nox_wasteland:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_nox_metal_ninja_pirates:
-    dw #preset_prkd_lower_norfair_nox_wasteland ; Lower Norfair: Wasteland
+preset_prkd15_lower_norfair_nox_metal_ninja_pirates:
+    dw #preset_prkd15_lower_norfair_nox_wasteland ; Lower Norfair: Wasteland
     dl $7E078D : db $02 : dw $99EA ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $B5D5 ; MDB
@@ -2065,8 +2065,8 @@ preset_prkd_lower_norfair_nox_metal_ninja_pirates:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_nox_plowerhouse:
-    dw #preset_prkd_lower_norfair_nox_metal_ninja_pirates ; Lower Norfair: Metal Ninja Pirates
+preset_prkd15_lower_norfair_nox_plowerhouse:
+    dw #preset_prkd15_lower_norfair_nox_metal_ninja_pirates ; Lower Norfair: Metal Ninja Pirates
     dl $7E078D : db $02 : dw $9A1A ; DDB
     dl $7E079B : db $02 : dw $B62B ; MDB
     dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
@@ -2085,8 +2085,8 @@ preset_prkd_lower_norfair_nox_plowerhouse:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_nox_ridley_farming_room:
-    dw #preset_prkd_lower_norfair_nox_plowerhouse ; Lower Norfair: Plowerhouse
+preset_prkd15_lower_norfair_nox_ridley_farming_room:
+    dw #preset_prkd15_lower_norfair_nox_plowerhouse ; Lower Norfair: Plowerhouse
     dl $7E078D : db $02 : dw $9A32 ; DDB
     dl $7E079B : db $02 : dw $B482 ; MDB
     dl $7E090F : db $02 : dw $9000 ; Screen subpixel X position.
@@ -2099,8 +2099,8 @@ preset_prkd_lower_norfair_nox_ridley_farming_room:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_nox_ridley:
-    dw #preset_prkd_lower_norfair_nox_ridley_farming_room ; Lower Norfair: Ridley Farming Room
+preset_prkd15_lower_norfair_nox_ridley:
+    dw #preset_prkd15_lower_norfair_nox_ridley_farming_room ; Lower Norfair: Ridley Farming Room
     dl $7E078D : db $02 : dw $995A ; DDB
     dl $7E079B : db $02 : dw $B37A ; MDB
     dl $7E090F : db $02 : dw $1000 ; Screen subpixel X position.
@@ -2113,8 +2113,8 @@ preset_prkd_lower_norfair_nox_ridley:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_leaving_ridley:
-    dw #preset_prkd_lower_norfair_ridley ; Lower Norfair: Ridley
+preset_prkd15_lower_norfair_leaving_ridley:
+    dw #preset_prkd15_lower_norfair_ridley ; Lower Norfair: Ridley
     dl $7E078D : db $02 : dw $98CA ; DDB
     dl $7E079B : db $02 : dw $B32E ; MDB
     dl $7E07F3 : db $02 : dw $0024 ; Music Bank
@@ -2137,8 +2137,8 @@ preset_prkd_lower_norfair_leaving_ridley:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_reverse_plowerhouse:
-    dw #preset_prkd_lower_norfair_leaving_ridley ; Lower Norfair: Leaving Ridley
+preset_prkd15_lower_norfair_reverse_plowerhouse:
+    dw #preset_prkd15_lower_norfair_leaving_ridley ; Lower Norfair: Leaving Ridley
     dl $7E078D : db $02 : dw $98BE ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $B37A ; MDB
@@ -2160,8 +2160,8 @@ preset_prkd_lower_norfair_reverse_plowerhouse:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_wasteland_revisit:
-    dw #preset_prkd_lower_norfair_reverse_plowerhouse ; Lower Norfair: Reverse Plowerhouse
+preset_prkd15_lower_norfair_wasteland_revisit:
+    dw #preset_prkd15_lower_norfair_reverse_plowerhouse ; Lower Norfair: Reverse Plowerhouse
     dl $7E078D : db $02 : dw $9966 ; DDB
     dl $7E079B : db $02 : dw $B62B ; MDB
     dl $7E090F : db $02 : dw $6000 ; Screen subpixel X position.
@@ -2171,8 +2171,8 @@ preset_prkd_lower_norfair_wasteland_revisit:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_kihunter_stairs_up:
-    dw #preset_prkd_lower_norfair_wasteland_revisit ; Lower Norfair: Wasteland Revisit
+preset_prkd15_lower_norfair_kihunter_stairs_up:
+    dw #preset_prkd15_lower_norfair_wasteland_revisit ; Lower Norfair: Wasteland Revisit
     dl $7E078D : db $02 : dw $9A3E ; DDB
     dl $7E079B : db $02 : dw $B5D5 ; MDB
     dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
@@ -2189,8 +2189,8 @@ preset_prkd_lower_norfair_kihunter_stairs_up:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_fire_flea_room:
-    dw #preset_prkd_lower_norfair_kihunter_stairs_up ; Lower Norfair: Kihunter Stairs Up
+preset_prkd15_lower_norfair_fire_flea_room:
+    dw #preset_prkd15_lower_norfair_kihunter_stairs_up ; Lower Norfair: Kihunter Stairs Up
     dl $7E078D : db $02 : dw $9A26 ; DDB
     dl $7E079B : db $02 : dw $B585 ; MDB
     dl $7E090F : db $02 : dw $2001 ; Screen subpixel X position.
@@ -2206,8 +2206,8 @@ preset_prkd_lower_norfair_fire_flea_room:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_springball_maze:
-    dw #preset_prkd_lower_norfair_fire_flea_room ; Lower Norfair: Fire Flea Room
+preset_prkd15_lower_norfair_springball_maze:
+    dw #preset_prkd15_lower_norfair_fire_flea_room ; Lower Norfair: Fire Flea Room
     dl $7E078D : db $02 : dw $9A02 ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $B6EE ; MDB
@@ -2228,8 +2228,8 @@ preset_prkd_lower_norfair_springball_maze:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_three_musketeers:
-    dw #preset_prkd_lower_norfair_springball_maze ; Lower Norfair: Springball Maze
+preset_prkd15_lower_norfair_three_musketeers:
+    dw #preset_prkd15_lower_norfair_springball_maze ; Lower Norfair: Springball Maze
     dl $7E078D : db $02 : dw $9A92 ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $B510 ; MDB
@@ -2247,8 +2247,8 @@ preset_prkd_lower_norfair_three_musketeers:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_single_chamber_final:
-    dw #preset_prkd_lower_norfair_three_musketeers ; Lower Norfair: Three Musketeers
+preset_prkd15_lower_norfair_single_chamber_final:
+    dw #preset_prkd15_lower_norfair_three_musketeers ; Lower Norfair: Three Musketeers
     dl $7E078D : db $02 : dw $99AE ; DDB
     dl $7E079B : db $02 : dw $B656 ; MDB
     dl $7E090F : db $02 : dw $E000 ; Screen subpixel X position.
@@ -2265,8 +2265,8 @@ preset_prkd_lower_norfair_single_chamber_final:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_bubble_mountain_final:
-    dw #preset_prkd_lower_norfair_single_chamber_final ; Lower Norfair: Single Chamber Final
+preset_prkd15_lower_norfair_bubble_mountain_final:
+    dw #preset_prkd15_lower_norfair_single_chamber_final ; Lower Norfair: Single Chamber Final
     dl $7E078D : db $02 : dw $9A4A ; DDB
     dl $7E079B : db $02 : dw $AD5E ; MDB
     dl $7E07F3 : db $02 : dw $0015 ; Music Bank
@@ -2283,8 +2283,8 @@ preset_prkd_lower_norfair_bubble_mountain_final:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_frog_speedway:
-    dw #preset_prkd_lower_norfair_bubble_mountain_final ; Lower Norfair: Bubble Mountain Final
+preset_prkd15_lower_norfair_frog_speedway:
+    dw #preset_prkd15_lower_norfair_bubble_mountain_final ; Lower Norfair: Bubble Mountain Final
     dl $7E078D : db $02 : dw $956A ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $AF72 ; MDB
@@ -2303,8 +2303,8 @@ preset_prkd_lower_norfair_frog_speedway:
     dw #$FFFF
 .after
 
-preset_prkd_lower_norfair_business_center_final:
-    dw #preset_prkd_lower_norfair_frog_speedway ; Lower Norfair: Frog Speedway
+preset_prkd15_lower_norfair_business_center_final:
+    dw #preset_prkd15_lower_norfair_frog_speedway ; Lower Norfair: Frog Speedway
     dl $7E078D : db $02 : dw $97DA ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $B167 ; MDB
@@ -2320,8 +2320,8 @@ preset_prkd_lower_norfair_business_center_final:
     dw #$FFFF
 .after
 
-preset_prkd_kraid_entering_kraids_lair:
-    dw #preset_prkd_lower_norfair_business_center_final ; Lower Norfair: Business Center Final
+preset_prkd15_kraid_entering_kraids_lair:
+    dw #preset_prkd15_lower_norfair_business_center_final ; Lower Norfair: Business Center Final
     dl $7E078D : db $02 : dw $92EE ; DDB
     dl $7E078F : db $02 : dw $0004 ; DoorOut Index
     dl $7E079B : db $02 : dw $A6A1 ; MDB
@@ -2344,8 +2344,8 @@ preset_prkd_kraid_entering_kraids_lair:
     dw #$FFFF
 .after
 
-preset_prkd_kraid_kraid_kihunters:
-    dw #preset_prkd_kraid_entering_kraids_lair ; Kraid: Entering Kraids Lair
+preset_prkd15_kraid_kraid_kihunters:
+    dw #preset_prkd15_kraid_entering_kraids_lair ; Kraid: Entering Kraids Lair
     dl $7E078D : db $02 : dw $923A ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $A471 ; MDB
@@ -2367,8 +2367,8 @@ preset_prkd_kraid_kraid_kihunters:
     dw #$FFFF
 .after
 
-preset_prkd_kraid_mini_kraid:
-    dw #preset_prkd_kraid_kraid_kihunters ; Kraid: Kraid Kihunters
+preset_prkd15_kraid_mini_kraid:
+    dw #preset_prkd15_kraid_kraid_kihunters ; Kraid: Kraid Kihunters
     dl $7E078D : db $02 : dw $9156 ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $A4DA ; MDB
@@ -2382,8 +2382,8 @@ preset_prkd_kraid_mini_kraid:
     dw #$FFFF
 .after
 
-preset_prkd_kraid_kraid_2:
-    dw #preset_prkd_kraid_mini_kraid ; Kraid: Mini Kraid
+preset_prkd15_kraid_kraid_2:
+    dw #preset_prkd15_kraid_mini_kraid ; Kraid: Mini Kraid
     dl $7E078D : db $02 : dw $919E ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $A56B ; MDB
@@ -2403,8 +2403,8 @@ preset_prkd_kraid_kraid_2:
     dw #$FFFF
 .after
 
-preset_prkd_kraid_leaving_varia:
-    dw #preset_prkd_kraid_kraid_2 ; Kraid: Kraid
+preset_prkd15_kraid_leaving_varia:
+    dw #preset_prkd15_kraid_kraid_2 ; Kraid: Kraid
     dl $7E078D : db $02 : dw $91DA ; DDB
     dl $7E079B : db $02 : dw $A6E2 ; MDB
     dl $7E07F5 : db $02 : dw $0003 ; Music Track
@@ -2432,8 +2432,8 @@ preset_prkd_kraid_leaving_varia:
     dw #$FFFF
 .after
 
-preset_prkd_kraid_mini_kraid_revisit:
-    dw #preset_prkd_kraid_leaving_varia ; Kraid: Leaving Varia
+preset_prkd15_kraid_mini_kraid_revisit:
+    dw #preset_prkd15_kraid_leaving_varia ; Kraid: Leaving Varia
     dl $7E078D : db $02 : dw $91CE ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $A56B ; MDB
@@ -2452,8 +2452,8 @@ preset_prkd_kraid_mini_kraid_revisit:
     dw #$FFFF
 .after
 
-preset_prkd_kraid_kraid_kihunters_revisit:
-    dw #preset_prkd_kraid_mini_kraid_revisit ; Kraid: Mini Kraid Revisit
+preset_prkd15_kraid_kraid_kihunters_revisit:
+    dw #preset_prkd15_kraid_mini_kraid_revisit ; Kraid: Mini Kraid Revisit
     dl $7E078D : db $02 : dw $91AA ; DDB
     dl $7E079B : db $02 : dw $A521 ; MDB
     dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
@@ -2472,8 +2472,8 @@ preset_prkd_kraid_kraid_kihunters_revisit:
     dw #$FFFF
 .after
 
-preset_prkd_kraid_leaving_kraids_lair:
-    dw #preset_prkd_kraid_kraid_kihunters_revisit ; Kraid: Kraid Kihunters Revisit
+preset_prkd15_kraid_leaving_kraids_lair:
+    dw #preset_prkd15_kraid_kraid_kihunters_revisit ; Kraid: Kraid Kihunters Revisit
     dl $7E078D : db $02 : dw $916E ; DDB
     dl $7E079B : db $02 : dw $A471 ; MDB
     dl $7E07F3 : db $02 : dw $0012 ; Music Bank
@@ -2494,8 +2494,8 @@ preset_prkd_kraid_leaving_kraids_lair:
     dw #$FFFF
 .after
 
-preset_prkd_maridia_maridia_tube_revisit:
-    dw #preset_prkd_kraid_leaving_kraids_lair ; Kraid: Leaving Kraids Lair
+preset_prkd15_maridia_maridia_tube_revisit:
+    dw #preset_prkd15_kraid_leaving_kraids_lair ; Kraid: Leaving Kraids Lair
     dl $7E078D : db $02 : dw $913E ; DDB
     dl $7E079B : db $02 : dw $A6A1 ; MDB
     dl $7E07F5 : db $02 : dw $0003 ; Music Track
@@ -2508,8 +2508,8 @@ preset_prkd_maridia_maridia_tube_revisit:
     dw #$FFFF
 .after
 
-preset_prkd_maridia_fish_tank:
-    dw #preset_prkd_maridia_maridia_tube_revisit ; Maridia: Maridia Tube Revisit
+preset_prkd15_maridia_fish_tank:
+    dw #preset_prkd15_maridia_maridia_tube_revisit ; Maridia: Maridia Tube Revisit
     dl $7E078D : db $02 : dw $A330 ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $CFC9 ; MDB
@@ -2536,8 +2536,8 @@ preset_prkd_maridia_fish_tank:
     dw #$FFFF
 .after
 
-preset_prkd_maridia_mt_everest:
-    dw #preset_prkd_maridia_fish_tank ; Maridia: Fish Tank
+preset_prkd15_maridia_mt_everest:
+    dw #preset_prkd15_maridia_fish_tank ; Maridia: Fish Tank
     dl $7E078D : db $02 : dw $A3F0 ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $D0B9 ; MDB
@@ -2553,8 +2553,8 @@ preset_prkd_maridia_mt_everest:
     dw #$FFFF
 .after
 
-preset_prkd_maridia_crab_shaft:
-    dw #preset_prkd_maridia_mt_everest ; Maridia: Mt Everest
+preset_prkd15_maridia_crab_shaft:
+    dw #preset_prkd15_maridia_mt_everest ; Maridia: Mt Everest
     dl $7E090F : db $02 : dw $6000 ; Screen subpixel X position.
     dl $7E0911 : db $02 : dw $0500 ; Screen X position in pixels
     dl $7E0913 : db $02 : dw $9C01 ; Screen subpixel Y position
@@ -2569,8 +2569,8 @@ preset_prkd_maridia_crab_shaft:
     dw #$FFFF
 .after
 
-preset_prkd_maridia_aqueduct:
-    dw #preset_prkd_maridia_crab_shaft ; Maridia: Crab Shaft
+preset_prkd15_maridia_aqueduct:
+    dw #preset_prkd15_maridia_crab_shaft ; Maridia: Crab Shaft
     dl $7E078D : db $02 : dw $A468 ; DDB
     dl $7E078F : db $02 : dw $0005 ; DoorOut Index
     dl $7E079B : db $02 : dw $D1A3 ; MDB
@@ -2590,8 +2590,8 @@ preset_prkd_maridia_aqueduct:
     dw #$FFFF
 .after
 
-preset_prkd_maridia_botwoon_hallway:
-    dw #preset_prkd_maridia_aqueduct ; Maridia: Aqueduct
+preset_prkd15_maridia_botwoon_hallway:
+    dw #preset_prkd15_maridia_aqueduct ; Maridia: Aqueduct
     dl $7E078D : db $02 : dw $A4C8 ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $D5A7 ; MDB
@@ -2618,8 +2618,8 @@ preset_prkd_maridia_botwoon_hallway:
     dw #$FFFF
 .after
 
-preset_prkd_maridia_botwoon:
-    dw #preset_prkd_maridia_botwoon_hallway ; Maridia: Botwoon Hallway
+preset_prkd15_maridia_botwoon:
+    dw #preset_prkd15_maridia_botwoon_hallway ; Maridia: Botwoon Hallway
     dl $7E078D : db $02 : dw $A72C ; DDB
     dl $7E078F : db $02 : dw $0003 ; DoorOut Index
     dl $7E079B : db $02 : dw $D617 ; MDB
@@ -2637,8 +2637,8 @@ preset_prkd_maridia_botwoon:
     dw #$FFFF
 .after
 
-preset_prkd_maridia_botwoon_etank:
-    dw #preset_prkd_maridia_botwoon ; Maridia: Botwoon
+preset_prkd15_maridia_botwoon_etank:
+    dw #preset_prkd15_maridia_botwoon ; Maridia: Botwoon
     dl $7E078D : db $02 : dw $A774 ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $D95E ; MDB
@@ -2661,8 +2661,8 @@ preset_prkd_maridia_botwoon_etank:
     dw #$FFFF
 .after
 
-preset_prkd_maridia_halfie_setup:
-    dw #preset_prkd_maridia_botwoon_etank ; Maridia: Botwoon E-tank
+preset_prkd15_maridia_halfie_setup:
+    dw #preset_prkd15_maridia_botwoon_etank ; Maridia: Botwoon E-tank
     dl $7E078D : db $02 : dw $A918 ; DDB
     dl $7E079B : db $02 : dw $D7E4 ; MDB
     dl $7E07F3 : db $02 : dw $001B ; Music Bank
@@ -2683,8 +2683,8 @@ preset_prkd_maridia_halfie_setup:
     dw #$FFFF
 .after
 
-preset_prkd_maridia_draygon:
-    dw #preset_prkd_maridia_halfie_setup ; Maridia: Halfie Setup
+preset_prkd15_maridia_draygon:
+    dw #preset_prkd15_maridia_halfie_setup ; Maridia: Halfie Setup
     dl $7E078D : db $02 : dw $A7F8 ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $D78F ; MDB
@@ -2706,8 +2706,8 @@ preset_prkd_maridia_draygon:
     dw #$FFFF
 .after
 
-preset_prkd_maridia_spikesuit_reverse_halfie:
-    dw #preset_prkd_maridia_draygon ; Maridia: Draygon
+preset_prkd15_maridia_spikesuit_reverse_halfie:
+    dw #preset_prkd15_maridia_draygon ; Maridia: Draygon
     dl $7E078D : db $02 : dw $A96C ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
@@ -2724,14 +2724,14 @@ preset_prkd_maridia_spikesuit_reverse_halfie:
     dw #$FFFF
 .after
 
-preset_prkd_maridia_reverse_colosseum:
-    dw #preset_prkd_maridia_spikesuit_reverse_halfie ; Maridia: Spikesuit Reverse Halfie
+preset_prkd15_maridia_reverse_colosseum:
+    dw #preset_prkd15_maridia_spikesuit_reverse_halfie ; Maridia: Spikesuit Reverse Halfie
     dl $7E0A68 : db $02 : dw $0000 ; Flash suit
     dw #$FFFF
 .after
 
-preset_prkd_maridia_reverse_halfie_climb:
-    dw #preset_prkd_maridia_reverse_colosseum ; Maridia: Reverse Colosseum
+preset_prkd15_maridia_reverse_halfie_climb:
+    dw #preset_prkd15_maridia_reverse_colosseum ; Maridia: Reverse Colosseum
     dl $7E078D : db $02 : dw $A834 ; DDB
     dl $7E079B : db $02 : dw $D72A ; MDB
     dl $7E090F : db $02 : dw $8000 ; Screen subpixel X position.
@@ -2744,8 +2744,8 @@ preset_prkd_maridia_reverse_halfie_climb:
     dw #$FFFF
 .after
 
-preset_prkd_maridia_reverse_botwoon_etank:
-    dw #preset_prkd_maridia_reverse_halfie_climb ; Maridia: Reverse Halfie Climb
+preset_prkd15_maridia_reverse_botwoon_etank:
+    dw #preset_prkd15_maridia_reverse_halfie_climb ; Maridia: Reverse Halfie Climb
     dl $7E078D : db $02 : dw $A7E0 ; DDB
     dl $7E079B : db $02 : dw $D913 ; MDB
     dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
@@ -2759,8 +2759,8 @@ preset_prkd_maridia_reverse_botwoon_etank:
     dw #$FFFF
 .after
 
-preset_prkd_maridia_reverse_botwoon_hallway:
-    dw #preset_prkd_maridia_reverse_botwoon_etank ; Maridia: Reverse Botwoon E-tank
+preset_prkd15_maridia_reverse_botwoon_hallway:
+    dw #preset_prkd15_maridia_reverse_botwoon_etank ; Maridia: Reverse Botwoon E-tank
     dl $7E078D : db $02 : dw $A84C ; DDB
     dl $7E079B : db $02 : dw $D95E ; MDB
     dl $7E07F5 : db $02 : dw $0003 ; Music Track
@@ -2775,8 +2775,8 @@ preset_prkd_maridia_reverse_botwoon_hallway:
     dw #$FFFF
 .after
 
-preset_prkd_maridia_reverse_crab_shaft:
-    dw #preset_prkd_maridia_reverse_botwoon_hallway ; Maridia: Reverse Botwoon Hallway
+preset_prkd15_maridia_reverse_crab_shaft:
+    dw #preset_prkd15_maridia_reverse_botwoon_hallway ; Maridia: Reverse Botwoon Hallway
     dl $7E078D : db $02 : dw $A768 ; DDB
     dl $7E079B : db $02 : dw $D5A7 ; MDB
     dl $7E07F5 : db $02 : dw $0005 ; Music Track
@@ -2793,8 +2793,8 @@ preset_prkd_maridia_reverse_crab_shaft:
     dw #$FFFF
 .after
 
-preset_prkd_maridia_mt_everest_revisit:
-    dw #preset_prkd_maridia_reverse_crab_shaft ; Maridia: Reverse Crab Shaft
+preset_prkd15_maridia_mt_everest_revisit:
+    dw #preset_prkd15_maridia_reverse_crab_shaft ; Maridia: Reverse Crab Shaft
     dl $7E078D : db $02 : dw $A708 ; DDB
     dl $7E079B : db $02 : dw $D1A3 ; MDB
     dl $7E07C3 : db $02 : dw $B130 ; GFX Pointers
@@ -2812,8 +2812,8 @@ preset_prkd_maridia_mt_everest_revisit:
     dw #$FFFF
 .after
 
-preset_prkd_backtracking_red_brinstar_green_gate:
-    dw #preset_prkd_maridia_mt_everest_revisit ; Maridia: Mt Everest Revisit
+preset_prkd15_backtracking_red_brinstar_green_gate:
+    dw #preset_prkd15_maridia_mt_everest_revisit ; Maridia: Mt Everest Revisit
     dl $7E078D : db $02 : dw $A42C ; DDB
     dl $7E079B : db $02 : dw $D104 ; MDB
     dl $7E090F : db $02 : dw $C000 ; Screen subpixel X position.
@@ -2831,8 +2831,8 @@ preset_prkd_backtracking_red_brinstar_green_gate:
     dw #$FFFF
 .after
 
-preset_prkd_backtracking_crateria_kihunters_final:
-    dw #preset_prkd_backtracking_red_brinstar_green_gate ; Backtracking: Red Brinstar Green Gate
+preset_prkd15_backtracking_crateria_kihunters_final:
+    dw #preset_prkd15_backtracking_red_brinstar_green_gate ; Backtracking: Red Brinstar Green Gate
     dl $7E078D : db $02 : dw $90BA ; DDB
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E079B : db $02 : dw $962A ; MDB
@@ -2856,8 +2856,8 @@ preset_prkd_backtracking_crateria_kihunters_final:
     dw #$FFFF
 .after
 
-preset_prkd_backtracking_parlor_return:
-    dw #preset_prkd_backtracking_crateria_kihunters_final ; Backtracking: Crateria Kihunters Final
+preset_prkd15_backtracking_parlor_return:
+    dw #preset_prkd15_backtracking_crateria_kihunters_final ; Backtracking: Crateria Kihunters Final
     dl $7E078D : db $02 : dw $8AC6 ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $91F8 ; MDB
@@ -2880,8 +2880,8 @@ preset_prkd_backtracking_parlor_return:
     dw #$FFFF
 .after
 
-preset_prkd_backtracking_terminator_revisit:
-    dw #preset_prkd_backtracking_parlor_return ; Backtracking: Parlor Return
+preset_prkd15_backtracking_terminator_revisit:
+    dw #preset_prkd15_backtracking_parlor_return ; Backtracking: Parlor Return
     dl $7E078D : db $02 : dw $8916 ; DDB
     dl $7E079B : db $02 : dw $92FD ; MDB
     dl $7E07F3 : db $02 : dw $0009 ; Music Bank
@@ -2900,8 +2900,8 @@ preset_prkd_backtracking_terminator_revisit:
     dw #$FFFF
 .after
 
-preset_prkd_backtracking_green_pirate_shaft_revisit:
-    dw #preset_prkd_backtracking_terminator_revisit ; Backtracking: Terminator Revisit
+preset_prkd15_backtracking_green_pirate_shaft_revisit:
+    dw #preset_prkd15_backtracking_terminator_revisit ; Backtracking: Terminator Revisit
     dl $7E078D : db $02 : dw $895E ; DDB
     dl $7E079B : db $02 : dw $990D ; MDB
     dl $7E07C3 : db $02 : dw $F911 ; GFX Pointers
@@ -2923,8 +2923,8 @@ preset_prkd_backtracking_green_pirate_shaft_revisit:
     dw #$FFFF
 .after
 
-preset_prkd_backtracking_g4_hallway:
-    dw #preset_prkd_backtracking_green_pirate_shaft_revisit ; Backtracking: Green Pirate Shaft Revisit
+preset_prkd15_backtracking_g4_hallway:
+    dw #preset_prkd15_backtracking_green_pirate_shaft_revisit ; Backtracking: Green Pirate Shaft Revisit
     dl $7E078D : db $02 : dw $8BE6 ; DDB
     dl $7E079B : db $02 : dw $99BD ; MDB
     dl $7E090F : db $02 : dw $7FFF ; Screen subpixel X position.
@@ -2944,8 +2944,8 @@ preset_prkd_backtracking_g4_hallway:
     dw #$FFFF
 .after
 
-preset_prkd_backtracking_g4_elevator:
-    dw #preset_prkd_backtracking_g4_hallway ; Backtracking: G4 Hallway
+preset_prkd15_backtracking_g4_elevator:
+    dw #preset_prkd15_backtracking_g4_hallway ; Backtracking: G4 Hallway
     dl $7E078D : db $02 : dw $91F2 ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $A66A ; MDB
@@ -2968,8 +2968,8 @@ preset_prkd_backtracking_g4_elevator:
     dw #$FFFF
 .after
 
-preset_prkd_tourian_tourian_elevator_room:
-    dw #preset_prkd_backtracking_g4_elevator ; Backtracking: G4 Elevator
+preset_prkd15_tourian_tourian_elevator_room:
+    dw #preset_prkd15_backtracking_g4_elevator ; Backtracking: G4 Elevator
     dl $7E078D : db $02 : dw $9222 ; DDB
     dl $7E079B : db $02 : dw $DAAE ; MDB
     dl $7E079F : db $02 : dw $0005 ; Region
@@ -2993,8 +2993,8 @@ preset_prkd_tourian_tourian_elevator_room:
     dw #$FFFF
 .after
 
-preset_prkd_tourian_metroids_1:
-    dw #preset_prkd_tourian_tourian_elevator_room ; Tourian: Tourian Elevator Room
+preset_prkd15_tourian_metroids_1:
+    dw #preset_prkd15_tourian_tourian_elevator_room ; Tourian: Tourian Elevator Room
     dl $7E078F : db $02 : dw $0002 ; DoorOut Index
     dl $7E090F : db $02 : dw $0001 ; Screen subpixel X position.
     dl $7E0913 : db $02 : dw $D3FF ; Screen subpixel Y position
@@ -3007,8 +3007,8 @@ preset_prkd_tourian_metroids_1:
     dw #$FFFF
 .after
 
-preset_prkd_tourian_metroids_2:
-    dw #preset_prkd_tourian_metroids_1 ; Tourian: Metroids 1
+preset_prkd15_tourian_metroids_2:
+    dw #preset_prkd15_tourian_metroids_1 ; Tourian: Metroids 1
     dl $7E078D : db $02 : dw $A984 ; DDB
     dl $7E078F : db $02 : dw $0000 ; DoorOut Index
     dl $7E079B : db $02 : dw $DAE1 ; MDB
@@ -3029,8 +3029,8 @@ preset_prkd_tourian_metroids_2:
     dw #$FFFF
 .after
 
-preset_prkd_tourian_metroids_3:
-    dw #preset_prkd_tourian_metroids_2 ; Tourian: Metroids 2
+preset_prkd15_tourian_metroids_3:
+    dw #preset_prkd15_tourian_metroids_2 ; Tourian: Metroids 2
     dl $7E078D : db $02 : dw $A9B4 ; DDB
     dl $7E078F : db $02 : dw $0001 ; DoorOut Index
     dl $7E079B : db $02 : dw $DB31 ; MDB
@@ -3052,8 +3052,8 @@ preset_prkd_tourian_metroids_3:
     dw #$FFFF
 .after
 
-preset_prkd_tourian_metroids_4:
-    dw #preset_prkd_tourian_metroids_3 ; Tourian: Metroids 3
+preset_prkd15_tourian_metroids_4:
+    dw #preset_prkd15_tourian_metroids_3 ; Tourian: Metroids 3
     dl $7E078D : db $02 : dw $A9CC ; DDB
     dl $7E079B : db $02 : dw $DB7D ; MDB
     dl $7E090F : db $02 : dw $A000 ; Screen subpixel X position.
@@ -3072,8 +3072,8 @@ preset_prkd_tourian_metroids_4:
     dw #$FFFF
 .after
 
-preset_prkd_tourian_giant_hoppers:
-    dw #preset_prkd_tourian_metroids_4 ; Tourian: Metroids 4
+preset_prkd15_tourian_giant_hoppers:
+    dw #preset_prkd15_tourian_metroids_4 ; Tourian: Metroids 4
     dl $7E078D : db $02 : dw $A9E4 ; DDB
     dl $7E079B : db $02 : dw $DBCD ; MDB
     dl $7E090F : db $02 : dw $B000 ; Screen subpixel X position.
@@ -3091,8 +3091,8 @@ preset_prkd_tourian_giant_hoppers:
     dw #$FFFF
 .after
 
-preset_prkd_tourian_baby_skip:
-    dw #preset_prkd_tourian_giant_hoppers ; Tourian: Giant Hoppers
+preset_prkd15_tourian_baby_skip:
+    dw #preset_prkd15_tourian_giant_hoppers ; Tourian: Giant Hoppers
     dl $7E078D : db $02 : dw $AA14 ; DDB
     dl $7E079B : db $02 : dw $DC65 ; MDB
     dl $7E07F3 : db $02 : dw $0045 ; Music Bank
@@ -3112,8 +3112,8 @@ preset_prkd_tourian_baby_skip:
     dw #$FFFF
 .after
 
-preset_prkd_tourian_gadora_room:
-    dw #preset_prkd_tourian_baby_skip ; Tourian: Baby Skip
+preset_prkd15_tourian_gadora_room:
+    dw #preset_prkd15_tourian_baby_skip ; Tourian: Baby Skip
     dl $7E078D : db $02 : dw $AA44 ; DDB
     dl $7E079B : db $02 : dw $DCFF ; MDB
     dl $7E07F3 : db $02 : dw $001E ; Music Bank
@@ -3134,8 +3134,8 @@ preset_prkd_tourian_gadora_room:
     dw #$FFFF
 .after
 
-preset_prkd_tourian_rinka_shaft:
-    dw #preset_prkd_tourian_gadora_room ; Tourian: gadora Room
+preset_prkd15_tourian_rinka_shaft:
+    dw #preset_prkd15_tourian_gadora_room ; Tourian: gadora Room
     dl $7E078D : db $02 : dw $AA5C ; DDB
     dl $7E079B : db $02 : dw $DDC4 ; MDB
     dl $7E090F : db $02 : dw $4000 ; Screen subpixel X position.
@@ -3154,8 +3154,8 @@ preset_prkd_tourian_rinka_shaft:
     dw #$FFFF
 .after
 
-preset_prkd_tourian_zeb_skip:
-    dw #preset_prkd_tourian_rinka_shaft ; Tourian: Rinka Shaft
+preset_prkd15_tourian_zeb_skip:
+    dw #preset_prkd15_tourian_rinka_shaft ; Tourian: Rinka Shaft
     dl $7E078D : db $02 : dw $AAA4 ; DDB
     dl $7E079B : db $02 : dw $DDF3 ; MDB
     dl $7E090F : db $02 : dw $6000 ; Screen subpixel X position.
@@ -3171,8 +3171,8 @@ preset_prkd_tourian_zeb_skip:
     dw #$FFFF
 .after
 
-preset_prkd_tourian_escape_room_3:
-    dw #preset_prkd_tourian_zeb_skip ; Tourian: Zeb Skip
+preset_prkd15_tourian_escape_room_3:
+    dw #preset_prkd15_tourian_zeb_skip ; Tourian: Zeb Skip
     dl $7E078D : db $02 : dw $AAEC ; DDB
     dl $7E079B : db $02 : dw $DE7A ; MDB
     dl $7E07F3 : db $02 : dw $0024 ; Music Bank
@@ -3198,8 +3198,8 @@ preset_prkd_tourian_escape_room_3:
     dw #$FFFF
 .after
 
-preset_prkd_tourian_climb_spark:
-    dw #preset_prkd_tourian_escape_room_3 ; Tourian: Escape Room 3
+preset_prkd15_tourian_climb_spark:
+    dw #preset_prkd15_tourian_escape_room_3 ; Tourian: Escape Room 3
     dl $7E078D : db $02 : dw $AB1C ; DDB
     dl $7E079B : db $02 : dw $DEDE ; MDB
     dl $7E090F : db $02 : dw $0000 ; Screen subpixel X position.
@@ -3215,8 +3215,8 @@ preset_prkd_tourian_climb_spark:
     dw #$FFFF
 .after
 
-preset_prkd_tourian_escape_parlor:
-    dw #preset_prkd_tourian_climb_spark ; Tourian: Climb Spark
+preset_prkd15_tourian_escape_parlor:
+    dw #preset_prkd15_tourian_climb_spark ; Tourian: Climb Spark
     dl $7E078D : db $02 : dw $AB34 ; DDB
     dl $7E079B : db $02 : dw $96BA ; MDB
     dl $7E079F : db $02 : dw $0000 ; Region
