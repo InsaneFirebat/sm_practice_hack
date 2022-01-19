@@ -207,7 +207,7 @@ presets_allbosskpdr_brinstar_red_tower:
     %cm_preset("Red Tower", #preset_allbosskpdr_brinstar_red_tower)
 
 presets_allbosskpdr_brinstar_entering_kraids_lair:
-    %cm_preset("Entering Kraid's Lair", #preset_allbosskpdr_brinstar_entering_kraids_lair)
+    %cm_preset("Entering Kraids Lair", #preset_allbosskpdr_brinstar_entering_kraids_lair)
 
 presets_allbosskpdr_brinstar_baby_kraid_entering:
     %cm_preset("Baby Kraid (Entering)", #preset_allbosskpdr_brinstar_baby_kraid_entering)

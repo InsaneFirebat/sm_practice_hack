@@ -30,7 +30,7 @@ presets_goto_allbossprkd_upper_norfair_revisit:
     %cm_submenu("Upper Norfair Revisit", #presets_submenu_allbossprkd_upper_norfair_revisit)
 
 presets_goto_allbossprkd_kraids_lair:
-    %cm_submenu("Kraid's Lair", #presets_submenu_allbossprkd_kraids_lair)
+    %cm_submenu("Kraids Lair", #presets_submenu_allbossprkd_kraids_lair)
 
 presets_goto_allbossprkd_maridia:
     %cm_submenu("Maridia", #presets_submenu_allbossprkd_maridia)
@@ -135,7 +135,7 @@ presets_submenu_allbossprkd_kraids_lair:
     dw #presets_allbossprkd_kraids_lair_baby_kraid_entering_2
     dw #presets_allbossprkd_kraids_lair_leaving_kraids_lair
     dw #$0000
-    %cm_header("KRAID'S LAIR")
+    %cm_header("KRAIDS LAIR")
 
 presets_submenu_allbossprkd_maridia:
     dw #presets_allbossprkd_maridia_mt_everest
@@ -376,9 +376,9 @@ presets_allbossprkd_upper_norfair_revisit_business_center_revisit:
     %cm_preset("Business Center Revisit", #preset_allbossprkd_upper_norfair_revisit_business_center_revisit)
 
 
-; Kraid's Lair
+; Kraids Lair
 presets_allbossprkd_kraids_lair_entering_kraids_lair:
-    %cm_preset("Entering Kraid's Lair", #preset_allbossprkd_kraids_lair_entering_kraids_lair)
+    %cm_preset("Entering Kraids Lair", #preset_allbossprkd_kraids_lair_entering_kraids_lair)
 
 presets_allbossprkd_kraids_lair_baby_kraid_entering:
     %cm_preset("Baby Kraid (Entering)", #preset_allbossprkd_kraids_lair_baby_kraid_entering)
@@ -390,7 +390,7 @@ presets_allbossprkd_kraids_lair_baby_kraid_entering_2:
     %cm_preset("Baby Kraid (Entering)", #preset_allbossprkd_kraids_lair_baby_kraid_entering_2)
 
 presets_allbossprkd_kraids_lair_leaving_kraids_lair:
-    %cm_preset("Leaving Kraid's Lair", #preset_allbossprkd_kraids_lair_leaving_kraids_lair)
+    %cm_preset("Leaving Kraids Lair", #preset_allbossprkd_kraids_lair_leaving_kraids_lair)
 
 
 ; Maridia
