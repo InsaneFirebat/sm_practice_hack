@@ -591,7 +591,7 @@ ti_xray:
 
 action_equip_collected_items:
 {
-    LDA $09A4 : STA $09A6
+    LDA $09A4 : STA $09A2
     RTS
 }
 
