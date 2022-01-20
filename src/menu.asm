@@ -327,11 +327,23 @@ PaletteProfileTables:
     dw #MelonaxProfileTable       ; 9
     dw #TopsyTurveProfileTable    ; A
     dw #OSTProfileTable           ; B
-    dw #GreyProfileTable          ; C
-    dw #RedProfileTable           ; D
-    dw #PurpleProfileTable        ; E
-    dw #HUDProfileTable           ; F
+    dw #JRPProfileTable           ; C
+    dw #GreyProfileTable          ; D
+    dw #RedProfileTable           ; E
+    dw #PurpleProfileTable        ; F
+    dw #HUDProfileTable           ; 10
     dw #$0000
+
+!PROFILE_Firebat      = #$0003
+!PROFILE_wardrinker   = #$0004
+!PROFILE_mm2          = #$0005
+!PROFILE_ptoil        = #$0006
+!PROFILE_Zohdin       = #$0007
+!PROFILE_DarkXoa      = #$0008
+!PROFILE_Melonax      = #$0009
+!PROFILE_TopsyTurvy   = #$000A
+!PROFILE_OST          = #$000B
+!PROFILE_JRP          = #$000C
 
 ; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
 CustomProfileTable: ; custom always first
@@ -369,6 +381,9 @@ TopsyTurveProfileTable:
 
 OSTProfileTable:
     dw $7FFF, $7FFF, $0010, $0000, $0010, $7FFF, $001F, $001E, $0000, $7FFF, $001E
+
+JRPProfileTable:
+    dw $7976, $384B, $66D1, $484A, $E54F, $7B97, $7B7B, $6B5E, $70F0, $654F, $7B97
 
 GreyProfileTable:
     dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $0012, $0C63, $1CE7, $3DEF

@@ -88,6 +88,7 @@ ifb_paletteprofile:
         db #$28, "    MELONAX", #$FF
         db #$28, " TOPSYTURVE", #$FF
         db #$28, "        OST", #$FF
+        db #$28, "        JRP", #$FF
         db #$28, "       GREY", #$FF
         db #$28, "        RED", #$FF
         db #$28, "     PURPLE", #$FF
