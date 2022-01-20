@@ -172,9 +172,7 @@
 !ram_cm_ctrl_mode = !WRAM_MENU_START+$34
 !ram_cm_ctrl_timer = !WRAM_MENU_START+$36
 !ram_cm_ctrl_last_input = !WRAM_MENU_START+$38
-!ram_cm_ctrl_assign = !WRAM_MENU_START+$3A
-!ram_cm_ctrl_swap = !WRAM_MENU_START+$3C
-!ram_cm_botwoon_rng = !WRAM_MENU_START+$3E
+!ram_cm_botwoon_rng = !WRAM_MENU_START+$3A
 
 ; ^ FREE SPACE ^ up to +$7E
 

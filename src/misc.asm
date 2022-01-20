@@ -239,7 +239,9 @@ stop_all_sounds:
 print pc, " misc end"
 
 
-org $90FF90
+;org $90FF90
+org $8CFF00
+print pc, " spacetime bank8C start"
 original_load_projectile_palette_long:
 {
     AND #$0FFF : ASL : TAY
@@ -291,11 +293,10 @@ spacetime_routine_long:
     CPY #$0020 : BMI .normal_load_loop
     RTL
 }
-print pc, " misc start"
-
+print pc, " spacetime bank8C end"
 
 ;org $90FF90
-org $90F6C1
+org $90F7E0
 print pc, " misc bank90 start"
 original_load_projectile_palette:
     JSL original_load_projectile_palette_long
@@ -304,6 +305,6 @@ original_load_projectile_palette:
 spacetime_routine:
     JSL spacetime_routine_long
     RTS
-
+warnpc $90F7EC
 print pc, " misc bank90 end"
 
