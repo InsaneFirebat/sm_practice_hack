@@ -47,6 +47,8 @@ presets_goto_prkd_tourian:
     %cm_submenu("Tourian", #presets_submenu_prkd_tourian)
 
 presets_submenu_prkd_crateria:
+    dw #presets_prkd_crateria_ceres_elevator
+    dw #presets_prkd_crateria_ceres_last_3_rooms
     dw #presets_prkd_crateria_ship
     dw #presets_prkd_crateria_parlor
     dw #presets_prkd_crateria_parlor_downback
@@ -199,7 +201,7 @@ presets_submenu_prkd_kraid:
     dw #presets_prkd_kraid_kraid_kihunters_revisit
     dw #presets_prkd_kraid_leaving_kraids_lair
     dw #$0000
-    %cm_header("KRAID")
+    %cm_header("KRAID'S LAIR")
 
 presets_submenu_prkd_maridia:
     dw #presets_prkd_maridia_maridia_tube_revisit
@@ -251,6 +253,12 @@ presets_submenu_prkd_tourian:
     %cm_header("TOURIAN")
 
 ; Crateria
+presets_prkd_crateria_ceres_elevator:
+    %cm_preset("Ceres Elevator", #preset_prkd_crateria_ceres_elevator)
+
+presets_prkd_crateria_ceres_last_3_rooms:
+    %cm_preset("Ceres Last 3 Rooms", #preset_prkd_crateria_ceres_last_3_rooms)
+
 presets_prkd_crateria_ship:
     %cm_preset("Ship", #preset_prkd_crateria_ship)
 
@@ -576,7 +584,7 @@ presets_prkd_lower_norfair_business_center_final:
 
 ; Kraid
 presets_prkd_kraid_entering_kraids_lair:
-    %cm_preset("Entering Kraids Lair", #preset_prkd_kraid_entering_kraids_lair)
+    %cm_preset("Entering Kraid's Lair", #preset_prkd_kraid_entering_kraids_lair)
 
 presets_prkd_kraid_kraid_kihunters:
     %cm_preset("Kraid Kihunters", #preset_prkd_kraid_kraid_kihunters)
@@ -597,7 +605,7 @@ presets_prkd_kraid_kraid_kihunters_revisit:
     %cm_preset("Kraid Kihunters Revisit", #preset_prkd_kraid_kraid_kihunters_revisit)
 
 presets_prkd_kraid_leaving_kraids_lair:
-    %cm_preset("Leaving Kraids Lair", #preset_prkd_kraid_leaving_kraids_lair)
+    %cm_preset("Leaving Kraid's Lair", #preset_prkd_kraid_leaving_kraids_lair)
 
 
 ; Maridia
