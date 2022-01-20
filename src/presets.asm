@@ -1,5 +1,5 @@
 org $82FA00
-print pc, " presets  bank82 start"
+print pc, " presets bank82 start"
 
 preset_load:
 {
@@ -88,7 +88,6 @@ endif
     JSL reset_all_counters
     STZ $0795 ; clear door transition flag
 
-  .music_done
     ; Clear enemies if not in certain rooms
     LDA $079B : CMP #$DD58 : BEQ .set_mb_state
     JSR clear_all_enemies
@@ -270,7 +269,6 @@ category_preset_load:
 }
 
 category_preset_data_table:
-{
   dl preset_kpdr21_crateria_ceres_elevator
 ;  dl preset_kpdr22_crateria_ceres_elevator
 ;  dl preset_spazer_crateria_ceres_elevator
@@ -278,7 +276,7 @@ category_preset_data_table:
 ;  dl preset_prkd15_crateria_ceres_elevator
   dl preset_pkrd_crateria_ship
   dl preset_kpdr25_bombs_ceres_elevator
-  dl preset_gtclassic_crateria_ship
+  dl preset_gtclassic_crateria_ceres_elevator
   dl preset_gtmax_crateria_ship
   dl preset_100early_crateria_ceres_elevator
   dl preset_hundo_bombs_ceres_elevator
@@ -292,7 +290,7 @@ category_preset_data_table:
   dl preset_allbosskpdr_crateria_ceres_elevator
   dl preset_allbosspkdr_crateria_ceres_elevator
   dl preset_allbossprkd_crateria_ceres_elevator
-}
+
 print pc, " presets bank82 end"
 
 
@@ -344,7 +342,11 @@ else
     JSL $A08A1E  ; Load enemies
 endif
     JSL $80A23F  ; Clear BG2 tilemap
+if !RAW_TILE_GRAPHICS
+    JSL preset_load_level_tile_tables_scrolls_plms_and_execute_asm
+else
     JSL $82E7D3  ; Load level data, CRE, tile table, scroll data, create PLMs and execute door ASM and room setup ASM
+endif
     JSL $89AB82  ; Load FX
     JSL $82E97C  ; Load library background
 
@@ -414,6 +416,7 @@ endif
     STZ $0E18    ; Set elevator to inactive
     STZ $0E1A    ; Clear health bomb flag
 
+    LDA #$E737 : STA $099C  ; Pointer to next frame's room transition code = $82:E737
     PLB
     PLP
     RTL
@@ -807,6 +810,7 @@ warnpc $809AC9
 ; $80:9AC9: Resume original logic
 org $809AC9
   .resume_infohud_icon_initialization
+
 
 
 ; -------------------

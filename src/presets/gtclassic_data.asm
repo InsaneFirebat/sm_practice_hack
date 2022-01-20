@@ -1997,6 +1997,7 @@ preset_gtclassic_wrecked_ship_crateria_kihunters:
     dw $0923, $FF00  ; BG2 Y offset
     dw $09CA, $0011  ; Supers
     dw $09CE, $000E  ; Pbs
+    dw $09D2, $0003  ; Currently selected item
     dw $0AF6, $008C  ; Samus X
     dw $0AFA, $005B  ; Samus Y
     dw $D8B2, $2C01  ; Doors
@@ -2016,6 +2017,7 @@ preset_gtclassic_wrecked_ship_moat:
     dw $0923, $FD00  ; BG2 Y offset
     dw $09C2, $0163  ; Health
     dw $09CE, $000D  ; Pbs
+    dw $09D2, $0000  ; Currently selected item
     dw $0A1C, $0001  ; Samus position/state
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $02B3  ; Samus X

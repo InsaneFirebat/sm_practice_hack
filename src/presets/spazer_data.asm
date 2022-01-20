@@ -1154,7 +1154,7 @@ preset_spazer_wrecked_ship_upper_west_ocean:
     dw $0911, $0000 ; Screen X position in pixels
     dw $0913, $C7FD ; Screen subpixel Y position
     dw $0915, $001F ; Screen Y position in pixels
-    dw $09C2, $0152 ; Health
+    dw $09C2, $00E9 ; Health
     dw $09CA, $0009 ; Supers
     dw $09D2, $0000 ; Currently selected item
     dw $0A1C, $0002 ; Samus position/state
@@ -1176,7 +1176,6 @@ preset_spazer_wrecked_ship_pancakes_and_wavers:
     dw $0911, $0200 ; Screen X position in pixels
     dw $0913, $F800 ; Screen subpixel Y position
     dw $0915, $01FC ; Screen Y position in pixels
-    dw $09C2, $0166 ; Health
     dw $0A1C, $0001 ; Samus position/state
     dw $0A1E, $0008 ; More position/state
     dw $0AF6, $02C2 ; Samus X
@@ -1209,7 +1208,7 @@ preset_spazer_wrecked_ship_leaving_gravity:
     dw $0913, $E400 ; Screen subpixel Y position
     dw $09A2, $3125 ; Equipped Items
     dw $09A4, $3125 ; Collected Items
-    dw $09C2, $010D ; Health
+    dw $09C2, $00C6 ; Health
     dw $0A1C, $009B ; Samus position/state
     dw $0A1E, $0000 ; More position/state
     dw $0AF6, $0078 ; Samus X
@@ -1260,7 +1259,7 @@ preset_spazer_red_brinstar_final_red_tower_elevator:
     dw $07F3, $0012 ; Music Bank
     dw $090F, $F000 ; Screen subpixel X position.
     dw $0915, $0238 ; Screen Y position in pixels
-    dw $09C2, $0121 ; Health
+    dw $09C2, $00D1 ; Health
     dw $09C6, $0012 ; Missiles
     dw $09CE, $0003 ; Pbs
     dw $0A1C, $009B ; Samus position/state
@@ -1290,7 +1289,7 @@ preset_spazer_red_brinstar_final_red_tower_down:
     dw $079B, $A2F7 ; MDB
     dw $0913, $9000 ; Screen subpixel Y position
     dw $0915, $0000 ; Screen Y position in pixels
-    dw $09C2, $0119 ; Health
+    dw $09C2, $00C6 ; Health
     dw $0AF6, $003D ; Samus X
     dw $0AFA, $008B ; Samus Y
     dw #$FFFF
@@ -1320,7 +1319,7 @@ preset_spazer_red_brinstar_final_below_spazer_final:
     dw $0911, $0100 ; Screen X position in pixels
     dw $0913, $4400 ; Screen subpixel Y position
     dw $0915, $0000 ; Screen Y position in pixels
-    dw $09C2, $0118 ; Health
+    dw $09C2, $00C6 ; Health
     dw $0AF6, $01DC ; Samus X
     dw $0AFA, $008B ; Samus Y
     dw #$FFFF
@@ -1334,6 +1333,7 @@ preset_spazer_maridia_breaking_tube:
     dw $090F, $E000 ; Screen subpixel X position.
     dw $0911, $0000 ; Screen X position in pixels
     dw $0913, $7400 ; Screen subpixel Y position
+    dw $09D2, $0003 ; Currently selected item
     dw $09CA, $000A ; Supers
     dw $0AF6, $002D ; Samus X
     dw #$FFFF
@@ -1351,7 +1351,7 @@ preset_spazer_maridia_fish_tank:
     dw $0913, $C000 ; Screen subpixel Y position
     dw $0915, $05F4 ; Screen Y position in pixels
     dw $09CE, $0002 ; Pbs
-    dw $09D2, $0003 ; Currently selected item
+    dw $09D2, $0000 ; Currently selected item
     dw $0AF6, $0167 ; Samus X
     dw $0AFA, $068B ; Samus Y
     dw $D820, $0801 ; Events, Items, Doors
@@ -1368,7 +1368,6 @@ preset_spazer_maridia_mt_everest:
     dw $0911, $0100 ; Screen X position in pixels
     dw $0913, $BC00 ; Screen subpixel Y position
     dw $0915, $031F ; Screen Y position in pixels
-    dw $09D2, $0000 ; Currently selected item
     dw $0AF6, $017C ; Samus X
     dw $0AFA, $03BB ; Samus Y
     dw #$FFFF
@@ -1380,7 +1379,7 @@ preset_spazer_maridia_crab_shaft:
     dw $0911, $0500 ; Screen X position in pixels
     dw $0913, $9C01 ; Screen subpixel Y position
     dw $0915, $0000 ; Screen Y position in pixels
-    dw $09C2, $00DD ; Health
+    dw $09C2, $0091 ; Health
     dw $0AF6, $05C0 ; Samus X
     dw $0AFA, $008B ; Samus Y
     dw #$FFFF
@@ -1448,7 +1447,7 @@ preset_spazer_maridia_botwoon_etank:
     dw $090F, $4000 ; Screen subpixel X position.
     dw $0911, $0100 ; Screen X position in pixels
     dw $0913, $C000 ; Screen subpixel Y position
-    dw $09C2, $0105 ; Health
+    dw $09C2, $00D5 ; Health
     dw $09C6, $0014 ; Missiles
     dw $09CA, $0003 ; Supers
     dw $09CE, $0002 ; Pbs
@@ -1829,6 +1828,7 @@ preset_spazer_lower_norfair_prepillars:
     dw $090F, $9000 ; Screen subpixel X position.
     dw $0911, $0700 ; Screen X position in pixels
     dw $0913, $E400 ; Screen subpixel Y position
+    dw $09D2, $0003 ; Currently selected item
     dw $0A1C, $0001 ; Samus position/state
     dw $0A1E, $0008 ; More position/state
     dw $0AF6, $07A2 ; Samus X

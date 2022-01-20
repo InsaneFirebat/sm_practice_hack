@@ -15,7 +15,7 @@ PresetsMenu100map:
     dw #presets_goto_100map_blue_brinstar_cleanup
     dw #presets_goto_100map_tourian
     dw #$0000
-    %cm_header("PRESETS FOR 100% MAP")
+    %cm_header("MAP COMPLETION PRESETS")
 
 presets_goto_100map_varia:
     %cm_submenu("Varia", #presets_submenu_100map_varia)
