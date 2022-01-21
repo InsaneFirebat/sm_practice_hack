@@ -255,7 +255,7 @@ hook_phantoon_init:
 ; $A7:D4AE 10 3D       BPL $3D    [$D4ED]       ; else, return
 {
     ; skip cutscene flag
-    LDA !ram_phantoon_intro : BNE .skip_cutscene
+    LDA !sram_phantoon_intro : BNE .skip_cutscene
     DEC $0FB0,X
     RTL
 

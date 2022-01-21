@@ -55,7 +55,7 @@ else
     STA !WRAM_START,X
     DEX : DEX : BPL .wram_loop
 
-    ; Clear custom build SRAM
+    ; Clear 200h bytes for custom build SRAM
     LDX #$01FE
 -   STA $F02100,X
     DEX #2 : BPL -
@@ -158,6 +158,9 @@ init_sram:
     LDA #$0003 : STA !sram_cutscenes
     LDA #$0000 : STA !sram_compressed_graphics
     LDA #$0000 : STA !sram_lag_counter_mode
+
+    LDA #$0000 : STA !sram_phantoon_intro
+    LDA #$0001 : STA !sram_preset_open_doors
 
     LDA #$0000 : STA !sram_countdamage
     LDA #$0000 : STA !sram_menu_background

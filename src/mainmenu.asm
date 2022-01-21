@@ -281,6 +281,8 @@ PresetsMenu:
     dw #presets_custom_preset_slot
     dw #presets_save_custom_preset
     dw #presets_load_custom_preset
+    dw #$FFFF
+    dw #presets_open_doors
 if !RAW_TILE_GRAPHICS
     dw #$FFFF
     dw #presets_compressed_graphics
@@ -304,6 +306,9 @@ presets_save_custom_preset:
 
 presets_load_custom_preset:
     %cm_jsr("Load Custom Preset", #action_load_custom_preset, #$0000)
+
+presets_open_doors:
+    %cm_toggle("Auto-Open Blue Doors", !sram_preset_open_doors, #$0001, #0)
 
 if !RAW_TILE_GRAPHICS
 !COMPRESSED_GRAPHICS = #$0001
@@ -2640,7 +2645,7 @@ phan_next_flamepattern:
     db #$FF
 
 phan_skip_intro:
-    %cm_toggle_bit("Skip Phantoon Intro", !ram_phantoon_intro, #$0001, 0)
+    %cm_toggle_bit("Skip Phantoon Intro", !sram_phantoon_intro, #$0001, 0)
 
 rng_botwoon_rng:
     dw !ACTION_CHOICE

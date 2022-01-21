@@ -350,8 +350,11 @@ if !RAW_TILE_GRAPHICS
 else
     JSL $82E7D3  ; Load level data, CRE, tile table, scroll data, create PLMs and execute door ASM and room setup ASM
 endif
+
+    LDA !sram_preset_open_doors : BEQ +
     JSR preset_open_all_plain_doors
-    JSL $89AB82  ; Load FX
+
++   JSL $89AB82  ; Load FX
     JSL $82E97C  ; Load library background
 
     JSR preset_scroll_fixes

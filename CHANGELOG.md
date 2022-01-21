@@ -2,7 +2,7 @@
 ## Changelog since v2.2.7
 
 * [2.4.0.3]  Added subpixel position to custom presets
-* [2.4.0.3]  Automatically open "always-blue" doors when loading presets by idlechild
+* [2.4.0.3]  Option to automatically open "always-blue" doors when loading presets by idlechild
 * [2.4.0.2]  Added JRP menu color profile
 * [2.4.0.2]  Added pre-decompressed tile data for faster preset loads by idlechild
 * [2.4.0.1]  Added a submenu for Phantoon RNG with more precise controls by NobodyNada
