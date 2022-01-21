@@ -2,6 +2,8 @@
 ; Custom Presets
 ; --------------
 
+; Backward compatibility was promised. Just because it's unused, doesn't mean you can use it.
+
 custom_preset_save:
 {
     LDA !sram_custom_preset_slot
@@ -10,12 +12,12 @@ custom_preset_save:
     LDA #$01EE : STA !PRESET_SLOTS+$02,X   ; record slot size for future compatibility
     LDA $078B : STA !PRESET_SLOTS+$04,X    ; Elevator Index
     LDA $078D : STA !PRESET_SLOTS+$06,X    ; DDB
-    LDA $078F : STA !PRESET_SLOTS+$08,X    ; DoorOut Index
+;    LDA $078F : STA !PRESET_SLOTS+$08,X    ; DoorOut Index
     LDA $079B : STA !PRESET_SLOTS+$0A,X    ; MDB
-    LDA $079F : STA !PRESET_SLOTS+$0C,X    ; Region
-    LDA $07C3 : STA !PRESET_SLOTS+$0E,X    ; GFX Pointers
-    LDA $07C5 : STA !PRESET_SLOTS+$10,X    ; GFX Pointers
-    LDA $07C7 : STA !PRESET_SLOTS+$12,X    ; GFX Pointers
+;    LDA $079F : STA !PRESET_SLOTS+$0C,X    ; Region
+;    LDA $07C3 : STA !PRESET_SLOTS+$0E,X    ; GFX Pointers
+;    LDA $07C5 : STA !PRESET_SLOTS+$10,X    ; GFX Pointers
+;    LDA $07C7 : STA !PRESET_SLOTS+$12,X    ; GFX Pointers
     LDA $07F3 : STA !PRESET_SLOTS+$14,X    ; Music Bank
     LDA $07F5 : STA !PRESET_SLOTS+$16,X    ; Music Track
     LDA $090F : STA !PRESET_SLOTS+$18,X    ; Screen subpixel X position
@@ -48,24 +50,26 @@ custom_preset_save:
     LDA $0B3F : STA !PRESET_SLOTS+$4E,X    ; Blue suit
 
     ; Copy SRAM
-    TXA : CLC : ADC #$005F : TAX
+    ; This was deemed unnecessary but remains reserved for backward compatibility
+;    TXA : CLC : ADC #$005F : TAX
   .save_sram_loop
-    DEX : PHX : TXA : AND #$01FF : TAX
-    LDA $7ED7C0,X : PLX : STA !PRESET_SLOTS+$50,X
-    DEX : TXA : BIT #$0100 : BEQ .save_sram_loop
+;    DEX : PHX : TXA : AND #$01FF : TAX
+;    LDA $7ED7C0,X : PLX : STA !PRESET_SLOTS+$50,X
+;    DEX : TXA : BIT #$0100 : BEQ .save_sram_loop
 
     ; Copy Events, Items, Doors
-    CLC : ADC #$0100 : TAX
+    ; Much of this is unnecessary for vanilla but remains reserved for backward compatibility
+    TXA : CLC : ADC #$0100 : TAX
   .save_events_items_doors_loop
     DEX : PHX : TXA : AND #$01FF : TAX
     LDA $7ED820,X : PLX : STA !PRESET_SLOTS+$B0,X
     DEX : TXA : BIT #$0100 : BEQ .save_events_items_doors_loop
 
-    INX                          ; Restore X for sanity
-    LDA $0917 : STA !PRESET_SLOTS+$1B0,X    ; Layer 2 X position
-    LDA $0919 : STA !PRESET_SLOTS+$1B2,X    ; Layer 2 Y position
-    LDA $0921 : STA !PRESET_SLOTS+$1B4,X    ; BG2 X offset
-    LDA $0923 : STA !PRESET_SLOTS+$1B6,X    ; BG2 Y offset
+    INX ; Restore X for sanity
+    LDA $0917 : STA !PRESET_SLOTS+$1B0,X ; Layer 2 X position
+    LDA $0919 : STA !PRESET_SLOTS+$1B2,X ; Layer 2 Y position
+    LDA $0921 : STA !PRESET_SLOTS+$1B4,X ; BG2 X offset
+    LDA $0923 : STA !PRESET_SLOTS+$1B6,X ; BG2 Y offset
 
     PHX : PHB
     TXA : CLC : ADC #$31B8 : TAY ; Y = Destination
@@ -88,12 +92,12 @@ custom_preset_load:
                                  ; skip past size for now
     LDA !PRESET_SLOTS+$04,X : STA $078B    ; Elevator Index
     LDA !PRESET_SLOTS+$06,X : STA $078D    ; DDB
-    LDA !PRESET_SLOTS+$08,X : STA $078F    ; DoorOut Index
+;    LDA !PRESET_SLOTS+$08,X : STA $078F    ; DoorOut Index
     LDA !PRESET_SLOTS+$0A,X : STA $079B    ; MDB
-    LDA !PRESET_SLOTS+$0C,X : STA $079F    ; Region
-    LDA !PRESET_SLOTS+$0E,X : STA $07C3    ; GFX Pointers
-    LDA !PRESET_SLOTS+$10,X : STA $07C5    ; GFX Pointers
-    LDA !PRESET_SLOTS+$12,X : STA $07C7    ; GFX Pointers
+;    LDA !PRESET_SLOTS+$0C,X : STA $079F    ; Region
+;    LDA !PRESET_SLOTS+$0E,X : STA $07C3    ; GFX Pointers
+;    LDA !PRESET_SLOTS+$10,X : STA $07C5    ; GFX Pointers
+;    LDA !PRESET_SLOTS+$12,X : STA $07C7    ; GFX Pointers
     LDA !PRESET_SLOTS+$14,X : STA $07F3    ; Music Bank
     LDA !PRESET_SLOTS+$16,X : STA $07F5    ; Music Track
     LDA !PRESET_SLOTS+$18,X : STA $090F    ; Screen subpixel X position
