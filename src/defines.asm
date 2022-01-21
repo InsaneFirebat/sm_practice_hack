@@ -454,9 +454,7 @@
 
 !ram_cm_rng = $F0210C
 
-!ram_phantoon_intro = $F0210E
-
-; FREE SPACE ^
+!sram_phantoon_intro = $F0210E
 
 !ram_infinite_ammo = $F02110
 !ram_infiniteammo_check = $F02112
@@ -504,6 +502,11 @@ endif
 !ram_enemy8_last_ypos = $F02162
 !ram_radar1 = $F02164
 !ram_radar2 = $F02166
+
+; FREE SPACE ^
+
+; to be relocated upon master branch merge
+!sram_preset_open_doors = $F021A0
 
 ; FREE SPACE ^
 
@@ -571,10 +574,6 @@ endif
 !sram_custompalette_green = $F022A4
 !sram_custompalette_red = $F022A6
 
-!sram_dummy_on = $F022FA
-!sram_dummy_off = $F022FC
-!sram_dummy_num = $F022FE
-
 ; FREE SPACE ^
 
 ; do not change order without updating custom palette profiles in menu.asm
@@ -598,4 +597,8 @@ endif
 !sram_customsfx_number = $F022F4
 !sram_customsfx_confirm = $F022F6
 !sram_customsfx_goback = $F022F8
+
+!sram_dummy_on = $F022FA
+!sram_dummy_off = $F022FC
+!sram_dummy_num = $F022FE
 
