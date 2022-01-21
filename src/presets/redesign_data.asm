@@ -1124,7 +1124,7 @@ preset_redesign_speed_booster_un_elevator_left:
     dl $7E09C2 : db $02 : dw $018F ; Health
     dl $7E09C4 : db $02 : dw $018F ; Max health
     dl $7E09CA : db $02 : dw $0002 ; Supers
-    dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
+    dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
     dl $7E0AF6 : db $02 : dw $0182 ; Samus X
     dl $7ED882 : db $02 : dw $0008 ; Events, Items, Doors
@@ -2070,6 +2070,7 @@ preset_redesign_grapple_screw:
     dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
     dl $7E0AF6 : db $02 : dw $02D0 ; Samus X
+    dl $7E0AFA : db $02 : dw $058B ; Samus Y
     dl $7E0B3F : db $02 : dw $0004 ; Blue suit
     dl $7ED8AE : db $02 : dw $2405 ; Events, Items, Doors
     dl $7ED8C2 : db $02 : dw $4000 ; Events, Items, Doors
@@ -3558,7 +3559,7 @@ preset_redesign_cleanup_norfair_elevator_left_2:
     dl $7E0919 : db $02 : dw $0000 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0923 : db $02 : dw $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E09C2 : db $02 : dw $01B1 ; Health
-    dl $7E0A1C : db $02 : dw $0001 ; Samus position/state
+    dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0008 ; More position/state
     dl $7E0A68 : db $02 : dw $0063 ; Flash suit
     dl $7E0AF6 : db $02 : dw $0187 ; Samus X
@@ -3586,7 +3587,6 @@ preset_redesign_cleanup_lag_farm:
     dl $7E0919 : db $02 : dw $02F7 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dl $7E0921 : db $02 : dw $FA00 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dl $7E0923 : db $02 : dw $FC00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dl $7E09A6 : db $02 : dw $1004 ; Beams
     dl $7E09C2 : db $02 : dw $016E ; Health
     dl $7E0A1C : db $02 : dw $0002 ; Samus position/state
     dl $7E0A1E : db $02 : dw $0004 ; More position/state
@@ -4119,7 +4119,6 @@ preset_redesign_draygon_mochtroid_spark:
     dl $7E0915 : db $02 : dw $040C ; Screen Y position in pixels
     dl $7E0917 : db $02 : dw $0000 ; Layer 2 X scroll in room in pixels?
     dl $7E0919 : db $02 : dw $0309 ; Layer 2 Y scroll in room in pixels? (up = positive)
-    dl $7E09A6 : db $02 : dw $1001 ; Beams
     dl $7E09C2 : db $02 : dw $026B ; Health
     dl $7E0AF6 : db $02 : dw $0030 ; Samus X
     dl $7E0AFA : db $02 : dw $048C ; Samus Y
