@@ -611,6 +611,7 @@ ih_update_hud_code:
         LDA [$00] : LDX #$00AE : JSR Draw3
 
         ; Draw decimal seperators
+        LDA !SAMUS_ITEMS_COLLECTED : AND #$1000 : BNE .end
         LDA !IH_DECIMAL : STA $7EC6B4 : STA $7EC6BA
     }
 
