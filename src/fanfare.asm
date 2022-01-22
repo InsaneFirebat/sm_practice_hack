@@ -54,13 +54,13 @@ hook_message_box_wait:
     LDX #$0020       ; shorten message box length
 
   .nofanfareloop     ; skipping fanfare, so no need to mess with sound
-    JSR hook_message_box_wait_for_lag_frame
+    JSR $8136 ;hook_message_box_wait_for_lag_frame
     DEX
     BNE .nofanfareloop
     RTS
 
   .fanfareloop       ; original logic
-    JSR hook_message_box_wait_for_lag_frame
+    JSR $8136 ;hook_message_box_wait_for_lag_frame
     PHX
     JSL $808F0C
     JSL $8289EF
@@ -69,8 +69,8 @@ hook_message_box_wait:
     BNE .fanfareloop
     RTS
 
-
 hook_message_box_wait_for_lag_frame:
+; this routine is unused in Redesign/Axeil
 {
     PHP
 if !FEATURE_SD2SNES
