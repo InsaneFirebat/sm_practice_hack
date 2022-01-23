@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.0.4]  Presets can open ALL blue doors now by idlechild
 * [2.4.0.4]  Fixed dead PRKD preset
 * [2.4.0.4]  Fixed long door transitions after collecting an item
 * [2.4.0.3]  Added subpixel position to custom presets

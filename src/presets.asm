@@ -348,8 +348,12 @@ else
     JSL $82E7D3  ; Load level data, CRE, tile table, scroll data, create PLMs and execute door ASM and room setup ASM
 endif
 
+    LDA !AREA_ID : CMP #$0006 : BEQ +
+    LDA !LOAD_STATION_INDEX : CMP #$0012 : BEQ +
+;    LDA !sram_preset_options : BIT !PRESETS_CLOSE_BLUE_DOORS : BNE +
     LDA !sram_preset_open_doors : BEQ +
-    JSR preset_open_all_plain_doors
+
+    JSR preset_open_all_blue_doors
 
 +   JSL $89AB82  ; Load FX
     JSL $82E97C  ; Load library background
@@ -426,10 +430,38 @@ endif
     RTL
 }
 
-preset_open_all_plain_doors:
+preset_open_all_blue_doors:
 {
-    PHP : PHB
-    LDA $7E07A5 : STA $C1 : ASL : STA $C3
+    PHP : PHB : PHX : PHY
+    LDA #$8484 : STA $C3 : PHA : PLB : PLB
+
+    ; First resolve all door PLMs where the door has previously been opened
+    LDX #$004E
+  .plm_search_loop
+    LDA $1C37,X : BEQ .plm_search_done
+    LDY $1D27,X : LDA $0000,Y : CMP #$8A72 : BEQ .plm_door_found
+  .plm_search_resume
+    DEX : DEX : BRA .plm_search_loop
+
+  .plm_door_found
+    LDA $1DC7,X : BMI .plm_search_resume
+    PHX : JSL $80818E : LDA $7ED8B0,X : PLX
+    AND $05E7 : BEQ .plm_search_resume
+
+    ; Door has been previously opened
+    ; Execute the next PLM instruction to set the BTS as a blue door
+    LDA $0002,Y : TAY
+    LDA $0000,Y : CMP #$86BC : BEQ .plm_delete
+    INY : INY
+    JSL preset_execute_plm_instruction
+
+  .plm_delete
+    STZ $1C37,X
+    BRA .plm_search_resume
+
+  .plm_search_done
+    ; Now search all of the room BTS for doors
+    LDA $07A5 : STA $C1 : ASL : STA $C3
     LDA $7F0000 : LSR : TAY
     STZ $C5 : TDC : %a8() : LDA #$7F : PHA : PLB
 
@@ -437,15 +469,19 @@ preset_open_all_plain_doors:
     LDA $6401,Y : AND #$FC : CMP #$40 : BEQ .bts_found
   .bts_continue
     DEY : BNE .bts_search_loop
-    PLB : PLP : RTS
+
+    ; All blue doors opened
+    PLY : PLX : PLB : PLP : RTS
 
   .bts_found
+    %a16() : TYA : ASL : TAX : %a8()
+    LDA $0001,X : BIT #$30 : BNE .bts_continue
     LDA $6401,Y : BIT #$02 : BNE .bts_check_up_or_down
     BIT #$01 : BEQ .bts_facing_left_right
     LDA #$04 : STA $C6
 
   .bts_facing_left_right
-    %a16() : TYA : ASL : TAX : LDA #$0082 : ORA $C5 : STA $0000,X
+    %a16() : LDA #$0082 : ORA $C5 : STA $0000,X
     TXA : CLC : ADC $C3 : TAX : LDA #$00A2 : ORA $C5 : STA $0000,X
     TXA : CLC : ADC $C3 : TAX : LDA #$08A2 : ORA $C5 : STA $0000,X
     TXA : CLC : ADC $C3 : TAX : LDA #$0882 : ORA $C5 : STA $0000,X
@@ -453,18 +489,29 @@ preset_open_all_plain_doors:
     %a16() : TYA : CLC : ADC $C1 : TAX : TDC : %a8() : STA $6401,X
     %a16() : TXA : CLC : ADC $C1 : TAX : TDC : %a8() : STA $6401,X
     %a16() : TXA : CLC : ADC $C1 : TAX : TDC : %a8() : STA $6401,X
-    BRA .bts_continue
+    JMP .bts_continue
 
   .bts_check_up_or_down
     BIT #$01 : BEQ .bts_facing_up_down
     LDA #$08 : STA $C6
 
   .bts_facing_up_down
-    %a16() : TYA : ASL : TAX : LDA #$0084 : ORA $C5 : STA $0006,X
+    %a16() : LDA #$0084 : ORA $C5 : STA $0006,X
     DEC : STA $0004,X : ORA #$0400 : STA $0002,X : INC : STA $0000,X
     TDC : %a8() : STA $C6 : STA $6401,Y
     STA $6402,Y : STA $6403,Y : STA $6404,Y
-    BRL .bts_continue
+    JMP .bts_continue
+}
+
+preset_execute_plm_instruction:
+{
+    ; A = Bank 84 PLM instruction to execute
+    ; $C3 already set to $84
+    STA $C1
+    ; PLM instruction ends with an RTS, but we need an RTL
+    ; Have the RTS return to $848031 which is an RTL
+    PEA $8030
+    JML [$00C1]
 }
 
 preset_room_setup_asm_fixes:
