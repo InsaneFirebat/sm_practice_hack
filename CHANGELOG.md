@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.0.4]  Fixed dead PRKD preset
+* [2.4.0.4]  Fixed long door transitions after collecting an item
 * [2.4.0.3]  Added subpixel position to custom presets
 * [2.4.0.3]  Option to automatically open "always-blue" doors when loading presets by idlechild
 * [2.4.0.2]  Added JRP menu color profile
