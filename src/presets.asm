@@ -35,6 +35,8 @@ endif
     BNE .paletteLoop
     PLP
 
+    LDA #$0000
+    STA $7EC400  ; Used as door fade timer
     LDA #$0001
     STA $0723    ; Screen fade delay = 1
     STA $0725    ; Screen fade counter = 1
@@ -86,7 +88,7 @@ endif
 
   .done_upload_sprite_oob_tiles
     JSL reset_all_counters
-    STZ $0795 ; clear door transition flag
+    STZ $0795 : STZ $0797 ; clear door transition flags
 
     ; Clear enemies if not in certain rooms
     LDA $079B : CMP #$DD58 : BEQ .set_mb_state
