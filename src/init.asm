@@ -1,4 +1,4 @@
-!SRAM_VERSION = $000D
+!SRAM_VERSION = #$F00D
 
 
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values
@@ -41,7 +41,7 @@ init_code:
     LDA #$0000 : STA !ram_slowdown_mode
 
     ; Check if we should initialize SRAM
-    LDA !sram_initialized : CMP #!SRAM_VERSION : BEQ .sram_initialized
+    LDA !sram_initialized : CMP !SRAM_VERSION : BEQ .sram_initialized
     JSR init_sram
 
   .sram_initialized
@@ -224,7 +224,7 @@ if !FEATURE_EXTRAS
     STA !ram_steamcollision
 endif
 
-    LDA #!SRAM_VERSION : STA !sram_initialized
+    LDA !SRAM_VERSION : STA !sram_initialized
 
     RTS
 }

@@ -97,6 +97,14 @@ macro cm_toggle_bit(title, addr, mask, jsrtarget)
     db #$28, "<title>", #$FF
 endmacro
 
+macro cm_toggle_bit_inverted(title, addr, mask, jsrtarget)
+    dw !ACTION_TOGGLE_BIT_INVERTED
+    dl <addr>
+    dw <mask>
+    dw <jsrtarget>
+    db #$28, "<title>", #$FF
+endmacro
+
 macro cm_jsr(title, routine, argument)
     dw !ACTION_JSR
     dw <routine>
@@ -311,18 +319,18 @@ presets_open_doors:
     %cm_toggle("Auto-Open Blue Doors", !sram_preset_open_doors, #$0001, #0)
 
 if !RAW_TILE_GRAPHICS
-!COMPRESSED_GRAPHICS = #$0001
+!PRESETS_COMPRESSED_GRAPHICS = #$0001
 presets_compressed_graphics:
-    %cm_toggle_bit("Compressed Graphics", !sram_compressed_graphics, !COMPRESSED_GRAPHICS, #0)
+    %cm_toggle_bit("Compressed Graphics", !sram_compressed_graphics, !PRESETS_COMPRESSED_GRAPHICS, #0)
 
-!COMPRESSED_PALETTES = #$0002
-!COMPRESSED_PALETTES_8BIT = #$02
+!PRESETS_COMPRESSED_PALETTES = #$0002
+!PRESETS_COMPRESSED_PALETTES_8BIT = #$02
 presets_compressed_palettes:
-    %cm_toggle_bit("Compressed Palettes", !sram_compressed_graphics, !COMPRESSED_PALETTES, #0)
+    %cm_toggle_bit("Compressed Palettes", !sram_compressed_graphics, !PRESETS_COMPRESSED_PALETTES, #0)
 
-!COMPRESSED_TABLES = #$0004
+!PRESETS_COMPRESSED_TABLES = #$0004
 presets_compressed_tables:
-    %cm_toggle_bit("Compressed Tables", !sram_compressed_graphics, !COMPRESSED_TABLES, #0)
+    %cm_toggle_bit("Compressed Tables", !sram_compressed_graphics, !PRESETS_COMPRESSED_TABLES, #0)
 endif
 
 SelectPresetCategoryMenu:
@@ -860,7 +868,7 @@ gb_unnamed:
 action_glitched_beam:
 {
     TYA
-    STA $09A6 : STA $09A8
+    STA !SAMUS_BEAMS_EQUIPPED : STA !SAMUS_BEAMS_COLLECTED
     LDA #$0042 : JSL !SFX_LIB1 ; unlabled, song dependent sound
     RTS
 }
@@ -961,14 +969,16 @@ tel_tourianmb:
 action_teleport:
 {
     ; teleport destination in Y when called
-    TYA : AND #$FF00 : XBA : STA $7E079F
-    TYA : AND #$00FF : STA $7E078B
-    LDA #$0006 : STA $7E0998
+    TYA : AND #$FF00 : XBA : STA !AREA_ID
+    TYA : AND #$00FF : STA !LOAD_STATION_INDEX
+    LDA #$0006 : STA !GAMEMODE
 
     ; Make sure we can teleport to Zebes from Ceres
-    SEP #$20
+    %a8()
     LDA #$05 : STA $7ED914
-    REP #$20
+    %a16()
+
+    STZ $1C1F ; Clear message box index
 
     JSL reset_all_counters
     JSL stop_all_sounds
