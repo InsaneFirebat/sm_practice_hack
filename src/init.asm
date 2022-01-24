@@ -55,11 +55,6 @@ else
     STA !WRAM_START,X
     DEX : DEX : BPL .wram_loop
 
-    ; Clear 200h bytes for custom build SRAM
-    LDX #$01FE
--   STA $F02100,X
-    DEX #2 : BPL -
-
     JSL init_nonzero_wram
 endif
 
@@ -103,6 +98,11 @@ endif
 
 init_sram:
 {
+    ; Clear 200h bytes for custom build SRAM
+    LDA #$0000 : LDX #$01FE
+-   STA $F02100,X
+    DEX #2 : BPL -
+
     ; Controllers
     LDA #$3000 : STA !sram_ctrl_menu        ; Start + Select
     LDA #$6010 : STA !sram_ctrl_save_state  ; Select + Y + R

@@ -1193,23 +1193,9 @@ cm_loop:
     JSR cm_ctrl_mode
     BRA .inputLoop
 
-; repeating the cgram transfer for flash carts...
-    ; don't do it if paused
-;    LDA $7E0998 : CMP #$000C : BMI .check_stack
-;    CMP #$0012 : BPL .check_stack
-;    BRA .skip_cgram
-
-;  .check_stack
-    ; this is how I find out if you're on the customization menu
-;    LDA !ram_cm_cursor_stack : CMP #$0014 : BNE .update_cgram
-    ; ensure that "Customize Menu Palette" is the second option in the "Extras" menu
-;    LDA !ram_cm_cursor_stack+2 : CMP #$0002 : BEQ .skip_cgram
-
-  .update_cgram
 +   JSR cm_transfer_original_cgram
     JSR cm_transfer_custom_cgram
 
-  .skip_cgram
     JSR cm_get_inputs : STA !ram_cm_controller : BEQ .inputLoop
 
     BIT #$0080 : BEQ + : JMP .pressedA ; more wiggle room with branch limits...
@@ -1392,7 +1378,7 @@ cm_get_inputs:
     RTS
 
   .noinput
-    LDA $8B : AND #$0000 ; allow Y to pass
+    LDA #$0000
     RTS
 }
 

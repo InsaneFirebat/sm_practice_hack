@@ -25,14 +25,12 @@ endif
     JSL $90AD22  ; Reset projectile data
 
     PHP
-    REP #$30
-    LDY #$0020
-    LDX #$0000
+    %ai16()
+    LDY #$0020 : LDX #$0000
   .paletteLoop
-    LDA $7EC180,x : STA $7EC380,x  ; Target Samus' palette = [Samus' palette]
+    LDA $7EC180,X : STA $7EC380,X  ; Target Samus' palette = [Samus' palette]
     INX #2
-    DEY #2
-    BNE .paletteLoop
+    DEY #2 : BNE .paletteLoop
     PLP
 
     LDA #$0000
@@ -49,31 +47,28 @@ endif
     JSL $878000  ; Enable animated tile objects
     JSL $908E0F  ; Set liquid physics type
 
-    LDA #$0006 : STA $0DA0
-  .loopSomething
+    ; Transfer enemy tiles to VRAM and initialize enemies
+    LDA #$0006 : STA $0DA0 ; loop counter
+  .loopEnemyVRAM
 if !FEATURE_PAL
-    JSL $A08CE7  ; Transfer enemy tiles to VRAM and initialize enemies
+    JSL $A08CE7
 else
-    JSL $A08CD7  ; Transfer enemy tiles to VRAM and initialize enemies
+    JSL $A08CD7
 endif
     JSL $808338  ; Wait for NMI
-    DEC $0DA0    ; Decrement $0DA0
-    BPL .loopSomething
+    DEC $0DA0
+    BPL .loopEnemyVRAM
 
     LDA #$0008 : STA !GAMEMODE
-    %a8() : LDA #$0F : STA $51 : %a16()
 
-    PHP
-    REP #$30
-    LDY #$0200
-    LDX #$0000
+    ; Set full brightness and forced blank off
+    %a8() : LDA #$0F : STA $51 : %ai16()
+
+    LDY #$0200 : LDX #$0000
   .paletteLoop2
-    LDA $7EC200,x
-    STA $7EC000,x  ; Palettes = [target palettes]
+    LDA $7EC200,X : STA $7EC000,X  ; Palettes = [target palettes]
     INX #2
-    DEY #2
-    BNE .paletteLoop2
-    PLP
+    DEY #2 : BNE .paletteLoop2
 
     ; Fix Samus' palette
 if !FEATURE_PAL
@@ -88,7 +83,6 @@ endif
 
   .done_upload_sprite_oob_tiles
     JSL reset_all_counters
-    STZ $0795 : STZ $0797 ; clear door transition flags
 
     ; Clear enemies if not in certain rooms
     LDA $079B : CMP #$DD58 : BEQ .set_mb_state
@@ -122,7 +116,7 @@ preset_load_destination_state_and_tiles:
 {
     ; Original logic from $82E76B
     PHP : PHB
-    REP #$30
+    %ai16()
     PEA $8F00
     PLB : PLB
     JSR $DDF1  ; Load destination room CRE bitset
@@ -140,7 +134,7 @@ reset_all_counters:
 {
     LDA #$0000
     STA !ram_room_has_set_rng
-    STA $09DA : STA $09DC : STA $09DE : STA $09E0
+    STA $09DA : STA $09DC : STA $09DE : STA $09E0 ; game time
     STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds : STA !ram_seg_rt_minutes
     STA !ram_realtime_room : STA !ram_last_realtime_room
     STA !ram_gametime_room : STA !ram_last_gametime_room
@@ -177,9 +171,6 @@ preset_load_preset:
     JSR category_preset_load
 
   .done
-    LDA #$0000
-    STA $0795   ; "Currently transitioning"
-    STA $0797   ; "Currently transitioning"
     PLB
     RTL
 }
@@ -208,7 +199,7 @@ category_preset_load:
   .build_list_loop
     ; Build list of presets to traverse
     LDA [$C3] : BEQ .prepare_traverse_list_loop
-    INX : INX : STA $7F0002,X
+    INX #2 : STA $7F0002,X
     CMP $C3 : STA $C3 : BCC .build_list_loop
     ; We just crossed back into the starting bank
     DEC $C5
@@ -223,24 +214,24 @@ category_preset_load:
   .traverse_list_loop_with_bank_check
     ; Now traverse from the first preset until the last one
     LDA $7F0002,X : TAY : CMP $C1 : BCC .increment_bank_before_inner_loop
-    INY : INY
+    INY #2
     BRA .inner_loop_with_bank_check_load_address
 
     ; For each preset, load and store address and value pairs
   .inner_loop_with_bank_check
-    STA $C3 : INY : INY
+    STA $C3 : INY #2
     CPY #$0000 : BEQ .increment_bank_before_load_value
-    LDA ($00),Y : STA [$C3] : INY : INY
+    LDA ($00),Y : STA [$C3] : INY #2
   .inner_loop_with_bank_check_load_address
     CPY #$0000 : BEQ .increment_bank_before_load_address
     LDA ($00),Y : CMP #$FFFF : BNE .inner_loop_with_bank_check
 
-    DEX : DEX : BPL .traverse_list_loop_with_bank_check
+    DEX #2 : BPL .traverse_list_loop_with_bank_check
     RTS
 
   .increment_bank_before_inner_loop
     %a8() : PHB : PLA : INC : PHA : PLB : %a16()
-    INY : INY
+    INY #2
     BRA .inner_loop_load_address
 
   .increment_bank_before_load_address
@@ -255,18 +246,18 @@ category_preset_load:
 
   .traverse_list_loop
     ; Continue traversing from the first preset until the last one
-    LDA $7F0002,X : TAY : INY : INY
+    LDA $7F0002,X : TAY : INY #2
     BRA .inner_loop_load_address
 
     ; For each preset, load and store address and value pairs
   .inner_loop
-    STA $C3 : INY : INY
+    STA $C3 : INY #2
   .inner_loop_load_value
-    LDA ($00),Y : STA [$C3] : INY : INY
+    LDA ($00),Y : STA [$C3] : INY #2
   .inner_loop_load_address
     LDA ($00),Y : CMP #$FFFF : BNE .inner_loop
 
-    DEX : DEX : BPL .traverse_list_loop
+    DEX #2 : BPL .traverse_list_loop
     RTS
 }
 
@@ -417,16 +408,17 @@ endif
   .done_music
     JSL $80834B  ; Enable NMI
 
-    LDA #$0004 : STA $A7  ; Set optional next interrupt to Main gameplay
+    LDA #$0004 : STA $A7   ; Set optional next interrupt to Main gameplay
 
     JSL $80982A  ; Enable horizontal and vertical timer interrupts
 
     LDA #$E695 : STA $0A42 ; Unlock Samus
     LDA #$E725 : STA $0A44 ; Unlock Samus
-    STZ $0E18    ; Set elevator to inactive
-    STZ $0E1A    ; Clear health bomb flag
+    STZ $0E18              ; Set elevator to inactive
+    STZ $0E1A              ; Clear health bomb flag
+    STZ $0795 : STZ $0797  ; clear door transition flags
 
-    LDA #$E737 : STA $099C  ; Pointer to next frame's room transition code = $82:E737
+    LDA #$E737 : STA $099C ; Pointer to next frame's room transition code = $82:E737
     PLB
     PLP
     RTL
