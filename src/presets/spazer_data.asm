@@ -1762,63 +1762,66 @@ preset_spazer_upper_norfair_revisit_kronic_boost_upper:
 
 preset_spazer_upper_norfair_revisit_croc_speedway_lower:
     dw #preset_spazer_upper_norfair_revisit_ice_escape ; Upper Norfair Revisit: Ice Escape
-    dw $078D, $9336 ; DDB
-    dw $078F, $0003 ; DoorOut Index
-    dw $079B, $A8F8 ; MDB
-    dw $090F, $6781 ; Screen subpixel X position.
-    dw $0913, $0800 ; Screen subpixel Y position
-    dw $0915, $0300 ; Screen Y position in pixels
-    dw $0AF6, $00DD ; Samus X
-    dw $0AFA, $038B ; Samus Y
-    dw $D91A, $0041 ; Events, Items, Doors
+    dw $078D, $9336  ; DDB
+    dw $079B, $A8F8  ; MDB
+    dw $090F, $6781  ; Screen subpixel X position
+    dw $0913, $0800  ; Screen subpixel Y position
+    dw $0915, $0300  ; Screen Y position in pixels
+    dw $0919, $0240  ; Layer 2 Y position
+    dw $0AF6, $00DD  ; Samus X
+    dw $0AFA, $038B  ; Samus Y
     dw #$FFFF
 .after
 
 preset_spazer_upper_norfair_revisit_spiky_acid_snakes_lower:
     dw #preset_spazer_upper_norfair_revisit_croc_speedway_lower ; Upper Norfair Revisit: Croc Speedway (Lower)
-    dw $078D, $93C6 ; DDB
-    dw $078F, $0003 ; DoorOut Index
-    dw $079B, $AFCE ; MDB
-    dw $090F, $A000 ; Screen subpixel X position.
-    dw $0911, $02A3 ; Screen X position in pixels
-    dw $0913, $7400 ; Screen subpixel Y position
-    dw $0A1C, $0001 ; Samus position/state
-    dw $0A1E, $0008 ; More position/state
-    dw $0AF6, $030E ; Samus X
-    dw $0AFA, $008B ; Samus Y
-    dw $0B3F, $0000 ; Blue suit
+    dw $078D, $93C6  ; DDB
+    dw $079B, $AFCE  ; MDB
+    dw $090F, $A000  ; Screen subpixel X position
+    dw $0911, $02A3  ; Screen X position in pixels
+    dw $0913, $7400  ; Screen subpixel Y position
+    dw $0915, $0000  ; Screen Y position in pixels
+    dw $0917, $01FA  ; Layer 2 X position
+    dw $0919, $0000  ; Layer 2 Y position
+    dw $0AF6, $030E  ; Samus X
+    dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 .after
 
 preset_spazer_upper_norfair_revisit_kronic_boost_lower:
     dw #preset_spazer_upper_norfair_revisit_spiky_acid_snakes_lower ; Upper Norfair Revisit: Spiky Acid Snakes (Lower)
-    dw $078D, $9792 ; DDB
-    dw $078F, $0001 ; DoorOut Index
-    dw $079B, $AFFB ; MDB
-    dw $090F, $B000 ; Screen subpixel X position.
-    dw $0911, $0300 ; Screen X position in pixels
-    dw $0913, $8C00 ; Screen subpixel Y position
-    dw $0AF6, $03BC ; Samus X
+    dw $078D, $9792  ; DDB
+    dw $079B, $AFFB  ; MDB
+    dw $090F, $B000  ; Screen subpixel X position
+    dw $0911, $0300  ; Screen X position in pixels
+    dw $0913, $8C00  ; Screen subpixel Y position
+    dw $0917, $0240  ; Layer 2 X position
+    dw $09D2, $0003  ; Currently selected item
+    dw $0AF6, $03BC  ; Samus X
     dw #$FFFF
 .after
 
 preset_spazer_lower_norfair_ln_main_hall:
     dw #preset_spazer_upper_norfair_revisit_kronic_boost_upper ; Upper Norfair Revisit: Kronic Boost (Upper)
-    dw $078D, $96F6 ; DDB
-    dw $079B, $B236 ; MDB
-    dw $07F3, $0018 ; Music Bank
-    dw $090F, $E000 ; Screen subpixel X position.
-    dw $0911, $0400 ; Screen X position in pixels
-    dw $0913, $0000 ; Screen subpixel Y position
-    dw $0915, $0200 ; Screen Y position in pixels
-    dw $09C2, $011E ; Health
-    dw $09CE, $0004 ; Pbs
-    dw $09D2, $0003 ; Currently selected item
-    dw $0A1C, $009B ; Samus position/state
-    dw $0A1E, $0000 ; More position/state
-    dw $0AF6, $0480 ; Samus X
-    dw $0AFA, $0288 ; Samus Y
-    dw $D8BA, $01F1 ; Events, Items, Doors
+    dw $078D, $96F6  ; DDB
+    dw $079B, $B236  ; MDB
+    dw $07F3, $0018  ; Music Bank
+    dw $090F, $E000  ; Screen subpixel X position
+    dw $0911, $0400  ; Screen X position in pixels
+    dw $0913, $0000  ; Screen subpixel Y position
+    dw $0915, $0200  ; Screen Y position in pixels
+    dw $0917, $0300  ; Layer 2 X position
+    dw $0919, $0301  ; Layer 2 Y position
+    dw $0921, $FC00  ; BG2 X offset
+    dw $0923, $00E0  ; BG2 Y offset
+    dw $09C2, $011E  ; Health
+    dw $09CE, $0004  ; Pbs
+    dw $0A1C, $009B  ; Samus position/state
+    dw $0A1E, $0000  ; More position/state
+    dw $0AF6, $0480  ; Samus X
+    dw $0AFA, $0288  ; Samus Y
+    dw $0AFC, $0000  ; Samus subpixel Y
+    dw $D8BA, $01F1  ; Doors
     dw #$FFFF
 .after
 
@@ -1828,7 +1831,6 @@ preset_spazer_lower_norfair_prepillars:
     dw $090F, $9000 ; Screen subpixel X position.
     dw $0911, $0700 ; Screen X position in pixels
     dw $0913, $E400 ; Screen subpixel Y position
-    dw $09D2, $0003 ; Currently selected item
     dw $0A1C, $0001 ; Samus position/state
     dw $0A1E, $0008 ; More position/state
     dw $0AF6, $07A2 ; Samus X
