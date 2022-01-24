@@ -310,10 +310,27 @@ presets_custom_preset_slot:
     %cm_numfield("Custom Preset Slot", !sram_custom_preset_slot, 0, 39, 1, 2, #0) ; update total slots in gamemode.asm
 
 presets_save_custom_preset:
-    %cm_jsr("Save Custom Preset", #action_save_custom_preset, #$0000)
+    %cm_jsr("Save Custom Preset", .routine, #$0000)
+  .routine
+    JSL custom_preset_save
+    LDA #$0001 : STA !ram_cm_leave
+    %sfxconfirm()
+    RTS
 
 presets_load_custom_preset:
-    %cm_jsr("Load Custom Preset", #action_load_custom_preset, #$0000)
+    %cm_jsr("Load Custom Preset", .routine, #$0000)
+  .routine
+    ; check if slot is populated first
+    LDA !sram_custom_preset_slot
+    ASL : XBA : TAX
+    LDA !PRESET_SLOTS,X : CMP #$5AFE : BEQ .safe
+    %sfxgoback()
+    RTS
+
+  .safe
+    STA !ram_custom_preset
+    LDA #$0001 : STA !ram_cm_leave
+    RTS
 
 presets_open_doors:
     %cm_toggle("Auto-Open Blue Doors", !sram_preset_open_doors, #$0001, #0)
@@ -450,29 +467,6 @@ action_select_preset_category:
     LDA #$0000 : STA !sram_last_preset
     JSR cm_go_back
     JSR cm_calculate_max
-    RTS
-}
-
-action_save_custom_preset:
-{
-    JSL custom_preset_save
-    LDA #$0001 : STA !ram_cm_leave
-    %sfxconfirm()
-    RTS
-}
-
-action_load_custom_preset:
-{
-    ; check if slot is populated first
-    LDA !sram_custom_preset_slot
-    ASL : XBA : TAX
-    LDA !PRESET_SLOTS,X : CMP #$5AFE : BEQ .safe
-    %sfxgoback()
-    RTS
-
-  .safe
-    STA !ram_custom_preset
-    LDA #$0001 : STA !ram_cm_leave
     RTS
 }
 
@@ -728,9 +722,9 @@ action_category:
     dw #$3025, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% speed
     dw #$F33F, #$100F, #$02BC, #$0064, #$0014, #$0014, #$012C, #$0000        ; gt code
 if !FEATURE_PAL
-    dw #$F33F, #$100F, #$0834, #$0145, #$0041, #$0046, #$02BC, #$0000        ; 135%
+    dw #$F33F, #$100F, #$0834, #$0145, #$0041, #$0046, #$02BC, #$0000        ; 136%
 else
-    dw #$F33F, #$100F, #$0834, #$0145, #$0041, #$0041, #$02BC, #$0000        ; 136%
+    dw #$F33F, #$100F, #$0834, #$0145, #$0041, #$0041, #$02BC, #$0000        ; 135%
 endif
     dw #$710C, #$1001, #$031F, #$001E, #$0019, #$0014, #$0064, #$0000        ; rbo
     dw #$9004, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0000, #$0000        ; any% glitched
@@ -1149,15 +1143,12 @@ sprites_show_samusproj_hitbox:
     %cm_toggle("Samus Projectile Hitbox", !ram_sprite_samusproj_hitbox_active, #1, #action_sprite_features)
 
 sprites_oob_viewer:
-    %cm_toggle("OoB Tile Viewer", !ram_oob_watch_active, #1, #toggle_oob_viewer)
-
-toggle_oob_viewer:
-{
+    %cm_toggle("OoB Tile Viewer", !ram_oob_watch_active, #1, .routine)
+  .routine
     LDA !ram_oob_watch_active : BEQ +
     JSL upload_sprite_oob_tiles
     STA !ram_sprite_features_active
 +   RTS
-}
 
 action_sprite_features:
 {
@@ -1250,13 +1241,34 @@ EventsMenu:
     %cm_header("EVENT FLAGS")
 
 events_resetevents:
-    %cm_jsr("Reset All Events", action_reset_events, #$0000)
+    %cm_jsr("Reset All Events", .routine, #$0000)
+  .routine
+    LDA #$0000
+    STA $7ED820 : STA $7ED822
+    %sfxquake()
+    RTS
 
 events_resetdoors:
-    %cm_jsr("Reset All Doors", action_reset_doors, #$0000)
+    %cm_jsr("Reset All Doors", .routine, #$0000)
+  .routine
+    %ai8()
+    LDA #$00 : LDX #$B0
+-   STA $7ED800,X
+    INX : CPX #$D0 : BNE -
+    %ai16()
+    %sfxquake()
+    RTS
 
 events_resetitems:
-    %cm_jsr("Reset All Items", action_reset_items, #$0000)
+    %cm_jsr("Reset All Items", .routine, #$0000)
+  .routine
+    %ai8()
+    LDA #$00 : LDX #$70
+-   STA $7ED800,X
+    INX : CPX #$90 : BNE -
+    %ai16()
+    %sfxquake()
+    RTS
 
 events_goto_bosses:
     %cm_submenu("Bosses", #BossesMenu)
@@ -1305,45 +1317,6 @@ events_zebesexploding:
 
 events_animals:
     %cm_toggle_bit("Animals Saved", $7ED820, #$8000, #0)
-
-action_reset_events:
-{
-    LDA #$0000
-    STA $7ED820
-    STA $7ED822
-    %sfxquake()
-    RTS
-}
-
-action_reset_doors:
-{
-    PHP
-    %ai8()
-    LDX #$B0
-    LDA #$00
--   STA $7ED800, X
-    INX
-    CPX #$D0
-    BNE -
-    PLP
-    %sfxquake()
-    RTS
-}
-
-action_reset_items:
-{
-    PHP
-    %ai8()
-    LDX #$70
-    LDA #$00
--   STA $7ED800, X
-    INX
-    CPX #$90
-    BNE -
-    PLP
-    %sfxquake()
-    RTS
-}
 
 
 ; ------------
@@ -1974,23 +1947,20 @@ ih_superhud_top_cooldowncounter:
 
 ih_superhud_top_ridleygrab:
     %cm_jsr("Ridley Death Grab Attempts", #action_select_superhud_top, #$000A)
+
+ih_superhud_enable:
+    %cm_jsr("Enable Super HUD", .routine, #$0001)
+  .routine
+    TYA : STA !sram_display_mode
+    DEC : STA !sram_room_strat
+    %sfxconfirm()
+    RTS
     
 action_select_superhud_top:
 {
     TYA : STA !sram_superhud_top
     JSR cm_go_back
     JSR cm_calculate_max
-    RTS
-}
-
-ih_superhud_enable:
-    %cm_jsr("Enable Super HUD", #action_enable_superhud, #$0001)
-
-action_enable_superhud:
-{
-    TYA : STA !sram_display_mode
-    DEC : STA !sram_room_strat
-    %sfxconfirm()
     RTS
 }
 
