@@ -372,6 +372,12 @@ endif
     JSR $A37B    ; Calculate BG positions
     JSL $80A176  ; Display the viewable part of the room
 
+    ; Set Samus previous position
+    LDA $0AF6 : STA $0B10  ; Samus last X position
+    LDA $0AF8 : STA $0B12  ; Samus last X subposition
+    LDA $0AFA : STA $0B14  ; Samus last Y position
+    LDA $0AFC : STA $0B16  ; Samus last Y subposition
+
     LDA #$0000 : STA $05F5  ; Enable sounds
     JSL stop_all_sounds
 
@@ -417,7 +423,7 @@ endif
     STZ $0E18              ; Set elevator to inactive
     STZ $1C1F              ; Clear message box index
     STZ $0E1A              ; Clear health bomb flag
-    STZ $0795 : STZ $0797  ; clear door transition flags
+    STZ $0795 : STZ $0797  ; Clear door transition flags
     LDA #$0000 : STA !ram_transition_flag
 
     LDA #$E737 : STA $099C ; Pointer to next frame's room transition code = $82:E737

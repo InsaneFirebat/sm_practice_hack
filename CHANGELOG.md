@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.0.6]  Fixed remaining minor background issues with presets
 * [2.4.0.6]  Presets no longer open blue doors that are hidden by camera scrolling by idlechild
 * [2.4.0.5]  Fixed several minor bugs when loading presets
 * [2.4.0.4]  Presets can open ALL blue doors now by idlechild
