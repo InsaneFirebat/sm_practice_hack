@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.0.7]  Fixed doors that shouldn't be open in certain presets (more to come)
 * [2.4.0.6]  Added Ceres Escape preset to 100% Late Croc presets by idlechild
 * [2.4.0.6]  Added Ship landing sequence to presets by idlechild
 * [2.4.0.6]  Fixed remaining minor background issues with presets

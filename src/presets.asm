@@ -368,6 +368,7 @@ endif
 
 ;    LDA !sram_preset_options : BIT !PRESETS_CLOSE_BLUE_DOORS : BNE +
     LDA !sram_preset_open_doors : BEQ +
+    LDA !PRESET_DOORS : BNE +
     LDA $7ED914 : CMP #$0005 : BNE +
     JSR preset_open_all_blue_doors
 
