@@ -14,7 +14,7 @@
 !VERSION_MINOR = 4
 !VERSION_BUILD = 0
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 6
+!VERSION_REV_2 = 7
 
 
 ; ---------
@@ -555,6 +555,7 @@ endif
 
 !sram_preset_open_doors = $F02128
 !sram_preset_ship_landing = $F0212A
+!PRESET_DOORS = $7EFDFE
 
 ; FREE SPACE ^
 
