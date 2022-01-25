@@ -110,7 +110,12 @@ org $8FE0DF
     dw layout_asm_ceres_ridley_room_no_timer
 
 
-org $8FEA00 ; free space for door asm
+;org $8FEA00 ; free space for door asm
+if !FEATURE_REDESIGN
+org $8FFFD0
+else
+org $8FFB81
+endif
 print pc, " misc bank8F start"
 
 layout_asm_ceres_ridley_room_state_check:
@@ -120,7 +125,7 @@ layout_asm_ceres_ridley_room_state_check:
     JMP $E5E6
   .no_timer
     STZ $093F
-    INX : INX : INX
+    INX #3
     RTS
 }
 
@@ -128,14 +133,17 @@ layout_asm_ceres_ridley_room_no_timer:
 {
     ; Same as original setup asm, except force blue background
     PHP
-    SEP #$20
+    %a8()
     LDA #$66 : STA $5D
     PLP
     JSL $88DDD0
     LDA #$0009 : STA $07EB
     RTS
 }
-
+if !FEATURE_REDESIGN
+else
+warnpc $8FFBA8
+endif
 print pc, " misc bank8F end"
 
 
