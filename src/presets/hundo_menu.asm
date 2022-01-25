@@ -68,6 +68,7 @@ presets_goto_hundo_tourian:
 
 presets_submenu_hundo_bombs:
     dw #presets_hundo_bombs_ceres_elevator
+    dw #presets_hundo_bombs_ceres_escape
     dw #presets_hundo_bombs_ceres_last_3_rooms
     dw #presets_hundo_bombs_ship
     dw #presets_hundo_bombs_parlor_down
@@ -297,7 +298,10 @@ presets_submenu_hundo_tourian:
 
 ; Bombs
 presets_hundo_bombs_ceres_elevator:
-    %cm_preset("Ceres elevator", #preset_hundo_bombs_ceres_elevator)
+    %cm_preset("Ceres Elevator", #preset_hundo_bombs_ceres_elevator)
+
+presets_hundo_bombs_ceres_escape:
+    %cm_preset("Ceres Escape", #preset_hundo_bombs_ceres_escape)
 
 presets_hundo_bombs_ceres_last_3_rooms:
     %cm_preset("Ceres Last 3 rooms", #preset_hundo_bombs_ceres_last_3_rooms)
@@ -306,7 +310,7 @@ presets_hundo_bombs_ship:
     %cm_preset("Ship", #preset_hundo_bombs_ship)
 
 presets_hundo_bombs_parlor_down:
-    %cm_preset("Parlor down", #preset_hundo_bombs_parlor_down)
+    %cm_preset("Parlor Down", #preset_hundo_bombs_parlor_down)
 
 presets_hundo_bombs_morph:
     %cm_preset("Morph", #preset_hundo_bombs_morph)
@@ -318,7 +322,7 @@ presets_hundo_bombs_climb:
     %cm_preset("Climb", #preset_hundo_bombs_climb)
 
 presets_hundo_bombs_parlor_up:
-    %cm_preset("Parlor up", #preset_hundo_bombs_parlor_up)
+    %cm_preset("Parlor Up", #preset_hundo_bombs_parlor_up)
 
 presets_hundo_bombs_bomb_torizo:
     %cm_preset("Bomb Torizo", #preset_hundo_bombs_bomb_torizo)

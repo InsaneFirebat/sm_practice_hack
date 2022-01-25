@@ -510,11 +510,6 @@ endif
 
 ; FREE SPACE ^
 
-; to be relocated upon master branch merge
-!sram_preset_open_doors = $F021A0
-
-; FREE SPACE ^
-
 !ram_custompalette_menuborder = $F021E0
 !ram_custompalette_menuheaderoutline = $F021E2
 !ram_custompalette_menutext = $F021E4
@@ -557,6 +552,9 @@ endif
 
 !sram_countdamage = $F02220
 !sram_menu_background = $F02222
+
+!sram_preset_open_doors = $F02128
+!sram_preset_ship_landing = $F0212A
 
 ; FREE SPACE ^
 

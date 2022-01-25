@@ -289,6 +289,7 @@ PresetsMenu:
     dw #presets_load_custom_preset
     dw #$FFFF
     dw #presets_open_doors
+    dw #presets_ship_landing
 if !RAW_TILE_GRAPHICS
     dw #$FFFF
     dw #presets_compressed_graphics
@@ -332,6 +333,9 @@ presets_load_custom_preset:
 
 presets_open_doors:
     %cm_toggle("Auto-Open Blue Doors", !sram_preset_open_doors, #$0001, #0)
+
+presets_ship_landing:
+    %cm_toggle("Ship Landing Sequence", !sram_preset_ship_landing, #$0001, #0)
 
 if !RAW_TILE_GRAPHICS
 !PRESETS_COMPRESSED_GRAPHICS = #$0001
