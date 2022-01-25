@@ -2340,6 +2340,7 @@ preset_prkd_maridia_spikesuit_reverse_halfie:
 preset_prkd_maridia_reverse_colosseum:
     dw #preset_prkd_maridia_spikesuit_reverse_halfie ; Maridia: Spikesuit Reverse Halfie
     dw $0A68, $0000  ; Flash suit
+    dw $0919, $0000  ; Layer 2 Y position
     dw #$FFFF
 .after
 
