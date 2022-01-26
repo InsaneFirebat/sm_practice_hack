@@ -1,7 +1,6 @@
 
 preset_100map_varia_landing_site:
     dw #$0000
-    dw $078B, $0000  ; Elevator Index
     dw $078D, $88FE  ; DDB
     dw $079B, $91F8  ; MDB
     dw $07F3, $0006  ; Music Bank
@@ -65,6 +64,7 @@ preset_100map_varia_landing_site:
     dw $D8C0, $0000  ; Doors
     dw $D8C2, $0000  ; Doors
     dw $D8C4, $0000  ; Doors
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -127,6 +127,7 @@ preset_100map_varia_bombs:
     dw $0AFA, $008B  ; Samus Y
     dw $D820, $0001  ; Events
     dw $D8B2, $2400  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -736,6 +737,7 @@ preset_100map_grapple_leaving_croc_spikesuit:
     dw $0AFA, $009B  ; Samus Y
     dw $D82A, $0002  ; Bosses
     dw $D876, $01B1  ; Items
+;    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -756,10 +758,12 @@ preset_100map_grapple_crocomire_shaft:
     dw $09D0, $0005  ; Max pbs
     dw $0A1C, $0001  ; Samus position/state
     dw $0A1E, $0008  ; More position/state
+    dw $0A68, $0000  ; Flash suit
     dw $0AF6, $00A5  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw $D876, $03B1  ; Items
     dw $D8BA, $00F3  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1944,6 +1948,7 @@ preset_100map_space_jump_over_under_spark:
     dw $0AFA, $009B  ; Samus Y
     dw $D82C, $0002  ; Bosses
     dw $D882, $0100  ; Items
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1963,6 +1968,7 @@ preset_100map_space_jump_under_over_spark:
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $002C  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -2253,6 +2259,7 @@ preset_100map_maridia_cleanup_west_cac_alley:
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $01C3  ; Samus X
     dw $0AFA, $05BB  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -2271,6 +2278,7 @@ preset_100map_maridia_cleanup_east_cac_alley:
     dw $0AF6, $00C8  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw $D8C2, $CDFE  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -2540,6 +2548,7 @@ preset_100map_screw_attack_lower_norfair_main_hall:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0480  ; Samus X
     dw $0AFA, $0288  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -2562,6 +2571,7 @@ preset_100map_screw_attack_blue_fireball:
     dw $0AF6, $0066  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw $D8BA, $21F7  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -3066,6 +3076,7 @@ preset_100map_cleanup_1_fish_tank_final:
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $0187  ; Samus X
     dw $0AFA, $068F  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -3085,6 +3096,7 @@ preset_100map_cleanup_1_mt_everest_final:
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $00C6  ; Samus X
     dw $0AFA, $006B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -3249,6 +3261,7 @@ preset_100map_greenpink_brin_cleanup_brinstar_map_entrance:
     dw $0921, $0000  ; BG2 X offset
     dw $0923, $00E0  ; BG2 Y offset
     dw $09CA, $0012  ; Supers
+    dw $09D2, $0002  ; Currently selected item
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $0044  ; Samus X
@@ -3268,6 +3281,7 @@ preset_100map_greenpink_brin_cleanup_green_brin_fireflea_room:
     dw $09C2, $0321  ; Health
     dw $09CA, $0010  ; Supers
     dw $09CE, $0002  ; Pbs
+    dw $09D2, $0000  ; Currently selected item
     dw $0AF6, $0045  ; Samus X
     dw $0AFA, $068B  ; Samus Y
     dw $D8B2, $AC01  ; Doors
@@ -3381,6 +3395,7 @@ preset_100map_greenpink_brin_cleanup_spo_spo_kihunters_room:
     dw $0919, $001A  ; Layer 2 Y position
     dw $0921, $0000  ; BG2 X offset
     dw $0923, $0000  ; BG2 Y offset
+    dw $09D2, $0002  ; Currently selected item
     dw $0AF6, $02F8  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
@@ -3486,6 +3501,7 @@ preset_100map_greenpink_brin_cleanup_mission_impossible_room:
     dw $09C2, $02BA  ; Health
     dw $09C6, $001C  ; Missiles
     dw $09CE, $0003  ; Pbs
+    dw $09D2, $0003  ; Currently selected item
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $026B  ; Samus X
@@ -3508,6 +3524,7 @@ preset_100map_greenpink_brin_cleanup_green_hill_zone_final:
     dw $09C6, $0017  ; Missiles
     dw $09CA, $000B  ; Supers
     dw $09CE, $0005  ; Pbs
+    dw $09D2, $0000  ; Currently selected item
     dw $0A1C, $0001  ; Samus position/state
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $035E  ; Samus X
@@ -3631,6 +3648,7 @@ preset_100map_blue_brinstar_cleanup_climb_supers:
     dw $0AF6, $02B6  ; Samus X
     dw $0AFA, $078B  ; Samus Y
     dw $D8B2, $AC09  ; Doors
+;    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -3653,6 +3671,7 @@ preset_100map_blue_brinstar_cleanup_parlor_again:
     dw $0AF6, $019D  ; Samus X
     dw $0AFA, $005B  ; Samus Y
     dw $D870, $09A0  ; Items
+;    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 

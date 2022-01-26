@@ -1580,6 +1580,7 @@ preset_kpdr21_maridia_botwoon:
     dw $0913, $5800  ; Screen subpixel Y position
     dw $0917, $0240  ; Layer 2 X position
     dw $0921, $0000  ; BG2 X offset
+    dw $09D2, $0003  ; Currently selected item
     dw $0A1C, $0001  ; Samus position/state
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $03A4  ; Samus X
@@ -1603,6 +1604,7 @@ preset_kpdr21_maridia_botwoon_etank:
     dw $09C6, $0014  ; Missiles
     dw $09CA, $0003  ; Supers
     dw $09CE, $0002  ; Pbs
+    dw $09D2, $0000  ; Currently selected item
     dw $0AF6, $01C6  ; Samus X
     dw $D82C, $0002  ; Bosses
     dw #$FFFF

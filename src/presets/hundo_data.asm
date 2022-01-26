@@ -69,6 +69,7 @@ preset_hundo_bombs_ceres_elevator:
     dw $D908, $0000  ; Map Stations
     dw $D90A, $0000  ; Map Stations
     dw $D90C, $0000  ; Map Stations
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -124,6 +125,7 @@ preset_hundo_bombs_ship:
     dw $0AFC, $8000  ; Samus subpixel Y
     dw $0917, $0200  ; Layer 2 X position
     dw $0921, $0200  ; BG2 X offset
+    dw !PRESET_DOORS, $0001 ; doors opened
     dw #$FFFF
 .after
 
@@ -139,6 +141,7 @@ preset_hundo_bombs_parlor_down:
     dw $0AF6, $0050  ; Samus X
     dw $0AFA, $048B  ; Samus Y
     dw $0AFC, $FFFF  ; Samus subpixel Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -156,6 +159,7 @@ preset_hundo_bombs_morph:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0580  ; Samus X
     dw $0AFA, $02A8  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -192,6 +196,7 @@ preset_hundo_bombs_climb:
     dw $0AFA, $008B  ; Samus Y
     dw $D820, $0001  ; Events
     dw $D8B2, $0400  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 

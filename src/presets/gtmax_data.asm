@@ -27,6 +27,7 @@ preset_gtmax_crateria_ship:
     dw $09CC, $0000  ; Max supers
     dw $09CE, $0000  ; Pbs
     dw $09D0, $0000  ; Max pbs
+    dw $09D2, $0000  ; Currently selected item
     dw $09D4, $0000  ; Max reserves
     dw $09D6, $0000  ; Reserves
     dw $0A1C, $0000  ; Samus position/state
