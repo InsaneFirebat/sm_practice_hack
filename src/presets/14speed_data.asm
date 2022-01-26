@@ -1,7 +1,6 @@
 
 preset_14speed_crateria_ceres_elevator:
     dw #$0000
-    dw $078B, $0000  ; Elevator Index
     dw $078D, $AB58  ; DDB
     dw $079B, $DF45  ; MDB
     dw $07F3, $002D  ; Music Bank
@@ -65,6 +64,7 @@ preset_14speed_crateria_ceres_elevator:
     dw $D8C0, $0000  ; Doors
     dw $D8C2, $0000  ; Doors
     dw $D8C4, $0000  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -103,6 +103,7 @@ preset_14speed_crateria_ship:
     dw $09C2, $0063  ; Health
     dw $0AF6, $047E  ; Samus X
     dw $0AFA, $0443  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -148,6 +149,7 @@ preset_14speed_crateria_climb:
     dw $D872, $0400  ; Items
     dw $D874, $0004  ; Items
     dw $D8B2, $0400  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -347,6 +349,7 @@ preset_14speed_brinstar_moat:
     dw $0AF6, $02DB  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw $D8B0, $6000  ; Doors
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -365,6 +368,7 @@ preset_14speed_brinstar_ocean:
     dw $09D2, $0000  ; Currently selected item
     dw $0AF6, $01A1  ; Samus X
     dw $D870, $0190  ; Items
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -531,6 +535,7 @@ preset_14speed_brinstar_revisit_red_tower_elevator:
     dw $09CE, $0002  ; Pbs
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $02A8  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -552,6 +557,7 @@ preset_14speed_brinstar_revisit_breaking_tube:
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $002C  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -776,6 +782,7 @@ preset_14speed_lower_norfair_ln_main_hall:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0480  ; Samus X
     dw $0AFA, $0288  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -795,6 +802,7 @@ preset_14speed_lower_norfair_pillars:
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $0025  ; Samus X
     dw $0AFA, $028B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1070,6 +1078,7 @@ preset_14speed_maridia_entering_maridia:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $0086  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1089,6 +1098,7 @@ preset_14speed_maridia_mt_everest:
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $00D0  ; Samus X
     dw $0AFA, $006B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 

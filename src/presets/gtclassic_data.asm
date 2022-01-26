@@ -849,6 +849,7 @@ preset_gtclassic_bootless_upper_norfair_business_center:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $02A8  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -871,6 +872,7 @@ preset_gtclassic_bootless_upper_norfair_cathedral:
     dw $0AF6, $02AD  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw $D8B8, $04EF  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 

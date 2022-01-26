@@ -1,7 +1,6 @@
 
 preset_kpdr25_bombs_ceres_elevator:
     dw #$0000
-    dw $078B, $0000  ; Elevator Index
     dw $078D, $AB58  ; DDB
     dw $079B, $DF45  ; MDB
     dw $07F3, $002D  ; Music Bank
@@ -28,6 +27,7 @@ preset_kpdr25_bombs_ceres_elevator:
     dw $09CC, $0000  ; Max supers
     dw $09CE, $0000  ; Pbs
     dw $09D0, $0000  ; Max pbs
+    dw $09D2, $0000  ; Currently selected item
     dw $09D4, $0000  ; Max reserves
     dw $09D6, $0000  ; Reserves
     dw $0A1C, $0026  ; Samus position/state
@@ -64,6 +64,7 @@ preset_kpdr25_bombs_ceres_elevator:
     dw $D8C0, $0000  ; Doors
     dw $D8C2, $0000  ; Doors
     dw $D8C4, $0000  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -104,6 +105,7 @@ preset_kpdr25_bombs_ship:
     dw $0A1E, $0E04  ; More position/state
     dw $0AF6, $0481  ; Samus X
     dw $0AFA, $0440  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -134,8 +136,8 @@ preset_kpdr25_bombs_morph:
     dw $0917, $03C0  ; Layer 2 X position
     dw $0919, $0180  ; Layer 2 Y position
     dw $0923, $00E0  ; BG2 Y offset
-    dw $0A1C, $0025  ; Samus position/state
-    dw $0A1E, $0E04  ; More position/state
+    dw $0A1C, $0000  ; Samus position/state
+    dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0580  ; Samus X
     dw $0AFA, $02A8  ; Samus Y
     dw #$FFFF
@@ -177,6 +179,7 @@ preset_kpdr25_bombs_reverse_pit:
     dw $09C8, $0005  ; Max missiles
     dw $0AF6, $007B  ; Samus X
     dw $D874, $0004  ; Items
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -263,8 +266,9 @@ preset_kpdr25_bombs_terminator:
     dw $0923, $FE00  ; BG2 Y offset
     dw $0A1C, $001F  ; Samus position/state
     dw $0A1E, $0404  ; More position/state
-    dw $0AF6, $012F  ; Samus X
-    dw $0AFA, $00A9  ; Samus Y
+    dw $0AF6, $011A  ; Samus X
+    dw $0AFA, $0099  ; Samus Y
+    dw $0B3F, $0004  ; Blue suit
     dw #$FFFF
 .after
 
@@ -286,6 +290,7 @@ preset_kpdr25_bombs_mushrooms:
     dw $0A1E, $0104  ; More position/state
     dw $0AF6, $0037  ; Samus X
     dw $0AFA, $068B  ; Samus Y
+    dw $0B3F, $0000  ; Blue suit
     dw $D870, $0180  ; Items
     dw #$FFFF
 .after
@@ -467,6 +472,7 @@ preset_kpdr25_kraid_baby_kraid:
     dw $0A1C, $0011  ; Samus position/state
     dw $0AF6, $0154  ; Samus X
     dw $0AFA, $00AB  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -491,6 +497,7 @@ preset_kpdr25_kraid_kraid_2:
     dw $0AF6, $01DB  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw $D8B8, $0024  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -553,6 +560,7 @@ preset_kpdr25_kraid_kraid_etank:
     dw $09CA, $0005  ; Supers
     dw $0AF6, $0045  ; Samus X
     dw $D8B8, $00ED  ; Doors
+;    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -575,6 +583,7 @@ preset_kpdr25_upper_norfair_business_center:
     dw $0AFA, $02AB  ; Samus Y
     dw $D874, $0C04  ; Items
     dw $D8B8, $00EF  ; Doors
+;    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -601,6 +610,7 @@ preset_kpdr25_upper_norfair_leaving_hijump:
     dw $D876, $0121  ; Items
     dw $D8B8, $20EF  ; Doors
     dw $D8BA, $0001  ; Doors
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -620,6 +630,7 @@ preset_kpdr25_upper_norfair_precathedral:
     dw $0AF6, $00B8  ; Samus X
     dw $0AFA, $038B  ; Samus Y
     dw $D876, $01A1  ; Items
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -943,6 +954,7 @@ preset_kpdr25_wrecked_ship_premoat:
     dw $0923, $FF00  ; BG2 Y offset
     dw $09CA, $0004  ; Supers
     dw $09CE, $0004  ; Pbs
+    dw $09D2, $0003  ; Currently selected item
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $007D  ; Samus X
@@ -966,6 +978,7 @@ preset_kpdr25_wrecked_ship_ocean_spark:
     dw $09C6, $0018  ; Missiles
     dw $09C8, $0019  ; Max missiles
     dw $09CE, $0002  ; Pbs
+    dw $09D2, $0000  ; Currently selected item
     dw $0A1C, $006F  ; Samus position/state
     dw $0A1E, $0608  ; More position/state
     dw $0AF6, $01DB  ; Samus X
@@ -1140,6 +1153,7 @@ preset_kpdr25_wrecked_ship_impulse_mockball:
     dw $0AF6, $0186  ; Samus X
     dw $0AFA, $04D2  ; Samus Y
     dw $D880, $00A0  ; Items
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1160,6 +1174,7 @@ preset_kpdr25_wrecked_ship_red_tower_elevator:
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $007F  ; Samus X
     dw $0AFA, $00AB  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1234,6 +1249,7 @@ preset_kpdr25_maridia_fish_tank:
     dw $0AF6, $0173  ; Samus X
     dw $0AFA, $068B  ; Samus Y
     dw $D820, $0801  ; Events
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1252,6 +1268,7 @@ preset_kpdr25_maridia_crab_shaft:
     dw $0A1C, $0011  ; Samus position/state
     dw $0AF6, $05DA  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1314,6 +1331,7 @@ preset_kpdr25_maridia_halfie:
     dw $0AFA, $009B  ; Samus Y
     dw $D82C, $0002  ; Bosses
     dw $D882, $0100  ; Items
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1334,6 +1352,7 @@ preset_kpdr25_maridia_draygon:
     dw $0AF6, $0025  ; Samus X
     dw $0AFA, $028B  ; Samus Y
     dw $D8C2, $0C00  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1494,6 +1513,7 @@ preset_kpdr25_lower_norfair_business_center_revisit:
     dw $0A1E, $0E04  ; More position/state
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $02A9  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1507,6 +1527,7 @@ preset_kpdr25_lower_norfair_magdollite_tunnel:
     dw $0A1E, $0108  ; More position/state
     dw $0AF6, $006F  ; Samus X
     dw $0AFA, $028B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1830,6 +1851,7 @@ preset_kpdr25_golden_4_ship_revisit:
     dw $0AF6, $0615  ; Samus X
     dw $0AFA, $04BB  ; Samus Y
     dw $0B3F, $0104  ; Blue suit
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1854,6 +1876,7 @@ preset_kpdr25_golden_4_g4_elevator:
     dw $0B3F, $0000  ; Blue suit
     dw $D820, $0FC1  ; Events
     dw $D8B2, $6C01  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
