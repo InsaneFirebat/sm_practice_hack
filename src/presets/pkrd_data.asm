@@ -1,7 +1,6 @@
 
 preset_pkrd_crateria_ship:
     dw #$0000
-    dw $078B, $0000  ; Elevator Index
     dw $078D, $88FE  ; DDB
     dw $079B, $91F8  ; MDB
     dw $07F3, $0006  ; Music Bank
@@ -61,6 +60,7 @@ preset_pkrd_crateria_ship:
     dw $D8C0, $0000  ; Doors
     dw $D8C2, $0000  ; Doors
     dw $D8C4, $0000  ; Doors
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -74,6 +74,7 @@ preset_pkrd_crateria_parlor:
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $0079  ; Samus X
     dw $0AFA, $049B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -87,6 +88,7 @@ preset_pkrd_crateria_parlor_downback:
     dw $0915, $032A  ; Screen Y position in pixels
     dw $0AF6, $01B5  ; Samus X
     dw $0AFA, $039B  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -97,6 +99,7 @@ preset_pkrd_crateria_climb_down:
     dw $0915, $041F  ; Screen Y position in pixels
     dw $0AF6, $01A8  ; Samus X
     dw $0AFA, $04BB  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -127,6 +130,7 @@ preset_pkrd_crateria_morph:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0580  ; Samus X
     dw $0AFA, $02A8  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -142,6 +146,7 @@ preset_pkrd_crateria_construction_zone_down:
     dw $0AF6, $07AC  ; Samus X
     dw $0AFA, $028B  ; Samus Y
     dw $D872, $0400  ; Items
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -172,6 +177,7 @@ preset_pkrd_crateria_pit_room_revisit:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $0088  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -189,6 +195,7 @@ preset_pkrd_crateria_climb_up:
     dw $0AFA, $008B  ; Samus Y
     dw $D820, $0001  ; Events
     dw $D8B2, $0400  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -488,6 +495,7 @@ preset_pkrd_brinstar_continuous_wall_jump:
     dw $0AF6, $02DB  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw $D8B0, $6000  ; Doors
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -513,6 +521,7 @@ preset_pkrd_brinstar_ocean:
     dw $0911, $0100  ; Screen X position in pixels
     dw $0913, $3C00  ; Screen subpixel Y position
     dw $0AF6, $01A8  ; Samus X
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -574,6 +583,7 @@ preset_pkrd_wrecked_ship_leaving_phantoon:
     dw $0AF6, $04DB  ; Samus X
     dw $D82A, $0100  ; Bosses
     dw $D8C0, $0070  ; Doors
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -584,6 +594,7 @@ preset_pkrd_wrecked_ship_shaft_to_supers:
     dw $0913, $FC00  ; Screen subpixel Y position
     dw $0AF6, $02C6  ; Samus X
     dw $0AFA, $006B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -903,6 +914,7 @@ preset_pkrd_kraid_leaving_varia:
     dw $D828, $0104  ; Bosses
     dw $D876, $0001  ; Items
     dw $D8B8, $0064  ; Doors
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -919,6 +931,7 @@ preset_pkrd_kraid_mini_kraid_revisit:
     dw $0AF6, $0059  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw $D8B8, $00E4  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -951,6 +964,7 @@ preset_pkrd_kraid_kraid_etank:
     dw $0AF6, $0057  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw $D8B8, $00ED  ; Doors
+;    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -970,6 +984,7 @@ preset_pkrd_kraid_leaving_kraids_lair:
     dw $0AFA, $009B  ; Samus Y
     dw $D874, $0D04  ; Items
     dw $D8B8, $00EF  ; Doors
+;    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1024,6 +1039,7 @@ preset_pkrd_upper_norfair_leaving_hi_jump:
     dw $0AFA, $00BB  ; Samus Y
     dw $D876, $0121  ; Items
     dw $D8BA, $0001  ; Doors
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1040,6 +1056,7 @@ preset_pkrd_upper_norfair_business_center_2:
     dw $09CE, $0004  ; Pbs
     dw $0AF6, $01C1  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1253,6 +1270,7 @@ preset_pkrd_upper_norfair_single_chamber_revisited:
     dw $0915, $011F  ; Screen Y position in pixels
     dw $0AF6, $01DB  ; Samus X
     dw $0AFA, $01BB  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1269,6 +1287,7 @@ preset_pkrd_upper_norfair_volcano_room:
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $03AF  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1317,6 +1336,7 @@ preset_pkrd_lower_norfair_ln_main_hall:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0480  ; Samus X
     dw $0AFA, $0288  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1329,6 +1349,7 @@ preset_pkrd_lower_norfair_prepillars:
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $07A1  ; Samus X
     dw $0AFA, $028B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1626,6 +1647,7 @@ preset_pkrd_maridia_maridia_tube_revisit:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $0086  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1668,6 +1690,7 @@ preset_pkrd_maridia_crab_shaft:
     dw $09C2, $0044  ; Health
     dw $0AF6, $05C4  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1721,6 +1744,7 @@ preset_pkrd_maridia_botwoon_etank:
     dw $09CE, $0001  ; Pbs
     dw $0AF6, $01CB  ; Samus X
     dw $D82C, $0002  ; Bosses
+;    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -1740,6 +1764,7 @@ preset_pkrd_maridia_halfie_setup:
     dw $0AF6, $0087  ; Samus X
     dw $0AFA, $009B  ; Samus Y
     dw $D882, $0100  ; Items
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1757,6 +1782,7 @@ preset_pkrd_maridia_draygon:
     dw $0AF6, $0056  ; Samus X
     dw $0AFA, $028B  ; Samus Y
     dw $D8C2, $0C00  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1893,6 +1919,7 @@ preset_pkrd_backtracking_parlor_return:
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $0439  ; Samus X
     dw $0AFA, $04BB  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1910,6 +1937,7 @@ preset_pkrd_backtracking_terminator_revisit:
     dw $0AF6, $0115  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw $0B3F, $0104  ; Blue suit
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1973,6 +2001,7 @@ preset_pkrd_tourian_tourian_elevator_room:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $02A8  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1985,6 +2014,7 @@ preset_pkrd_tourian_metroids_1:
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $0040  ; Samus X
     dw $0AFA, $038B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -2168,6 +2198,7 @@ preset_pkrd_tourian_climb_spark:
     dw $0915, $00F4  ; Screen Y position in pixels
     dw $09C2, $0199  ; Health
     dw $0AF6, $0155  ; Samus X
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 

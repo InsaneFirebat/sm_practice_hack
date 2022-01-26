@@ -1,7 +1,6 @@
 
 preset_nintendopower_crateria_ship:
     dw #$0000
-    dw $078B, $0000  ; Elevator Index
     dw $078D, $88FE  ; DDB
     dw $079B, $91F8  ; MDB
     dw $07F3, $0006  ; Music Bank
@@ -61,6 +60,7 @@ preset_nintendopower_crateria_ship:
     dw $D8C0, $0000  ; Doors
     dw $D8C2, $0000  ; Doors
     dw $D8C4, $0000  ; Doors
+    dw !PRESET_DOORS, $0001 ; doors opened
     dw #$FFFF
 .after
 
@@ -98,6 +98,7 @@ preset_nintendopower_crateria_climb:
     dw $D874, $0004  ; Items
     dw $D8B2, $0400  ; Doors
     dw $D8B6, $0004  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 

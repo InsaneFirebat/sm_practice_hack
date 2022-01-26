@@ -615,6 +615,9 @@ preset_scroll_fixes:
     LDA #$02
     STA $7ECD20 : STA $7ECD21
     BRA .topdone
++   CPX #$A6A1 : BNE +           ; Elevator to Upper Norfair (from Kraid's area)
+    STA $7ECD20
+    BRA .topdone
 +   CPX #$AC83 : BNE +           ; left of Green Bubbles Missile Room (Norfair Reserve)
     STA $7ECD20
     BRA .topdone
@@ -627,7 +630,7 @@ preset_scroll_fixes:
 +   CPX #$B1E5 : BNE +           ; bottom of Acid Chozo Room
     STA $7ECD26 : STA $7ECD27 : STA $7ECD28
     LDA #$00 : STA $7ECD23 : STA $7ECD24
-    BRA .topdone
+    BRA .done
 +   CPX #$B283 : BNE +           ; bottom of GT's Room
     LDY !SAMUS_Y : CPY #$00D0    ; no fix if Ypos < 208
     BMI .done
@@ -681,9 +684,13 @@ preset_scroll_fixes:
     STA $7ECD26
     LDA #$02 : STA $7ECD24
     BRA .bottomdone
-+   CPX #$D21C : BNE +           ; bottom of Crab Hole (Maridia Map Station)
-    STA $7ECD21
++   CPX #$D21C : BNE +           ; Crab Hole
+    LDY !SAMUS_Y : CPY #$00D0
+    BMI ++    
+    STA $7ECD21                  ; bottom of Crab Hole
     LDA #$00 : STA $7ECD20
+    BRA .bottomdone
+++  LDA #$02 : STA $7ECD20       ; top of Crab Hole
     BRA .bottomdone
 +   CPX #$D48E : BNE +           ; Oasis (bottom of Toilet)
     LDA #$02
