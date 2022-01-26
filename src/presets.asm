@@ -438,7 +438,8 @@ endif
     LDA #$E695 : STA $0A42 ; Unlock Samus
     LDA #$E725 : STA $0A44 ; Unlock Samus
 
-+   STZ $0E18              ; Set elevator to inactive
++   LDA #$9F55 : STA $0A6C ; Set X speed table pointer
+    STZ $0E18              ; Set elevator to inactive
     STZ $1C1F              ; Clear message box index
     STZ $0E1A              ; Clear health bomb flag
     STZ $0795 : STZ $0797  ; Clear door transition flags
