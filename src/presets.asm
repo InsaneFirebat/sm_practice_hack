@@ -262,6 +262,10 @@ preset_start_gameplay:
     JSL $878016  ; Clear animated tile objects
     JSL $88829E  ; Wait until the end of a v-blank and clear (H)DMA enable flags
 
+    ; Set Samus last position same as current position
+    LDA !SAMUS_X : STA $0B10 : LDA !SAMUS_X_SUBPX : STA $0B12
+    LDA !SAMUS_Y : STA $0B14 : LDA !SAMUS_Y_SUBPX : STA $0B16
+
     ; Preserve layer 2 values we may have loaded from presets
     LDA $0923 : PHA
     LDA $0921 : PHA
@@ -344,7 +348,12 @@ preset_start_gameplay:
 
     LDA #$E695 : STA $0A42 ; Unlock Samus
     LDA #$E725 : STA $0A44 ; Unlock Samus
-    STZ $0E18    ; Set elevator to inactive
+    LDA #$9F55 : STA $0A6C ; Set X speed table pointer
+    STZ $0E18              ; Set elevator to inactive
+    STZ $1C1F              ; Clear message box index
+    STZ $0E1A              ; Clear health bomb flag
+    STZ $0795 : STZ $0797  ; Clear door transition flags
+    LDA #$0000 : STA !ram_transition_flag
 
     LDA #$E737 : STA $099C  ; Pointer to next frame's room transition code = $82:E737
     PLB
