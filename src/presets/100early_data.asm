@@ -1,7 +1,6 @@
 
 preset_100early_crateria_ceres_elevator:
     dw #$0000
-    dw $078B, $0000  ; Elevator Index
     dw $078D, $AB58  ; DDB
     dw $079B, $DF45  ; MDB
     dw $07F3, $002D  ; Music Bank
@@ -65,6 +64,7 @@ preset_100early_crateria_ceres_elevator:
     dw $D8C0, $0000  ; Doors
     dw $D8C2, $0000  ; Doors
     dw $D8C4, $0000  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -105,6 +105,7 @@ preset_100early_crateria_ship:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0481  ; Samus X
     dw $0AFA, $0440  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -123,6 +124,7 @@ preset_100early_crateria_pit_room:
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $01DB  ; Samus X
     dw $0AFA, $088B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -142,6 +144,7 @@ preset_100early_crateria_morph:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0580  ; Samus X
     dw $0AFA, $02A8  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -184,6 +187,7 @@ preset_100early_crateria_climb:
     dw $0AFA, $008B  ; Samus Y
     dw $D820, $0001  ; Events
     dw $D8B2, $0400  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -502,6 +506,7 @@ preset_100early_brinstar_leaving_varia:
     dw $D828, $0104  ; Bosses
     dw $D876, $0001  ; Items
     dw $D8B8, $0064  ; Doors
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -520,6 +525,7 @@ preset_100early_brinstar_leaving_kraid_hallway:
     dw $0AF6, $0087  ; Samus X
     dw $0AFA, $00AB  ; Samus Y
     dw $D8B8, $00EC  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1022,6 +1028,7 @@ preset_100early_red_tower_and_crateria_warehouse_elevator:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $0086  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1040,6 +1047,7 @@ preset_100early_red_tower_and_crateria_red_tower_climb:
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $0025  ; Samus X
     dw $0AFA, $009B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1215,6 +1223,7 @@ preset_100early_wrecked_ship_enter_wrecked_ship:
     dw $09CA, $0004  ; Supers
     dw $0AF6, $002B  ; Samus X
     dw $D8B0, $3000  ; Doors
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1234,6 +1243,7 @@ preset_100early_wrecked_ship_phantoon:
     dw $0AF6, $04CE  ; Samus X
     dw $D880, $0001  ; Items
     dw $D8C0, $0030  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1715,6 +1725,7 @@ preset_100early_brinstar_cleanup_big_pink_power_bombs:
     dw $09C6, $0054  ; Missiles
     dw $09C8, $006E  ; Max missiles
     dw $09CE, $000C  ; Pbs
+    dw $09D2, $0003  ; Currently selected item
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $026B  ; Samus X
@@ -1737,6 +1748,7 @@ preset_100early_brinstar_cleanup_big_pink_hopper_room:
     dw $09CA, $000F  ; Supers
     dw $09CE, $0011  ; Pbs
     dw $09D0, $001E  ; Max pbs
+    dw $09D2, $0000  ; Currently selected item
     dw $0A1C, $0001  ; Samus position/state
     dw $0A1E, $0008  ; More position/state
     dw $0AFA, $049B  ; Samus Y
@@ -1882,6 +1894,7 @@ preset_100early_maridia_predraygon_fish_tank:
     dw $0AF6, $0169  ; Samus X
     dw $0AFA, $068B  ; Samus Y
     dw $D880, $01FF  ; Items
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1900,6 +1913,7 @@ preset_100early_maridia_predraygon_mama_turtle_etank:
     dw $09C2, $0350  ; Health
     dw $0AF6, $01E1  ; Samus X
     dw $0AFA, $028B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1947,6 +1961,7 @@ preset_100early_maridia_predraygon_mt_everest:
     dw $0AF6, $0178  ; Samus X
     dw $0AFA, $03BB  ; Samus Y
     dw $D880, $0FFF  ; Items
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1964,6 +1979,7 @@ preset_100early_maridia_predraygon_beach_missiles:
     dw $09C2, $03A9  ; Health
     dw $0AF6, $0078  ; Samus X
     dw $0AFA, $005B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -2077,6 +2093,7 @@ preset_100early_maridia_predraygon_botwoon:
     dw $09D2, $0000  ; Currently selected item
     dw $0AF6, $03A8  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+;    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -2100,6 +2117,7 @@ preset_100early_maridia_predraygon_full_halfie:
     dw $09CE, $000C  ; Pbs
     dw $0AF6, $01C4  ; Samus X
     dw $D82C, $0002  ; Bosses
+;    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -2677,6 +2695,7 @@ preset_100early_lower_norfair_ln_main_hall:
     dw $0AF6, $0480  ; Samus X
     dw $0AFA, $0288  ; Samus Y
     dw $D8BA, $01F7  ; Doors
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -2698,6 +2717,7 @@ preset_100early_lower_norfair_golden_torizo:
     dw $0AF6, $02B2  ; Samus X
     dw $0AFA, $028B  ; Samus Y
     dw $D820, $3801  ; Events
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -3149,6 +3169,7 @@ preset_100early_final_cleanup_reverse_slinky:
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $0476  ; Samus X
     dw $0AFA, $004B  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -3169,6 +3190,7 @@ preset_100early_final_cleanup_retro_brinstar_hoppers:
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $0152  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -3189,6 +3211,7 @@ preset_100early_final_cleanup_retro_brinstar_etank:
     dw $0AF6, $05EB  ; Samus X
     dw $0AFA, $02BB  ; Samus Y
     dw $D872, $CFEF  ; Items
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -3212,6 +3235,7 @@ preset_100early_final_cleanup_boulder_room:
     dw $0AFA, $008B  ; Samus Y
     dw $D872, $EFEF  ; Items
     dw $D8B6, $EEFD  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -3253,6 +3277,7 @@ preset_100early_final_cleanup_retro_brinstar_escape:
     dw $0AF6, $02D9  ; Samus X
     dw $0AFA, $02BB  ; Samus Y
     dw $D872, $FFEF  ; Items
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -3302,6 +3327,7 @@ preset_100early_final_cleanup_climb_supers:
     dw $0AFA, $078B  ; Samus Y
     dw $D870, $E7FF  ; Items
     dw $D8B2, $2C09  ; Doors
+;    dw !PRESET_DOORS, $FFFF ; doors forced opened
     dw #$FFFF
 .after
 
@@ -3325,6 +3351,7 @@ preset_100early_final_cleanup_parlor_missiles:
     dw $0AF6, $012C  ; Samus X
     dw $0AFA, $0398  ; Samus Y
     dw $D870, $EFFF  ; Items
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 

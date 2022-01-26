@@ -1,7 +1,6 @@
 
 preset_gtmax_crateria_ship:
     dw #$0000
-    dw $078B, $0000  ; Elevator Index
     dw $078D, $88FE  ; DDB
     dw $079B, $91F8  ; MDB
     dw $07F3, $0006  ; Music Bank
@@ -64,6 +63,7 @@ preset_gtmax_crateria_ship:
     dw $D8C0, $0000  ; Doors
     dw $D8C2, $0000  ; Doors
     dw $D8C4, $0000  ; Doors
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -78,6 +78,7 @@ preset_gtmax_crateria_parlor:
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $0084  ; Samus X
     dw $0AFA, $04A0  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -96,6 +97,7 @@ preset_gtmax_crateria_parlor_downback:
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $01A1  ; Samus X
     dw $0AFA, $035B  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -145,6 +147,7 @@ preset_gtmax_crateria_morph:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0580  ; Samus X
     dw $0AFA, $02A8  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -161,6 +164,7 @@ preset_gtmax_crateria_construction_zone_down:
     dw $0AF6, $07A6  ; Samus X
     dw $0AFA, $028B  ; Samus Y
     dw $D872, $0400  ; Items
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -198,6 +202,7 @@ preset_gtmax_crateria_pit_room_revisit:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $0088  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -217,6 +222,7 @@ preset_gtmax_crateria_climb_up:
     dw $0AFA, $008B  ; Samus Y
     dw $D820, $0001  ; Events
     dw $D8B2, $0400  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -698,6 +704,7 @@ preset_gtmax_kraid_leaving_varia:
     dw $D828, $0104  ; Bosses
     dw $D876, $0001  ; Items
     dw $D8B8, $0064  ; Doors
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -717,6 +724,7 @@ preset_gtmax_kraid_mini_kraid_revisit:
     dw $0AF6, $0052  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw $D8B8, $00E4  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -807,6 +815,7 @@ preset_gtmax_upper_norfair_leaving_hijump:
     dw $0AF6, $0045  ; Samus X
     dw $0AFA, $00BB  ; Samus Y
     dw $D876, $0021  ; Items
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -826,6 +835,7 @@ preset_gtmax_upper_norfair_business_center_revisit:
     dw $0AF6, $01C1  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw $D8BA, $0001  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -978,6 +988,7 @@ preset_gtmax_upper_norfair_ln_main_hall:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0480  ; Samus X
     dw $0AFA, $0288  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -991,6 +1002,7 @@ preset_gtmax_upper_norfair_prepillars:
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $0796  ; Samus X
     dw $0AFA, $028B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1007,7 +1019,7 @@ preset_gtmax_upper_norfair_green_gate_glitch:
     dw $0923, $FF00  ; BG2 Y offset
     dw $09C2, $0013  ; Health
     dw $09CE, $0001  ; Pbs
-    dw $09D2, $0000  ; Currently selected item
+    dw $09D2, $0002  ; Currently selected item
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $007E  ; Samus X
@@ -1206,26 +1218,27 @@ preset_gtmax_lower_norfair_kihunter_stairs_down:
 
 preset_gtmax_lower_norfair_wasteland:
     dw #preset_gtmax_lower_norfair_kihunter_stairs_down ; Lower Norfair: Kihunter Stairs Down
-    dw $078D, $99EA  ; DDB
+    dw $078D, $99A2  ; DDB
     dw $079B, $B585  ; MDB
-    dw $090F, $0000  ; Screen subpixel X position
+    dw $090F, $A000  ; Screen subpixel X position
     dw $0911, $0200  ; Screen X position in pixels
-    dw $0913, $C000  ; Screen subpixel Y position
-    dw $0915, $041F  ; Screen Y position in pixels
+    dw $0913, $0000  ; Screen subpixel Y position
+    dw $0915, $0419  ; Screen Y position in pixels
     dw $0917, $0180  ; Layer 2 X position
-    dw $0919, $0317  ; Layer 2 Y position
+    dw $0919, $0312  ; Layer 2 Y position
     dw $0923, $0000  ; BG2 Y offset
-    dw $09CE, $000F  ; Pbs
-    dw $0A1C, $007E  ; Samus position/state
-    dw $0A1E, $1304  ; More position/state
-    dw $0AF6, $0265  ; Samus X
-    dw $0AFA, $04EC  ; Samus Y
+    dw $09CE, $000E  ; Pbs
+    dw $0A1C, $0079  ; Samus position/state
+    dw $0A1E, $1108  ; More position/state
+    dw $0AF6, $0246  ; Samus X
+    dw $0AFA, $0489  ; Samus Y
     dw $D8BA, $4301  ; Doors
     dw #$FFFF
 .after
 
 preset_gtmax_lower_norfair_metal_ninja_pirates:
     dw #preset_gtmax_lower_norfair_wasteland ; Lower Norfair: Wasteland
+    dw $078D, $99EA  ; DDB
     dw $079B, $B5D5  ; MDB
     dw $090F, $C000  ; Screen subpixel X position
     dw $0911, $0100  ; Screen X position in pixels
@@ -1802,6 +1815,7 @@ preset_gtmax_upper_norfair_and_kraid_kraid_revisit:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $0086  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1823,6 +1837,7 @@ preset_gtmax_upper_norfair_and_kraid_kraid_etank:
     dw $0AF6, $0059  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw $D8B8, $EEED  ; Doors
+;    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -1842,6 +1857,7 @@ preset_gtmax_upper_norfair_and_kraid_kraid_kihunters_final:
     dw $0AF6, $0167  ; Samus X
     dw $D874, $0904  ; Items
     dw $D8B8, $EEEF  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1887,6 +1903,7 @@ preset_gtmax_maridia_predraygon_fish_tank:
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $0165  ; Samus X
     dw $0AFA, $068B  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -1905,6 +1922,7 @@ preset_gtmax_maridia_predraygon_tatori_room:
     dw $0923, $FE00  ; BG2 Y offset
     dw $0AF6, $01E3  ; Samus X
     dw $0AFA, $028B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1995,6 +2013,7 @@ preset_gtmax_maridia_predraygon_beach_exit:
     dw $0AF6, $00AC  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw $D880, $7E00  ; Items
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -2014,6 +2033,7 @@ preset_gtmax_maridia_predraygon_crab_shaft_revisit:
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $00A8  ; Samus X
     dw $0AFA, $02B3  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -2072,6 +2092,7 @@ preset_gtmax_maridia_predraygon_halfie_setup:
     dw $0AF6, $0079  ; Samus X
     dw $0AFA, $009B  ; Samus Y
     dw $D82C, $0002  ; Bosses
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -2117,6 +2138,7 @@ preset_gtmax_maridia_predraygon_draygon:
     dw $0AFA, $028B  ; Samus Y
     dw $D882, $0080  ; Items
     dw $D8C2, $0C00  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -2340,11 +2362,13 @@ preset_gtmax_maridia_postdraygon_leaving_alpha_power_bombs:
     dw $09C8, $00E1  ; Max missiles
     dw $09CA, $0011  ; Supers
     dw $09CE, $0026  ; Pbs
+    dw $09D2, $0003  ; Currently selected item
     dw $0A1C, $0001  ; Samus position/state
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $0036  ; Samus X
     dw $0AFA, $00BB  ; Samus Y
     dw $D874, $1B04  ; Items
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -2360,11 +2384,13 @@ preset_gtmax_maridia_postdraygon_beta_power_bombs:
     dw $0921, $0100  ; BG2 X offset
     dw $0923, $F900  ; BG2 Y offset
     dw $09CA, $0010  ; Supers
+    dw $09D2, $0000  ; Currently selected item
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $005D  ; Samus X
     dw $0AFA, $038B  ; Samus Y
     dw $D8B6, $3808  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -3245,6 +3271,7 @@ preset_gtmax_brinstar_cleanup_2_leaving_blue_brinstar:
     dw $0AFA, $02BB  ; Samus Y
     dw $D872, $FF6F  ; Items
     dw $D874, $1BBE  ; Items
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -3294,6 +3321,7 @@ preset_gtmax_brinstar_cleanup_2_climb_supers:
     dw $0AFA, $078B  ; Samus Y
     dw $D870, $E6FD  ; Items
     dw $D8B2, $2C09  ; Doors
+;    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -3317,6 +3345,7 @@ preset_gtmax_brinstar_cleanup_2_to_final_missiles:
     dw $0AF6, $01D6  ; Samus X
     dw $0AFA, $004B  ; Samus Y
     dw $D870, $EEFD  ; Items
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -3389,6 +3418,7 @@ preset_gtmax_tourian_tourian_elevator_room:
     dw $D820, $1FC1  ; Events
     dw $D870, $FFFD  ; Items
     dw $D8B2, $6C09  ; Doors
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
@@ -3402,6 +3432,7 @@ preset_gtmax_tourian_metroids_1:
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $003B  ; Samus X
     dw $0AFA, $038B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -3608,6 +3639,7 @@ preset_gtmax_tourian_climb_spark:
     dw $0923, $FD00  ; BG2 Y offset
     dw $0AF6, $0152  ; Samus X
     dw $0AFA, $018B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
