@@ -1841,7 +1841,7 @@ preset_prkd15_lower_norfair_leaving_ridley:
     dw $0917, $0001 ; Layer 2 X scroll in room in pixels?
     dw $0919, $00D7 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dw $0921, $FF00 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dw $09A6, $1004 ; Beams
+    dw $09A6, $1001 ; Beams
     dw $09C6, $0004 ; Missiles
     dw $09CA, $0003 ; Supers
     dw $09CE, $0005 ; Pbs
@@ -1866,7 +1866,6 @@ preset_prkd15_lower_norfair_reverse_plowerhouse:
     dw $0917, $0180 ; Layer 2 X scroll in room in pixels?
     dw $0919, $0000 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dw $0921, $0100 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dw $09A6, $1001 ; Beams
     dw $09C2, $00F1 ; Health
     dw $09C6, $0009 ; Missiles
     dw $0AF6, $02B1 ; Samus X
