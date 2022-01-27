@@ -1,10 +1,10 @@
 
 preset_gtclassic_crateria_ceres_elevator:
     dw #$0000
-    dw $078D, $88FE  ; DDB
+    dw $078D, $AB58  ; DDB
     dw $079B, $DF45  ; MDB
     dw $07F3, $002D  ; Music Bank
-    dw $07F5, $0000  ; Music Track
+    dw $07F5, $0006  ; Music Track
     dw $090F, $0000  ; Screen subpixel X position
     dw $0911, $0000  ; Screen X position in pixels
     dw $0913, $0000  ; Screen subpixel Y position
@@ -35,14 +35,16 @@ preset_gtclassic_crateria_ceres_elevator:
     dw $0A68, $0000  ; Flash suit
     dw $0A76, $0000  ; Hyper beam
     dw $0AF6, $0080  ; Samus X
-    dw $0AFA, $0000  ; Samus Y
+    dw $0AF8, $0000  ; Samus subpixel X
+    dw $0AFA, $0048  ; Samus Y
+    dw $0AFC, $0000  ; Samus subpixel Y
     dw $0B3F, $0000  ; Blue suit
     dw $D820, $0000  ; Events
     dw $D822, $0000  ; Events
     dw $D828, $0000  ; Bosses
     dw $D82A, $0000  ; Bosses
     dw $D82C, $0000  ; Bosses
-    dw $D82E, $0001  ; Bosses
+    dw $D82E, $0000  ; Bosses
     dw $D870, $0000  ; Items
     dw $D872, $0000  ; Items
     dw $D874, $0000  ; Items
@@ -64,6 +66,9 @@ preset_gtclassic_crateria_ceres_elevator:
     dw $D8C0, $0000  ; Doors
     dw $D8C2, $0000  ; Doors
     dw $D8C4, $0000  ; Doors
+    dw $D908, $0000  ; Map Stations
+    dw $D90A, $0000  ; Map Stations
+    dw $D90C, $0000  ; Map Stations
     dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
