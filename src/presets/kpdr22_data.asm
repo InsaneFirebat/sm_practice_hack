@@ -744,9 +744,8 @@ preset_kpdr22_upper_norfair_leaving_hi_jump:
     dw $0923, $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dw $09A2, $1105 ; Equipped Items
     dw $09A4, $1105 ; Collected Items
-    dw $09C4, $018F ; Max health
     dw $09C2, $012B ; Health
-    dw $09C4, $012B ; Max health
+    dw $09C4, $018F ; Max health
     dw $0A1C, $0001 ; Samus position/state
     dw $0A1E, $0008 ; More position/state
     dw $0AF6, $00B5 ; Samus X
@@ -959,11 +958,10 @@ preset_kpdr22_upper_norfair_frog_speedway:
     dw $090F, $5000 ; Screen subpixel X position.
     dw $0913, $1400 ; Screen subpixel Y position
     dw $0915, $0000 ; Screen Y position in pixels
-    dw $09C2, $018F ; Health
     dw $0919, $0000 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dw $0921, $FE00 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dw $0923, $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dw $09C2, $012B ; Health
+    dw $09C2, $018F ; Health
     dw $09C6, $000E ; Missiles
     dw $09CA, $0004 ; Supers
     dw $0AF6, $008E ; Samus X
@@ -1027,10 +1025,9 @@ preset_kpdr22_red_brinstar_red_tower_climb:
     dw $090F, $0000 ; Screen subpixel X position.
     dw $0913, $EC00 ; Screen subpixel Y position
     dw $0915, $0000 ; Screen Y position in pixels
-    dw $09C2, $018D ; Health
     dw $0919, $0000 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dw $0923, $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dw $09C2, $0129 ; Health
+    dw $09C2, $018D ; Health
     dw $0AF6, $0024 ; Samus X
     dw $0AFA, $008B ; Samus Y
     dw #$FFFF
@@ -1057,11 +1054,10 @@ preset_kpdr22_red_brinstar_caterpillars_down:
     dw $090F, $0000 ; Screen subpixel X position.
     dw $0911, $01FB ; Screen X position in pixels
     dw $0913, $4400 ; Screen subpixel Y position
-    dw $09C2, $017D ; Health
     dw $0917, $017C ; Layer 2 X scroll in room in pixels?
     dw $0921, $0100 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dw $0923, $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dw $09C2, $0119 ; Health
+    dw $09C2, $017D ; Health
     dw $0AF6, $0291 ; Samus X
     dw #$FFFF
 .after
@@ -1095,12 +1091,11 @@ preset_kpdr22_red_brinstar_caterpillars_up:
     dw $0911, $0200 ; Screen X position in pixels
     dw $0913, $FC00 ; Screen subpixel Y position
     dw $0915, $0000 ; Screen Y position in pixels
-    dw $09C2, $0173 ; Health
     dw $0917, $0180 ; Layer 2 X scroll in room in pixels?
     dw $0919, $0000 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dw $0921, $FD00 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dw $0923, $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dw $09C2, $010F ; Health
+    dw $09C2, $0173 ; Health
     dw $09CE, $0005 ; Pbs
     dw $09D0, $0005 ; Max pbs
     dw $09D2, $0003 ; Currently selected item
@@ -1120,11 +1115,10 @@ preset_kpdr22_wrecked_ship_crateria_kihunters:
     dw $090F, $C000 ; Screen subpixel X position.
     dw $0911, $0000 ; Screen X position in pixels
     dw $0913, $A400 ; Screen subpixel Y position
-    dw $09C2, $0187 ; Health
     dw $0917, $0000 ; Layer 2 X scroll in room in pixels?
     dw $0921, $0000 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dw $0923, $FF00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dw $09C2, $0123 ; Health
+    dw $09C2, $0187 ; Health
     dw $09CA, $0005 ; Supers
     dw $09CE, $0004 ; Pbs
     dw $0A1C, $0028 ; Samus position/state
@@ -1162,10 +1156,10 @@ preset_kpdr22_wrecked_ship_ocean_spark:
     dw $090F, $A3FF ; Screen subpixel X position.
     dw $0911, $0100 ; Screen X position in pixels
     dw $0913, $6C00 ; Screen subpixel Y position
-    dw $09C2, $0152 ; Health
     dw $0917, $00C0 ; Layer 2 X scroll in room in pixels?
     dw $0921, $0100 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dw $0923, $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dw $09C2, $0152 ; Health
     dw $0AF6, $01C6 ; Samus X
     dw $D91A, $0025 ; Events, Items, Doors
     dw #$FFFF
@@ -1180,9 +1174,9 @@ preset_kpdr22_wrecked_ship_entering_wrecked_ship:
     dw $0911, $0700 ; Screen X position in pixels
     dw $0913, $B000 ; Screen subpixel Y position
     dw $0915, $0400 ; Screen Y position in pixels
-    dw $09C2, $00D8 ; Health
     dw $0917, $0380 ; Layer 2 X scroll in room in pixels?
     dw $0923, $FC00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dw $09C2, $00D8 ; Health
     dw $09CA, $0004 ; Supers
     dw $0AF6, $07DB ; Samus X
     dw $0AFA, $048B ; Samus Y
@@ -1235,8 +1229,8 @@ preset_kpdr22_wrecked_ship_leaving_phantoon:
     dw $07F5, $0006 ; Music Track
     dw $090F, $7000 ; Screen subpixel X position.
     dw $0913, $8000 ; Screen subpixel Y position
-    dw $09C2, $0146 ; Health
     dw $0921, $FB00 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dw $09C2, $0146 ; Health
     dw $09CA, $0005 ; Supers
     dw $09CE, $0003 ; Pbs
     dw $0A1C, $0002 ; Samus position/state
@@ -1305,11 +1299,11 @@ preset_kpdr22_wrecked_ship_upper_west_ocean:
     dw $0911, $0000 ; Screen X position in pixels
     dw $0913, $C7FD ; Screen subpixel Y position
     dw $0915, $001F ; Screen Y position in pixels
-    dw $09C2, $0152 ; Health
     dw $0917, $0000 ; Layer 2 X scroll in room in pixels?
     dw $0919, $001E ; Layer 2 Y scroll in room in pixels? (up = positive)
     dw $0921, $FC00 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dw $0923, $FF00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dw $09C2, $0152 ; Health
     dw $09CA, $0009 ; Supers
     dw $0A1C, $0002 ; Samus position/state
     dw $0A1E, $0004 ; More position/state
@@ -1329,11 +1323,11 @@ preset_kpdr22_wrecked_ship_pancakes_and_wavers:
     dw $0911, $0200 ; Screen X position in pixels
     dw $0913, $F800 ; Screen subpixel Y position
     dw $0915, $01FC ; Screen Y position in pixels
-    dw $09C2, $0166 ; Health
     dw $0917, $0100 ; Layer 2 X scroll in room in pixels?
     dw $0919, $0000 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dw $0921, $F800 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dw $0923, $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dw $09C2, $0166 ; Health
     dw $0A1C, $0001 ; Samus position/state
     dw $0A1E, $0008 ; More position/state
     dw $0AF6, $02C2 ; Samus X
@@ -1428,10 +1422,10 @@ preset_kpdr22_red_brinstar_final_red_tower_elevator:
     dw $07F3, $0012 ; Music Bank
     dw $090F, $F000 ; Screen subpixel X position.
     dw $0915, $0238 ; Screen Y position in pixels
-    dw $09C2, $0121 ; Health
     dw $0919, $0238 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dw $0921, $0000 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dw $0923, $00E0 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dw $09C2, $0121 ; Health
     dw $09C6, $0012 ; Missiles
     dw $09CE, $0003 ; Pbs
     dw $0A1C, $009B ; Samus position/state
@@ -1462,10 +1456,10 @@ preset_kpdr22_red_brinstar_final_red_tower_down:
     dw $079B, $A2F7 ; MDB
     dw $0913, $9000 ; Screen subpixel Y position
     dw $0915, $0000 ; Screen Y position in pixels
-    dw $09C2, $0119 ; Health
     dw $0919, $0000 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dw $0921, $FD00 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dw $0923, $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dw $09C2, $0119 ; Health
     dw $0AF6, $003D ; Samus X
     dw $0AFA, $008B ; Samus Y
     dw #$FFFF
@@ -1495,10 +1489,10 @@ preset_kpdr22_red_brinstar_final_below_spazer_final:
     dw $0911, $0100 ; Screen X position in pixels
     dw $0913, $4400 ; Screen subpixel Y position
     dw $0915, $0000 ; Screen Y position in pixels
-    dw $09C2, $0118 ; Health
     dw $0917, $00C0 ; Layer 2 X scroll in room in pixels?
     dw $0919, $0000 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dw $0921, $0100 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dw $09C2, $0118 ; Health
     dw $0AF6, $01DC ; Samus X
     dw $0AFA, $008B ; Samus Y
     dw #$FFFF
@@ -1565,9 +1559,9 @@ preset_kpdr22_maridia_crab_shaft:
     dw $0911, $0500 ; Screen X position in pixels
     dw $0913, $9C01 ; Screen subpixel Y position
     dw $0915, $0000 ; Screen Y position in pixels
-    dw $09C2, $00DD ; Health
     dw $0917, $03C0 ; Layer 2 X scroll in room in pixels?
     dw $0919, $0000 ; Layer 2 Y scroll in room in pixels? (up = positive)
+    dw $09C2, $00DD ; Health
     dw $0AF6, $05C0 ; Samus X
     dw $0AFA, $008B ; Samus Y
     dw !PRESET_DOORS, $0000 ; doors opened
@@ -1642,10 +1636,10 @@ preset_kpdr22_maridia_botwoon_etank:
     dw $090F, $4000 ; Screen subpixel X position.
     dw $0911, $0100 ; Screen X position in pixels
     dw $0913, $C000 ; Screen subpixel Y position
-    dw $09C2, $0105 ; Health
     dw $0917, $0100 ; Layer 2 X scroll in room in pixels?
     dw $0921, $0100 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dw $0923, $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dw $09C2, $0105 ; Health
     dw $09C6, $0014 ; Missiles
     dw $09CA, $0003 ; Supers
     dw $09CE, $0002 ; Pbs
@@ -1664,10 +1658,10 @@ preset_kpdr22_maridia_halfie_setup:
     dw $0911, $0000 ; Screen X position in pixels
     dw $0913, $4400 ; Screen subpixel Y position
     dw $0915, $001F ; Screen Y position in pixels
-    dw $09C2, $01F3 ; Health
-    dw $09C4, $01F3 ; Max health
     dw $0917, $0000 ; Layer 2 X scroll in room in pixels?
     dw $0919, $001F ; Layer 2 Y scroll in room in pixels? (up = positive)
+    dw $09C2, $01F3 ; Health
+    dw $09C4, $01F3 ; Max health
     dw $0AF6, $008D ; Samus X
     dw $0AFA, $009B ; Samus Y
     dw $D882, $0100 ; Events, Items, Doors
@@ -1683,8 +1677,8 @@ preset_kpdr22_maridia_draygon:
     dw $090F, $3000 ; Screen subpixel X position.
     dw $0913, $E400 ; Screen subpixel Y position
     dw $0915, $0200 ; Screen Y position in pixels
-    dw $09C2, $0174 ; Health
     dw $0919, $0180 ; Layer 2 Y scroll in room in pixels? (up = positive)
+    dw $09C2, $0174 ; Health
     dw $09CA, $0001 ; Supers
     dw $0A1C, $0002 ; Samus position/state
     dw $0A1E, $0004 ; More position/state
@@ -1876,10 +1870,10 @@ preset_kpdr22_maridia_lower_maridia_gate:
     dw $090F, $8000 ; Screen subpixel X position.
     dw $0913, $5C00 ; Screen subpixel Y position
     dw $0915, $0100 ; Screen Y position in pixels
-    dw $09C2, $0112 ; Health
     dw $0919, $0100 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dw $0921, $FF00 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dw $0923, $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dw $09C2, $0112 ; Health
     dw $09CE, $0005 ; Pbs
     dw $0AF6, $002E ; Samus X
     dw #$FFFF
@@ -2056,7 +2050,6 @@ preset_kpdr22_lower_norfair_ln_main_hall:
     dw $0919, $0301  ; Layer 2 Y position
     dw $0921, $FC00  ; BG2 X offset
     dw $0923, $00E0  ; BG2 Y offset
-    dw $09C2, $011E  ; Health
     dw $09CE, $0004  ; Pbs
     dw $0A1C, $009B  ; Samus position/state
     dw $0A1E, $0000  ; More position/state
@@ -2108,10 +2101,10 @@ preset_kpdr22_lower_norfair_worst_room_in_the_game:
     dw $0911, $0300 ; Screen X position in pixels
     dw $0913, $F800 ; Screen subpixel Y position
     dw $0915, $0000 ; Screen Y position in pixels
-    dw $09C2, $00D4 ; Health
     dw $0917, $0240 ; Layer 2 X scroll in room in pixels?
     dw $0919, $0000 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dw $0923, $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dw $09C2, $00D4 ; Health
     dw $0AF6, $03DB ; Samus X
     dw $0AFA, $008B ; Samus Y
     dw #$FFFF
@@ -2125,10 +2118,10 @@ preset_kpdr22_lower_norfair_amphitheatre:
     dw $0911, $0000 ; Screen X position in pixels
     dw $0913, $A400 ; Screen subpixel Y position
     dw $0915, $011D ; Screen Y position in pixels
-    dw $09C2, $00E8 ; Health
     dw $0917, $0000 ; Layer 2 X scroll in room in pixels?
     dw $0919, $00D5 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dw $0923, $FB00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dw $09C2, $00E8 ; Health
     dw $09CE, $0004 ; Pbs
     dw $09D2, $0000 ; Currently selected item
     dw $0AF6, $00A7 ; Samus X
@@ -2159,10 +2152,10 @@ preset_kpdr22_lower_norfair_wasteland:
     dw $090F, $8000 ; Screen subpixel X position.
     dw $0911, $0200 ; Screen X position in pixels
     dw $0915, $0419 ; Screen Y position in pixels
-    dw $09C2, $0110 ; Health
     dw $0917, $0180 ; Layer 2 X scroll in room in pixels?
     dw $0919, $0312 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dw $0923, $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dw $09C2, $0110 ; Health
     dw $09CE, $0002 ; Pbs
     dw $0A1C, $001D ; Samus position/state
     dw $0A1E, $0408 ; More position/state
@@ -2199,11 +2192,11 @@ preset_kpdr22_lower_norfair_plowerhouse:
     dw $0911, $0000 ; Screen X position in pixels
     dw $0913, $CC00 ; Screen subpixel Y position
     dw $0915, $0000 ; Screen Y position in pixels
-    dw $09C2, $0186 ; Health
     dw $0917, $0000 ; Layer 2 X scroll in room in pixels?
     dw $0919, $0000 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dw $0921, $FD00 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dw $0923, $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dw $09C2, $0186 ; Health
     dw $09C6, $0014 ; Missiles
     dw $09CA, $0009 ; Supers
     dw $0AF6, $006A ; Samus X
