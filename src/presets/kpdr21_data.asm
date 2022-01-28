@@ -675,6 +675,7 @@ preset_kpdr21_brinstar_kraid_etank:
     dw $0AF6, $0051  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw $D8B8, $00ED  ; Doors
+    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -695,6 +696,7 @@ preset_kpdr21_upper_norfair_business_center:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $02A8  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1607,6 +1609,7 @@ preset_kpdr21_maridia_botwoon_etank:
     dw $09D2, $0000  ; Currently selected item
     dw $0AF6, $01C6  ; Samus X
     dw $D82C, $0002  ; Bosses
+    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 

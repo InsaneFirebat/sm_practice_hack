@@ -737,7 +737,7 @@ preset_100map_grapple_leaving_croc_spikesuit:
     dw $0AFA, $009B  ; Samus Y
     dw $D82A, $0002  ; Bosses
     dw $D876, $01B1  ; Items
-;    dw !PRESET_DOORS, $FFFF ; doors forced open
+    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -3648,7 +3648,7 @@ preset_100map_blue_brinstar_cleanup_climb_supers:
     dw $0AF6, $02B6  ; Samus X
     dw $0AFA, $078B  ; Samus Y
     dw $D8B2, $AC09  ; Doors
-;    dw !PRESET_DOORS, $FFFF ; doors forced open
+    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -3671,7 +3671,7 @@ preset_100map_blue_brinstar_cleanup_parlor_again:
     dw $0AF6, $019D  ; Samus X
     dw $0AFA, $005B  ; Samus Y
     dw $D870, $09A0  ; Items
-;    dw !PRESET_DOORS, $0000 ; doors opened
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 

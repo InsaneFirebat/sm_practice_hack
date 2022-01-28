@@ -366,7 +366,7 @@ endif
 ;    LDA !sram_preset_options : BIT !PRESETS_CLOSE_BLUE_DOORS : BNE +
     LDA !sram_preset_open_doors : BEQ +
     LDA !SAMUS_POSE : BEQ +
-    LDA !PRESET_DOORS : BNE +
+    LDA !PRESET_DOORS : CMP #$0001 : BEQ +
     LDA $7ED914 : CMP #$0005 : BNE +
     JSR preset_open_all_blue_doors
 
@@ -512,9 +512,13 @@ preset_open_all_blue_doors:
     %a16() : TYA : ASL : TAX : %a8()
     LDA $0001,X : BIT #$30 : BNE .bts_continue
 
+    ; Check if preset skips the scroll check
+    %a16()
+    LDA !PRESET_DOORS : CMP #$FFFF : BEQ .preset_forced_open
+
     ; If this door has a red scroll, then leave it closed
     ; Most of the work is to determine the scroll index
-    %a16() : TYA : DEC : LSR : LSR : LSR : LSR : STA $004204
+    TYA : DEC : LSR : LSR : LSR : LSR : STA $004204
     %a8() : LDA $C7 : STA $004206
     %a16() : PHA : PLA : PHA : PLA
     LDA $004216 : STA $C8
@@ -525,6 +529,9 @@ preset_open_all_blue_doors:
     LDA $004216 : CLC : ADC $C8
     PHX : TAX : LDA $7ECD20,X : PLX
     CMP #$00 : BEQ .bts_continue
+
+  .preset_forced_open
+    %a8()
 
     ; Check what type of door we need to open
     LDA $6401,Y : BIT #$02 : BNE .bts_check_up_or_down
@@ -598,7 +605,7 @@ preset_room_setup_asm_fixes:
 
 preset_scroll_fixes:
 {
-    ; Fixes bad scrolling caused by a loading into a position that
+    ; Fixes bad scrolling caused by loading into a position that
     ; is normally hidden until passing over a red scroll block.
     ; These fixes can often be found in nearby door asm.
     PHP

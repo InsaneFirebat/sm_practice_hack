@@ -1838,7 +1838,7 @@ preset_gtmax_upper_norfair_and_kraid_kraid_etank:
     dw $0AF6, $0059  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw $D8B8, $EEED  ; Doors
-;    dw !PRESET_DOORS, $FFFF ; doors forced open
+    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -3322,7 +3322,7 @@ preset_gtmax_brinstar_cleanup_2_climb_supers:
     dw $0AFA, $078B  ; Samus Y
     dw $D870, $E6FD  ; Items
     dw $D8B2, $2C09  ; Doors
-;    dw !PRESET_DOORS, $FFFF ; doors forced open
+    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 

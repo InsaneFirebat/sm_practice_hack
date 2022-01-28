@@ -813,9 +813,11 @@ preset_gtclassic_kraid_kraid_etank:
     dw $0919, $0100  ; Layer 2 Y position
     dw $0921, $FF00  ; BG2 X offset
     dw $0923, $FFE0  ; BG2 Y offset
+    dw $09D2, $0001  ; Currently selected item
     dw $0AF6, $005B  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw $D8B8, $00ED  ; Doors
+    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -832,10 +834,12 @@ preset_gtclassic_kraid_leaving_kraids_lair:
     dw $09C4, $012B  ; Max health
     dw $09C6, $0004  ; Missiles
     dw $09CE, $0005  ; Pbs
+    dw $09D2, $0000  ; Currently selected item
     dw $0AF6, $0025  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw $D874, $0904  ; Items
     dw $D8B8, $00EF  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 

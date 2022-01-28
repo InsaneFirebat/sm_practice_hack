@@ -609,6 +609,7 @@ preset_spazer_brinstar_kraid_etank:
     dw $0AFA, $018B ; Samus Y
     dw $D8B8, $00ED ; Events, Items, Doors
     dw $D91A, $0013 ; Events, Items, Doors
+    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -632,6 +633,7 @@ preset_spazer_upper_norfair_business_center:
     dw $D874, $0C04 ; Events, Items, Doors
     dw $D8B8, $00EF ; Events, Items, Doors
     dw $D91A, $0015 ; Events, Items, Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1470,6 +1472,7 @@ preset_spazer_maridia_botwoon_etank:
     dw $09CE, $0002 ; Pbs
     dw $0AF6, $01C6 ; Samus X
     dw $D82C, $0002 ; Events, Items, Doors
+    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
