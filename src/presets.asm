@@ -771,7 +771,7 @@ preset_scroll_fixes:
 LoadRandomPreset:
 {
     PHY : PHX
-    JSL $808111 : STA $12
+    JSL MenuRNG : STA $12
 
     LDA #$00B8 : STA $18                       ; bank in $18
     LDA !sram_preset_category : ASL : TAY      ; selected category index in Y
