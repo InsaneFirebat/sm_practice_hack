@@ -30,6 +30,7 @@ preset_gtclassic_crateria_ceres_elevator:
     dw $09D2, $0000  ; Currently selected item
     dw $09D4, $0000  ; Max reserves
     dw $09D6, $0000  ; Reserves
+    dw $0A04, $0000  ; Auto-cancel item
     dw $0A1C, $0000  ; Samus position/state
     dw $0A1E, $0000  ; More position/state
     dw $0A68, $0000  ; Flash suit
@@ -367,6 +368,7 @@ preset_gtclassic_crateria_green_pirate_shaft:
     dw $0923, $0000  ; BG2 Y offset
     dw $09C2, $00C7  ; Health
     dw $09C4, $00C7  ; Max health
+    dw $09D2, $0001  ; Currently selected item
     dw $0AF6, $0063  ; Samus X
     dw $0AFA, $029B  ; Samus Y
     dw $0B3F, $0000  ; Blue suit
@@ -385,6 +387,7 @@ preset_gtclassic_brinstar_green_brinstar_elevator:
     dw $0919, $0000  ; Layer 2 Y position
     dw $0921, $FF00  ; BG2 X offset
     dw $09C6, $0002  ; Missiles
+    dw $09D2, $0000  ; Currently selected item
     dw $0A1C, $0000  ; Samus position/state
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0080  ; Samus X
@@ -708,6 +711,7 @@ preset_gtclassic_kraid_mini_kraid:
     dw $0921, $0000  ; BG2 X offset
     dw $0923, $FF00  ; BG2 Y offset
     dw $09C2, $005B  ; Health
+    dw $09D2, $0001  ; Currently selected item
     dw $0AF6, $016B  ; Samus X
     dw #$FFFF
 .after
@@ -725,6 +729,7 @@ preset_gtclassic_kraid_kraid_2:
     dw $09C2, $0031  ; Health
     dw $09CA, $0004  ; Supers
     dw $09CE, $0002  ; Pbs
+    dw $09D2, $0000  ; Currently selected item
     dw $0AF6, $01BE  ; Samus X
     dw $D8B8, $0024  ; Doors
     dw #$FFFF
@@ -769,6 +774,7 @@ preset_gtclassic_kraid_mini_kraid_revisit:
     dw $0921, $FE00  ; BG2 X offset
     dw $0923, $FF00  ; BG2 Y offset
     dw $09C2, $005A  ; Health
+    dw $09D2, $0002  ; Currently selected item
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $005B  ; Samus X
@@ -793,6 +799,7 @@ preset_gtclassic_kraid_kraid_kihunters_revisit:
     dw $09C2, $0064  ; Health
     dw $09C6, $0002  ; Missiles
     dw $09CA, $0005  ; Supers
+    dw $09D2, $0000  ; Currently selected item
     dw $0AF6, $0166  ; Samus X
     dw $0AFA, $00AB  ; Samus Y
     dw $D8B8, $00EC  ; Doors
@@ -816,6 +823,7 @@ preset_gtclassic_kraid_kraid_etank:
     dw $0AF6, $005B  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw $D8B8, $00ED  ; Doors
+;    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -836,6 +844,7 @@ preset_gtclassic_kraid_leaving_kraids_lair:
     dw $0AFA, $008B  ; Samus Y
     dw $D874, $0904  ; Items
     dw $D8B8, $00EF  ; Doors
+;    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -926,7 +935,7 @@ preset_gtclassic_bootless_upper_norfair_magdollite_tunnel:
     dw $0921, $0000  ; BG2 X offset
     dw $0923, $00E0  ; BG2 Y offset
     dw $09CE, $0004  ; Pbs
-    dw $09D2, $0000  ; Currently selected item
+    dw $09D2, $0001  ; Currently selected item
     dw $0AF6, $0056  ; Samus X
     dw $0AFA, $028B  ; Samus Y
     dw #$FFFF
@@ -960,6 +969,7 @@ preset_gtclassic_bootless_upper_norfair_lava_dive:
     dw $0921, $0000  ; BG2 X offset
     dw $09C6, $0001  ; Missiles
     dw $09CE, $0003  ; Pbs
+    dw $09D2, $0000  ; Currently selected item
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $0155  ; Samus X
@@ -1903,6 +1913,7 @@ preset_gtclassic_maridia_reverse_halfie_climb:
     dw $0921, $F900  ; BG2 X offset
     dw $0923, $FF00  ; BG2 Y offset
     dw $09C2, $015E  ; Health
+    dw $09D2, $0001  ; Currently selected item
     dw $0A68, $0000  ; Flash suit
     dw $0AF6, $0037  ; Samus X
     dw #$FFFF
@@ -1919,6 +1930,7 @@ preset_gtclassic_maridia_reverse_botwoon_etank:
     dw $0921, $FF00  ; BG2 X offset
     dw $0923, $0000  ; BG2 Y offset
     dw $09C6, $0053  ; Missiles
+    dw $09D2, $0000  ; Currently selected item
     dw $0AF6, $00A5  ; Samus X
     dw $0AFA, $028B  ; Samus Y
     dw #$FFFF
@@ -2000,6 +2012,7 @@ preset_gtclassic_maridia_red_brinstar_green_gate:
     dw $0917, $0001  ; Layer 2 X position
     dw $0919, $0000  ; Layer 2 Y position
     dw $0923, $FE00  ; BG2 Y offset
+    dw $09D2, $0002  ; Currently selected item
     dw $0AF6, $007A  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
@@ -2057,6 +2070,8 @@ preset_gtclassic_wrecked_ship_ocean:
     dw $0917, $00C0  ; Layer 2 X position
     dw $0921, $0100  ; BG2 X offset
     dw $0923, $0000  ; BG2 Y offset
+    dw $09D2, $0002  ; Currently selected item
+    dw $0A04, $0002  ; Auto-cancel item
     dw $0AF6, $01A8  ; Samus X
     dw #$FFFF
 .after
@@ -2071,6 +2086,8 @@ preset_gtclassic_wrecked_ship_wrecked_ship_shaft:
     dw $0913, $0000  ; Screen subpixel Y position
     dw $0917, $0000  ; Layer 2 X position
     dw $09CA, $0010  ; Supers
+    dw $09D2, $0000  ; Currently selected item
+    dw $0A04, $0000  ; Auto-cancel item
     dw $0AF6, $002E  ; Samus X
     dw $D8B0, $3000  ; Doors
     dw !PRESET_DOORS, $0001 ; doors closed
@@ -2090,6 +2107,7 @@ preset_gtclassic_wrecked_ship_basement:
     dw $0921, $FD00  ; BG2 X offset
     dw $0923, $FD00  ; BG2 Y offset
     dw $09CA, $000F  ; Supers
+    dw $09D2, $0002  ; Currently selected item
     dw $0AF6, $045F  ; Samus X
     dw $0AFA, $07BB  ; Samus Y
     dw $D8C0, $8010  ; Doors
@@ -2109,6 +2127,7 @@ preset_gtclassic_wrecked_ship_phantoon:
     dw $0923, $0000  ; BG2 Y offset
     dw $09CA, $000E  ; Supers
     dw $09CE, $000C  ; Pbs
+    dw $09D2, $0000  ; Currently selected item
     dw $0AF6, $04CE  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw $D8C0, $8030  ; Doors
@@ -2183,6 +2202,7 @@ preset_gtclassic_wrecked_ship_parlor_return:
     dw $0917, $02F6  ; Layer 2 X position
     dw $0921, $F700  ; BG2 X offset
     dw $0923, $FC00  ; BG2 Y offset
+    dw $09D2, $0003  ; Currently selected item
     dw $0AF6, $068C  ; Samus X
     dw $0AFA, $04BB  ; Samus Y
     dw !PRESET_DOORS, $0001 ; doors closed
@@ -2201,6 +2221,7 @@ preset_gtclassic_wrecked_ship_terminator_revisit:
     dw $0917, $00C0  ; Layer 2 X position
     dw $0921, $FB00  ; BG2 X offset
     dw $0923, $0000  ; BG2 Y offset
+    dw $09D2, $0004  ; Currently selected item
     dw $0A1C, $008A  ; Samus position/state
     dw $0A1E, $1504  ; More position/state
     dw $0AF6, $0115  ; Samus X
@@ -2221,6 +2242,7 @@ preset_gtclassic_wrecked_ship_green_pirate_shaft_2:
     dw $0917, $0000  ; Layer 2 X position
     dw $0919, $017D  ; Layer 2 Y position
     dw $0921, $FA00  ; BG2 X offset
+    dw $09D2, $0000  ; Currently selected item
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $0062  ; Samus X
@@ -2418,6 +2440,7 @@ preset_gtclassic_tourian_zeb_skip:
     dw $0919, $0195  ; Layer 2 Y position
     dw $0921, $0100  ; BG2 X offset
     dw $09CA, $000E  ; Supers
+    dw $09D2, $0002  ; Currently selected item
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $0047  ; Samus X
@@ -2442,6 +2465,7 @@ preset_gtclassic_tourian_escape_room_3:
     dw $09C6, $0000  ; Missiles
     dw $09CA, $0000  ; Supers
     dw $09CE, $0000  ; Pbs
+    dw $09D2, $0000  ; Currently selected item
     dw $0A1C, $0001  ; Samus position/state
     dw $0A1E, $0008  ; More position/state
     dw $0A76, $8000  ; Hyper beam

@@ -159,9 +159,9 @@ init_sram:
     LDA #$0000 : STA !sram_compressed_graphics
     LDA #$0000 : STA !sram_lag_counter_mode
 
-    LDA #$0000 : STA !sram_phantoon_intro
+    LDA #$0001 : STA !sram_phantoon_intro ; 1 - skip
     LDA #$0001 : STA !sram_preset_open_doors
-    LDA #$0001 : STA !sram_preset_ship_landing
+    LDA #$0000 : STA !sram_preset_ship_landing ; 0 - off
 
     LDA #$0000 : STA !sram_countdamage
     LDA #$0000 : STA !sram_menu_background
@@ -173,7 +173,7 @@ init_sram:
     LDA #$0006 : STA !sram_superhud_middle
     LDA #$0008 : STA !sram_superhud_top
 
-    LDA #$0003 : STA !sram_custompalette_profile ; 3 - Firebat
+    LDA !PROFILE_Firebat : STA !sram_custompalette_profile
     LDA #$0A20 : STA !sram_custompalette_menutext
     LDA #$000F : STA !sram_custompalette_menuseltext
     LDA #$0005 : STA !sram_custompalette_menuseltextbg

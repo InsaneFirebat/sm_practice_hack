@@ -303,7 +303,10 @@ preset_spazer_crateria_terminator:
     dw $090F, $F400 ; Screen subpixel X position.
     dw $0911, $0100 ; Screen X position in pixels
     dw $0913, $8800 ; Screen subpixel Y position
+    dw $0A1C, $0041 ; Samus position/state
+    dw $0A1E, $0404 ; More position/state
     dw $0AF6, $0115 ; Samus X
+    dw $0B3F, $0104 ; Blue suit
     dw #$FFFF
 .after
 
@@ -317,8 +320,10 @@ preset_spazer_crateria_green_pirate_shaft:
     dw $0915, $01FC ; Screen Y position in pixels
     dw $09C2, $00C7 ; Health
     dw $09C4, $00C7 ; Max health
+    dw $09D2, $0001 ; Currently selected item
     dw $0AF6, $0063 ; Samus X
     dw $0AFA, $029B ; Samus Y
+    dw $0B3F, $0000 ; Blue suit
     dw $D870, $0180 ; Events, Items, Doors
     dw $D91A, $0006 ; Events, Items, Doors
     dw #$FFFF
@@ -334,6 +339,7 @@ preset_spazer_brinstar_green_brinstar_elevator:
     dw $0913, $C400 ; Screen subpixel Y position
     dw $0915, $0000 ; Screen Y position in pixels
     dw $09C2, $008B ; Health
+    dw $09D2, $0000 ; Currently selected item
     dw $0AF6, $007E ; Samus X
     dw $0AFA, $008B ; Samus Y
     dw $D91A, $0008 ; Events, Items, Doors
@@ -517,6 +523,7 @@ preset_spazer_brinstar_mini_kraid:
     dw $090F, $E000 ; Screen subpixel X position.
     dw $0913, $FC00 ; Screen subpixel Y position
     dw $09C2, $0059 ; Health
+    dw $09D2, $0001 ; Currently selected item
     dw $0AF6, $016B ; Samus X
     dw $D91A, $0011 ; Events, Items, Doors
     dw #$FFFF
@@ -533,6 +540,7 @@ preset_spazer_brinstar_kraid:
     dw $0913, $0800 ; Screen subpixel Y position
     dw $09C2, $0043 ; Health
     dw $09C6, $0005 ; Missiles
+    dw $09D2, $0000 ; Currently selected item
     dw $0AF6, $01C1 ; Samus X
     dw $D8B8, $0024 ; Events, Items, Doors
     dw #$FFFF
@@ -572,6 +580,7 @@ preset_spazer_brinstar_mini_kraid_revisit:
     dw $0913, $7800 ; Screen subpixel Y position
     dw $0915, $0100 ; Screen Y position in pixels
     dw $09C2, $007C ; Health
+    dw $09D2, $0002 ; Currently selected item
     dw $0A1C, $0002 ; Samus position/state
     dw $0A1E, $0004 ; More position/state
     dw $0AF6, $0058 ; Samus X
@@ -590,6 +599,7 @@ preset_spazer_brinstar_kraid_kihunters_revisit:
     dw $0915, $0000 ; Screen Y position in pixels
     dw $09C6, $0004 ; Missiles
     dw $09CA, $0005 ; Supers
+    dw $09D2, $0000 ; Currently selected item
     dw $0AF6, $009A ; Samus X
     dw $0AFA, $00AB ; Samus Y
     dw $D8B8, $00EC ; Events, Items, Doors
@@ -609,6 +619,7 @@ preset_spazer_brinstar_kraid_etank:
     dw $0AFA, $018B ; Samus Y
     dw $D8B8, $00ED ; Events, Items, Doors
     dw $D91A, $0013 ; Events, Items, Doors
+;    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -632,6 +643,7 @@ preset_spazer_upper_norfair_business_center:
     dw $D874, $0C04 ; Events, Items, Doors
     dw $D8B8, $00EF ; Events, Items, Doors
     dw $D91A, $0015 ; Events, Items, Doors
+;    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -831,6 +843,7 @@ preset_spazer_upper_norfair_single_chamber_revisit:
     dw $07F5, $0005 ; Music Track
     dw $090F, $3000 ; Screen subpixel X position.
     dw $0913, $6000 ; Screen subpixel Y position
+    dw $09D2, $0001 ; Currently selected item
     dw $0AF6, $0050 ; Samus X
     dw $D91A, $0021 ; Events, Items, Doors
     dw #$FFFF
@@ -858,6 +871,7 @@ preset_spazer_upper_norfair_frog_speedway:
     dw $09C2, $018F ; Health
     dw $09C6, $000E ; Missiles
     dw $09CA, $0004 ; Supers
+    dw $09D2, $0000 ; Currently selected item
     dw $0AF6, $008E ; Samus X
     dw $D91A, $0022 ; Events, Items, Doors
     dw #$FFFF
@@ -1069,6 +1083,7 @@ preset_spazer_wrecked_ship_basement:
     dw $0913, $F000 ; Screen subpixel Y position
     dw $0915, $071F ; Screen Y position in pixels
     dw $09CA, $0003 ; Supers
+    dw $09D2, $0002 ; Currently selected item
     dw $0AF6, $0455 ; Samus X
     dw $0AFA, $07BB ; Samus Y
     dw $D8C0, $0010 ; Events, Items, Doors
@@ -1085,6 +1100,7 @@ preset_spazer_wrecked_ship_phantoon:
     dw $0913, $7000 ; Screen subpixel Y position
     dw $0915, $0000 ; Screen Y position in pixels
     dw $09CA, $0002 ; Supers
+    dw $09D2, $0000 ; Currently selected item
     dw $0AF6, $04CC ; Samus X
     dw $0AFA, $008B ; Samus Y
     dw $D8C0, $0030 ; Events, Items, Doors
@@ -1470,6 +1486,7 @@ preset_spazer_maridia_botwoon_etank:
     dw $09CE, $0002 ; Pbs
     dw $0AF6, $01C6 ; Samus X
     dw $D82C, $0002 ; Events, Items, Doors
+;    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -1607,6 +1624,7 @@ preset_spazer_maridia_plasma_beam:
     dw $0911, $0000 ; Screen X position in pixels
     dw $0913, $0800 ; Screen subpixel Y position
     dw $0915, $0000 ; Screen Y position in pixels
+    dw $09D2, $0003 ; Currently selected item
     dw $0AF6, $0095 ; Samus X
     dw $0AFA, $008B ; Samus Y
     dw $D8C2, $DC08 ; Events, Items, Doors
@@ -1626,6 +1644,7 @@ preset_spazer_maridia_plasma_spark_revisit:
     dw $09C2, $0108 ; Health
     dw $09C6, $0011 ; Missiles
     dw $09CE, $0002 ; Pbs
+    dw $09D2, $0000 ; Currently selected item
     dw $0A1C, $0002 ; Samus position/state
     dw $0A1E, $0004 ; More position/state
     dw $0AF6, $0025 ; Samus X
@@ -1687,6 +1706,7 @@ preset_spazer_upper_norfair_revisit_ice_beam_gates:
     dw $0913, $0000 ; Screen subpixel Y position
     dw $0915, $0326 ; Screen Y position in pixels
     dw $09CA, $0007 ; Supers
+    dw $09D2, $0002 ; Currently selected item
     dw $0AF6, $0032 ; Samus X
     dw $0AFA, $0395 ; Samus Y
     dw $D8B8, $2EED ; Events, Items, Doors
@@ -1700,6 +1720,7 @@ preset_spazer_upper_norfair_revisit_ice_maze_up:
     dw $079B, $A75D ; MDB
     dw $0913, $1800 ; Screen subpixel Y position
     dw $0915, $0000 ; Screen Y position in pixels
+    dw $09D2, $0000 ; Currently selected item
     dw $0AF6, $0025 ; Samus X
     dw $0AFA, $008B ; Samus Y
     dw #$FFFF
@@ -1835,6 +1856,7 @@ preset_spazer_lower_norfair_ln_main_hall:
     dw $0923, $00E0  ; BG2 Y offset
     dw $09C2, $011E  ; Health
     dw $09CE, $0004  ; Pbs
+    dw $09D2, $0003  ; Currently selected item
     dw $0A1C, $009B  ; Samus position/state
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0480  ; Samus X
@@ -2182,6 +2204,7 @@ preset_spazer_backtracking_red_brinstar_green_gate:
     dw $090F, $3801 ; Screen subpixel X position.
     dw $0911, $0000 ; Screen X position in pixels
     dw $0913, $2000 ; Screen subpixel Y position
+    dw $09D2, $0002 ; Currently selected item
     dw $0AF6, $0079 ; Samus X
     dw $0AFA, $008B ; Samus Y
     dw #$FFFF
@@ -2197,6 +2220,7 @@ preset_spazer_backtracking_crateria_kihunters_final:
     dw $090F, $A000 ; Screen subpixel X position.
     dw $0913, $2800 ; Screen subpixel Y position
     dw $09CA, $0009 ; Supers
+    dw $09D2, $0000 ; Currently selected item
     dw $0A1C, $0001 ; Samus position/state
     dw $0A1E, $0008 ; More position/state
     dw $0AF6, $0063 ; Samus X
