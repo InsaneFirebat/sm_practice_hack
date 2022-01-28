@@ -365,6 +365,7 @@ endif
 
 ;    LDA !sram_preset_options : BIT !PRESETS_CLOSE_BLUE_DOORS : BNE +
     LDA !sram_preset_open_doors : BEQ +
+    LDA !SAMUS_POSE : BEQ +
     LDA !PRESET_DOORS : BNE +
     LDA $7ED914 : CMP #$0005 : BNE +
     JSR preset_open_all_blue_doors
@@ -759,7 +760,7 @@ preset_scroll_fixes:
     LDA !sram_custom_preset_slot
     ASL : XBA
     CLC : ADC #$31E9 : TAX       ; X = Source
-    LDY #$CD52 : LDA #$0031      ; Y = Destination, A = Size-1
+    LDY #$CD51 : LDA #$0031      ; Y = Destination, A = Size-1
     MVP $F07E                    ; srcBank, destBank
     LDA #$0000 : STA !ram_custom_preset
     PLB
