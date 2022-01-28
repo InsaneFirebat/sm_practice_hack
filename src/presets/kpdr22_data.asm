@@ -692,6 +692,7 @@ preset_kpdr22_brinstar_kraid_etank:
     dw $0AFA, $018B ; Samus Y
     dw $D8B8, $00ED ; Events, Items, Doors
     dw $D91A, $0013 ; Events, Items, Doors
+    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -714,6 +715,7 @@ preset_kpdr22_upper_norfair_business_center:
     dw $0A1E, $0000 ; More position/state
     dw $0AF6, $0080 ; Samus X
     dw $0AFA, $02A8 ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 

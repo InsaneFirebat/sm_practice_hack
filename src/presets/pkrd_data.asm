@@ -964,7 +964,7 @@ preset_pkrd_kraid_kraid_etank:
     dw $0AF6, $0057  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw $D8B8, $00ED  ; Doors
-;    dw !PRESET_DOORS, $FFFF ; doors forced open
+    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -984,7 +984,7 @@ preset_pkrd_kraid_leaving_kraids_lair:
     dw $0AFA, $009B  ; Samus Y
     dw $D874, $0D04  ; Items
     dw $D8B8, $00EF  ; Doors
-;    dw !PRESET_DOORS, $0000 ; doors opened
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1744,7 +1744,7 @@ preset_pkrd_maridia_botwoon_etank:
     dw $09CE, $0001  ; Pbs
     dw $0AF6, $01CB  ; Samus X
     dw $D82C, $0002  ; Bosses
-;    dw !PRESET_DOORS, $FFFF ; doors forced open
+    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 

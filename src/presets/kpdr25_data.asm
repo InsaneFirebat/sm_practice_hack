@@ -560,7 +560,7 @@ preset_kpdr25_kraid_kraid_etank:
     dw $09CA, $0005  ; Supers
     dw $0AF6, $0045  ; Samus X
     dw $D8B8, $00ED  ; Doors
-;    dw !PRESET_DOORS, $FFFF ; doors forced open
+    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -583,7 +583,7 @@ preset_kpdr25_upper_norfair_business_center:
     dw $0AFA, $02AB  ; Samus Y
     dw $D874, $0C04  ; Items
     dw $D8B8, $00EF  ; Doors
-;    dw !PRESET_DOORS, $0000 ; doors opened
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 

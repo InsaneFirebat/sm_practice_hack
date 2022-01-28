@@ -2093,7 +2093,6 @@ preset_100early_maridia_predraygon_botwoon:
     dw $09D2, $0000  ; Currently selected item
     dw $0AF6, $03A8  ; Samus X
     dw $0AFA, $008B  ; Samus Y
-;    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -2117,7 +2116,7 @@ preset_100early_maridia_predraygon_full_halfie:
     dw $09CE, $000C  ; Pbs
     dw $0AF6, $01C4  ; Samus X
     dw $D82C, $0002  ; Bosses
-;    dw !PRESET_DOORS, $0000 ; doors opened
+    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -2138,6 +2137,7 @@ preset_100early_maridia_predraygon_draygon_missiles:
     dw $0AF6, $06BB  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw $D8C2, $0400  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -2491,6 +2491,7 @@ preset_100early_maridia_postdraygon_thread_the_needle:
     dw $0AF6, $002F  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw $D882, $05FF  ; Items
+    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -2522,6 +2523,7 @@ preset_100early_kraidicekronic_kraid_missiles:
     dw $0921, $0100  ; BG2 X offset
     dw $09CE, $0012  ; Pbs
     dw $0AF6, $016C  ; Samus X
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -3327,7 +3329,7 @@ preset_100early_final_cleanup_climb_supers:
     dw $0AFA, $078B  ; Samus Y
     dw $D870, $E7FF  ; Items
     dw $D8B2, $2C09  ; Doors
-;    dw !PRESET_DOORS, $FFFF ; doors forced opened
+    dw !PRESET_DOORS, $FFFF ; doors forced opened
     dw #$FFFF
 .after
 
