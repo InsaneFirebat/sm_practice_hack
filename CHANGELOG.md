@@ -1,6 +1,11 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.0.10] Fixed and re-enabled scrolling sky backgrounds when loading presets by idlechild
+* [2.4.0.9]  Fixed doors that should be open in certain presets
+* [2.4.0.8]  Improvements to scrolling sky background when loading presets by idlechild
+* [2.4.0.8]  Fixed missing scroll when loading custom presets by idlechild
+* [2.4.0.8]  Fixed presets that spawn on an invisible scroll tile
 * [2.4.0.7]  Configured more doors in more categories (still more to come)
 * [2.4.0.7]  Fixed doors that shouldn't be open in certain presets (more to come)
 * [2.4.0.6]  Added Ceres Escape preset to 100% Late Croc presets by idlechild
