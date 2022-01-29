@@ -69,7 +69,6 @@ preset_hundo_bombs_ceres_elevator:
     dw $D908, $0000  ; Map Stations
     dw $D90A, $0000  ; Map Stations
     dw $D90C, $0000  ; Map Stations
-    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1388,13 +1387,13 @@ preset_hundo_brinstar_cleanup_mission_impossible_pbs:
     dw $09C6, $003D  ; Missiles
     dw $09C8, $005F  ; Max missiles
     dw $09CE, $000E  ; Pbs
-    dw $09D2, $0003  ; Currently selected item
     dw $0A1C, $000A  ; Samus position/state
     dw $0A1E, $0104  ; More position/state
     dw $0AF6, $0264  ; Samus X
     dw $0AFA, $038B  ; Samus Y
     dw $D872, $C4AF  ; Items
     dw $D8B4, $0346  ; Doors
+    dw !PRESET_SPECIAL, $0001 ; fix PB blocks
     dw #$FFFF
 .after
 
@@ -1409,7 +1408,6 @@ preset_hundo_brinstar_cleanup_pink_brinstar_etank:
     dw $09CA, $0007  ; Supers
     dw $09CE, $0013  ; Pbs
     dw $09D0, $0019  ; Max pbs
-    dw $09D2, $0000  ; Currently selected item
     dw $0A1C, $000B  ; Samus position/state
     dw $0A1E, $0108  ; More position/state
     dw $0AF6, $02F6  ; Samus X
@@ -1417,6 +1415,7 @@ preset_hundo_brinstar_cleanup_pink_brinstar_etank:
     dw $0B3F, $0001  ; Blue suit
     dw $D872, $C5AF  ; Items
     dw $D8B4, $8346  ; Doors
+    dw !PRESET_SPECIAL, $0000 ; flag disabled
     dw #$FFFF
 .after
 

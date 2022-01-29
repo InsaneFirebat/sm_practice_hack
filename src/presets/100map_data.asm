@@ -3501,12 +3501,12 @@ preset_100map_greenpink_brin_cleanup_mission_impossible_room:
     dw $09C2, $02BA  ; Health
     dw $09C6, $001C  ; Missiles
     dw $09CE, $0003  ; Pbs
-    dw $09D2, $0003  ; Currently selected item
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $026B  ; Samus X
     dw $0AFA, $038B  ; Samus Y
     dw $D8B6, $EFF8  ; Doors
+    dw !PRESET_SPECIAL, $0001 ; fix PB blocks
     dw #$FFFF
 .after
 
@@ -3524,12 +3524,12 @@ preset_100map_greenpink_brin_cleanup_green_hill_zone_final:
     dw $09C6, $0017  ; Missiles
     dw $09CA, $000B  ; Supers
     dw $09CE, $0005  ; Pbs
-    dw $09D2, $0000  ; Currently selected item
     dw $0A1C, $0001  ; Samus position/state
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $035E  ; Samus X
     dw $0AFA, $068B  ; Samus Y
     dw $D8B4, $2F6F  ; Doors
+    dw !PRESET_SPECIAL, $0000 ; flag disabled
     dw #$FFFF
 .after
 

@@ -3106,10 +3106,11 @@ preset_gtmax_brinstar_cleanup_1_mission_impossible:
     dw $09CE, $002D  ; Pbs
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
-    dw $0AF6, $0224  ; Samus X
+    dw $0AF6, $026B  ; Samus X
     dw $0AFA, $038B  ; Samus Y
     dw $D872, $C42F  ; Items
     dw $D8B4, $0346  ; Doors
+    dw !PRESET_SPECIAL, $0001 ; fix PB blocks
     dw #$FFFF
 .after
 
@@ -3135,6 +3136,7 @@ preset_gtmax_brinstar_cleanup_1_leaving_pink_etank:
     dw $D874, $1B8C  ; Items
     dw $D8B4, $8346  ; Doors
     dw $D8B6, $78D8  ; Doors
+    dw !PRESET_SPECIAL, $0000 ; flag disabled
     dw #$FFFF
 .after
 

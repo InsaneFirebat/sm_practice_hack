@@ -555,7 +555,8 @@ endif
 
 !sram_preset_open_doors = $F02128
 !sram_preset_ship_landing = $F0212A
-!PRESET_DOORS = $7EFDFE
+!PRESET_DOORS = $7EFDF0
+!PRESET_SPECIAL = $7EFDF2
 
 ; FREE SPACE ^
 
