@@ -66,7 +66,6 @@ preset_nghyper_ceres_station_ceres_elevator:
     dw $D918, $0000 ; Events, Items, Doors
     dw $D91A, $0000 ; Events, Items, Doors
     dw $D91C, $0000 ; Events, Items, Doors
-    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 

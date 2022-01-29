@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.0.10] Fixed PB blocks in the way of Mission Impossible presets
 * [2.4.0.10] Fixed and re-enabled scrolling sky backgrounds when loading presets by idlechild
 * [2.4.0.9]  Fixed doors that should be open in certain presets
 * [2.4.0.8]  Improvements to scrolling sky background when loading presets by idlechild

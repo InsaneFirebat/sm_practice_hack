@@ -64,7 +64,6 @@ preset_kpdr25_bombs_ceres_elevator:
     dw $D8C0, $0000  ; Doors
     dw $D8C2, $0000  ; Doors
     dw $D8C4, $0000  ; Doors
-    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 

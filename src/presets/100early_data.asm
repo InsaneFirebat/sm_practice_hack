@@ -64,7 +64,6 @@ preset_100early_crateria_ceres_elevator:
     dw $D8C0, $0000  ; Doors
     dw $D8C2, $0000  ; Doors
     dw $D8C4, $0000  ; Doors
-    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
@@ -1725,13 +1724,13 @@ preset_100early_brinstar_cleanup_big_pink_power_bombs:
     dw $09C6, $0054  ; Missiles
     dw $09C8, $006E  ; Max missiles
     dw $09CE, $000C  ; Pbs
-    dw $09D2, $0003  ; Currently selected item
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $026B  ; Samus X
     dw $0AFA, $038B  ; Samus Y
     dw $D872, $C4AF  ; Items
     dw $D8B4, $0346  ; Doors
+    dw !PRESET_SPECIAL, $0001 ; fix PB blocks
     dw #$FFFF
 .after
 
@@ -1748,12 +1747,12 @@ preset_100early_brinstar_cleanup_big_pink_hopper_room:
     dw $09CA, $000F  ; Supers
     dw $09CE, $0011  ; Pbs
     dw $09D0, $001E  ; Max pbs
-    dw $09D2, $0000  ; Currently selected item
     dw $0A1C, $0001  ; Samus position/state
     dw $0A1E, $0008  ; More position/state
     dw $0AFA, $049B  ; Samus Y
     dw $D872, $C5AF  ; Items
     dw $D8B4, $8346  ; Doors
+    dw !PRESET_SPECIAL, $0000 ; flag disabled
     dw #$FFFF
 .after
 

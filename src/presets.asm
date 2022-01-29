@@ -203,18 +203,18 @@ preset_load_preset:
     LDA #$0000
     STA $7E09D2 ; Current selected weapon
     STA $7E0A04 ; Auto-cancel item
+    STA !PRESET_DOORS : STA !PRESET_SPECIAL
     LDA #$5AFE : STA $0917 ; Load garbage into Layer 2 X position
     LDA #$FFFF : STA !ram_reset_segment_later
 
     ; check if custom preset is being loaded
     LDA !ram_custom_preset : BEQ .category_preset
     JSL custom_preset_load
-    BRA .done
+    PLB
+    RTL
 
   .category_preset
     JSR category_preset_load
-
-  .done
     PLB
     RTL
 }
@@ -409,8 +409,11 @@ endif
 
     JSR preset_scroll_fixes
 
+    LDA !PRESET_SPECIAL : BEQ +
+    JSR preset_special_fixes
+
 ;    LDA !sram_preset_options : BIT !PRESETS_CLOSE_BLUE_DOORS : BNE +
-    LDA !sram_preset_open_doors : BEQ +
++   LDA !sram_preset_open_doors : BEQ +
     LDA !SAMUS_POSE : BEQ +
     LDA !PRESET_DOORS : CMP #$0001 : BEQ +
     LDA $7ED914 : CMP #$0005 : BNE +
@@ -834,6 +837,21 @@ preset_scroll_fixes:
     PLB
     PLP
     RTS
+}
+
+preset_special_fixes:
+{
+    ; Big Pink Power Bomb blocks before Mission Impossible
+    LDA !ROOM_ID : CMP #$9D19 : BNE +
+    LDA !SAMUS_Y : CMP #$02C0 : BMI +
+    CMP #$03C9 : BPL +
+    LDA #$00FF
+    STA $7F2208 : STA $7F220A
+    STA $7F22A8 : STA $7F22AA
+    STA $7F2348 : STA $7F234A
+    STA $7F23E8 : STA $7F23EA
+
++   RTS
 }
 
 LoadRandomPreset:

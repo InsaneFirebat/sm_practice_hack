@@ -62,7 +62,6 @@ preset_ngplasma_ceres_station_ceres_elevator:
     dw $D8C4, $0000 ; Events, Items, Doors
     dw $D90C, $0000 ; Events, Items, Doors
     dw $D91A, $0000 ; Events, Items, Doors
-    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 

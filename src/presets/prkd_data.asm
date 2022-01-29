@@ -69,7 +69,6 @@ preset_prkd_crateria_ceres_elevator:
     dw $D908, $0000  ; Map Stations
     dw $D90A, $0000  ; Map Stations
     dw $D90C, $0000  ; Map Stations
-    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 

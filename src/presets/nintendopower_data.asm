@@ -60,7 +60,7 @@ preset_nintendopower_crateria_ship:
     dw $D8C0, $0000  ; Doors
     dw $D8C2, $0000  ; Doors
     dw $D8C4, $0000  ; Doors
-    dw !PRESET_DOORS, $0001 ; doors opened
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
 
