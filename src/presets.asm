@@ -405,7 +405,7 @@ preset_scroll_fixes:
   .category_presets
     %a8()
     LDA #$01 : LDX !ROOM_ID      ; X = room ID
-    CPX #$C000 : BMI +           ; organized by room ID so we only have to check half
+    CPX #$D000 : BMI +           ; organized by room ID so we only have to check half
     BRL .ceres
 
 if !FEATURE_REDESIGN
@@ -426,7 +426,7 @@ if !FEATURE_REDESIGN
     STA $7ECD26 : STA $7ECD26
     STA $7ECD26 : STA $7ECD23
 +   CPX #$CE8A : BNE +           ; Preset: Final Escape - Mushroom Run
-    LDA #$00 : STA $7ECD21
+    LDA #$00 : STA $7ECD20 : STA $7ECD21
 endif
 
   .end
