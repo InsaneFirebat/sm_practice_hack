@@ -69,11 +69,10 @@ preset_load:
 
     ; Re-upload OOB viewer tiles if needed
     LDA !ram_oob_watch_active : BEQ +
-      JSL upload_sprite_oob_tiles
-    +
+    JSL upload_sprite_oob_tiles
 
     ; Re-upload OOB viewer tiles if needed
-    LDA !ram_oob_watch_active : BEQ .done_upload_sprite_oob_tiles
++   LDA !ram_oob_watch_active : BEQ .done_upload_sprite_oob_tiles
     JSL upload_sprite_oob_tiles
 
   .done_upload_sprite_oob_tiles
@@ -287,8 +286,12 @@ preset_start_gameplay:
     ; Careful about Redesign vs Axeil rooms
     JSR preset_scroll_fixes
 
+    ; Special fixes for specific presets
+    LDA !PRESET_SPECIAL : BEQ +
+    JSL preset_special_fixes
+
     ; Pull layer 2 values, and use them if they are valid
-    PLA : CMP #$5AFE : BEQ .calculate_layer_2
++   PLA : CMP #$5AFE : BEQ .calculate_layer_2
     STA $0917
     PLA : STA $0919
     PLA : STA $0921
@@ -479,6 +482,20 @@ endif
     PLB
     PLP
     RTS
+}
+
+preset_special_fixes:
+{
+    ; Grapple - Guardian Runback
+    LDA !ROOM_ID : CMP #$ACB3 : BNE +
+    LDA #$00FF : LDX #$0000
+-   STA $7F0678,X : INX #2
+    CPX #$0012 : BMI -
+    LDX #$0000
+-   STA $7F0738,X : INX #2
+    CPX #$0012 : BMI -
+
++   RTL
 }
 
 transfer_cgram_long:

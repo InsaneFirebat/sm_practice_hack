@@ -420,6 +420,7 @@
 ; FREE SPACE ^
 
 !PRESET_SLOTS = $F03000
+!PRESET_SPECIAL = $7EFD00
 
 
 ; ----------

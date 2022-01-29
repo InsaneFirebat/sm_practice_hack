@@ -218,6 +218,7 @@ preset_redesign_crateria_ceres_elevator:
     dl $7ED91A : db $02 : dw $0000 ; Events, Items, Doors
     dl $7ED91C : db $02 : dw $0000 ; Events, Items, Doors
     dl $7ED91E : db $02 : dw $0000 ; Events, Items, Doors
+    dl !PRESET_SPECIAL : db $02 : dw $0000 ; disable flag
     dw #$FFFF
 .after
 
@@ -2149,6 +2150,7 @@ preset_redesign_grapple_guardian_runback:
     dl $7ED8BE : db $02 : dw $2C06 ; Events, Items, Doors
     dl $7ED8DC : db $02 : dw $0096 ; Events, Items, Doors
     dl $7ED91A : db $02 : dw $00AD ; Events, Items, Doors
+    dl !PRESET_SPECIAL : db $02 : dw $0001 ; delete speed blocks
     dw #$FFFF
 .after
 
@@ -2173,6 +2175,7 @@ preset_redesign_grapple_dessgeega_kill_room:
     dl $7E0AF6 : db $02 : dw $003F ; Samus X
     dl $7E0AFA : db $02 : dw $088B ; Samus Y
     dl $7ED8B8 : db $02 : dw $8021 ; Events, Items, Doors
+    dl !PRESET_SPECIAL : db $02 : dw $0000 ; disable flag
     dw #$FFFF
 .after
 

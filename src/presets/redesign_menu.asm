@@ -13,7 +13,8 @@ PresetsMenuRedesign:
     dw #presets_goto_redesign_tourian
     dw #presets_goto_redesign_final_escape
     dw #$0000
-    %cm_header("PRESETS FOR REDESIGN")
+    %cm_header("REDESIGN ANY% EARLY SPEED")
+    %cm_header("PRESETS BY OSSE101")
 
 presets_goto_redesign_crateria:
     %cm_submenu("Crateria", #presets_submenu_redesign_crateria)
