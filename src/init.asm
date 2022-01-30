@@ -51,9 +51,9 @@ else
     ; Clear WRAM
     LDA #$0000
     LDX !WRAM_SIZE-2
-  .wram_loop
-    STA !WRAM_START,X
-    DEX : DEX : BPL .wram_loop
+
+-   STA !WRAM_START,X
+    DEX : DEX : BPL -
 
     JSL init_nonzero_wram
 endif

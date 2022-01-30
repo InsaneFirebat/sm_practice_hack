@@ -3,30 +3,27 @@
 if !NEW_PHANTOON_RNG
 ; new Phantoon RNG starts here
 print "NEW_PHANTOON_RNG enabled!"
-    ; 1st pattern
 if !FEATURE_PAL
-    org $A7D5DA
-else
-    org $A7D5A6
+org $A7D5DA
+else    ; 1st pattern
+org $A7D5A6
 endif
     JSL hook_phantoon_1st_rng
     REP $12 : NOP
 
-    ; 2nd pattern
 if !FEATURE_PAL
-    org $A7D0B0
-else
-    org $A7D07C
+org $A7D0B0
+else    ; 2nd pattern
+org $A7D07C
 endif
     JSL hook_phantoon_2nd_rng
     REP $0B : NOP
 ; new Phantoon RNG ends here
 else
 ; old Phantoon RNG starts here
-    ; 1st pattern
 if !FEATURE_PAL
 org $A7D5E9
-else
+else    ; 1st direction
 org $A7D5B5
 endif
     ; $A7:D5B5 22 11 81 80 JSL $808111[$80:8111]
@@ -34,17 +31,17 @@ endif
 
 if !FEATURE_PAL
 org $A7D5DA
-else
+else    ; 1st pattern
 org $A7D5A6
 endif
     ; $A7:D5A6 AD B6 05    LDA $05B6  [$7E:05B6] ; Frame counter
     ; $A7:D5A9 4A          LSR A
     JSL hook_phantoon_1st_pat
 
-    ; 2nd pattern
+
 if !FEATURE_PAL
 org $A7D716
-else
+else    ; 2nd direction
 org $A7D6E2
 endif
     ; $A7:D6E2 22 11 81 80 JSL $808111[$80:8111]
@@ -52,7 +49,7 @@ endif
 
 if !FEATURE_PAL
 org $A7D0BF
-else
+else    ; 2nd direction
 org $A7D08B
 endif
     ; $A7:D08B AD B6 05    LDA $05B6  [$7E:05B6] ; Frame counter
@@ -61,9 +58,9 @@ endif
     NOP : NOP
 
 if !FEATURE_PAL
-org $A7D0B0 ; hijack, RNG call for second pattern
-else
-org $A7D07C ; hijack, RNG call for second pattern
+org $A7D0B0
+else    ; hijack, RNG call for second pattern
+org $A7D07C
 endif
     ; $A7:D07C 22 11 81 80 JSL $808111[$80:8111]
     JSL hook_phantoon_2nd_pat
@@ -72,25 +69,25 @@ endif
 
 
 if !FEATURE_PAL
-    org $A7D098 ; Phantoon eye close timer
-else
-    org $A7D064 ; Phantoon eye close timer
+org $A7D098
+else    ; Phantoon eye close timer
+org $A7D064
 endif
     JSL hook_phantoon_eyeclose
 
 if !FEATURE_PAL
-    org $A7D00A ; Phantoon flame pattern
-else
-    org $A7CFD6 ; Phantoon flame pattern
+    org $A7D00A
+else    ; Phantoon flame pattern
+    org $A7CFD6
 endif
     JSL hook_phantoon_flame_pattern
 }
 
 
 if !FEATURE_PAL
-    org $A7D4DD ; Intro
-else
-    org $A7D4A9 ; Intro
+    org $A7D4DD
+else    ; Intro
+    org $A7D4A9
 endif
     JSL hook_phantoon_init
     NOP : BNE $3D
@@ -191,38 +188,35 @@ MenuRNG:
 ; Generates new random number
 ; 32-bit period (uses two 16-bit seeds)
 ; Make sure ram_seed_X and ram_seed_Y is initialized to something other than zero
-    LDA.l !ram_seed_X
-	ASL #5
-	EOR.l !ram_seed_X
-	STA $16
+{
+    LDA !ram_seed_X : ASL #5
+    EOR !ram_seed_X : STA $16
 
-	LDA.l !ram_seed_Y
-	STA.l !ram_seed_X
+    LDA !ram_seed_Y : STA !ram_seed_X
 
-	LDA $16
-	LSR #3
-	EOR $16
-	STA $16
+    LDA $16 : LSR #3
+    EOR $16 : STA $16
 
-	LDA !ram_seed_Y
-	LSR
-	EOR !ram_seed_Y
-	EOR $16
-	STA !ram_seed_Y
+    LDA !ram_seed_Y : LSR
+    EOR !ram_seed_Y : EOR $16
+    STA !ram_seed_Y
 
-	; return y (in a)
-	RTL	
+    ; return y (in a)
+    RTL	
+}
 
+MenuRNG2:
 ; 16-bit period xorshift (uses only ram_seed_X)
 ; Make sure ram_seed_X is not zero
-MenuRNG2:
-	LDA !ram_seed_X
-	STA $16
-	ASL #2 : EOR $16 : STA $16
-	LSR #5 : EOR $16 : STA $16
-	ASL : EOR $16
-	STA !ram_seed_X
-	RTL
+{
+    LDA !ram_seed_X
+    STA $16
+    ASL #2 : EOR $16 : STA $16
+    LSR #5 : EOR $16 : STA $16
+    ASL : EOR $16
+    STA !ram_seed_X
+    RTL
+}
 
 
 hook_hopper_set_rng:
@@ -732,11 +726,11 @@ print pc, " kraid rng start"
 hook_kraid_rng:
 {
     LDA !ram_kraid_rng : BEQ .no_manip
-    DEC : DEC     ; return -1 (laggy) or 0 (laggier)
+    DEC #2 ; return -1 (laggy) or 0 (laggier)
     RTS
 
   .no_manip
-    LDA $05E5     ; return with random number (overwritten code)
+    LDA $05E5 ; return with random number (overwritten code)
     RTS
 }
 

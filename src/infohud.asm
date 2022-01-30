@@ -49,100 +49,100 @@ org $8095FC      ; hijack, end of NMI routine to update realtime frames
     JML ih_nmi_end
 
 if !FEATURE_PAL
-org $91DA3D      ; hijack, runs after a shinespark has been charged
-else
-org $91DAD8      ; hijack, runs after a shinespark has been charged
+org $91DA3D
+else             ; hijack, runs after a shinespark has been charged
+org $91DAD8
 endif
     JSL ih_shinespark_code
 
 if !FEATURE_PAL
-org $90F1E1      ; hijack, runs when an elevator is activated
-else
-org $90F1E4      ; hijack, runs when an elevator is activated
+org $90F1E1
+else             ; hijack, runs when an elevator is activated
+org $90F1E4
 endif
     JSL ih_elevator_activation
 
 if !FEATURE_PAL
-org $A98884      ; update timers after MB1 fight
-else
-org $A98874      ; update timers after MB1 fight
+org $A98884
+else             ; update timers after MB1 fight
+org $A98874
 endif
     JSL ih_mb1_segment
 
 if !FEATURE_PAL
-org $A9BE33      ; update timers when baby spawns (off-screen) in MB2 fight
-else
-org $A9BE23      ; update timers when baby spawns (off-screen) in MB2 fight
+org $A9BE33
+else             ; update timers when baby spawns (off-screen) in MB2 fight
+org $A9BE23
 endif
     JSL ih_mb2_segment
 
 if !FEATURE_PAL
-org $A0B9BE      ; update timers when Ridley drops spawn
-else
-org $A0B9AE      ; update timers when Ridley drops spawn
+org $A0B9BE
+else             ; update timers when Ridley drops spawn
+org $A0B9AE
 endif
     JSL ih_drops_segment
 
 if !FEATURE_PAL
-org $A0B9F1      ; update timers when Crocomire drops spawn
-else
-org $A0B9E1      ; update timers when Crocomire drops spawn
+org $A0B9F1
+else             ; update timers when Crocomire drops spawn
+org $A0B9E1
 endif
     JSL ih_drops_segment
 
 if !FEATURE_PAL
-org $A0BA24      ; update timers when Phantoon drops spawn
-else
-org $A0BA14      ; update timers when Phantoon drops spawn
+org $A0BA24
+else             ; update timers when Phantoon drops spawn
+org $A0BA14
 endif
     JSL ih_drops_segment
 
 if !FEATURE_PAL
-org $A0BA57      ; update timers when Botwoon drops spawn
-else
-org $A0BA47      ; update timers when Botwoon drops spawn
+org $A0BA57
+else             ; update timers when Botwoon drops spawn
+org $A0BA47
 endif
     JSL ih_drops_segment
 
 if !FEATURE_PAL
-org $A0BA8A      ; update timers when Kraid drops spawn
-else
-org $A0BA7A      ; update timers when Kraid drops spawn
+org $A0BA8A
+else             ; update timers when Kraid drops spawn
+org $A0BA7A
 endif
     JSL ih_drops_segment
 
 if !FEATURE_PAL
-org $A0BABD      ; update timers when Bomb Torizo drops spawn
-else
-org $A0BAAD      ; update timers when Bomb Torizo drops spawn
+org $A0BABD
+else             ; update timers when Bomb Torizo drops spawn
+org $A0BAAD
 endif
     JSL ih_drops_segment
 
 if !FEATURE_PAL
-org $A0BAF0      ; update timers when Golden Torizo drops spawn
-else
-org $A0BAE0      ; update timers when Golden Torizo drops spawn
+org $A0BAF0
+else             ; update timers when Golden Torizo drops spawn
+org $A0BAE0
 endif
     JSL ih_drops_segment
 
 if !FEATURE_PAL
-org $A0BB23      ; update timers when Spore Spawn drops spawn
-else
-org $A0BB13      ; update timers when Spore Spawn drops spawn
+org $A0BB23
+else             ; update timers when Spore Spawn drops spawn
+org $A0BB13
 endif
     JSL ih_drops_segment
 
 if !FEATURE_PAL
-org $A0BB56      ; update timers when Draygon drops spawn
-else
-org $A0BB46      ; update timers when Draygon drops spawn
+org $A0BB56
+else             ; update timers when Draygon drops spawn
+org $A0BB46
 endif
     JSL ih_drops_segment
 
 if !FEATURE_PAL
-org $AAE592      ; update timers when statue grabs Samus
-else
-org $AAE582      ; update timers when statue grabs Samus
+org $AAE592
+else             ; update timers when statue grabs Samus
+org $AAE582
 endif
     JSL ih_chozo_segment
 
@@ -151,8 +151,8 @@ org $89AD0A      ; update timers when Samus escapes Ceres
 
 if !FEATURE_PAL
 org $A2AA38
-else
-org $A2AA20      ; update timers when Samus enters ship
+else             ; update timers when Samus enters ship
+org $A2AA20
 endif
     JSL ih_ship_elevator_segment
 
@@ -192,8 +192,7 @@ ih_get_item_code:
 
 ih_debug_patch:
 {
-    LDA $05D1
-    BNE +
+    LDA $05D1 : BNE +
     JML $828B54
 +   JSL $B49809
     JML $828B4F
@@ -334,9 +333,7 @@ ih_after_room_transition:
 
 ih_before_room_transition:
 {
-    PHA
-    PHX
-    PHY
+    PHA : PHX : PHY
 
     ; Save and reset timers
     LDA !ram_transition_flag : CMP #$0001 : BEQ .done
@@ -368,9 +365,7 @@ ih_before_room_transition:
 
   .done
     ; Run standard code and return
-    PLY
-    PLX
-    PLA
+    PLY : PLX : PLA
     STA !GAMEMODE
     CLC
     RTL
@@ -473,10 +468,7 @@ endif
 
 ih_update_hud_code:
 {
-    PHX
-    PHY
-    PHP
-    PHB
+    PHX : PHY : PHP : PHB
     ; Bank 80
     PEA $8080 : PLB : PLB
 
@@ -707,18 +699,13 @@ ih_update_hud_code:
     }
 
   .end
-    PLB
-    PLP
-    PLY
-    PLX
+    PLB : PLP : PLY : PLX
     RTL
 }
 
 ih_update_hud_early:
 {
-    PHA
-    PHX
-    PHY
+    PHA : PHX : PHY
 
     ; calculate lag frames
     LDA !ram_realtime_room : SEC : SBC !ram_transition_counter : STA !ram_last_room_lag
@@ -738,9 +725,7 @@ ih_update_hud_early:
     PLA : STA $12
 
     ; Run standard code and return
-    PLY
-    PLX
-    PLA
+    PLY : PLX : PLA
     RTL
 }
 
@@ -750,9 +735,7 @@ ih_hud_code:
 
     ; fix data bank register
     PHB
-    PEA $8080
-    PLB
-    PLB
+    PEA $8080 : PLB : PLB
 
 ; -- input display --
     ; -- check if we want to update --
@@ -1101,12 +1084,10 @@ CalcItem:
 
 CalcLargeItem:
 {
-    LDA $09A4
-    AND #$F32F ; GT Code adds an unused item (10h)
+    LDA $09A4 : AND #$F32F ; GT Code adds an unused item (10h)
     LDX #$0000
   .loop
     BIT #$0001 : BEQ .noItem
-
     INX
 
   .noItem
@@ -1117,20 +1098,16 @@ CalcLargeItem:
 
 CalcBeams:
 {
-    PHP
-    %a8()
-    LDA $09A8
-    LDX #$0000
+    PHP : %a8()
+    LDA $09A8 : LDX #$0000
   .loop
     BIT #$01 : BEQ .noItem
-
     INX
 
   .noItem
     LSR : BNE .loop
 
     LDA $09A9 : CMP #$10 : BNE .done
-
     INX
 
   .done
@@ -1160,28 +1137,28 @@ ih_game_loop_code:
     JSR metronome
 
   .checkpants
-    if !FEATURE_EXTRAS
-    +   LDA !ram_magic_pants_enabled : AND #$0003 : BEQ .infiniteammo
-    else
-    +   LDA !ram_magic_pants_enabled : AND #$0003 : BEQ .handleinputs
-    endif
+if !FEATURE_EXTRAS
++   LDA !ram_magic_pants_enabled : AND #$0003 : BEQ .infiniteammo
+else
++   LDA !ram_magic_pants_enabled : AND #$0003 : BEQ .handleinputs
+endif
     CMP #$0001 : BEQ .magicpants
     CMP #$0002 : BEQ .spacepants
     ; both are enabled, check Samus movement type to decide
     LDA $0A1F : AND #$00FF : CMP #$0001 : BEQ .magicpants    ; check if running
-    if !FEATURE_EXTRAS
-        BRA .infiniteammo
-    else
-        BRA .handleinputs
-    endif
+if !FEATURE_EXTRAS
+    BRA .infiniteammo
+else
+    BRA .handleinputs
+endif
 
   .magicpants
     JSR magic_pants
-    if !FEATURE_EXTRAS
-        BRA .infiniteammo
-    else
-        BRA .handleinputs
-    endif
+if !FEATURE_EXTRAS
+    BRA .infiniteammo
+else
+    BRA .handleinputs
+endif
 
   .spacepants
     JSR space_pants
@@ -1213,64 +1190,47 @@ ih_game_loop_code:
     RTL
 
   .toggle_pause
-    LDA #$FFFF
-    STA !ram_slowdown_mode
-    LDA #$0000
-    STA !ram_slowdown_frames
-    JMP .done
+    LDA #$FFFF : STA !ram_slowdown_mode
+    LDA #$0000 : STA !ram_slowdown_frames
+    BRA .done
 
   .toggle_slowdown
-    LDA !ram_slowdown_mode
-    INC A
-    STA !ram_slowdown_mode
-    JMP .done
+    LDA !ram_slowdown_mode : INC : STA !ram_slowdown_mode
+    BRA .done
 
   .toggle_speedup
-    LDA !ram_slowdown_mode
-    BEQ +
-    DEC A
-    STA !ram_slowdown_mode
-+   JMP .done
+    LDA !ram_slowdown_mode : BEQ .done
+    DEC : STA !ram_slowdown_mode
+    BRA .done
 
   .reset_slowdown
     LDA #$0000
-    STA !ram_slowdown_mode
-    STA !ram_slowdown_frames
-    JMP .done
+    STA !ram_slowdown_mode : STA !ram_slowdown_frames
+    BRA .done
 
   .inc_statusdisplay
-    LDA !sram_display_mode
-    INC A
-    CMP #$0012
-    BNE +
+    LDA !sram_display_mode : INC
+    CMP #$0012 : BNE +
     LDA #$0000
 +   STA !sram_display_mode
-    JMP .update_status
+    BRA .update_status
 
   .dec_statusdisplay
-    LDA !sram_display_mode
-    DEC A
-    CMP #$FFFF
-    BNE +
+    LDA !sram_display_mode : DEC
+    CMP #$FFFF : BNE +
     LDA #$0011
 +   STA !sram_display_mode
-    JMP .update_status
+    BRA .update_status
 
 
   .update_status
     LDA #$0000
-    STA !ram_HUD_check
-    STA !ram_armed_shine_duration
-    INC A
-    STA !ram_dash_counter
-    STA !ram_xpos
-    STA !ram_ypos
-    STA !ram_horizontal_speed
-    STA !ram_vertical_speed
-    STA !ram_subpixel_pos
-    STA !ram_mb_hp
-    STA !ram_enemy_hp
-    STA !ram_shine_counter
+    STA !ram_HUD_check : STA !ram_armed_shine_duration
+    INC
+    STA !ram_dash_counter : STA !ram_shine_counter
+    STA !ram_xpos : STA !ram_ypos : STA !ram_subpixel_pos
+    STA !ram_horizontal_speed : STA !ram_vertical_speed
+    STA !ram_mb_hp : STA !ram_enemy_hp
     JMP .done
 }
 
@@ -1393,26 +1353,27 @@ infinite_ammo:
     LDA $7E09CE : STA !ram_ammo_powerbombs
 
     ; lock ammo to specific values
-+   LDA #$01A4 : STA $7E09C6  ; missiles
-    LDA #$0045 : STA $7E09CA  ; supers
-    LDA #$0045 : STA $7E09CE  ; pbs
++   LDA #$03E7 : STA $7E09C6  ; 999 missiles
+    LDA #$0063 : STA $7E09CA  ; 99 supers
+    LDA #$0063 : STA $7E09CE  ; 99 pbs
     RTS
 }
 
 if !FEATURE_EXTRAS
-    space_pants_helper:
-    {
-        LDA !ram_magic_pants_state : BEQ +
-        STA $7EC194 : STA $7EC196 : STA $7EC198 : STA $7EC19A : STA $7EC19C : STA $7EC19E
-    +   RTL
-    }
+; dead code
+space_pants_helper:
+{
+    LDA !ram_magic_pants_state : BEQ +
+    STA $7EC194 : STA $7EC196 : STA $7EC198
+    STA $7EC19A : STA $7EC19C : STA $7EC19E
++   RTL
+}
 endif
 
 ih_shinespark_code:
 {
     DEC
-    STA !ram_armed_shine_duration
-    STA $0A68
+    STA $0A68 : STA !ram_armed_shine_duration
     RTL
 }
 

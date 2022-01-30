@@ -10,7 +10,7 @@ custom_preset_save:
     ASL : XBA : TAX ; multiply by 200h (slot offset)
     LDA #$5AFE : STA !PRESET_SLOTS+$00,X   ; mark this slot as "SAFE" to load
     LDA #$01EE : STA !PRESET_SLOTS+$02,X   ; record slot size for future compatibility
-    LDA $078B : STA !PRESET_SLOTS+$04,X    ; Elevator Index
+;    LDA $078B : STA !PRESET_SLOTS+$04,X    ; Elevator Index
     LDA $078D : STA !PRESET_SLOTS+$06,X    ; DDB
 ;    LDA $078F : STA !PRESET_SLOTS+$08,X    ; DoorOut Index
     LDA $079B : STA !PRESET_SLOTS+$0A,X    ; MDB
@@ -90,7 +90,7 @@ custom_preset_load:
     ASL : XBA : TAX              ; multiply by 200h
                                  ; skip past "5AFE" word
                                  ; skip past size for now
-    LDA !PRESET_SLOTS+$04,X : STA $078B    ; Elevator Index
+;    LDA !PRESET_SLOTS+$04,X : STA $078B    ; Elevator Index
     LDA !PRESET_SLOTS+$06,X : STA $078D    ; DDB
 ;    LDA !PRESET_SLOTS+$08,X : STA $078F    ; DoorOut Index
     LDA !PRESET_SLOTS+$0A,X : STA $079B    ; MDB
@@ -131,6 +131,7 @@ custom_preset_load:
 
     ; Copy SRAM
     TXA : CLC : ADC #$005F : TAX
+
   .load_sram_loop
     DEX : LDA !PRESET_SLOTS+$50,X : PHX : PHA
     TXA : AND #$01FF : TAX : PLA
@@ -139,6 +140,7 @@ custom_preset_load:
 
     ; Copy Events, Items, Doors
     CLC : ADC #$0100 : TAX
+
   .load_events_items_doors_loop
     DEX : LDA !PRESET_SLOTS+$B0,X : PHX : PHA
     TXA : AND #$01FF : TAX : PLA

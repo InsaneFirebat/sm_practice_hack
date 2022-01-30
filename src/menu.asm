@@ -345,6 +345,9 @@ PaletteProfileTables:
     dw #HUDProfileTable           ; 10
     dw #$0000
 
+!PROFILE_CUSTOM       = #$0000
+!PROFILE_Twitch       = #$0001
+!PROFILE_Default      = #$0002
 !PROFILE_Firebat      = #$0003
 !PROFILE_wardrinker   = #$0004
 !PROFILE_mm2          = #$0005
@@ -355,6 +358,10 @@ PaletteProfileTables:
 !PROFILE_TopsyTurvy   = #$000A
 !PROFILE_OST          = #$000B
 !PROFILE_JRP          = #$000C
+!PROFILE_Grey         = #$000D
+!PROFILE_Red          = #$000E
+!PROFILE_Purple       = #$000F
+!PROFILE_HUD          = #$0010
 
 ; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
 CustomProfileTable: ; custom always first
@@ -442,17 +449,17 @@ cm_tilemap_bg:
     LDX #$0000
     LDY #$0019
 
--   LDA.w #$647A : STA !ram_tilemap_buffer+$082,X
-    LDA.w #$247A : STA !ram_tilemap_buffer+$0BC,X
+-   LDA #$647A : STA !ram_tilemap_buffer+$082,X
+    LDA #$247A : STA !ram_tilemap_buffer+$0BC,X
     TXA : CLC : ADC #$0040 : TAX
     DEY : BPL -
 
     ; Horizontal edges
-    LDX.w #$0000
-    LDY.w #$001B
+    LDX #$0000
+    LDY #$001B
 
--   LDA.w #$A47B : STA !ram_tilemap_buffer+$044,X
-    LDA.w #$247B : STA !ram_tilemap_buffer+$704,X
+-   LDA #$A47B : STA !ram_tilemap_buffer+$044,X
+    LDA #$247B : STA !ram_tilemap_buffer+$704,X
 
     INX #2
     DEY : BPL -
@@ -465,12 +472,12 @@ cm_tilemap_bg:
     BEQ .fill_interior : CMP #$0012 : BMI .fill_interior
     ; fill if Ceres
   .check_ceres
-    LDA $079F : CMP #$0006 : BMI .done
+    LDA !AREA_ID : CMP #$0006 : BMI .done
     ; transparent otherwise ------^
   .fill_interior
-    LDX.w #$0000
-    LDY.w #$001B
-    LDA.w #$281F
+    LDX #$0000
+    LDY #$001B
+    LDA #$281F
 
       .interior_loop
     STA !ram_tilemap_buffer+$004,X
@@ -623,494 +630,496 @@ cm_draw_action_table:
     dw draw_controller_input
     dw draw_toggle_bit_inverted
 
-    draw_toggle:
-    {
-        ; grab the memory address (long)
-        LDA [$04] : INC $04 : INC $04 : STA $08
-        LDA [$04] : INC $04 : STA $0A
+draw_toggle:
+{
+    ; grab the memory address (long)
+    LDA [$04] : INC $04 : INC $04 : STA $08
+    LDA [$04] : INC $04 : STA $0A
 
-        ; grab the toggle value
-        LDA [$04] : AND #$00FF : INC $04 : STA $0C
+    ; grab the toggle value
+    LDA [$04] : AND #$00FF : INC $04 : STA $0C
 
-        ; increment past JSR
-        INC $04 : INC $04
+    ; increment past JSR
+    INC $04 : INC $04
 
-        ; Draw the text
-        %item_index_to_vram_index()
-        PHX : JSR cm_draw_text : PLX
+    ; Draw the text
+    %item_index_to_vram_index()
+    PHX : JSR cm_draw_text : PLX
 
-        ; Set position for ON/OFF
-        TXA : CLC : ADC #$002E : TAX
+    ; Set position for ON/OFF
+    TXA : CLC : ADC #$002E : TAX
 
-        %a8()
-        ; set palette
-        LDA $0E
-        STA !ram_tilemap_buffer+1,X
-        STA !ram_tilemap_buffer+3,X
-        STA !ram_tilemap_buffer+5,X
+    %a8()
+    ; set palette
+    LDA $0E
+    STA !ram_tilemap_buffer+1,X
+    STA !ram_tilemap_buffer+3,X
+    STA !ram_tilemap_buffer+5,X
 
-        ; grab the value at that memory address
-        LDA [$08] : CMP $0C : BEQ .checked
+    ; grab the value at that memory address
+    LDA [$08] : CMP $0C : BEQ .checked
 
-        ; Off
-        %a16()
-        LDA #$244B : STA !ram_tilemap_buffer+0,X
-        LDA #$244D : STA !ram_tilemap_buffer+2,X
-        LDA #$244D : STA !ram_tilemap_buffer+4,X
-        RTS
+    ; Off
+    %a16()
+    LDA #$244B : STA !ram_tilemap_buffer+0,X
+    LDA #$244D : STA !ram_tilemap_buffer+2,X
+    LDA #$244D : STA !ram_tilemap_buffer+4,X
+    RTS
 
-      .checked
-        ; On
-        %a16()
-        LDA #$384B : STA !ram_tilemap_buffer+2,X
-        LDA #$384C : STA !ram_tilemap_buffer+4,X
-        RTS
-    }
+  .checked
+    ; On
+    %a16()
+    LDA #$384B : STA !ram_tilemap_buffer+2,X
+    LDA #$384C : STA !ram_tilemap_buffer+4,X
+    RTS
+}
 
-    draw_toggle_inverted:
-    {
-        ; grab the memory address (long)
-        LDA [$04] : INC $04 : INC $04 : STA $08
-        LDA [$04] : INC $04 : STA $0A
+draw_toggle_inverted:
+{
+    ; grab the memory address (long)
+    LDA [$04] : INC $04 : INC $04 : STA $08
+    LDA [$04] : INC $04 : STA $0A
 
-        ; grab the toggle value
-        LDA [$04] : AND #$00FF : INC $04 : STA $0C
+    ; grab the toggle value
+    LDA [$04] : AND #$00FF : INC $04 : STA $0C
 
-        ; increment past JSR
-        INC $04 : INC $04
+    ; increment past JSR
+    INC $04 : INC $04
 
-        ; Draw the text
-        %item_index_to_vram_index()
-        PHX : JSR cm_draw_text : PLX
+    ; Draw the text
+    %item_index_to_vram_index()
+    PHX : JSR cm_draw_text : PLX
 
-        ; Set position for ON/OFF
-        TXA : CLC : ADC #$002E : TAX
+    ; Set position for ON/OFF
+    TXA : CLC : ADC #$002E : TAX
 
-        %a8()
-        ; set palette
-        LDA $0E
-        STA !ram_tilemap_buffer+1,X
-        STA !ram_tilemap_buffer+3,X
-        STA !ram_tilemap_buffer+5,X
+    %a8()
+    ; set palette
+    LDA $0E
+    STA !ram_tilemap_buffer+1,X
+    STA !ram_tilemap_buffer+3,X
+    STA !ram_tilemap_buffer+5,X
 
-        ; grab the value at that memory address
-        LDA [$08] : CMP $0C : BNE .checked
+    ; grab the value at that memory address
+    LDA [$08] : CMP $0C : BNE .checked
 
-        ; Off
-        %a16()
-        LDA #$244B : STA !ram_tilemap_buffer+0,X
-        LDA #$244D : STA !ram_tilemap_buffer+2,X
-        LDA #$244D : STA !ram_tilemap_buffer+4,X
-        RTS
+    ; Off
+    %a16()
+    LDA #$244B : STA !ram_tilemap_buffer+0,X
+    LDA #$244D : STA !ram_tilemap_buffer+2,X
+    LDA #$244D : STA !ram_tilemap_buffer+4,X
+    RTS
 
-      .checked
-        ; On
-        %a16()
-        LDA #$384B : STA !ram_tilemap_buffer+2,X
-        LDA #$384C : STA !ram_tilemap_buffer+4,X
-        RTS
-    }
+  .checked
+    ; On
+    %a16()
+    LDA #$384B : STA !ram_tilemap_buffer+2,X
+    LDA #$384C : STA !ram_tilemap_buffer+4,X
+    RTS
+}
 
-    draw_toggle_bit:
-    {
-        ; grab the memory address (long)
-        LDA [$04] : INC $04 : INC $04 : STA $08
-        LDA [$04] : INC $04 : STA $0A
+draw_toggle_bit:
+{
+    ; grab the memory address (long)
+    LDA [$04] : INC $04 : INC $04 : STA $08
+    LDA [$04] : INC $04 : STA $0A
 
-        ; grab bitmask
-        LDA [$04] : INC $04 : INC $04 : STA $0C
+    ; grab bitmask
+    LDA [$04] : INC $04 : INC $04 : STA $0C
 
-        ; increment past JSR
-        INC $04 : INC $04
+    ; increment past JSR
+    INC $04 : INC $04
 
-        ; Draw the text
-        %item_index_to_vram_index()
-        PHX : JSR cm_draw_text : PLX
+    ; Draw the text
+    %item_index_to_vram_index()
+    PHX : JSR cm_draw_text : PLX
 
-        ; Set position for ON/OFF
-        TXA : CLC : ADC #$002E : TAX
+    ; Set position for ON/OFF
+    TXA : CLC : ADC #$002E : TAX
 
-        ; grab the value at that memory address
-        LDA [$08] : AND $0C : BNE .checked
+    ; grab the value at that memory address
+    LDA [$08] : AND $0C : BNE .checked
 
-        ; Off
-        LDA #$244B : STA !ram_tilemap_buffer+0,X
-        LDA #$244D : STA !ram_tilemap_buffer+2,X
-        LDA #$244D : STA !ram_tilemap_buffer+4,X
-        RTS
+    ; Off
+    LDA #$244B : STA !ram_tilemap_buffer+0,X
+    LDA #$244D : STA !ram_tilemap_buffer+2,X
+    LDA #$244D : STA !ram_tilemap_buffer+4,X
+    RTS
 
-      .checked
-        ; On
-        %a16()
-        LDA #$384B : STA !ram_tilemap_buffer+2,X
-        LDA #$384C : STA !ram_tilemap_buffer+4,X
-        RTS
-    }
+  .checked
+    ; On
+    %a16()
+    LDA #$384B : STA !ram_tilemap_buffer+2,X
+    LDA #$384C : STA !ram_tilemap_buffer+4,X
+    RTS
+}
 
-    draw_toggle_bit_inverted:
-    {
-        ; grab the memory address (long)
-        LDA [$04] : INC $04 : INC $04 : STA $08
-        LDA [$04] : INC $04 : STA $0A
+draw_toggle_bit_inverted:
+{
+    ; grab the memory address (long)
+    LDA [$04] : INC $04 : INC $04 : STA $08
+    LDA [$04] : INC $04 : STA $0A
 
-        ; grab bitmask
-        LDA [$04] : INC $04 : INC $04 : STA $0C
+    ; grab bitmask
+    LDA [$04] : INC $04 : INC $04 : STA $0C
 
-        ; increment past JSR
-        INC $04 : INC $04
+    ; increment past JSR
+    INC $04 : INC $04
 
-        ; Draw the text
-        %item_index_to_vram_index()
-        PHX : JSR cm_draw_text : PLX
+    ; Draw the text
+    %item_index_to_vram_index()
+    PHX : JSR cm_draw_text : PLX
 
-        ; Set position for ON/OFF
-        TXA : CLC : ADC #$002C : TAX
+    ; Set position for ON/OFF
+    TXA : CLC : ADC #$002C : TAX
 
-        ; grab the value at that memory address
-        LDA [$08] : AND $0C : BEQ .checked
+    ; grab the value at that memory address
+    LDA [$08] : AND $0C : BEQ .checked
 
-        ; Off
-        LDA #$244B : STA !ram_tilemap_buffer+0,X
-        LDA #$244D : STA !ram_tilemap_buffer+2,X
-        LDA #$244D : STA !ram_tilemap_buffer+4,X
-        RTS
+    ; Off
+    LDA #$244B : STA !ram_tilemap_buffer+0,X
+    LDA #$244D : STA !ram_tilemap_buffer+2,X
+    LDA #$244D : STA !ram_tilemap_buffer+4,X
+    RTS
 
-      .checked
-        ; On
-        %a16()
-        LDA #$384B : STA !ram_tilemap_buffer+2,X
-        LDA #$384C : STA !ram_tilemap_buffer+4,X
-        RTS
-    }
+  .checked
+    ; On
+    %a16()
+    LDA #$384B : STA !ram_tilemap_buffer+2,X
+    LDA #$384C : STA !ram_tilemap_buffer+4,X
+    RTS
+}
 
-    draw_jsr:
-    {
-        ; skip JSR address
-        INC $04 : INC $04
+draw_jsr:
+{
+    ; skip JSR address
+    INC $04 : INC $04
 
-        ; skip argument
-        INC $04 : INC $04
+    ; skip argument
+    INC $04 : INC $04
 
-        ; draw text normally
-        %item_index_to_vram_index()
-        JSR cm_draw_text
-        RTS
-    }
+    ; draw text normally
+    %item_index_to_vram_index()
+    JSR cm_draw_text
+    RTS
+}
 
-    draw_numfield:
-    {
-        ; grab the memory address (long)
-        LDA [$04] : INC $04 : INC $04 : STA $08
-        LDA [$04] : INC $04 : STA $0A
+draw_numfield:
+{
+    ; grab the memory address (long)
+    LDA [$04] : INC $04 : INC $04 : STA $08
+    LDA [$04] : INC $04 : STA $0A
 
-        ; skip bounds and increment values
-        INC $04 : INC $04 : INC $04; : INC $04
+    ; skip bounds and increment values
+    INC $04 : INC $04 : INC $04; : INC $04
 
-        ; increment past JSR
-        INC $04 : INC $04
+    ; increment past JSR
+    INC $04 : INC $04
 
-        ; Draw the text
-        %item_index_to_vram_index()
-        PHX : JSR cm_draw_text : PLX
+    ; Draw the text
+    %item_index_to_vram_index()
+    PHX : JSR cm_draw_text : PLX
 
-        ; set position for the number
-        TXA : CLC : ADC #$002E : TAX
-        LDA [$08] : AND #$00FF : JSR cm_hex2dec
-        ; Clear out the area (black tile)
-        LDA #$281F : STA !ram_tilemap_buffer+0,X
-                     STA !ram_tilemap_buffer+2,X
-                     STA !ram_tilemap_buffer+4,X
+    ; set position for the number
+    TXA : CLC : ADC #$002E : TAX
+    LDA [$08] : AND #$00FF : JSR cm_hex2dec
+    ; Clear out the area (black tile)
+    LDA #$281F : STA !ram_tilemap_buffer+0,X
+                 STA !ram_tilemap_buffer+2,X
+                 STA !ram_tilemap_buffer+4,X
 
-        ; Set palette
-        %a8()
-        LDA.b #$24 : ORA $0E : STA $0F
-        LDA.b #$70 : STA $0E
-        ; Draw numbers
-        %a16()
-        ; ones
-        LDA !ram_hex2dec_third_digit : CLC : ADC $0E : STA !ram_tilemap_buffer+4,X
-        ; tens
-        LDA !ram_hex2dec_second_digit : ORA !ram_hex2dec_first_digit : BEQ .done
-        LDA !ram_hex2dec_second_digit : CLC : ADC $0E : STA !ram_tilemap_buffer+2,X
-        LDA !ram_hex2dec_first_digit : BEQ .done
-        CLC : ADC $0E : STA !ram_tilemap_buffer,X
-      .done
-        RTS
-    }
+    ; Set palette
+    %a8()
+    LDA #$24 : ORA $0E : STA $0F
+    LDA #$70 : STA $0E
+    ; Draw numbers
+    %a16()
+    ; ones
+    LDA !ram_hex2dec_third_digit : CLC : ADC $0E : STA !ram_tilemap_buffer+4,X
+    ; tens
+    LDA !ram_hex2dec_second_digit : ORA !ram_hex2dec_first_digit : BEQ .done
+    LDA !ram_hex2dec_second_digit : CLC : ADC $0E : STA !ram_tilemap_buffer+2,X
+    LDA !ram_hex2dec_first_digit : BEQ .done
+    CLC : ADC $0E : STA !ram_tilemap_buffer,X
 
-    draw_numfield_word:
-    {
-        ; grab the memory address (long)
-        LDA [$04] : INC $04 : INC $04 : STA $08
-        LDA [$04] : INC $04 : STA $0A
+  .done
+    RTS
+}
 
-        ; skip bounds and increment values
-        INC $04 : INC $04 : INC $04; : INC $04
-        INC $04 : INC $04 : INC $04; : INC $04
+draw_numfield_word:
+{
+    ; grab the memory address (long)
+    LDA [$04] : INC $04 : INC $04 : STA $08
+    LDA [$04] : INC $04 : STA $0A
 
-        ; increment past JSR
-        INC $04 : INC $04
+    ; skip bounds and increment values
+    INC $04 : INC $04 : INC $04; : INC $04
+    INC $04 : INC $04 : INC $04; : INC $04
 
-        ; Draw the text
-        %item_index_to_vram_index()
-        PHX : JSR cm_draw_text : PLX
+    ; increment past JSR
+    INC $04 : INC $04
 
-        ; set position for the number
-        TXA : CLC : ADC #$002C : TAX
+    ; Draw the text
+    %item_index_to_vram_index()
+    PHX : JSR cm_draw_text : PLX
 
-        LDA [$08] : JSR cm_hex2dec
+    ; set position for the number
+    TXA : CLC : ADC #$002C : TAX
 
-        ; Clear out the area (black tile)
-        LDA #$281F : STA !ram_tilemap_buffer+0,X
-                     STA !ram_tilemap_buffer+2,X
-                     STA !ram_tilemap_buffer+4,X
-                     STA !ram_tilemap_buffer+6,X
+    LDA [$08] : JSR cm_hex2dec
 
-        ; Set palette
-        %a8()
-        LDA.b #$24 : ORA $0E : STA $0F
-        LDA.b #$70 : STA $0E
+    ; Clear out the area (black tile)
+    LDA #$281F : STA !ram_tilemap_buffer+0,X
+                 STA !ram_tilemap_buffer+2,X
+                 STA !ram_tilemap_buffer+4,X
+                 STA !ram_tilemap_buffer+6,X
 
-        ; Draw numbers
-        %a16()
-        ; ones
-        LDA !ram_hex2dec_third_digit : CLC : ADC $0E : STA !ram_tilemap_buffer+6,X
+    ; Set palette
+    %a8()
+    LDA #$24 : ORA $0E : STA $0F
+    LDA #$70 : STA $0E
 
-        ; tens
-        LDA !ram_hex2dec_second_digit : ORA !ram_hex2dec_first_digit
-        ORA !ram_hex2dec_rest : BEQ .done
-        LDA !ram_hex2dec_second_digit : CLC : ADC $0E : STA !ram_tilemap_buffer+4,X
+    ; Draw numbers
+    %a16()
+    ; ones
+    LDA !ram_hex2dec_third_digit : CLC : ADC $0E : STA !ram_tilemap_buffer+6,X
 
-        LDA !ram_hex2dec_first_digit : ORA !ram_hex2dec_rest : BEQ .done
-        LDA !ram_hex2dec_first_digit : CLC : ADC $0E : STA !ram_tilemap_buffer+2,X
+    ; tens
+    LDA !ram_hex2dec_second_digit : ORA !ram_hex2dec_first_digit
+    ORA !ram_hex2dec_rest : BEQ .done
+    LDA !ram_hex2dec_second_digit : CLC : ADC $0E : STA !ram_tilemap_buffer+4,X
 
-        LDA !ram_hex2dec_rest : BEQ .done
-        CLC : ADC $0E : STA !ram_tilemap_buffer,X
+    LDA !ram_hex2dec_first_digit : ORA !ram_hex2dec_rest : BEQ .done
+    LDA !ram_hex2dec_first_digit : CLC : ADC $0E : STA !ram_tilemap_buffer+2,X
 
-      .done
-        RTS
-    }
+    LDA !ram_hex2dec_rest : BEQ .done
+    CLC : ADC $0E : STA !ram_tilemap_buffer,X
 
-    draw_numfield_hex:
-    draw_numfield_sound:
-    {
-        ; grab the memory address (long)
-        LDA [$04] : INC $04 : INC $04 : STA $08
-        LDA [$04] : INC $04 : STA $0A
+  .done
+    RTS
+}
 
-        ; skip bounds and increment values
-        INC $04 : INC $04 : INC $04; : INC $04
+draw_numfield_hex:
+draw_numfield_sound:
+{
+    ; grab the memory address (long)
+    LDA [$04] : INC $04 : INC $04 : STA $08
+    LDA [$04] : INC $04 : STA $0A
 
-        ; increment past JSR
-        INC $04 : INC $04
+    ; skip bounds and increment values
+    INC $04 : INC $04 : INC $04; : INC $04
 
-        ; Draw the text
-        %item_index_to_vram_index()
-        PHX : JSR cm_draw_text : PLX
+    ; increment past JSR
+    INC $04 : INC $04
 
-        ; set position for the number
-        TXA : CLC : ADC #$0030 : TAX
+    ; Draw the text
+    %item_index_to_vram_index()
+    PHX : JSR cm_draw_text : PLX
 
-        LDA [$08] : AND #$00FF : STA !ram_tmp_2
+    ; set position for the number
+    TXA : CLC : ADC #$0030 : TAX
 
-        ; Clear out the area (black tile)
-        LDA #$281F : STA !ram_tilemap_buffer+0,X
-                     STA !ram_tilemap_buffer+2,X
+    LDA [$08] : AND #$00FF : STA !ram_tmp_2
 
-        ; Draw numbers
-        ; (00X0)
-        LDA !ram_tmp_2 : AND #$00F0 : LSR #3 : TAY
-        LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer,X
+    ; Clear out the area (black tile)
+    LDA #$281F : STA !ram_tilemap_buffer+0,X
+                 STA !ram_tilemap_buffer+2,X
+
+    ; Draw numbers
+    ; (00X0)
+    LDA !ram_tmp_2 : AND #$00F0 : LSR #3 : TAY
+    LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer,X
         
-        ; (000X)
-        LDA !ram_tmp_2 : AND #$000F : ASL : TAY
-        LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X
+    ; (000X)
+    LDA !ram_tmp_2 : AND #$000F : ASL : TAY
+    LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X
 
-      .done
-        RTS
-    }
+  .done
+    RTS
+}
 
-    draw_numfield_hex_word:
-    {
-        ; grab the memory address (long)
-        LDA [$04] : INC $04 : INC $04 : STA $08
-        LDA [$04] : INC $04 : STA $0A
+draw_numfield_hex_word:
+{
+    ; grab the memory address (long)
+    LDA [$04] : INC $04 : INC $04 : STA $08
+    LDA [$04] : INC $04 : STA $0A
 
-        ; Draw the text
-        %item_index_to_vram_index()
-        PHX : JSR cm_draw_text : PLX
+    ; Draw the text
+    %item_index_to_vram_index()
+    PHX : JSR cm_draw_text : PLX
 
-        ; set position for the number
-        TXA : CLC : ADC #$002C : TAX
+    ; set position for the number
+    TXA : CLC : ADC #$002C : TAX
 
-        LDA [$08] : STA !ram_tmp_2
+    LDA [$08] : STA !ram_tmp_2
 
-        ; Clear out the area (black tile)
-        LDA #$281F : STA !ram_tilemap_buffer+0,X
-                     STA !ram_tilemap_buffer+2,X
-                     STA !ram_tilemap_buffer+4,X
-                     STA !ram_tilemap_buffer+6,X
+    ; Clear out the area (black tile)
+    LDA #$281F : STA !ram_tilemap_buffer+0,X
+                 STA !ram_tilemap_buffer+2,X
+                 STA !ram_tilemap_buffer+4,X
+                 STA !ram_tilemap_buffer+6,X
 
-        ; Draw numbers
-        ; (X000)
-        LDA !ram_tmp_2 : AND #$F000 : XBA : LSR #3 : TAY
-        LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer,X
+    ; Draw numbers
+    ; (X000)
+    LDA !ram_tmp_2 : AND #$F000 : XBA : LSR #3 : TAY
+    LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer,X
         
-        ; (0X00)
-        LDA !ram_tmp_2 : AND #$0F00 : XBA : ASL : TAY
-        LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X
+    ; (0X00)
+    LDA !ram_tmp_2 : AND #$0F00 : XBA : ASL : TAY
+    LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X
 
-        ; (00X0)
-        LDA !ram_tmp_2 : AND #$00F0 : LSR #3 : TAY
-        LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+4,X
+    ; (00X0)
+    LDA !ram_tmp_2 : AND #$00F0 : LSR #3 : TAY
+    LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+4,X
         
-        ; (000X)
-        LDA !ram_tmp_2 : AND #$000F : ASL : TAY
-        LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+6,X
+    ; (000X)
+    LDA !ram_tmp_2 : AND #$000F : ASL : TAY
+    LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+6,X
 
-      .done
-        RTS
-    }
+  .done
+    RTS
+}
 
-    draw_numfield_color:
-    {
-        ; grab the memory address (long)
-        LDA [$04] : INC $04 : INC $04 : STA $08
-        LDA [$04] : INC $04 : STA $0A
+draw_numfield_color:
+{
+    ; grab the memory address (long)
+    LDA [$04] : INC $04 : INC $04 : STA $08
+    LDA [$04] : INC $04 : STA $0A
 
-        ; increment past JSR
-        INC $04 : INC $04
+    ; increment past JSR
+    INC $04 : INC $04
 
-        ; Draw the text
-        %item_index_to_vram_index()
-        PHX : JSR cm_draw_text : PLX
+    ; Draw the text
+    %item_index_to_vram_index()
+    PHX : JSR cm_draw_text : PLX
 
-        ; set position for the number
-        TXA : CLC : ADC #$0030 : TAX
+    ; set position for the number
+    TXA : CLC : ADC #$0030 : TAX
 
-        LDA [$08] : AND #$00FF : STA !ram_tmp_2
+    LDA [$08] : AND #$00FF : STA !ram_tmp_2
 
-        ; Clear out the area (black tile)
-        LDA #$281F : STA !ram_tilemap_buffer+0,X
-                     STA !ram_tilemap_buffer+2,X
+    ; Clear out the area (black tile)
+    LDA #$281F : STA !ram_tilemap_buffer+0,X
+                 STA !ram_tilemap_buffer+2,X
 
-        ; Draw numbers
-        ; (00X0)
-        LDA !ram_tmp_2 : AND #$001E : TAY
-        LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer,X
+    ; Draw numbers
+    ; (00X0)
+    LDA !ram_tmp_2 : AND #$001E : TAY
+    LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer,X
 
-        ; (000X)
-        LDA !ram_tmp_2 : AND #$0001 : ASL #4 : STA $0E
-        LDA !ram_tmp_2 : AND #$001C : LSR : CLC : ADC $0E : TAY
-        LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X
+    ; (000X)
+    LDA !ram_tmp_2 : AND #$0001 : ASL #4 : STA $0E
+    LDA !ram_tmp_2 : AND #$001C : LSR : CLC : ADC $0E : TAY
+    LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X
 
-      .done
-        RTS
-    }
+  .done
+    RTS
+}
 
-    draw_choice:
-    {
-        ; $04[0x3] = address
-        ; $08[0x2] = jsr target
+draw_choice:
+{
+    ; $04[0x3] = address
+    ; $08[0x2] = jsr target
 
-        ; grab the memory address (long)
-        LDA [$04] : INC $04 : INC $04 : STA $08
-        LDA [$04] : INC $04 : STA $0A
+    ; grab the memory address (long)
+    LDA [$04] : INC $04 : INC $04 : STA $08
+    LDA [$04] : INC $04 : STA $0A
 
-        ; grab JSR target
-        LDA [$04] : INC $04 : INC $04 : STA $0C
+    ; grab JSR target
+    LDA [$04] : INC $04 : INC $04 : STA $0C
 
-        ; Draw the text first
-        %item_index_to_vram_index()
-        PHX : JSR cm_draw_text : PLX
+    ; Draw the text first
+    %item_index_to_vram_index()
+    PHX : JSR cm_draw_text : PLX
 
-        ; set position for choice
-        TXA : CLC : ADC #$001E : TAX
+    ; set position for choice
+    TXA : CLC : ADC #$001E : TAX
 
-        LDY #$0000
-        LDA #$0000
+    LDY #$0000
+    LDA #$0000
 
-        ; grab the value at that memory address
-        LDA [$08] : TAY
+    ; grab the value at that memory address
+    LDA [$08] : TAY
 
-        ; find the correct text that should be drawn (the selected choice)
-        INY : INY ; uh, skipping the first text that we already drew..
-      .loop_choices
-        DEY : BEQ .found
+    ; find the correct text that should be drawn (the selected choice)
+    INY : INY ; uh, skipping the first text that we already drew..
 
-      .loop_text
-        LDA [$04] : %a16() : INC $04 : %a8()
-        CMP.b #$FF : BEQ .loop_choices
-        BRA .loop_text
+  .loop_choices
+    DEY : BEQ .found
 
-      .found
-        %a16()
-        JSR cm_draw_text
+  .loop_text
+    LDA [$04] : %a16() : INC $04 : %a8()
+    CMP #$FF : BEQ .loop_choices
+    BRA .loop_text
 
-        %a16()
-        RTS
-    }
+  .found
+    %a16()
+    JSR cm_draw_text
 
-    draw_ctrl_shortcut:
-    {
-        LDA [$04] : INC $04 : INC $04 : STA $08
-        LDA [$04] : STA $0A : INC $04
+    %a16()
+    RTS
+}
 
-        %item_index_to_vram_index()
-        PHX
-        JSR cm_draw_text
-        PLA : CLC : ADC #$0022 : TAX
+draw_ctrl_shortcut:
+{
+    LDA [$04] : INC $04 : INC $04 : STA $08
+    LDA [$04] : STA $0A : INC $04
 
-        LDA [$08]
-        JSR menu_ctrl_input_display
+    %item_index_to_vram_index()
+    PHX
+    JSR cm_draw_text
+    PLA : CLC : ADC #$0022 : TAX
 
-        RTS
-    }
+    LDA [$08]
+    JSR menu_ctrl_input_display
 
-    draw_controller_input:
-    {
-        ; grab the memory address (long)
-        LDA [$04] : INC $04 : INC $04 : STA $08
-        STA !ram_cm_ctrl_assign
-        LDA [$04] : INC $04 : STA $0A
+    RTS
+}
 
-        ; grab JSR target
-        LDA [$04] : INC $04 : INC $04 : STA $0C
+draw_controller_input:
+{
+    ; grab the memory address (long)
+    LDA [$04] : INC $04 : INC $04 : STA $08
+    STA !ram_cm_ctrl_assign
+    LDA [$04] : INC $04 : STA $0A
 
-        ; skip JSR argument
-        INC $04 : INC $04
+    ; grab JSR target
+    LDA [$04] : INC $04 : INC $04 : STA $0C
 
-        ; Draw the text
-        %item_index_to_vram_index()
-        PHX : JSR cm_draw_text : PLX
+    ; skip JSR argument
+    INC $04 : INC $04
 
-        ; set position for the input
-        TXA : CLC : ADC #$0020 : TAX
+    ; Draw the text
+    %item_index_to_vram_index()
+    PHX : JSR cm_draw_text : PLX
 
-        LDA ($08) : AND #$E0F0 : BEQ .unbound
+    ; set position for the input
+    TXA : CLC : ADC #$0020 : TAX
 
-        ; determine which input to draw, using Y to refresh A
-        TAY : AND #$0080 : BEQ + : LDY #$0000 : BRA .draw
-+       TYA : AND #$8000 : BEQ + : LDY #$0002 : BRA .draw
-+       TYA : AND #$0040 : BEQ + : LDY #$0004 : BRA .draw
-+       TYA : AND #$4000 : BEQ + : LDY #$0006 : BRA .draw
-+       TYA : AND #$0020 : BEQ + : LDY #$0008 : BRA .draw
-+       TYA : AND #$0010 : BEQ + : LDY #$000A : BRA .draw
-+       TYA : AND #$2000 : BEQ .unbound : LDY #$000C
+    LDA ($08) : AND #$E0F0 : BEQ .unbound
 
-      .draw
-        LDA.w CtrlMenuGFXTable,Y : STA !ram_tilemap_buffer,X
-        RTS
+    ; determine which input to draw, using Y to refresh A
+    TAY : AND #$0080 : BEQ + : LDY #$0000 : BRA .draw
++   TYA : AND #$8000 : BEQ + : LDY #$0002 : BRA .draw
++   TYA : AND #$0040 : BEQ + : LDY #$0004 : BRA .draw
++   TYA : AND #$4000 : BEQ + : LDY #$0006 : BRA .draw
++   TYA : AND #$0020 : BEQ + : LDY #$0008 : BRA .draw
++   TYA : AND #$0010 : BEQ + : LDY #$000A : BRA .draw
++   TYA : AND #$2000 : BEQ .unbound : LDY #$000C
 
-      .unbound
-        LDA #$281F : STA !ram_tilemap_buffer,X
-        RTS
+  .draw
+    LDA.w CtrlMenuGFXTable,Y : STA !ram_tilemap_buffer,X
+    RTS
 
-    CtrlMenuGFXTable:
-        ;  A      B      X      Y      L      R      Select
-        ;  0080   8000   0040   4000   0020   0010   2000
-        dw $288F, $2887, $288E, $2886, $288D, $288C, $2885
-    }
+  .unbound
+    LDA #$281F : STA !ram_tilemap_buffer,X
+    RTS
+
+CtrlMenuGFXTable:
+    ;  A      B      X      Y      L      R      Select
+    ;  0080   8000   0040   4000   0020   0010   2000
+    dw $288F, $2887, $288E, $2886, $288D, $288C, $2885
+}
 }
 
 cm_draw_text:
@@ -1438,7 +1447,6 @@ cm_execute:
 }
 
 cm_execute_action_table:
-{
     dw execute_toggle
     dw execute_toggle_bit
     dw execute_jsr
@@ -1454,426 +1462,413 @@ cm_execute_action_table:
     dw execute_controller_input
     dw execute_toggle_bit
 
-    execute_toggle:
-    {
-        ; Grab address
-        LDA [$00] : INC $00 : INC $00 : STA $04
-        LDA [$00] : INC $00 : STA $06
-
-        ; Grab toggle value
-        LDA [$00] : INC $00 : AND #$00FF : STA $08
-
-        ; Grab JSR target
-        LDA [$00] : INC $00 : INC $00 : STA $0A
-
-        %a8()
-        LDA [$04] : CMP $08 : BEQ .toggleOff
-
-        LDA $08 : STA [$04]
-        BRA .jsr
+execute_toggle:
+{
+    ; Grab address
+    LDA [$00] : INC $00 : INC $00 : STA $04
+    LDA [$00] : INC $00 : STA $06
+
+    ; Grab toggle value
+    LDA [$00] : INC $00 : AND #$00FF : STA $08
+
+    ; Grab JSR target
+    LDA [$00] : INC $00 : INC $00 : STA $0A
+
+    %a8()
+    LDA [$04] : CMP $08 : BEQ .toggleOff
+
+    LDA $08 : STA [$04]
+    BRA .jsr
+
+  .toggleOff
+    LDA #$00 : STA [$04]
+
+  .jsr
+    %a16()
+    LDA $0A : BEQ .end
+    LDA [$04]
+    LDX #$0000
+    JSR ($000A,X)
+
+  .end
+    %sfxtoggle()
+    RTS
+}
+
+execute_toggle_bit:
+{
+    ; Load the address
+    LDA [$00] : INC $00 : INC $00 : STA $04
+    LDA [$00] : INC $00 : STA $06
+
+    ; Load which bit(s) to toggle
+    LDA [$00] : INC $00 : INC $00 : STA $08
+
+    ; Load JSR target
+    LDA [$00] : INC $00 : INC $00 : STA $0A
+
+    ; Toggle the bit
+    LDA [$04] : EOR $08 : STA [$04]
+
+    LDA $0A : BEQ .end
+
+    LDA [$04]
+    LDX #$0000
+    JSR ($000A,X)
+
+ .end
+    %sfxtoggle()
+    RTS
+}
+
+execute_jsr:
+{
+    ; <, > and X should do nothing here
+    ; also ignore input held flag
+    LDA !ram_cm_controller : BIT #$0341 : BNE .end
+
+    ; $02 = JSR target
+    LDA [$00] : INC $00 : INC $00 : STA $04
+
+    ; Y = Argument
+    LDA [$00] : TAY
+
+    LDX #$0000
+    JSR ($0004,X)
+
+  .end
+    RTS
+}
+
+execute_numfield:
+execute_numfield_hex:
+{
+    ; $04[0x3] = memory address to manipulate
+    ; $08[0x1] = min
+    ; $0A[0x1] = max
+    ; $0C[0x1] = increment (normal)
+    ; $0C[0x1] = increment (input held)
+    ; $20[0x2] = JSR target
+    LDA [$00] : INC $00 : INC $00 : STA $04
+    LDA [$00] : INC $00 : STA $06
+
+    LDA [$00] : INC $00 : AND #$00FF : STA $08
+    LDA [$00] : INC $00 : AND #$00FF : INC : STA $0A ; INC for convenience
+    LDA [$00] : INC $00 : AND #$00FF : STA $0C
+
+    ; 4x scroll speed if Y held
+    LDA !IH_CONTROLLER_PRI : AND !sram_cm_scroll_button : BEQ +
+    LDA $0C : ASL #2 : STA $0C
+
+    ; "hold dpad to fast-scroll" is disabled here
+;    LDA !ram_cm_controller : BIT !IH_INPUT_HELD : BNE .input_held
+;    LDA [$00] : INC $00 : INC $00; : AND #$00FF : STA $0C
+;    BRA .load_jsr_target
+
+  .input_held
+;    INC $00 : LDA [$00] : INC $00 : AND #$00FF : STA $0C
+
+  .load_jsr_target
++   LDA [$00] : INC $00 : INC $00 : STA $20
+
+    LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
+
+    LDA [$04] : CLC : ADC $0C
+    CMP $0A : BCS .set_to_min
+    STA [$04] : BRA .jsr
+
+  .pressed_left
+    LDA [$04] : SEC : SBC $0C : BMI .set_to_max
+    CMP $0A : BCS .set_to_max
+    STA [$04] : BRA .jsr
+
+  .set_to_min
+    LDA $08 : STA [$04] : CLC : BRA .jsr
+
+  .set_to_max
+    LDA $0A : DEC : STA [$04] : CLC
+
+  .jsr
+    LDA $20 : BEQ .end
+
+    LDA [$04]
+    LDX #$0000
+    JSR ($0020,X)
 
-      .toggleOff
-        LDA #$00 : STA [$04]
+  .end
+    %sfxnumber()
+    RTS
+}
+
+execute_numfield_sound:
+{
+    ; $04[0x3] = memory address to manipulate
+    ; $08[0x1] = min
+    ; $0A[0x1] = max
+    ; $0C[0x1] = increment
+    ; $20[0x2] = JSR target
+    LDA [$00] : INC $00 : INC $00 : STA $04
+    LDA [$00] : INC $00 : STA $06
 
-      .jsr
-        %a16()
-        LDA $0A : BEQ .end
-        LDA [$04]
-        LDX #$0000
-        JSR ($000A,X)
+    LDA [$00] : INC $00 : AND #$00FF : STA $08
+    LDA [$00] : INC $00 : AND #$00FF : INC : STA $0A ; INC for convenience
+    LDA [$00] : INC $00 : AND #$00FF : STA $0C
+
+    ; 4x scroll speed if Y held
+    LDA !IH_CONTROLLER_PRI : AND !sram_cm_scroll_button : BEQ +
+    LDA $0C : ASL #2 : STA $0C
+
++   LDA [$00] : INC $00 : INC $00 : STA $20
+
+    LDA !ram_cm_controller : BIT #$4000 : BNE .jsr ; check for Y pressed
+    LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
 
-      .end
-        %sfxtoggle()
-        RTS
-    }
+    LDA [$04] : CLC : ADC $0C
+    CMP $0A : BCS .set_to_min
+    STA [$04] : BRA .end
 
-    execute_toggle_bit:
-    {
-        ; Load the address
-        LDA [$00] : INC $00 : INC $00 : STA $04
-        LDA [$00] : INC $00 : STA $06
+  .pressed_left
+    LDA [$04] : SEC : SBC $0C : BMI .set_to_max
+    CMP $0A : BCS .set_to_max
+    STA [$04] : BRA .end
 
-        ; Load which bit(s) to toggle
-        LDA [$00] : INC $00 : INC $00 : STA $08
+  .set_to_min
+    LDA $08 : STA [$04] : CLC : BRA .end
 
-        ; Load JSR target
-        LDA [$00] : INC $00 : INC $00 : STA $0A
+  .set_to_max
+    LDA $0A : DEC : STA [$04] : CLC : BRA .end
 
-        ; Toggle the bit
-        LDA [$04] : EOR $08 : STA [$04]
+  .jsr
+    LDA $20 : BEQ .end
 
-        LDA $0A : BEQ .end
+    LDA [$04]
+    LDX #$0000
+    JSR ($0020,X)
 
-        LDA [$04]
-        LDX #$0000
-        JSR ($000A,X)
+  .end
+;    %sfxnumber()
+    RTS
+}
 
-      .end
-        %sfxtoggle()
-        RTS
-    }
+execute_numfield_word:
+{
+    ; $04[0x3] = memory address to manipulate
+    ; $08[0x2] = min
+    ; $0A[0x2] = max
+    ; $0C[0x2] = increment (normal)
+    ; $0C[0x2] = increment (input held)
+    ; $20[0x2] = JSR target
+    LDA [$00] : INC $00 : INC $00 : STA $04
+    LDA [$00] : INC $00 : STA $06
 
-    execute_jsr:
-    {
-        ; <, > and X should do nothing here
-        ; also ignore input held flag
-        LDA !ram_cm_controller : BIT #$0341 : BNE .end
+    LDA [$00] : INC $00 : INC $00 : STA $08
+    LDA [$00] : INC $00 : INC $00 : INC : STA $0A ; INC for convenience
+    LDA [$00] : INC $00 : INC $00 : STA $0C
 
-        ; $02 = JSR target
-        LDA [$00] : INC $00 : INC $00 : STA $04
+    ; 4x scroll speed if Y held
+    LDA !IH_CONTROLLER_PRI : AND !sram_cm_scroll_button : BEQ +
+    LDA $0C : ASL #2 : STA $0C
 
-        ; Y = Argument
-        LDA [$00] : TAY
+    ; "hold dpad to fast-scroll" is disabled here
+;    LDA !ram_cm_controller : BIT !IH_INPUT_HELD : BNE .input_held
+;    LDA [$00] : INC $00 : INC $00; : AND #$00FF : STA $0C
+;    BRA .load_jsr_target
 
-        LDX #$0000
-        JSR ($0004,X)
+  .input_held
+;    INC $00 : LDA [$00] : INC $00 : AND #$00FF : STA $0C
 
-      .end
-        RTS
-    }
+  .load_jsr_target
++   LDA [$00] : INC $00 : INC $00 : STA $20
 
-    execute_numfield:
-    execute_numfield_hex:
-    {
-        ; $04[0x3] = memory address to manipulate
-        ; $08[0x1] = min
-        ; $0A[0x1] = max
-        ; $0C[0x1] = increment (normal)
-        ; $0C[0x1] = increment (input held)
-        ; $20[0x2] = JSR target
-        LDA [$00] : INC $00 : INC $00 : STA $04
-        LDA [$00] : INC $00 : STA $06
+    LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
 
-        LDA [$00] : INC $00 : AND #$00FF : STA $08
-        LDA [$00] : INC $00 : AND #$00FF : INC : STA $0A ; INC for convenience
-        LDA [$00] : INC $00 : AND #$00FF : STA $0C
+    LDA [$04] : CLC : ADC $0C
+    CMP $0A : BCS .set_to_min
+    STA [$04] : BRA .jsr
 
-        ; 4x scroll speed if Y held
-        LDA !IH_CONTROLLER_PRI : AND !sram_cm_scroll_button : BEQ +
-        LDA $0C : ASL #2 : STA $0C
+  .pressed_left
+    LDA [$04] : SEC : SBC $0C : BMI .set_to_max
+    CMP $0A : BCS .set_to_max
+    STA [$04] : BRA .jsr
 
-        ; "hold dpad to fast-scroll" is disabled here
-;        LDA !ram_cm_controller : BIT !IH_INPUT_HELD : BNE .input_held
-;        LDA [$00] : INC $00 : INC $00; : AND #$00FF : STA $0C
-;        BRA .load_jsr_target
+  .set_to_min
+    LDA $08 : STA [$04] : CLC : BRA .jsr
 
-      .input_held
-;        INC $00 : LDA [$00] : INC $00 : AND #$00FF : STA $0C
+  .set_to_max
+    LDA $0A : DEC : STA [$04] : CLC
 
-      .load_jsr_target
-+       LDA [$00] : INC $00 : INC $00 : STA $20
+  .jsr
+    LDA $20 : BEQ .end
 
-        LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
+    LDA [$04]
+    LDX #$0000
+    JSR ($0020,X)
 
-        LDA [$04] : CLC : ADC $0C
+  .end
+    %sfxnumber()
+    RTS
+}
 
-        CMP $0A : BCS .set_to_min
+execute_numfield_color:
+{
+    ; $04[0x3] = memory address to manipulate
+    ; $20[0x2] = JSR target
+    LDA [$00] : INC $00 : INC $00 : STA $04
+    LDA [$00] : INC $00 : STA $06
 
-        STA [$04] : BRA .jsr
+    LDA [$00] : INC $00 : INC $00 : STA $20
 
-      .pressed_left
-        LDA [$04] : SEC : SBC $0C : BMI .set_to_max
+    LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
 
-        CMP $0A : BCS .set_to_max
+    LDA [$04] : INC : CMP #$0020 : BCS .set_to_min
+    STA [$04] : LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BEQ .jsr
 
-        STA [$04] : BRA .jsr
+    LDA [$04] : INC : CMP #$0020 : BCS .set_to_min
+    STA [$04] : BRA .jsr
 
-      .set_to_min
-        LDA $08 : STA [$04] : CLC : BRA .jsr
+  .pressed_left
+    LDA [$04] : DEC : BMI .set_to_max
+    STA [$04] : LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BEQ .jsr
 
-      .set_to_max
-        LDA $0A : DEC : STA [$04] : CLC
+    LDA [$04] : DEC : BMI .set_to_max
+    STA [$04] : BRA .jsr
 
-      .jsr
-        LDA $20 : BEQ .end
+  .set_to_min
+    LDA #$0000 : STA [$04] : CLC : BRA .jsr
 
-        LDA [$04]
-        LDX #$0000
-        JSR ($0020,X)
+  .set_to_max
+    LDA #$001F : STA [$04] : CLC
 
-      .end
-        %sfxnumber()
-        RTS
-    }
+  .jsr
+    LDA $20 : BEQ .end
 
-    execute_numfield_sound:
-    {
-        ; $04[0x3] = memory address to manipulate
-        ; $08[0x1] = min
-        ; $0A[0x1] = max
-        ; $0C[0x1] = increment
-        ; $20[0x2] = JSR target
-        LDA [$00] : INC $00 : INC $00 : STA $04
-        LDA [$00] : INC $00 : STA $06
+    LDA [$04]
+    LDX #$0000
+    JSR ($0020,X)
 
-        LDA [$00] : INC $00 : AND #$00FF : STA $08
-        LDA [$00] : INC $00 : AND #$00FF : INC : STA $0A ; INC for convenience
-        LDA [$00] : INC $00 : AND #$00FF : STA $0C
+  .end
+    %sfxnumber()
+    RTS
+}
 
-        ; 4x scroll speed if Y held
-        LDA !IH_CONTROLLER_PRI : AND !sram_cm_scroll_button : BEQ +
-        LDA $0C : ASL #2 : STA $0C
+execute_choice:
+{
+    ; $04[0x3] = memory to manipulate
+    ; $08[0x2] = jsr target
+    %a16()
+    LDA [$00] : INC $00 : INC $00 : STA $04
+    LDA [$00] : INC $00 : STA $06
 
-+       LDA [$00] : INC $00 : INC $00 : STA $20
+    LDA [$00] : INC $00 : INC $00 : STA $08
 
-        LDA !ram_cm_controller : BIT #$4000 : BNE .jsr ; check for Y pressed
-        LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
+    ; we either increment or decrement
+    LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
+    LDA [$04] : INC : BRA .bounds_check
 
-        LDA [$04] : CLC : ADC $0C
+  .pressed_left
+    LDA [$04] : DEC
 
-        CMP $0A : BCS .set_to_min
+  .bounds_check
+    TAX         ; X = new value
+    LDY #$0000  ; Y will be set to max
+    %a8()
 
-        STA [$04] : BRA .end
+  .loop_choices
+    LDA [$00] : %a16() : INC $00 : %a8() : CMP #$FF : BEQ .loop_done
 
-      .pressed_left
-        LDA [$04] : SEC : SBC $0C : BMI .set_to_max
+  .loop_text
+    LDA [$00] : %a16() : INC $00 : %a8()
+    CMP #$FF : BNE .loop_text
+    INY : BRA .loop_choices
 
-        CMP $0A : BCS .set_to_max
+  .loop_done
+    ; X = new value (might be out of bounds)
+    ; Y = maximum + 2
+    ; We need to make sure X is between 0-maximum.
 
-        STA [$04] : BRA .end
+    ; for convenience so we can use BCS. We do one more DEC in `.set_to_max`
+    ; below, so we get the actual max.
+    DEY
 
-      .set_to_min
-        LDA $08 : STA [$04] : CLC : BRA .end
+    %a16()
+    TXA : BMI .set_to_max
+    STY $0A
+    CMP $0A : BCS .set_to_zero
 
-      .set_to_max
-        LDA $0A : DEC : STA [$04] : CLC : BRA .end
+    BRA .store
 
-      .jsr
-        LDA $20 : BEQ .end
+  .set_to_zero
+    LDA #$0000 : BRA .store
 
-        LDA [$04]
-        LDX #$0000
-        JSR ($0020,X)
+  .set_to_max
+    TYA : DEC
 
-      .end
-;        %sfxnumber()
-        RTS
-    }
+  .store
+    STA [$04]
 
-    execute_numfield_word:
-    {
-        ; $04[0x3] = memory address to manipulate
-        ; $08[0x2] = min
-        ; $0A[0x2] = max
-        ; $0C[0x2] = increment (normal)
-        ; $0C[0x2] = increment (input held)
-        ; $20[0x2] = JSR target
-        LDA [$00] : INC $00 : INC $00 : STA $04
-        LDA [$00] : INC $00 : STA $06
+    LDA $08 : BEQ .end
 
-        LDA [$00] : INC $00 : INC $00 : STA $08
-        LDA [$00] : INC $00 : INC $00 : INC : STA $0A ; INC for convenience
-        LDA [$00] : INC $00 : INC $00 : STA $0C
+    LDA [$04]
+    LDX #$0000
+    JSR ($0008,X)
 
-        ; 4x scroll speed if Y held
-        LDA !IH_CONTROLLER_PRI : AND !sram_cm_scroll_button : BEQ +
-        LDA $0C : ASL #2 : STA $0C
+  .end
+    %sfxtoggle()
+    RTS
+}
 
-        ; "hold dpad to fast-scroll" is disabled here
-;        LDA !ram_cm_controller : BIT !IH_INPUT_HELD : BNE .input_held
-;        LDA [$00] : INC $00 : INC $00; : AND #$00FF : STA $0C
-;        BRA .load_jsr_target
+execute_ctrl_shortcut:
+{
+    ; < and > should do nothing here
+    ; also ignore the input held flag
+    LDA !ram_cm_controller : BIT #$0301 : BNE .end
 
-      .input_held
-;        INC $00 : LDA [$00] : INC $00 : AND #$00FF : STA $0C
+    LDA [$00] : STA $C5 : INC $00 : INC $00
+    LDA [$00] : STA $C7 : INC $00
 
-      .load_jsr_target
-+       LDA [$00] : INC $00 : INC $00 : STA $20
+    LDA !ram_cm_controller : BIT #$0040 : BNE .reset_shortcut
 
-        LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
+    LDA #$0001 : STA !ram_cm_ctrl_mode
+    LDA #$0000 : STA !ram_cm_ctrl_timer
+    RTS
 
-        LDA [$04] : CLC : ADC $0C
+  .reset_shortcut
+    LDA.w #!sram_ctrl_menu : CMP $C5 : BEQ .end
+    %sfxconfirm()
 
-        CMP $0A : BCS .set_to_min
+    LDA #$0000 : STA [$C5]
 
-        STA [$04] : BRA .jsr
+  .end
+    RTS
+}
 
-      .pressed_left
-        LDA [$04] : SEC : SBC $0C : BMI .set_to_max
+execute_controller_input:
+{
+    ; <, > and X should do nothing here
+    ; also ignore input held flag
+    LDA !ram_cm_controller : BIT #$0341 : BNE .end
 
-        CMP $0A : BCS .set_to_max
+    ; store long address as short address for now
+    LDA [$00] : INC $00 : INC $00 : INC $00
+    STA !ram_cm_ctrl_assign
 
-        STA [$04] : BRA .jsr
+    ; $02 = JSR target
+    LDA [$00] : INC $00 : INC $00 : STA $04
 
-      .set_to_min
-        LDA $08 : STA [$04] : CLC : BRA .jsr
+    ; Y = Argument
+    LDA [$00] : TAY
 
-      .set_to_max
-        LDA $0A : DEC : STA [$04] : CLC
+    LDX #$0000
+    JSR ($0004,X)
 
-      .jsr
-        LDA $20 : BEQ .end
+  .end
+    RTS
+}
 
-        LDA [$04]
-        LDX #$0000
-        JSR ($0020,X)
-
-      .end
-        %sfxnumber()
-        RTS
-    }
-
-    execute_numfield_color:
-    {
-        ; $04[0x3] = memory address to manipulate
-        ; $20[0x2] = JSR target
-        LDA [$00] : INC $00 : INC $00 : STA $04
-        LDA [$00] : INC $00 : STA $06
-
-        LDA [$00] : INC $00 : INC $00 : STA $20
-
-        LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
-
-        LDA [$04] : INC : CMP #$0020 : BCS .set_to_min
-        STA [$04] : LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BEQ .jsr
-
-        LDA [$04] : INC : CMP #$0020 : BCS .set_to_min
-        STA [$04] : BRA .jsr
-
-      .pressed_left
-        LDA [$04] : DEC : BMI .set_to_max
-        STA [$04] : LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BEQ .jsr
-
-        LDA [$04] : DEC : BMI .set_to_max
-        STA [$04] : BRA .jsr
-
-      .set_to_min
-        LDA #$0000 : STA [$04] : CLC : BRA .jsr
-
-      .set_to_max
-        LDA #$001F : STA [$04] : CLC
-
-      .jsr
-        LDA $20 : BEQ .end
-
-        LDA [$04]
-        LDX #$0000
-        JSR ($0020,X)
-
-      .end
-        %sfxnumber()
-        RTS
-    }
-
-    execute_choice:
-    {
-        ; $04[0x3] = memory to manipulate
-        ; $08[0x2] = jsr target
-        %a16()
-        LDA [$00] : INC $00 : INC $00 : STA $04
-        LDA [$00] : INC $00 : STA $06
-
-        LDA [$00] : INC $00 : INC $00 : STA $08
-
-        ; we either increment or decrement
-        LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
-        LDA [$04] : INC : BRA .bounds_check
-
-      .pressed_left
-        LDA [$04] : DEC
-
-      .bounds_check
-        TAX         ; X = new value
-        LDY #$0000  ; Y will be set to max
-
-        %a8()
-      .loop_choices
-        LDA [$00] : %a16() : INC $00 : %a8() : CMP.b #$FF : BEQ .loop_done
-
-      .loop_text
-        LDA [$00] : %a16() : INC $00 : %a8()
-        CMP.b #$FF : BNE .loop_text
-        INY : BRA .loop_choices
-
-      .loop_done
-        ; X = new value (might be out of bounds)
-        ; Y = maximum + 2
-        ; We need to make sure X is between 0-maximum.
-
-        ; for convenience so we can use BCS. We do one more DEC in `.set_to_max`
-        ; below, so we get the actual max.
-        DEY
-
-        %a16()
-        TXA : BMI .set_to_max
-        STY $0A
-        CMP $0A : BCS .set_to_zero
-
-        BRA .store
-
-      .set_to_zero
-        LDA #$0000 : BRA .store
-
-      .set_to_max
-        TYA : DEC
-
-      .store
-        STA [$04]
-
-        LDA $08 : BEQ .end
-
-        LDA [$04]
-        LDX #$0000
-        JSR ($0008,X)
-
-      .end
-        %sfxtoggle()
-        RTS
-    }
-
-    execute_ctrl_shortcut:
-    {
-        ; < and > should do nothing here
-        ; also ignore the input held flag
-        LDA !ram_cm_controller : BIT #$0301 : BNE .end
-
-        LDA [$00] : STA $C5 : INC $00 : INC $00
-        LDA [$00] : STA $C7 : INC $00
-
-        LDA !ram_cm_controller : BIT #$0040 : BNE .reset_shortcut
-
-        LDA #$0001 : STA !ram_cm_ctrl_mode
-        LDA #$0000 : STA !ram_cm_ctrl_timer
-        RTS
-
-      .reset_shortcut
-        LDA.w #!sram_ctrl_menu : CMP $C5 : BEQ .end
-        %sfxconfirm()
-
-        LDA #$0000 : STA [$C5]
-
-        .end
-        RTS
-    }
-
-    execute_controller_input:
-    {
-        ; <, > and X should do nothing here
-        ; also ignore input held flag
-        LDA !ram_cm_controller : BIT #$0341 : BNE .end
-
-        ; store long address as short address for now
-        LDA [$00] : INC $00 : INC $00 : INC $00
-        STA !ram_cm_ctrl_assign
-
-        ; $02 = JSR target
-        LDA [$00] : INC $00 : INC $00 : STA $04
-
-        ; Y = Argument
-        LDA [$00] : TAY
-
-        LDX #$0000
-        JSR ($0004,X)
-
-      .end
-        RTS
-    }
-
-    execute_numfield_hex_word:
-    {
-        ; do nothing
-        RTS
-    }
+execute_numfield_hex_word:
+{
+    ; do nothing
+    RTS
 }
 
 cm_hex2dec:
