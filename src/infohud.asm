@@ -608,7 +608,7 @@ ih_update_hud_code:
         LDA HexToNumberGFX2, X : STA $7EC6B8
 
         ; Minutes
-        LDA [$00] : LDX #$00AE : JSR Draw3
+        LDA [$00] : LDX #$00B0 : JSR Draw2
 
         ; Draw decimal seperators
         LDA !SAMUS_ITEMS_COLLECTED : AND #$1000 : BNE .end
