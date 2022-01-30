@@ -27,14 +27,16 @@ gamemode_start:
     PHP
 
     ; don't load presets if we're in credits
-    LDA !GAMEMODE : CMP #$0027 : BEQ ++
+    LDA !GAMEMODE : CMP #$0027 : BEQ .done
 
-    LDA !ram_custom_preset : BNE +
-    LDA !ram_load_preset : BEQ ++
+    LDA !ram_custom_preset : BNE .load_preset
+    LDA !ram_load_preset : BEQ .done
 
-+   JSL preset_load
+  .load_preset
+    JSL preset_load
 
-++  LDA !GAMEMODE : AND #$00FF
+  .done
+    LDA !GAMEMODE : AND #$00FF
     PLP
     PLB
     RTL
@@ -202,16 +204,16 @@ endif
     ; check if slot is populated first
     LDA !sram_custom_preset_slot
     ASL : XBA : TAX
-    LDA !PRESET_SLOTS,X : CMP #$5AFE : BEQ .safe
-    %sfxgoback()
-    ; CLC to continue normal gameplay after failing to load preset
-    CLC : RTS
-
-  .safe
+    LDA !PRESET_SLOTS,X : CMP #$5AFE : BNE .fail
     STA !ram_custom_preset
     JSL preset_load
     ; SEC to skip normal gameplay for one frame after loading preset
     SEC : RTS
+
+  .fail
+    %sfxgoback()
+    ; CLC to continue normal gameplay after failing to save or load a custom preset
+    CLC : RTS
 
   .next_preset_slot
     LDA !sram_custom_preset_slot : CMP #$0027 ; total slots minus one
