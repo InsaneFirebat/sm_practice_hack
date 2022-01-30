@@ -30,6 +30,8 @@ preset_load:
     BNE .paletteLoop
     PLP
 
+    LDA #$0000
+    STA $7EC400  ; Used as door fade timer
     LDA #$0001
     STA $0723    ; Screen fade delay = 1
     STA $0725    ; Screen fade counter = 1
@@ -155,6 +157,7 @@ preset_load_preset:
     STA $7E09D2 ; Current selected weapon
     STA $7E0A04 ; Auto-cancel item
     LDA #$5AFE : STA $0917 ; Load garbage into Layer 2 X position
+    LDA #$FFFF : STA !ram_reset_segment_later
 
     ; check if custom preset is being loaded
     LDA !ram_custom_preset : BEQ .normal_preset
@@ -264,6 +267,9 @@ preset_start_gameplay:
     ; Set Samus last position same as current position
     LDA !SAMUS_X : STA $0B10 : LDA !SAMUS_X_SUBPX : STA $0B12
     LDA !SAMUS_Y : STA $0B14 : LDA !SAMUS_Y_SUBPX : STA $0B16
+
+    ; Set Samus last pose same as current pose
+    LDA !SAMUS_POSE : STA $0A20
 
     ; Preserve layer 2 values we may have loaded from presets
     LDA $0923 : PHA
