@@ -6,20 +6,36 @@
 org $809606      ; inc lag counter
     STX $05BA : INC $05A0
 
-org $A6A17C      ; Ridley AI init, reset !ram_countdamage
+if !FEATURE_PAL
+org $A6A18C
+else             ; Ridley AI init, reset !ram_countdamage
+org $A6A17C
+endif
     JSR ResetCountDamageRid
 
-org $A7CE64      ;Phantoon AI init
+if !FEATURE_PAL
+org $A7CE98
+else             ; Phantoon AI init
+org $A7CE64
+endif
     JSR ResetCountDamagePhan
 
-org $A0A54C
-    JSR CountDamageShinespark
-
-org $A0A862      ; hijack damage routine to count total damage dealt
+if !FEATURE_PAL
+org $A0A872
+else             ; hijack damage routine to count total damage dealt
+org $A0A862
+endif
     JSR CountDamage
 
+if !FEATURE_PAL
+org $A0A55C
+else             ; shinespark damage hijack
+org $A0A54C
+endif
+    JSR CountDamageShinespark
+
 if !FEATURE_EXTRAS
-org $948F49        ; RTS this routine to enable walk through walls
+org $948F49      ; RTS this routine to enable walk through walls
     JSR NoClip
     RTS
 

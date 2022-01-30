@@ -8,14 +8,17 @@ IFBMenu:
     dw #ifb_soundtest
     dw #$FFFF
     dw #ifb_presetrando
-    if !FEATURE_EXTRAS
+if !FEATURE_EXTRAS
     dw #$FFFF
-        dw #ifb_noclip
-        dw #ifb_nosteam
-    endif
+    dw #ifb_noclip
+    dw #ifb_nosteam
+endif
     dw #$FFFF
+if !FEATURE_PAL
+else
     dw #ifb_debugteleport
     dw #ifb_lockout
+endif
     dw #$FFFF
     dw #ifb_fixcontrols
     dw #$FFFF
@@ -30,8 +33,11 @@ ifb_soundtest:
 ifb_presetrando:
     %cm_submenu("Preset Randomizer", #PresetRandoMenu)
 
+if !FEATURE_PAL
+else
 ifb_debugteleport:
     %cm_submenu("Hidden Dev Load Stations", #DebugTeleportMenu)
+endif
 
 if !FEATURE_EXTRAS
 ifb_noclip:
@@ -41,8 +47,11 @@ ifb_nosteam:
     %cm_toggle("No Steam Collision", !ram_steamcollision, #$0001, #0)
 endif
 
+if !FEATURE_PAL
+else
 ifb_lockout:
     %cm_submenu("Trigger Piracy Warning", #LockoutConfirm)
+endif
 
 ifb_fixcontrols:
     %cm_jsr("Fix My Controls", #action_fixcontrols, #$4000)
@@ -74,6 +83,8 @@ incsrc customizemenu.asm
 ; Lockout Menu
 ; ----------
 
+if !FEATURE_PAL
+else
 LockoutConfirm:
     dw #ifb_lockout_abort
     dw #ifb_lockout_piracy
@@ -93,12 +104,15 @@ ifb_lockout_piracy:
     %cm_jsr("NINTENDO CAUGHT ME", #.routine, #$0000)
   .routine
     JSL $8086E3
+endif
 
 
 ; ----------
 ; Debug Teleport Menu
 ; ----------
 
+if !FEATURE_PAL
+else
 DebugTeleportMenu:
     dw #ifb_debugteleport_crateria
     dw #ifb_debugteleport_brinstar
@@ -296,6 +310,7 @@ tel_ceres:
 
 tel_debug:
     %cm_jsr("Debug Room CRASH", #action_teleport, #$0700)
+endif
 
 
 ; ------------
