@@ -494,12 +494,11 @@ preset_special_fixes:
 {
     ; Grapple - Guardian Runback
     LDA !ROOM_ID : CMP #$ACB3 : BNE +
-    LDA #$00FF : LDX #$0000
--   STA $7F0678,X : INX #2
-    CPX #$0012 : BMI -
-    LDX #$0000
--   STA $7F0738,X : INX #2
-    CPX #$0012 : BMI -
+    LDA #$00FF
+    STA $7F0B08 : STA $7F0BC8
+    STA $7F0C88 : STA $7F0D48
+    STA $7F0E08 : STA $7F0EC8
+    STA $7F0F88 : STA $7F1048
 
 +   RTL
 }
