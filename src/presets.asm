@@ -364,6 +364,9 @@ preset_start_gameplay:
     LDA !SAMUS_X : STA $0B10 : LDA !SAMUS_X_SUBPX : STA $0B12
     LDA !SAMUS_Y : STA $0B14 : LDA !SAMUS_Y_SUBPX : STA $0B16
 
+    ; Set Samus last pose same as current pose
+    LDA !SAMUS_POSE : STA $0A20
+
     ; Set loading game state for Ceres
     LDA #$001F : STA $7ED914
     LDA !AREA_ID : CMP #$0006 : BEQ .end_load_game_state
