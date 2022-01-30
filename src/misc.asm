@@ -230,14 +230,14 @@ gamemode_end:
 
 stop_all_sounds:
 {
-    ; If $05F5 is non-zero, the game won't clear the sounds
-    LDA $05F5 : PHA
-    LDA #$0000 : STA $05F5
-    JSL $82BE17
-    PLA : STA $05F5
+    ; If sounds are not enabled, the game won't clear the sounds
+    LDA !DISABLE_SOUNDS : PHA
+    STZ !DISABLE_SOUNDS
+    JSL $82BE17  ; Cancel sound effects
+    PLA : STA !DISABLE_SOUNDS
 
     ; Makes the game check Samus' health again, to see if we need annoying sound
-    LDA #$0000 : STA $0A6A
+    STZ !SAMUS_HEALTH_WARNING
     RTL
 }
 

@@ -51,12 +51,17 @@ cm_start:
     LDA #$A1 : STA $4200
     LDA #$09 : STA $2105
     LDA #$0F : STA $2100
-
     %a16()
+
+    ; Ensure sound is enabled when menu is open
+    LDA !DISABLE_SOUNDS : PHA
+    STZ !DISABLE_SOUNDS
+    LDA !PB_EXPLOSION_STATUS : PHA
+    STZ !PB_EXPLOSION_STATUS
+    JSL $82BE17               ; Cancel sound effects
 
     JSR cm_init
 
-    JSL $82BE17               ; Cancel sound effects
     JSL initialize_ppu_long   ; Initialise PPU for message boxes
 
     JSR cm_transfer_custom_tileset
@@ -70,6 +75,12 @@ cm_start:
     %a16()
 
     JSR cm_loop         ; Handle message box interaction
+
+    ; Restore sounds variables
+    PLA : STA !PB_EXPLOSION_STATUS
+    PLA : STA !DISABLE_SOUNDS
+    ; Makes the game check Samus' health again, to see if we need annoying sound
+    STZ !SAMUS_HEALTH_WARNING
 
     %a8()
     STA !ram_cm_morphlock : STA $09A1 ; restore morph lock flag

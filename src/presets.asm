@@ -255,6 +255,7 @@ preset_start_gameplay:
     STZ $0943    ; Timer status = inactive
 
     JSL $828A9A  ; Reset sound queues
+    LDA #$FFFF : STA !DISABLE_SOUNDS
 
     LDA #$FFFF : STA $05F5  ; Disable sounds
 
@@ -315,7 +316,7 @@ preset_start_gameplay:
     JSR $A37B    ; Calculate BG positions
     JSL $80A176  ; Display the viewable part of the room
 
-    LDA #$0000 : STA $05F5  ; Enable sounds
+    STZ !DISABLE_SOUNDS  ; Enable sounds
     JSL stop_all_sounds
 
     ; Clear music queue
