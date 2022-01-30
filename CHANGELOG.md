@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.0.11] Always allow sound effects to play while menu is open by idlechild
 * [2.4.0.11] Fixed presets that crash on load when certain directions are held
 * [2.4.0.10] Fixed PB blocks in the way of Mission Impossible presets
 * [2.4.0.10] Fixed and re-enabled scrolling sky backgrounds when loading presets by idlechild
