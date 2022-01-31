@@ -317,6 +317,8 @@ preset_spazer_crateria_green_pirate_shaft:
     dw $0915, $01FC ; Screen Y position in pixels
     dw $09C2, $00C7 ; Health
     dw $09C4, $00C7 ; Max health
+    dw $0A1C, $0002 ; Samus position/state
+    dw $0A1E, $0004 ; More position/state
     dw $0AF6, $0063 ; Samus X
     dw $0AFA, $029B ; Samus Y
     dw $D870, $0180 ; Events, Items, Doors
