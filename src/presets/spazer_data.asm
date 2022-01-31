@@ -321,6 +321,8 @@ preset_spazer_crateria_green_pirate_shaft:
     dw $09C2, $00C7 ; Health
     dw $09C4, $00C7 ; Max health
     dw $09D2, $0001 ; Currently selected item
+    dw $0A1C, $0002 ; Samus position/state
+    dw $0A1E, $0004 ; More position/state
     dw $0AF6, $0063 ; Samus X
     dw $0AFA, $029B ; Samus Y
     dw $0B3F, $0000 ; Blue suit
