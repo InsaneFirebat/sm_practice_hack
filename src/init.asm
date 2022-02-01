@@ -27,7 +27,8 @@ org $8084AF
   .end_clear_bank
 
 
-org $81F000
+;org $81F000
+org $81FA00
 print pc, " init start"
 
 init_code:
@@ -121,4 +122,4 @@ init_sram:
 }
 
 print pc, " init end"
-warnpc $81FF00
+warnpc $81FF00 ;;; $FF00: Thanks Genji! ;;;
