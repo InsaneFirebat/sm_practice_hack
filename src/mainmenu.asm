@@ -624,7 +624,7 @@ ti_xray:
 
 action_equip_collected_items:
 {
-    LDA $09A4 : STA $09A6
+    LDA !SAMUS_ITEMS_COLLECTED : STA !SAMUS_ITEMS_EQUIPPED
     RTS
 }
 
@@ -664,7 +664,7 @@ tb_glitchedbeams:
 
 action_equip_collected_beams:
 {
-    LDA $09A8 : STA $09A6 : TAY
+    LDA !SAMUS_BEAMS_COLLECTED : STA !SAMUS_BEAMS_EQUIPPED : TAY
     AND #$000C : CMP #$000C : BEQ .murderBeam
     TYA : STA $7E09A6
     RTS
@@ -705,7 +705,7 @@ gb_unnamed:
 action_glitched_beam:
 {
     TYA
-    STA $09A6 : STA $09A8
+    STA !SAMUS_BEAMS_EQUIPPED : STA !SAMUS_BEAMS_COLLECTED
     LDA #$0042 : JSL !SFX_LIB1 ; unlabeled, song dependent sound
     RTS
 }

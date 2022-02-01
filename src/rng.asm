@@ -28,11 +28,7 @@
     org $A7D064 ; Phantoon eye close timer
         JSL hook_phantoon_eyeclose
 
-if !FEATURE_PAL
-    org $A7D00A ; Phantoon flame pattern
-else
     org $A7CFD6 ; Phantoon flame pattern
-endif
         JSL hook_phantoon_flame_pattern
 }
 
