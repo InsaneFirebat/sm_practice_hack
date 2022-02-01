@@ -5,6 +5,7 @@
 !FEATURE_SD2SNES ?= 1
 !ORIGINAL_MESSAGE_TEXT ?= 0
 !PRESERVE_WRAM_DURING_SPACETIME ?= 1
+!FEATURE_MORPHLOCK ?= 0
 
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 4
@@ -159,6 +160,7 @@
 !ram_cm_cursor_stack = !WRAM_MENU_START+$10       ; 16 bytes
 
 !ram_cm_cursor_max = !WRAM_MENU_START+$20
+!ram_cm_menu_active = !WRAM_MENU_START+$22
 !ram_cm_input_timer = !WRAM_MENU_START+$24
 !ram_cm_controller = !WRAM_MENU_START+$26
 !ram_cm_menu_bank = !WRAM_MENU_START+$28
@@ -233,9 +235,15 @@
 ; Pointers
 ; ---------
 
+if !FEATURE_MORPHLOCK
+!IH_CONTROLLER_PRI = $CB
+!IH_CONTROLLER_PRI_NEW = $CF
+!IH_CONTROLLER_PRI_PREV = $C7
+else
 !IH_CONTROLLER_PRI = $8B
 !IH_CONTROLLER_PRI_NEW = $8F
 !IH_CONTROLLER_PRI_PREV = $97
+endif
 
 !IH_CONTROLLER_SEC = $8D
 !IH_CONTROLLER_SEC_NEW = $91

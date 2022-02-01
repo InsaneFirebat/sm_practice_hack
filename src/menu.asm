@@ -50,8 +50,9 @@ cm_start:
     LDA #$A1 : STA $4200
     LDA #$09 : STA $2105
     LDA #$0F : STA $2100
-
     %a16()
+
+    LDA #$0001 : STA !ram_cm_menu_active
 
     JSR cm_init
 
@@ -85,6 +86,8 @@ cm_start:
     JSL $82BE2F                   ; Queue Samus movement sound effects
     JSL play_music_long           ; Play 2 lag frames of music and sound effects
     JSL maybe_trigger_pause_long  ; Maybe trigger pause screen or return save confirmation selection
+
+    LDA #$0000 : STA !ram_cm_menu_active
 
     PLY
     PLX
