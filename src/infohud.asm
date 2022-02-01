@@ -716,8 +716,8 @@ ih_hud_code:
     LDA !sram_status_icons : BNE .check_healthbomb
     JMP .end
 
-  .check_healthbomb
     ; health bomb
+  .check_healthbomb
     LDA $0E1A : BEQ .clear_healthbomb
     LDA !SAMUS_HP : CMP #$0032 : BMI .pink
     LDA !IH_LETTER_E : STA $7EC654
@@ -730,8 +730,8 @@ ih_hud_code:
   .clear_healthbomb
     LDA !IH_BLANK : STA $7EC654
 
-  .check_elevator
     ; Elevator
+  .check_elevator
     LDA $0E16 : BEQ .clear_elevator
     LDA !IH_ELEVATOR : STA $7EC656
     BRA .check_shinetimer
@@ -750,21 +750,30 @@ ih_hud_code:
 
     ; reserve tank
   .check_reserves
-    LDA !sram_top_display_mode : BNE .end
+    LDA !sram_top_display_mode : BNE .check_morphlock
     LDA !SAMUS_RESERVE_MODE : CMP #$0001 : BNE .clearReserve
     LDA !SAMUS_RESERVE_ENERGY : BEQ .empty
     LDA !SAMUS_RESERVE_MAX : BEQ .clearReserve
 
     LDA !IH_RESERVE_AUTO : STA $7EC61A
-    BRA .end
+    BRA .check_morphlock
 
   .empty
     LDA !SAMUS_RESERVE_MAX : BEQ .clearReserve
     LDA !IH_RESERVE_EMPTY : STA $7EC61A
-    BRA .end
+    BRA .check_morphlock
 
   .clearReserve
     LDA !IH_BLANK : STA $7EC61A
+
+    ; Morph Lock
+  .check_morphlock
+    LDA $09A1 : AND #$8000 : BEQ .clear_morphlock
+    LDA !IH_MORPHBALL : STA $7EC656
+    BRA .end
+
+  .clear_morphlock
+    LDA !IH_BLANK : STA $7EC656
 
   .end
     PLB
