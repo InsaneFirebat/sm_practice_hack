@@ -124,7 +124,7 @@ mm_write_hud_tiles_during_door_transition:
 
   .minimap_vram
     JSR $E039
-    dl $DFD500
+    dl $FDD500
     dw $4000
     dw $1000
     JMP $E492  ; resume logic
@@ -192,7 +192,7 @@ mm_inc_tile_count:
     ; Set tile and increment counter
     STA $07F7,X
     REP #$20
-    LDA !ram_map_counter : INC A : STA !ram_map_counter
+    LDA !ram_map_counter : INC : STA !ram_map_counter
     SEP #$20
 
   .done
@@ -212,5 +212,5 @@ mm_clear_boss_room_tiles:
 }
 
 print pc, " minimap bank90 end"
-warnpc $90F800
+warnpc $90F7F0
 
