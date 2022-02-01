@@ -1,8 +1,8 @@
-# HACK
+# Super Metroid: Life
 
 ## Notes
 
-Always use the UNHEADERED (UH) version of the hack for the practice rom.
+Always use the UNHEADERED (UH) version of the hack for any practice rom.
 
 ## Which Download?
 

@@ -121,4 +121,4 @@ init_sram:
 }
 
 print pc, " init end"
-warnpc $81FF00
+warnpc $81F800 ; Life code runs through $F9C5

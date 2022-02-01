@@ -114,7 +114,8 @@ org $8FE0DF
     dw layout_asm_ceres_ridley_room_no_timer
 
 
-org $8FEA00 ; free space for door asm
+;org $8FEA00 ; free space for door asm
+org $8FF100
 print pc, " misc bank8F start"
 
 layout_asm_ceres_ridley_room_state_check:

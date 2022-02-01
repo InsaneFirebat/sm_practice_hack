@@ -77,7 +77,8 @@ org $80994D
 
 
 ; Placed in bank 82 so that the jumps work
-org $82F70F
+;org $82F70F
+org $82F740
 print pc, " minimap bank82 start"
 
 mm_write_and_clear_hud_tiles:
