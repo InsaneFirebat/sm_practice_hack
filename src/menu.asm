@@ -255,13 +255,11 @@ cm_transfer_custom_cgram:
     LDA $7EC03C : STA !ram_cgram_cache+14
 
     LDA #$7277 : STA $7EC00A
+    LDA #$0000 : STA $7EC00E : STA $7EC016 : STA $7EC036 : STA $7EC03A
     LDA #$48F3 : STA $7EC012
-    LDA #$0000 : STA $7EC01A
-    LDA #$7FFF : STA $7EC01C
-    LDA #$4376 : STA $7EC032
-    LDA #$761F : STA $7EC034
-    LDA #$0000 : STA $7EC03A
-    LDA #$761F : STA $7EC03C
+    LDA #$7FFF : STA $7EC014 : STA $7EC01C
+    LDA #$4676 : STA $7EC032
+    LDA #$761F : STA $7EC034 : STA $7EC03C
 
     JSL transfer_cgram_long
     PLP
