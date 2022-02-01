@@ -1040,6 +1040,7 @@ preset_pkrd_upper_norfair_leaving_hi_jump:
     dw $D876, $0121  ; Items
     dw $D8BA, $0001  ; Doors
     dw !PRESET_DOORS, $0001 ; doors closed
+    dw !PRESET_SPECIAL, $0001 ; remove shot blocks
     dw #$FFFF
 .after
 
@@ -1057,6 +1058,7 @@ preset_pkrd_upper_norfair_business_center_2:
     dw $0AF6, $01C1  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw !PRESET_DOORS, $0000 ; doors opened
+    dw !PRESET_SPECIAL, $0000 ; flag disabled
     dw #$FFFF
 .after
 
