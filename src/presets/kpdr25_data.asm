@@ -610,6 +610,7 @@ preset_kpdr25_upper_norfair_leaving_hijump:
     dw $D8B8, $20EF  ; Doors
     dw $D8BA, $0001  ; Doors
     dw !PRESET_DOORS, $0001 ; doors closed
+    dw !PRESET_SPECIAL, $0001 ; remove shot blocks
     dw #$FFFF
 .after
 
@@ -630,6 +631,7 @@ preset_kpdr25_upper_norfair_precathedral:
     dw $0AFA, $038B  ; Samus Y
     dw $D876, $01A1  ; Items
     dw !PRESET_DOORS, $0000 ; doors opened
+    dw !PRESET_SPECIAL, $0000 ; flag disabled
     dw #$FFFF
 .after
 

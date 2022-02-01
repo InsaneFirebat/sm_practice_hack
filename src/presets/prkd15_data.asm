@@ -1127,6 +1127,7 @@ preset_prkd15_upper_norfair_leaving_hi_jump:
     dw $D876, $0120 ; Events, Items, Doors
     dw $D91A, $0028 ; Events, Items, Doors
     dw !PRESET_DOORS, $0001 ; doors closed
+    dw !PRESET_SPECIAL, $0001 ; remove shot blocks
     dw #$FFFF
 .after
 
@@ -1148,6 +1149,7 @@ preset_prkd15_upper_norfair_business_center_2:
     dw $D8BA, $0001 ; Events, Items, Doors
     dw $D91A, $002A ; Events, Items, Doors
     dw !PRESET_DOORS, $0000 ; doors opened
+    dw !PRESET_SPECIAL, $0000 ; flag disabled
     dw #$FFFF
 .after
 

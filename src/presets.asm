@@ -200,9 +200,10 @@ startgame_seg_timer:
 preset_load_preset:
 {
     PHB
+    LDA #$0000
+    STA !PRESET_DOORS : STA !PRESET_SPECIAL
     STZ $09D2 ; Current selected weapon
     STZ $0A04 ; Auto-cancel item
-    STA !PRESET_DOORS : STA !PRESET_SPECIAL
     LDA #$5AFE : STA $0917 ; Load garbage into Layer 2 X position
     LDA #$FFFF : STA !ram_reset_segment_later
 
@@ -855,7 +856,16 @@ preset_special_fixes:
     STA $7F22A8 : STA $7F22AA
     STA $7F2348 : STA $7F234A
     STA $7F23E8 : STA $7F23EA
+    BRA .done
 
+    ; Leaving Hi-Jump Boots when left of column
++   LDA !ROOM_ID : CMP #$A9E5 : BNE +
+    LDA !SAMUS_X : CMP #$0095 : BPL +
+    LDA #$00FF : STA $7F0052
+    STA $7F0072 : STA $7F0092
+;    BRA .done
+
+  .done
 +   RTS
 }
 
