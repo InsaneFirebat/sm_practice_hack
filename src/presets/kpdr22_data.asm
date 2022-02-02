@@ -5,14 +5,14 @@ preset_kpdr22_crateria_ceres_elevator:
     dw $079B, $DF45 ; MDB
     dw $07F3, $002D ; Music Bank
     dw $07F5, $0006 ; Music Track
-    dw $090F, $0000 ; Screen subpixel X position.
+    dw $090F, $0000 ; Screen subpixel X position
     dw $0911, $0000 ; Screen X position in pixels
     dw $0913, $0000 ; Screen subpixel Y position
     dw $0915, $0000 ; Screen Y position in pixels
-    dw $0917, $0000 ; Layer 2 X scroll in room in pixels?
-    dw $0919, $0000 ; Layer 2 Y scroll in room in pixels? (up = positive)
-    dw $0921, $0000 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dw $0923, $0000 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dw $0917, $0000 ; Layer 2 X position
+    dw $0919, $0000 ; Layer 2 Y position
+    dw $0921, $0000 ; BG2 X offset
+    dw $0923, $0000 ; BG2 Y offset
     dw $093F, $0000 ; Ceres escape flag
     dw $09A2, $0000 ; Equipped Items
     dw $09A4, $0000 ; Collected Items
@@ -35,37 +35,40 @@ preset_kpdr22_crateria_ceres_elevator:
     dw $0A68, $0000 ; Flash suit
     dw $0A76, $0000 ; Hyper beam
     dw $0AF6, $0080 ; Samus X
+    dw $0AF8, $0000 ; Samus subpixel X
     dw $0AFA, $0048 ; Samus Y
+    dw $0AFC, $0000 ; Samus subpixel Y
     dw $0B3F, $0000 ; Blue suit
-    dw $D820, $0000 ; Events, Items, Doors
-    dw $D822, $0000 ; Events, Items, Doors
-    dw $D828, $0000 ; Events, Items, Doors
-    dw $D82A, $0000 ; Events, Items, Doors
-    dw $D82C, $0000 ; Events, Items, Doors
-    dw $D82E, $0000 ; Events, Items, Doors
-    dw $D870, $0000 ; Events, Items, Doors
-    dw $D872, $0000 ; Events, Items, Doors
-    dw $D874, $0000 ; Events, Items, Doors
-    dw $D876, $0000 ; Events, Items, Doors
-    dw $D878, $0000 ; Events, Items, Doors
-    dw $D87A, $0000 ; Events, Items, Doors
-    dw $D87C, $0000 ; Events, Items, Doors
-    dw $D87E, $0000 ; Events, Items, Doors
-    dw $D880, $0000 ; Events, Items, Doors
-    dw $D882, $0000 ; Events, Items, Doors
-    dw $D884, $0000 ; Events, Items, Doors
-    dw $D8B0, $0000 ; Events, Items, Doors
-    dw $D8B2, $0000 ; Events, Items, Doors
-    dw $D8B4, $0000 ; Events, Items, Doors
-    dw $D8B8, $0000 ; Events, Items, Doors
-    dw $D8BA, $0000 ; Events, Items, Doors
-    dw $D8BC, $0000 ; Events, Items, Doors
-    dw $D8BE, $0000 ; Events, Items, Doors
-    dw $D8C0, $0000 ; Events, Items, Doors
-    dw $D8C2, $0000 ; Events, Items, Doors
-    dw $D8C4, $0000 ; Events, Items, Doors
-    dw $D90C, $0000 ; Events, Items, Doors
-    dw $D91A, $0000 ; Events, Items, Doors
+    dw $D820, $0000 ; Events
+    dw $D822, $0000 ; Events
+    dw $D828, $0000 ; Bosses
+    dw $D82A, $0000 ; Bosses
+    dw $D82C, $0000 ; Bosses
+    dw $D82E, $0000 ; Bosses
+    dw $D870, $0000 ; Items
+    dw $D872, $0000 ; Items
+    dw $D874, $0000 ; Items
+    dw $D876, $0000 ; Items
+    dw $D878, $0000 ; Items
+    dw $D87A, $0000 ; Items
+    dw $D87C, $0000 ; Items
+    dw $D87E, $0000 ; Items
+    dw $D880, $0000 ; Items
+    dw $D882, $0000 ; Items
+    dw $D8B0, $0000 ; Doors
+    dw $D8B2, $0000 ; Doors
+    dw $D8B4, $0000 ; Doors
+    dw $D8B6, $0000 ; Doors
+    dw $D8B8, $0000 ; Doors
+    dw $D8BA, $0000 ; Doors
+    dw $D8BC, $0000 ; Doors
+    dw $D8BE, $0000 ; Doors
+    dw $D8C0, $0000 ; Doors
+    dw $D8C2, $0000 ; Doors
+    dw $D8C4, $0000 ; Doors
+    dw $D908, $0000 ; Map Stations
+    dw $D90A, $0000 ; Map Stations
+    dw $D90C, $0000 ; Map Stations
     dw #$FFFF
 .after
 
@@ -75,7 +78,7 @@ preset_kpdr22_crateria_ceres_last_3_rooms:
     dw $079B, $E021 ; MDB
     dw $07F3, $0024 ; Music Bank
     dw $07F5, $0007 ; Music Track
-    dw $090F, $7400 ; Screen subpixel X position.
+    dw $090F, $7400 ; Screen subpixel X position
     dw $0913, $F000 ; Screen subpixel Y position
     dw $093F, $0002 ; Ceres escape flag
     dw $09C2, $0018 ; Health
@@ -83,7 +86,7 @@ preset_kpdr22_crateria_ceres_last_3_rooms:
     dw $0A1E, $0004 ; More position/state
     dw $0AF6, $004E ; Samus X
     dw $0AFA, $00A2 ; Samus Y
-    dw $D82E, $0001 ; Events, Items, Doors
+    dw $D82E, $0001 ; Bosses
     dw #$FFFF
 .after
 
@@ -93,27 +96,28 @@ preset_kpdr22_crateria_ship:
     dw $079B, $91F8 ; MDB
     dw $07F3, $0006 ; Music Bank
     dw $07F5, $0005 ; Music Track
-    dw $090F, $8000 ; Screen subpixel X position.
+    dw $090F, $8000 ; Screen subpixel X position
     dw $0911, $0400 ; Screen X position in pixels
     dw $0913, $0000 ; Screen subpixel Y position
     dw $0915, $03D0 ; Screen Y position in pixels
-    dw $0917, $0200 ; Layer 2 X scroll in room in pixels?
-    dw $0921, $0200 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
+    dw $0917, $0200 ; Layer 2 X position
+    dw $0919, $0000 ; Layer 2 Y position
+    dw $0921, $0200 ; BG2 X offset
+    dw $0923, $0000 ; BG2 Y offset
+    dw $093F, $0000 ; Ceres escape flag
     dw $09C2, $0063 ; Health
-    dw $09C4, $0063 ; Max health
-    dw $0AF6, $0481 ; Samus X
-    dw $0AFA, $0440 ; Samus Y
-    dw $D91C, $1010 ; Events, Items, Doors
+    dw $0AF6, $047E ; Samus X
+    dw $0AFA, $0443 ; Samus Y
     dw #$FFFF
 .after
 
 preset_kpdr22_crateria_parlor:
     dw #preset_kpdr22_crateria_ship ; Crateria: Ship
-    dw $090F, $0000 ; Screen subpixel X position.
+    dw $090F, $0000 ; Screen subpixel X position
     dw $0911, $0000 ; Screen X position in pixels
     dw $0913, $1400 ; Screen subpixel Y position
     dw $0915, $0400 ; Screen Y position in pixels
-    dw $0917, $0000 ; Layer 2 X scroll in room in pixels?
+    dw $0917, $0000 ; Layer 2 X position
     dw $0A1C, $0002 ; Samus position/state
     dw $0A1E, $0004 ; More position/state
     dw $0AF6, $0079 ; Samus X
