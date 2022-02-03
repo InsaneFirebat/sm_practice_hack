@@ -17,10 +17,7 @@ endif
 if !FEATURE_PAL
 else
     dw #ifb_debugteleport
-    dw #ifb_lockout
 endif
-    dw #$FFFF
-    dw #ifb_fixcontrols
     dw #$FFFF
     dw #ifb_factory_reset
     dw #$0000
@@ -47,15 +44,6 @@ ifb_nosteam:
     %cm_toggle("No Steam Collision", !ram_steamcollision, #$0001, #0)
 endif
 
-if !FEATURE_PAL
-else
-ifb_lockout:
-    %cm_submenu("Trigger Piracy Warning", #LockoutConfirm)
-endif
-
-ifb_fixcontrols:
-    %cm_jsr("Fix My Controls", #action_fixcontrols, #$4000)
-
 ifb_factory_reset:
     %cm_submenu("Factory Reset", #FactoryResetConfirm)
 
@@ -77,34 +65,6 @@ ifb_dummy_num:
 ; ----------
 
 incsrc customizemenu.asm
-
-
-; ----------
-; Lockout Menu
-; ----------
-
-if !FEATURE_PAL
-else
-LockoutConfirm:
-    dw #ifb_lockout_abort
-    dw #ifb_lockout_piracy
-    dw #$0000
-    %cm_header("THIS IS A FORCED RESET")
-    %cm_footer("REMEMBER TO CENTER CAMERA!")
-
-ifb_lockout_abort:
-    %cm_jsr("ABORT", #.routine, #$0000)
-  .routine
-    %sfxgoback()
-    JSR cm_go_back
-    JSR cm_calculate_max
-    RTS
-
-ifb_lockout_piracy:
-    %cm_jsr("NINTENDO CAUGHT ME", #.routine, #$0000)
-  .routine
-    JSL $8086E3
-endif
 
 
 ; ----------
@@ -575,17 +535,9 @@ action_soundtest_playmusic:
     PLY : TYA
     %a8() : STA !ram_soundtest_music
     XBA : %a16()
-    STA $07CB                                       ; store data index to the room
+    STA $07CB                                        ; store data index to the room
     ORA #$FF00 : JSL !MUSIC_ROUTINE                  ; play from negative data index
     LDA !ram_soundtest_music : JSL !MUSIC_ROUTINE    ; play from track index
-    RTS
-}
-
-action_fixcontrols:
-{
-    TYA : STA $09B2           ; Y for Shot
-    LDA #$0040 : STA $09B8    ; X for Item Cancel
-    %sfxshot()
     RTS
 }
 
