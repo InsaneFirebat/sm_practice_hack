@@ -2073,6 +2073,7 @@ game_music_toggle:
     db #$28, "        OFF", #$FF
     db #$28, "         ON", #$FF
     db #$28, "   FAST OFF", #$FF
+    db #$28, " PRESET OFF", #$FF
     db #$FF
   .routine
     ; Clear music queue
