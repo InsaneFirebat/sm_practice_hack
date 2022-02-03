@@ -5,6 +5,7 @@
 !FEATURE_SD2SNES ?= 0
 !FEATURE_PAL ?= 0
 !FEATURE_EXTRAS ?= 0
+!FEATURE_DEV ?= 0
 !ORIGINAL_MESSAGE_TEXT ?= 0
 !PRESERVE_WRAM_DURING_SPACETIME ?= 1
 !RAW_TILE_GRAPHICS ?= 1
@@ -137,14 +138,21 @@
 !ram_quickdrop_counter = !WRAM_START+$CC
 !ram_walljump_counter = !WRAM_START+$CE
 
-; ^ FREE SPACE ^ up to +$FC
+; ^ FREE SPACE ^ up to +$F8
+
+!ram_random_preset_rng = !WRAM_START+$FA
+!ram_random_preset_value = !WRAM_START+$FC
+
 
 ; -----------------------
 ; RAM (Bank 7E required)
 ; -----------------------
 
-
 !ram_slowdown_mode = $7EFBFE
+!PRESET_DOORS = $7EFDF0
+!PRESET_SPECIAL = $7EFDF2
+!PRESET_ENEMIES = $7EFDF4
+
 
 ; ---------
 ; RAM Menu
@@ -179,6 +187,7 @@
 
 !ram_seed_X = !WRAM_MENU_START+$7C
 !ram_seed_Y = !WRAM_MENU_START+$7E
+
 
 ; ------------------
 ; Reusable RAM Menu
@@ -537,9 +546,6 @@ endif
 ; ---------
 
 !PRESET_SLOTS = $F03000
-!PRESET_DOORS = $7EFDF0
-!PRESET_SPECIAL = $7EFDF2
-!PRESET_ENEMIES = $7EFDF4
 
 
 ; -----

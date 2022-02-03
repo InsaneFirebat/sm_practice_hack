@@ -682,8 +682,17 @@ endif
 LoadRandomPreset:
 {
     PHY : PHX
+if !FEATURE_DEV
+    LDA !ram_random_preset_rng : BEQ .seedrandom
+    LDA !ram_random_preset_value : INC
+    STA !ram_random_preset_value : STA $12
+    BRA .seedpicked
+endif
+
+  .seedrandom
     JSL MenuRNG : STA $12
 
+  .seedpicked
     LDA #$00B8 : STA $18                       ; bank in $18
     LDA !sram_preset_category : ASL : TAY      ; selected category index in Y
     LDA #preset_category_submenus : STA $16    ; pointer to category list in $16
@@ -718,9 +727,16 @@ LoadRandomPreset:
     %a16()
     PEA $0000 : PLA
     LDA $4216 : ASL : TAY                      ; random preset index in Y
+if !FEATURE_DEV
+    BNE .presetselected
+    LDA !ram_random_preset_rng : BEQ .presetselected
+    LDA !ram_random_preset_value : XBA : INC : XBA
+    AND #$FF00 : INC : STA !ram_random_preset_value
+endif
+
+  .presetselected
     LDA [$16],Y : STA $16                      ; random preset macro pointer in $16
     LDY #$0004 : LDA [$16],Y                   ; finally reached the pointer to the preset
-
     STA !ram_load_preset
 
     PLX : PLY
