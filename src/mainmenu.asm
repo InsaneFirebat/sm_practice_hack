@@ -291,6 +291,9 @@ PresetsMenu:
     dw #presets_custom_preset_slot
     dw #presets_save_custom_preset
     dw #presets_load_custom_preset
+if !FEATURE_DEV
+    dw #presets_random_preset_rng
+endif
     dw #$FFFF
     dw #presets_open_doors
     dw #presets_ship_landing
@@ -334,6 +337,11 @@ presets_load_custom_preset:
     STA !ram_custom_preset
     LDA #$0001 : STA !ram_cm_leave
     RTS
+
+if !FEATURE_DEV
+presets_random_preset_rng:
+    %cm_toggle_inverted("Random Preset RNG", !ram_random_preset_rng, #$0001, #0)
+endif
 
 presets_open_doors:
     %cm_toggle("Auto-Open Blue Doors", !sram_preset_open_doors, #$0001, #0)
