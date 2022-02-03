@@ -216,7 +216,6 @@ RAMWatchCommonSamusMenu2:
     dw ramwatch_common_samus_0CCC
     dw #$0000
     %cm_header("SELECT FROM SAMUS RAM")
-    %cm_header("ALSO SEE INFOHUD MODES")
 
 ramwatch_common_samus_09C2:
     %cm_jsr("Samus Energy", action_select_common_address, #$09C2)
