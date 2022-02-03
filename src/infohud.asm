@@ -1084,7 +1084,7 @@ CalcItem:
 
 CalcLargeItem:
 {
-    LDA $09A4 : AND #$F32F ; GT Code adds an unused item (10h)
+    LDA !SAMUS_ITEMS_COLLECTED : AND #$F32F ; GT Code adds an unused item (10h)
     LDX #$0000
   .loop
     BIT #$0001 : BEQ .noItem
@@ -1099,7 +1099,7 @@ CalcLargeItem:
 CalcBeams:
 {
     PHP : %a8()
-    LDA $09A8 : LDX #$0000
+    LDA !SAMUS_BEAMS_COLLECTED : LDX #$0000
   .loop
     BIT #$01 : BEQ .noItem
     INX
@@ -1107,7 +1107,7 @@ CalcBeams:
   .noItem
     LSR : BNE .loop
 
-    LDA $09A9 : CMP #$10 : BNE .done
+    LDA !SAMUS_BEAMS_COLLECTED+1 : CMP #$10 : BNE .done
     INX
 
   .done

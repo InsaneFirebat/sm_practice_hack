@@ -85,9 +85,12 @@ endif
     JSL reset_all_counters
 
     ; Clear enemies if not in certain rooms
-    LDA $079B : CMP #$DD58 : BEQ .set_mb_state
+    LDA $079B : CMP #$9804 : BEQ .set_mb_state
+    CMP #$DD58 : BEQ .set_mb_state
+    LDA !PRESET_ENEMIES : BNE .done
     JSR clear_all_enemies
-    BRA .done
+    PLP
+    RTL
 
   .set_mb_state
     ; If glass is broken, assume we should skip MB1
@@ -201,7 +204,7 @@ preset_load_preset:
 {
     PHB
     LDA #$0000
-    STA !PRESET_DOORS : STA !PRESET_SPECIAL
+    STA !PRESET_DOORS : STA !PRESET_SPECIAL : STA !PRESET_ENEMIES
     STZ $09D2 ; Current selected weapon
     STZ $0A04 ; Auto-cancel item
     LDA #$5AFE : STA $0917 ; Load garbage into Layer 2 X position
@@ -415,10 +418,10 @@ else
     JSL $82E7D3  ; Load level data, CRE, tile table, scroll data, create PLMs and execute door ASM and room setup ASM
 endif
 
-    JSR preset_scroll_fixes
+    JSL preset_scroll_fixes
 
     LDA !PRESET_SPECIAL : BEQ +
-    JSR preset_special_fixes
+    JSL preset_special_fixes
 
 ;    LDA !sram_preset_options : BIT !PRESETS_CLOSE_BLUE_DOORS : BNE +
 +   LDA !sram_preset_open_doors : BEQ +
@@ -674,202 +677,6 @@ endif
 
   .end
     PLB : PLP : RTL
-}
-
-preset_scroll_fixes:
-{
-    ; Fixes bad scrolling caused by loading into a position that
-    ; is normally hidden until passing over a red scroll block.
-    ; These fixes can often be found in nearby door asm.
-    PHP
-    %ai16()
-    LDA !ram_custom_preset : CMP #$5AFE : BNE .category_presets
-    BRL .custom_presets
-
-  .category_presets
-    %a8() : %i16()
-    LDA #$01 : LDX !ROOM_ID      ; X = room ID
-    CPX #$C000 : BMI +           ; organized by room ID so we only have to check half
-    BRL .halfway
-
-  .topdone
-    PLP
-    RTS
-
-+   CPX #$A011 : BNE +           ; bottom-left of Etecoons Etank
-    STA $7ECD25 : STA $7ECD26
-    BRA .topdone
-+   CPX #$A3AE : BNE +           ; hidden area behind Alpha Power Bombs
-    LDY !SAMUS_X : CPY #$0100    ; no fix if Xpos > 255
-    BPL .topdone
-    STA $7ECD20
-+   CPX #$A408 : BNE +           ; top of Below Spazer Room
-    LDY !SAMUS_Y : CPY #$00B0    ; no fix if Ypos > 176
-    BPL .topdone
-    LDA #$02
-    STA $7ECD20 : STA $7ECD21
-    BRA .topdone
-+   CPX #$A6A1 : BNE +           ; Elevator to Upper Norfair (from Kraid's area)
-    STA $7ECD20
-    BRA .topdone
-+   CPX #$AC83 : BNE +           ; left of Green Bubbles Missile Room (Norfair Reserve)
-    STA $7ECD20
-    BRA .topdone
-+   CPX #$AE32 : BNE +           ; bottom of Volcano Room
-    STA $7ECD26
-    BRA .topdone
-+   CPX #$B07A : BNE +           ; top of Bat Cave
-    STA $7ECD20
-    BRA .topdone
-+   CPX #$B1E5 : BNE +           ; bottom of Acid Chozo Room
-    STA $7ECD26 : STA $7ECD27 : STA $7ECD28
-    LDA #$00 : STA $7ECD23 : STA $7ECD24
-    BRA .done
-+   CPX #$B283 : BNE +           ; bottom of GT's Room
-    LDY !SAMUS_Y : CPY #$00D0    ; no fix if Ypos < 208
-    BMI .done
-    STA $7ECD22 : STA $7ECD23    ; leaving GT's room
-    LDA #$02
-    STA $7ECD20 : STA $7ECD21
-+   CPX #$B3A5 : BNE +           ; Pre-Pillars
-    LDY !SAMUS_Y : CPY #$0199    ; no scroll fix if Ypos < 409
-    BMI ++
-    STA $7ECD22 : STA $7ECD24    ; bottom of Pre-Pillars
-    LDA #$00 : STA $7ECD21
-    BRA .done
-++  LDA #$02 : STA $7ECD21       ; middle/top of Pre-Pillars
-    BRA .done
-+   CPX #$B4AD : BNE +           ; top of Worst Room in the Game
-    LDA #$02 : STA $7ECD20
-+   CPX #$B585 : BNE .done       ; top of Kihunter Stairs
-    LDY !SAMUS_Y : CPY #$008C    ; no scroll fix if Ypos > 140
-    BPL .done
-    STA $7ECD20
-    LDA #$00 : STA $7ECD23
-
-  .done
-    PLP
-    RTS
-
-  .halfway
-    CPX #$DF45 : BMI +           ; Ceres rooms set BG1 offsets manually
-    BRL .ceres
-+   CPX #$C98E : BNE +           ; bottom-left of Bowling Room
-    LDA #$00 : STA $7ECD26 : STA $7ECD27
-    STA $7ECD28 : STA $7ECD29
-    STA $7ECD2A : STA $7ECD2B
-    BRA .done
-+   CPX #$CAF6 : BNE +           ; WS Shaft
-    LDY !SAMUS_X : CPY #$05A0    ; fix East Supers if Xpos > 1440
-    BPL ++
-    LDA #$02                     ; lower area before Basement
-    STA $7ECD48 : STA $7ECD4E
-    BRA .done
-++  STA $7ECD49                  ; hidden area before WS East Supers
-    BRA .done
-+   CPX #$CBD5 : BNE +           ; top of Electric Death Room (WS E-Tank)
-    LDA #$02
-    STA $7ECD20
-    BRA .done
-+   CPX #$CC6F : BNE +           ; right of Basement (Phantoon)
-    STA $7ECD24
-    BRA .bottomdone
-+   CPX #$D1A3 : BNE +           ; bottom of Crab Shaft
-    STA $7ECD26
-    LDA #$02 : STA $7ECD24
-    BRA .bottomdone
-+   CPX #$D21C : BNE +           ; Crab Hole
-    LDY !SAMUS_Y : CPY #$00D0
-    BMI ++    
-    STA $7ECD21                  ; bottom of Crab Hole
-    LDA #$00 : STA $7ECD20
-    BRA .bottomdone
-++  LDA #$02 : STA $7ECD20       ; top of Crab Hole
-    BRA .bottomdone
-+   CPX #$D48E : BNE +           ; Oasis (bottom of Toilet)
-    LDA #$02
-    STA $7ECD20 : STA $7ECD21
-    BRA .bottomdone
-+   CPX #$D69A : BNE .bottomdone ; Pants Room (door to Shaktool)
-    STA $7ECD21
-    LDA #$00 : STA $7ECD22
-
-  .bottomdone
-    PLP
-    RTS
-
-  .ceres
-    LDA #$00 : STA $7E005F       ; Initialize mode 7
-    CPX #$DF45 : BNE +           ; Ceres Elevator
-    LDA #$00 : STA $7E091E : STA $7E0920
-    BRL .ceresdone
-
-+   STA $7E0078 : STA $7E0079    ; Ceres Elevator room already does this
-    STA $7E007A : STA $7E007B    ; Other rooms should zero out the values
-    STA $7E007C : STA $7E007D
-    STA $7E007E : STA $7E007F
-    STA $7E0080 : STA $7E0081
-    STA $7E0082 : STA $7E0083
-
-    CPX #$DF8D : BNE +           ; Ceres Falling Tiles
-    LDA #$01 : STA $7E091E
-    LDA #$02 : STA $7E0920
-    BRA .ceresdone
-+   CPX #$DFD7 : BNE +           ; Ceres Magnet Stairs
-    LDA #$03 : STA $7E091E
-    LDA #$02 : STA $7E0920
-    BRA .ceresdone
-+   CPX #$E021 : BNE +           ; Ceres Dead Scientists
-    LDA #$04 : STA $7E091E
-    LDA #$03 : STA $7E0920
-    BRA .ceresdone
-+   CPX #$E06B : BNE +           ; Ceres 58 Escape
-    LDA #$06 : STA $7E091E
-    LDA #$03 : STA $7E0920
-    BRA .ceresdone
-+   CPX #$E0B5 : BNE .ceresdone  ; Ceres Ridley
-    LDA #$08 : STA $7E091E
-    LDA #$03 : STA $7E0920
-
-  .ceresdone
-    PLP
-    RTS
-
-  .custom_presets
-    PHB
-    LDA !sram_custom_preset_slot
-    ASL : XBA
-    CLC : ADC #$31E9 : TAX       ; X = Source
-    LDY #$CD51 : LDA #$0031      ; Y = Destination, A = Size-1
-    MVP $F07E                    ; srcBank, destBank
-    LDA #$0000 : STA !ram_custom_preset
-    PLB
-    PLP
-    RTS
-}
-
-preset_special_fixes:
-{
-    ; Big Pink Power Bomb blocks before Mission Impossible
-    LDA !ROOM_ID : CMP #$9D19 : BNE +
-    LDA !SAMUS_Y : CMP #$02C0 : BMI +
-    CMP #$03C9 : BPL +
-    LDA #$00FF
-    STA $7F2208 : STA $7F220A
-    STA $7F22A8 : STA $7F22AA
-    STA $7F2348 : STA $7F234A
-    STA $7F23E8 : STA $7F23EA
-    BRA .done
-
-    ; Leaving Hi-Jump Boots when left of column
-+   LDA !ROOM_ID : CMP #$A9E5 : BNE +
-    LDA !SAMUS_X : CMP #$0095 : BPL +
-    LDA #$00FF : STA $7F0052
-    STA $7F0072 : STA $7F0092
-;    BRA .done
-
-  .done
-+   RTS
 }
 
 LoadRandomPreset:
@@ -1142,27 +949,27 @@ print pc, " preset_menu.asm bankF3 end"
 
 org $E8E000
 check bankcross off
-incsrc presets/spazer_data.asm ; 313Dh bytes
-incsrc presets/prkd_data.asm ; 3C95h bytes
-incsrc presets/prkd15_data.asm ; 3C95h bytes
-incsrc presets/kpdr21_data.asm ; 3B17h bytes
-incsrc presets/kpdr22_data.asm ; 3B17h bytes
-incsrc presets/nintendopower_data.asm ; 2109h bytes
-incsrc presets/gtclassic_data.asm ; 35B5h bytes
-incsrc presets/14ice_data.asm ; 1EC1h bytes
-incsrc presets/14speed_data.asm ; 1F2Ch bytes
-incsrc presets/allbosskpdr_data.asm ; 2435h bytes
-incsrc presets/allbosspkdr_data.asm ; 24ADh bytes
-incsrc presets/allbossprkd_data.asm ; 2539h bytes
-incsrc presets/hundo_data.asm ; 42B9h bytes
-incsrc presets/100early_data.asm ; 4E29h bytes
-incsrc presets/gtmax_data.asm ; 4E9Fh bytes
-incsrc presets/kpdr25_data.asm ; 2F09h bytes
-incsrc presets/rbo_data.asm ; 327Fh bytes
-incsrc presets/pkrd_data.asm ; 2EE5h bytes
-incsrc presets/100map_data.asm ; 57E5h bytes
-incsrc presets/nghyper_data.asm ; 1B6Bh bytes
-incsrc presets/ngplasma_data.asm ; 1B5Fh bytes
+incsrc presets/spazer_data.asm ; 1D60h bytes
+incsrc presets/prkd_data.asm ; 2234h bytes
+incsrc presets/prkd15_data.asm ; 23F4h bytes
+incsrc presets/kpdr21_data.asm ; 215Ch bytes
+incsrc presets/kpdr22_data.asm ; 2238h bytes
+incsrc presets/nintendopower_data.asm ; 10A0h bytes
+incsrc presets/gtclassic_data.asm ; 1EDCh bytes
+incsrc presets/14ice_data.asm ; 12CCh bytes
+incsrc presets/14speed_data.asm ; 1318h bytes
+incsrc presets/allbosskpdr_data.asm ; 12B4h bytes
+incsrc presets/allbosspkdr_data.asm ; 12F4h bytes
+incsrc presets/allbossprkd_data.asm ; 136Ch bytes
+incsrc presets/hundo_data.asm ; 2638h bytes
+incsrc presets/100early_data.asm ; 2D0Ch bytes
+incsrc presets/gtmax_data.asm ; 2E00h bytes
+incsrc presets/kpdr25_data.asm ; 19F4h bytes
+incsrc presets/rbo_data.asm ; 1AFCh bytes
+incsrc presets/pkrd_data.asm ; 1A14h bytes
+incsrc presets/100map_data.asm ; 31FCh bytes
+incsrc presets/nghyper_data.asm ; E88h bytes
+incsrc presets/ngplasma_data.asm ; EA4h bytes
 warnpc $F08000
 check bankcross on
 print pc, " crossbank preset_data.asm end"

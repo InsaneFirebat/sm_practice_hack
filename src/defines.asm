@@ -537,6 +537,9 @@ endif
 ; ---------
 
 !PRESET_SLOTS = $F03000
+!PRESET_DOORS = $7EFDF0
+!PRESET_SPECIAL = $7EFDF2
+!PRESET_ENEMIES = $7EFDF4
 
 
 ; -----
@@ -556,8 +559,6 @@ endif
 
 !sram_preset_open_doors = $F02128
 !sram_preset_ship_landing = $F0212A
-!PRESET_DOORS = $7EFDF0
-!PRESET_SPECIAL = $7EFDF2
 
 ; FREE SPACE ^
 
