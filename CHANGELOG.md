@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.0.14] Added average momentum to Shinetune for stutter feedback by idlechild
 * [2.4.0.13] Added "PRESET OFF" option to skip music load with presets but not normal loads by idlechild
 * [2.4.0.12] Unlock enemies-killed doors when loading presets
 * [2.4.0.11] Always allow sound effects to play while menu is open by idlechild
