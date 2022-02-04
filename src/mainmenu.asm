@@ -2027,9 +2027,11 @@ ih_top_HUD_mode:
     db #$28, "Top-Left Displa", #$FF
     db #$28, "y    ITEM %", #$FF
     db #$28, "y  RESERVES", #$FF
+    db #$28, "y   VANILLA", #$FF
     db #$FF
 
 !TOP_HUD_RESERVES_INDEX = #$0001
+!TOP_HUD_VANILLA_INDEX = #$0002
 
 
 ; ----------
