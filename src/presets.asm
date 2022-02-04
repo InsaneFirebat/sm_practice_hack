@@ -682,12 +682,9 @@ endif
 LoadRandomPreset:
 {
     PHY : PHX
-if !FEATURE_DEV
     LDA !ram_random_preset_rng : BEQ .seedrandom
-    LDA !ram_random_preset_value : INC
-    STA !ram_random_preset_value : STA $12
+    LDA !ram_random_preset_value : STA $12
     BRA .seedpicked
-endif
 
   .seedrandom
     JSL MenuRNG : STA $12
@@ -710,7 +707,7 @@ endif
     %a8()
     STY $4206                                  ; by number of preset groups
     %a16()
-    PEA $0000 : PLA
+    PEA $0000 : PLA : PEA $0000 : PLA
     LDA $4216 : ASL : TAY                      ; random preset group index in Y
     LDA [$16],Y : STA $16                      ; random preset group macro pointer in $16
     LDY #$0004 : LDA [$16],Y : STA $16         ; preset group table pointer in $16
@@ -723,22 +720,23 @@ endif
 
     LDA $12 : AND #$00FF : STA $4204           ; divide random number...
     %a8()
-    STY $4206                                  ; by number of presets in the group
+    STY $14 : STY $4206                        ; divide bottom half of random number by Y
     %a16()
-    PEA $0000 : PLA
-    LDA $4216 : ASL : TAY                      ; random preset index in Y
-if !FEATURE_DEV
-    BNE .presetselected
-    LDA !ram_random_preset_rng : BEQ .presetselected
-    LDA !ram_random_preset_value : XBA : INC : XBA
-    AND #$FF00 : INC : STA !ram_random_preset_value
-endif
+    PEA $0000 : PLA : PEA $0000 : PLA
+    LDA $4216 : STA $12                        ; randomly selected preset
 
-  .presetselected
+    ASL : TAY
     LDA [$16],Y : STA $16                      ; random preset macro pointer in $16
     LDY #$0004 : LDA [$16],Y                   ; finally reached the pointer to the preset
     STA !ram_load_preset
 
+    LDA !ram_random_preset_rng : BEQ .done
+    LDA !ram_random_preset_value : INC : STA !ram_random_preset_value
+    LDA $12 : INC : CMP $14 : BMI .done
+    LDA !ram_random_preset_value : XBA : INC : XBA
+    AND #$FF00 : STA !ram_random_preset_value
+
+  .done
     PLX : PLY
     RTL
 }
