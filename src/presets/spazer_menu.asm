@@ -1,6 +1,7 @@
 PresetsMenuSpazer:
     dw #presets_goto_spazer_crateria
     dw #presets_goto_spazer_brinstar
+    dw #presets_goto_spazer_kraid
     dw #presets_goto_spazer_upper_norfair
     dw #presets_goto_spazer_red_brinstar
     dw #presets_goto_spazer_wrecked_ship
@@ -18,6 +19,9 @@ presets_goto_spazer_crateria:
 
 presets_goto_spazer_brinstar:
     %cm_submenu("Brinstar", #presets_submenu_spazer_brinstar)
+
+presets_goto_spazer_kraid:
+    %cm_submenu("Kraid's Lair", #presets_submenu_spazer_kraid)
 
 presets_goto_spazer_upper_norfair:
     %cm_submenu("Upper Norfair", #presets_submenu_spazer_upper_norfair)
@@ -48,19 +52,21 @@ presets_goto_spazer_tourian:
 
 presets_submenu_spazer_crateria:
     dw #presets_spazer_crateria_ceres_elevator
+    dw #presets_spazer_crateria_ceres_escape_start
     dw #presets_spazer_crateria_ceres_last_3_rooms
     dw #presets_spazer_crateria_ship
     dw #presets_spazer_crateria_parlor
     dw #presets_spazer_crateria_climb_down
     dw #presets_spazer_crateria_pit_room
     dw #presets_spazer_crateria_morph
-    dw #presets_spazer_crateria_construction_zone
-    dw #presets_spazer_crateria_construction_zone_revisit
+    dw #presets_spazer_crateria_construction_zone_down
+    dw #presets_spazer_crateria_construction_zone_up
     dw #presets_spazer_crateria_pit_room_revisit
     dw #presets_spazer_crateria_climb_up
     dw #presets_spazer_crateria_parlor_revisit
     dw #presets_spazer_crateria_flyway
     dw #presets_spazer_crateria_bomb_torizo
+    dw #presets_spazer_crateria_leaving_bomb_torizo
     dw #presets_spazer_crateria_alcatraz
     dw #presets_spazer_crateria_terminator
     dw #presets_spazer_crateria_green_pirate_shaft
@@ -77,18 +83,29 @@ presets_submenu_spazer_brinstar:
     dw #presets_spazer_brinstar_red_tower
     dw #presets_spazer_brinstar_skree_boost
     dw #presets_spazer_brinstar_below_spazer
-    dw #presets_spazer_brinstar_entering_kraids_lair
-    dw #presets_spazer_brinstar_kraid_kihunters
-    dw #presets_spazer_brinstar_mini_kraid
-    dw #presets_spazer_brinstar_kraid
-    dw #presets_spazer_brinstar_leaving_varia
-    dw #presets_spazer_brinstar_mini_kraid_revisit
-    dw #presets_spazer_brinstar_kraid_kihunters_revisit
-    dw #presets_spazer_brinstar_kraid_etank
+    dw #presets_spazer_brinstar_leaving_spazer
+    dw #presets_spazer_brinstar_passing_through_maridia
     dw #$0000
     %cm_header("BRINSTAR")
 
+presets_submenu_spazer_kraid:
+    dw #presets_spazer_kraid_entering_kraids_lair
+    dw #presets_spazer_kraid_warehouse_zeelas
+    dw #presets_spazer_kraid_kraid_kihunters
+    dw #presets_spazer_kraid_mini_kraid
+    dw #presets_spazer_kraid_fallen_hero
+    dw #presets_spazer_kraid_kraid_2
+    dw #presets_spazer_kraid_leaving_varia
+    dw #presets_spazer_kraid_arthur_j_metroid
+    dw #presets_spazer_kraid_mini_kraid_revisit
+    dw #presets_spazer_kraid_kraid_kihunters_revisit
+    dw #presets_spazer_kraid_kraid_etank
+    dw #presets_spazer_kraid_leaving_kraid_etank
+    dw #$0000
+    %cm_header("KRAID'S LAIR")
+
 presets_submenu_spazer_upper_norfair:
+;    dw #presets_spazer_upper_norfair_prebusiness_center
     dw #presets_spazer_upper_norfair_business_center
     dw #presets_spazer_upper_norfair_hi_jump_etank
     dw #presets_spazer_upper_norfair_leaving_hi_jump
@@ -115,6 +132,7 @@ presets_submenu_spazer_red_brinstar:
     dw #presets_spazer_red_brinstar_hellway
     dw #presets_spazer_red_brinstar_caterpillars_down
     dw #presets_spazer_red_brinstar_alpha_power_bombs
+    dw #presets_spazer_red_brinstar_leaving_power_bombs
     dw #presets_spazer_red_brinstar_caterpillars_up
     dw #$0000
     %cm_header("RED BRINSTAR")
@@ -126,7 +144,7 @@ presets_submenu_spazer_wrecked_ship:
     dw #presets_spazer_wrecked_ship_entering_wrecked_ship
     dw #presets_spazer_wrecked_ship_basement
     dw #presets_spazer_wrecked_ship_phantoon
-    dw #presets_spazer_wrecked_ship_leaving_phantoon
+;    dw #presets_spazer_wrecked_ship_leaving_phantoon
     dw #presets_spazer_wrecked_ship_shaft_to_supers
     dw #presets_spazer_wrecked_ship_wrecked_ship_shaft
     dw #presets_spazer_wrecked_ship_attic
@@ -190,6 +208,7 @@ presets_submenu_spazer_upper_norfair_revisit:
 presets_submenu_spazer_lower_norfair:
     dw #presets_spazer_lower_norfair_ln_main_hall
     dw #presets_spazer_lower_norfair_prepillars
+    dw #presets_spazer_lower_norfair_fast_pillars_setup
     dw #presets_spazer_lower_norfair_worst_room_in_the_game
     dw #presets_spazer_lower_norfair_amphitheatre
     dw #presets_spazer_lower_norfair_kihunter_stairs_down
@@ -213,7 +232,7 @@ presets_submenu_spazer_lower_norfair:
 presets_submenu_spazer_backtracking:
     dw #presets_spazer_backtracking_maridia_tube_revisit
     dw #presets_spazer_backtracking_fish_tank_revisit
-    dw #presets_spazer_backtracking_mt_everest_revisit_revisit
+    dw #presets_spazer_backtracking_mt_everest_revisit
     dw #presets_spazer_backtracking_red_brinstar_green_gate
     dw #presets_spazer_backtracking_crateria_kihunters_final
     dw #presets_spazer_backtracking_parlor_spacejump
@@ -223,6 +242,7 @@ presets_submenu_spazer_backtracking:
     %cm_header("BACKTRACKING")
 
 presets_submenu_spazer_tourian:
+    dw #presets_spazer_tourian_tourian_elevator
     dw #presets_spazer_tourian_metroids_1
     dw #presets_spazer_tourian_metroids_2
     dw #presets_spazer_tourian_metroids_3
@@ -231,7 +251,11 @@ presets_submenu_spazer_tourian:
     dw #presets_spazer_tourian_baby_skip
     dw #presets_spazer_tourian_gedora_room
     dw #presets_spazer_tourian_zeb_skip
+    dw #presets_spazer_tourian_mother_brain_2
+    dw #presets_spazer_tourian_mother_brain_3
+    dw #presets_spazer_tourian_zebes_escape_start
     dw #presets_spazer_tourian_escape_room_3
+    dw #presets_spazer_tourian_escape_room_4
     dw #presets_spazer_tourian_climb_spark
     dw #presets_spazer_tourian_escape_parlor
     dw #$0000
@@ -240,6 +264,9 @@ presets_submenu_spazer_tourian:
 ; Crateria
 presets_spazer_crateria_ceres_elevator:
     %cm_preset("Ceres Elevator", #preset_spazer_crateria_ceres_elevator)
+
+presets_spazer_crateria_ceres_escape_start:
+    %cm_preset("Ceres Escape Start", #preset_spazer_crateria_ceres_escape_start)
 
 presets_spazer_crateria_ceres_last_3_rooms:
     %cm_preset("Ceres Last 3 Rooms", #preset_spazer_crateria_ceres_last_3_rooms)
@@ -259,11 +286,11 @@ presets_spazer_crateria_pit_room:
 presets_spazer_crateria_morph:
     %cm_preset("Morph", #preset_spazer_crateria_morph)
 
-presets_spazer_crateria_construction_zone:
-    %cm_preset("Construction Zone", #preset_spazer_crateria_construction_zone)
+presets_spazer_crateria_construction_zone_down:
+    %cm_preset("Construction Zone Down", #preset_spazer_crateria_construction_zone_down)
 
-presets_spazer_crateria_construction_zone_revisit:
-    %cm_preset("Construction Zone Revisit", #preset_spazer_crateria_construction_zone_revisit)
+presets_spazer_crateria_construction_zone_up:
+    %cm_preset("Construction Zone Up", #preset_spazer_crateria_construction_zone_up)
 
 presets_spazer_crateria_pit_room_revisit:
     %cm_preset("Pit Room Revisit", #preset_spazer_crateria_pit_room_revisit)
@@ -279,6 +306,9 @@ presets_spazer_crateria_flyway:
 
 presets_spazer_crateria_bomb_torizo:
     %cm_preset("Bomb Torizo", #preset_spazer_crateria_bomb_torizo)
+
+presets_spazer_crateria_leaving_bomb_torizo:
+    %cm_preset("Leaving Bomb Torizo", #preset_spazer_crateria_leaving_bomb_torizo)
 
 presets_spazer_crateria_alcatraz:
     %cm_preset("Alcatraz", #preset_spazer_crateria_alcatraz)
@@ -318,32 +348,55 @@ presets_spazer_brinstar_skree_boost:
 presets_spazer_brinstar_below_spazer:
     %cm_preset("Below Spazer", #preset_spazer_brinstar_below_spazer)
 
-presets_spazer_brinstar_entering_kraids_lair:
-    %cm_preset("Entering Kraid's Lair", #preset_spazer_brinstar_entering_kraids_lair)
+presets_spazer_brinstar_leaving_spazer:
+    %cm_preset("Leaving Spazer", #preset_spazer_brinstar_leaving_spazer)
 
-presets_spazer_brinstar_kraid_kihunters:
-    %cm_preset("Kraid Kihunters", #preset_spazer_brinstar_kraid_kihunters)
+presets_spazer_brinstar_passing_through_maridia:
+    %cm_preset("Passing Through Maridia", #preset_spazer_brinstar_passing_through_maridia)
 
-presets_spazer_brinstar_mini_kraid:
-    %cm_preset("Mini Kraid", #preset_spazer_brinstar_mini_kraid)
 
-presets_spazer_brinstar_kraid:
-    %cm_preset("Kraid", #preset_spazer_brinstar_kraid)
+; Kraid
+presets_spazer_kraid_entering_kraids_lair:
+    %cm_preset("Entering Kraid's Lair", #preset_spazer_kraid_entering_kraids_lair)
 
-presets_spazer_brinstar_leaving_varia:
-    %cm_preset("Leaving Varia", #preset_spazer_brinstar_leaving_varia)
+presets_spazer_kraid_warehouse_zeelas:
+    %cm_preset("Warehouse Zeelas", #preset_spazer_kraid_warehouse_zeelas)
 
-presets_spazer_brinstar_mini_kraid_revisit:
-    %cm_preset("Mini Kraid Revisit", #preset_spazer_brinstar_mini_kraid_revisit)
+presets_spazer_kraid_kraid_kihunters:
+    %cm_preset("Kraid Kihunters", #preset_spazer_kraid_kraid_kihunters)
 
-presets_spazer_brinstar_kraid_kihunters_revisit:
-    %cm_preset("Kraid Kihunters Revisit", #preset_spazer_brinstar_kraid_kihunters_revisit)
+presets_spazer_kraid_mini_kraid:
+    %cm_preset("Mini Kraid", #preset_spazer_kraid_mini_kraid)
 
-presets_spazer_brinstar_kraid_etank:
-    %cm_preset("Kraid E-tank", #preset_spazer_brinstar_kraid_etank)
+presets_spazer_kraid_fallen_hero:
+    %cm_preset("Fallen Hero", #preset_spazer_kraid_fallen_hero)
+
+presets_spazer_kraid_kraid_2:
+    %cm_preset("Kraid", #preset_spazer_kraid_kraid_2)
+
+presets_spazer_kraid_leaving_varia:
+    %cm_preset("Leaving Varia", #preset_spazer_kraid_leaving_varia)
+
+presets_spazer_kraid_arthur_j_metroid:
+    %cm_preset("Arthur J. Metroid", #preset_spazer_kraid_arthur_j_metroid)
+
+presets_spazer_kraid_mini_kraid_revisit:
+    %cm_preset("Mini Kraid Revisit", #preset_spazer_kraid_mini_kraid_revisit)
+
+presets_spazer_kraid_kraid_kihunters_revisit:
+    %cm_preset("Kraid Kihunters Revisit", #preset_spazer_kraid_kraid_kihunters_revisit)
+
+presets_spazer_kraid_kraid_etank:
+    %cm_preset("Kraid E-tank", #preset_spazer_kraid_kraid_etank)
+
+presets_spazer_kraid_leaving_kraid_etank:
+    %cm_preset("Leaving Kraid E-tank", #preset_spazer_kraid_leaving_kraid_etank)
 
 
 ; Upper Norfair
+presets_spazer_upper_norfair_prebusiness_center:
+    %cm_preset("Pre-Business Center", #preset_spazer_upper_norfair_prebusiness_center)
+
 presets_spazer_upper_norfair_business_center:
     %cm_preset("Business Center", #preset_spazer_upper_norfair_business_center)
 
@@ -411,6 +464,9 @@ presets_spazer_red_brinstar_caterpillars_down:
 
 presets_spazer_red_brinstar_alpha_power_bombs:
     %cm_preset("Alpha Power Bombs", #preset_spazer_red_brinstar_alpha_power_bombs)
+
+presets_spazer_red_brinstar_leaving_power_bombs:
+    %cm_preset("Leaving Power Bombs", #preset_spazer_red_brinstar_leaving_power_bombs)
 
 presets_spazer_red_brinstar_caterpillars_up:
     %cm_preset("Caterpillars Up", #preset_spazer_red_brinstar_caterpillars_up)
@@ -587,6 +643,9 @@ presets_spazer_lower_norfair_ln_main_hall:
 presets_spazer_lower_norfair_prepillars:
     %cm_preset("Pre-Pillars", #preset_spazer_lower_norfair_prepillars)
 
+presets_spazer_lower_norfair_fast_pillars_setup:
+    %cm_preset("Fast Pillars Setup", #preset_spazer_lower_norfair_fast_pillars_setup)
+
 presets_spazer_lower_norfair_worst_room_in_the_game:
     %cm_preset("Worst Room in the Game", #preset_spazer_lower_norfair_worst_room_in_the_game)
 
@@ -646,8 +705,8 @@ presets_spazer_backtracking_maridia_tube_revisit:
 presets_spazer_backtracking_fish_tank_revisit:
     %cm_preset("Fish Tank Revisit", #preset_spazer_backtracking_fish_tank_revisit)
 
-presets_spazer_backtracking_mt_everest_revisit_revisit:
-    %cm_preset("Mt Everest Revisit Revisit", #preset_spazer_backtracking_mt_everest_revisit_revisit)
+presets_spazer_backtracking_mt_everest_revisit:
+    %cm_preset("Mt. Everest Revisit", #preset_spazer_backtracking_mt_everest_revisit)
 
 presets_spazer_backtracking_red_brinstar_green_gate:
     %cm_preset("Red Brinstar Green Gate", #preset_spazer_backtracking_red_brinstar_green_gate)
@@ -666,6 +725,9 @@ presets_spazer_backtracking_green_pirate_shaft_revisit:
 
 
 ; Tourian
+presets_spazer_tourian_tourian_elevator:
+    %cm_preset("Tourian Elevator", #preset_spazer_tourian_tourian_elevator)
+
 presets_spazer_tourian_metroids_1:
     %cm_preset("Metroids 1", #preset_spazer_tourian_metroids_1)
 
@@ -690,8 +752,20 @@ presets_spazer_tourian_gedora_room:
 presets_spazer_tourian_zeb_skip:
     %cm_preset("Zeb Skip", #preset_spazer_tourian_zeb_skip)
 
+presets_spazer_tourian_mother_brain_2:
+    %cm_preset("Mother Brain 2", #preset_spazer_tourian_mother_brain_2)
+
+presets_spazer_tourian_mother_brain_3:
+    %cm_preset("Mother Brain 3", #preset_spazer_tourian_mother_brain_3)
+
+presets_spazer_tourian_zebes_escape_start:
+    %cm_preset("Zebes Escape Start", #preset_spazer_tourian_zebes_escape_start)
+
 presets_spazer_tourian_escape_room_3:
     %cm_preset("Escape Room 3", #preset_spazer_tourian_escape_room_3)
+
+presets_spazer_tourian_escape_room_4:
+    %cm_preset("Escape Room 4", #preset_spazer_tourian_escape_room_4)
 
 presets_spazer_tourian_climb_spark:
     %cm_preset("Climb Spark", #preset_spazer_tourian_climb_spark)
