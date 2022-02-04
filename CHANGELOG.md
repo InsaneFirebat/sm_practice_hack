@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.0.14] Added option to load presets with enemies
 * [2.4.0.14] First pass at allowing vanilla E-tanks to be displayed on the HUD by idlechild
 * [2.4.0.14] Added average momentum to Shinetune for stutter feedback by idlechild
 * [2.4.0.13] Added "PRESET OFF" option to skip music load with presets but not normal loads by idlechild

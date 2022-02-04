@@ -1,4 +1,4 @@
-!SRAM_VERSION = #$F00D
+!SRAM_VERSION = #$000D
 
 
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values
@@ -162,6 +162,7 @@ init_sram:
     LDA #$0000 : STA !sram_phantoon_intro
     LDA #$0001 : STA !sram_preset_open_doors
     LDA #$0001 : STA !sram_preset_ship_landing
+    LDA #$0000 : STA !sram_preset_enemies
 
     LDA #$0000 : STA !sram_countdamage
     LDA #$0001 : STA !sram_menu_background

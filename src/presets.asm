@@ -88,6 +88,7 @@ endif
     LDA $079B : CMP #$9804 : BEQ .set_mb_state
     CMP #$DD58 : BEQ .set_mb_state
     LDA !PRESET_ENEMIES : BNE .done
+    LDA !sram_preset_enemies : BNE .done
     JSR clear_all_enemies
     PLP
     RTL
@@ -112,6 +113,7 @@ clear_all_enemies:
     ORA #$0200 : STA $0F86,X
   .done_clearing
     TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .loop
+    STZ $0E52 ; unlock grey doors that require killing enemies
     RTS
 }
 
@@ -422,10 +424,11 @@ endif
 
 ;    LDA !sram_preset_options : BIT !PRESETS_CLOSE_BLUE_DOORS : BNE +
 +   LDA !sram_preset_open_doors : BEQ +
+    LDA !PRESET_DOORS : CMP #$FFFF : BEQ ++
     LDA !SAMUS_POSE : BEQ + : CMP #$009B : BEQ +
     LDA !PRESET_DOORS : CMP #$0001 : BEQ +
     LDA $7ED914 : CMP #$0005 : BNE +
-    JSR preset_open_all_blue_doors
+++  JSR preset_open_all_blue_doors
 
 +   JSL $89AB82  ; Load FX
 if !RAW_TILE_GRAPHICS
@@ -513,7 +516,6 @@ endif
     STZ $0E18              ; Set elevator to inactive
     STZ $1C1F              ; Clear message box index
     STZ $0E1A              ; Clear health bomb flag
-    STZ $0E52              ; unlock grey doors that require killing enemies
     STZ $0795 : STZ $0797  ; Clear door transition flags
     LDA #$0000 : STA !ram_transition_flag
 
