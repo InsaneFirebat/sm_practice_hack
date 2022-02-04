@@ -118,6 +118,53 @@ status_shinetune:
     ; The segment timer is also suppressed elsewhere just for shinetune
     LDA !SAMUS_HP : STA !ram_last_hp
 
+    ; Track Samus momentum
+    LDA !ram_momentum_count : BEQ .wait_for_start : BMI .wait_for_stop
+    CMP #$002C : BEQ .average_momentum
+
+    ; Check if momentum has stopped or if direction changed
+    LDA !IH_CONTROLLER_PRI : AND !ram_momentum_direction : BNE .increment_momentum
+    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_LEFTRIGHT : BNE .invalid_momentum
+    LDA !ram_momentum_last : BEQ .momentum_stopped
+
+  .increment_momentum
+    LDA !ram_momentum_count : INC : STA !ram_momentum_count
+    LDA !ram_momentum_sum : CLC : ADC !ram_momentum_last : STA !ram_momentum_sum
+    BRA .shinetune_start
+
+  .wait_for_start
+    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_LEFTRIGHT : BEQ .shinetune_start
+    STA !ram_momentum_direction
+    LDA #$0001 : STA !ram_momentum_count
+    BRA .shinetune_start
+
+  .average_momentum
+    ; We have total momentum (x256) over 44 frames
+    ; To get the average (x1024), divide by 11
+    LDA !ram_momentum_sum
+    STA $4204
+    %a8()
+    LDA #$0B : STA $4206
+    %a16()
+    PEA $0000 : PLA : PEA $0000 : PLA
+    LDA $4214 : LDX #$0054 : JSR Draw4Hundredths
+
+  .invalid_momentum
+    LDA #$FFFF : STA !ram_momentum_count
+    BRA .shinetune_start
+
+  .wait_for_stop
+    LDA !ram_momentum_last : BNE .shinetune_start
+    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_LEFTRIGHT : BNE .shinetune_start
+
+  .momentum_stopped
+    LDA #$0000 : STA !ram_momentum_sum : STA !ram_momentum_count : STA !ram_momentum_direction
+
+  .shinetune_start
+    ; Track momentum
+    LDA !SAMUS_X_SUBMOMENTUM : XBA : AND #$00FF : STA $12
+    LDA !SAMUS_X_MOMENTUM : XBA : AND #$FF00 : ORA $12 : STA !ram_momentum_last
+
     ; Think of Samus as a five-speed bike with gears 0-4 (dash counter)
     LDA !ram_dash_counter : CMP #$0003 : BEQ .checkgearshift3
     CMP #$00FF : BEQ .checkgearshiftinvalid : CMP #$0004 : BNE .checkgearshift012
@@ -650,7 +697,7 @@ status_hspeed:
 {
 ; converted to only use 4 tiles in the HUD, saving 202 cycles
     ; subspeed + submomentum into low byte of Hspeed
-    LDA $0B44 : CLC : ADC $0B48
+    LDA $0B44 : CLC : ADC !SAMUS_X_SUBMOMENTUM
     AND #$FF00 : XBA : STA !ram_horizontal_speed
 
     ; speed + momentum + carry into high byte of Hspeed
@@ -1236,9 +1283,9 @@ endif
   .rising
     ; If our speed is still good then we haven't broken spin
 if !FEATURE_PAL
-    LDA $0B48 : CMP #$A600 : BEQ .donerising
+    LDA !SAMUS_X_SUBMOMENTUM : CMP #$A600 : BEQ .donerising
 else
-    LDA $0B48 : CMP #$6000 : BEQ .donerising
+    LDA !SAMUS_X_SUBMOMENTUM : CMP #$6000 : BEQ .donerising
 endif
 
     ; We have broken spin, combine starting X position with walljump to see how we did
@@ -1310,9 +1357,9 @@ endif
     LDA !SAMUS_Y : CMP #$0243 : BPL .peakfail
     LDA $0B44 : CMP #!expected_subspeed : BNE .peakfail
 if !FEATURE_PAL
-    LDA $0B48 : CMP #$8000 : BNE .peakfail
+    LDA !SAMUS_X_SUBMOMENTUM : CMP #$8000 : BNE .peakfail
 else
-    LDA $0B48 : CMP #$4000 : BNE .peakfail
+    LDA !SAMUS_X_SUBMOMENTUM : CMP #$4000 : BNE .peakfail
 endif
     LDA !SAMUS_POSE : CMP #$0018 : BNE .peakfail
     BRL .incstate
