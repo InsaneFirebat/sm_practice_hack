@@ -3280,6 +3280,7 @@ preset_100early_final_cleanup_retro_brinstar_escape:
     dw $0AFA, $02BB  ; Samus Y
     dw $D872, $FFEF  ; Items
     dw !PRESET_DOORS, $0001 ; doors closed
+    dw !PRESET_SPECIAL, $0001 ; clear PB blocks
     dw #$FFFF
 .after
 
@@ -3302,6 +3303,7 @@ preset_100early_final_cleanup_old_tourian_missiles:
     dw $0A68, $0068  ; Flash suit
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $0088  ; Samus Y
+    dw !PRESET_SPECIAL, $0000 ; reset flag
     dw #$FFFF
 .after
 

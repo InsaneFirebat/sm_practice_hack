@@ -205,7 +205,12 @@ preset_scroll_fixes:
     STA $7ECD20 : STA $7ECD21
     BRA .topdone
 +   CPX #$A6A1 : BNE +           ; Elevator to Upper Norfair (from Kraid's area)
-    STA $7ECD20
+    LDY !SAMUS_X : CPY #$0135
+    BMI ++
+    LDA #$00 : STA $7ECD20       ; fix for hidden area on right
+    LDA #$20 : STA $7ECD21
+    BRA .topdone
+++  STA $7ECD20                  ; fix for right side by elevator
     BRA .topdone
 +   CPX #$AC83 : BNE +           ; left of Green Bubbles Missile Room (Norfair Reserve)
     STA $7ECD20
@@ -345,28 +350,37 @@ preset_scroll_fixes:
 
 preset_special_fixes:
 {
+    LDA #$00FF : LDY !ROOM_ID
+
     ; Big Pink Power Bomb blocks before Mission Impossible
-    LDA !ROOM_ID : CMP #$9D19 : BNE +
-    LDA !SAMUS_Y : CMP #$02C0 : BMI +
-    CMP #$03C9 : BPL +
-    LDA #$00FF
+    CPY #$9D19 : BNE +
+    LDX !SAMUS_Y : CPX #$02C0 : BMI +
+    CPX #$03C9 : BPL +
     STA $7F2208 : STA $7F220A : STA $7F22A8 : STA $7F22AA
     STA $7F2348 : STA $7F234A : STA $7F23E8 : STA $7F23EA
     BRA .done
 
     ; Leaving Hi-Jump Boots when left of column
-+   LDA !ROOM_ID : CMP #$A9E5 : BNE +
-    LDA !SAMUS_X : CMP #$0095 : BPL +
-    LDA #$00FF
++   CPY #$A9E5 : BNE +
+    LDX !SAMUS_X : CPX #$0095 : BPL +
     STA $7F0052 : STA $7F0072 : STA $7F0092
     BRA .done
 
     ; Top of Kihunter Stairs before Firefleas
-    LDA !ROOM_ID : CMP #$B585 : BNE +
-    LDA !SAMUS_Y : CMP #$00F0 : BMI +
-    LDA #$00FF
++   CPY #$B585 : BNE +
+    LDX !SAMUS_Y : CPX #$00F0 : BPL +
     STA $7F036E : STA $7F0370 : STA $7F0374 : STA $7F0376
     STA $7F03D4 : STA $7F0610 : STA $7F0612
+    BRA .done
+
+    ; Power Bomb blocks at Blue Brinstar E-tank
++   CPY #$9F64 : BNE +
+    LDX !SAMUS_X : CPX #$022B : BMI +
+    LDX !SAMUS_PBS_MAX : BEQ +
+    LDX #$0000
+-   STA $7F1008,X : INX #2 : CPX #$0011 : BMI -
+    LDX #$0000
+-   STA $7F1068,X : INX #2 : CPX #$0011 : BMI -
 ;    BRA .done
 
   .done

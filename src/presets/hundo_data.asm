@@ -2871,6 +2871,8 @@ preset_hundo_brinstar_cleanup_2_retro_brinstar_escape:
     dw $0AF6, $02D6  ; Samus X
     dw $0AFA, $02BB  ; Samus Y
     dw $D872, $FFEF  ; Items
+    dw !PRESET_DOORS, $0001 ; doors closed
+    dw !PRESET_SPECIAL, $0001 ; clear PB blocks
     dw #$FFFF
 .after
 
@@ -2886,6 +2888,7 @@ preset_hundo_brinstar_cleanup_2_pit_room_2:
     dw $0A1C, $0002  ; Samus position/state
     dw $0AF6, $00EA  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_SPECIAL, $0000 ; reset flag
     dw #$FFFF
 .after
 
@@ -2900,6 +2903,7 @@ preset_hundo_brinstar_cleanup_2_climb_supers:
     dw $09C8, $00E1  ; Max missiles
     dw $0AF6, $0045  ; Samus X
     dw $D870, $E7FF  ; Items
+    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 .after
 
@@ -2921,6 +2925,7 @@ preset_hundo_brinstar_cleanup_2_the_last_missiles:
     dw $0AFA, $039B  ; Samus Y
     dw $D870, $EFFF  ; Items
     dw $D8B2, $2C09  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 .after
 
