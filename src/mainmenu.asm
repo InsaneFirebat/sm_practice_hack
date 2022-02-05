@@ -2188,6 +2188,7 @@ CutscenesMenu:
     dw #cutscenes_skip_intro
     dw #cutscenes_skip_ceres_arrival
     dw #$FFFF
+    dw #kraid_skip_intro
     dw #phan_skip_intro
     dw #$FFFF
     dw #cutscenes_g4_skip
@@ -2202,6 +2203,9 @@ cutscenes_skip_intro:
 !CUTSCENE_SKIP_CERES_ARRIVAL = #$0002
 cutscenes_skip_ceres_arrival:
     %cm_toggle_bit("Skip Ceres Arrival", !sram_cutscenes, !CUTSCENE_SKIP_CERES_ARRIVAL, #0)
+
+kraid_skip_intro:
+    %cm_toggle("Skip Kraid Intro", !sram_kraid_intro, #$0001, #0)
 
 !CUTSCENE_SKIP_G4 = #$0080
 cutscenes_g4_skip:

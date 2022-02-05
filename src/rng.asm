@@ -93,7 +93,9 @@ endif
     NOP : BNE $3D
 
 
-; Botwoon hijacks
+; --------------
+; Botwoon hijack
+; --------------
 {
 if !FEATURE_PAL
 org $B39953
@@ -105,7 +107,9 @@ endif
 }
 
 
+; ---------------
 ; Draygon hijacks
+; ---------------
 {
 if !FEATURE_PAL
 org $A58AEC
@@ -123,30 +127,41 @@ endif
 }
 
 
+; ----------------
 ; Crocomire hijack
-{
+; ----------------
+
 if !FEATURE_PAL
 org $A48763
 else
 org $A48753
 endif
     JSR hook_crocomire_rng
-}
 
 
-; Kraid hijack
-{
+; -------------
+; Kraid hijacks
+; -------------
+
 if !FEATURE_PAL
 org $A7BDF3
-else
+else    ; Kraid rng
 org $A7BDBF
 endif
     JSR hook_kraid_rng
-}
+
+if !FEATURE_PAL
+org $A7AA7F
+else    ; Kraid intro
+org $A7AA69
+endif
+    JMP kraid_intro_skip : kraid_intro_skip_return:
 
 
+; -----------------
 ; "Set rng" hijacks
-{
+; -----------------
+
     ; $A3:AB0C A9 25 00    LDA #$0025
     ; $A3:AB0F 8D E5 05    STA $05E5  [$7E:05E5]
     ; $A3:AB12 22 11 81 80 JSL $808111[$80:8111]
@@ -176,10 +191,11 @@ org $A8B798
 endif
     JSL hook_beetom_set_rng
     NOP #2
-}
 
 
+; -----
 ; Hooks
+; -----
 
 org $83B000
 print pc, " rng start"
@@ -733,6 +749,20 @@ hook_kraid_rng:
     LDA $05E5 ; return with random number (overwritten code)
     RTS
 }
+
+
+kraid_intro_skip:
+    LDA !sram_kraid_intro : BEQ .noSkip
+    LDA #$0001
+    JMP kraid_intro_skip_return
+
+  .noSkip
+if !FEATURE_PAL
+    LDA #$00FA
+else
+    LDA #$012C
+endif
+    JMP kraid_intro_skip_return
 
 print pc, " kraid rng end"
 
