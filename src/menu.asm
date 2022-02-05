@@ -467,19 +467,25 @@ cm_tilemap_bg:
     ; Interior
     ; background is optional
     LDA !sram_menu_background : BNE .fill_interior
+
     ; fill if paused
-    LDA !GAMEMODE : CMP #$000C : BMI .check_ceres
-    BEQ .fill_interior : CMP #$0012 : BMI .fill_interior
+    LDA !GAMEMODE : CMP #$000C : BMI .check_ceres : BEQ .fill_interior
+    CMP #$0012 : BMI .fill_interior
+
+    ; fill if game over
+    CMP #$001A : BEQ .fill_interior
+
     ; fill if Ceres
   .check_ceres
     LDA !AREA_ID : CMP #$0006 : BMI .done
     ; transparent otherwise ------^
+
   .fill_interior
     LDX #$0000
     LDY #$001B
     LDA #$281F
 
-      .interior_loop
+  .interior_loop
     STA !ram_tilemap_buffer+$004,X
     STA !ram_tilemap_buffer+$084,X
     STA !ram_tilemap_buffer+$0C4,X
