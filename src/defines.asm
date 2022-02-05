@@ -482,7 +482,7 @@
 
 !ram_cm_rng = $F0210C
 
-!sram_phantoon_intro = $F0210E
+; FREE SPACE ^
 
 !ram_infinite_ammo = $F02110
 !ram_infiniteammo_check = $F02112
@@ -501,6 +501,9 @@
 !ram_spark_icon = $F02120
 !ram_lag_counter = $F02122
 !ram_lag_counter_HUD = $F02124
+
+!sram_phantoon_intro = $F02126
+!sram_kraid_intro = $F02128
 
 ; FREE SPACE ^
 
@@ -576,9 +579,9 @@ endif
 !sram_countdamage = $F02220
 !sram_menu_background = $F02222
 
-!sram_preset_open_doors = $F02128
-!sram_preset_ship_landing = $F0212A
-!sram_preset_enemies = $F0212C
+!sram_preset_open_doors = $F02228
+!sram_preset_ship_landing = $F0222A
+!sram_preset_enemies = $F0222C
 
 ; FREE SPACE ^
 

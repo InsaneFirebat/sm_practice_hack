@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.0.14] Added option to skip Kraids suspenseful intro cutscene
 * [2.4.0.14] Force menu background on game over screen
 * [2.4.0.14] Added option to load presets with enemies
 * [2.4.0.14] First pass at allowing vanilla E-tanks to be displayed on the HUD by idlechild
