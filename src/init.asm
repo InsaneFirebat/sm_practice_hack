@@ -122,4 +122,4 @@ init_sram:
 }
 
 print pc, " init end"
-warnpc $81FF00 ;;; $FF00: Thanks Genji! ;;;
+;warnpc $81F800 ; NWD code $81F800-$F9C4

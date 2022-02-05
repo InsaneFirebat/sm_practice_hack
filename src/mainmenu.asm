@@ -171,10 +171,10 @@ MainMenu:
     dw #mm_goto_infohud
     dw #mm_goto_sprites
     dw #mm_goto_gamemenu
-;    dw #mm_goto_rngmenu
+    dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_version_header("HACK PRACTICE HACK", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
+    %cm_version_header("NEW WET DREAM", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
 
 mm_goto_equipment:
     %cm_submenu("Equipment", #EquipmentMenu)
@@ -436,7 +436,7 @@ eq_currentmissiles:
     %cm_numfield_word("Current Missiles", $7E09C6, 0, 325, 1, 20, #0)
 
 eq_setmissiles:
-    %cm_numfield_word("Missiles", $7E09C8, 0, 325, 5, 20, .routine)
+    %cm_numfield_word("Missiles", $7E09C8, 0, 325, 2, 8, .routine)
     .routine
         LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES ; missiles
         RTS
@@ -445,7 +445,7 @@ eq_currentsupers:
     %cm_numfield("Current Super Missiles", $7E09CA, 0, 65, 1, 5, #0)
 
 eq_setsupers:
-    %cm_numfield("Super Missiles", $7E09CC, 0, 65, 5, 5, .routine)
+    %cm_numfield("Super Missiles", $7E09CC, 0, 65, 1, 5, .routine)
     .routine
         LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS ; supers
         RTS
@@ -454,7 +454,7 @@ eq_currentpbs:
     %cm_numfield("Current Power Bombs", $7E09CE, 0, 65, 1, 5, #0)
 
 eq_setpbs:
-    %cm_numfield("Power Bombs", $7E09D0, 0, 65, 5, 5, .routine)
+    %cm_numfield("Power Bombs", $7E09D0, 0, 65, 1, 5, .routine)
     .routine
         LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS ; pbs
         RTS
@@ -727,22 +727,22 @@ TeleportMenu:
     %cm_header("TELEPORT TO SAVE STATION")
 
 tel_goto_crat:
-    %cm_submenu("Crateria", #TeleportCrateriaMenu)
+    %cm_submenu("Solaria", #TeleportCrateriaMenu)
 
 tel_goto_brin:
-    %cm_submenu("Brinstar", #TeleportBrinstarMenu)
+    %cm_submenu("Amazonia", #TeleportBrinstarMenu)
 
 tel_goto_norf:
-    %cm_submenu("Norfair", #TeleportNorfairMenu)
+    %cm_submenu("Vulcania", #TeleportNorfairMenu)
 
 tel_goto_ship:
-    %cm_submenu("Wrecked Ship", #TeleportWreckedShipMenu)
+    %cm_submenu("Metallia", #TeleportWreckedShipMenu)
 
 tel_goto_mari:
-    %cm_submenu("Maridia", #TeleportMaridiaMenu)
+    %cm_submenu("Aquaria", #TeleportMaridiaMenu)
 
 tel_goto_tour:
-    %cm_submenu("Tourian", #TeleportTourianMenu)
+    %cm_submenu("Universia", #TeleportTourianMenu)
 
 tel_goto_debug:
     %cm_submenu("Debug Teleports", #DebugTeleportMenu)
@@ -750,14 +750,42 @@ tel_goto_debug:
 TeleportCrateriaMenu:
     dw #tel_crateriaship
     dw #tel_crateriaparlor
+    dw #tel_crateria08
+    dw #tel_crateria09
+    dw #tel_crateria0A
+    dw #tel_crateria0B
+    dw #tel_crateria0C
+    dw #tel_crateria11
+    dw #tel_crateria12
     dw #$0000
-    %cm_header("CRATERIA SAVE STATIONS")
+    %cm_header("SOLARIA SAVE STATIONS")
 
 tel_crateriaship:
-    %cm_jsr("Crateria Ship", #action_teleport, #$0000)
+    %cm_jsr("Solaria Ship", #action_teleport, #$0000)
 
 tel_crateriaparlor:
-    %cm_jsr("Crateria Parlor", #action_teleport, #$0001)
+    %cm_jsr("Solaria Parlor", #action_teleport, #$0001)
+
+tel_crateria08:
+    %cm_jsr("DEBUG Elev to Aquaria", #action_teleport, #$0008)
+
+tel_crateria09:
+    %cm_jsr("DEBUG Elev to Amazonia", #action_teleport, #$0009)
+
+tel_crateria0A:
+    %cm_jsr("DEBUG Elev to Amazonia 2", #action_teleport, #$000A)
+
+tel_crateria0B:
+    %cm_jsr("DEBUG Elev to Amazonia 3", #action_teleport, #$000B)
+
+tel_crateria0C:
+    %cm_jsr("DEBUG Elev to Universia", #action_teleport, #$000C)
+
+tel_crateria11:
+    %cm_jsr("DEBUG West Solaria", #action_teleport, #$0011)
+
+tel_crateria12:
+    %cm_jsr("DEBUG Top of Landing Site", #action_teleport, #$0012)
 
 TeleportBrinstarMenu:
     dw #tel_brinstarpink
@@ -765,23 +793,35 @@ TeleportBrinstarMenu:
     dw #tel_brinstargreenetecoons
     dw #tel_brinstarkraid
     dw #tel_brinstarredtower
+    dw #tel_brinstar08
+    dw #tel_brinstar0B
+    dw #tel_brinstar11
     dw #$0000
-    %cm_header("BRINSTAR SAVE STATIONS")
+    %cm_header("AMAZONIA SAVE STATIONS")
 
 tel_brinstarpink:
-    %cm_jsr("Brinstar Pink Spospo", #action_teleport, #$0100)
+    %cm_jsr("Amazonia Pink Spospo", #action_teleport, #$0100)
 
 tel_brinstargreenshaft:
-    %cm_jsr("Brinstar Green Shaft", #action_teleport, #$0101)
+    %cm_jsr("Amazonia Green Shaft", #action_teleport, #$0101)
 
 tel_brinstargreenetecoons:
-    %cm_jsr("Brinstar Green Etecoons", #action_teleport, #$0102)
+    %cm_jsr("Amazonia Green Etecoons", #action_teleport, #$0102)
 
 tel_brinstarkraid:
-    %cm_jsr("Brinstar Kraid", #action_teleport, #$0103)
+    %cm_jsr("Amazonia Kraid", #action_teleport, #$0103)
 
 tel_brinstarredtower:
-    %cm_jsr("Brinstar Red Tower", #action_teleport, #$0104)
+    %cm_jsr("Amazonia Red Tower", #action_teleport, #$0104)
+
+tel_brinstar08:
+    %cm_jsr("DEBUG Elev to Solaria", #action_teleport, #$0108)
+
+tel_brinstar0B:
+    %cm_jsr("DEBUG Elev to Vulcania", #action_teleport, #$010B)
+
+tel_brinstar11:
+    %cm_jsr("DEBUG Kraid", #action_teleport, #$0111)
 
 TeleportNorfairMenu:
     dw #tel_norfairgrapple
@@ -790,66 +830,109 @@ TeleportNorfairMenu:
     dw #tel_norfaircrocomire
     dw #tel_norfairlnelevator
     dw #tel_norfairridley
+    dw #tel_norfair0A
+    dw #tel_norfair10
+    dw #tel_norfair12
+    dw #tel_norfair13
     dw #$0000
-    %cm_header("NORFAIR SAVE STATIONS")
+    %cm_header("VULCANIA SAVE STATIONS")
 
 tel_norfairgrapple:
-    %cm_jsr("Norfair Grapple", #action_teleport, #$0200)
+    %cm_jsr("Vulcania Grapple", #action_teleport, #$0200)
 
 tel_norfairbubble:
-    %cm_jsr("Norfair Bubble Mountain", #action_teleport, #$0201)
+    %cm_jsr("Vulcania Bubble Mountain", #action_teleport, #$0201)
 
 tel_norfairtunnel:
-    %cm_jsr("Norfair Tunnel", #action_teleport, #$0202)
+    %cm_jsr("Vulcania Tunnel", #action_teleport, #$0202)
 
 tel_norfaircrocomire:
-    %cm_jsr("Norfair Crocomire", #action_teleport, #$0203)
+    %cm_jsr("Vulcania Crocomire", #action_teleport, #$0203)
 
 tel_norfairlnelevator:
-    %cm_jsr("Norfair LN Elevator", #action_teleport, #$0204)
+    %cm_jsr("Vulcania LN Elevator", #action_teleport, #$0204)
 
 tel_norfairridley:
-    %cm_jsr("Norfair Ridley", #action_teleport, #$0205)
+    %cm_jsr("Vulcania Ridley", #action_teleport, #$0205)
+
+tel_norfair0A:
+    %cm_jsr("DEBUG Elev to LN", #action_teleport, #$020A)
+
+tel_norfair10:
+    %cm_jsr("DEBUG Elev to Amazonia", #action_teleport, #$0210)
+
+tel_norfair12:
+    %cm_jsr("DEBUG Wasteland", #action_teleport, #$0212)
+
+tel_norfair13:
+    %cm_jsr("DEBUG Near Lava Dive Room", #action_teleport, #$0213)
 
 TeleportWreckedShipMenu:
     dw #tel_wreckedship
+    dw #tel_wreckedship10
     dw #$0000
-    %cm_header("WRECKED SHIP SAVE STATIONS")
+    %cm_header("METALLIA SAVE STATIONS")
 
 tel_wreckedship:
-    %cm_jsr("Wrecked Ship", #action_teleport, #$0300)
+    %cm_jsr("Metallia", #action_teleport, #$0300)
+
+tel_wreckedship10:
+    %cm_jsr("DEBUG Spiky Room", #action_teleport, #$0310)
 
 TeleportMaridiaMenu:
     dw #tel_maridiatube
     dw #tel_maridiaelevator
     dw #tel_maridiaaqueduct
     dw #tel_maridiadraygon
+    dw #tel_maridia05
+    dw #tel_maridia08
+    dw #tel_maridia11
     dw #$0000
-    %cm_header("MARIDIA SAVE STATIONS")
+    %cm_header("AQUARIA SAVE STATIONS")
 
 tel_maridiatube:
-    %cm_jsr("Maridia Tube", #action_teleport, #$0400)
+    %cm_jsr("Aquaria Tube", #action_teleport, #$0400)
 
 tel_maridiaelevator:
-    %cm_jsr("Maridia Elevator", #action_teleport, #$0401)
+    %cm_jsr("Aquaria Elevator", #action_teleport, #$0401)
 
 tel_maridiaaqueduct:
-    %cm_jsr("Maridia Aqueduct", #action_teleport, #$0402)
+    %cm_jsr("Aquaria Aqueduct", #action_teleport, #$0402)
 
 tel_maridiadraygon:
-    %cm_jsr("Maridia Draygon", #action_teleport, #$0403)
+    %cm_jsr("Aquaria Draygon", #action_teleport, #$0403)
+
+tel_maridia05:
+    %cm_jsr("Aquaria Near Botwoon", #action_teleport, #$0405)
+
+tel_maridia08:
+    %cm_jsr("DEBUG Elev to Solaria", #action_teleport, #$0408)
+
+tel_maridia11:
+    %cm_jsr("DEBUG Snail Tubes", #action_teleport, #$0411)
+
+tel_maridia13:
+    %cm_jsr("DEBUG Bottom of Fast Tube", #action_teleport, #$0413)
 
 TeleportTourianMenu:
     dw #tel_tourianentrance
     dw #tel_tourianmb
+    dw #tel_tourian08
+    dw #tel_tourian11
     dw #$0000
-    %cm_header("TOURIAN SAVE STATIONS")
+    %cm_header("UNIVERSIA SAVE STATIONS")
 
 tel_tourianentrance:
-    %cm_jsr("Tourian Entrance", #action_teleport, #$0501)
+    %cm_jsr("Universia Entrance", #action_teleport, #$0501)
 
 tel_tourianmb:
-    %cm_jsr("Tourian MB", #action_teleport, #$0500)
+    %cm_jsr("Universia MB", #action_teleport, #$0500)
+
+tel_tourian08:
+    %cm_jsr("DEBUG Elev to Solaria", #action_teleport, #$0508)
+
+tel_tourian11:
+    %cm_jsr("DEBUG Baby Skip", #action_teleport, #$0511)
 
 DebugTeleportMenu:
     dw #tel_debug_area
@@ -863,12 +946,12 @@ tel_debug_area:
     dl #!ram_tel_debug_area
     dw #$0000
     db #$28, "Select Area", #$FF
-        db #$28, "   CRATERIA", #$FF
-        db #$28, "   BRINSTAR", #$FF
-        db #$28, "    NORFAIR", #$FF
-        db #$28, "  REQT SHIP", #$FF
-        db #$28, "    MARIDIA", #$FF
-        db #$28, "    TOURIAN", #$FF
+        db #$28, "    SOLARIA", #$FF
+        db #$28, "   AMAZONIA", #$FF
+        db #$28, "    VULCANI", #$FF
+        db #$28, "   METALLIA", #$FF
+        db #$28, "    AQUARIA", #$FF
+        db #$28, "  UNIVERSIA", #$FF
     db #$FF
 
 tel_debug_station:

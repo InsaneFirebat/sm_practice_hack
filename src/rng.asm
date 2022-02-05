@@ -89,6 +89,7 @@
 
 ; Hooks
 
+;org $83B000
 org $83B000
 print pc, " rng start"
 
