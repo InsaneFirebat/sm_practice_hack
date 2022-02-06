@@ -124,14 +124,15 @@ cm_init:
     STA.l !ram_cm_menu_bank
 
     JSR cm_calculate_max
-    JSR cm_set_etanks_and_reserve
+    JSL cm_set_etanks_and_reserve
+    RTS
 }
 
 cm_set_etanks_and_reserve:
 {
-    LDA $09C4 : JSR cm_divide_100 : STA !ram_cm_etanks
-    LDA $09D4 : JSR cm_divide_100 : STA !ram_cm_reserve
-    RTS
+    LDA !SAMUS_HP_MAX : JSR cm_divide_100 : STA !ram_cm_etanks
+    LDA !SAMUS_RESERVE_MAX : JSR cm_divide_100 : STA !ram_cm_reserve
+    RTL
 }
 
 
@@ -250,7 +251,7 @@ cm_transfer_custom_cgram:
     LDA $7EC03A : STA !ram_cgram_cache+20
     LDA $7EC03C : STA !ram_cgram_cache+22
 
-    JSR PrepMenuPalette
+    JSL PrepMenuPalette
 
     LDA #$0000 : STA $7EC000
     LDA !ram_custompalette_menuborder : STA $7EC00A
@@ -292,128 +293,11 @@ cm_transfer_original_cgram:
     RTS
 }
 
-PrepMenuPalette:
+cm_refresh_cgram_long:
 {
-    LDA !sram_custompalette_profile : ASL : TAX
-    BEQ .customPalette
-    LDA.w PaletteProfileTables,X : STA $12
-
-    LDY #$0000 : LDA ($12),Y : STA !ram_custompalette_menuborder
-    LDY #$0002 : LDA ($12),Y : STA !ram_custompalette_menuheaderoutline
-    LDY #$0004 : LDA ($12),Y : STA !ram_custompalette_menutext
-    LDY #$0006 : LDA ($12),Y : STA !ram_custompalette_menubackground
-    LDY #$0008 : LDA ($12),Y : STA !ram_custompalette_menunumoutline
-    LDY #$000A : LDA ($12),Y : STA !ram_custompalette_menunumfill
-    LDY #$000C : LDA ($12),Y : STA !ram_custompalette_menutoggleon
-    LDY #$000E : LDA ($12),Y : STA !ram_custompalette_menuseltext
-    LDY #$0010 : LDA ($12),Y : STA !ram_custompalette_menuseltextbg
-    LDY #$0012 : LDA ($12),Y : STA !ram_custompalette_menunumseloutline
-    LDY #$0014 : LDA ($12),Y : STA !ram_custompalette_menunumsel
-    RTS
-    
-  .customPalette
-    LDA !sram_custompalette_menuborder : STA !ram_custompalette_menuborder
-    LDA !sram_custompalette_menuheaderoutline : STA !ram_custompalette_menuheaderoutline
-    LDA !sram_custompalette_menutext : STA !ram_custompalette_menutext
-    LDA !sram_custompalette_menubackground : STA !ram_custompalette_menubackground
-    LDA !sram_custompalette_menunumoutline : STA !ram_custompalette_menunumoutline
-    LDA !sram_custompalette_menunumfill : STA !ram_custompalette_menunumfill
-    LDA !sram_custompalette_menutoggleon : STA !ram_custompalette_menutoggleon
-    LDA !sram_custompalette_menuseltext : STA !ram_custompalette_menuseltext
-    LDA !sram_custompalette_menuseltextbg : STA !ram_custompalette_menuseltextbg
-    LDA !sram_custompalette_menunumseloutline : STA !ram_custompalette_menunumseloutline
-    LDA !sram_custompalette_menunumsel : STA !ram_custompalette_menunumsel
-    RTS
-
-PaletteProfileTables:
-    dw #CustomProfileTable        ; 0
-    dw #TwitchProfileTable        ; 1
-    dw #DefaultProfileTable       ; 2
-    dw #FirebatProfileTable       ; 3
-    dw #wardrinkerProfileTable    ; 4
-    dw #mm2ProfileTable           ; 5
-    dw #ptoilProfileTable         ; 6
-    dw #ZohdinProfileTable        ; 7
-    dw #DarkXoaProfileTable       ; 8
-    dw #MelonaxProfileTable       ; 9
-    dw #TopsyTurveProfileTable    ; A
-    dw #OSTProfileTable           ; B
-    dw #JRPProfileTable           ; C
-    dw #GreyProfileTable          ; D
-    dw #RedProfileTable           ; E
-    dw #PurpleProfileTable        ; F
-    dw #HUDProfileTable           ; 10
-    dw #$0000
-
-!PROFILE_CUSTOM       = #$0000
-!PROFILE_Twitch       = #$0001
-!PROFILE_Default      = #$0002
-!PROFILE_Firebat      = #$0003
-!PROFILE_wardrinker   = #$0004
-!PROFILE_mm2          = #$0005
-!PROFILE_ptoil        = #$0006
-!PROFILE_Zohdin       = #$0007
-!PROFILE_DarkXoa      = #$0008
-!PROFILE_Melonax      = #$0009
-!PROFILE_TopsyTurvy   = #$000A
-!PROFILE_OST          = #$000B
-!PROFILE_JRP          = #$000C
-!PROFILE_Grey         = #$000D
-!PROFILE_Red          = #$000E
-!PROFILE_Purple       = #$000F
-!PROFILE_HUD          = #$0010
-
-; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
-CustomProfileTable: ; custom always first
-    dw $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000
-
-TwitchProfileTable:
-    dw $550D, $550D, $7FFF, $0000, $0000, $7FFF, $550D, $550D, $0000, $550D, $7FFF
-
-DefaultProfileTable:
-    dw $7277, $48F3, $7FFF, $0000, $0000, $7FFF, $4376, $761F, $0000, $0000, $761F
-
-FirebatProfileTable:
-    dw $000E, $000E, $0A20, $0000, $0A20, $0002, $0680, $000F, $0005, $0A20, $000F
-
-wardrinkerProfileTable:
-    dw $7277, $7FFF, $7A02, $0000, $0000, $9200, $7277, $7F29, $0000, $0000, $7F29
-
-mm2ProfileTable:
-    dw $001A, $0000, $7C80, $0000, $0000, $7FFF, $03E0, $7F44, $0842, $0000, $7FFF
-
-ptoilProfileTable:
-    dw $5CAA, $14A5, $01EF, $0000, $0000, $5294, $4376, $03FF, $0000, $0000, $7FFF
-
-ZohdinProfileTable:
-    dw $7BFF, $0402, $0300, $0060, $0100, $9700, $7B64, $7BFF, $94A6, $2051, $09BF
-
-DarkXoaProfileTable:
-    dw $24C4, $45A8, $24C4, $0000, $0000, $24C4, $45A8, $45A8, $0000, $1505, $45A8
-
-MelonaxProfileTable:
-    dw $7FFF, $0000, $3DEF, $0C63, $0000, $7FFF, $266B, $3DFE, $0C63, $0000, $266B
-
-TopsyTurveProfileTable:
-    dw $7264, $7264, $7FFF, $0000, $0000, $7FFF, $7264, $7264, $0000, $0000, $7264
-
-OSTProfileTable:
-    dw $7FFF, $7FFF, $0010, $0000, $0010, $7FFF, $001F, $001E, $0000, $7FFF, $001E
-
-JRPProfileTable:
-    dw $7976, $384B, $66D1, $484A, $E54F, $7B97, $7B7B, $6B5E, $70F0, $654F, $7B97
-
-GreyProfileTable:
-    dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $0012, $0C63, $1CE7, $3DEF
-
-RedProfileTable:
-    dw $0010, $0000, $0010, $0000, $0010, $0000, $001F, $001F, $0000, $001F, $0010
-
-PurpleProfileTable:
-    dw $602F, $0000, $602F, $0000, $0000, $602F, $0338, $0338, $0000, $602F, $0338
-
-HUDProfileTable:
-    dw $3D46, $48FB, $7FFF, $0000, $44E5, $7FFF, $4A52, $318C, $0000, $02DF, $001F
+    JSR cm_transfer_original_cgram
+    JSR cm_transfer_custom_cgram
+    RTL
 }
 
 cm_draw:
@@ -1913,7 +1797,7 @@ cm_divide_100:
 {
     STA $4204 : SEP #$20
     LDA #$64 : STA $4206
-    PHA : PLA : PHA : PLA : REP #$20
+    PHA : PLA : PHA : PLA : %a16()
     LDA $4214 : ADC !ram_tmp_1 : STA !ram_tmp_1
     LDA $4214
     RTS
@@ -1924,7 +1808,9 @@ cm_divide_100:
 ; Main menu
 ; -----------
 
+print pc, " mainmenu.asm start"
 incsrc mainmenu.asm
+print pc, " mainmenu.asm end"
 
 
 ; ----------
@@ -1932,6 +1818,7 @@ incsrc mainmenu.asm
 ; ----------
 
 cm_hud_table:
+    ; 1000h bytes
     incbin ../resources/cm_gfx.bin
 
 HexMenuGFXTable:

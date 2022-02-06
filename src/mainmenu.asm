@@ -145,7 +145,7 @@ action_submenu:
     JSR cm_calculate_max
     JSR cm_draw
 
-    JSR cm_colors
+    JSL cm_colors
 
     RTS
 }
@@ -632,6 +632,7 @@ endif
         LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS ; pbs
         RTS
 
+
 ; ---------------------
 ; Toggle Category menu
 ; ---------------------
@@ -699,63 +700,10 @@ cat_14speedboots:
     %cm_jsr("14% Speed Boots", action_category, #$000D)
 endif
 
-
 action_category:
 {
-    TYA : ASL #4 : TAX
-
-    ; Items
-    LDA .table,X : STA $7E09A4 : STA $7E09A2 : INX #2
-
-    ; Beams
-    LDA .table,X : STA $7E09A8 : TAY
-    AND #$000C : CMP #$000C : BEQ .murderBeam
-    TYA : STA $7E09A6 : INX #2 : BRA +
-
-  .murderBeam
-    TYA : AND #$100B : STA $7E09A6 : INX #2
-
-    ; Health
-+   LDA .table,X : STA $7E09C2 : STA $7E09C4 : INX #2
-
-    ; Missiles
-    LDA .table,X : STA $7E09C6 : STA $7E09C8 : INX #2
-
-    ; Supers
-    LDA .table,X : STA $7E09CA : STA $7E09CC : INX #2
-
-    ; PBs
-    LDA .table,X : STA $7E09CE : STA $7E09D0 : INX #2
-
-    ; Reserves
-    LDA .table,X : STA $7E09D4 : STA $7E09D6 : INX #2
-
-    JSR cm_set_etanks_and_reserve
-    %sfxmissile()
+    JSL set_category_loadout
     RTS
-
-  .table
-    ;  Items,  Beams,  Health, Miss,   Supers, PBs,    Reserv, Dummy
-    dw #$F32F, #$100F, #$05DB, #$00E6, #$0032, #$0032, #$0190, #$0000        ; 100%
-    dw #$3125, #$1007, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% new
-    dw #$3325, #$100B, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% old
-    dw #$1025, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% ice
-    dw #$3025, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% speed
-    dw #$F33F, #$100F, #$02BC, #$0064, #$0014, #$0014, #$012C, #$0000        ; gt code
-if !FEATURE_PAL
-    dw #$F33F, #$100F, #$0834, #$0145, #$0041, #$0046, #$02BC, #$0000        ; 136%
-else
-    dw #$F33F, #$100F, #$0834, #$0145, #$0041, #$0041, #$02BC, #$0000        ; 135%
-endif
-    dw #$710C, #$1001, #$031F, #$001E, #$0019, #$0014, #$0064, #$0000        ; rbo
-    dw #$9004, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0000, #$0000        ; any% glitched
-    dw #$F32F, #$100F, #$0031, #$01A4, #$005A, #$0063, #$0000, #$0000        ; crystal flash
-    dw #$0000, #$0000, #$0063, #$0000, #$0000, #$0000, #$0000, #$0000        ; nothing
-if !FEATURE_PAL
-    dw #$9005, #$1002, #$012B, #$000A, #$000A, #$0005, #$0064, #$0000        ; 14% x-ice
-    dw #$1105, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% iceboots
-    dw #$3105, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% speedboots
-endif
 }
 
 
@@ -837,22 +785,34 @@ ToggleBeamsMenu:
     %cm_header("TOGGLE BEAMS")
 
 tb_chargebeam:
-    %cm_toggle_bit("Charge", $7E09A8, #$1000, #0)
+    %cm_toggle_bit("Charge", $7E09A8, #$1000, #action_equip_safe_beams)
 
 tb_icebeam:
-    %cm_toggle_bit("Ice", $7E09A8, #$0002, #0)
+    %cm_toggle_bit("Ice", $7E09A8, #$0002, #action_equip_safe_beams)
 
 tb_wavebeam:
-    %cm_toggle_bit("Wave", $7E09A8, #$0001, #0)
+    %cm_toggle_bit("Wave", $7E09A8, #$0001, #action_equip_safe_beams)
 
 tb_spazerbeam:
-    %cm_toggle_bit("Spazer", $7E09A8, #$0004, #0)
+    %cm_toggle_bit("Spazer", $7E09A8, #$0004, #.routine)
+  .routine
+    AND #$1007 : STA !SAMUS_BEAMS_EQUIPPED
+    RTS
 
 tb_plasmabeam:
-    %cm_toggle_bit("Plasma", $7E09A8, #$0008, #0)
+    %cm_toggle_bit("Plasma", $7E09A8, #$0008, #.routine)
+  .routine
+    AND #$100B : STA !SAMUS_BEAMS_EQUIPPED
+    RTS
 
 tb_glitchedbeams:
     %cm_submenu("Glitched Beams", #GlitchedBeamsMenu)
+
+action_equip_safe_beams:
+{
+    STA !SAMUS_BEAMS_EQUIPPED
+    RTS
+}
 
 
 ; -------------------
@@ -1669,6 +1629,7 @@ ih_room_strat:
         LDA #$0001 : STA !sram_display_mode
         RTS
 
+print pc, " superhud menu end"
 ih_superhud:
     %cm_submenu("Configure Super HUD", #SuperHUDMenu)
 
@@ -1984,11 +1945,14 @@ action_select_superhud_top:
     JSR cm_calculate_max
     RTS
 }
+print pc, " superhud menu end"
 
 ih_ram_watch:
     %cm_jsr("Customize RAM Watch", #ih_prepare_ram_watch_menu, #RAMWatchMenu)
 
+print pc, " ramwatchmenu.asm start"
 incsrc ramwatchmenu.asm
+print pc, " ramwatchmenu.asm end"
 
 ih_room_counter:
     dw !ACTION_CHOICE
@@ -2887,5 +2851,7 @@ init_wram_based_on_sram:
 ; Firebat Menu   IFBMenu:
 ; ----------
 
+print pc, " IFBmenu start"
 incsrc IFBmenu.asm
+print pc, " IFBmenu end"
 

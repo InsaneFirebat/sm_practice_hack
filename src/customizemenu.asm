@@ -37,9 +37,9 @@ macro palettemenu(title, pointer)
 endmacro
 
 macro setupRGB(addr)
-    LDA <addr> : AND #$7C00 : XBA : LSR #2 : STA !sram_custompalette_blue
-    LDA <addr> : AND #$03E0 : LSR #5 : STA !sram_custompalette_green
-    LDA <addr> : AND #$001F : STA !sram_custompalette_red
+    LDA.w #<addr>>>16 : STA $C3
+    LDA.w #<addr> : STA $C1
+    JSR cm_setup_RGB
     RTS
 endmacro
 
@@ -96,7 +96,10 @@ ifb_paletteprofile:
     db #$FF
 
 ifb_palette2custom:
-    %cm_jsr("Copy Palette to Custom", action_copy_palette, #$0000)
+    %cm_jsr("Copy Palette to Custom", .routine, #$0000)
+  .routine
+    JSL copy_menu_palette
+    RTS
 
 ifb_paletterando:
     %cm_submenu("Randomize Custom Palette", #PaletteRandoConfirm)
@@ -142,8 +145,8 @@ paletterando_confirm:
 
     ; play a happy sound and refresh current profile
     %ai16()
-    JSR PrepMenuPalette_customPalette ; points to a branch within PrepMenuPalette
-    JSR action_custompalettes_refresh
+    JSL PrepMenuPalette_customPalette ; points to a branch within PrepMenuPalette
+    JSL refresh_custom_palettes
     %sfxbubble()
     RTS
 
@@ -200,53 +203,40 @@ custompalettes_menuborder:
 custompalettes_menubackground:
     %palettemenu("Background", #CustomPalettesMenu_menubackground)
 
-
 custompalettes_hex_red:
-    %cm_numfield_color("Hexadecimal Red", !sram_custompalette_red, #MixRGB)
+    %cm_numfield_color("Hexadecimal Red", !sram_custompalette_red, #MixRGB_long)
 
 custompalettes_hex_green:
-    %cm_numfield_color("Hexadecimal Green", !sram_custompalette_green, #MixRGB)
+    %cm_numfield_color("Hexadecimal Green", !sram_custompalette_green, #MixRGB_long)
 
 custompalettes_hex_blue:
-    %cm_numfield_color("Hexadecimal Blue", !sram_custompalette_blue, #MixRGB)
+    %cm_numfield_color("Hexadecimal Blue", !sram_custompalette_blue, #MixRGB_long)
 
 custompalettes_dec_red:
-    %cm_numfield("Decimal Red", !sram_custompalette_red, 0, 31, 1, 2, #MixRGB)
+    %cm_numfield("Decimal Red", !sram_custompalette_red, 0, 31, 1, 2, #MixRGB_long)
 
 custompalettes_dec_green:
-    %cm_numfield("Decimal Green", !sram_custompalette_green, 0, 31, 1, 2, #MixRGB)
+    %cm_numfield("Decimal Green", !sram_custompalette_green, 0, 31, 1, 2, #MixRGB_long)
 
 custompalettes_dec_blue:
-    %cm_numfield("Decimal Blue", !sram_custompalette_blue, 0, 31, 1, 2, #MixRGB)
+    %cm_numfield("Decimal Blue", !sram_custompalette_blue, 0, 31, 1, 2, #MixRGB_long)
 
-MixRGB:
+ifb_dummy_on:
+    %cm_toggle("Example Toggle", !sram_dummy_on, #$0001, #0)
+
+ifb_dummy_off:
+    %cm_toggle("Example Toggle", !sram_dummy_off, #$0001, #0)
+
+ifb_dummy_hexnum:
+    %cm_numfield_hex("Example Hex Number", !sram_dummy_num, 0, 255, 1, 8, #0)
+
+ifb_dummy_num:
+    %cm_numfield("Example Number", !sram_dummy_num, 0, 255, 1, 8, #0)
+
+MixRGB_long:
 {
-    ; figure out which menu element is being edited
-    LDA !ram_cm_cursor_stack+6 : TAX
-    LDA.w MenuPaletteTable,X : STA $12 ; store indirect address
-    LDA #$0070 : STA $14 ; store indirect bank
-
-    ; mix RGB values
-    LDA !sram_custompalette_blue : XBA : ASL #2 : STA $16
-    LDA !sram_custompalette_green : ASL #5 : ORA $16 : STA $16
-    LDA !sram_custompalette_red : ORA $16
-
-    STA [$12] ; store combined color value
-    JSR action_custompalettes_refresh
+    JSL MixRGB
     RTS
-
-MenuPaletteTable:
-    dw #!sram_custompalette_menutext
-    dw #!sram_custompalette_menuseltext
-    dw #!sram_custompalette_menuseltextbg
-    dw #!sram_custompalette_menuheaderoutline
-    dw #!sram_custompalette_menunumfill
-    dw #!sram_custompalette_menunumoutline
-    dw #!sram_custompalette_menunumsel
-    dw #!sram_custompalette_menunumseloutline
-    dw #!sram_custompalette_menutoggleon
-    dw #!sram_custompalette_menuborder
-    dw #!sram_custompalette_menubackground
 }
 
 
@@ -301,107 +291,6 @@ custompalettes_menutoggleon_display:
 
 custompalettes_menubackground_display:
     %cm_numfield_hex_word("Background", !sram_custompalette_menubackground)
-
-action_custompalettes_refresh:
-{
-    PHP
-    %ai16()
-    JSR cm_transfer_original_cgram
-    JSR cm_transfer_custom_cgram
-    LDA #$0000 : STA !sram_custompalette_profile
-    PLP
-    RTS
-}
-
-action_copy_palette:
-{
-    PHP
-    %ai16()
-    LDA !sram_custompalette_profile : BNE + : BRL .fail
-+   ASL : TAX : LDA PaletteProfileTables,X : STA $16
-
-    ; copy table to SRAM, Y is already zero from JSR menu macro
-    LDA ($16),Y : STA !sram_custompalette_menuborder : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menuheaderoutline : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menutext : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menubackground : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menunumoutline : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menunumfill : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menutoggleon : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menuseltext : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menuseltextbg : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menunumseloutline : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menunumsel : INY #2
-
-    ; play a happy sound and refresh current profile
-    JSR action_custompalettes_refresh
-    %sfxbubble()
-    BRA .done
-
-  .fail
-    ; make the animals cry cause we couldn't do anything
-    %sfxetecoon()
-
-  .done
-    PLP
-    RTS
-}
-
-cm_colors:
-{
-    LDA !ram_cm_cursor_stack+4 : CMP #$0002 : BNE .done ; exit if not in color menu
-    LDA !ram_cm_cursor_stack+6 : CMP #$0016 : BPL .done ; exit if beyond table boundaries
-    TAX : JSR (ColorMenuTable,X)
-
-  .done
-    RTS
-
-ColorMenuTable:
-    dw ColorMenuTable_text
-    dw ColorMenuTable_seltext
-    dw ColorMenuTable_seltextbg
-    dw ColorMenuTable_headeroutline
-    dw ColorMenuTable_numfill
-    dw ColorMenuTable_numoutline
-    dw ColorMenuTable_numsel
-    dw ColorMenuTable_numseloutline
-    dw ColorMenuTable_toggleon
-    dw ColorMenuTable_border
-    dw ColorMenuTable_background
-}
-
-ColorMenuTable_text:
-    %setupRGB(!sram_custompalette_menutext)
-
-ColorMenuTable_seltext:
-    %setupRGB(!sram_custompalette_menuseltext)
-
-ColorMenuTable_seltextbg:
-    %setupRGB(!sram_custompalette_menuseltextbg)
-
-ColorMenuTable_headeroutline:
-    %setupRGB(!sram_custompalette_menuheaderoutline)
-
-ColorMenuTable_numfill:
-    %setupRGB(!sram_custompalette_menunumfill)
-
-ColorMenuTable_numoutline:
-    %setupRGB(!sram_custompalette_menunumoutline)
-
-ColorMenuTable_numsel:
-    %setupRGB(!sram_custompalette_menunumsel)
-
-ColorMenuTable_numseloutline:
-    %setupRGB(!sram_custompalette_menunumseloutline)
-
-ColorMenuTable_toggleon:
-    %setupRGB(!sram_custompalette_menutoggleon)
-
-ColorMenuTable_border:
-    %setupRGB(!sram_custompalette_menuborder)
-
-ColorMenuTable_background:
-    %setupRGB(!sram_custompalette_menubackground)
 
 
 ; ---------------
@@ -479,3 +368,282 @@ ifb_menuscroll_delay:
     LDA #$000A : STA !sram_cm_scroll_delay
 +   RTS
 
+
+; ---------
+; Menu Code
+; ---------
+
+pushpc
+org $B5F000
+print pc, " menu customization bankB5 start"
+PrepMenuPalette:
+{
+
+    LDA !sram_custompalette_profile : ASL : TAX
+    BEQ .customPalette
+
+    PHB
+    PHK : PLB
+    LDA.l PaletteProfileTables,X : STA $12
+
+    LDY #$0000 : LDA ($12),Y : STA !ram_custompalette_menuborder
+    LDY #$0002 : LDA ($12),Y : STA !ram_custompalette_menuheaderoutline
+    LDY #$0004 : LDA ($12),Y : STA !ram_custompalette_menutext
+    LDY #$0006 : LDA ($12),Y : STA !ram_custompalette_menubackground
+    LDY #$0008 : LDA ($12),Y : STA !ram_custompalette_menunumoutline
+    LDY #$000A : LDA ($12),Y : STA !ram_custompalette_menunumfill
+    LDY #$000C : LDA ($12),Y : STA !ram_custompalette_menutoggleon
+    LDY #$000E : LDA ($12),Y : STA !ram_custompalette_menuseltext
+    LDY #$0010 : LDA ($12),Y : STA !ram_custompalette_menuseltextbg
+    LDY #$0012 : LDA ($12),Y : STA !ram_custompalette_menunumseloutline
+    LDY #$0014 : LDA ($12),Y : STA !ram_custompalette_menunumsel
+    PLB
+    RTL
+
+  .customPalette
+    LDA !sram_custompalette_menuborder : STA !ram_custompalette_menuborder
+    LDA !sram_custompalette_menuheaderoutline : STA !ram_custompalette_menuheaderoutline
+    LDA !sram_custompalette_menutext : STA !ram_custompalette_menutext
+    LDA !sram_custompalette_menubackground : STA !ram_custompalette_menubackground
+    LDA !sram_custompalette_menunumoutline : STA !ram_custompalette_menunumoutline
+    LDA !sram_custompalette_menunumfill : STA !ram_custompalette_menunumfill
+    LDA !sram_custompalette_menutoggleon : STA !ram_custompalette_menutoggleon
+    LDA !sram_custompalette_menuseltext : STA !ram_custompalette_menuseltext
+    LDA !sram_custompalette_menuseltextbg : STA !ram_custompalette_menuseltextbg
+    LDA !sram_custompalette_menunumseloutline : STA !ram_custompalette_menunumseloutline
+    LDA !sram_custompalette_menunumsel : STA !ram_custompalette_menunumsel
+    RTL
+}
+
+copy_menu_palette:
+{
+    PHB
+    PHK : PLB
+    LDA !sram_custompalette_profile : BNE + : BRL .fail
++   ASL : TAX : LDA PaletteProfileTables,X : STA $16
+
+    ; copy table to SRAM, Y is already zero from JSR menu macro
+    LDA ($16),Y : STA !sram_custompalette_menuborder : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menuheaderoutline : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menutext : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menubackground : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menunumoutline : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menunumfill : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menutoggleon : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menuseltext : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menuseltextbg : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menunumseloutline : INY #2
+    LDA ($16),Y : STA !sram_custompalette_menunumsel : INY #2
+
+    ; play a happy sound and refresh current profile
+    JSL refresh_custom_palettes
+    %sfxbubble()
+    PLB
+    RTL
+
+  .fail
+    ; make the animals cry cause we couldn't do anything
+    %sfxetecoon()
+    PLB
+    RTL
+}
+
+refresh_custom_palettes:
+{
+    PHP
+    %ai16()
+    JSL cm_refresh_cgram_long
+    LDA #$0000 : STA !sram_custompalette_profile
+    PLP
+    RTL
+}
+
+PaletteProfileTables:
+{
+    dw #CustomProfileTable        ; 0
+    dw #TwitchProfileTable        ; 1
+    dw #DefaultProfileTable       ; 2
+    dw #FirebatProfileTable       ; 3
+    dw #wardrinkerProfileTable    ; 4
+    dw #mm2ProfileTable           ; 5
+    dw #ptoilProfileTable         ; 6
+    dw #ZohdinProfileTable        ; 7
+    dw #DarkXoaProfileTable       ; 8
+    dw #MelonaxProfileTable       ; 9
+    dw #TopsyTurveProfileTable    ; A
+    dw #OSTProfileTable           ; B
+    dw #JRPProfileTable           ; C
+    dw #GreyProfileTable          ; D
+    dw #RedProfileTable           ; E
+    dw #PurpleProfileTable        ; F
+    dw #HUDProfileTable           ; 10
+    dw #$0000
+
+!PROFILE_CUSTOM       = #$0000
+!PROFILE_Twitch       = #$0001
+!PROFILE_Default      = #$0002
+!PROFILE_Firebat      = #$0003
+!PROFILE_wardrinker   = #$0004
+!PROFILE_mm2          = #$0005
+!PROFILE_ptoil        = #$0006
+!PROFILE_Zohdin       = #$0007
+!PROFILE_DarkXoa      = #$0008
+!PROFILE_Melonax      = #$0009
+!PROFILE_TopsyTurvy   = #$000A
+!PROFILE_OST          = #$000B
+!PROFILE_JRP          = #$000C
+!PROFILE_Grey         = #$000D
+!PROFILE_Red          = #$000E
+!PROFILE_Purple       = #$000F
+!PROFILE_HUD          = #$0010
+
+; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
+CustomProfileTable: ; custom always first
+    dw $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000
+
+TwitchProfileTable:
+    dw $550D, $550D, $7FFF, $0000, $0000, $7FFF, $550D, $550D, $0000, $550D, $7FFF
+
+DefaultProfileTable:
+    dw $7277, $48F3, $7FFF, $0000, $0000, $7FFF, $4376, $761F, $0000, $0000, $761F
+
+FirebatProfileTable:
+    dw $000E, $000E, $0A20, $0000, $0A20, $0002, $0680, $000F, $0005, $0A20, $000F
+
+wardrinkerProfileTable:
+    dw $7277, $7FFF, $7A02, $0000, $0000, $9200, $7277, $7F29, $0000, $0000, $7F29
+
+mm2ProfileTable:
+    dw $001A, $0000, $7C80, $0000, $0000, $7FFF, $03E0, $7F44, $0842, $0000, $7FFF
+
+ptoilProfileTable:
+    dw $5CAA, $14A5, $01EF, $0000, $0000, $5294, $4376, $03FF, $0000, $0000, $7FFF
+
+ZohdinProfileTable:
+    dw $7BFF, $0402, $0300, $0060, $0100, $9700, $7B64, $7BFF, $94A6, $2051, $09BF
+
+DarkXoaProfileTable:
+    dw $24C4, $45A8, $24C4, $0000, $0000, $24C4, $45A8, $45A8, $0000, $1505, $45A8
+
+MelonaxProfileTable:
+    dw $7FFF, $0000, $3DEF, $0C63, $0000, $7FFF, $266B, $3DFE, $0C63, $0000, $266B
+
+TopsyTurveProfileTable:
+    dw $7264, $7264, $7FFF, $0000, $0000, $7FFF, $7264, $7264, $0000, $0000, $7264
+
+OSTProfileTable:
+    dw $7FFF, $7FFF, $0010, $0000, $0010, $7FFF, $001F, $001E, $0000, $7FFF, $001E
+
+JRPProfileTable:
+    dw $7976, $384B, $66D1, $484A, $E54F, $7B97, $7B7B, $6B5E, $70F0, $654F, $7B97
+
+GreyProfileTable:
+    dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $0012, $0C63, $1CE7, $3DEF
+
+RedProfileTable:
+    dw $0010, $0000, $0010, $0000, $0010, $0000, $001F, $001F, $0000, $001F, $0010
+
+PurpleProfileTable:
+    dw $602F, $0000, $602F, $0000, $0000, $602F, $0338, $0338, $0000, $602F, $0338
+
+HUDProfileTable:
+    dw $3D46, $48FB, $7FFF, $0000, $44E5, $7FFF, $4A52, $318C, $0000, $02DF, $001F
+}
+
+
+cm_colors:
+{
+    LDA !ram_cm_cursor_stack+4 : CMP #$0002 : BNE .done ; exit if not in color menu
+    LDA !ram_cm_cursor_stack+6 : CMP #$0016 : BPL .done ; exit if beyond table boundaries
+    TAX : JSR (ColorMenuTable,X)
+
+  .done
+    RTL
+}
+
+cm_setup_RGB:
+{
+    LDA [$C1] : AND #$7C00 : XBA : LSR #2 : STA !sram_custompalette_blue
+    LDA [$C1] : AND #$03E0 : LSR #5 : STA !sram_custompalette_green
+    LDA [$C1] : AND #$001F : STA !sram_custompalette_red
+    RTS
+}
+
+MixRGB:
+{
+    ; figure out which menu element is being edited
+    LDA !ram_cm_cursor_stack+6 : TAX
+    LDA.l MenuPaletteTable,X : STA $12 ; store indirect address
+    LDA #$00F0 : STA $14 ; store indirect bank
+
+    ; mix RGB values
+    LDA !sram_custompalette_blue : XBA : ASL #2 : STA $16
+    LDA !sram_custompalette_green : ASL #5 : ORA $16 : STA $16
+    LDA !sram_custompalette_red : ORA $16
+
+    STA [$12] ; store combined color value
+    JSL refresh_custom_palettes
+    RTL
+
+MenuPaletteTable:
+    dw !sram_custompalette_menutext
+    dw !sram_custompalette_menuseltext
+    dw !sram_custompalette_menuseltextbg
+    dw !sram_custompalette_menuheaderoutline
+    dw !sram_custompalette_menunumfill
+    dw !sram_custompalette_menunumoutline
+    dw !sram_custompalette_menunumsel
+    dw !sram_custompalette_menunumseloutline
+    dw !sram_custompalette_menutoggleon
+    dw !sram_custompalette_menuborder
+    dw !sram_custompalette_menubackground
+}
+
+ColorMenuTable:
+    dw ColorMenuTable_text
+    dw ColorMenuTable_seltext
+    dw ColorMenuTable_seltextbg
+    dw ColorMenuTable_headeroutline
+    dw ColorMenuTable_numfill
+    dw ColorMenuTable_numoutline
+    dw ColorMenuTable_numsel
+    dw ColorMenuTable_numseloutline
+    dw ColorMenuTable_toggleon
+    dw ColorMenuTable_border
+    dw ColorMenuTable_background
+
+ColorMenuTable_text:
+    %setupRGB(!sram_custompalette_menutext)
+
+ColorMenuTable_seltext:
+    %setupRGB(!sram_custompalette_menuseltext)
+
+ColorMenuTable_seltextbg:
+    %setupRGB(!sram_custompalette_menuseltextbg)
+
+ColorMenuTable_headeroutline:
+    %setupRGB(!sram_custompalette_menuheaderoutline)
+
+ColorMenuTable_numfill:
+    %setupRGB(!sram_custompalette_menunumfill)
+
+ColorMenuTable_numoutline:
+    %setupRGB(!sram_custompalette_menunumoutline)
+
+ColorMenuTable_numsel:
+    %setupRGB(!sram_custompalette_menunumsel)
+
+ColorMenuTable_numseloutline:
+    %setupRGB(!sram_custompalette_menunumseloutline)
+
+ColorMenuTable_toggleon:
+    %setupRGB(!sram_custompalette_menutoggleon)
+
+ColorMenuTable_border:
+    %setupRGB(!sram_custompalette_menuborder)
+
+ColorMenuTable_background:
+    %setupRGB(!sram_custompalette_menubackground)
+
+print pc, " menu customization bankB5 end"
+pullpc
