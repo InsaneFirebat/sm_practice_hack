@@ -47,18 +47,6 @@ endif
 ifb_factory_reset:
     %cm_submenu("Factory Reset", #FactoryResetConfirm)
 
-ifb_dummy_on:
-    %cm_toggle("Example Toggle", !sram_dummy_on, #$0001, #0)
-
-ifb_dummy_off:
-    %cm_toggle("Example Toggle", !sram_dummy_off, #$0001, #0)
-
-ifb_dummy_hexnum:
-    %cm_numfield_hex("Example Hex Number", !sram_dummy_num, 0, 255, 1, 8, #0)
-
-ifb_dummy_num:
-    %cm_numfield("Example Number", !sram_dummy_num, 0, 255, 1, 8, #0)
-
 
 ; ----------
 ; Custom Palettes
@@ -596,3 +584,72 @@ action_factory_reset:
     ; I'd like to silence audio before doing this, but there isn't enough time
     JML $80841C
 }
+
+
+; ---------------------
+; Additional Menu Space
+; ---------------------
+
+pushpc
+org $B6F000
+print pc, " mainmenu bankB6 start"
+
+set_category_loadout:
+    TYA : ASL #4 : TAX
+
+    ; Items
+    LDA .table,X : STA $7E09A4 : STA $7E09A2 : INX #2
+
+    ; Beams
+    LDA .table,X : STA $7E09A8 : TAY
+    AND #$000C : CMP #$000C : BEQ .murderBeam
+    TYA : STA $7E09A6 : INX #2 : BRA +
+
+  .murderBeam
+    TYA : AND #$100B : STA $7E09A6 : INX #2
+
+    ; Health
++   LDA .table,X : STA $7E09C2 : STA $7E09C4 : INX #2
+
+    ; Missiles
+    LDA .table,X : STA $7E09C6 : STA $7E09C8 : INX #2
+
+    ; Supers
+    LDA .table,X : STA $7E09CA : STA $7E09CC : INX #2
+
+    ; PBs
+    LDA .table,X : STA $7E09CE : STA $7E09D0 : INX #2
+
+    ; Reserves
+    LDA .table,X : STA $7E09D4 : STA $7E09D6 : INX #2
+
+    JSL cm_set_etanks_and_reserve
+
+    %sfxmissile()
+    RTS
+
+  .table
+    ;  Items,  Beams,  Health, Miss,   Supers, PBs,    Reserv, Dummy
+    dw #$F32F, #$100F, #$05DB, #$00E6, #$0032, #$0032, #$0190, #$0000        ; 100%
+    dw #$3125, #$1007, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% new
+    dw #$3325, #$100B, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% old
+    dw #$1025, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% ice
+    dw #$3025, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% speed
+    dw #$F33F, #$100F, #$02BC, #$0064, #$0014, #$0014, #$012C, #$0000        ; gt code
+if !FEATURE_PAL
+    dw #$F33F, #$100F, #$0834, #$0145, #$0041, #$0046, #$02BC, #$0000        ; 136%
+else
+    dw #$F33F, #$100F, #$0834, #$0145, #$0041, #$0041, #$02BC, #$0000        ; 135%
+endif
+    dw #$710C, #$1001, #$031F, #$001E, #$0019, #$0014, #$0064, #$0000        ; rbo
+    dw #$9004, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0000, #$0000        ; any% glitched
+    dw #$F32F, #$100F, #$0031, #$01A4, #$005A, #$0063, #$0000, #$0000        ; crystal flash
+    dw #$0000, #$0000, #$0063, #$0000, #$0000, #$0000, #$0000, #$0000        ; nothing
+if !FEATURE_PAL
+    dw #$9005, #$1002, #$012B, #$000A, #$000A, #$0005, #$0064, #$0000        ; 14% x-ice
+    dw #$1105, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% iceboots
+    dw #$3105, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% speedboots
+endif
+
+print pc, " mainmenu bankB6 end"
+pullpc
