@@ -2543,39 +2543,62 @@ rng_goto_phanmenu:
     %cm_submenu("Phantoon RNG Controls", #PhantoonMenu)
 
 PhantoonMenu:
-    dw #phan_fast_left
-    dw #phan_mid_left
-    dw #phan_slow_left
-    dw #phan_fast_right
-    dw #phan_mid_right
-    dw #phan_slow_right
+    dw #phan_fast_left_1
+    dw #phan_mid_left_1
+    dw #phan_slow_left_1
+    dw #phan_fast_right_1
+    dw #phan_mid_right_1
+    dw #phan_slow_right_1
+    dw #$FFFF
+    dw #phan_fast_left_2
+    dw #phan_mid_left_2
+    dw #phan_slow_left_2
+    dw #phan_fast_right_2
+    dw #phan_mid_right_2
+    dw #phan_slow_right_2
     dw #$FFFF
     dw #phan_eyeclose
     dw #$FFFF
     dw #phan_flamepattern
     dw #phan_next_flamepattern
-    dw #$FFFF
-    dw #phan_skip_intro
     dw #$0000
     %cm_header("PHANTOON RNG CONTROL")
 
-phan_fast_left:
-    %cm_toggle_bit("Fast Left", !ram_phantoon_rng_1, #$0020, 0)
+phan_fast_left_1:
+    %cm_toggle_bit("#1 Fast Left", !ram_phantoon_rng_1, #$0020, 0)
 
-phan_mid_left:
-    %cm_toggle_bit("Mid Left", !ram_phantoon_rng_1, #$0008, 0)
+phan_mid_left_1:
+    %cm_toggle_bit("#1 Mid  Left", !ram_phantoon_rng_1, #$0008, 0)
 
-phan_slow_left:
-    %cm_toggle_bit("Slow Left", !ram_phantoon_rng_1, #$0002, 0)
+phan_slow_left_1:
+    %cm_toggle_bit("#1 Slow Left", !ram_phantoon_rng_1, #$0002, 0)
 
-phan_fast_right:
-    %cm_toggle_bit("Fast Right", !ram_phantoon_rng_1, #$0010, 0)
+phan_fast_right_1:
+    %cm_toggle_bit("#1 Fast Right", !ram_phantoon_rng_1, #$0010, 0)
 
-phan_mid_right:
-    %cm_toggle_bit("Mid Right", !ram_phantoon_rng_1, #$0004, 0)
+phan_mid_right_1:
+    %cm_toggle_bit("#1 Mid  Right", !ram_phantoon_rng_1, #$0004, 0)
 
-phan_slow_right:
-    %cm_toggle_bit("Slow Right", !ram_phantoon_rng_1, #$0001, 0)
+phan_slow_right_1:
+    %cm_toggle_bit("#1 Slow Right", !ram_phantoon_rng_1, #$0001, 0)
+
+phan_fast_left_2:
+    %cm_toggle_bit("#2 Fast Left", !ram_phantoon_rng_2, #$0020, 0)
+
+phan_mid_left_2:
+    %cm_toggle_bit("#2 Mid  Left", !ram_phantoon_rng_2, #$0008, 0)
+
+phan_slow_left_2:
+    %cm_toggle_bit("#2 Slow Left", !ram_phantoon_rng_2, #$0002, 0)
+
+phan_fast_right_2:
+    %cm_toggle_bit("#2 Fast Right", !ram_phantoon_rng_2, #$0010, 0)
+
+phan_mid_right_2:
+    %cm_toggle_bit("#2 Mid  Right", !ram_phantoon_rng_2, #$0004, 0)
+
+phan_slow_right_2:
+    %cm_toggle_bit("#2 Slow Right", !ram_phantoon_rng_2, #$0001, 0)
 ; new Phantoon RNG ends here
 else
 ; old Phantoon RNG starts here

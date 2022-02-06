@@ -77,9 +77,6 @@ init_nonzero_wram:
     LDA #$09C2 : STA !ram_watch_right ; Samus HP
     LDA #$FEED : STA !ram_seed_X
     LDA #$5EED : STA !ram_seed_Y
-if !NEW_PHANTOON_RNG
-    LDA #$003F : STA !ram_phantoon_rng_1    ; Enable all Phantoon patterns
-endif
 
     LDA #$0000
     STA !ram_watch_bank : STA !ram_cm_watch_enemy_side

@@ -15,7 +15,7 @@
 !VERSION_MINOR = 4
 !VERSION_BUILD = 0
 !VERSION_REV_1 = 1
-!VERSION_REV_2 = 4
+!VERSION_REV_2 = 5
 
 
 ; ---------
@@ -80,11 +80,11 @@
 !ram_room_has_set_rng = !WRAM_START+$5A
 !ram_kraid_rng = !WRAM_START+$5C
 !ram_crocomire_rng = !WRAM_START+$5E
-!ram_phantoon_rng_1 = !WRAM_START+$60
-!ram_phantoon_rng_2 = !WRAM_START+$62
-!ram_phantoon_rng_3 = !WRAM_START+$64
-!ram_phantoon_rng_4 = !WRAM_START+$66
-!ram_phantoon_rng_5 = !WRAM_START+$68
+!ram_phantoon_rng_1 = !WRAM_START+$60 ; round 1 pattern bitmask
+!ram_phantoon_rng_2 = !WRAM_START+$62 ; round 2 pattern bitmask
+!ram_phantoon_rng_3 = !WRAM_START+$64 ; eye close
+!ram_phantoon_rng_4 = !WRAM_START+$66 ; flames
+!ram_phantoon_rng_5 = !WRAM_START+$68 ; next flame
 !ram_botwoon_rng = !WRAM_START+$6A
 !ram_draygon_rng_left = !WRAM_START+$6C
 !ram_draygon_rng_right = !WRAM_START+$6E
