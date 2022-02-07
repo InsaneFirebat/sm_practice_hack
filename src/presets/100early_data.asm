@@ -2834,8 +2834,31 @@ preset_100early_lower_norfair_red_kihunter_shaft:
     dw #$FFFF
 .after
 
-preset_100early_lower_norfair_ninja_pirates:
+preset_100early_lower_norfair_wasteland:
     dw #preset_100early_lower_norfair_red_kihunter_shaft ; Lower Norfair: Red Kihunter Shaft
+    dw $078D, $99A2 ; DDB
+    dw $079B, $B585 ; MDB
+    dw $090F, $C27F ; Screen subpixel X position
+    dw $0911, $0200 ; Screen X position in pixels
+    dw $0913, $8800 ; Screen subpixel Y position
+    dw $0915, $0417 ; Screen Y position in pixels
+    dw $0917, $0180 ; Layer 2 X position
+    dw $0919, $0311 ; Layer 2 Y position
+    dw $0923, $0000 ; BG2 Y offset
+    dw $09CA, $001D ; Supers
+    dw $09CE, $000A ; Pbs
+    dw $0A1C, $001D ; Samus position/state
+    dw $0A1E, $0408 ; More position/state
+    dw $0AF6, $0248 ; Samus X
+    dw $0AF8, $FFFF ; Samus subpixel X
+    dw $0AFA, $0489 ; Samus Y
+    dw $0AFC, $FFFF ; Samus subpixel Y
+    dw $D8BA, $41F1 ; Doors
+    dw #$FFFF
+.after
+
+preset_100early_lower_norfair_ninja_pirates:
+    dw #preset_100early_lower_norfair_wasteland ; Lower Norfair: Wasteland
     dw $078D, $99EA  ; DDB
     dw $079B, $B5D5  ; MDB
     dw $090F, $4FFF  ; Screen subpixel X position
@@ -2856,7 +2879,7 @@ preset_100early_lower_norfair_ninja_pirates:
     dw $0AF6, $0163  ; Samus X
     dw $0AFA, $028B  ; Samus Y
     dw $D878, $92DE  ; Items
-    dw $D8BA, $C3F7  ; Doors
+    dw $D8BA, $83F7  ; Doors
     dw #$FFFF
 .after
 

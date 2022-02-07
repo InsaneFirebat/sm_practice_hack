@@ -227,6 +227,7 @@ presets_submenu_100early_lower_norfair:
     dw #presets_100early_lower_norfair_mickey_mouse_missiles
     dw #presets_100early_lower_norfair_amphitheatre
     dw #presets_100early_lower_norfair_red_kihunter_shaft
+    dw #presets_100early_lower_norfair_wasteland
     dw #presets_100early_lower_norfair_ninja_pirates
     dw #presets_100early_lower_norfair_plowerhouse_room
     dw #presets_100early_lower_norfair_ridley
@@ -713,6 +714,9 @@ presets_100early_lower_norfair_amphitheatre:
 
 presets_100early_lower_norfair_red_kihunter_shaft:
     %cm_preset("Red Kihunter Shaft", #preset_100early_lower_norfair_red_kihunter_shaft)
+
+presets_100early_lower_norfair_wasteland:
+    %cm_preset("Wasteland", #preset_100early_lower_norfair_wasteland)
 
 presets_100early_lower_norfair_ninja_pirates:
     %cm_preset("Ninja Pirates", #preset_100early_lower_norfair_ninja_pirates)
