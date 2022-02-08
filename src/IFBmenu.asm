@@ -590,17 +590,17 @@ action_factory_reset:
 ; ---------------------
 
 pushpc
-org $B6F000
+org $B6F200
 print pc, " mainmenu bankB6 start"
 
 set_category_loadout:
     TYA : ASL #4 : TAX
 
     ; Items
-    LDA .table,X : STA $7E09A4 : STA $7E09A2 : INX #2
+    LDA.l EquipmentTable,X : STA $7E09A4 : STA $7E09A2 : INX #2
 
     ; Beams
-    LDA .table,X : STA $7E09A8 : TAY
+    LDA.l EquipmentTable,X : STA $7E09A8 : TAY
     AND #$000C : CMP #$000C : BEQ .murderBeam
     TYA : STA $7E09A6 : INX #2 : BRA +
 
@@ -608,26 +608,26 @@ set_category_loadout:
     TYA : AND #$100B : STA $7E09A6 : INX #2
 
     ; Health
-+   LDA .table,X : STA $7E09C2 : STA $7E09C4 : INX #2
++   LDA.l EquipmentTable,X : STA $7E09C2 : STA $7E09C4 : INX #2
 
     ; Missiles
-    LDA .table,X : STA $7E09C6 : STA $7E09C8 : INX #2
+    LDA.l EquipmentTable,X : STA $7E09C6 : STA $7E09C8 : INX #2
 
     ; Supers
-    LDA .table,X : STA $7E09CA : STA $7E09CC : INX #2
+    LDA.l EquipmentTable,X : STA $7E09CA : STA $7E09CC : INX #2
 
     ; PBs
-    LDA .table,X : STA $7E09CE : STA $7E09D0 : INX #2
+    LDA.l EquipmentTable,X : STA $7E09CE : STA $7E09D0 : INX #2
 
     ; Reserves
-    LDA .table,X : STA $7E09D4 : STA $7E09D6 : INX #2
+    LDA.l EquipmentTable,X : STA $7E09D4 : STA $7E09D6 : INX #2
 
     JSL cm_set_etanks_and_reserve
 
     %sfxmissile()
-    RTS
+    RTL
 
-  .table
+EquipmentTable:
     ;  Items,  Beams,  Health, Miss,   Supers, PBs,    Reserv, Dummy
     dw #$F32F, #$100F, #$05DB, #$00E6, #$0032, #$0032, #$0190, #$0000        ; 100%
     dw #$3125, #$1007, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% new
