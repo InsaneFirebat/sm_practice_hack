@@ -210,6 +210,7 @@ topHUD_chargetimer:
   .drawCharge
     ASL : TAX
     LDA NumberGFXTable,X : STA $7EC618
+    LDA !IH_BLANK : STA $7EC616
 
   .done
     RTS
@@ -243,6 +244,7 @@ middleHUD_chargetimer:
   .drawCharge
     ASL : TAX
     LDA NumberGFXTable,X : STA $7EC658
+    LDA !IH_BLANK : STA $7EC656
 
   .done
     RTS
