@@ -2202,7 +2202,7 @@ controls_common_layouts:
     %cm_submenu("Common Controller Layouts", #ControllerCommonMenu)
 
 controls_shot:
-    %cm_ctrl_input("        SHOT", !IH_INPUT_SHOOT, action_submenu, #AssignControlsMenu)
+    %cm_ctrl_input("        SHOT", !IH_INPUT_SHOT, action_submenu, #AssignControlsMenu)
 
 controls_jump:
     %cm_ctrl_input("        JUMP", !IH_INPUT_JUMP, action_submenu, #AssignControlsMenu)
@@ -2461,7 +2461,7 @@ controls_common_d5:
 action_set_common_controls:
 {
     TYX
-    LDA.l ControllerLayoutTable,X : STA !IH_INPUT_SHOOT
+    LDA.l ControllerLayoutTable,X : STA !IH_INPUT_SHOT
     LDA.l ControllerLayoutTable+2,X : STA !IH_INPUT_JUMP
     LDA.l ControllerLayoutTable+4,X : STA !IH_INPUT_RUN
     LDA.l ControllerLayoutTable+6,X : STA !IH_INPUT_ITEM_CANCEL

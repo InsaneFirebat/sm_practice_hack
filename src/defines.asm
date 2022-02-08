@@ -110,6 +110,8 @@
 !ram_watch_edit_right = !WRAM_START+$8E
 !ram_watch_edit_lock_left = !WRAM_START+$90
 !ram_watch_edit_lock_right = !WRAM_START+$92
+!ram_watch_left_index = !WRAM_START+$94
+!ram_watch_right_index = !WRAM_START+$96
 
 ; ^ FREE SPACE ^ up to +$9E
 
@@ -309,7 +311,7 @@
 !CTRL_L = #$0020
 !CTRL_R = #$0010
 
-!IH_INPUT_SHOOT = $7E09B2
+!IH_INPUT_SHOT = $7E09B2
 !IH_INPUT_JUMP = $7E09B4
 !IH_INPUT_RUN = $7E09B6
 !IH_INPUT_ITEM_CANCEL = $7E09B8
@@ -392,6 +394,7 @@
 !ENEMY_SPRITEMAP = $0F8E
 !ENEMY_BANK = $0FA6
 !SAMUS_IFRAME_TIMER = $18A8
+!SAMUS_KNOCKBACK_TIMER = $18AA
 !ENEMY_PROJ_ID = $1997
 !ENEMY_PROJ_X = $1A4B
 !ENEMY_PROJ_Y = $1A93
@@ -474,10 +477,6 @@
 !ram_HUD_top = $F02100
 !ram_HUD_middle = $F02102
 !ram_HUD_bottom = $F02104
-
-!ram_watch_bank = $F02106
-!ram_watch_left_index = $F02108
-!ram_watch_right_index = $F0210A
 
 !ram_cm_rng = $F0210C
 
