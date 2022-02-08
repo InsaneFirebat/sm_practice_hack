@@ -176,43 +176,83 @@ preset_scroll_fixes:
     ; Fixes bad scrolling caused by loading into a position that
     ; is normally hidden until passing over a red scroll block.
     ; These fixes can often be found in nearby door asm.
-    PHP
-    %ai16()
+    PHP : %ai16()
+    PHB
+
     LDA !ram_custom_preset : CMP #$5AFE : BNE .category_presets
     BRL .custom_presets
 
   .category_presets
-    %a8() : %i16()
+    PEA $7E7E : PLB : PLB
+    %a8()
     LDA #$01 : LDX !ROOM_ID      ; X = room ID
-    CPX #$C000 : BMI +           ; organized by room ID so we only have to check half
+    CPX #$C000 : BMI .tophalf    ; organized by room ID so we only have to check half
     BRL .halfway
 
+  .parlor
+    LDY !SAMUS_Y : CPY #$00D0    ; fix varies depending on Y position
+    BPL .parlor_lower
+    STA $CD24
+    BRA .topdone
+  .parlor_lower
+    INC : STA $CD26 : STA $CD28
+    BRA .topdone
+
+  .dachora
+    LDY !SAMUS_X : CPY #$0405    ; no fix if Xpos < 1029
+    BMI .topdone
+    STA $CD24
+    BRA .topdone
+
+  .etecoons_etank
+    STA $CD25 : STA $CD26
+    BRA .topdone
+
+  .red_tower
+    LDY !SAMUS_Y : CPY #$06A0    ; no fix if Ypos < 1696
+    BMI .topdone
+    STA $CD27
+    BRA .topdone
+
+  .alpha_pbs
+    LDY !SAMUS_X : CPY #$0100    ; no fix if Xpos > 255
+    BPL .topdone
+    STA $CD20
+    BRA .topdone
+
+  .below_spazer
+    LDY !SAMUS_Y : CPY #$00B0    ; no fix if Ypos > 176
+    BPL .topdone
+    INC : STA $CD20 : STA $CD21
+    BRA .topdone
+
+  .warehouse_entrance
+    STA $CD20
+    BRA .topdone
+
+  .ice_snake_room
+    LDY !SAMUS_X : CPY #$0100    ; fix varies depending on X position
+    BPL .ice_snake_room_hidden
+    INC : STA $CD22 : TDC : STA $CD23
+    BRA .topdone
+  .ice_snake_room_hidden
+    INC : STA $CD23 : TDC : STA $CD22
+
   .topdone
+    PLB
     PLP
     RTL
 
-+   CPX #$A011 : BNE +           ; bottom-left of Etecoons Etank
-    STA $7ECD25 : STA $7ECD26
-    BRA .topdone
-+   CPX #$A3AE : BNE +           ; hidden area behind Alpha Power Bombs
-    LDY !SAMUS_X : CPY #$0100    ; no fix if Xpos > 255
-    BPL .topdone
-    STA $7ECD20
-+   CPX #$A408 : BNE +           ; top of Below Spazer Room
-    LDY !SAMUS_Y : CPY #$00B0    ; no fix if Ypos > 176
-    BPL .topdone
-    LDA #$02
-    STA $7ECD20 : STA $7ECD21
-    BRA .topdone
-+   CPX #$A6A1 : BNE +           ; Elevator to Upper Norfair (from Kraid's area)
-    LDY !SAMUS_X : CPY #$0135
-    BMI ++
-    LDA #$00 : STA $7ECD20       ; fix for hidden area on right
-    LDA #$20 : STA $7ECD21
-    BRA .topdone
-++  STA $7ECD20                  ; fix for right side by elevator
-    BRA .topdone
-+   CPX #$AC83 : BNE +           ; left of Green Bubbles Missile Room (Norfair Reserve)
+  .tophalf
+    CPX #$92FD : BEQ .parlor
+    CPX #$9CB3 : BEQ .dachora
+    CPX #$A011 : BEQ .etecoons_etank
+    CPX #$A253 : BEQ .red_tower
+    CPX #$A3AE : BEQ .alpha_pbs
+    CPX #$A408 : BEQ .below_spazer
+    CPX #$A6A1 : BEQ .warehouse_entrance
+    CPX #$A8B9 : BEQ .ice_snake_room
+    CPX #$AC83 : BNE +           ; left of Green Bubbles Missile Room (Norfair Reserve)
     STA $7ECD20
     BRA .topdone
 +   CPX #$AE32 : BNE +           ; bottom of Volcano Room
@@ -248,6 +288,7 @@ preset_scroll_fixes:
     LDA #$00 : STA $7ECD23
 
   .done
+    PLB
     PLP
     RTL
 
@@ -295,6 +336,7 @@ preset_scroll_fixes:
     LDA #$00 : STA $7ECD22
 
   .bottomdone
+    PLB
     PLP
     RTL
 
@@ -332,11 +374,11 @@ preset_scroll_fixes:
     LDA #$03 : STA $7E0920
 
   .ceresdone
+    PLB
     PLP
     RTL
 
   .custom_presets
-    PHB
     LDA !sram_custom_preset_slot
     ASL : XBA
     CLC : ADC #$31E9 : TAX       ; X = Source
