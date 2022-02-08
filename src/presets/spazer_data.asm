@@ -2656,7 +2656,7 @@ preset_spazer_lower_norfair_fire_flea_room:
     dw $0919, $0008 ; Layer 2 Y position
     dw $0921, $FE00 ; BG2 X offset
     dw $0923, $FB00 ; BG2 Y offset
-    dw $0AF6, $00A0 ; Samus X
+    dw $0AF6, $009C ; Samus X
     dw $0AF8, $2FFF ; Samus subpixel X
     dw $0AFA, $008B ; Samus Y
     dw !PRESET_SPECIAL, $0001 ; clear shot blocks

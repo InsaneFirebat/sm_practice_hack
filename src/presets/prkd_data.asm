@@ -1885,8 +1885,9 @@ preset_prkd_lower_norfair_fire_flea_room:
     dw $0919, $0009  ; Layer 2 Y position
     dw $0921, $FE00  ; BG2 X offset
     dw $0923, $FB00  ; BG2 Y offset
-    dw $0AF6, $00B8  ; Samus X
+    dw $0AF6, $009C  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_SPECIAL, $0001 ; clear shot blocks
     dw #$FFFF
 .after
 
@@ -1905,6 +1906,7 @@ preset_prkd_lower_norfair_springball_maze:
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $016C  ; Samus X
+    dw !PRESET_SPECIAL, $0000 ; reset flag
     dw #$FFFF
 .after
 
