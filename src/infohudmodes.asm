@@ -63,11 +63,26 @@ status_roomstrat:
 
 status_chargetimer:
 {
-    LDA #$003D : SEC : SBC !SAMUS_CHARGE_TIMER : CMP !ram_HUD_check : BEQ .done : STA !ram_HUD_check
-    CMP #$0000 : BPL .charging : LDA #$0000
+    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_SHOT : BNE .pressedShot
+    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_SHOT : BNE .charging
+
+    ; count up to 36 frames of shot released
+    LDA !ram_shot_timer : CMP #$0024 : BPL .done
+    INC : STA !ram_shot_timer
+    ASL : TAX
+    LDA.l NumberGFXTable,X : STA $7EC688
+    RTS
+
+  .pressedShot
+    LDA #$0000 : STA !ram_shot_timer
 
   .charging
-    LDX #$0088 : JSR Draw4
+    LDA #$003D : SEC : SBC !SAMUS_CHARGE_TIMER : CMP !ram_HUD_check : BEQ .done : STA !ram_HUD_check
+    CMP #$0000 : BPL .drawCharge
+    LDA #$0000
+
+  .drawCharge
+    LDX #$008C : JSR Draw2
 
   .done
     RTS
@@ -1074,7 +1089,7 @@ endif
 
 status_shottimer:
 {
-    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_SHOOT : BEQ .inc
+    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_SHOT : BEQ .inc
     LDA !ram_shot_timer : LDX #$0088 : JSR Draw4
     LDA #$0000 : STA !ram_shot_timer
 
@@ -1530,7 +1545,7 @@ endif
 status_gateglitch:
 {
     ; Arbitrarily expecting shot and gate events to be within 20 frames of each other
-    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_SHOOT : BEQ .incshot
+    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_SHOT : BEQ .incshot
 
     ; Clear shot counter when shot fired
     LDA #$0000 : STA !ram_shot_timer

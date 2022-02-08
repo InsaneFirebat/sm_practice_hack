@@ -1,7 +1,8 @@
 
 ## Changelog since v2.2.7
 
-* [2.4.0.15] More work on Mother Brain presets by idlechild
+* [2.4.0.16] Added number of frames shot was released to the Charge Timer HUD mode
+* [2.4.0.16] More work on Mother Brain presets by idlechild
 * [2.4.0.15] Added per-round controls to new Phantoon RNG by NobodyNada
 * [2.4.0.14] Added option to skip Kraids suspenseful intro cutscene
 * [2.4.0.14] Force menu background on game over screen

@@ -33,13 +33,13 @@ status_dboost:
     DEC : BEQ .reset     ; 1 = needs reset
     DEC : BEQ .kbExpired ; 2 = knockback expired
   ;.damaged              ; 3 = damage detected
-    LDA $18AA : BEQ .kbExpired : BRA .knockback
+    LDA !SAMUS_KNOCKBACK_TIMER : BEQ .kbExpired : BRA .knockback
     
   .kbExpired
     LDA #$0002 : STA !ram_dboost_state
     LDA !ram_dboost_counter : CMP #$0014 : BPL .giveUp ; give up 20 frames after kb expires
     INC : STA !ram_dboost_counter
-    LDA $8B : AND #$0300
+    LDA !IH_CONTROLLER_PRI : AND #$0300
     CMP #$0200 : BEQ .failedHoldingLeft
     CMP #$0100 : BEQ .failedHoldingRight
   .done
@@ -54,7 +54,7 @@ status_dboost:
     RTS
 
   .failedCheckJumpInput
-    LDA $8B : AND !IH_INPUT_JUMP : BEQ .printfailed
+    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_JUMP : BEQ .printfailed
     RTS
 
   .printfailed
@@ -73,14 +73,14 @@ status_dboost:
     STA !ram_dboost_counter
     
   .knockback
-    LDA $18AA : CMP !ram_dboost_kbmax : BMI .knockbackContinues
+    LDA !SAMUS_KNOCKBACK_TIMER : CMP !ram_dboost_kbmax : BMI .knockbackContinues
     STA !ram_dboost_kbmax
     
   .knockbackContinues
     LDA #$0003 : STA !ram_dboost_state : BRA .direction
     
   .direction
-    LDA $8B : AND #$0300
+    LDA !IH_CONTROLLER_PRI : AND #$0300
     CMP #$0200 : BEQ .holdingLeft
     CMP #$0100 : BEQ .holdingRight
     ; no directional input code here
@@ -94,12 +94,12 @@ status_dboost:
     ; directional input does not match knockback direction
     
   .checkJumpInput
-    LDA $8B : AND !IH_INPUT_JUMP : BEQ .dboostInitiated
+    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_JUMP : BEQ .dboostInitiated
     ; not holding jump
     
   .dboostInitiated
     LDA #$0001 : STA !ram_dboost_state
-    LDA $18AA : STA !ram_dboost_kb
+    LDA !SAMUS_KNOCKBACK_TIMER : STA !ram_dboost_kb
     SEC : LDA !ram_dboost_kbmax : SBC !ram_dboost_kb
     LDX #$008C : JSR Draw2 : LDA !IH_LETTER_Y : STA $7EC68A
 
@@ -184,11 +184,11 @@ middleHUD_off:
 
 topHUD_chargetimer:
 {
-    LDA #$003D : SEC : SBC $0CD0 : CMP !ram_HUD_top : BEQ .done : STA !ram_HUD_top
+    LDA #$003D : SEC : SBC !SAMUS_CHARGE_TIMER : CMP !ram_HUD_top : BEQ .done : STA !ram_HUD_top
     CMP #$0000 : BPL .charging : LDA #$0000
 
   .charging
-    LDX #$0014 : JSR Draw3
+    LDX #$0016 : JSR Draw2
 
   .done
     RTS
@@ -196,11 +196,11 @@ topHUD_chargetimer:
 
 middleHUD_chargetimer:
 {
-    LDA #$003D : SEC : SBC $0CD0 : CMP !ram_HUD_middle : BEQ .done : STA !ram_HUD_middle
+    LDA #$003D : SEC : SBC !SAMUS_CHARGE_TIMER : CMP !ram_HUD_middle : BEQ .done : STA !ram_HUD_middle
     CMP #$0000 : BPL .charging : LDA #$0000
 
   .charging
-    LDX #$0054 : JSR Draw3
+    LDX #$0056 : JSR Draw2
 
   .done
     RTS
@@ -208,7 +208,7 @@ middleHUD_chargetimer:
 
 topHUD_xfactor:
 {
-    LDA #$0079 : SEC : SBC $0CD0 : CMP !ram_HUD_top : BEQ .done : STA !ram_HUD_top
+    LDA #$0079 : SEC : SBC !SAMUS_CHARGE_TIMER : CMP !ram_HUD_top : BEQ .done : STA !ram_HUD_top
     LDX #$0014 : JSR Draw3
 
   .done
@@ -217,7 +217,7 @@ topHUD_xfactor:
 
 middleHUD_xfactor:
 {
-    LDA #$0079 : SEC : SBC $0CD0 : CMP !ram_HUD_middle : BEQ .done : STA !ram_HUD_middle
+    LDA #$0079 : SEC : SBC !SAMUS_CHARGE_TIMER : CMP !ram_HUD_middle : BEQ .done : STA !ram_HUD_middle
     LDX #$0054 : JSR Draw3
 
   .done
@@ -268,7 +268,7 @@ middleHUD_shinetimer:
 
 topHUD_dashcounter:
 {
-    LDA $0B3F : AND #$00FF : CMP !ram_dash_counter : BEQ .done
+    LDA !SAMUS_DASH_COUNTER : AND #$00FF : CMP !ram_dash_counter : BEQ .done
     STA !ram_dash_counter : ASL : TAX
     LDA HexGFXTable,X : STA $7EC618
 
@@ -278,7 +278,7 @@ topHUD_dashcounter:
 
 middleHUD_dashcounter:
 {
-    LDA $0B3F : AND #$00FF : CMP !ram_dash_counter : BEQ .done
+    LDA !SAMUS_DASH_COUNTER : AND #$00FF : CMP !ram_dash_counter : BEQ .done
     STA !ram_dash_counter : ASL : TAX
     LDA HexGFXTable,X : STA $7EC658
 
@@ -306,7 +306,7 @@ middleHUD_ridleygrab:
 
 topHUD_iframecounter:
 {
-    LDA $18A8 : CMP !ram_HUD_top : BEQ .done : STA !ram_HUD_top
+    LDA !SAMUS_IFRAME_TIMER : CMP !ram_HUD_top : BEQ .done : STA !ram_HUD_top
     LDX #$0014 : JSR Draw3
 
   .done
@@ -315,7 +315,7 @@ topHUD_iframecounter:
 
 middleHUD_iframecounter:
 {
-    LDA $18A8 : CMP !ram_HUD_middle : BEQ .done : STA !ram_HUD_middle
+    LDA !SAMUS_IFRAME_TIMER : CMP !ram_HUD_middle : BEQ .done : STA !ram_HUD_middle
     LDX #$0054 : JSR Draw3
 
   .done
@@ -350,7 +350,7 @@ middleHUD_cpuusage:
 
 topHUD_shottimer:
 {
-    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_SHOOT : BEQ .inc
+    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_SHOT : BEQ .inc
     LDA !ram_shot_timer : LDX #$0014 : JSR Draw3
     LDA #$0000 : STA !ram_shot_timer
 
@@ -361,7 +361,7 @@ topHUD_shottimer:
 
 middleHUD_shottimer:
 {
-    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_SHOOT : BEQ .inc
+    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_SHOT : BEQ .inc
     LDA !ram_shot_timer : LDX #$0054 : JSR Draw3
     LDA #$0000 : STA !ram_shot_timer
 
