@@ -2308,8 +2308,9 @@ preset_kpdr22_lower_norfair_fire_flea_room:
     dw $0919, $0009 ; Layer 2 Y scroll in room in pixels? (up = positive)
     dw $0921, $FE00 ; BG2 X scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dw $0923, $FB00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
-    dw $0AF6, $00B7 ; Samus X
+    dw $0AF6, $009C ; Samus X
     dw $0AFA, $008B ; Samus Y
+    dw !PRESET_SPECIAL, $0001 ; clear shot blocks
     dw #$FFFF
 .after
 
@@ -2330,6 +2331,7 @@ preset_kpdr22_lower_norfair_springball_maze:
     dw $0A1E, $0004 ; More position/state
     dw $0AF6, $016C ; Samus X
     dw $D91A, $0044 ; Events, Items, Doors
+    dw !PRESET_SPECIAL, $0000 ; reset flag
     dw #$FFFF
 .after
 

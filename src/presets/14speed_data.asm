@@ -1022,8 +1022,9 @@ preset_14speed_lower_norfair_fireflea_room:
     dw $0923, $FB00  ; BG2 Y offset
     dw $0A1C, $0001  ; Samus position/state
     dw $0A1E, $0008  ; More position/state
-    dw $0AF6, $00B9  ; Samus X
+    dw $0AF6, $009C  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_SPECIAL, $0001 ; clear shot blocks
     dw #$FFFF
 .after
 
@@ -1039,6 +1040,7 @@ preset_14speed_lower_norfair_three_musketeers:
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $005F  ; Samus X
+    dw !PRESET_SPECIAL, $0000 ; reset flag
     dw #$FFFF
 .after
 

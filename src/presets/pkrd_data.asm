@@ -1552,8 +1552,9 @@ preset_pkrd_lower_norfair_fire_flea_room:
     dw $0911, $0000  ; Screen X position in pixels
     dw $0913, $8800  ; Screen subpixel Y position
     dw $0915, $000F  ; Screen Y position in pixels
-    dw $0AF6, $00B9  ; Samus X
+    dw $0AF6, $009C  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_SPECIAL, $0001 ; clear shot blocks
     dw #$FFFF
 .after
 
@@ -1568,6 +1569,7 @@ preset_pkrd_lower_norfair_springball_maze:
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $016D  ; Samus X
+    dw !PRESET_SPECIAL, $0000 ; reset flag
     dw #$FFFF
 .after
 
