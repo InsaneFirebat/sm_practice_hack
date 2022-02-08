@@ -820,7 +820,7 @@ ih_hud_code:
 
 ; Samus' HP
     LDA !SAMUS_HP : CMP !ram_last_hp : BEQ .reserves : STA !ram_last_hp
-    LDA !sram_top_display_mode : CMP #$0002 : BEQ .vanilla_draw_health
+    LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_draw_health
     LDA !SAMUS_HP : LDX #$0092 : JSR Draw4
     LDA !IH_BLANK : STA $7EC690 : STA $7EC69A
     BRA .reserves
@@ -869,6 +869,11 @@ ih_hud_code:
     LDA !sram_status_icons : BNE +
     JMP .end
 
+    ; check for Super HUD
++   LDA !sram_display_mode : CMP !IH_MODE_ROOMSTRAT_INDEX : BNE +
+    LDA !sram_room_strat : BNE +
+    JMP .end
+    
     ; elevator
 +   LDA $0E16 : BEQ .clearElevator
     LDA !IH_ELEVATOR : STA $7EC656
