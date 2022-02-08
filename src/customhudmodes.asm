@@ -184,11 +184,32 @@ middleHUD_off:
 
 topHUD_chargetimer:
 {
-    LDA #$003D : SEC : SBC !SAMUS_CHARGE_TIMER : CMP !ram_HUD_top : BEQ .done : STA !ram_HUD_top
-    CMP #$0000 : BPL .charging : LDA #$0000
+    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_SHOT : BNE .pressedShot
+    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_SHOT : BNE .charging
+
+    ; count up to 36 frames of shot released
+    LDA !ram_HUD_top_counter : CMP #$0024 : BPL .reset
+    INC : STA !ram_HUD_top_counter
+    ASL : TAX
+    LDA NumberGFXTable,X : STA $7EC614
+    RTS
+
+  .reset
+    LDA !IH_BLANK : STA $7EC614 : STA $7EC616
+    LDA NumberGFXTable+122 : STA $7EC618
+    RTS
+
+  .pressedShot
+    LDA #$0000 : STA !ram_HUD_top_counter
 
   .charging
-    LDX #$0016 : JSR Draw2
+    LDA #$003D : SEC : SBC !SAMUS_CHARGE_TIMER : CMP !ram_HUD_top : BEQ .done : STA !ram_HUD_top
+    CMP #$0000 : BPL .drawCharge
+    LDA #$0000
+
+  .drawCharge
+    ASL : TAX
+    LDA NumberGFXTable,X : STA $7EC618
 
   .done
     RTS
@@ -196,11 +217,32 @@ topHUD_chargetimer:
 
 middleHUD_chargetimer:
 {
-    LDA #$003D : SEC : SBC !SAMUS_CHARGE_TIMER : CMP !ram_HUD_middle : BEQ .done : STA !ram_HUD_middle
-    CMP #$0000 : BPL .charging : LDA #$0000
+    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_SHOT : BNE .pressedShot
+    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_SHOT : BNE .charging
+
+    ; count up to 36 frames of shot released
+    LDA !ram_HUD_middle_counter : CMP #$0024 : BPL .reset
+    INC : STA !ram_HUD_middle_counter
+    ASL : TAX
+    LDA NumberGFXTable,X : STA $7EC654
+    RTS
+
+  .reset
+    LDA !IH_BLANK : STA $7EC654 : STA $7EC656
+    LDA NumberGFXTable+122 : STA $7EC658
+    RTS
+
+  .pressedShot
+    LDA #$0000 : STA !ram_HUD_middle_counter
 
   .charging
-    LDX #$0056 : JSR Draw2
+    LDA #$003D : SEC : SBC !SAMUS_CHARGE_TIMER : CMP !ram_HUD_middle : BEQ .done : STA !ram_HUD_middle
+    CMP #$0000 : BPL .drawCharge
+    LDA #$0000
+
+  .drawCharge
+    ASL : TAX
+    LDA NumberGFXTable,X : STA $7EC658
 
   .done
     RTS

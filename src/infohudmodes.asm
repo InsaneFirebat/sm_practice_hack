@@ -67,10 +67,16 @@ status_chargetimer:
     LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_SHOT : BNE .charging
 
     ; count up to 36 frames of shot released
-    LDA !ram_shot_timer : CMP #$0024 : BPL .done
+    LDA !ram_shot_timer : CMP #$0024 : BPL .reset
     INC : STA !ram_shot_timer
     ASL : TAX
-    LDA.l NumberGFXTable,X : STA $7EC688
+    LDA NumberGFXTable,X : STA $7EC688
+    RTS
+
+  .reset
+    LDA !IH_BLANK : STA $7EC688
+    LDA NumberGFXTable+12 : STA $7EC68C
+    LDA NumberGFXTable+2 : STA $7EC68E
     RTS
 
   .pressedShot
@@ -82,7 +88,7 @@ status_chargetimer:
     LDA #$0000
 
   .drawCharge
-    LDX #$008C : JSR Draw2
+    LDX #$008A : JSR Draw3
 
   .done
     RTS

@@ -477,6 +477,8 @@
 !ram_HUD_top = $F02100
 !ram_HUD_middle = $F02102
 !ram_HUD_bottom = $F02104
+!ram_HUD_top_counter = $F02106
+!ram_HUD_middle_counter = $F02108
 
 !ram_cm_rng = $F0210C
 
