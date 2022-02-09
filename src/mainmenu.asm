@@ -163,7 +163,7 @@ preset_category_banks:
 
 MainMenu:
     dw #mm_goto_equipment
-    dw #mm_goto_presets
+;    dw #mm_goto_presets
     dw #mm_goto_presets_menu
     dw #mm_goto_teleport
     dw #mm_goto_events
@@ -215,9 +215,9 @@ mm_goto_ctrlsmenu:
 ; -------------
 
 PresetsMenu:
-    dw #presets_goto_select_preset_category
-    dw #presets_current
-    dw #$FFFF
+;    dw #presets_goto_select_preset_category
+;    dw #presets_current
+;    dw #$FFFF
     dw #presets_custom_preset_slot
     dw #presets_save_custom_preset
     dw #presets_load_custom_preset
@@ -2132,8 +2132,8 @@ CtrlMenu:
         dw #ctrl_save_state
         dw #ctrl_load_state
     endif
-    dw #ctrl_load_last_preset
-    dw #ctrl_random_preset
+;    dw #ctrl_load_last_preset
+;    dw #ctrl_random_preset
     dw #ctrl_save_custom_preset
     dw #ctrl_load_custom_preset
     dw #ctrl_inc_custom_preset
