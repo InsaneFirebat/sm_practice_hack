@@ -163,7 +163,7 @@ preset_category_banks:
 
 MainMenu:
     dw #mm_goto_equipment
-    dw #mm_goto_presets
+;    dw #mm_goto_presets
     dw #mm_goto_presets_menu
     dw #mm_goto_teleport
     dw #mm_goto_events
@@ -215,9 +215,9 @@ mm_goto_ctrlsmenu:
 ; -------------
 
 PresetsMenu:
-    dw #presets_goto_select_preset_category
-    dw #presets_current
-    dw #$FFFF
+;    dw #presets_goto_select_preset_category
+;    dw #presets_current
+;    dw #$FFFF
     dw #presets_custom_preset_slot
     dw #presets_save_custom_preset
     dw #presets_load_custom_preset
@@ -716,12 +716,28 @@ action_glitched_beam:
 ; ---------------
 
 TeleportMenu:
-    dw #tel_goto_crat
-    dw #tel_goto_brin
-    dw #tel_goto_norf
-    dw #tel_goto_ship
-    dw #tel_goto_mari
-    dw #tel_goto_tour
+    dw #tel_crateriaship
+    dw #$FFFF
+    dw #tel_brinstargreenshaft
+    dw #tel_brinstarkraid
+    dw #$FFFF
+    dw #tel_norfairgrapple
+    dw #tel_norfairtunnel
+    dw #tel_norfaircrocomire
+    dw #$FFFF
+    dw #tel_maridiatube
+    dw #tel_maridiaelevator
+    dw #tel_maridiaaqueduct
+    dw #tel_maridiadraygon
+    dw #$FFFF
+    dw #tel_tourianmb
+;    dw #tel_goto_crat
+;    dw #tel_goto_brin
+;    dw #tel_goto_norf
+;    dw #tel_goto_ship
+;    dw #tel_goto_mari
+;    dw #tel_goto_tour
+    dw #$FFFF
     dw #tel_goto_debug
     dw #$0000
     %cm_header("TELEPORT TO SAVE STATION")
@@ -760,11 +776,11 @@ tel_crateriaparlor:
     %cm_jsr("Crateria Parlor", #action_teleport, #$0001)
 
 TeleportBrinstarMenu:
-    dw #tel_brinstarpink
+;    dw #tel_brinstarpink
     dw #tel_brinstargreenshaft
-    dw #tel_brinstargreenetecoons
+;    dw #tel_brinstargreenetecoons
     dw #tel_brinstarkraid
-    dw #tel_brinstarredtower
+;    dw #tel_brinstarredtower
     dw #$0000
     %cm_header("BRINSTAR SAVE STATIONS")
 
@@ -772,7 +788,7 @@ tel_brinstarpink:
     %cm_jsr("Brinstar Pink Spospo", #action_teleport, #$0100)
 
 tel_brinstargreenshaft:
-    %cm_jsr("Brinstar Green Shaft", #action_teleport, #$0101)
+    %cm_jsr("Brinstar Green Parlor", #action_teleport, #$0101)
 
 tel_brinstargreenetecoons:
     %cm_jsr("Brinstar Green Etecoons", #action_teleport, #$0102)
@@ -785,11 +801,11 @@ tel_brinstarredtower:
 
 TeleportNorfairMenu:
     dw #tel_norfairgrapple
-    dw #tel_norfairbubble
+;    dw #tel_norfairbubble
     dw #tel_norfairtunnel
     dw #tel_norfaircrocomire
-    dw #tel_norfairlnelevator
-    dw #tel_norfairridley
+;    dw #tel_norfairlnelevator
+;    dw #tel_norfairridley
     dw #$0000
     %cm_header("NORFAIR SAVE STATIONS")
 
@@ -837,10 +853,10 @@ tel_maridiaaqueduct:
     %cm_jsr("Maridia Aqueduct", #action_teleport, #$0402)
 
 tel_maridiadraygon:
-    %cm_jsr("Maridia Draygon", #action_teleport, #$0403)
+    %cm_jsr("DEBUG Maridia 03", #action_teleport, #$0403)
 
 TeleportTourianMenu:
-    dw #tel_tourianentrance
+;    dw #tel_tourianentrance
     dw #tel_tourianmb
     dw #$0000
     %cm_header("TOURIAN SAVE STATIONS")
@@ -857,6 +873,7 @@ DebugTeleportMenu:
     dw #tel_debug_execute
     dw #$0000
     %cm_header("DEBUG LOAD POINTS")
+    %cm_footer("SOME MAY CRASH")
 
 tel_debug_area:
     dw !ACTION_CHOICE
@@ -2068,8 +2085,8 @@ CtrlMenu:
         dw #ctrl_save_state
         dw #ctrl_load_state
     endif
-    dw #ctrl_load_last_preset
-    dw #ctrl_random_preset
+;    dw #ctrl_load_last_preset
+;    dw #ctrl_random_preset
     dw #ctrl_save_custom_preset
     dw #ctrl_load_custom_preset
     dw #ctrl_inc_custom_preset
