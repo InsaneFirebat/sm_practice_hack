@@ -1,4 +1,4 @@
-# HACK
+# SM: Decision
 
 ## Notes
 

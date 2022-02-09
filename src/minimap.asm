@@ -134,7 +134,8 @@ warnpc $82FA00
 
 
 ; Placed in bank 90 so that the jumps work
-org $90F640
+;org $90F640
+org $90F660
 print pc, " minimap bank90 start"
 
 mm_initialize_minimap:
