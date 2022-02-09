@@ -328,7 +328,7 @@ layout_asm_ceres_ridley_room_no_timer:
 {
     ; Same as original setup asm, except force blue background
     PHP
-    SEP #$20
+    %a8()
     LDA #$66 : STA $5D
     PLP
     JSL $88DDD0

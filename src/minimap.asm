@@ -190,9 +190,9 @@ mm_inc_tile_count:
 
     ; Set tile and increment counter
     STA $07F7,X
-    REP #$20
+    %a16()
     LDA !ram_map_counter : INC A : STA !ram_map_counter
-    SEP #$20
+    %a8()
 
   .done
     JMP $A987  ; resume original logic

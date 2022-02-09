@@ -651,5 +651,128 @@ if !FEATURE_PAL
     dw #$3105, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% speedboots
 endif
 
+
+check_duplicate_inputs:
+{
+    ; ram_cm_ctrl_assign = word address of input being assigned
+    ; ram_cm_ctrl_swap = previous input bitmask being moved
+    ; X / $C2 = word address of new input
+    ; Y / $C4 = new input bitmask
+
+    LDA #$09B2 : CMP $C2 : BEQ .check_jump      ; check if we just assigned shot
+    LDA $09B2 : BEQ +                           ; check if shot is unassigned
+    CMP $C4 : BNE .check_jump                   ; skip to check_jump if not a duplicate assignment
++   JMP .shot                                   ; swap with shot
+
+  .check_jump
+    LDA #$09B4 : CMP $C2 : BEQ .check_dash
+    LDA $09B4 : BEQ +
+    CMP $C4 : BNE .check_dash
++   JMP .jump
+
+  .check_dash
+    LDA #$09B6 : CMP $C2 : BEQ .check_cancel
+    LDA $09B6 : BEQ +
+    CMP $C4 : BNE .check_cancel
++   JMP .dash
+
+  .check_cancel
+    LDA #$09B8 : CMP $C2 : BEQ .check_select
+    LDA $09B8 : BEQ +
+    CMP $C4 : BNE .check_select
++   JMP .cancel
+
+  .check_select
+    LDA #$09BA : CMP $C2 : BEQ .check_up
+    LDA $09BA : BEQ +
+    CMP $C4 : BNE .check_up
++   JMP .select
+
+  .check_up
+    LDA #$09BE : CMP $C2 : BEQ .check_down
+    LDA $09BE : BEQ +
+    CMP $C4 : BNE .check_down
++   JMP .up
+
+  .check_down
+    LDA #$09BC : CMP $C2 : BEQ .not_detected
+    LDA $09BC : BEQ +
+    CMP $C4 : BNE .not_detected
++   JMP .down
+
+  .not_detected
+    LDA #$FFFF
+    RTL
+
+  .shot
+    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +  ; check if old input is L or R
+    LDA #$0000 : STA $09B2                      ; unassign input
+    RTL
++   LDA !ram_cm_ctrl_swap : STA $09B2           ; input is safe to be assigned
+    RTL
+
+  .jump
+    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +
+    LDA #$0000 : STA $09B4
+    RTL
++   LDA !ram_cm_ctrl_swap : STA $09B4
+    RTL
+
+  .dash
+    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +
+    LDA #$0000 : STA $09B6
+    RTL
++   LDA !ram_cm_ctrl_swap : STA $09B6
+    RTL
+
+  .cancel
+    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +
+    LDA #$0000 : STA $09B8
+    RTL
++   LDA !ram_cm_ctrl_swap : STA $09B8
+    RTL
+
+  .select
+    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +
+    LDA #$0000 : STA $09BA
+    RTL
++   LDA !ram_cm_ctrl_swap : STA $09BA
+    RTL
+
+  .up
+    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ .unbind_up  ; check if input is L or R, unbind if not
+    LDA !ram_cm_ctrl_swap : STA $09BE                    ; safe to assign input
+    CMP $09BC : BEQ .swap_down                           ; check if input matches angle down
+    RTL
+
+  .unbind_up
+    STA $09BE               ; unassign up
+    RTL
+
+  .swap_down
+    CMP #$0020 : BNE +      ; check if angle up is assigned to L
+    LDA #$0010 : STA $09BC  ; assign R to angle down
+    RTL
++   LDA #$0020 : STA $09BC  ; assign L to angle down
+    RTL
+
+  .down
+    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ .unbind_down
+    LDA !ram_cm_ctrl_swap : STA $09BC
+    CMP $09BE : BEQ .swap_up
+    RTL
+
+  .unbind_down
+    STA $09BC               ; unassign down
+    RTL
+
+  .swap_up
+    CMP #$0020 : BNE +
+    LDA #$0010 : STA $09BE
+    RTL
++   LDA #$0020 : STA $09BE
+    RTL
+}
+
 print pc, " mainmenu bankB6 end"
 pullpc
