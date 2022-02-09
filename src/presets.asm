@@ -155,7 +155,7 @@ preset_load_library_background:
 
   .done_fx_tilemap
     PEA $8F00 : PLB : PLB
-    REP #$20
+    %a16()
     LDX $07BB
     LDY $0016,X : BPL .done
 

@@ -51,11 +51,11 @@ custom_preset_save:
 
     ; Copy SRAM
     ; This was deemed unnecessary but remains reserved for backward compatibility
-;    TXA : CLC : ADC #$005F : TAX
+    TXA : CLC : ADC #$005F : TAX
   .save_sram_loop
-;    DEX : PHX : TXA : AND #$01FF : TAX
-;    LDA $7ED7C0,X : PLX : STA !PRESET_SLOTS+$50,X
-;    DEX : TXA : BIT #$0100 : BEQ .save_sram_loop
+    DEX : PHX : TXA : AND #$01FF : TAX
+    LDA $7ED7C0,X : PLX : STA !PRESET_SLOTS+$50,X
+    DEX : TXA : BIT #$0100 : BEQ .save_sram_loop
 
     ; Copy Events, Items, Doors
     ; Much of this is unnecessary for vanilla but remains reserved for backward compatibility

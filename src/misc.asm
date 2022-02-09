@@ -387,7 +387,7 @@ endif
 ; Make our minor adjustments and jump back to the vanilla routine
 periodic_damage_balanced:
 {
-    PHP : REP #$30
+    PHP : %ai16()
     LDA $0A78 : BEQ $03
 if !FEATURE_PAL
     JMP $EA32
@@ -406,7 +406,7 @@ endif
 
 periodic_damage_progressive:
 {
-    PHP : REP #$30
+    PHP : %ai16()
     LDA $0A78 : BEQ $03
     ; Nothing to do, jump back to vanilla routine
 if !FEATURE_PAL

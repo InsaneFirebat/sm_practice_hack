@@ -34,7 +34,7 @@ print pc, " init start"
 
 init_code:
 {
-    REP #$30
+    %ai16()
     PHA
 
     ; Initialize RAM (Bank 7E required)

@@ -471,29 +471,21 @@ cm_tilemap_menu:
 
 cm_tilemap_transfer:
 {
-    JSL wait_for_lag_frame_long  ; Wait for lag frame
+    JSL wait_for_lag_frame_long ; Wait for lag frame
 
-    REP #$20
-    LDA #$5800
-    STA $2116
-    LDA #$1801
-    STA $4310
-    LDA.w #!ram_tilemap_buffer
-    STA $4312
-    LDA.w #!ram_tilemap_buffer>>16
-    STA $4314
-    LDA #$0800
-    STA $4315
-    STZ $4317
-    STZ $4319
-    SEP #$20
-    LDA #$80
-    STA $2115
-    LDA #$02
-    STA $420B
-    JSL $808F0C
-    JSL $8289EF
-    REP #$20
+    %a16()
+    LDA #$5800 : STA $2116
+    LDA #$1801 : STA $4310
+    LDA.w #!ram_tilemap_buffer : STA $4312
+    LDA.w #!ram_tilemap_buffer>>16 : STA $4314
+    LDA #$0800 : STA $4315
+    STZ $4317 : STZ $4319
+    %a8()
+    LDA #$80 : STA $2115
+    LDA #$02 : STA $420B
+    JSL $808F0C ; Handle music queue
+    JSL $8289EF ; Handle sounds
+    %a16()
     RTS
 }
 
@@ -1795,9 +1787,11 @@ cm_hex2dec:
 
 cm_divide_100:
 {
-    STA $4204 : SEP #$20
+    STA $4204
+    %a8()
     LDA #$64 : STA $4206
-    PHA : PLA : PHA : PLA : %a16()
+    PHA : PLA : PHA : PLA
+    %a16()
     LDA $4214 : ADC !ram_tmp_1 : STA !ram_tmp_1
     LDA $4214
     RTS
