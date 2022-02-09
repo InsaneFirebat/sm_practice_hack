@@ -267,8 +267,7 @@ preset_start_gameplay:
     JSL $89AB82  ; Load FX
     JSL $82E97C  ; Load library background
 
-; Don't enable this unless the room layout is basically vanilla. Room IDs may need to be updated.
-;    JSR preset_scroll_fixes
+    JSR preset_scroll_fixes
 
     ; Pull layer 2 values, and use them if they are valid
     PLA : CMP #$5AFE : BEQ .calculate_layer_2
