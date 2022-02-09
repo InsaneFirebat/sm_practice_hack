@@ -15,7 +15,7 @@ incsrc gamemode.asm
 incsrc minimap.asm
 incsrc menu.asm
 incsrc infohud.asm
-;incsrc rng.asm
+incsrc rng.asm
 incsrc presets.asm
 incsrc misc.asm
 incsrc init.asm
