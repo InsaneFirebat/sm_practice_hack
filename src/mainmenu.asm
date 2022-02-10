@@ -792,7 +792,7 @@ tel_debug_area:
     db #$FF
 
 tel_debug_station:
-    %cm_numfield_hex("Station ID", !ram_tel_debug_station, 0, 21, 1, 4, #0)
+    %cm_numfield_hex("Station ID", !ram_tel_debug_station, 0, 22, 1, 4, #0)
 
 tel_debug_execute:
     %cm_jsr("TELEPORT", #action_debug_teleport, #$0000)
