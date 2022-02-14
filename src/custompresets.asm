@@ -179,6 +179,7 @@ preset_scroll_fixes:
     PHP : %ai16()
     PHB
 
+    STZ $0921 : STZ $0923
     LDA !ram_custom_preset : CMP #$5AFE : BNE .category_presets
     BRL .custom_presets
 
