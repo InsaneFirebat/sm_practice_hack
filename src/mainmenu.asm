@@ -2358,16 +2358,7 @@ if !FEATURE_SD2SNES
     dw #rng_rerandomize
     dw #$FFFF
 endif
-if !NEW_PHANTOON_RNG
     dw #rng_goto_phanmenu
-else
-    dw #rng_phan_first_phase
-    dw #rng_phan_second_phase
-    dw #phan_eyeclose
-    dw #phan_flamepattern
-    dw #phan_next_flamepattern
-    dw #phan_skip_intro
-endif
     dw #$FFFF
     dw #rng_botwoon_rng
     dw #$FFFF
@@ -2383,12 +2374,20 @@ endif
 rng_rerandomize:
     %cm_toggle("Rerandomize", !sram_rerandomize, #$0001, #0)
 
-if !NEW_PHANTOON_RNG
-; new Phantoon RNG starts here
 rng_goto_phanmenu:
-    %cm_submenu("Phantoon RNG Controls", #PhantoonMenu)
+    %cm_jsr("Phantoon", ih_prepare_phantoon_menu, #PhantoonMenu)
+
+ih_prepare_phantoon_menu:
+{
+    LDA !ram_phantoon_rng_inverted : PHA
+    JSR phan_set_phan_first_phase
+    JSR phan_set_phan_second_phase
+    PLA : STA !ram_phantoon_rng_inverted
+    JMP action_submenu
+}
 
 PhantoonMenu:
+    dw #phan_first_phase
     dw #phan_fast_left_1
     dw #phan_mid_left_1
     dw #phan_slow_left_1
@@ -2396,12 +2395,14 @@ PhantoonMenu:
     dw #phan_mid_right_1
     dw #phan_slow_right_1
     dw #$FFFF
+    dw #phan_second_phase
     dw #phan_fast_left_2
     dw #phan_mid_left_2
     dw #phan_slow_left_2
     dw #phan_fast_right_2
     dw #phan_mid_right_2
     dw #phan_slow_right_2
+    dw #phan_second_phase_inverted
     dw #$FFFF
     dw #phan_eyeclose
     dw #$FFFF
@@ -2410,48 +2411,10 @@ PhantoonMenu:
     dw #$0000
     %cm_header("PHANTOON RNG CONTROL")
 
-phan_fast_left_1:
-    %cm_toggle_bit("#1 Fast Left", !ram_phantoon_rng_1, #$0020, 0)
-
-phan_mid_left_1:
-    %cm_toggle_bit("#1 Mid  Left", !ram_phantoon_rng_1, #$0008, 0)
-
-phan_slow_left_1:
-    %cm_toggle_bit("#1 Slow Left", !ram_phantoon_rng_1, #$0002, 0)
-
-phan_fast_right_1:
-    %cm_toggle_bit("#1 Fast Right", !ram_phantoon_rng_1, #$0010, 0)
-
-phan_mid_right_1:
-    %cm_toggle_bit("#1 Mid  Right", !ram_phantoon_rng_1, #$0004, 0)
-
-phan_slow_right_1:
-    %cm_toggle_bit("#1 Slow Right", !ram_phantoon_rng_1, #$0001, 0)
-
-phan_fast_left_2:
-    %cm_toggle_bit("#2 Fast Left", !ram_phantoon_rng_2, #$0020, 0)
-
-phan_mid_left_2:
-    %cm_toggle_bit("#2 Mid  Left", !ram_phantoon_rng_2, #$0008, 0)
-
-phan_slow_left_2:
-    %cm_toggle_bit("#2 Slow Left", !ram_phantoon_rng_2, #$0002, 0)
-
-phan_fast_right_2:
-    %cm_toggle_bit("#2 Fast Right", !ram_phantoon_rng_2, #$0010, 0)
-
-phan_mid_right_2:
-    %cm_toggle_bit("#2 Mid  Right", !ram_phantoon_rng_2, #$0004, 0)
-
-phan_slow_right_2:
-    %cm_toggle_bit("#2 Slow Right", !ram_phantoon_rng_2, #$0001, 0)
-; new Phantoon RNG ends here
-else
-; old Phantoon RNG starts here
-rng_phan_first_phase:
+phan_first_phase:
     dw !ACTION_CHOICE
-    dl #!ram_phantoon_rng_1
-    dw #$0000
+    dl #!ram_cm_phan_first_phase
+    dw .routine
     db #$28, "Phan 1st Phase", #$FF
     db #$28, "     RANDOM", #$FF
     db #$28, "  FAST LEFT", #$FF
@@ -2460,12 +2423,22 @@ rng_phan_first_phase:
     db #$28, " FAST RIGHT", #$FF
     db #$28, "  MID RIGHT", #$FF
     db #$28, " SLOW RIGHT", #$FF
+    db #$28, "       FAST", #$FF
+    db #$28, "        MID", #$FF
+    db #$28, "       SLOW", #$FF
+    db #$28, "       LEFT", #$FF
+    db #$28, "      RIGHT", #$FF
+    db #$28, "     CUSTOM", #$FF
     db #$FF
+  .routine
+    ASL : TAX
+    LDA PhantoonPhaseTable,X : STA !ram_phantoon_rng_round_1
+    RTS
 
-rng_phan_second_phase:
+phan_second_phase:
     dw !ACTION_CHOICE
-    dl #!ram_phantoon_rng_2
-    dw #$0000
+    dl #!ram_cm_phan_second_phase
+    dw .routine
     db #$28, "Phan 2nd Phase", #$FF
     db #$28, "     RANDOM", #$FF
     db #$28, "  FAST LEFT", #$FF
@@ -2474,13 +2447,103 @@ rng_phan_second_phase:
     db #$28, " FAST RIGHT", #$FF
     db #$28, "  MID RIGHT", #$FF
     db #$28, " SLOW RIGHT", #$FF
+    db #$28, "       FAST", #$FF
+    db #$28, "        MID", #$FF
+    db #$28, "       SLOW", #$FF
+    db #$28, "       LEFT", #$FF
+    db #$28, "      RIGHT", #$FF
+    db #$28, "     CUSTOM", #$FF
     db #$FF
-; old Phantoon RNG ends here
-endif
+  .routine
+    ASL : TAX
+    LDA PhantoonPhaseTable,X : STA !ram_phantoon_rng_round_2 : BEQ +
+    TXA : BEQ +
+    LDA #$0002
++   STA !ram_phantoon_rng_inverted
+    RTS
+
+PhantoonPhaseTable:
+    dw #$003F, #$0020, #$0008, #$0002, #$0010, #$0004, #$0001
+    dw #$0030, #$000C, #$0003, #$002A, #$0015, #$0000 ; 0 = Term
+
+phan_set_phan_first_phase:
+{
+    LDX #$0000
+    LDA !ram_phantoon_rng_round_1 : BEQ +
+
+-   CMP PhantoonPhaseTable,X : BEQ +
+    INX : INX : CPX #$0018 : BNE -
+
++   TXA : LSR : STA !ram_cm_phan_first_phase
+    RTS
+}
+
+phan_set_phan_second_phase:
+{
+    LDX #$0000
+    LDA !ram_phantoon_rng_round_2 : BEQ +
+
+-   CMP PhantoonPhaseTable,X : BEQ +
+    INX : INX : CPX #$0018 : BNE -
+
++   TXA : LSR : STA !ram_cm_phan_second_phase
+    BEQ +
+    TXA : BEQ +
+    LDA #$0002
++   STA !ram_phantoon_rng_inverted
+    RTS
+}
+
+phan_fast_left_1:
+    %cm_toggle_bit("#1 Fast Left", !ram_phantoon_rng_round_1, #$0020, phan_set_phan_first_phase)
+
+phan_mid_left_1:
+    %cm_toggle_bit("#1 Mid  Left", !ram_phantoon_rng_round_1, #$0008, phan_set_phan_first_phase)
+
+phan_slow_left_1:
+    %cm_toggle_bit("#1 Slow Left", !ram_phantoon_rng_round_1, #$0002, phan_set_phan_first_phase)
+
+phan_fast_right_1:
+    %cm_toggle_bit("#1 Fast Right", !ram_phantoon_rng_round_1, #$0010, phan_set_phan_first_phase)
+
+phan_mid_right_1:
+    %cm_toggle_bit("#1 Mid  Right", !ram_phantoon_rng_round_1, #$0004, phan_set_phan_first_phase)
+
+phan_slow_right_1:
+    %cm_toggle_bit("#1 Slow Right", !ram_phantoon_rng_round_1, #$0001, phan_set_phan_first_phase)
+
+phan_fast_left_2:
+    %cm_toggle_bit("#2 Fast Left", !ram_phantoon_rng_round_2, #$0020, phan_set_phan_second_phase)
+
+phan_mid_left_2:
+    %cm_toggle_bit("#2 Mid  Left", !ram_phantoon_rng_round_2, #$0008, phan_set_phan_second_phase)
+
+phan_slow_left_2:
+    %cm_toggle_bit("#2 Slow Left", !ram_phantoon_rng_round_2, #$0002, phan_set_phan_second_phase)
+
+phan_fast_right_2:
+    %cm_toggle_bit("#2 Fast Right", !ram_phantoon_rng_round_2, #$0010, phan_set_phan_second_phase)
+
+phan_mid_right_2:
+    %cm_toggle_bit("#2 Mid  Right", !ram_phantoon_rng_round_2, #$0004, phan_set_phan_second_phase)
+
+phan_slow_right_2:
+    %cm_toggle_bit("#2 Slow Right", !ram_phantoon_rng_round_2, #$0001, phan_set_phan_second_phase)
+
+phan_second_phase_inverted:
+    dw !ACTION_CHOICE
+    dl #!ram_phantoon_rng_inverted
+    dw #$0000
+    db #$28, "2nd Phase Inver", #$FF
+    db #$28, "t   VANILLA", #$FF
+    db #$28, "t        ON", #$FF
+    db #$28, "t       OFF", #$FF
+    db #$28, "t    RANDOM", #$FF
+    db #$FF
 
 phan_eyeclose:
     dw !ACTION_CHOICE
-    dl #!ram_phantoon_rng_3
+    dl #!ram_phantoon_rng_eyeclose
     dw #$0000
     db #$28, "Phan Eye Close", #$FF
     db #$28, "     RANDOM", #$FF
@@ -2491,9 +2554,9 @@ phan_eyeclose:
 
 phan_flamepattern:
     dw !ACTION_CHOICE
-    dl #!ram_phantoon_rng_4
+    dl #!ram_phantoon_rng_flames
     dw #$0000
-    db #$28, "Phan Flames", #$FF
+    db #$28, "Phantoon Flames", #$FF
     db #$28, "     RANDOM", #$FF
     db #$28, "      22222", #$FF
     db #$28, "        111", #$FF
@@ -2503,7 +2566,7 @@ phan_flamepattern:
 
 phan_next_flamepattern:
     dw !ACTION_CHOICE
-    dl #!ram_phantoon_rng_5
+    dl #!ram_phantoon_rng_next_flames
     dw #$0000
     db #$28, "Next Flames", #$FF
     db #$28, "     RANDOM", #$FF

@@ -1,15 +1,16 @@
+
+; ----------------
 ; Phantoon hijacks
-{
-if !NEW_PHANTOON_RNG
-; new Phantoon RNG starts here
-print "NEW_PHANTOON_RNG enabled!"
+; ----------------
+
 if !FEATURE_PAL
 org $A7D5DA
 else    ; 1st pattern
 org $A7D5A6
 endif
     JSL hook_phantoon_1st_rng
-    REP $12 : NOP
+    BRA hook_phantoon_1st_rng_return
+    NOP #16 : hook_phantoon_1st_rng_return:
 
 if !FEATURE_PAL
 org $A7D0B0
@@ -17,56 +18,8 @@ else    ; 2nd pattern
 org $A7D07C
 endif
     JSL hook_phantoon_2nd_rng
-    REP $0B : NOP
-; new Phantoon RNG ends here
-else
-; old Phantoon RNG starts here
-if !FEATURE_PAL
-org $A7D5E9
-else    ; 1st direction
-org $A7D5B5
-endif
-    ; $A7:D5B5 22 11 81 80 JSL $808111[$80:8111]
-    JSL hook_phantoon_1st_dir_rng
-
-if !FEATURE_PAL
-org $A7D5DA
-else    ; 1st pattern
-org $A7D5A6
-endif
-    ; $A7:D5A6 AD B6 05    LDA $05B6  [$7E:05B6] ; Frame counter
-    ; $A7:D5A9 4A          LSR A
-    JSL hook_phantoon_1st_pat
-
-
-if !FEATURE_PAL
-org $A7D716
-else    ; 2nd direction
-org $A7D6E2
-endif
-    ; $A7:D6E2 22 11 81 80 JSL $808111[$80:8111]
-    JSL hook_phantoon_2nd_dir_rng
-
-if !FEATURE_PAL
-org $A7D0BF
-else    ; 2nd direction
-org $A7D08B
-endif
-    ; $A7:D08B AD B6 05    LDA $05B6  [$7E:05B6] ; Frame counter
-    ; $A7:D08E 89 01 00    BIT #$0001
-    JSL hook_phantoon_2nd_dir_2
-    NOP : NOP
-
-if !FEATURE_PAL
-org $A7D0B0
-else    ; hijack, RNG call for second pattern
-org $A7D07C
-endif
-    ; $A7:D07C 22 11 81 80 JSL $808111[$80:8111]
-    JSL hook_phantoon_2nd_pat
-; old Phantoon RNG ends here
-endif
-
+    BRA hook_phantoon_2nd_rng_return
+    NOP #15 : hook_phantoon_2nd_rng_return:
 
 if !FEATURE_PAL
 org $A7D098
@@ -81,8 +34,6 @@ else    ; Phantoon flame pattern
     org $A7CFD6
 endif
     JSL hook_phantoon_flame_pattern
-}
-
 
 if !FEATURE_PAL
     org $A7D4DD
@@ -90,13 +41,13 @@ else    ; Intro
     org $A7D4A9
 endif
     JSL hook_phantoon_init
-    NOP : BNE $3D
+    BNE $3E : NOP
 
 
 ; --------------
 ; Botwoon hijack
 ; --------------
-{
+
 if !FEATURE_PAL
 org $B39953
 else
@@ -104,13 +55,12 @@ org $B39943
 endif
     ; $B3:9943 22 11 81 80 JSL $808111[$80:8111]
     JSL hook_botwoon_rng
-}
 
 
 ; ---------------
 ; Draygon hijacks
 ; ---------------
-{
+
 if !FEATURE_PAL
 org $A58AEC
 else
@@ -124,7 +74,6 @@ else
 org $A5899D
 endif
     JSR hook_draygon_rng_right
-}
 
 
 ; ----------------
@@ -245,7 +194,7 @@ hook_lavarocks_set_rng:
 {
     LDA #$0001 : STA !ram_room_has_set_rng
     LDA #$0011
-    STA $05E5
+    STA !RANDOM_NUMBER
     RTL
 }
 
@@ -253,7 +202,7 @@ hook_beetom_set_rng:
 {
     LDA #$0001 : STA !ram_room_has_set_rng
     LDA #$0017
-    STA $05E5
+    STA !RANDOM_NUMBER
     RTL
 }
 
@@ -284,9 +233,6 @@ endif
 }
 
 
-if !NEW_PHANTOON_RNG
-; new Phantoon RNG starts here
-
 ; Table of Phantoon pattern durations & directions
 ; bit 0 is direction, remaining bits are duration
 ; Note that later entries in the table will tend to occur slightly more often.
@@ -300,7 +246,7 @@ phan_pattern_table:
 
 
 ; Patch to the following code, to determine Phantoon's first-round direction and pattern
-; $A7:D5A6 AD B6 05    LDA $05B6  [$7E:05B6]    ; Frame counter
+; $A7:D5A6 AD B6 05    LDA !FRAME_COUNTER  [$7E:05B6]    ; Frame counter
 ; $A7:D5A9 4A          LSR A
 ; $A7:D5AA 29 03 00    AND #$0003
 ; $A7:D5AD 0A          ASL A
@@ -312,11 +258,11 @@ phan_pattern_table:
 hook_phantoon_1st_rng:
 {
     ; If set to all-on or all-off, don't mess with RNG
-    LDA !ram_phantoon_rng_1 : BEQ .no_manip
+    LDA !ram_phantoon_rng_round_1 : BEQ .no_manip
     CMP #$003F : BNE choose_phantoon_pattern
 
   .no_manip
-    LDA $05B6 : LSR
+    LDA !FRAME_COUNTER : LSR
     AND #$0003 : ASL : TAY
 if !FEATURE_PAL
     LDA $CD87,Y
@@ -337,12 +283,12 @@ endif
 ; $A7:D084 A8          TAY
 ; $A7:D085 B9 53 CD    LDA $CD53,y[$A7:CD5B]
 ; $A7:D088 8D E8 0F    STA $0FE8  [$7E:0FE8]
-; $A7:D08B AD B6 05    LDA $05B6  [$7E:05B6]
+; $A7:D08B AD B6 05    LDA !FRAME_COUNTER  [$7E:05B6]
 ; $A7:D08E 89 01 00    BIT #$0001
 hook_phantoon_2nd_rng:
 {
     ; If set to all-on or all-off, don't mess with RNG
-    LDA !ram_phantoon_rng_2 : BEQ .no_manip
+    LDA !ram_phantoon_rng_round_2 : BEQ .no_manip
     CMP #$003F : BNE choose_phantoon_pattern
 
   .no_manip
@@ -353,8 +299,29 @@ if !FEATURE_PAL
 else
     LDA $CD53,Y
 endif
-    STA $0FE8
-    LDA $05B6 : BIT #$0001
+    STA $0FE8    ; Intentional fallthrough to invert logic
+}
+
+hook_phantoon_invert:
+{
+    LDA !ram_phantoon_rng_inverted : BEQ .vanilla_inverted
+    CMP #$0001 : BEQ .inverted
+    CMP #$0002 : BEQ .not_inverted
+
+    ; Random
+    LDA !RANDOM_NUMBER : BIT #$0080
+    RTL
+
+  .inverted
+    LDA #$0000 : BIT #$0001
+    RTL
+
+  .not_inverted
+    LDA #$0001 : BIT #$0001
+    RTL
+
+  .vanilla_inverted
+    LDA !FRAME_COUNTER : BIT #$0001
     RTL
 }
 
@@ -404,115 +371,47 @@ if !FEATURE_PAL
 else
     CPY #$D6E2
 endif
-    BEQ .round2
-
-    ; If not, save the pattern timer and return the direction in the zero flag
-    ; shift direction into carry
-    LSR : STA $0FE8
-
-    ; shift carry into A (and zero flag)
-    LDA #$0000 : ROL
-    RTL
-
-  .round2
+    BNE .round1
     ; Save the pattern timer, check the direction, and
     ; set Phantoon's starting point and pattern index.
-    LSR : STA $0FE8 : BCS .left
+    LSR : STA $0FE8 : BCS .round2left
 
     ; Right pattern
     LDA #$0088 : LDY #$00D0
     BRA .round2done
 
-  .left
+  .round2left
     LDA #$018F : LDY #$0030
 
   .round2done
     STA $0FA8  ; Index into figure-8 movement table
     STY $0F7A  ; X position
     LDA #$0060 : STA $0F7E  ; Y position
+    BRA hook_phantoon_invert
+
+  .round1
+    ; Save the pattern timer and check the direction
+    LSR
+    STA $0FE8
+    BCS .round1left
+
+    ; Round 1 right pattern
+    SEP #$02
+    RTL
+
+  .round1left
+    REP #$02
     RTL
 }
-; new Phantoon RNG ends here
-else
-; old Phantoon RNG starts here
-hook_phantoon_1st_dir_rng:
-{
-    JSL $808111 ; Trying to preserve the number of RNG calls being done in the frame
-
-    LDA !ram_phantoon_rng_1 : BEQ .no_manip
-    PHX : TAX : LDA.l phantoon_dirs,X : PLX : AND #$00FF
-    RTL
-
-  .no_manip
-    LDA $05E5
-    RTL
-}
-
-hook_phantoon_1st_pat:
-{
-    LDA !ram_phantoon_rng_1 : BEQ .no_manip
-    PHX : TAX : LDA.l phantoon_pats,X : PLX : AND #$00FF
-    RTL
-
-  .no_manip
-    LDA $05B6 : LSR A
-    RTL
-}
-
-hook_phantoon_2nd_dir_rng:
-{
-    JSL $808111 ; Trying to preserve the number of RNG calls being done in the frame
-
-    LDA !ram_phantoon_rng_2 : BEQ .no_manip
-
-    PHX : TAX : LDA.l phantoon_dirs,X : PLX : AND #$00FF
-    EOR #$0001
-    RTL
-
-  .no_manip
-    LDA $05E5
-    RTL
-}
-
-hook_phantoon_2nd_dir_2:
-{
-    LDA !ram_phantoon_rng_2 : BEQ .no_manip
-
-    ; I don't quite understand this part, but it works ¯\_(ツ)_/¯
-    LDA #$0001
-    BIT #$0001
-    RTL
-
-  .no_manip
-    LDA $05B6 : BIT #$0001
-    RTL
-}
-
-hook_phantoon_2nd_pat:
-{
-    JSL $808111 ; Trying to preserve the number of RNG calls being done in the frame
-
-    LDA !ram_phantoon_rng_2 : BEQ .no_manip
-
-    PHX : TAX : LDA.l phantoon_pats,X : PLX : AND #$00FF
-    RTL
-
-  .no_manip
-    LDA $05E5
-    RTL
-}
-; old Phantoon RNG ends here
-endif
-
 
 hook_phantoon_eyeclose:
 {
-    LDA !ram_phantoon_rng_3 : BEQ .no_manip
+    LDA !ram_phantoon_rng_eyeclose : BEQ .no_manip
     DEC : ASL ; return with 0-slow, 2-mid, 4-fast
     RTL
 
   .no_manip
-    LDA $05E5 ; return with random number
+    LDA !RANDOM_NUMBER ; return with random number
     AND #$0007 : ASL   ; overwritten code
     RTL
 }
@@ -521,26 +420,16 @@ hook_phantoon_flame_pattern:
 {
     JSL $808111 ; Trying to preserve the number of RNG calls being done in the frame
 
-    LDA !ram_phantoon_rng_4 : TAY
-    LDA !ram_phantoon_rng_5 : STA !ram_phantoon_rng_4
-    TYA : STA !ram_phantoon_rng_5 : BEQ .no_manip
+    LDA !ram_phantoon_rng_flames : TAY
+    LDA !ram_phantoon_rng_next_flames : STA !ram_phantoon_rng_flames
+    TYA : STA !ram_phantoon_rng_next_flames : BEQ .no_manip
     DEC
     RTL
 
   .no_manip
-    LDA $05E5 ; return with random number
+    LDA !RANDOM_NUMBER ; return with random number
     RTL
 }
-
-phantoon_dirs:
-    db #$FF
-    db #$01, #$01, #$01
-    db #$00, #$00, #$00
-
-phantoon_pats:
-    db #$FF
-    db #$01, #$02, #$03
-    db #$01, #$02, #$03
 
 
 hook_botwoon_rng:
@@ -551,7 +440,7 @@ hook_botwoon_rng:
     RTL
 
   .no_manip
-    LDA $05E5
+    LDA !RANDOM_NUMBER
     RTL
 }
 
@@ -573,7 +462,7 @@ hook_crocomire_rng:
     RTS
 
   .no_manip
-    LDA $05E5     ; return with random number (overwritten code)
+    LDA !RANDOM_NUMBER     ; return with random number (overwritten code)
     RTS
 }
 
@@ -590,7 +479,7 @@ hook_draygon_rng_left:
     RTS
 
   .no_manip
-    LDA $05E5   ; return with random number (overwritten code)
+    LDA !RANDOM_NUMBER   ; return with random number (overwritten code)
     RTS
 }
 
@@ -601,7 +490,7 @@ hook_draygon_rng_right:
     RTS
 
   .no_manip
-    LDA $05E5   ; return with random number (overwritten code)
+    LDA !RANDOM_NUMBER   ; return with random number (overwritten code)
     RTS
 }
 
@@ -750,10 +639,9 @@ hook_kraid_rng:
     RTS
 
   .no_manip
-    LDA $05E5 ; return with random number (overwritten code)
+    LDA !RANDOM_NUMBER ; return with random number (overwritten code)
     RTS
 }
-
 
 kraid_intro_skip:
     LDA !sram_kraid_intro : BEQ .noSkip

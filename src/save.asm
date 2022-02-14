@@ -17,7 +17,7 @@ pre_load_state:
     LDA !sram_save_has_set_rng : BNE .done
     LDA !sram_rerandomize : AND #$00FF : BEQ .done
     LDA $05E5 : STA $770080
-    LDA $05B6 : STA $770082
+    LDA !FRAME_COUNTER : STA $770082
 
   .done
     RTS
@@ -113,7 +113,7 @@ post_load_state:
     LDA !sram_save_has_set_rng : BNE .done
     LDA !sram_rerandomize : AND #$00FF : BEQ .done
     LDA $770080 : STA $05E5
-    LDA $770082 : STA $05B6
+    LDA $770082 : STA !FRAME_COUNTER
 
   .done
     JSL init_wram_based_on_sram

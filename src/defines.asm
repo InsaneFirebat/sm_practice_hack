@@ -9,7 +9,6 @@
 !ORIGINAL_MESSAGE_TEXT ?= 0
 !PRESERVE_WRAM_DURING_SPACETIME ?= 1
 !RAW_TILE_GRAPHICS ?= 1
-!NEW_PHANTOON_RNG ?= 0
 
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 4
@@ -80,38 +79,37 @@
 !ram_room_has_set_rng = !WRAM_START+$5A
 !ram_kraid_rng = !WRAM_START+$5C
 !ram_crocomire_rng = !WRAM_START+$5E
-!ram_phantoon_rng_1 = !WRAM_START+$60 ; round 1 pattern bitmask
-!ram_phantoon_rng_2 = !WRAM_START+$62 ; round 2 pattern bitmask
-!ram_phantoon_rng_3 = !WRAM_START+$64 ; eye close
-!ram_phantoon_rng_4 = !WRAM_START+$66 ; flames
-!ram_phantoon_rng_5 = !WRAM_START+$68 ; next flame
-!ram_botwoon_rng = !WRAM_START+$6A
-!ram_draygon_rng_left = !WRAM_START+$6C
-!ram_draygon_rng_right = !WRAM_START+$6E
+!ram_phantoon_rng_round_1 = !WRAM_START+$60
+!ram_phantoon_rng_round_2 = !WRAM_START+$62
+!ram_phantoon_rng_inverted = !WRAM_START+$64
+!ram_phantoon_rng_eyeclose = !WRAM_START+$66
+!ram_phantoon_rng_flames = !WRAM_START+$68
+!ram_phantoon_rng_next_flames = !WRAM_START+$6A
+!ram_botwoon_rng = !WRAM_START+$6C
+!ram_draygon_rng_left = !WRAM_START+$6E
+!ram_draygon_rng_right = !WRAM_START+$70
 
-!ram_game_loop_extras = !WRAM_START+$70
-!ram_game_mode_extras = !WRAM_START+$72
-!ram_sprite_features_active = !WRAM_START+$74
+!ram_game_loop_extras = !WRAM_START+$72
+!ram_game_mode_extras = !WRAM_START+$74
+!ram_sprite_features_active = !WRAM_START+$76
 
-!ram_metronome = !WRAM_START+$76
-!ram_metronome_counter = !WRAM_START+$78
+!ram_metronome = !WRAM_START+$78
+!ram_metronome_counter = !WRAM_START+$7A
 
-!ram_fix_scroll_offsets = !WRAM_START+$7A
-!ram_magnetstairs = !WRAM_START+$7C
-!ram_arearando = !WRAM_START+$7E
+!ram_fix_scroll_offsets = !WRAM_START+$7C
 
-!ram_watch_bank = !WRAM_START+$80
-!ram_watch_write_mode = !WRAM_START+$82
-!ram_watch_left = !WRAM_START+$84
-!ram_watch_left_hud = !WRAM_START+$86
-!ram_watch_right = !WRAM_START+$88
-!ram_watch_right_hud = !WRAM_START+$8A
-!ram_watch_edit_left = !WRAM_START+$8C
-!ram_watch_edit_right = !WRAM_START+$8E
-!ram_watch_edit_lock_left = !WRAM_START+$90
-!ram_watch_edit_lock_right = !WRAM_START+$92
-!ram_watch_left_index = !WRAM_START+$94
-!ram_watch_right_index = !WRAM_START+$96
+!ram_watch_bank = !WRAM_START+$88
+!ram_watch_write_mode = !WRAM_START+$8A
+!ram_watch_left = !WRAM_START+$8C
+!ram_watch_left_hud = !WRAM_START+$8E
+!ram_watch_right = !WRAM_START+$90
+!ram_watch_right_hud = !WRAM_START+$92
+!ram_watch_edit_left = !WRAM_START+$94
+!ram_watch_edit_right = !WRAM_START+$96
+!ram_watch_edit_lock_left = !WRAM_START+$98
+!ram_watch_edit_lock_right = !WRAM_START+$9A
+!ram_watch_left_index = !WRAM_START+$9C
+!ram_watch_right_index = !WRAM_START+$9E
 
 ; ^ FREE SPACE ^ up to +$9E
 
@@ -186,7 +184,6 @@
 !ram_cm_ctrl_last_input = !WRAM_MENU_START+$36
 !ram_cm_ctrl_assign = !WRAM_MENU_START+$38
 !ram_cm_ctrl_swap = !WRAM_MENU_START+$3A
-!ram_cm_botwoon_rng = !WRAM_MENU_START+$8C
 !ram_cm_slow_graphics = !WRAM_MENU_START+$3E
 
 ; ^ FREE SPACE ^ up to +$7A
@@ -219,6 +216,10 @@
 !ram_cm_watch_enemy_side = !WRAM_MENU_START+$9C
 !ram_cm_watch_bank = !WRAM_MENU_START+$9E
 !ram_cm_watch_common_address = !WRAM_MENU_START+$A0
+
+!ram_cm_phan_first_phase = !WRAM_MENU_START+$80
+!ram_cm_phan_second_phase = !WRAM_MENU_START+$82
+!ram_cm_botwoon_rng = !WRAM_MENU_START+$84
 
 ; ^ FREE SPACE ^ up to +$CE
 
@@ -331,6 +332,8 @@
 
 !OAM_STACK_POINTER = $0590
 !PB_EXPLOSION_STATUS = $0592
+!FRAME_COUNTER = $05B6
+!RANDOM_NUMBER = $05E5
 !DISABLE_SOUNDS = $05F5
 !LOAD_STATION_INDEX = $078B
 !ROOM_ID = $079B
@@ -505,6 +508,8 @@
 
 !sram_phantoon_intro = $F02126
 !sram_kraid_intro = $F02128
+
+!ram_magnetstairs = $F0212A
 
 ; FREE SPACE ^
 

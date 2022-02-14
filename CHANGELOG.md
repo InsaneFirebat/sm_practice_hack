@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.0.17] Added improved Phantoon RNG menu and added inverted patterns by idlechild
 * [2.4.0.16] Added number of frames shot was released to the Charge Timer HUD mode
 * [2.4.0.16] More work on Mother Brain presets by idlechild
 * [2.4.0.15] Added per-round controls to new Phantoon RNG by NobodyNada
