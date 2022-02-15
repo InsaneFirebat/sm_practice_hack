@@ -70,7 +70,7 @@ endif
     JSL ih_mb1_segment
 
 if !FEATURE_PAL
-org $A9BE33
+org $A9BE70
 else             ; update timers when baby spawns (off-screen) in MB2 fight
 org $A9BE23
 endif
