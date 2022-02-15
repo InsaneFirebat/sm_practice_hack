@@ -496,6 +496,7 @@ Randomize_Preset_Equipment:
 {
     LDA !sram_presetrando : BNE .randomize
     RTL
+
   .randomize
     PHX
     ; equipment
@@ -510,13 +511,17 @@ Randomize_Preset_Equipment:
     AND #$000C : CMP #$000C : BNE .beams_done                          ; check for Spazer+Plasma
     LDA !sram_presetrando_beampref : BEQ .random_pref                  ; check beam preference, 0 = random
     DEC : BEQ .spazer                                                  ; after decrement, 0 = spazer, 1 = plasma
+
   .plasma
     LDA $09A8 : AND #$100B : STA $09A6 : BRA +                         ; unequip Spazer
+
   .spazer
     LDA $09A8 : AND #$1007 : STA $09A6 : BRA +                         ; unequip Plasma
+
   .random_pref
     LDA !ram_seed_X : AND #$0001 : BEQ .spazer                         ; get random bit
     BRA .plasma
+
   .beams_done
     LDA $09A8 : STA $09A6
     
@@ -529,16 +534,19 @@ Randomize_Preset_Equipment:
 +   LDA !sram_presetrando_max_reserves : BEQ .no_reserves              ; check if max = 0
     LDA !ram_seed_Y : AND #$F000 : LSR #4 : XBA                        ; reuse random number
     CMP !sram_presetrando_max_reserves : BPL .cap_reserves             ; check if capped
-    ASL : TAX : LDA presetrando_reservetable,X                         ; load value from table
+    ASL : TAX : LDA.l PresetRandoReserveTable,X                       ; load value from table
     STA $09D4 : STA $09D6 : BRA +                                      ; store reserves
+
   .cap_reserves
     BEQ .reserves_done                                                 ; check for 0 condition (value is equal to max)
     SEC : SBC !sram_presetrando_max_reserves                           ; subtract max from random number
     CMP !sram_presetrando_max_reserves : BPL .cap_reserves             ; check if capped again (loop)
+
   .reserves_done
-    ASL : TAX : LDA presetrando_reservetable,X                         ; load a proper value from table
+    ASL : TAX : LDA.l PresetRandoReserveTable,X                       ; load a proper value from table
     STA $09D4 : STA $09D6                                              ; store capped reserves
     BRA +
+
   .no_reserves
     STZ $09D4 : STZ $09D6                                              ; capped at zero
 
@@ -546,16 +554,19 @@ Randomize_Preset_Equipment:
 +   LDA !sram_presetrando_max_missiles : BEQ .no_missiles              ; check if max = 0
     LDA !ram_seed_X : AND #$0FF0 : LSR #4                              ; reuse random number
     CMP !sram_presetrando_max_missiles : BPL .cap_missiles             ; check if capped
-    ASL : TAX : LDA presetrando_missiletable,X                         ; load a proper value from table
+    ASL : TAX : LDA.l PresetRandoAmmoTable,X                       ; load a proper value from table
     STA $09C6 : STA $09C8 : BRA +                                      ; store random missiles
+
   .cap_missiles
     BEQ .missiles_done                                                 ; check for 0 condition (value is equal to max)
     SEC : SBC !sram_presetrando_max_missiles
     CMP !sram_presetrando_max_missiles : BPL .cap_missiles
+
   .missiles_done
-    ASL : TAX : LDA presetrando_missiletable,X
+    ASL : TAX : LDA.l PresetRandoAmmoTable,X
     STA $09C6 : STA $09C8                                              ; store capped missiles
     BRA +
+
   .no_missiles
     STZ $09C6 : STZ $09C8                                              ; capped at zero
 
@@ -563,16 +574,19 @@ Randomize_Preset_Equipment:
 +   LDA !sram_presetrando_max_supers : BEQ .no_supers                  ; check if max = 0
     JSL MenuRNG : AND #$00FF                                           ; get new random number
     CMP !sram_presetrando_max_supers : BPL .cap_supers                 ; check if capped
-    ASL : TAX : LDA presetrando_supertable,X
+    ASL : TAX : LDA.l PresetRandoAmmoTable,X
     STA $09CA : STA $09CC : BRA +                                      ; store random supers
+
   .cap_supers
     BEQ .supers_done                                                   ; check for 0 condition (value is equal to max)
     SEC : SBC !sram_presetrando_max_supers
     CMP !sram_presetrando_max_supers : BPL .cap_supers
+
   .supers_done
-    ASL : TAX : LDA presetrando_pbtable,X
+    ASL : TAX : LDA.l PresetRandoAmmoTable,X
     STA $09CA : STA $09CC                                              ; store capped supers
     BRA +
+
   .no_supers
     STZ $09CA : STZ $09CC                                              ; capped at zero
 
@@ -580,16 +594,19 @@ Randomize_Preset_Equipment:
 +   LDA !sram_presetrando_max_pbs : BEQ .no_pbs                        ; check if max = 0
     LDA !ram_seed_Y : XBA : AND #$00FF                                 ; get new random number
     CMP !sram_presetrando_max_pbs : BPL .cap_pbs                       ; check if capped
-    ASL : TAX : LDA presetrando_pbtable,X
+    ASL : TAX : LDA.l PresetRandoAmmoTable,X
     STA $09CE : STA $09D0 : BRA +                                      ; store random pbs
+
   .cap_pbs
     BEQ .pbs_done                                                      ; check for 0 condition (value is equal to max)
     SEC : SBC !sram_presetrando_max_pbs
     CMP !sram_presetrando_max_pbs : BPL .cap_pbs
+
   .pbs_done
-    ASL : TAX : LDA presetrando_pbtable,X
+    ASL : TAX : LDA.l PresetRandoAmmoTable,X
     STA $09CE : STA $09D0                                              ; store capped pbs
     BRA +
+
   .no_pbs
     STZ $09CE : STZ $09D0                                              ; capped at zero
 
@@ -597,16 +614,19 @@ Randomize_Preset_Equipment:
 +   LDA !sram_presetrando_max_etanks : BEQ .no_etanks                  ; check if max = 0
     JSL MenuRNG2 : AND #$000F                                          ; get new random number
     CMP !sram_presetrando_max_etanks : BPL .cap_etanks                 ; check if capped
-    ASL : TAX : LDA presetrando_etanktable,X                           ; load value from table
+    ASL : TAX : LDA.l PresetRandoETankTable,X                         ; load value from table
     STA $09C2 : STA $09C4 : BRA .done                                  ; store energy
+
   .cap_etanks
     BEQ .etanks_done                                                   ; check for 0 condition (value is equal to max)
     SEC : SBC !sram_presetrando_max_etanks
     CMP !sram_presetrando_max_etanks : BPL .cap_etanks
+
   .etanks_done
-    ASL : TAX : LDA presetrando_etanktable,X                           ; load value from table
+    ASL : TAX : LDA.l PresetRandoETankTable,X                         ; load value from table
     STA $09C2 : STA $09C4                                              ; store energy
     BRA .done
+
   .no_etanks
     LDA #$0063 : STA $09C2 : STA $09C4                                 ; capped at zero (99)
 
@@ -614,28 +634,16 @@ Randomize_Preset_Equipment:
     PLX
     RTL
 
-presetrando_missiletable:
+PresetRandoAmmoTable:
     dw #$0000, #$0005, #$000A, #$000F, #$0014, #$0019, #$001E, #$0023, #$0028, #$002D, #$0032, #$0037, #$003C, #$0041, #$0046, #$004B
     dw #$0050, #$0055, #$005A, #$005F, #$0064, #$0069, #$006E, #$0073, #$0078, #$007D, #$0082, #$0087, #$008C, #$0091, #$0096, #$009B
     dw #$00A0, #$00A5, #$00AA, #$00AF, #$00B4, #$00B9, #$00BE, #$00C3, #$00C8, #$00CD, #$00D2, #$00D7, #$00DC, #$00E1, #$00E6, #$00EB
     dw #$00F0, #$00F5, #$00FA, #$00FF
 
-presetrando_supertable:
-    dw #$0000, #$0005, #$000A, #$000F, #$0014, #$0019, #$001E, #$0023, #$0028, #$002D, #$0032, #$0037, #$003C, #$0041, #$0046, #$004B
-    dw #$0050, #$0055, #$005A, #$005F, #$0064, #$0069, #$006E, #$0073, #$0078, #$007D, #$0082, #$0087, #$008C, #$0091, #$0096, #$009B
-    dw #$00A0, #$00A5, #$00AA, #$00AF, #$00B4, #$00B9, #$00BE, #$00C3, #$00C8, #$00CD, #$00D2, #$00D7, #$00DC, #$00E1, #$00E6, #$00EB
-    dw #$00F0, #$00F5, #$00FA, #$00FF
-
-presetrando_pbtable:
-    dw #$0000, #$0005, #$000A, #$000F, #$0014, #$0019, #$001E, #$0023, #$0028, #$002D, #$0032, #$0037, #$003C, #$0041, #$0046, #$004B
-    dw #$0050, #$0055, #$005A, #$005F, #$0064, #$0069, #$006E, #$0073, #$0078, #$007D, #$0082, #$0087, #$008C, #$0091, #$0096, #$009B
-    dw #$00A0, #$00A5, #$00AA, #$00AF, #$00B4, #$00B9, #$00BE, #$00C3, #$00C8, #$00CD, #$00D2, #$00D7, #$00DC, #$00E1, #$00E6, #$00EB
-    dw #$00F0, #$00F5, #$00FA, #$00FF
-
-presetrando_reservetable:
+PresetRandoReserveTable:
     dw #$0000, #$0064, #$00C8, #$012C, #$0190
 
-presetrando_etanktable:
+PresetRandoETankTable:
     dw #$0063, #$00C7, #$012B, #$018F, #$01F3, #$0257, #$02BB, #$031F, #$0383, #$03E7, #$044B, #$04AF, #$0513, #$0517, #$05DB
 }
 
