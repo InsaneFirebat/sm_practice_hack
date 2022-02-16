@@ -66,7 +66,7 @@ cm_start:
 
     JSR cm_transfer_custom_tileset
     JSR cm_transfer_custom_cgram
-    JSR cm_draw         ; Initialise message box
+    JSL cm_draw         ; Initialise message box
 
     JSL play_music_long ; Play 2 lag frames of music and sound effects
 
@@ -97,7 +97,7 @@ cm_start:
     LDA $C1 : STA !ram_gametime_room
     LDA $C3 : STA !ram_last_gametime_room
     JSL $809B44
-    JSR GameLoopExtras            ; check if game_loop_extras needs to be disabled
+    JSL GameLoopExtras_long       ; check if game_loop_extras needs to be disabled
 
     ; I think the above subroutines erases some of infohud, so we make sure we redraw it.
     JSL ih_update_hud_code
@@ -128,22 +128,23 @@ cm_init:
     STA $8B
     LDA $05B6 : STA !ram_cm_input_counter
 
-    LDA.w #MainMenu
+    LDA.l #MainMenu
     STA.l !ram_cm_menu_stack
-    LDA.w #MainMenu>>16
+    LDA.l #MainMenu>>16
     STA.l !ram_cm_menu_bank
 
     STA !ram_cm_menu_active ; for morph lock in Redesign
 
-    JSR cm_calculate_max
-    JSR cm_set_etanks_and_reserve
+    JSL cm_calculate_max
+    JSL cm_set_etanks_and_reserve
+    RTS
 }
 
 cm_set_etanks_and_reserve:
 {
     LDA $09C4 : JSR cm_divide_100 : STA !ram_cm_etanks
     LDA $09D4 : JSR cm_divide_100 : STA !ram_cm_reserve
-    RTS
+    RTL
 }
 
 
@@ -315,7 +316,7 @@ cm_draw:
     JSR cm_tilemap_menu
     JSR cm_tilemap_transfer
     PLP
-    RTS
+    RTL
 }
 
 cm_tilemap_clear:
@@ -1042,8 +1043,8 @@ cm_loop:
     BRA .inputLoop
 
   .pressedB
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_go_back
+    JSL cm_calculate_max
     BRA .redraw
 
   .pressedDown
@@ -1080,7 +1081,7 @@ cm_loop:
     BRA .done
 
   .redraw
-    JSR cm_draw
+    JSL cm_draw
     JMP .inputLoop
 
   .done
@@ -1126,7 +1127,7 @@ cm_ctrl_mode:
     STA !ram_cm_ctrl_last_input
     STA !ram_cm_ctrl_mode
     STA !ram_cm_ctrl_timer
-    JSR cm_draw
+    JSL cm_draw
     RTS
 }
 
@@ -1147,12 +1148,12 @@ cm_go_back:
     STA !ram_cm_stack_index    
     LDA !ram_cm_stack_index
     BNE +
-    LDA.w #MainMenu>>16       ; Reset submenu bank when back at main menu
+    LDA.l #MainMenu>>16       ; Reset submenu bank when back at main menu
     STA.l !ram_cm_menu_bank
   +
   .end
     LDA #!SOUND_MENU_MOVE : JSL $80903F
-    RTS
+    RTL
 }
 
 cm_calculate_max:
@@ -1170,7 +1171,7 @@ cm_calculate_max:
 
   .done
     TXA : STA !ram_cm_cursor_max
-    RTS
+    RTL
 }
 
 cm_get_inputs:
@@ -1295,8 +1296,7 @@ cm_execute_action_table:
         %a16()
         LDA $0A : BEQ .end
         LDA [$04]
-        LDX #$0000
-        JSR ($000A,X)
+        JSL MainMenuJSR_toggle
 
       .end
         LDA #!SOUND_MENU_MOVE : JSL $80903F
@@ -1321,8 +1321,7 @@ cm_execute_action_table:
         LDA $0A : BEQ .end
 
         LDA [$04]
-        LDX #$0000
-        JSR ($000A,X)
+        JSL MainMenuJSR_toggle_bit
 
       .end
         LDA #!SOUND_MENU_MOVE : JSL $80903F
@@ -1341,8 +1340,7 @@ cm_execute_action_table:
         ; Y = Argument
         LDA [$00] : TAY
 
-        LDX #$0000
-        JSR ($0004,X)
+        JSL MainMenuJSR_jsr
 
       .end
         RTS
@@ -1398,8 +1396,7 @@ cm_execute_action_table:
         LDA $20 : BEQ .end
 
         LDA [$04]
-        LDX #$0000
-        JSR ($0020,X)
+        JSL MainMenuJSR_numfield
 
       .end
         LDA #!SOUND_MENU_MOVE : JSL $80903F
@@ -1455,8 +1452,7 @@ cm_execute_action_table:
         LDA $20 : BEQ .end
 
         LDA [$04]
-        LDX #$0000
-        JSR ($0020,X)
+        JSL MainMenuJSR_numfield_word
 
       .end
         LDA #!SOUND_MENU_MOVE : JSL $80903F
@@ -1497,8 +1493,7 @@ cm_execute_action_table:
         LDA $20 : BEQ .end
 
         LDA [$04]
-        LDX #$0000
-        JSR ($0020,X)
+        JSL MainMenuJSR_numfield_color
 
       .end
         LDA #!SOUND_MENU_MOVE : JSL $80903F
@@ -1563,8 +1558,7 @@ cm_execute_action_table:
         LDA $08 : BEQ .end
 
         LDA [$04]
-        LDX #$0000
-        JSR ($0008,X)
+        JSL MainMenuJSR_choice
 
       .end
         LDA #!SOUND_MENU_MOVE : JSL $80903F
@@ -1612,8 +1606,7 @@ cm_execute_action_table:
         ; Y = Argument
         LDA [$00] : TAY
 
-        LDX #$0000
-        JSR ($0004,X)
+        JSL MainMenuJSR_controller_input
 
       .end
         RTS
@@ -1660,18 +1653,13 @@ cm_divide_100:
     LDA $4214
     RTS
 
-; -----------
-; Main menu
-; -----------
-
-incsrc mainmenu.asm
-
 print pc, " menu end"
+
+
 
 ; ----------
 ; Resources
 ; ----------
-
 
 org $B8A2E5
 print pc, " menu gfx start"
@@ -1681,5 +1669,15 @@ incbin ../resources/cm_gfx.bin
 HexMenuGFXTable:
     dw $2C70, $2C71, $2C72, $2C73, $2C74, $2C75, $2C76, $2C77, $2C78, $2C79, $2C50, $2C51, $2C52, $2C53, $2C54, $2C55
 
-warnpc $B8C458 ; There's a small chunk of Axeil code at $B8C459
 print pc, " menu gfx end"
+warnpc $B8C458 ; There's a small chunk of Axeil code at $B8C459
+
+
+; -----------
+; Main menu
+; -----------
+
+org $89AF00
+print pc, " mainmenu start"
+incsrc mainmenu.asm
+print pc, " mainmenu end"

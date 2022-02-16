@@ -120,14 +120,17 @@ action_submenu:
     LDA #$0000 : STA !ram_cm_cursor_stack,X
 
     LDA #!SOUND_MENU_MOVE : JSL $80903F
-    JSR cm_calculate_max
-    JSR cm_draw
+    JSL cm_calculate_max
+    JSL cm_draw
 
     RTS
 }
 
 action_presets_submenu:
 {
+    PHB
+    PHK : PLB
+
     ; Increment stack pointer by 2, then store current menu    
     LDA !ram_cm_stack_index : INC #2 : STA !ram_cm_stack_index : TAX
     LDA !sram_preset_category : ASL : TAY
@@ -138,9 +141,10 @@ action_presets_submenu:
     LDA #$0000 : STA !ram_cm_cursor_stack,X
 
     LDA #!SOUND_MENU_MOVE : JSL $80903F
-    JSR cm_calculate_max
-    JSR cm_draw
+    JSL cm_calculate_max
+    JSL cm_draw
 
+    PLB
     RTS
 }
 
@@ -287,8 +291,8 @@ action_select_preset_category:
 {
     TYA : STA !sram_preset_category
     LDA #$0000 : STA !sram_last_preset
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_go_back
+    JSL cm_calculate_max
     RTS
 }
 
@@ -313,54 +317,6 @@ action_load_custom_preset:
     STA !ram_custom_preset
     LDA #$0001 : STA !ram_cm_leave
     RTS
-}
-
-LoadRandomPreset:
-{
-    PHY : PHX
-    JSL $808111 : STA $12     ; random number
-
-    LDA #$00B8 : STA $18      ; this routine lives in bank B8
-    LDA !sram_preset_category : ASL : TAY
-    LDA #preset_category_submenus : STA $16
-    LDA [$16],Y : TAX         ; preset category submenu table
-    LDA #preset_category_banks : STA $16
-    LDA [$16],Y : STA $18     ; preset category menu bank
-
-    STX $16 : LDY #$0000
-  .toploop
-    INY #2
-    LDA [$16],Y : BNE .toploop
-    TYA : LSR : TAY           ; Y = size of preset category submenu table
-
-    LDA $12 : XBA : AND #$00FF : STA $4204
-    %a8()
-    STY $4206                 ; divide top half of random number by Y
-    %a16()
-    PEA $0000 : PLA
-    LDA $4216 : ASL : TAY     ; randomly selected subcategory
-    LDA [$16],Y : STA $16     ; increment four bytes to get the subcategory table
-    LDY #$0004 : LDA [$16],Y : STA $16
-
-    LDY #$0000
-  .subloop
-    INY #2
-    LDA [$16],Y : BNE .subloop
-    TYA : LSR : TAY           ; Y = size of subcategory table
-
-    LDA $12 : AND #$00FF : STA $4204
-    %a8()
-    STY $4206                 ; divide bottom half of random number by Y
-    %a16()
-    PEA $0000 : PLA
-    LDA $4216 : ASL : TAY     ; randomly selected preset
-    LDA [$16],Y : STA $16     ; increment four bytes to get the data
-    LDY #$0004 : LDA [$16],Y
-
-    STA !ram_load_preset
-
-    PLX : PLY
-    RTL
 }
 
 action_load_preset:
@@ -542,10 +498,10 @@ action_category:
     TYA : ASL #4 : TAX
 
     ; Items
-    LDA .table,X : STA $7E09A4 : STA $7E09A2 : INX #2
+    LDA.l .table,X : STA $7E09A4 : STA $7E09A2 : INX #2
 
     ; Beams
-    LDA .table,X : STA $7E09A8 : TAY
+    LDA.l .table,X : STA $7E09A8 : TAY
     AND #$000C : CMP #$000C : BEQ .murderBeam
     TYA : STA $7E09A6 : INX #2 : BRA +
 
@@ -553,21 +509,21 @@ action_category:
     TYA : AND #$100B : STA $7E09A6 : INX #2
 
     ; Health
-+   LDA .table,X : STA $7E09C2 : STA $7E09C4 : INX #2
++   LDA.l .table,X : STA $7E09C2 : STA $7E09C4 : INX #2
 
     ; Missiles
-    LDA .table,X : STA $7E09C6 : STA $7E09C8 : INX #2
+    LDA.l .table,X : STA $7E09C6 : STA $7E09C8 : INX #2
 
     ; Supers
-    LDA .table,X : STA $7E09CA : STA $7E09CC : INX #2
+    LDA.l .table,X : STA $7E09CA : STA $7E09CC : INX #2
 
     ; PBs
-    LDA .table,X : STA $7E09CE : STA $7E09D0 : INX #2
+    LDA.l .table,X : STA $7E09CE : STA $7E09D0 : INX #2
 
     ; Reserves
-    LDA .table,X : STA $7E09D4 : STA $7E09D6 : INX #2
+    LDA.l .table,X : STA $7E09D4 : STA $7E09D6 : INX #2
 
-    JSR cm_set_etanks_and_reserve
+    JSL cm_set_etanks_and_reserve
     LDA #!SOUND_MENU_JSR : JSL $80903F
     RTS
 
@@ -1076,7 +1032,7 @@ misc_flashsuit:
     %cm_toggle("Flash Suit", $7E0A68, #$0001, #0)
 
 misc_hyperbeam:
-    %cm_toggle("Hyper Beam", $7E0A76, #$8000, #0)
+    %cm_toggle_bit("Hyper Beam", $7E0A76, #$8000, #0)
 
 misc_gooslowdown:
     %cm_numfield("Slowdown Rate", $7E0A66, 0, 4, 1, 1, #0)
@@ -1496,8 +1452,8 @@ ihmode_ramwatch:
 action_select_infohud_mode:
 {
     TYA : STA !sram_display_mode
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_go_back
+    JSL cm_calculate_max
     RTS
 }
 
@@ -1585,8 +1541,8 @@ action_select_room_strat:
 {
     TYA : STA !sram_room_strat
     LDA #!IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_go_back
+    JSL cm_calculate_max
     RTS
 }
 
@@ -1767,6 +1723,12 @@ GameLoopExtras:
     RTS
 }
 
+GameLoopExtras_long:
+{
+    JSR GameLoopExtras
+    RTL
+}
+
 ; -------------------
 ; Controller Settings
 ; -------------------
@@ -1889,9 +1851,10 @@ action_assign_input:
 
     JSR check_duplicate_inputs
 
+    LDA !ram_cm_ctrl_assign : CMP #$FFFF : BEQ +
     LDA #!SOUND_MENU_JSR : JSL !SFX_LIB1
-    JSR cm_go_back
-    JSR cm_calculate_max
++   JSL cm_go_back
+    JSL cm_calculate_max
     RTS
 }
 
@@ -1945,10 +1908,10 @@ check_duplicate_inputs:
 
   .not_detected
     LDA #!SOUND_MENU_FAIL : JSL !SFX_LIB1
-    ; pull return address to skip success-sfx
-    PLA : PLA
-    JSR cm_go_back
-    JMP cm_calculate_max
+    LDA #$FFFF : STA !ram_cm_ctrl_assign
+    JSL cm_go_back
+    JSL cm_calculate_max
+    RTS
 
   .shot
     LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +  ; check if old input is L or R
@@ -2055,8 +2018,8 @@ action_set_common_controls:
     LDA.l ControllerLayoutTable+8,X : STA !IH_INPUT_ITEM_SELECT
     LDA.l ControllerLayoutTable+10,X : STA !IH_INPUT_ANGLE_UP
     LDA.l ControllerLayoutTable+12,X : STA !IH_INPUT_ANGLE_DOWN
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_go_back
+    JSL cm_calculate_max
     RTS
 
 ControllerLayoutTable:
@@ -2334,5 +2297,32 @@ GameModeExtras:
 
   .enabled
     STA !ram_game_mode_extras
+    RTL
+}
+
+MainMenuJSR:
+{
+  .toggle
+  .toggle_bit
+    LDX #$0000
+    JSR ($000A,X)
+    RTL
+
+  .jsr
+  .controller_input
+    LDX #$0000
+    JSR ($0004,X)
+    RTL
+
+  .numfield
+  .numfield_word
+  .numfield_color
+    LDX #$0000
+    JSR ($0020,X)
+    RTL
+
+  .choice
+    LDX #$0000
+    JSR ($0008,X)
     RTL
 }

@@ -124,8 +124,8 @@ ramwatch_common_enemy_apply:
     LDY #RAMWatchMenu
     LDA !ram_cm_stack_index : DEC #4
     STA !ram_cm_stack_index
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_go_back
+    JSL cm_calculate_max
     JSR ih_prepare_ram_watch_menu
     LDA #!SOUND_MENU_JSR : JSL !SFX_LIB1
     RTS
@@ -409,8 +409,8 @@ ramwatch_common_addr_done:
     LDY #RAMWatchMenu
     LDA !ram_cm_stack_index : DEC #6
     STA !ram_cm_stack_index
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_go_back
+    JSL cm_calculate_max
     JSR ih_prepare_ram_watch_menu
     LDA #!SOUND_MENU_MOVE : JSL !SFX_LIB1
     RTS
@@ -420,12 +420,12 @@ ramwatch_common_back:
   .routine
     LDA !ram_cm_stack_index : DEC #4
     STA !ram_cm_stack_index
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_go_back
+    JSL cm_calculate_max
     RTS
 
 ramwatch_enable:
-    %cm_jsr("Turn On RAM Watch", .routine, !IH_MODE_RAMWATCH_INDEX)
+    %cm_jsr("Turn On RAM Watch", .routine, #!IH_MODE_RAMWATCH_INDEX)
   .routine
     TYA : STA !sram_display_mode
     LDA #!SOUND_MENU_JSR : JSL !SFX_LIB1
@@ -560,7 +560,7 @@ action_ramwatch_edit_left:
   .bankSRAM
     LDA !ram_watch_edit_left : STA $F00000,X
 +   %a16()
-    LDA !IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
+    LDA #!IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
     LDA #!SOUND_MENU_JSR : JSL !SFX_LIB1
     RTS
 }
@@ -579,14 +579,14 @@ action_ramwatch_edit_right:
   .bankSRAM
     LDA !ram_watch_edit_right : STA $F00000,X
 +   %a16()
-    LDA !IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
+    LDA #!IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
     LDA #!SOUND_MENU_JSR : JSL !SFX_LIB1
     RTS
 }
 
 action_HUD_ramwatch:
 {
-    LDA !IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
+    LDA #!IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
     RTS
 }
 
