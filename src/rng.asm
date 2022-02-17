@@ -445,6 +445,7 @@ hook_botwoon_rng:
 }
 
 print pc, " rng end"
+warnpc $83B400
 
 
 org $A4F700

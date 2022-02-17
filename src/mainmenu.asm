@@ -496,15 +496,6 @@ action_load_preset:
     RTS
 }
 
-pushpc
-
-org $89E000
-print pc, " custom presets start"
-incsrc custompresets.asm
-print pc, " custom presets end"
-
-pullpc
-
 
 ; ----------------
 ; Equipment menu

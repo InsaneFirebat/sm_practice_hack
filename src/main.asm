@@ -16,6 +16,7 @@ incsrc infohud.asm
 incsrc IFBhijacks.asm
 incsrc rng.asm
 incsrc presets.asm
+incsrc custompresets.asm
 incsrc misc.asm
 incsrc layout.asm
 incsrc cutscenes.asm
