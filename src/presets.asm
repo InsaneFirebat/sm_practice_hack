@@ -420,8 +420,9 @@ endif
 
     JSL preset_scroll_fixes
 
-    LDA !PRESET_SPECIAL : BEQ +
-    JSL preset_special_fixes
+;    ; flags are still in the preset data for now
+;    LDA !PRESET_SPECIAL : BEQ +
+;    JSL preset_special_fixes
 
 ;    LDA !sram_preset_options : BIT !PRESETS_CLOSE_BLUE_DOORS : BNE +
 +   LDA !sram_preset_open_doors : BEQ +
