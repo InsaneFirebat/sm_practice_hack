@@ -134,6 +134,30 @@ macro cm_ctrl_input(title, addr, routine, argument)
     db #$28, "<title>", #$FF
 endmacro
 
+MainMenuJSR:
+{
+  .toggle
+  .toggle_bit
+    JSR ($000A,X)
+    RTL
+
+  .jsr
+  .controller_input
+    JSR ($0004,X)
+    RTL
+
+  .numfield
+  .numfield_sound
+  .numfield_word
+  .numfield_color
+    JSR ($0020,X)
+    RTL
+
+  .choice
+    JSR ($0008,X)
+    RTL
+}
+
 action_submenu:
 {
     ; Increment stack pointer by 2, then store current menu
@@ -142,8 +166,8 @@ action_submenu:
     LDA #$0000 : STA !ram_cm_cursor_stack,X
 
     %sfxmove()
-    JSR cm_calculate_max
-    JSR cm_draw
+    JSL cm_calculate_max
+    JSL cm_draw
 
     JSL cm_colors
 
@@ -152,6 +176,9 @@ action_submenu:
 
 action_presets_submenu:
 {
+    PHB
+    PHK : PLB
+
     ; Increment stack pointer by 2, then store current menu    
     LDA !ram_cm_stack_index : INC #2 : STA !ram_cm_stack_index : TAX
     LDA !sram_preset_category : ASL : TAY
@@ -162,9 +189,10 @@ action_presets_submenu:
     LDA #$0000 : STA !ram_cm_cursor_stack,X
 
     %sfxmove()
-    JSR cm_calculate_max
-    JSR cm_draw
+    JSL cm_calculate_max
+    JSL cm_draw
 
+    PLB
     RTS
 }
 
@@ -479,8 +507,7 @@ action_select_preset_category:
 {
     TYA : STA !sram_preset_category
     LDA #$0000 : STA !sram_last_preset
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_previous_menu
     RTS
 }
 
@@ -1480,8 +1507,7 @@ ihmode_ramwatch:
 action_select_infohud_mode:
 {
     TYA : STA !sram_display_mode
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_previous_menu
     RTS
 }
 
@@ -1583,9 +1609,8 @@ ihstrat_kraidradar:
 action_select_room_strat:
 {
     TYA : STA !sram_room_strat
-    LDA #$0001 : STA !sram_display_mode
-    JSR cm_go_back
-    JSR cm_calculate_max
+    LDA !IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
+    JSL cm_previous_menu
     RTS
 }
 
@@ -1763,8 +1788,7 @@ ih_superhud_doorskip:
 action_select_superhud_bottom:
 {
     TYA : STA !sram_superhud_bottom
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_previous_menu
     RTS
 }
 
@@ -1840,8 +1864,7 @@ ih_superhud_middle_ridleygrab:
 action_select_superhud_middle:
 {
     TYA : STA !sram_superhud_middle
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_previous_menu
     RTS
 }
 
@@ -1925,8 +1948,7 @@ ih_superhud_enable:
 action_select_superhud_top:
 {
     TYA : STA !sram_superhud_top
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_previous_menu
     RTS
 }
 print pc, " superhud menu end"
@@ -2127,6 +2149,12 @@ GameLoopExtras:
     RTS
 }
 
+GameLoopExtras_long:
+{
+    JSR GameLoopExtras
+    RTL
+}
+
 
 ; ---------------
 ; Cutscenes menu
@@ -2294,8 +2322,7 @@ action_assign_input:
   .undetected
     %sfxgoback()
 
-+   JSR cm_go_back
-    JSR cm_calculate_max
++   JSL cm_previous_menu
     RTS
 }
 
@@ -2335,8 +2362,7 @@ action_set_common_controls:
     LDA.l ControllerLayoutTable+10,X : STA !IH_INPUT_ANGLE_UP
     LDA.l ControllerLayoutTable+12,X : STA !IH_INPUT_ANGLE_DOWN
     %sfxconfirm()
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_previous_menu
     RTS
 }
 

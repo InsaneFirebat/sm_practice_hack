@@ -1,6 +1,10 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.0.19] Just backend stuff so far...
+* [2.4.0.18] Fixed rare crash when opening the pause menu
+* [2.4.0.18] Removed bomb blocks blocking Terminator presets by idlechild
+* [2.4.0.18] Fixed custom presets in Ceres by idlechild
 * [2.4.0.17] Added improved Phantoon RNG menu and added inverted patterns by idlechild
 * [2.4.0.16] Added number of frames shot was released to the Charge Timer HUD mode
 * [2.4.0.16] More work on Mother Brain presets by idlechild

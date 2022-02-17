@@ -124,8 +124,7 @@ paletterando_abort:
     %cm_jsr("ABORT", #.routine, #$0000)
   .routine
     %sfxgoback()
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_previous_menu
     RTS
 
 paletterando_confirm:

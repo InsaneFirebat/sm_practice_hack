@@ -124,8 +124,7 @@ ramwatch_common_enemy_apply:
     LDY #RAMWatchMenu
     LDA !ram_cm_stack_index : DEC #4
     STA !ram_cm_stack_index
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_previous_menu
     JSR ih_prepare_ram_watch_menu
     %sfxconfirm()
     RTS
@@ -134,7 +133,7 @@ ramwatch_common_enemy_property:
     dw !ACTION_CHOICE
     dl #!ram_cm_watch_enemy_property
     dw #$0000
-    db #$28, "Set to Enemy  ", #$FF
+    db #$28, "Set to Enemy", #$FF
     db #$28, "         ID", #$FF
     db #$28, " X POSITION", #$FF
     db #$28, "   X SUBPOS", #$FF
@@ -408,8 +407,7 @@ ramwatch_common_addr_done:
     LDY #RAMWatchMenu
     LDA !ram_cm_stack_index : DEC #6
     STA !ram_cm_stack_index
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_previous_menu
     JSR ih_prepare_ram_watch_menu
     %sfxconfirm()
     RTS
@@ -419,8 +417,7 @@ ramwatch_common_back:
   .routine
     LDA !ram_cm_stack_index : DEC #4
     STA !ram_cm_stack_index
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_previous_menu
     RTS
 
 ramwatch_enable:
