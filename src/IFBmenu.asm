@@ -442,7 +442,7 @@ ifb_soundtest_music_tourian:
 ifb_soundtest_music_goto_2:
     %cm_jsr("GOTO PAGE TWO", .routine, #MusicSelectMenu2)
   .routine
-    JSR cm_go_back
+    JSL cm_go_back
     JMP action_submenu
 
 MusicSelectMenu2:
@@ -513,7 +513,7 @@ ifb_soundtest_music_galaxypeace:
 ifb_soundtest_music_goto_1:
     %cm_jsr("GOTO PAGE ONE", .routine, #MusicSelectMenu1)
   .routine
-    JSR cm_go_back
+    JSL cm_go_back
     JMP action_submenu
 
 action_soundtest_playmusic:
@@ -542,8 +542,7 @@ ifb_factory_reset_abort:
     %cm_jsr("ABORT", #.routine, #$0000)
   .routine
     %sfxgoback()
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_previous_menu
     RTS
 
 ifb_factory_reset_keep_presets:

@@ -33,7 +33,7 @@ print pc, " menu bank85 end"
 warnpc $85FE00
 
 
-org $B88000
+org $89B000
 print pc, " menu start"
 
 cm_start:
@@ -65,7 +65,7 @@ cm_start:
 
     JSR cm_transfer_custom_tileset
     JSR cm_transfer_custom_cgram
-    JSR cm_draw         ; Initialise message box
+    JSL cm_draw         ; Initialise message box
 
     JSL play_music_long ; Play 2 lag frames of music and sound effects
 
@@ -87,7 +87,7 @@ cm_start:
     LDA $C1 : STA !ram_gametime_room
     LDA $C3 : STA !ram_last_gametime_room
     JSL $809B44
-    JSR GameLoopExtras            ; check if game_loop_extras needs to be disabled
+    JSL GameLoopExtras_long       ; check if game_loop_extras needs to be disabled
 
     ; I think the above subroutines erases some of infohud, so we make sure we redraw it.
     JSL ih_update_hud_code
@@ -118,12 +118,12 @@ cm_init:
     STA $8B
     LDA !FRAME_COUNTER : STA !ram_cm_input_counter
 
-    LDA.w #MainMenu
+    LDA.l #MainMenu
     STA.l !ram_cm_menu_stack
-    LDA.w #MainMenu>>16
+    LDA.l #MainMenu>>16
     STA.l !ram_cm_menu_bank
 
-    JSR cm_calculate_max
+    JSL cm_calculate_max
     JSL cm_set_etanks_and_reserve
     RTS
 }
@@ -309,7 +309,7 @@ cm_draw:
     JSR cm_tilemap_menu
     JSR cm_tilemap_transfer
     PLP
-    RTS
+    RTL
 }
 
 cm_tilemap_clear:
@@ -1116,8 +1116,7 @@ cm_loop:
     JMP .inputLoop
 
   .pressedB
-    JSR cm_go_back
-    JSR cm_calculate_max
+    JSL cm_previous_menu
     BRA .redraw
 
   .pressedDown
@@ -1156,7 +1155,7 @@ cm_loop:
     JMP .inputLoop
 
   .redraw
-    JSR cm_draw
+    JSL cm_draw
     JMP .inputLoop
 }
 
@@ -1199,8 +1198,15 @@ cm_ctrl_mode:
     STA !ram_cm_ctrl_last_input
     STA !ram_cm_ctrl_mode
     STA !ram_cm_ctrl_timer
-    JSR cm_draw
+    JSL cm_draw
     RTS
+}
+
+cm_previous_menu:
+{
+    JSL cm_go_back
+    JSL cm_calculate_max
+    RTL
 }
 
 cm_go_back:
@@ -1220,12 +1226,12 @@ cm_go_back:
     STA !ram_cm_stack_index    
     LDA !ram_cm_stack_index
     BNE .end
-    LDA.w #MainMenu>>16       ; Reset submenu bank when back at main menu
+    LDA.l #MainMenu>>16       ; Reset submenu bank when back at main menu
     STA.l !ram_cm_menu_bank
 
   .end
     %sfxgoback()
-    RTS
+    RTL
 }
 
 cm_calculate_max:
@@ -1243,7 +1249,7 @@ cm_calculate_max:
 
   .done
     TXA : STA !ram_cm_cursor_max
-    RTS
+    RTL
 }
 
 cm_get_inputs:
@@ -1370,7 +1376,7 @@ execute_toggle:
     LDA $0A : BEQ .end
     LDA [$04]
     LDX #$0000
-    JSR ($000A,X)
+    JSL MainMenuJSR_toggle
 
   .end
     %sfxtoggle()
@@ -1396,7 +1402,7 @@ execute_toggle_bit:
 
     LDA [$04]
     LDX #$0000
-    JSR ($000A,X)
+    JSL MainMenuJSR_toggle_bit
 
  .end
     %sfxtoggle()
@@ -1416,7 +1422,7 @@ execute_jsr:
     LDA [$00] : TAY
 
     LDX #$0000
-    JSR ($0004,X)
+    JSL MainMenuJSR_jsr
 
   .end
     RTS
@@ -1475,7 +1481,7 @@ execute_numfield_hex:
 
     LDA [$04]
     LDX #$0000
-    JSR ($0020,X)
+    JSL MainMenuJSR_numfield
 
   .end
     %sfxnumber()
@@ -1525,7 +1531,7 @@ execute_numfield_sound:
 
     LDA [$04]
     LDX #$0000
-    JSR ($0020,X)
+    JSL MainMenuJSR_numfield_sound
 
   .end
 ;    %sfxnumber()
@@ -1584,7 +1590,7 @@ execute_numfield_word:
 
     LDA [$04]
     LDX #$0000
-    JSR ($0020,X)
+    JSL MainMenuJSR_numfield_word
 
   .end
     %sfxnumber()
@@ -1626,7 +1632,7 @@ execute_numfield_color:
 
     LDA [$04]
     LDX #$0000
-    JSR ($0020,X)
+    JSL MainMenuJSR_numfield_color
 
   .end
     %sfxnumber()
@@ -1692,7 +1698,7 @@ execute_choice:
 
     LDA [$04]
     LDX #$0000
-    JSR ($0008,X)
+    JSL MainMenuJSR_choice
 
   .end
     %sfxtoggle()
@@ -1741,7 +1747,7 @@ execute_controller_input:
     LDA [$00] : TAY
 
     LDX #$0000
-    JSR ($0004,X)
+    JSL MainMenuJSR_controller_input
 
   .end
     RTS
@@ -1798,15 +1804,6 @@ cm_divide_100:
 }
 
 
-; -----------
-; Main menu
-; -----------
-
-print pc, " mainmenu.asm start"
-incsrc mainmenu.asm
-print pc, " mainmenu.asm end"
-
-
 ; ----------
 ; Resources
 ; ----------
@@ -1819,3 +1816,13 @@ HexMenuGFXTable:
     dw $2C70, $2C71, $2C72, $2C73, $2C74, $2C75, $2C76, $2C77, $2C78, $2C79, $2C50, $2C51, $2C52, $2C53, $2C54, $2C55
 
 print pc, " menu end"
+
+
+; -----------
+; Main menu
+; -----------
+
+org $B88000
+print pc, " mainmenu start"
+incsrc mainmenu.asm
+print pc, " mainmenu end"
