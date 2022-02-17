@@ -513,6 +513,7 @@ endif
 
 +   LDA #$9F55 : STA $0A6C ; Set X speed table pointer
     STZ $0E18              ; Set elevator to inactive
+    STZ $0727              ; Clear pause menu index
     STZ $1C1F              ; Clear message box index
     STZ $0E1A              ; Clear health bomb flag
     STZ $0795 : STZ $0797  ; Clear door transition flags
@@ -523,18 +524,22 @@ if !RAW_TILE_GRAPHICS
     LDX $07BB : LDA $8F0018,X
     CMP #$91C9 : BEQ .post_preset_scrolling_sky
     CMP #$91CE : BEQ .post_preset_scrolling_sky
-    PLB : PLP : RTL
+    PLB : PLP
+    RTL
+
   .post_preset_scrolling_sky
     JML $8FE89B
 else
-    PLB : PLP : RTL
+    PLB : PLP
+    RTL
 endif
 }
 
 preset_open_all_blue_doors:
 {
     PHP : PHB : PHX : PHY
-    LDA #$8484 : STA $C3 : PHA : PLB : PLB
+    LDA #$8484 : STA $C3
+    PHA : PLB : PLB
 
     ; First resolve all door PLMs where the door has previously been opened
     LDX #$004E
@@ -553,7 +558,7 @@ preset_open_all_blue_doors:
     ; Execute the next PLM instruction to set the BTS as a blue door
     LDA $0002,Y : TAY
     LDA $0000,Y : CMP #$86BC : BEQ .plm_delete
-    INY : INY
+    INY #2
     JSL preset_execute_plm_instruction
 
   .plm_delete
@@ -565,21 +570,29 @@ preset_open_all_blue_doors:
     LDA !ROOM_WIDTH_SCROLLS : STA $C7
     LDA !ROOM_WIDTH_BLOCKS : STA $C1 : ASL : STA $C3
     LDA $7F0000 : LSR : TAY
-    STZ $C5 : TDC : %a8() : LDA #$7F : PHA : PLB
+    STZ $C5 : TDC
+    %a8()
+    LDA #$7F : PHA : PLB
 
   .bts_search_loop
     LDA $6401,Y : AND #$FC : CMP #$40 : BEQ .bts_found
+
   .bts_continue
     DEY : BNE .bts_search_loop
 
     ; All blue doors opened
-    PLY : PLX : PLB : PLP : RTS
+    PLY : PLX : PLB : PLP
+    RTS
 
   .bts_found
-    %a16() : TYA : ASL : TAX : %a8()
+    %a16()
+    TYA : ASL : TAX
+    %a8()
     ; Convert BTS index to tile index
     ; Also verify this is a door and not a slope or half-tile
-    %a16() : TYA : ASL : TAX : %a8()
+    %a16()
+    TYA : ASL : TAX
+    %a8()
     LDA $0001,X : BIT #$30 : BNE .bts_continue
 
     ; Check if preset skips the scroll check
@@ -588,12 +601,15 @@ preset_open_all_blue_doors:
 
     ; If this door has a red scroll, then leave it closed
     ; Most of the work is to determine the scroll index
-    TYA : DEC : LSR : LSR : LSR : LSR : STA $004204
-    %a8() : LDA $C7 : STA $004206
-    %a16() : PHA : PLA : PHA : PLA
+    TYA : DEC : LSR #4 : STA $004204
+    %a8()
+    LDA $C7 : STA $004206
+    %a16()
+    PHA : PLA : PHA : PLA
     LDA $004216 : STA $C8
-    LDA $004214 : LSR : LSR : LSR : LSR
-    %a8() : STA $004202
+    LDA $004214 : LSR #4
+    %a8()
+    STA $004202
     LDA $C7 : STA $004203
     PHA : PLA : TDC
     LDA $004216 : CLC : ADC $C8
@@ -609,7 +625,8 @@ preset_open_all_blue_doors:
     LDA #$04 : STA $C6
 
   .bts_facing_left_right
-    %a16() : LDA #$0082 : ORA $C5 : STA $0000,X
+    %a16()
+    LDA #$0082 : ORA $C5 : STA $0000,X
     TXA : CLC : ADC $C3 : TAX : LDA #$00A2 : ORA $C5 : STA $0000,X
     TXA : CLC : ADC $C3 : TAX : LDA #$08A2 : ORA $C5 : STA $0000,X
     TXA : CLC : ADC $C3 : TAX : LDA #$0882 : ORA $C5 : STA $0000,X
@@ -624,9 +641,13 @@ preset_open_all_blue_doors:
     LDA #$08 : STA $C6
 
   .bts_facing_up_down
-    %a16() : LDA #$0084 : ORA $C5 : STA $0006,X
-    DEC : STA $0004,X : ORA #$0400 : STA $0002,X : INC : STA $0000,X
-    TDC : %a8() : STA $C6 : STA $6401,Y
+    %a16()
+    LDA #$0084 : ORA $C5 : STA $0006,X
+    DEC : STA $0004,X
+    ORA #$0400 : STA $0002,X
+    INC : STA $0000,X
+    TDC : %a8()
+    STA $C6 : STA $6401,Y
     STA $6402,Y : STA $6403,Y : STA $6404,Y
     JMP .bts_continue
 }
@@ -674,14 +695,14 @@ else
 endif
 
   .end
-    PLB : PLP : RTL
+    PLB : PLP
+    RTL
 }
 
 transfer_cgram_long:
 {
     PHP
-    %a16()
-    %i8()
+    %a16() : %i8()
     JSR $933A
     PLP
     RTL
@@ -691,9 +712,9 @@ add_grapple_and_xray_to_hud:
 {
     ; Copied from $809AB1 to $809AC9
     LDA $09A2 : BIT #$8000 : BEQ $04
-    JSL $809A3E            ; Add x-ray to HUD tilemap
+    JSL $809A3E ; Add x-ray to HUD tilemap
     LDA $09A2 : BIT #$4000 : BEQ $04
-    JSL $809A2E            ; Add grapple to HUD tilemap
+    JSL $809A2E ; Add grapple to HUD tilemap
     JMP .resume_infohud_icon_initialization
 }
 
