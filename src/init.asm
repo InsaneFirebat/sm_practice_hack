@@ -85,6 +85,9 @@ init_nonzero_wram:
     STA !ram_cm_watch_right_index_hi : STA !ram_cm_watch_right_index_lo
     STA !ram_cm_watch_enemy_property : STA !ram_cm_watch_enemy_index
 
+    LDA #$000A : STA !ram_cm_brb_set_cycle
+    LDA #$0258 : STA !ram_cm_brb_cycle_time
+
     LDA #$0001
     STA !ram_nodamage : STA !ram_soundtest_lib1
     STA !ram_soundtest_lib2 : STA !ram_soundtest_lib3

@@ -90,8 +90,8 @@ macro sfxbeep() ; play minimap movement beep sound lib1
     LDA #$0036 : JSL !SFX_LIB1
 endmacro
 
-macro sfxetecoon() ; play etecoon cry (required instrument) sound lib2
-    LDA #$0033 : JSL !SFX_LIB2
+macro sfxdachora() ; play dachora cry sound lib2
+    LDA #$001D : JSL !SFX_LIB2
 endmacro
 
 macro sfxdamage() ; play damage boost sound lib1

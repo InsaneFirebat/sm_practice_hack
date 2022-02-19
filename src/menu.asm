@@ -445,7 +445,7 @@ cm_tilemap_menu:
 
   .blank
     ; skip drawing blank lines
-    INY : INY
+    INY #2
     BRA .loop
 
   .header
@@ -487,6 +487,18 @@ cm_tilemap_transfer:
     JSL $8289EF ; Handle sounds
     %a16()
     RTS
+}
+
+cm_tilemap_transfer_long:
+{
+    JSR cm_tilemap_transfer
+    RTL
+}
+
+cm_tilemap_bg_interior:
+{
+    JSR cm_tilemap_bg_fill_interior
+    RTL
 }
 
 macro item_index_to_vram_index()
@@ -659,16 +671,16 @@ draw_toggle_bit_inverted:
     LDA [$08] : AND $0C : BEQ .checked
 
     ; Off
-    LDA #$244B : STA !ram_tilemap_buffer+0,X
-    LDA #$244D : STA !ram_tilemap_buffer+2,X
+    LDA #$244B : STA !ram_tilemap_buffer+2,X
     LDA #$244D : STA !ram_tilemap_buffer+4,X
+    LDA #$244D : STA !ram_tilemap_buffer+6,X
     RTS
 
   .checked
     ; On
     %a16()
-    LDA #$384B : STA !ram_tilemap_buffer+2,X
-    LDA #$384C : STA !ram_tilemap_buffer+4,X
+    LDA #$384B : STA !ram_tilemap_buffer+4,X
+    LDA #$384C : STA !ram_tilemap_buffer+6,X
     RTS
 }
 
@@ -1091,10 +1103,18 @@ cm_loop:
     LDA !ram_cm_leave : BEQ +
     RTS ; Exit menu loop
 
++   LDA !ram_cm_brb : BEQ +
+    JSL cm_brb_loop
+    JSR cm_transfer_custom_tileset
+    JSR cm_transfer_custom_cgram
+    JMP .redraw
+
 +   LDA !ram_cm_ctrl_mode : BEQ +
     JSR cm_ctrl_mode
     BRA .inputLoop
 
+    ; not sure if still necessary
+    ; needs flash cart testing
 +   JSR cm_transfer_original_cgram
     JSR cm_transfer_custom_cgram
 
@@ -1112,7 +1132,6 @@ cm_loop:
     BIT #$0200 : BNE .pressedLeft
     BIT #$0020 : BNE .pressedL
     BIT #$0010 : BNE .pressedR
-
     JMP .inputLoop
 
   .pressedB
@@ -1162,17 +1181,17 @@ cm_loop:
 cm_ctrl_mode:
 {
     JSL $809459
-    LDA $8B
+    LDA !IH_CONTROLLER_PRI
 
     %a8() : LDA #$28 : STA $0E : %a16()
 
-    LDA $8B : BEQ .clear_and_draw
+    LDA !IH_CONTROLLER_PRI : BEQ .clear_and_draw
     CMP !ram_cm_ctrl_last_input : BNE .clear_and_draw
 
     ; Holding an input for more than one second
     LDA !ram_cm_ctrl_timer : INC : STA !ram_cm_ctrl_timer : CMP.w #0060 : BNE .next_frame
 
-    LDA $8B : STA [$C5]
+    LDA !IH_CONTROLLER_PRI : STA [$C5]
     JSL GameModeExtras
     %sfxstatue()
     BRA .exit
@@ -1186,7 +1205,7 @@ cm_ctrl_mode:
     LDA !ram_cm_cursor_stack,X : ASL #5 : CLC : ADC #$0168 : TAX
 
     ; Input display
-    LDA $8B
+    LDA !IH_CONTROLLER_PRI
     JSR menu_ctrl_input_display
     JSR cm_tilemap_transfer
 
@@ -1259,25 +1278,25 @@ cm_get_inputs:
 
     JSL $809459 ; Read controller input
 
-+   LDA $8F : BEQ .check_holding
++   LDA !IH_CONTROLLER_PRI_NEW : BEQ .check_holding
 
     ; Initial delay of $0E frames
     LDA #$000E : STA !ram_cm_input_timer
 
     ; Return the new input
-    LDA $8F
+    LDA !IH_CONTROLLER_PRI_NEW
     RTS
 
   .check_holding
     ; Check if we're holding the dpad
-    LDA $8B : AND #$0F00 : BEQ .noinput
+    LDA !IH_CONTROLLER_PRI : AND #$0F00 : BEQ .noinput
 
     ; Decrement delay timer and check if it's zero
     LDA !ram_cm_input_timer : DEC : STA !ram_cm_input_timer : BNE .noinput
 
     ; Set new delay to two frames and return the input we're holding
     LDA !sram_cm_scroll_delay : STA !ram_cm_input_timer
-    LDA $8B : AND #$4F00 : ORA !IH_INPUT_HELD
+    LDA !IH_CONTROLLER_PRI : AND #$4F00 : ORA !IH_INPUT_HELD
     RTS
 
   .noinput
@@ -1814,6 +1833,11 @@ cm_hud_table:
 
 HexMenuGFXTable:
     dw $2C70, $2C71, $2C72, $2C73, $2C74, $2C75, $2C76, $2C77, $2C78, $2C79, $2C50, $2C51, $2C52, $2C53, $2C54, $2C55
+
+DecMenuGFXTable:
+    dw $2C20, $2C21, $2C22, $2C23, $2C24, $2C25, $2C26, $2C27, $2C28, $2C29
+
+MenuResources:
 
 print pc, " menu end"
 

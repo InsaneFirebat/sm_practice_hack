@@ -486,6 +486,17 @@
 
 !ram_cm_rng = $F0210C
 
+!ram_cm_brb = !WRAM_MENU_START+$60
+!ram_cm_brb_timer = !WRAM_MENU_START+$62
+!ram_cm_brb_frames = !WRAM_MENU_START+$64
+!ram_cm_brb_secs = !WRAM_MENU_START+$66
+!ram_cm_brb_mins = !WRAM_MENU_START+$68
+!ram_cm_brb_screen = !WRAM_MENU_START+$6A
+!ram_cm_brb_palette = !WRAM_MENU_START+$6C
+!ram_cm_brb_timer_mode = !WRAM_MENU_START+$6E
+!ram_cm_brb_set_cycle = !WRAM_MENU_START+$70
+!ram_cm_brb_cycle_time = !WRAM_MENU_START+$72
+
 ; FREE SPACE ^
 
 !ram_infinite_ammo = $F02110
@@ -567,6 +578,8 @@ endif
 ; ---------
 
 !PRESET_SLOTS = $F03000
+
+!BRB_METROID = #$287F
 
 
 ; -----
