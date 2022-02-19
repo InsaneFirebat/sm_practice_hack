@@ -1,14 +1,16 @@
 
-preset_nintendopower_crateria_ship:
+preset_nintendopower_crateria_ceres_elevator:
     dw #$0000
-    dw $078D, $88FE  ; DDB
-    dw $079B, $91F8  ; MDB
-    dw $07F3, $0006  ; Music Bank
-    dw $07F5, $0005  ; Music Track
-    dw $090F, $D000  ; Screen subpixel X position
-    dw $0911, $03F0  ; Screen X position in pixels
-    dw $0913, $C000  ; Screen subpixel Y position
-    dw $0915, $03D3  ; Screen Y position in pixels
+    dw $078D, $AB58  ; DDB
+    dw $079B, $DF45  ; MDB
+    dw $07F3, $002D  ; Music Bank
+    dw $07F5, $0006  ; Music Track
+    dw $090F, $0000  ; Screen subpixel X position
+    dw $0911, $0000  ; Screen X position in pixels
+    dw $0913, $0000  ; Screen subpixel Y position
+    dw $0915, $0000  ; Screen Y position in pixels
+    dw $0917, $0000  ; Layer 2 X position
+    dw $0919, $0000  ; Layer 2 Y position
     dw $093F, $0000  ; Ceres escape flag
     dw $09A2, $0000  ; Equipped Items
     dw $09A4, $0000  ; Collected Items
@@ -26,19 +28,21 @@ preset_nintendopower_crateria_ship:
     dw $09D2, $0000  ; Currently selected item
     dw $09D4, $0000  ; Max reserves
     dw $09D6, $0000  ; Reserves
-    dw $0A1C, $0002  ; Samus position/state
-    dw $0A1E, $0004  ; More position/state
+    dw $0A1C, $0000  ; Samus position/state
+    dw $0A1E, $0000  ; More position/state
     dw $0A68, $0000  ; Flash suit
     dw $0A76, $0000  ; Hyper beam
-    dw $0AF6, $0478  ; Samus X
-    dw $0AFA, $0443  ; Samus Y
+    dw $0AF6, $0080  ; Samus X
+    dw $0AF8, $0000  ; Samus subpixel X
+    dw $0AFA, $0048  ; Samus Y
+    dw $0AFC, $0000  ; Samus subpixel Y
     dw $0B3F, $0000  ; Blue suit
     dw $D820, $0000  ; Events
     dw $D822, $0000  ; Events
     dw $D828, $0000  ; Bosses
     dw $D82A, $0000  ; Bosses
     dw $D82C, $0000  ; Bosses
-    dw $D82E, $0001  ; Bosses
+    dw $D82E, $0000  ; Bosses
     dw $D870, $0000  ; Items
     dw $D872, $0000  ; Items
     dw $D874, $0000  ; Items
@@ -60,95 +64,299 @@ preset_nintendopower_crateria_ship:
     dw $D8C0, $0000  ; Doors
     dw $D8C2, $0000  ; Doors
     dw $D8C4, $0000  ; Doors
-    dw !PRESET_DOORS, $0001 ; doors closed
+    dw $D908, $0000  ; Map Stations
+    dw $D90A, $0000  ; Map Stations
+    dw $D90C, $0000  ; Map Stations
     dw #$FFFF
-.after
+
+preset_nintendopower_crateria_ceres_escape:
+    dw #preset_nintendopower_crateria_ceres_elevator ; Crateria: Ceres Elevator
+    dw $078D, $ABAC  ; DDB
+    dw $079B, $E0B5  ; MDB
+    dw $07F3, $0024  ; Music Bank
+    dw $07F5, $0007  ; Music Track
+    dw $090F, $8000  ; Screen subpixel X position
+    dw $0913, $9400  ; Screen subpixel Y position
+    dw $093F, $0002  ; Ceres escape flag
+    dw $09C2, $0018  ; Health
+    dw $0A1C, $0002  ; Samus position/state
+    dw $0A1E, $0004  ; More position/state
+    dw $0AF6, $0033  ; Samus X
+    dw $0AF8, $B000  ; Samus subpixel X
+    dw $0AFA, $008B  ; Samus Y
+    dw $0AFC, $FFFF  ; Samus subpixel Y
+    dw $D82E, $0001  ; Bosses
+    dw #$FFFF
+
+preset_nintendopower_crateria_ceres_last_3_rooms:
+    dw #preset_nintendopower_crateria_ceres_escape ; Crateria: Ceres Escape
+    dw $078D, $ABA0  ; DDB
+    dw $079B, $E021  ; MDB
+    dw $090F, $7400  ; Screen subpixel X position
+    dw $0913, $F000  ; Screen subpixel Y position
+    dw $0AF6, $004E  ; Samus X
+    dw $0AFA, $00A2  ; Samus Y
+    dw #$FFFF
+
+preset_nintendopower_crateria_ship:
+    dw #preset_nintendopower_crateria_ceres_last_3_rooms ; Crateria: Ceres Last 3 Rooms
+    dw $078D, $88FE  ; DDB
+    dw $079B, $91F8  ; MDB
+    dw $07F3, $0006  ; Music Bank
+    dw $07F5, $0005  ; Music Track
+    dw $090F, $8000  ; Screen subpixel X position
+    dw $0911, $0400  ; Screen X position in pixels
+    dw $0913, $0000  ; Screen subpixel Y position
+    dw $0915, $0400  ; Screen Y position in pixels
+    dw $093F, $0000  ; Ceres escape flag
+    dw $09C2, $0063  ; Health
+    dw $0A1C, $0000  ; Samus position/state
+    dw $0A1E, $0000  ; More position/state
+    dw $0AF6, $0481  ; Samus X
+    dw $0AF8, $0000  ; Samus subpixel X
+    dw $0AFA, $0471  ; Samus Y
+    dw $0AFC, $8000  ; Samus subpixel Y
+    dw $0917, $0200  ; Layer 2 X position
+    dw #$FFFF
+
+preset_nintendopower_crateria_parlor:
+    dw #preset_nintendopower_crateria_ship ; Crateria: Ship
+    dw $090F, $0000  ; Screen subpixel X position
+    dw $0911, $0000  ; Screen X position in pixels
+    dw $0913, $1400  ; Screen subpixel Y position
+    dw $0915, $0400  ; Screen Y position in pixels
+    dw $0917, $0000  ; Layer 2 X position
+    dw $0A1C, $0002  ; Samus position/state
+    dw $0A1E, $0004  ; More position/state
+    dw $0AF6, $0079  ; Samus X
+    dw $0AFA, $049B  ; Samus Y
+    dw $0AFC, $FFFF  ; Samus subpixel Y
+    dw #$FFFF
+
+preset_nintendopower_crateria_climb_down:
+    dw #preset_nintendopower_crateria_parlor ; Crateria: Parlor
+    dw $078D, $8916  ; DDB
+    dw $079B, $92FD  ; MDB
+    dw $0911, $0100  ; Screen X position in pixels
+    dw $0913, $7BFF  ; Screen subpixel Y position
+    dw $0915, $03F2  ; Screen Y position in pixels
+    dw $0917, $00C0  ; Layer 2 X position
+    dw $0919, $02F5  ; Layer 2 Y position
+    dw $0A1C, $0018  ; Samus position/state
+    dw $0A1E, $0204  ; More position/state
+    dw $0AF6, $0199  ; Samus X
+    dw $0AF8, $8000  ; Samus subpixel X
+    dw $0AFA, $048A  ; Samus Y
+    dw $0AFC, $0000  ; Samus subpixel Y
+    dw #$FFFF
+
+preset_nintendopower_crateria_pit_room:
+    dw #preset_nintendopower_crateria_climb_down ; Crateria: Climb Down
+    dw $078D, $898E  ; DDB
+    dw $079B, $96BA  ; MDB
+    dw $090F, $6FFF  ; Screen subpixel X position
+    dw $0913, $3800  ; Screen subpixel Y position
+    dw $0915, $0800  ; Screen Y position in pixels
+    dw $0919, $0600  ; Layer 2 Y position
+    dw $0A1C, $0001  ; Samus position/state
+    dw $0A1E, $0008  ; More position/state
+    dw $0AF6, $01DB  ; Samus X
+    dw $0AF8, $FFFF  ; Samus subpixel X
+    dw $0AFA, $088B  ; Samus Y
+    dw $0AFC, $FFFF  ; Samus subpixel Y
+    dw #$FFFF
 
 preset_nintendopower_crateria_morph:
-    dw #preset_nintendopower_crateria_ship ; Crateria: Ship
+    dw #preset_nintendopower_crateria_pit_room ; Crateria: Pit Room
     dw $078D, $8B9E  ; DDB
     dw $079B, $9E9F  ; MDB
     dw $07F5, $0007  ; Music Track
-    dw $090F, $C000  ; Screen subpixel X position
-    dw $0911, $04FC  ; Screen X position in pixels
+    dw $090F, $6000  ; Screen subpixel X position
+    dw $0911, $0500  ; Screen X position in pixels
+    dw $0913, $0000  ; Screen subpixel Y position
     dw $0915, $0200  ; Screen Y position in pixels
-    dw $0AF6, $057E  ; Samus X
-    dw $0AFA, $02AB  ; Samus Y
+    dw $0917, $03C0  ; Layer 2 X position
+    dw $0919, $0180  ; Layer 2 Y position
+    dw $0A1C, $0000  ; Samus position/state
+    dw $0A1E, $0000  ; More position/state
+    dw $0AF6, $0580  ; Samus X
+    dw $0AFA, $02A8  ; Samus Y
     dw #$FFFF
-.after
 
-preset_nintendopower_crateria_climb:
+preset_nintendopower_crateria_construction_zone_down:
     dw #preset_nintendopower_crateria_morph ; Crateria: Morph
+    dw $090F, $2000  ; Screen subpixel X position
+    dw $0911, $0700  ; Screen X position in pixels
+    dw $0913, $E400  ; Screen subpixel Y position
+    dw $0917, $0540  ; Layer 2 X position
+    dw $09A2, $0004  ; Equipped Items
+    dw $09A4, $0004  ; Collected Items
+    dw $0A1C, $0001  ; Samus position/state
+    dw $0A1E, $0008  ; More position/state
+    dw $0AF6, $07AC  ; Samus X
+    dw $0AFA, $028B  ; Samus Y
+    dw $D872, $0400  ; Items
+    dw #$FFFF
+
+preset_nintendopower_crateria_construction_zone_up:
+    dw #preset_nintendopower_crateria_construction_zone_down ; Crateria: Construction Zone Down
+    dw $078D, $8EDA  ; DDB
+    dw $079B, $A107  ; MDB
+    dw $090F, $D000  ; Screen subpixel X position
+    dw $0911, $0000  ; Screen X position in pixels
+    dw $0913, $6800  ; Screen subpixel Y position
+    dw $0915, $0000  ; Screen Y position in pixels
+    dw $0917, $0001  ; Layer 2 X position
+    dw $0919, $0000  ; Layer 2 Y position
+    dw $09C6, $0005  ; Missiles
+    dw $09C8, $0005  ; Max missiles
+    dw $0AF6, $0055  ; Samus X
+    dw $0AFA, $008B  ; Samus Y
+    dw $D874, $0004  ; Items
+    dw #$FFFF
+
+preset_nintendopower_crateria_pit_room_revisit:
+    dw #preset_nintendopower_crateria_construction_zone_up ; Crateria: Construction Zone Up
+    dw $078D, $8EB6  ; DDB
+    dw $079B, $97B5  ; MDB
+    dw $07F5, $0003  ; Music Track
+    dw $090F, $0000  ; Screen subpixel X position
+    dw $0913, $0000  ; Screen subpixel Y position
+    dw $0917, $0000  ; Layer 2 X position
+    dw $09C8, $000A  ; Max missiles
+    dw $0A1C, $0000  ; Samus position/state
+    dw $0A1E, $0000  ; More position/state
+    dw $0AF6, $0080  ; Samus X
+    dw $0AFA, $0088  ; Samus Y
+    dw $D872, $1400  ; Items
+    dw $D8B6, $0004  ; Doors
+    dw #$FFFF
+
+preset_nintendopower_crateria_climb_up:
+    dw #preset_nintendopower_crateria_pit_room_revisit ; Crateria: Pit Room Revisit
     dw $078D, $8B92  ; DDB
     dw $079B, $975C  ; MDB
     dw $07F3, $0009  ; Music Bank
     dw $07F5, $0005  ; Music Track
     dw $090F, $2000  ; Screen subpixel X position
-    dw $0911, $0000  ; Screen X position in pixels
-    dw $0913, $7800  ; Screen subpixel Y position
-    dw $0915, $0000  ; Screen Y position in pixels
-    dw $09A2, $0004  ; Equipped Items
-    dw $09A4, $0004  ; Collected Items
+    dw $0913, $AC00  ; Screen subpixel Y position
     dw $09C6, $000A  ; Missiles
-    dw $09C8, $000A  ; Max missiles
-    dw $0AF6, $0059  ; Samus X
+    dw $0A1C, $0002  ; Samus position/state
+    dw $0A1E, $0004  ; More position/state
+    dw $0AF6, $0087  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw $D820, $0001  ; Events
-    dw $D872, $1400  ; Items
-    dw $D874, $0004  ; Items
     dw $D8B2, $0400  ; Doors
-    dw $D8B6, $0004  ; Doors
-    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
-.after
 
-preset_nintendopower_crateria_bomb_torizo:
-    dw #preset_nintendopower_crateria_climb ; Crateria: Climb
-    dw $078D, $8982  ; DDB
-    dw $079B, $9879  ; MDB
+preset_nintendopower_crateria_parlor_revisit:
+    dw #preset_nintendopower_crateria_climb_up ; Crateria: Climb Up
+    dw $078D, $8B7A  ; DDB
+    dw $079B, $96BA  ; MDB
+    dw $090F, $0000  ; Screen subpixel X position
+    dw $0911, $0100  ; Screen X position in pixels
+    dw $0913, $C000  ; Screen subpixel Y position
+    dw $0917, $00C0  ; Layer 2 X position
+    dw $0AF6, $01A0  ; Samus X
+    dw $0AFA, $005B  ; Samus Y
+    dw #$FFFF
+
+preset_nintendopower_crateria_flyway:
+    dw #preset_nintendopower_crateria_parlor_revisit ; Crateria: Parlor Revisit
+    dw $078D, $8B3E  ; DDB
+    dw $079B, $92FD  ; MDB
     dw $090F, $C000  ; Screen subpixel X position
-    dw $0911, $0200  ; Screen X position in pixels
-    dw $0913, $B400  ; Screen subpixel Y position
-    dw $09C6, $0005  ; Missiles
+    dw $0911, $0300  ; Screen X position in pixels
+    dw $0913, $2BFF  ; Screen subpixel Y position
+    dw $0915, $01E6  ; Screen Y position in pixels
+    dw $0917, $0240  ; Layer 2 X position
+    dw $0919, $016C  ; Layer 2 Y position
+    dw $09D2, $0001  ; Currently selected item
     dw $0A1C, $0001  ; Samus position/state
     dw $0A1E, $0008  ; More position/state
-    dw $0AF6, $02D3  ; Samus X
+    dw $0AF6, $0369  ; Samus X
+    dw $0AFA, $026B  ; Samus Y
+    dw #$FFFF
+
+preset_nintendopower_crateria_bomb_torizo:
+    dw #preset_nintendopower_crateria_flyway ; Crateria: Flyway
+    dw $078D, $8982  ; DDB
+    dw $079B, $9879  ; MDB
+    dw $090F, $4000  ; Screen subpixel X position
+    dw $0911, $0200  ; Screen X position in pixels
+    dw $0913, $D000  ; Screen subpixel Y position
+    dw $0915, $0000  ; Screen Y position in pixels
+    dw $0917, $0180  ; Layer 2 X position
+    dw $0919, $0000  ; Layer 2 Y position
+    dw $09C6, $0005  ; Missiles
+    dw $09D2, $0000  ; Currently selected item
+    dw $0AF6, $02BE  ; Samus X
+    dw $0AFA, $008B  ; Samus Y
     dw $D8B2, $2400  ; Doors
     dw #$FFFF
-.after
 
-preset_nintendopower_crateria_terminator:
+preset_nintendopower_crateria_alcatraz:
     dw #preset_nintendopower_crateria_bomb_torizo ; Crateria: Bomb Torizo
-    dw $078D, $8BF2  ; DDB
-    dw $079B, $92FD  ; MDB
-    dw $090F, $A401  ; Screen subpixel X position
+    dw $078D, $8BAA  ; DDB
+    dw $090F, $8000  ; Screen subpixel X position
     dw $0911, $0000  ; Screen X position in pixels
-    dw $0913, $C800  ; Screen subpixel Y position
+    dw $0913, $1800  ; Screen subpixel Y position
+    dw $0917, $0000  ; Layer 2 X position
     dw $09A2, $1004  ; Equipped Items
     dw $09A4, $1004  ; Collected Items
     dw $09C6, $000A  ; Missiles
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
-    dw $0AF6, $0032  ; Samus X
+    dw $0AF6, $0037  ; Samus X
     dw $D828, $0004  ; Bosses
     dw $D870, $0080  ; Items
     dw $D8B2, $2C00  ; Doors
     dw #$FFFF
-.after
+
+preset_nintendopower_crateria_terminator:
+    dw #preset_nintendopower_crateria_alcatraz ; Crateria: Alcatraz
+    dw $078D, $8BB6  ; DDB
+    dw $079B, $92FD  ; MDB
+    dw $090F, $6000  ; Screen subpixel X position
+    dw $0911, $0100  ; Screen X position in pixels
+    dw $0913, $5800  ; Screen subpixel Y position
+    dw $0917, $00C0  ; Layer 2 X position
+    dw $0A1C, $0041  ; Samus position/state
+    dw $0A1E, $0404  ; More position/state
+    dw $0AF6, $0115  ; Samus X
+    dw $0AFA, $0099  ; Samus Y
+    dw #$FFFF
+
+preset_nintendopower_crateria_green_pirate_shaft:
+    dw #preset_nintendopower_crateria_terminator ; Crateria: Terminator
+    dw $078D, $895E  ; DDB
+    dw $079B, $990D  ; MDB
+    dw $090F, $8000  ; Screen subpixel X position
+    dw $0911, $0000  ; Screen X position in pixels
+    dw $0913, $0000  ; Screen subpixel Y position
+    dw $0915, $01FD  ; Screen Y position in pixels
+    dw $0917, $0000  ; Layer 2 X position
+    dw $0919, $017D  ; Layer 2 Y position
+    dw $09C2, $00C7  ; Health
+    dw $09C4, $00C7  ; Max health
+    dw $0A1C, $0002  ; Samus position/state
+    dw $0A1E, $0004  ; More position/state
+    dw $0AF6, $0077  ; Samus X
+    dw $0AFA, $029B  ; Samus Y
+    dw $D870, $0180  ; Items
+    dw #$FFFF
 
 preset_nintendopower_brinstar_green_brinstar_elevator:
-    dw #preset_nintendopower_crateria_terminator ; Crateria: Terminator
+    dw #preset_nintendopower_crateria_green_pirate_shaft ; Crateria: Green Pirate Shaft
     dw $078D, $8C22  ; DDB
     dw $079B, $9938  ; MDB
     dw $07F5, $0003  ; Music Track
     dw $090F, $8000  ; Screen subpixel X position
     dw $0913, $9800  ; Screen subpixel Y position
-    dw $09C2, $00C7  ; Health
-    dw $09C4, $00C7  ; Max health
+    dw $0919, $0000  ; Layer 2 Y position
     dw $0AF6, $0080  ; Samus X
     dw $D870, $0180  ; Items
     dw #$FFFF
-.after
 
 preset_nintendopower_brinstar_big_pink:
     dw #preset_nintendopower_brinstar_green_brinstar_elevator ; Brinstar: Green Brinstar Elevator
@@ -166,7 +374,6 @@ preset_nintendopower_brinstar_big_pink:
     dw $0AF6, $06C0  ; Samus X
     dw $D8B4, $0004  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_brinstar_spore_spawn:
     dw #preset_nintendopower_brinstar_big_pink ; Brinstar: Big Pink
@@ -184,7 +391,6 @@ preset_nintendopower_brinstar_spore_spawn:
     dw $D872, $14C0  ; Items
     dw $D8B4, $2404  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_brinstar_spore_fall:
     dw #preset_nintendopower_brinstar_spore_spawn ; Brinstar: Spore Spawn
@@ -201,7 +407,6 @@ preset_nintendopower_brinstar_spore_fall:
     dw $0AFA, $008B  ; Samus Y
     dw $D828, $0204  ; Bosses
     dw #$FFFF
-.after
 
 preset_nintendopower_brinstar_red_tower:
     dw #preset_nintendopower_brinstar_spore_fall ; Brinstar: Spore Fall
@@ -223,7 +428,6 @@ preset_nintendopower_brinstar_red_tower:
     dw $D8B4, $2604  ; Doors
     dw $D8B6, $002C  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_business_center:
     dw #preset_nintendopower_brinstar_red_tower ; Brinstar: Red Tower
@@ -241,7 +445,6 @@ preset_nintendopower_norfair_business_center:
     dw $D874, $0404  ; Items
     dw $D8B6, $802C  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_kraid_warehouse:
     dw #preset_nintendopower_norfair_business_center ; Norfair: Business Center
@@ -264,7 +467,6 @@ preset_nintendopower_norfair_kraid_warehouse:
     dw $D8B8, $2000  ; Doors
     dw $D8BA, $0001  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_kraid_fight:
     dw #preset_nintendopower_norfair_kraid_warehouse ; Norfair: Kraid Warehouse
@@ -282,7 +484,6 @@ preset_nintendopower_norfair_kraid_fight:
     dw $0AFA, $018B  ; Samus Y
     dw $D8B8, $2024  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_rising_tide:
     dw #preset_nintendopower_norfair_kraid_fight ; Norfair: Kraid Fight
@@ -306,7 +507,6 @@ preset_nintendopower_norfair_rising_tide:
     dw $D876, $01A3  ; Items
     dw $D8B8, $26EF  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_reserve_tank:
     dw #preset_nintendopower_norfair_rising_tide ; Norfair: Rising Tide
@@ -328,7 +528,6 @@ preset_nintendopower_norfair_reserve_tank:
     dw $D878, $0007  ; Items
     dw $D8BA, $0031  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_ice_beam:
     dw #preset_nintendopower_norfair_reserve_tank ; Norfair: Reserve Tank
@@ -348,7 +547,6 @@ preset_nintendopower_norfair_ice_beam:
     dw $D876, $E1A3  ; Items
     dw $D8BA, $0039  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_ice_escape:
     dw #preset_nintendopower_norfair_ice_beam ; Norfair: Ice Beam
@@ -368,7 +566,6 @@ preset_nintendopower_norfair_ice_escape:
     dw $D876, $E1A7  ; Items
     dw $D8B8, $2EEF  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_shinespark_to_power_bombs:
     dw #preset_nintendopower_norfair_ice_escape ; Norfair: Ice Escape
@@ -385,7 +582,6 @@ preset_nintendopower_norfair_shinespark_to_power_bombs:
     dw $0AF6, $007E  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_business_center_2:
     dw #preset_nintendopower_norfair_shinespark_to_power_bombs ; Norfair: Shinespark to Power Bombs
@@ -402,7 +598,6 @@ preset_nintendopower_norfair_business_center_2:
     dw $D874, $0F04  ; Items
     dw $D8B6, $B02C  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_crocomire:
     dw #preset_nintendopower_norfair_business_center_2 ; Norfair: Business Center 2
@@ -421,7 +616,6 @@ preset_nintendopower_norfair_crocomire:
     dw $0AFA, $02AB  ; Samus Y
     dw $D8B8, $6EEF  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_grapple_beam:
     dw #preset_nintendopower_norfair_crocomire ; Norfair: Crocomire
@@ -441,7 +635,6 @@ preset_nintendopower_norfair_grapple_beam:
     dw $D82A, $0002  ; Bosses
     dw $D876, $E1B7  ; Items
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_exit_grapple_beam:
     dw #preset_nintendopower_norfair_grapple_beam ; Norfair: Grapple Beam
@@ -460,7 +653,6 @@ preset_nintendopower_norfair_exit_grapple_beam:
     dw $0AFA, $028B  ; Samus Y
     dw $D876, $F9B7  ; Items
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_power_bombs_post_croc:
     dw #preset_nintendopower_norfair_exit_grapple_beam ; Norfair: Exit Grapple Beam
@@ -473,7 +665,6 @@ preset_nintendopower_norfair_power_bombs_post_croc:
     dw $0AF6, $0075  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_red_pirate_shaft:
     dw #preset_nintendopower_norfair_power_bombs_post_croc ; Norfair: Power Bombs Post Croc
@@ -493,7 +684,6 @@ preset_nintendopower_norfair_red_pirate_shaft:
     dw $D8B8, $EEEF  ; Doors
     dw $D8BA, $003B  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_bubble_mountain:
     dw #preset_nintendopower_norfair_red_pirate_shaft ; Norfair: Red Pirate Shaft
@@ -509,7 +699,6 @@ preset_nintendopower_norfair_bubble_mountain:
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $01C2  ; Samus X
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_wave_beam:
     dw #preset_nintendopower_norfair_bubble_mountain ; Norfair: Bubble Mountain
@@ -526,7 +715,6 @@ preset_nintendopower_norfair_wave_beam:
     dw $0AFA, $018B  ; Samus Y
     dw $D8BA, $007B  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_shinespark_2:
     dw #preset_nintendopower_norfair_wave_beam ; Norfair: Wave Beam
@@ -551,7 +739,6 @@ preset_nintendopower_norfair_shinespark_2:
     dw $D878, $001F  ; Items
     dw $D8BA, $00FB  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_xray_beam:
     dw #preset_nintendopower_norfair_shinespark_2 ; Norfair: Shinespark 2
@@ -567,7 +754,6 @@ preset_nintendopower_norfair_xray_beam:
     dw $0AFA, $068B  ; Samus Y
     dw $D8B6, $B22C  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_xray_beam_2:
     dw #preset_nintendopower_norfair_xray_beam ; Norfair: X-Ray Beam
@@ -581,7 +767,6 @@ preset_nintendopower_norfair_xray_beam_2:
     dw $0AFA, $008B  ; Samus Y
     dw $D8B6, $B62C  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_xray_beam_3:
     dw #preset_nintendopower_norfair_xray_beam_2 ; Norfair: X-Ray Beam 2
@@ -598,7 +783,6 @@ preset_nintendopower_norfair_xray_beam_3:
     dw $0AF6, $0175  ; Samus X
     dw $D874, $0F44  ; Items
     dw #$FFFF
-.after
 
 preset_nintendopower_wrecked_ship_red_brinstar_elevator:
     dw #preset_nintendopower_norfair_xray_beam_3 ; Norfair: X-Ray Beam 3
@@ -614,7 +798,6 @@ preset_nintendopower_wrecked_ship_red_brinstar_elevator:
     dw $0AF6, $007E  ; Samus X
     dw $0AFA, $00AB  ; Samus Y
     dw #$FFFF
-.after
 
 preset_nintendopower_wrecked_ship_moat_missiles:
     dw #preset_nintendopower_wrecked_ship_red_brinstar_elevator ; Wrecked Ship: Red Brinstar Elevator
@@ -633,7 +816,6 @@ preset_nintendopower_wrecked_ship_moat_missiles:
     dw $D8B0, $6000  ; Doors
     dw $D8B2, $2C01  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_wrecked_ship_shinespark_to_phantoon:
     dw #preset_nintendopower_wrecked_ship_moat_missiles ; Wrecked Ship: Moat Missiles
@@ -647,7 +829,6 @@ preset_nintendopower_wrecked_ship_shinespark_to_phantoon:
     dw $0AF6, $01AC  ; Samus X
     dw $D870, $4190  ; Items
     dw #$FFFF
-.after
 
 preset_nintendopower_wrecked_ship_phantoon:
     dw #preset_nintendopower_wrecked_ship_shinespark_to_phantoon ; Wrecked Ship: Shinespark to Phantoon
@@ -665,7 +846,6 @@ preset_nintendopower_wrecked_ship_phantoon:
     dw $D8B0, $7000  ; Doors
     dw $D8C0, $0010  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_wrecked_ship_movement_before_attic:
     dw #preset_nintendopower_wrecked_ship_phantoon ; Wrecked Ship: Phantoon
@@ -686,7 +866,6 @@ preset_nintendopower_wrecked_ship_movement_before_attic:
     dw $D880, $0020  ; Items
     dw $D8C0, $0074  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_wrecked_ship_attic:
     dw #preset_nintendopower_wrecked_ship_movement_before_attic ; Wrecked Ship: Movement before Attic
@@ -699,7 +878,6 @@ preset_nintendopower_wrecked_ship_attic:
     dw $0AF6, $0482  ; Samus X
     dw $0AFA, $005B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_nintendopower_wrecked_ship_bowling_alley:
     dw #preset_nintendopower_wrecked_ship_attic ; Wrecked Ship: Attic
@@ -716,7 +894,6 @@ preset_nintendopower_wrecked_ship_bowling_alley:
     dw $0AFA, $028B  ; Samus Y
     dw $D8C0, $0174  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_wrecked_ship_gravity_suit_room:
     dw #preset_nintendopower_wrecked_ship_bowling_alley ; Wrecked Ship: Bowling Alley
@@ -737,7 +914,6 @@ preset_nintendopower_wrecked_ship_gravity_suit_room:
     dw $0AFA, $008B  ; Samus Y
     dw $D880, $00A0  ; Items
     dw #$FFFF
-.after
 
 preset_nintendopower_wrecked_ship_red_tower_3:
     dw #preset_nintendopower_wrecked_ship_gravity_suit_room ; Wrecked Ship: Gravity Suit Room
@@ -751,7 +927,6 @@ preset_nintendopower_wrecked_ship_red_tower_3:
     dw $09CE, $0009  ; Pbs
     dw $0AF6, $0034  ; Samus X
     dw #$FFFF
-.after
 
 preset_nintendopower_maridia_mainstreet:
     dw #preset_nintendopower_wrecked_ship_red_tower_3 ; Wrecked Ship: Red Tower 3
@@ -773,7 +948,6 @@ preset_nintendopower_maridia_mainstreet:
     dw $D8B6, $B72C  ; Doors
     dw $D8C0, $2174  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_maridia_pants_room:
     dw #preset_nintendopower_maridia_mainstreet ; Maridia: Mainstreet
@@ -790,7 +964,6 @@ preset_nintendopower_maridia_pants_room:
     dw $0AF6, $02C7  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_nintendopower_maridia_east_pants_room:
     dw #preset_nintendopower_maridia_pants_room ; Maridia: Pants Room
@@ -810,7 +983,6 @@ preset_nintendopower_maridia_east_pants_room:
     dw $D820, $2801  ; Events
     dw $D882, $0040  ; Items
     dw #$FFFF
-.after
 
 preset_nintendopower_maridia_super_door:
     dw #preset_nintendopower_maridia_east_pants_room ; Maridia: East Pants Room
@@ -827,7 +999,6 @@ preset_nintendopower_maridia_super_door:
     dw $0AF6, $007C  ; Samus X
     dw $0AFA, $009B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_nintendopower_maridia_fish_tank:
     dw #preset_nintendopower_maridia_super_door ; Maridia: Super Door
@@ -845,7 +1016,6 @@ preset_nintendopower_maridia_fish_tank:
     dw $0AF6, $02AB  ; Samus X
     dw $0AFA, $068B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_nintendopower_maridia_mama_turtle:
     dw #preset_nintendopower_maridia_fish_tank ; Maridia: Fish Tank
@@ -861,7 +1031,6 @@ preset_nintendopower_maridia_mama_turtle:
     dw $0AFA, $028B  ; Samus Y
     dw $D8C0, $6174  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_maridia_crab_supers:
     dw #preset_nintendopower_maridia_mama_turtle ; Maridia: Mama Turtle
@@ -881,7 +1050,6 @@ preset_nintendopower_maridia_crab_supers:
     dw $0AFA, $038B  ; Samus Y
     dw $D880, $0CA0  ; Items
     dw #$FFFF
-.after
 
 preset_nintendopower_maridia_aqueduct:
     dw #preset_nintendopower_maridia_crab_supers ; Maridia: Crab Supers
@@ -900,7 +1068,6 @@ preset_nintendopower_maridia_aqueduct:
     dw $D880, $0EA0  ; Items
     dw $D8C0, $E174  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_maridia_botwoon:
     dw #preset_nintendopower_maridia_aqueduct ; Maridia: Aqueduct
@@ -922,7 +1089,6 @@ preset_nintendopower_maridia_botwoon:
     dw $0AFA, $006B  ; Samus Y
     dw $D882, $0070  ; Items
     dw #$FFFF
-.after
 
 preset_nintendopower_maridia_full_halfie:
     dw #preset_nintendopower_maridia_botwoon ; Maridia: Botwoon
@@ -941,7 +1107,6 @@ preset_nintendopower_maridia_full_halfie:
     dw $0AFA, $009B  ; Samus Y
     dw $D82C, $0002  ; Bosses
     dw #$FFFF
-.after
 
 preset_nintendopower_maridia_draygon:
     dw #preset_nintendopower_maridia_full_halfie ; Maridia: Full Halfie
@@ -964,7 +1129,6 @@ preset_nintendopower_maridia_draygon:
     dw $D882, $0170  ; Items
     dw $D8C2, $0500  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_maridia_going_to_plasma_beam:
     dw #preset_nintendopower_maridia_draygon ; Maridia: Draygon
@@ -984,7 +1148,6 @@ preset_nintendopower_maridia_going_to_plasma_beam:
     dw $D882, $05F0  ; Items
     dw $D8C2, $DD80  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_maridia_plasma_beam:
     dw #preset_nintendopower_maridia_going_to_plasma_beam ; Maridia: Going to Plasma Beam
@@ -999,7 +1162,6 @@ preset_nintendopower_maridia_plasma_beam:
     dw $0AFA, $008B  ; Samus Y
     dw $D8C2, $DD88  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_maridia_long_tube:
     dw #preset_nintendopower_maridia_plasma_beam ; Maridia: Plasma Beam
@@ -1021,7 +1183,6 @@ preset_nintendopower_maridia_long_tube:
     dw $D880, $8EA0  ; Items
     dw $D8C2, $DD9A  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_2_pre_gt_fight:
     dw #preset_nintendopower_maridia_long_tube ; Maridia: Long Tube
@@ -1036,7 +1197,6 @@ preset_nintendopower_norfair_2_pre_gt_fight:
     dw $09CA, $0012  ; Supers
     dw $0AF6, $007A  ; Samus X
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_2_elevator_menu:
     dw #preset_nintendopower_norfair_2_pre_gt_fight ; Norfair 2: Pre GT Fight
@@ -1051,7 +1211,6 @@ preset_nintendopower_norfair_2_elevator_menu:
     dw $0AFA, $00AB  ; Samus Y
     dw $D8BA, $01FB  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_2_golden_torizo:
     dw #preset_nintendopower_norfair_2_elevator_menu ; Norfair 2: Elevator Menu
@@ -1070,7 +1229,6 @@ preset_nintendopower_norfair_2_golden_torizo:
     dw $0AFA, $028B  ; Samus Y
     dw $D820, $3801  ; Events
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_2_on_route_to_ridley:
     dw #preset_nintendopower_norfair_2_golden_torizo ; Norfair 2: Golden Torizo
@@ -1098,7 +1256,6 @@ preset_nintendopower_norfair_2_on_route_to_ridley:
     dw $D878, $80DF  ; Items
     dw $D8BA, $03FB  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_2_worst_room_in_the_game:
     dw #preset_nintendopower_norfair_2_on_route_to_ridley ; Norfair 2: On Route to Ridley
@@ -1115,7 +1272,6 @@ preset_nintendopower_norfair_2_worst_room_in_the_game:
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $03DB  ; Samus X
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_2_metal_ninja_pirates:
     dw #preset_nintendopower_norfair_2_worst_room_in_the_game ; Norfair 2: Worst Room in the Game
@@ -1134,7 +1290,6 @@ preset_nintendopower_norfair_2_metal_ninja_pirates:
     dw $0AFA, $028B  ; Samus Y
     dw $D8BA, $C3FB  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_2_ridley:
     dw #preset_nintendopower_norfair_2_metal_ninja_pirates ; Norfair 2: Metal Ninja Pirates
@@ -1152,7 +1307,6 @@ preset_nintendopower_norfair_2_ridley:
     dw $D8BA, $D3FB  ; Doors
     dw $D8BC, $0001  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_2_escape_from_ridley:
     dw #preset_nintendopower_norfair_2_ridley ; Norfair 2: Ridley
@@ -1172,7 +1326,6 @@ preset_nintendopower_norfair_2_escape_from_ridley:
     dw $D878, $C0DF  ; Items
     dw $D8BA, $DBFB  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_norfair_2_landing_site:
     dw #preset_nintendopower_norfair_2_escape_from_ridley ; Norfair 2: Escape from Ridley
@@ -1191,7 +1344,6 @@ preset_nintendopower_norfair_2_landing_site:
     dw $0AFA, $04BB  ; Samus Y
     dw $D8BA, $DFFB  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_tourian_metroids_1:
     dw #preset_nintendopower_norfair_2_landing_site ; Norfair 2: Landing Site
@@ -1210,8 +1362,8 @@ preset_nintendopower_tourian_metroids_1:
     dw $0AFA, $02A8  ; Samus Y
     dw $D820, $3FC1  ; Events
     dw $D8B2, $6C01  ; Doors
+    dw $D90C, $0100  ; Map Stations
     dw #$FFFF
-.after
 
 preset_nintendopower_tourian_metroids_2:
     dw #preset_nintendopower_tourian_metroids_1 ; Tourian: Metroids 1
@@ -1228,7 +1380,6 @@ preset_nintendopower_tourian_metroids_2:
     dw $D822, $0021  ; Events
     dw $D8C4, $0001  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_tourian_metroids_3:
     dw #preset_nintendopower_tourian_metroids_2 ; Tourian: Metroids 2
@@ -1246,7 +1397,6 @@ preset_nintendopower_tourian_metroids_3:
     dw $D822, $0023  ; Events
     dw $D8C4, $0003  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_tourian_metroids_4:
     dw #preset_nintendopower_tourian_metroids_3 ; Tourian: Metroids 3
@@ -1263,7 +1413,6 @@ preset_nintendopower_tourian_metroids_4:
     dw $D822, $0027  ; Events
     dw $D8C4, $0007  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_tourian_baby_skip:
     dw #preset_nintendopower_tourian_metroids_4 ; Tourian: Metroids 4
@@ -1282,7 +1431,6 @@ preset_nintendopower_tourian_baby_skip:
     dw $D822, $002F  ; Events
     dw $D8C4, $002F  ; Doors
     dw #$FFFF
-.after
 
 preset_nintendopower_tourian_zeb_skip:
     dw #preset_nintendopower_tourian_baby_skip ; Tourian: Baby Skip
@@ -1301,35 +1449,84 @@ preset_nintendopower_tourian_zeb_skip:
     dw $0AFA, $008B  ; Samus Y
     dw $D8C4, $01AF  ; Doors
     dw #$FFFF
-.after
 
-preset_nintendopower_tourian_escape_room_2:
+preset_nintendopower_tourian_mother_brain_2:
     dw #preset_nintendopower_tourian_zeb_skip ; Tourian: Zeb Skip
-    dw $078D, $AA8C  ; DDB
-    dw $079B, $DE4D  ; MDB
+    dw $078D, $AAC8  ; DDB
+    dw $079B, $DD58  ; MDB
+    dw $07F3, $0021  ; Music Bank
+    dw $090F, $79FF  ; Screen subpixel X position
+    dw $0915, $0000  ; Screen Y position in pixels
+    dw $0919, $0000  ; Layer 2 Y position
+    dw $09C2, $02C2  ; Health
+    dw $09C6, $0051  ; Missiles
+    dw $09CA, $000D  ; Supers
+    dw $0AF6, $00CF  ; Samus X
+    dw $0AFA, $009B  ; Samus Y
+    dw $D820, $3FC5  ; Events
+    dw $D8C4, $03AF  ; Doors
+    dw #$FFFF
+
+preset_nintendopower_tourian_zebes_escape:
+    dw #preset_nintendopower_tourian_mother_brain_2 ; Tourian: Mother Brain 2
     dw $07F3, $0024  ; Music Bank
     dw $07F5, $0007  ; Music Track
-    dw $090F, $0000  ; Screen subpixel X position
-    dw $0911, $000F  ; Screen X position in pixels
-    dw $0913, $B000  ; Screen subpixel Y position
-    dw $0915, $000F  ; Screen Y position in pixels
     dw $09A6, $1009  ; Beams
-    dw $09C2, $02A7  ; Health
+    dw $09C2, $031F  ; Health
     dw $09C6, $0000  ; Missiles
     dw $09CA, $0000  ; Supers
     dw $09CE, $0000  ; Pbs
-    dw $0A1C, $0010  ; Samus position/state
-    dw $0A1E, $0104  ; More position/state
     dw $0A76, $8000  ; Hyper beam
-    dw $0AF6, $00AF  ; Samus X
+    dw $0AF6, $0025  ; Samus X
+    dw $0AFA, $00C3  ; Samus Y
     dw $D820, $7FC5  ; Events
     dw $D82C, $0203  ; Bosses
-    dw $D8C4, $03AF  ; Doors
     dw #$FFFF
-.after
+
+preset_nintendopower_tourian_escape_room_3:
+    dw #preset_nintendopower_tourian_zebes_escape ; Tourian: Zebes Escape
+    dw $078D, $AAEC  ; DDB
+    dw $079B, $DE7A  ; MDB
+    dw $090F, $7000  ; Screen subpixel X position
+    dw $0913, $0C00  ; Screen subpixel Y position
+    dw $0915, $00F5  ; Screen Y position in pixels
+    dw $0919, $00B7  ; Layer 2 Y position
+    dw $0A1C, $0001  ; Samus position/state
+    dw $0A1E, $0008  ; More position/state
+    dw $0AF6, $00DF  ; Samus X
+    dw $0AFA, $018B  ; Samus Y
+    dw #$FFFF
+
+preset_nintendopower_tourian_escape_room_4:
+    dw #preset_nintendopower_tourian_escape_room_3 ; Tourian: Escape Room 3
+    dw $078D, $AB04  ; DDB
+    dw $079B, $DEA7  ; MDB
+    dw $090F, $D000  ; Screen subpixel X position
+    dw $0911, $0500  ; Screen X position in pixels
+    dw $0913, $0000  ; Screen subpixel Y position
+    dw $0915, $001A  ; Screen Y position in pixels
+    dw $0917, $03C0  ; Layer 2 X position
+    dw $0919, $0013  ; Layer 2 Y position
+    dw $0AF6, $05DB  ; Samus X
+    dw $0AFA, $008B  ; Samus Y
+    dw #$FFFF
+
+preset_nintendopower_tourian_escape_climb:
+    dw #preset_nintendopower_tourian_escape_room_4 ; Tourian: Escape Room 4
+    dw $078D, $AB1C  ; DDB
+    dw $079B, $DEDE  ; MDB
+    dw $090F, $6000  ; Screen subpixel X position
+    dw $0911, $00F4  ; Screen X position in pixels
+    dw $0913, $6C00  ; Screen subpixel Y position
+    dw $0915, $0103  ; Screen Y position in pixels
+    dw $0917, $00B7  ; Layer 2 X position
+    dw $0919, $00C2  ; Layer 2 Y position
+    dw $0AF6, $0154  ; Samus X
+    dw $0AFA, $018B  ; Samus Y
+    dw #$FFFF
 
 preset_nintendopower_tourian_escape_parlor:
-    dw #preset_nintendopower_tourian_escape_room_2 ; Tourian: Escape Room 2
+    dw #preset_nintendopower_tourian_escape_climb ; Tourian: Escape Climb
     dw $078D, $AB34  ; DDB
     dw $079B, $96BA  ; MDB
     dw $090F, $EFFF  ; Screen subpixel X position
@@ -1341,4 +1538,3 @@ preset_nintendopower_tourian_escape_parlor:
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $01C4  ; Samus X
     dw #$FFFF
-.after

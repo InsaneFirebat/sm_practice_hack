@@ -1,14 +1,16 @@
 
-preset_pkrd_crateria_ship:
+preset_pkrd_crateria_ceres_elevator:
     dw #$0000
-    dw $078D, $88FE  ; DDB
-    dw $079B, $91F8  ; MDB
-    dw $07F3, $0006  ; Music Bank
-    dw $07F5, $0005  ; Music Track
-    dw $090F, $8000  ; Screen subpixel X position
-    dw $0911, $0400  ; Screen X position in pixels
+    dw $078D, $AB58  ; DDB
+    dw $079B, $DF45  ; MDB
+    dw $07F3, $002D  ; Music Bank
+    dw $07F5, $0006  ; Music Track
+    dw $090F, $0000  ; Screen subpixel X position
+    dw $0911, $0000  ; Screen X position in pixels
     dw $0913, $0000  ; Screen subpixel Y position
-    dw $0915, $03D0  ; Screen Y position in pixels
+    dw $0915, $0000  ; Screen Y position in pixels
+    dw $0917, $0000  ; Layer 2 X position
+    dw $0919, $0000  ; Layer 2 Y position
     dw $093F, $0000  ; Ceres escape flag
     dw $09A2, $0000  ; Equipped Items
     dw $09A4, $0000  ; Collected Items
@@ -30,15 +32,17 @@ preset_pkrd_crateria_ship:
     dw $0A1E, $0000  ; More position/state
     dw $0A68, $0000  ; Flash suit
     dw $0A76, $0000  ; Hyper beam
-    dw $0AF6, $0481  ; Samus X
-    dw $0AFA, $0440  ; Samus Y
+    dw $0AF6, $0080  ; Samus X
+    dw $0AF8, $0000  ; Samus subpixel X
+    dw $0AFA, $0048  ; Samus Y
+    dw $0AFC, $0000  ; Samus subpixel Y
     dw $0B3F, $0000  ; Blue suit
     dw $D820, $0000  ; Events
     dw $D822, $0000  ; Events
     dw $D828, $0000  ; Bosses
     dw $D82A, $0000  ; Bosses
     dw $D82C, $0000  ; Bosses
-    dw $D82E, $0001  ; Bosses
+    dw $D82E, $0000  ; Bosses
     dw $D870, $0000  ; Items
     dw $D872, $0000  ; Items
     dw $D874, $0000  ; Items
@@ -60,9 +64,60 @@ preset_pkrd_crateria_ship:
     dw $D8C0, $0000  ; Doors
     dw $D8C2, $0000  ; Doors
     dw $D8C4, $0000  ; Doors
-    dw !PRESET_DOORS, $0001 ; doors closed
+    dw $D908, $0000  ; Map Stations
+    dw $D90A, $0000  ; Map Stations
+    dw $D90C, $0000  ; Map Stations
     dw #$FFFF
-.after
+
+preset_pkrd_crateria_ceres_escape:
+    dw #preset_pkrd_crateria_ceres_elevator ; Crateria: Ceres Elevator
+    dw $078D, $ABAC  ; DDB
+    dw $079B, $E0B5  ; MDB
+    dw $07F3, $0024  ; Music Bank
+    dw $07F5, $0007  ; Music Track
+    dw $090F, $8000  ; Screen subpixel X position
+    dw $0913, $9400  ; Screen subpixel Y position
+    dw $093F, $0002  ; Ceres escape flag
+    dw $09C2, $0018  ; Health
+    dw $0A1C, $0002  ; Samus position/state
+    dw $0A1E, $0004  ; More position/state
+    dw $0AF6, $0033  ; Samus X
+    dw $0AF8, $B000  ; Samus subpixel X
+    dw $0AFA, $008B  ; Samus Y
+    dw $0AFC, $FFFF  ; Samus subpixel Y
+    dw $D82E, $0001  ; Bosses
+    dw #$FFFF
+
+preset_pkrd_crateria_ceres_last_3_rooms:
+    dw #preset_pkrd_crateria_ceres_escape ; Crateria: Ceres Escape
+    dw $078D, $ABA0  ; DDB
+    dw $079B, $E021  ; MDB
+    dw $090F, $7400  ; Screen subpixel X position
+    dw $0913, $F000  ; Screen subpixel Y position
+    dw $0AF6, $004E  ; Samus X
+    dw $0AFA, $00A2  ; Samus Y
+    dw #$FFFF
+
+preset_pkrd_crateria_ship:
+    dw #preset_pkrd_crateria_ceres_last_3_rooms ; Crateria: Ceres Last 3 Rooms
+    dw $078D, $88FE  ; DDB
+    dw $079B, $91F8  ; MDB
+    dw $07F3, $0006  ; Music Bank
+    dw $07F5, $0005  ; Music Track
+    dw $090F, $8000  ; Screen subpixel X position
+    dw $0911, $0400  ; Screen X position in pixels
+    dw $0913, $0000  ; Screen subpixel Y position
+    dw $0915, $0400  ; Screen Y position in pixels
+    dw $093F, $0000  ; Ceres escape flag
+    dw $09C2, $0063  ; Health
+    dw $0A1C, $0000  ; Samus position/state
+    dw $0A1E, $0000  ; More position/state
+    dw $0AF6, $0481  ; Samus X
+    dw $0AF8, $0000  ; Samus subpixel X
+    dw $0AFA, $0471  ; Samus Y
+    dw $0AFC, $8000  ; Samus subpixel Y
+    dw $0917, $0200  ; Layer 2 X position
+    dw #$FFFF
 
 preset_pkrd_crateria_parlor:
     dw #preset_pkrd_crateria_ship ; Crateria: Ship
@@ -70,13 +125,13 @@ preset_pkrd_crateria_parlor:
     dw $0911, $0000  ; Screen X position in pixels
     dw $0913, $1400  ; Screen subpixel Y position
     dw $0915, $0400  ; Screen Y position in pixels
+    dw $0917, $0000  ; Layer 2 X position
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $0079  ; Samus X
     dw $0AFA, $049B  ; Samus Y
-    dw !PRESET_DOORS, $0000 ; doors opened
+    dw $0AFC, $FFFF  ; Samus subpixel Y
     dw #$FFFF
-.after
 
 preset_pkrd_crateria_parlor_downback:
     dw #preset_pkrd_crateria_parlor ; Crateria: Parlor
@@ -90,7 +145,6 @@ preset_pkrd_crateria_parlor_downback:
     dw $0AFA, $039B  ; Samus Y
     dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
-.after
 
 preset_pkrd_crateria_climb_down:
     dw #preset_pkrd_crateria_parlor_downback ; Crateria: Parlor Downback
@@ -101,7 +155,6 @@ preset_pkrd_crateria_climb_down:
     dw $0AFA, $04BB  ; Samus Y
     dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
-.after
 
 preset_pkrd_crateria_pit_room:
     dw #preset_pkrd_crateria_climb_down ; Crateria: Climb Down
@@ -115,7 +168,6 @@ preset_pkrd_crateria_pit_room:
     dw $0AF6, $01DB  ; Samus X
     dw $0AFA, $088B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_crateria_morph:
     dw #preset_pkrd_crateria_pit_room ; Crateria: Pit Room
@@ -130,9 +182,7 @@ preset_pkrd_crateria_morph:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0580  ; Samus X
     dw $0AFA, $02A8  ; Samus Y
-    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
-.after
 
 preset_pkrd_crateria_construction_zone_down:
     dw #preset_pkrd_crateria_morph ; Crateria: Morph
@@ -146,9 +196,7 @@ preset_pkrd_crateria_construction_zone_down:
     dw $0AF6, $07AC  ; Samus X
     dw $0AFA, $028B  ; Samus Y
     dw $D872, $0400  ; Items
-    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
-.after
 
 preset_pkrd_crateria_construction_zone_up:
     dw #preset_pkrd_crateria_construction_zone_down ; Crateria: Construction Zone Down
@@ -164,7 +212,6 @@ preset_pkrd_crateria_construction_zone_up:
     dw $0AFA, $008B  ; Samus Y
     dw $D874, $0004  ; Items
     dw #$FFFF
-.after
 
 preset_pkrd_crateria_pit_room_revisit:
     dw #preset_pkrd_crateria_construction_zone_up ; Crateria: Construction Zone Up
@@ -177,9 +224,7 @@ preset_pkrd_crateria_pit_room_revisit:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $0088  ; Samus Y
-    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
-.after
 
 preset_pkrd_crateria_climb_up:
     dw #preset_pkrd_crateria_pit_room_revisit ; Crateria: Pit Room Revisit
@@ -195,9 +240,7 @@ preset_pkrd_crateria_climb_up:
     dw $0AFA, $008B  ; Samus Y
     dw $D820, $0001  ; Events
     dw $D8B2, $0400  ; Doors
-    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
-.after
 
 preset_pkrd_crateria_parlor_revisit:
     dw #preset_pkrd_crateria_climb_up ; Crateria: Climb Up
@@ -209,7 +252,6 @@ preset_pkrd_crateria_parlor_revisit:
     dw $0AF6, $01A0  ; Samus X
     dw $0AFA, $005B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_crateria_flyway:
     dw #preset_pkrd_crateria_parlor_revisit ; Crateria: Parlor Revisit
@@ -224,7 +266,6 @@ preset_pkrd_crateria_flyway:
     dw $0AF6, $0369  ; Samus X
     dw $0AFA, $026B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_crateria_bomb_torizo:
     dw #preset_pkrd_crateria_flyway ; Crateria: Flyway
@@ -239,7 +280,6 @@ preset_pkrd_crateria_bomb_torizo:
     dw $0AFA, $008B  ; Samus Y
     dw $D8B2, $2400  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_crateria_alcatraz:
     dw #preset_pkrd_crateria_bomb_torizo ; Crateria: Bomb Torizo
@@ -256,19 +296,20 @@ preset_pkrd_crateria_alcatraz:
     dw $D870, $0080  ; Items
     dw $D8B2, $2C00  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_crateria_terminator:
     dw #preset_pkrd_crateria_alcatraz ; Crateria: Alcatraz
     dw $078D, $8BB6  ; DDB
     dw $079B, $92FD  ; MDB
-    dw $090F, $F400  ; Screen subpixel X position
+    dw $090F, $6000  ; Screen subpixel X position
     dw $0911, $0100  ; Screen X position in pixels
-    dw $0913, $8800  ; Screen subpixel Y position
+    dw $0913, $5800  ; Screen subpixel Y position
+    dw $0917, $00C0  ; Layer 2 X position
+    dw $0A1C, $0041  ; Samus position/state
+    dw $0A1E, $0404  ; More position/state
     dw $0AF6, $0115  ; Samus X
-    dw $0B3F, $0104  ; Blue suit
+    dw $0AFA, $0099  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_crateria_green_pirate_shaft:
     dw #preset_pkrd_crateria_terminator ; Crateria: Terminator
@@ -278,14 +319,16 @@ preset_pkrd_crateria_green_pirate_shaft:
     dw $0911, $0000  ; Screen X position in pixels
     dw $0913, $0000  ; Screen subpixel Y position
     dw $0915, $01FC  ; Screen Y position in pixels
+    dw $0917, $0000  ; Layer 2 X position
+    dw $0919, $017D  ; Layer 2 Y position
     dw $09C2, $00C7  ; Health
     dw $09C4, $00C7  ; Max health
+    dw $0A1C, $0002  ; Samus position/state
+    dw $0A1E, $0004  ; More position/state
     dw $0AF6, $0063  ; Samus X
     dw $0AFA, $029B  ; Samus Y
-    dw $0B3F, $0000  ; Blue suit
     dw $D870, $0180  ; Items
     dw #$FFFF
-.after
 
 preset_pkrd_brinstar_green_brinstar_elevator:
     dw #preset_pkrd_crateria_green_pirate_shaft ; Crateria: Green Pirate Shaft
@@ -295,11 +338,11 @@ preset_pkrd_brinstar_green_brinstar_elevator:
     dw $090F, $1C80  ; Screen subpixel X position
     dw $0913, $C400  ; Screen subpixel Y position
     dw $0915, $0000  ; Screen Y position in pixels
+    dw $0919, $0000  ; Layer 2 Y position
     dw $09C6, $0002  ; Missiles
     dw $0AF6, $007C  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_brinstar_early_supers:
     dw #preset_pkrd_brinstar_green_brinstar_elevator ; Brinstar: Green Brinstar Elevator
@@ -317,7 +360,6 @@ preset_pkrd_brinstar_early_supers:
     dw $0AFA, $048B  ; Samus Y
     dw $D8B4, $0002  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_brinstar_dachora_room:
     dw #preset_pkrd_brinstar_early_supers ; Brinstar: Early Supers
@@ -332,7 +374,6 @@ preset_pkrd_brinstar_dachora_room:
     dw $D872, $0401  ; Items
     dw $D8B4, $0006  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_brinstar_big_pink:
     dw #preset_pkrd_brinstar_dachora_room ; Brinstar: Dachora Room
@@ -347,7 +388,6 @@ preset_pkrd_brinstar_big_pink:
     dw $0AF6, $0699  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_brinstar_green_hill_zone:
     dw #preset_pkrd_brinstar_big_pink ; Brinstar: Big Pink
@@ -367,7 +407,6 @@ preset_pkrd_brinstar_green_hill_zone:
     dw $D872, $04C1  ; Items
     dw $D8B4, $0206  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_brinstar_noob_bridge:
     dw #preset_pkrd_brinstar_green_hill_zone ; Brinstar: Green Hill Zone
@@ -381,7 +420,6 @@ preset_pkrd_brinstar_noob_bridge:
     dw $0AF6, $06FC  ; Samus X
     dw $0AFA, $03AB  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_brinstar_red_tower:
     dw #preset_pkrd_brinstar_noob_bridge ; Brinstar: Noob Bridge
@@ -396,7 +434,6 @@ preset_pkrd_brinstar_red_tower:
     dw $0AFA, $008B  ; Samus Y
     dw $D8B6, $0008  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_brinstar_hellway:
     dw #preset_pkrd_brinstar_red_tower ; Brinstar: Red Tower
@@ -409,7 +446,6 @@ preset_pkrd_brinstar_hellway:
     dw $0915, $0006  ; Screen Y position in pixels
     dw $0AF6, $0094  ; Samus X
     dw #$FFFF
-.after
 
 preset_pkrd_brinstar_caterpillars_down:
     dw #preset_pkrd_brinstar_hellway ; Brinstar: Hellway
@@ -422,7 +458,6 @@ preset_pkrd_brinstar_caterpillars_down:
     dw $09C2, $0089  ; Health
     dw $0AF6, $0286  ; Samus X
     dw #$FFFF
-.after
 
 preset_pkrd_brinstar_alpha_power_bombs:
     dw #preset_pkrd_brinstar_caterpillars_down ; Brinstar: Caterpillars Down
@@ -439,7 +474,6 @@ preset_pkrd_brinstar_alpha_power_bombs:
     dw $0AFA, $078B  ; Samus Y
     dw $D8B6, $2008  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_brinstar_caterpillars_up:
     dw #preset_pkrd_brinstar_alpha_power_bombs ; Brinstar: Alpha Power Bombs
@@ -460,7 +494,6 @@ preset_pkrd_brinstar_caterpillars_up:
     dw $0AFA, $008B  ; Samus Y
     dw $D874, $0104  ; Items
     dw #$FFFF
-.after
 
 preset_pkrd_brinstar_crateria_kihunters:
     dw #preset_pkrd_brinstar_caterpillars_up ; Brinstar: Caterpillars Up
@@ -478,7 +511,6 @@ preset_pkrd_brinstar_crateria_kihunters:
     dw $D8B2, $2C01  ; Doors
     dw $D8B6, $3008  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_brinstar_continuous_wall_jump:
     dw #preset_pkrd_brinstar_crateria_kihunters ; Brinstar: Crateria Kihunters
@@ -497,7 +529,6 @@ preset_pkrd_brinstar_continuous_wall_jump:
     dw $D8B0, $6000  ; Doors
     dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
-.after
 
 preset_pkrd_brinstar_horizontal_bomb_jump:
     dw #preset_pkrd_brinstar_continuous_wall_jump ; Brinstar: Continuous Wall Jump
@@ -513,7 +544,6 @@ preset_pkrd_brinstar_horizontal_bomb_jump:
     dw $0AF6, $00EB  ; Samus X
     dw $D870, $0190  ; Items
     dw #$FFFF
-.after
 
 preset_pkrd_brinstar_ocean:
     dw #preset_pkrd_brinstar_horizontal_bomb_jump ; Brinstar: Horizontal Bomb Jump
@@ -523,7 +553,6 @@ preset_pkrd_brinstar_ocean:
     dw $0AF6, $01A8  ; Samus X
     dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
-.after
 
 preset_pkrd_wrecked_ship_shaft_down:
     dw #preset_pkrd_brinstar_ocean ; Brinstar: Ocean
@@ -537,7 +566,6 @@ preset_pkrd_wrecked_ship_shaft_down:
     dw $0AF6, $038E  ; Samus X
     dw $D8B0, $7000  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_wrecked_ship_basement:
     dw #preset_pkrd_wrecked_ship_shaft_down ; Wrecked Ship: Shaft Down
@@ -552,7 +580,6 @@ preset_pkrd_wrecked_ship_basement:
     dw $0AFA, $07BB  ; Samus Y
     dw $D8C0, $0010  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_wrecked_ship_phantoon:
     dw #preset_pkrd_wrecked_ship_basement ; Wrecked Ship: Basement
@@ -566,7 +593,6 @@ preset_pkrd_wrecked_ship_phantoon:
     dw $0AFA, $008B  ; Samus Y
     dw $D8C0, $0030  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_wrecked_ship_leaving_phantoon:
     dw #preset_pkrd_wrecked_ship_phantoon ; Wrecked Ship: Phantoon
@@ -585,7 +611,6 @@ preset_pkrd_wrecked_ship_leaving_phantoon:
     dw $D8C0, $0070  ; Doors
     dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
-.after
 
 preset_pkrd_wrecked_ship_shaft_to_supers:
     dw #preset_pkrd_wrecked_ship_leaving_phantoon ; Wrecked Ship: Leaving Phantoon
@@ -596,7 +621,6 @@ preset_pkrd_wrecked_ship_shaft_to_supers:
     dw $0AFA, $006B  ; Samus Y
     dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
-.after
 
 preset_pkrd_wrecked_ship_shaft_up:
     dw #preset_pkrd_wrecked_ship_shaft_to_supers ; Wrecked Ship: Shaft to Supers
@@ -615,7 +639,6 @@ preset_pkrd_wrecked_ship_shaft_up:
     dw $D880, $0020  ; Items
     dw $D8C0, $0074  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_wrecked_ship_attic:
     dw #preset_pkrd_wrecked_ship_shaft_up ; Wrecked Ship: Shaft Up
@@ -627,7 +650,6 @@ preset_pkrd_wrecked_ship_attic:
     dw $0AF6, $0445  ; Samus X
     dw $0AFA, $006B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_wrecked_ship_upper_west_ocean:
     dw #preset_pkrd_wrecked_ship_attic ; Wrecked Ship: Attic
@@ -646,7 +668,6 @@ preset_pkrd_wrecked_ship_upper_west_ocean:
     dw $0AFA, $008B  ; Samus Y
     dw $D8C0, $0174  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_wrecked_ship_pancakes_and_wavers:
     dw #preset_pkrd_wrecked_ship_upper_west_ocean ; Wrecked Ship: Upper West Ocean
@@ -664,7 +685,6 @@ preset_pkrd_wrecked_ship_pancakes_and_wavers:
     dw $0AF6, $02C0  ; Samus X
     dw $0AFA, $028B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_wrecked_ship_bowling_alley:
     dw #preset_pkrd_wrecked_ship_pancakes_and_wavers ; Wrecked Ship: Pancakes and Wavers
@@ -679,7 +699,6 @@ preset_pkrd_wrecked_ship_bowling_alley:
     dw $0AF6, $017B  ; Samus X
     dw $0AFA, $0090  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_wrecked_ship_leaving_gravity:
     dw #preset_pkrd_wrecked_ship_bowling_alley ; Wrecked Ship: Bowling Alley
@@ -699,7 +718,6 @@ preset_pkrd_wrecked_ship_leaving_gravity:
     dw $0AFA, $0088  ; Samus Y
     dw $D880, $00A0  ; Items
     dw #$FFFF
-.after
 
 preset_pkrd_wrecked_ship_reverse_moat:
     dw #preset_pkrd_wrecked_ship_leaving_gravity ; Wrecked Ship: Leaving Gravity
@@ -716,7 +734,6 @@ preset_pkrd_wrecked_ship_reverse_moat:
     dw $0AF6, $0068  ; Samus X
     dw $0AFA, $049B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_wrecked_ship_crateria_kihunters_return:
     dw #preset_pkrd_wrecked_ship_reverse_moat ; Wrecked Ship: Reverse Moat
@@ -727,7 +744,6 @@ preset_pkrd_wrecked_ship_crateria_kihunters_return:
     dw $0AF6, $0038  ; Samus X
     dw $0AFA, $0094  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_red_brinstar_revisit_red_brinstar_elevator:
     dw #preset_pkrd_wrecked_ship_crateria_kihunters_return ; Wrecked Ship: Crateria Kihunters Return
@@ -743,7 +759,6 @@ preset_pkrd_red_brinstar_revisit_red_brinstar_elevator:
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $00AB  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_red_brinstar_revisit_hellway_revisit:
     dw #preset_pkrd_red_brinstar_revisit_red_brinstar_elevator ; Red Brinstar Revisit: Red Brinstar Elevator
@@ -761,7 +776,6 @@ preset_pkrd_red_brinstar_revisit_hellway_revisit:
     dw $0AF6, $0059  ; Samus X
     dw $0AFA, $058B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_red_brinstar_revisit_red_tower_down:
     dw #preset_pkrd_red_brinstar_revisit_hellway_revisit ; Red Brinstar Revisit: Hellway Revisit
@@ -774,7 +788,6 @@ preset_pkrd_red_brinstar_revisit_red_tower_down:
     dw $0AF6, $002D  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_red_brinstar_revisit_skree_boost:
     dw #preset_pkrd_red_brinstar_revisit_red_tower_down ; Red Brinstar Revisit: Red Tower Down
@@ -788,7 +801,6 @@ preset_pkrd_red_brinstar_revisit_skree_boost:
     dw $0AF6, $005E  ; Samus X
     dw $0AFA, $098B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_red_brinstar_revisit_below_spazer:
     dw #preset_pkrd_red_brinstar_revisit_skree_boost ; Red Brinstar Revisit: Skree Boost
@@ -802,7 +814,6 @@ preset_pkrd_red_brinstar_revisit_below_spazer:
     dw $0AF6, $01DC  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_red_brinstar_revisit_leaving_spazer:
     dw #preset_pkrd_red_brinstar_revisit_below_spazer ; Red Brinstar Revisit: Below Spazer
@@ -821,7 +832,6 @@ preset_pkrd_red_brinstar_revisit_leaving_spazer:
     dw $D874, $0504  ; Items
     dw $D8B6, $B008  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_red_brinstar_revisit_breaking_tube:
     dw #preset_pkrd_red_brinstar_revisit_leaving_spazer ; Red Brinstar Revisit: Leaving Spazer
@@ -839,7 +849,6 @@ preset_pkrd_red_brinstar_revisit_breaking_tube:
     dw $0AF6, $01B6  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_kraid_entering_kraids_lair:
     dw #preset_pkrd_red_brinstar_revisit_breaking_tube ; Red Brinstar Revisit: Breaking Tube
@@ -853,7 +862,6 @@ preset_pkrd_kraid_entering_kraids_lair:
     dw $0AF6, $002E  ; Samus X
     dw $D820, $0801  ; Events
     dw #$FFFF
-.after
 
 preset_pkrd_kraid_kraid_kihunters:
     dw #preset_pkrd_kraid_entering_kraids_lair ; Kraid: Entering Kraids Lair
@@ -865,7 +873,6 @@ preset_pkrd_kraid_kraid_kihunters:
     dw $09CA, $0007  ; Supers
     dw $0AF6, $0168  ; Samus X
     dw #$FFFF
-.after
 
 preset_pkrd_kraid_mini_kraid:
     dw #preset_pkrd_kraid_kraid_kihunters ; Kraid: Kraid Kihunters
@@ -875,7 +882,6 @@ preset_pkrd_kraid_mini_kraid:
     dw $0913, $1000  ; Screen subpixel Y position
     dw $0AF6, $016B  ; Samus X
     dw #$FFFF
-.after
 
 preset_pkrd_kraid_kraid_2:
     dw #preset_pkrd_kraid_mini_kraid ; Kraid: Mini Kraid
@@ -891,7 +897,6 @@ preset_pkrd_kraid_kraid_2:
     dw $0AF6, $01C6  ; Samus X
     dw $D8B8, $0024  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_kraid_leaving_varia:
     dw #preset_pkrd_kraid_kraid_2 ; Kraid: Kraid
@@ -914,9 +919,7 @@ preset_pkrd_kraid_leaving_varia:
     dw $D828, $0104  ; Bosses
     dw $D876, $0001  ; Items
     dw $D8B8, $0064  ; Doors
-    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
-.after
 
 preset_pkrd_kraid_mini_kraid_revisit:
     dw #preset_pkrd_kraid_leaving_varia ; Kraid: Leaving Varia
@@ -931,9 +934,7 @@ preset_pkrd_kraid_mini_kraid_revisit:
     dw $0AF6, $0059  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw $D8B8, $00E4  ; Doors
-    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
-.after
 
 preset_pkrd_kraid_kraid_kihunters_revisit:
     dw #preset_pkrd_kraid_mini_kraid_revisit ; Kraid: Mini Kraid Revisit
@@ -949,7 +950,6 @@ preset_pkrd_kraid_kraid_kihunters_revisit:
     dw $0AFA, $00AB  ; Samus Y
     dw $D8B8, $00EC  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_kraid_kraid_etank:
     dw #preset_pkrd_kraid_kraid_kihunters_revisit ; Kraid: Kraid Kihunters Revisit
@@ -966,7 +966,6 @@ preset_pkrd_kraid_kraid_etank:
     dw $D8B8, $00ED  ; Doors
     dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
-.after
 
 preset_pkrd_kraid_leaving_kraids_lair:
     dw #preset_pkrd_kraid_kraid_etank ; Kraid: Kraid E-tank
@@ -986,7 +985,6 @@ preset_pkrd_kraid_leaving_kraids_lair:
     dw $D8B8, $00EF  ; Doors
     dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_business_center:
     dw #preset_pkrd_kraid_leaving_kraids_lair ; Kraid: Leaving Kraids Lair
@@ -1003,7 +1001,6 @@ preset_pkrd_upper_norfair_business_center:
     dw $0AF6, $0078  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_hi_jump_etank:
     dw #preset_pkrd_upper_norfair_business_center ; Upper Norfair: Business Center
@@ -1019,7 +1016,6 @@ preset_pkrd_upper_norfair_hi_jump_etank:
     dw $0AFA, $058B  ; Samus Y
     dw $D8B8, $20EF  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_leaving_hi_jump:
     dw #preset_pkrd_upper_norfair_hi_jump_etank ; Upper Norfair: Hi Jump E-tank
@@ -1042,7 +1038,6 @@ preset_pkrd_upper_norfair_leaving_hi_jump:
     dw !PRESET_DOORS, $0001 ; doors closed
     dw !PRESET_SPECIAL, $0001 ; remove shot blocks
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_business_center_2:
     dw #preset_pkrd_upper_norfair_leaving_hi_jump ; Upper Norfair: Leaving Hi Jump
@@ -1060,7 +1055,6 @@ preset_pkrd_upper_norfair_business_center_2:
     dw !PRESET_DOORS, $0000 ; doors opened
     dw !PRESET_SPECIAL, $0000 ; flag disabled
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_ice_beam_gates:
     dw #preset_pkrd_upper_norfair_business_center_2 ; Upper Norfair: Business Center 2
@@ -1077,7 +1071,6 @@ preset_pkrd_upper_norfair_ice_beam_gates:
     dw $0AFA, $039A  ; Samus Y
     dw $D8B8, $28EF  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_ice_maze_up:
     dw #preset_pkrd_upper_norfair_ice_beam_gates ; Upper Norfair: Ice Beam Gates
@@ -1089,7 +1082,6 @@ preset_pkrd_upper_norfair_ice_maze_up:
     dw $0AF6, $0038  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_ice_maze_down:
     dw #preset_pkrd_upper_norfair_ice_maze_up ; Upper Norfair: Ice Maze Up
@@ -1103,7 +1095,6 @@ preset_pkrd_upper_norfair_ice_maze_down:
     dw $0AF6, $00B9  ; Samus X
     dw $D876, $0125  ; Items
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_ice_escape:
     dw #preset_pkrd_upper_norfair_ice_maze_down ; Upper Norfair: Ice Maze Down
@@ -1118,7 +1109,6 @@ preset_pkrd_upper_norfair_ice_escape:
     dw $0AF6, $00C8  ; Samus X
     dw $0AFA, $028B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_precathedral:
     dw #preset_pkrd_upper_norfair_ice_escape ; Upper Norfair: Ice Escape
@@ -1130,7 +1120,6 @@ preset_pkrd_upper_norfair_precathedral:
     dw $0AF6, $00A4  ; Samus X
     dw $0AFA, $038B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_cathedral:
     dw #preset_pkrd_upper_norfair_precathedral ; Upper Norfair: Pre-Cathedral
@@ -1145,7 +1134,6 @@ preset_pkrd_upper_norfair_cathedral:
     dw $0AFA, $008B  ; Samus Y
     dw $D8B8, $2CEF  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_rising_tide:
     dw #preset_pkrd_upper_norfair_cathedral ; Upper Norfair: Cathedral
@@ -1159,7 +1147,6 @@ preset_pkrd_upper_norfair_rising_tide:
     dw $0AFA, $018B  ; Samus Y
     dw $D8B8, $2EEF  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_bubble_mountain:
     dw #preset_pkrd_upper_norfair_rising_tide ; Upper Norfair: Rising Tide
@@ -1173,7 +1160,6 @@ preset_pkrd_upper_norfair_bubble_mountain:
     dw $0AF6, $04AD  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_bat_cave:
     dw #preset_pkrd_upper_norfair_bubble_mountain ; Upper Norfair: Bubble Mountain
@@ -1184,7 +1170,6 @@ preset_pkrd_upper_norfair_bat_cave:
     dw $0AF6, $01BC  ; Samus X
     dw $D8BA, $0011  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_leaving_speedbooster:
     dw #preset_pkrd_upper_norfair_bat_cave ; Upper Norfair: Bat Cave
@@ -1204,7 +1189,6 @@ preset_pkrd_upper_norfair_leaving_speedbooster:
     dw $D878, $0004  ; Items
     dw $D8BA, $0031  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_single_chamber:
     dw #preset_pkrd_upper_norfair_leaving_speedbooster ; Upper Norfair: Leaving Speedbooster
@@ -1223,7 +1207,6 @@ preset_pkrd_upper_norfair_single_chamber:
     dw $0AFA, $018B  ; Samus Y
     dw $D822, $0020  ; Events
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_double_chamber:
     dw #preset_pkrd_upper_norfair_single_chamber ; Upper Norfair: Single Chamber
@@ -1238,7 +1221,6 @@ preset_pkrd_upper_norfair_double_chamber:
     dw $0AF6, $00BF  ; Samus X
     dw $D8BA, $0071  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_double_chamber_revisited:
     dw #preset_pkrd_upper_norfair_double_chamber ; Upper Norfair: Double Chamber
@@ -1259,7 +1241,6 @@ preset_pkrd_upper_norfair_double_chamber_revisited:
     dw $D878, $001C  ; Items
     dw $D8BA, $00F1  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_single_chamber_revisited:
     dw #preset_pkrd_upper_norfair_double_chamber_revisited ; Upper Norfair: Double Chamber Revisited
@@ -1274,7 +1255,6 @@ preset_pkrd_upper_norfair_single_chamber_revisited:
     dw $0AFA, $01BB  ; Samus Y
     dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_volcano_room:
     dw #preset_pkrd_upper_norfair_single_chamber_revisited ; Upper Norfair: Single Chamber Revisited
@@ -1291,7 +1271,6 @@ preset_pkrd_upper_norfair_volcano_room:
     dw $0AFA, $008B  ; Samus Y
     dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_kronic_boost:
     dw #preset_pkrd_upper_norfair_volcano_room ; Upper Norfair: Volcano Room
@@ -1307,7 +1286,6 @@ preset_pkrd_upper_norfair_kronic_boost:
     dw $0AF6, $0030  ; Samus X
     dw $0AFA, $028B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_upper_norfair_lava_spark:
     dw #preset_pkrd_upper_norfair_kronic_boost ; Upper Norfair: Kronic Boost
@@ -1322,7 +1300,6 @@ preset_pkrd_upper_norfair_lava_spark:
     dw $0AF6, $01EB  ; Samus X
     dw $D8BA, $01F1  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_ln_main_hall:
     dw #preset_pkrd_upper_norfair_lava_spark ; Upper Norfair: Lava Spark
@@ -1338,9 +1315,7 @@ preset_pkrd_lower_norfair_ln_main_hall:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0480  ; Samus X
     dw $0AFA, $0288  ; Samus Y
-    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_prepillars:
     dw #preset_pkrd_lower_norfair_ln_main_hall ; Lower Norfair: LN Main Hall
@@ -1351,9 +1326,7 @@ preset_pkrd_lower_norfair_prepillars:
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $07A1  ; Samus X
     dw $0AFA, $028B  ; Samus Y
-    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_worst_room_in_the_game:
     dw #preset_pkrd_lower_norfair_prepillars ; Lower Norfair: Pre-Pillars
@@ -1367,7 +1340,6 @@ preset_pkrd_lower_norfair_worst_room_in_the_game:
     dw $0AF6, $03DB  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_amphitheatre:
     dw #preset_pkrd_lower_norfair_worst_room_in_the_game ; Lower Norfair: Worst Room in the Game
@@ -1384,7 +1356,6 @@ preset_pkrd_lower_norfair_amphitheatre:
     dw $0AF6, $00B8  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_kihunter_stairs_down:
     dw #preset_pkrd_lower_norfair_amphitheatre ; Lower Norfair: Amphitheatre
@@ -1399,7 +1370,6 @@ preset_pkrd_lower_norfair_kihunter_stairs_down:
     dw $0AF6, $02D5  ; Samus X
     dw $0AFA, $00B9  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_wasteland:
     dw #preset_pkrd_lower_norfair_kihunter_stairs_down ; Lower Norfair: Kihunter Stairs Down
@@ -1417,7 +1387,6 @@ preset_pkrd_lower_norfair_wasteland:
     dw $0AFA, $0489  ; Samus Y
     dw $D8BA, $41F1  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_metal_ninja_pirates:
     dw #preset_pkrd_lower_norfair_wasteland ; Lower Norfair: Wasteland
@@ -1436,7 +1405,6 @@ preset_pkrd_lower_norfair_metal_ninja_pirates:
     dw $0AFA, $028B  ; Samus Y
     dw $D8BA, $C1F1  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_plowerhouse:
     dw #preset_pkrd_lower_norfair_metal_ninja_pirates ; Lower Norfair: Metal Ninja Pirates
@@ -1451,7 +1419,6 @@ preset_pkrd_lower_norfair_plowerhouse:
     dw $0AFA, $00BB  ; Samus Y
     dw $D8BC, $0001  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_ridley_farming_room:
     dw #preset_pkrd_lower_norfair_plowerhouse ; Lower Norfair: Plowerhouse
@@ -1464,7 +1431,6 @@ preset_pkrd_lower_norfair_ridley_farming_room:
     dw $0AF6, $004E  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_ridley:
     dw #preset_pkrd_lower_norfair_ridley_farming_room ; Lower Norfair: Ridley Farming Room
@@ -1478,7 +1444,6 @@ preset_pkrd_lower_norfair_ridley:
     dw $0AFA, $009B  ; Samus Y
     dw $D8BA, $D1F1  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_leaving_ridley:
     dw #preset_pkrd_lower_norfair_ridley ; Lower Norfair: Ridley
@@ -1499,7 +1464,6 @@ preset_pkrd_lower_norfair_leaving_ridley:
     dw $0AFA, $019B  ; Samus Y
     dw $D82A, $0101  ; Bosses
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_reverse_plowerhouse:
     dw #preset_pkrd_lower_norfair_leaving_ridley ; Lower Norfair: Leaving Ridley
@@ -1516,7 +1480,6 @@ preset_pkrd_lower_norfair_reverse_plowerhouse:
     dw $0AFA, $008B  ; Samus Y
     dw $D8BA, $D5F1  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_wasteland_revisit:
     dw #preset_pkrd_lower_norfair_reverse_plowerhouse ; Lower Norfair: Reverse Plowerhouse
@@ -1528,7 +1491,6 @@ preset_pkrd_lower_norfair_wasteland_revisit:
     dw $09CA, $0006  ; Supers
     dw $0AF6, $02DC  ; Samus X
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_kihunter_stairs_up:
     dw #preset_pkrd_lower_norfair_wasteland_revisit ; Lower Norfair: Wasteland Revisit
@@ -1542,7 +1504,6 @@ preset_pkrd_lower_norfair_kihunter_stairs_up:
     dw $0AF6, $055B  ; Samus X
     dw $0AFA, $009B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_fire_flea_room:
     dw #preset_pkrd_lower_norfair_kihunter_stairs_up ; Lower Norfair: Kihunter Stairs Up
@@ -1556,7 +1517,6 @@ preset_pkrd_lower_norfair_fire_flea_room:
     dw $0AFA, $008B  ; Samus Y
     dw !PRESET_SPECIAL, $0001 ; clear shot blocks
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_springball_maze:
     dw #preset_pkrd_lower_norfair_fire_flea_room ; Lower Norfair: Fire Flea Room
@@ -1571,7 +1531,6 @@ preset_pkrd_lower_norfair_springball_maze:
     dw $0AF6, $016D  ; Samus X
     dw !PRESET_SPECIAL, $0000 ; reset flag
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_three_musketeers:
     dw #preset_pkrd_lower_norfair_springball_maze ; Lower Norfair: Springball Maze
@@ -1583,7 +1542,6 @@ preset_pkrd_lower_norfair_three_musketeers:
     dw $0915, $0000  ; Screen Y position in pixels
     dw $0AF6, $005D  ; Samus X
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_single_chamber_final:
     dw #preset_pkrd_lower_norfair_three_musketeers ; Lower Norfair: Three Musketeers
@@ -1595,7 +1553,6 @@ preset_pkrd_lower_norfair_single_chamber_final:
     dw $09C2, $006D  ; Health
     dw $0AF6, $0169  ; Samus X
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_bubble_mountain_final:
     dw #preset_pkrd_lower_norfair_single_chamber_final ; Lower Norfair: Single Chamber Final
@@ -1609,7 +1566,6 @@ preset_pkrd_lower_norfair_bubble_mountain_final:
     dw $09C2, $0061  ; Health
     dw $0AF6, $008B  ; Samus X
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_frog_speedway:
     dw #preset_pkrd_lower_norfair_bubble_mountain_final ; Lower Norfair: Bubble Mountain Final
@@ -1624,7 +1580,6 @@ preset_pkrd_lower_norfair_frog_speedway:
     dw $09CE, $0003  ; Pbs
     dw $0AF6, $00C4  ; Samus X
     dw #$FFFF
-.after
 
 preset_pkrd_lower_norfair_business_center_final:
     dw #preset_pkrd_lower_norfair_frog_speedway ; Lower Norfair: Frog Speedway
@@ -1635,7 +1590,6 @@ preset_pkrd_lower_norfair_business_center_final:
     dw $0913, $EC00  ; Screen subpixel Y position
     dw $0AF6, $002A  ; Samus X
     dw #$FFFF
-.after
 
 preset_pkrd_maridia_maridia_tube_revisit:
     dw #preset_pkrd_lower_norfair_business_center_final ; Lower Norfair: Business Center Final
@@ -1653,7 +1607,6 @@ preset_pkrd_maridia_maridia_tube_revisit:
     dw $0AFA, $0086  ; Samus Y
     dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
-.after
 
 preset_pkrd_maridia_fish_tank:
     dw #preset_pkrd_maridia_maridia_tube_revisit ; Maridia: Maridia Tube Revisit
@@ -1670,7 +1623,6 @@ preset_pkrd_maridia_fish_tank:
     dw $0AF6, $016C  ; Samus X
     dw $0AFA, $068B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_maridia_mt_everest:
     dw #preset_pkrd_maridia_fish_tank ; Maridia: Fish Tank
@@ -1683,7 +1635,6 @@ preset_pkrd_maridia_mt_everest:
     dw $0AF6, $0186  ; Samus X
     dw $0AFA, $03BB  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_maridia_crab_shaft:
     dw #preset_pkrd_maridia_mt_everest ; Maridia: Mt Everest
@@ -1696,7 +1647,6 @@ preset_pkrd_maridia_crab_shaft:
     dw $0AFA, $008B  ; Samus Y
     dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
-.after
 
 preset_pkrd_maridia_botwoon_hallway:
     dw #preset_pkrd_maridia_crab_shaft ; Maridia: Crab Shaft
@@ -1714,7 +1664,6 @@ preset_pkrd_maridia_botwoon_hallway:
     dw $0AFA, $006B  ; Samus Y
     dw $D8C0, $8174  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_maridia_botwoon:
     dw #preset_pkrd_maridia_botwoon_hallway ; Maridia: Botwoon Hallway
@@ -1730,7 +1679,6 @@ preset_pkrd_maridia_botwoon:
     dw $0AF6, $03A2  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_maridia_botwoon_etank:
     dw #preset_pkrd_maridia_botwoon ; Maridia: Botwoon
@@ -1750,7 +1698,6 @@ preset_pkrd_maridia_botwoon_etank:
     dw $D82C, $0002  ; Bosses
     dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
-.after
 
 preset_pkrd_maridia_halfie_setup:
     dw #preset_pkrd_maridia_botwoon_etank ; Maridia: Botwoon E-tank
@@ -1770,7 +1717,6 @@ preset_pkrd_maridia_halfie_setup:
     dw $D882, $0100  ; Items
     dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
-.after
 
 preset_pkrd_maridia_draygon:
     dw #preset_pkrd_maridia_halfie_setup ; Maridia: Halfie Setup
@@ -1788,7 +1734,6 @@ preset_pkrd_maridia_draygon:
     dw $D8C2, $0C00  ; Doors
     dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
-.after
 
 preset_pkrd_maridia_spikesuit_reverse_halfie:
     dw #preset_pkrd_maridia_draygon ; Maridia: Draygon
@@ -1805,13 +1750,11 @@ preset_pkrd_maridia_spikesuit_reverse_halfie:
     dw $D82C, $0003  ; Bosses
     dw $D8C2, $4C00  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_maridia_reverse_colosseum:
     dw #preset_pkrd_maridia_spikesuit_reverse_halfie ; Maridia: Spikesuit Reverse Halfie
     dw $0A68, $0000  ; Flash suit
     dw #$FFFF
-.after
 
 preset_pkrd_maridia_reverse_halfie_climb:
     dw #preset_pkrd_maridia_reverse_colosseum ; Maridia: Reverse Colosseum
@@ -1823,7 +1766,6 @@ preset_pkrd_maridia_reverse_halfie_climb:
     dw $0A68, $0000  ; Flash suit
     dw $0AF6, $0037  ; Samus X
     dw #$FFFF
-.after
 
 preset_pkrd_maridia_reverse_botwoon_etank:
     dw #preset_pkrd_maridia_reverse_halfie_climb ; Maridia: Reverse Halfie Climb
@@ -1837,7 +1779,6 @@ preset_pkrd_maridia_reverse_botwoon_etank:
     dw $0AF6, $00A4  ; Samus X
     dw $0AFA, $028B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_maridia_reverse_botwoon_hallway:
     dw #preset_pkrd_maridia_reverse_botwoon_etank ; Maridia: Reverse Botwoon E-tank
@@ -1849,7 +1790,6 @@ preset_pkrd_maridia_reverse_botwoon_hallway:
     dw $0AF6, $0025  ; Samus X
     dw $0AFA, $00BB  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_maridia_reverse_crab_shaft:
     dw #preset_pkrd_maridia_reverse_botwoon_hallway ; Maridia: Reverse Botwoon Hallway
@@ -1863,7 +1803,6 @@ preset_pkrd_maridia_reverse_crab_shaft:
     dw $0AFA, $018B  ; Samus Y
     dw $D8C2, $6C00  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_maridia_mt_everest_revisit:
     dw #preset_pkrd_maridia_reverse_crab_shaft ; Maridia: Reverse Crab Shaft
@@ -1876,7 +1815,6 @@ preset_pkrd_maridia_mt_everest_revisit:
     dw $0AF6, $0071  ; Samus X
     dw $0AFA, $028B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_backtracking_red_brinstar_green_gate:
     dw #preset_pkrd_maridia_mt_everest_revisit ; Maridia: Mt Everest Revisit
@@ -1890,7 +1828,6 @@ preset_pkrd_backtracking_red_brinstar_green_gate:
     dw $0AF6, $0078  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_backtracking_crateria_kihunters_final:
     dw #preset_pkrd_backtracking_red_brinstar_green_gate ; Backtracking: Red Brinstar Green Gate
@@ -1906,7 +1843,6 @@ preset_pkrd_backtracking_crateria_kihunters_final:
     dw $0AF6, $006C  ; Samus X
     dw $0AFA, $005B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_pkrd_backtracking_parlor_return:
     dw #preset_pkrd_backtracking_crateria_kihunters_final ; Backtracking: Crateria Kihunters Final
@@ -1925,7 +1861,6 @@ preset_pkrd_backtracking_parlor_return:
     dw $0AFA, $04BB  ; Samus Y
     dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
-.after
 
 preset_pkrd_backtracking_terminator_revisit:
     dw #preset_pkrd_backtracking_parlor_return ; Backtracking: Parlor Return
@@ -1943,7 +1878,6 @@ preset_pkrd_backtracking_terminator_revisit:
     dw $0B3F, $0104  ; Blue suit
     dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
-.after
 
 preset_pkrd_backtracking_green_pirate_shaft_revisit:
     dw #preset_pkrd_backtracking_terminator_revisit ; Backtracking: Terminator Revisit
@@ -1959,7 +1893,6 @@ preset_pkrd_backtracking_green_pirate_shaft_revisit:
     dw $0AFA, $029B  ; Samus Y
     dw $0B3F, $0000  ; Blue suit
     dw #$FFFF
-.after
 
 preset_pkrd_backtracking_g4_hallway:
     dw #preset_pkrd_backtracking_green_pirate_shaft_revisit ; Backtracking: Green Pirate Shaft Revisit
@@ -1976,7 +1909,6 @@ preset_pkrd_backtracking_g4_hallway:
     dw $0AFA, $068B  ; Samus Y
     dw $D8B2, $6C01  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_backtracking_g4_elevator:
     dw #preset_pkrd_backtracking_g4_hallway ; Backtracking: G4 Hallway
@@ -1990,7 +1922,6 @@ preset_pkrd_backtracking_g4_elevator:
     dw $0AFA, $019B  ; Samus Y
     dw $D820, $0FC1  ; Events
     dw #$FFFF
-.after
 
 preset_pkrd_tourian_tourian_elevator_room:
     dw #preset_pkrd_backtracking_g4_elevator ; Backtracking: G4 Elevator
@@ -2005,9 +1936,8 @@ preset_pkrd_tourian_tourian_elevator_room:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $02A8  ; Samus Y
-    dw !PRESET_DOORS, $0001 ; doors closed
+    dw $D90C, $0100  ; Map Stations
     dw #$FFFF
-.after
 
 preset_pkrd_tourian_metroids_1:
     dw #preset_pkrd_tourian_tourian_elevator_room ; Tourian: Tourian Elevator Room
@@ -2018,9 +1948,7 @@ preset_pkrd_tourian_metroids_1:
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $0040  ; Samus X
     dw $0AFA, $038B  ; Samus Y
-    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
-.after
 
 preset_pkrd_tourian_metroids_2:
     dw #preset_pkrd_tourian_metroids_1 ; Tourian: Metroids 1
@@ -2038,7 +1966,6 @@ preset_pkrd_tourian_metroids_2:
     dw $0AFA, $00AB  ; Samus Y
     dw $D822, $0021  ; Events
     dw #$FFFF
-.after
 
 preset_pkrd_tourian_metroids_3:
     dw #preset_pkrd_tourian_metroids_2 ; Tourian: Metroids 2
@@ -2059,7 +1986,6 @@ preset_pkrd_tourian_metroids_3:
     dw $D822, $0023  ; Events
     dw $D8C4, $0003  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_tourian_metroids_4:
     dw #preset_pkrd_tourian_metroids_3 ; Tourian: Metroids 3
@@ -2077,7 +2003,6 @@ preset_pkrd_tourian_metroids_4:
     dw $D822, $0027  ; Events
     dw $D8C4, $0007  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_tourian_giant_hoppers:
     dw #preset_pkrd_tourian_metroids_4 ; Tourian: Metroids 4
@@ -2095,7 +2020,6 @@ preset_pkrd_tourian_giant_hoppers:
     dw $0AFA, $01D0  ; Samus Y
     dw $D822, $002F  ; Events
     dw #$FFFF
-.after
 
 preset_pkrd_tourian_baby_skip:
     dw #preset_pkrd_tourian_giant_hoppers ; Tourian: Giant Hoppers
@@ -2114,7 +2038,6 @@ preset_pkrd_tourian_baby_skip:
     dw $0AFA, $00AB  ; Samus Y
     dw $D8C4, $000F  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_tourian_gadora_room:
     dw #preset_pkrd_tourian_baby_skip ; Tourian: Baby Skip
@@ -2133,7 +2056,6 @@ preset_pkrd_tourian_gadora_room:
     dw $0AFA, $019B  ; Samus Y
     dw $D8C4, $00AF  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_tourian_rinka_shaft:
     dw #preset_pkrd_tourian_gadora_room ; Tourian: Gadora Room
@@ -2150,7 +2072,6 @@ preset_pkrd_tourian_rinka_shaft:
     dw $0AFA, $008B  ; Samus Y
     dw $D8C4, $01AF  ; Doors
     dw #$FFFF
-.after
 
 preset_pkrd_tourian_zeb_skip:
     dw #preset_pkrd_tourian_rinka_shaft ; Tourian: Rinka Shaft
@@ -2166,48 +2087,91 @@ preset_pkrd_tourian_zeb_skip:
     dw $0AFA, $028B  ; Samus Y
     dw $D8C4, $03AF  ; Doors
     dw #$FFFF
-.after
 
-preset_pkrd_tourian_escape_room_3:
+preset_pkrd_tourian_mother_brain_2:
     dw #preset_pkrd_tourian_zeb_skip ; Tourian: Zeb Skip
-    dw $078D, $AAEC  ; DDB
-    dw $079B, $DE7A  ; MDB
+    dw $078D, $AAC8  ; DDB
+    dw $079B, $DD58  ; MDB
+    dw $07F3, $0021  ; Music Bank
+    dw $090F, $79FF  ; Screen subpixel X position
+    dw $0915, $0000  ; Screen Y position in pixels
+    dw $0919, $0000  ; Layer 2 Y position
+    dw $09C2, $01B3  ; Health
+    dw $09C6, $0005  ; Missiles
+    dw $09CA, $0000  ; Supers
+    dw $0AF6, $00CF  ; Samus X
+    dw $0AFA, $009B  ; Samus Y
+    dw $D820, $0FC5  ; Events
+    dw #$FFFF
+
+preset_pkrd_tourian_mother_brain_3:
+    dw #preset_pkrd_tourian_mother_brain_2 ; Tourian: Mother Brain 2
+    dw $07F3, $0048  ; Music Bank
+    dw $09A6, $1009  ; Beams
+    dw $09C2, $01F3  ; Health
+    dw $09C6, $0000  ; Missiles
+    dw $09CE, $0000  ; Pbs
+    dw $0A76, $8000  ; Hyper beam
+    dw $D82C, $0203  ; Bosses
+    dw #$FFFF
+
+preset_pkrd_tourian_zebes_escape:
+    dw #preset_pkrd_tourian_mother_brain_3 ; Tourian: Mother Brain 3
     dw $07F3, $0024  ; Music Bank
     dw $07F5, $0007  ; Music Track
+    dw $09A6, $1009  ; Beams
+    dw $09C2, $01B7  ; Health
+    dw $0AF6, $0025  ; Samus X
+    dw $0AFA, $00C3  ; Samus Y
+    dw $D820, $4FC5  ; Events
+    dw #$FFFF
+
+preset_pkrd_tourian_escape_room_3:
+    dw #preset_pkrd_tourian_zebes_escape ; Tourian: Zebes Escape
+    dw $078D, $AAEC  ; DDB
+    dw $079B, $DE7A  ; MDB
     dw $090F, $7000  ; Screen subpixel X position
     dw $0913, $2400  ; Screen subpixel Y position
     dw $0915, $00FA  ; Screen Y position in pixels
-    dw $09A6, $1009  ; Beams
     dw $09C2, $01B7  ; Health
-    dw $09C6, $0000  ; Missiles
-    dw $09CA, $0000  ; Supers
-    dw $09CE, $0000  ; Pbs
     dw $0A1C, $0001  ; Samus position/state
     dw $0A1E, $0008  ; More position/state
-    dw $0A76, $8000  ; Hyper beam
     dw $0AF6, $00DF  ; Samus X
     dw $0AFA, $018B  ; Samus Y
-    dw $D820, $4FC5  ; Events
-    dw $D82C, $0203  ; Bosses
     dw #$FFFF
-.after
 
-preset_pkrd_tourian_climb_spark:
+preset_pkrd_tourian_escape_room_4:
     dw #preset_pkrd_tourian_escape_room_3 ; Tourian: Escape Room 3
+    dw $078D, $AB04  ; DDB
+    dw $079B, $DEA7  ; MDB
+    dw $090F, $3000  ; Screen subpixel X position
+    dw $0911, $0500  ; Screen X position in pixels
+    dw $0913, $4C00  ; Screen subpixel Y position
+    dw $0915, $001C  ; Screen Y position in pixels
+    dw $0917, $03C0  ; Layer 2 X position
+    dw $0919, $0015  ; Layer 2 Y position
+    dw $0AF6, $05D6  ; Samus X
+    dw $0AFA, $008B  ; Samus Y
+    dw #$FFFF
+
+preset_pkrd_tourian_escape_climb:
+    dw #preset_pkrd_tourian_escape_room_4 ; Tourian: Escape Room 4
     dw $078D, $AB1C  ; DDB
     dw $079B, $DEDE  ; MDB
-    dw $090F, $B000  ; Screen subpixel X position
-    dw $0911, $00BA  ; Screen X position in pixels
-    dw $0913, $C000  ; Screen subpixel Y position
-    dw $0915, $00F4  ; Screen Y position in pixels
+    dw $090F, $0000  ; Screen subpixel X position
+    dw $0911, $00F1  ; Screen X position in pixels
+    dw $0913, $A400  ; Screen subpixel Y position
+    dw $0915, $00FB  ; Screen Y position in pixels
+    dw $0917, $00B4  ; Layer 2 X position
+    dw $0919, $00BC  ; Layer 2 Y position
     dw $09C2, $0199  ; Health
-    dw $0AF6, $0155  ; Samus X
+    dw $0AF6, $0151  ; Samus X
+    dw $0AFA, $018B  ; Samus Y
     dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
-.after
 
 preset_pkrd_tourian_escape_parlor:
-    dw #preset_pkrd_tourian_climb_spark ; Tourian: Climb Spark
+    dw #preset_pkrd_tourian_escape_climb ; Tourian: Escape Climb
     dw $078D, $AB34  ; DDB
     dw $079B, $96BA  ; MDB
     dw $090F, $E000  ; Screen subpixel X position
@@ -2220,4 +2184,3 @@ preset_pkrd_tourian_escape_parlor:
     dw $0AF6, $01D7  ; Samus X
     dw $0AFA, $004B  ; Samus Y
     dw #$FFFF
-.after

@@ -2882,6 +2882,7 @@ preset_prkd15_tourian_climb_spark:
     dw $0923, $FD00 ; BG2 Y scroll offset due to room transitions (Translates between Layer 2 scroll and BG2 scroll)
     dw $09C2, $0171 ; Health
     dw $0AF6, $0151 ; Samus X
+    dw $0AFA, $018B  ; Samus Y
     dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 .after
