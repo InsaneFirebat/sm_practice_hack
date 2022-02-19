@@ -5,24 +5,27 @@
 IFBMenu:
     dw #ifb_customizemenu
     dw #$FFFF
+    dw #ifb_brb
     dw #ifb_soundtest
-    dw #$FFFF
     dw #ifb_presetrando
+    dw #ifb_debugteleport
 if !FEATURE_EXTRAS
     dw #$FFFF
     dw #ifb_noclip
     dw #ifb_nosteam
 endif
     dw #$FFFF
-if !FEATURE_PAL
-else
-    dw #ifb_debugteleport
-endif
     dw #$FFFF
     dw #ifb_factory_reset
     dw #$0000
     %cm_header("CUSTOM ROMS ONLY")
     %cm_footer("MODIFIED BY INSANEFIREBAT")
+
+ifb_customizemenu:
+    %cm_submenu("Customize Practice Menu", #CustomizeMenu)
+
+ifb_brb:
+    %cm_submenu("BRB Screen", #BRBMenu)
 
 ifb_soundtest:
     %cm_submenu("Sound Test", #SoundTestMenu)
@@ -30,11 +33,8 @@ ifb_soundtest:
 ifb_presetrando:
     %cm_submenu("Preset Randomizer", #PresetRandoMenu)
 
-if !FEATURE_PAL
-else
 ifb_debugteleport:
     %cm_submenu("Hidden Dev Load Stations", #DebugTeleportMenu)
-endif
 
 if !FEATURE_EXTRAS
 ifb_noclip:
@@ -47,20 +47,81 @@ endif
 ifb_factory_reset:
     %cm_submenu("Factory Reset", #FactoryResetConfirm)
 
+; -------------------
+; Custom Menu Palette
+; -------------------
 
-; ----------
-; Custom Palettes
-; ----------
-
+print pc, " customizemenu start"
 incsrc customizemenu.asm
+print pc, " customizemenu end"
+
+; --------
+; BRB Menu
+; --------
+
+BRBMenu:
+    dw ifb_brb_screen
+    dw #$FFFF
+    dw ifb_brb_timer_mode
+    dw ifb_brb_timer_min
+    dw ifb_brb_timer_sec
+    dw ifb_brb_timer_clear
+    dw #$FFFF
+    dw ifb_brb_cycle_timer
+    dw ifb_brb_palette_cycle
+    dw #$FFFF
+    dw #ifb_soundtest_goto_music
+    dw #game_music_toggle
+    dw #$0000
+    %cm_header("BRB SCREEN MENU")
+
+ifb_brb_screen:
+    %cm_jsr("Launch BRB Screen", .routine, #0)
+  .routine
+    LDA #$0001 : STA !ram_cm_brb
+    RTS
+
+ifb_brb_timer_mode:
+    dw !ACTION_CHOICE
+    dl #!ram_cm_brb_timer_mode
+    dw #$0000
+    db #$28, "Timer Mode", #$FF
+        db #$28, "        OFF", #$FF
+        db #$28, "   COUNT UP", #$FF
+        db #$28, " COUNT DOWN", #$FF
+    db #$FF
+
+ifb_brb_timer_min:
+    %cm_numfield("Minutes on Timer", !ram_cm_brb_mins, 0, 99, 1, 5, #0)
+
+ifb_brb_timer_sec:
+    %cm_numfield("Seconds on Timer", !ram_cm_brb_secs, 0, 59, 1, 5, #0)
+
+ifb_brb_timer_clear:
+    %cm_jsr("Clear Timer", .routine, #0)
+  .routine
+    TYA : STA !ram_cm_brb_mins
+    STA !ram_cm_brb_secs : STA !ram_cm_brb_frames
+    RTS
+
+ifb_brb_cycle_timer:
+    %cm_numfield_word("Cycle Timer (seconds)", !ram_cm_brb_set_cycle, 1, 600, 1, 10, .routine)
+  .routine
+    LDA !ram_cm_brb_set_cycle : BNE +
+    LDA #$0009 ; default to ~10s
++   ASL #6 : STA !ram_cm_brb_cycle_time
+    RTS
+
+ifb_brb_palette_cycle:
+    %cm_toggle_bit_inverted("Cycle Palettes", !ram_cm_brb_palette, #$FFFF, #0)
+
+incsrc BRBmenu.asm
 
 
 ; ----------
 ; Debug Teleport Menu
 ; ----------
 
-if !FEATURE_PAL
-else
 DebugTeleportMenu:
     dw #ifb_debugteleport_crateria
     dw #ifb_debugteleport_brinstar
@@ -258,7 +319,6 @@ tel_ceres:
 
 tel_debug:
     %cm_jsr("Debug Room CRASH", #action_teleport, #$0700)
-endif
 
 
 ; ------------
@@ -529,6 +589,11 @@ action_soundtest_playmusic:
     RTS
 }
 
+
+; -------------
+; Factory Reset
+; -------------
+
 FactoryResetConfirm:
     dw #ifb_factory_reset_abort
     dw #$FFFF
@@ -559,12 +624,6 @@ ifb_factory_reset_delete_presets:
 
 action_factory_reset:
 {
-    ; Mark save files as corrupt
-;    LDX #$000A
-;-   LDA $8082AD,X : STA $F01FE0,X
-;    DEX #2 : BPL -
-    ; InfoHUD probably skips the routine that checks this
-
     ; Wipe standard practice hack memory
     LDA #$0000 : LDX !WRAM_SIZE-2
 -   STA !WRAM_START,X

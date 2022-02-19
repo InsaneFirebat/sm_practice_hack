@@ -62,9 +62,6 @@ CustomizeMenu:
     dw #$0000
     %cm_header("CUSTOMIZE PRACTICE MENU")
 
-ifb_customizemenu:
-    %cm_submenu("Customize Practice Menu", #CustomizeMenu)
-
 ifb_menubackground:
     %cm_toggle("Menu Background", !sram_menu_background, #$0001, #0)
 
@@ -377,10 +374,10 @@ org $B5F000
 print pc, " menu customization bankB5 start"
 PrepMenuPalette:
 {
-
     LDA !sram_custompalette_profile : ASL : TAX
     BEQ .customPalette
 
+  .profilePalette
     PHB
     PHK : PLB
     LDA.l PaletteProfileTables,X : STA $12
@@ -442,7 +439,7 @@ copy_menu_palette:
 
   .fail
     ; make the animals cry cause we couldn't do anything
-    %sfxetecoon()
+    %sfxdachora()
     PLB
     RTL
 }
@@ -498,7 +495,7 @@ PaletteProfileTables:
 
 ; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
 CustomProfileTable: ; custom always first
-    dw $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000
+    dw $7277, $48F3, $7FFF, $0000, $0000, $7FFF, $4376, $761F, $0000, $0000, $761F
 
 TwitchProfileTable:
     dw $550D, $550D, $7FFF, $0000, $0000, $7FFF, $550D, $550D, $0000, $550D, $7FFF
