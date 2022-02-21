@@ -32,6 +32,8 @@ Regardless of which tool you use, the process is the same: you select the .IPS f
 * Option to clear the elevator flag for OoB travel
 * No tile marker when applying Magnet Stairs fix
 * Additional preset categories for NewGame+
+* Option to load presets with enemies
+* Convenience improvements for many presets
 * Options to customize the color palette of the practice menu
 * Pre-made practice menu palettes by the community
 * Option to skip drawing the practice menu background
@@ -41,5 +43,4 @@ Regardless of which tool you use, the process is the same: you select the .IPS f
 * Sound Test menu with options to play music and sound effects
 * Options to randomize your equipment when loading presets
 * Access to developer/debug load points
-* Option to trigger the anti-piracy warning screen
 * Option to factory reset practice rom settings
