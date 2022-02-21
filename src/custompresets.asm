@@ -323,7 +323,7 @@ preset_scroll_fixes:
   .fast_pillars_setup
     LDY !SAMUS_Y : CPY #$0199    ; fix varies depending on Y position
     BMI .above_pillars
-    STA $CD24 : INC : STA $CD22
+    STA $CD22 : STA $CD24
     STZ $CD21
     BRA .norfairdone
   .above_pillars
@@ -346,6 +346,7 @@ preset_scroll_fixes:
     ; Wrecked Ship Scroll Fixes (Category Presets)
     ; --------------------------------------------
   .bowling
+    STA $CD2D : STA $CD2E : STA $CD2F
     STZ $CD26 : STZ $CD27
     STZ $CD28 : STZ $CD29
     STZ $CD2A : STZ $CD2B
@@ -479,7 +480,7 @@ preset_scroll_fixes:
     LDY !SAMUS_X : CPY #$0175 : BPL .specialdone
     %a16()
     LDA #$00FF
-    STA $7F0480 : STA $7F0482
+    STA $7F05C0 : STA $7F05C2
     ; only clear bottom row if no power bombs
     LDY !SAMUS_PBS_MAX
     BEQ .specialdone

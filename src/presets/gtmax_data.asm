@@ -733,6 +733,7 @@ preset_gtmax_upper_norfair_business_center:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $02A8  ; Samus Y
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_gtmax_upper_norfair_hijump_etank_room:
@@ -746,6 +747,7 @@ preset_gtmax_upper_norfair_hijump_etank_room:
     dw $0AF6, $0042  ; Samus X
     dw $0AFA, $058B  ; Samus Y
     dw $D8B8, $20EC  ; Doors
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_gtmax_upper_norfair_leaving_hijump:
@@ -1405,6 +1407,7 @@ preset_gtmax_upper_norfair_and_kraid_bubble_mountain_revisit:
     dw $0A1E, $0204  ; More position/state
     dw $0AF6, $0035  ; Samus X
     dw $0AFA, $0187  ; Samus Y
+    dw !PRESET_DOORS, $FFFF ; doors forced open
     dw #$FFFF
 
 preset_gtmax_upper_norfair_and_kraid_leaving_norfair_reserve:
@@ -1427,6 +1430,7 @@ preset_gtmax_upper_norfair_and_kraid_leaving_norfair_reserve:
     dw $0AFA, $008B  ; Samus Y
     dw $D876, $E021  ; Items
     dw $D8BA, $DF59  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 
 preset_gtmax_upper_norfair_and_kraid_bubble_mountain_final:
@@ -2364,6 +2368,7 @@ preset_gtmax_wrecked_ship_leaving_ws_etank:
     dw $0AFA, $008B  ; Samus Y
     dw $D880, $7F71  ; Items
     dw $D8C0, $C87C  ; Doors
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 
 preset_gtmax_wrecked_ship_reverse_spiky_room:
@@ -2380,6 +2385,7 @@ preset_gtmax_wrecked_ship_reverse_spiky_room:
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $00DB  ; Samus X
     dw $0AFA, $029B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 
 preset_gtmax_wrecked_ship_shaft_to_attic:
@@ -2396,6 +2402,7 @@ preset_gtmax_wrecked_ship_shaft_to_attic:
     dw $09CE, $0027  ; Pbs
     dw $0AF6, $01DB  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 
 preset_gtmax_wrecked_ship_attic:
@@ -2410,6 +2417,7 @@ preset_gtmax_wrecked_ship_attic:
     dw $0919, $0003  ; Layer 2 Y position
     dw $0AF6, $04C4  ; Samus X
     dw $0AFA, $006B  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 
 preset_gtmax_wrecked_ship_antispeedrun_robots:
@@ -2508,6 +2516,7 @@ preset_gtmax_wrecked_ship_ocean_revisit:
     dw $0AF6, $0078  ; Samus X
     dw $0AFA, $0088  ; Samus Y
     dw $D880, $7FFF  ; Items
+    dw !PRESET_DOORS, $FFFF ; doors forced opened
     dw #$FFFF
 
 preset_gtmax_brinstar_cleanup_1_crateria_power_bombs:
@@ -2527,6 +2536,7 @@ preset_gtmax_brinstar_cleanup_1_crateria_power_bombs:
     dw $0A1E, $1108  ; More position/state
     dw $0AF6, $0803  ; Samus X
     dw $0AFA, $0159  ; Samus Y
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 
 preset_gtmax_brinstar_cleanup_1_landing_site_revisit:
@@ -2784,7 +2794,7 @@ preset_gtmax_brinstar_cleanup_1_mission_impossible:
     dw $09CE, $002D  ; Pbs
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
-    dw $0AF6, $0224  ; Samus X
+    dw $0AF6, $026B  ; Samus X
     dw $0AFA, $038B  ; Samus Y
     dw $D872, $C42F  ; Items
     dw $D8B4, $0346  ; Doors
@@ -2834,6 +2844,7 @@ preset_gtmax_brinstar_cleanup_1_leaving_spore_spawn_supers:
     dw $0AFA, $088B  ; Samus Y
     dw $D870, $E6BD  ; Items
     dw $D8B6, $78F8  ; Doors
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 
 preset_gtmax_brinstar_cleanup_1_waterway_etank:
@@ -2855,6 +2866,7 @@ preset_gtmax_brinstar_cleanup_1_waterway_etank:
     dw $0AFA, $098B  ; Samus Y
     dw $D872, $C56F  ; Items
     dw $D8B4, $8B46  ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 
 preset_gtmax_brinstar_cleanup_2_green_hills_revisit:
@@ -3271,6 +3283,7 @@ preset_gtmax_tourian_escape_room_4:
     dw $0919, $0013  ; Layer 2 Y position
     dw $0AF6, $05DB  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_gtmax_tourian_escape_climb:
@@ -3285,7 +3298,8 @@ preset_gtmax_tourian_escape_climb:
     dw $0919, $00B6  ; Layer 2 Y position
     dw $0AF6, $0152  ; Samus X
     dw $0AFA, $018B  ; Samus Y
-    dw !PRESET_DOORS, $0000 ; doors opened
+    dw !PRESET_DOORS, $0001 ; doors closed
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_gtmax_tourian_escape_parlor:

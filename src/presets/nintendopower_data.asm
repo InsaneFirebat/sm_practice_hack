@@ -1509,6 +1509,7 @@ preset_nintendopower_tourian_escape_room_4:
     dw $0919, $0013  ; Layer 2 Y position
     dw $0AF6, $05DB  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_nintendopower_tourian_escape_climb:
@@ -1523,6 +1524,7 @@ preset_nintendopower_tourian_escape_climb:
     dw $0919, $00C2  ; Layer 2 Y position
     dw $0AF6, $0154  ; Samus X
     dw $0AFA, $018B  ; Samus Y
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_nintendopower_tourian_escape_parlor:

@@ -631,6 +631,7 @@ preset_kpdr22_upper_norfair_business_center:
     dw $0AF6, $0080 ; Samus X
     dw $0AFA, $02A8 ; Samus Y
     dw !PRESET_DOORS, $0000 ; doors opened
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_kpdr22_upper_norfair_hi_jump_etank:
@@ -644,6 +645,7 @@ preset_kpdr22_upper_norfair_hi_jump_etank:
     dw $0AF6, $0041 ; Samus X
     dw $0AFA, $058B ; Samus Y
     dw $D8B8, $20ED ; Doors
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_kpdr22_upper_norfair_leaving_hi_jump:
@@ -1445,6 +1447,7 @@ preset_kpdr22_maridia_halfie_setup:
     dw $0AF6, $008D ; Samus X
     dw $0AFA, $009B ; Samus Y
     dw $D882, $0100 ; Items
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF
 
 preset_kpdr22_maridia_draygon:
@@ -1462,6 +1465,7 @@ preset_kpdr22_maridia_draygon:
     dw $0AF6, $0041 ; Samus X
     dw $0AFA, $028B ; Samus Y
     dw $D8C2, $0C00 ; Doors
+    dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 
 preset_kpdr22_maridia_reverse_halfie_spikesuit:
@@ -1773,6 +1777,7 @@ preset_kpdr22_lower_norfair_ln_main_hall:
     dw $0919, $0301 ; Layer 2 Y position
     dw $09C2, $00BA ; Health
     dw $09CE, $0004 ; Pbs
+    dw $09D2, $0003 ; Currently selected item
     dw $0A1C, $009B ; Samus position/state
     dw $0A1E, $0000 ; More position/state
     dw $0AF6, $0480 ; Samus X
@@ -1955,6 +1960,7 @@ preset_kpdr22_lower_norfair_reverse_plowerhouse:
     dw $0AF6, $02B8 ; Samus X
     dw $0AFA, $008B ; Samus Y
     dw $D8BA, $D5F1 ; Doors
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_kpdr22_lower_norfair_wasteland_revisit:
@@ -1965,6 +1971,7 @@ preset_kpdr22_lower_norfair_wasteland_revisit:
     dw $0913, $7400 ; Screen subpixel Y position
     dw $09C2, $00B4 ; Health
     dw $0AF6, $02DC ; Samus X
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_kpdr22_lower_norfair_kihunter_stairs_up:
@@ -2406,6 +2413,7 @@ preset_kpdr22_tourian_escape_room_4:
     dw $0919, $0015 ; Layer 2 Y position
     dw $0AF6, $05D6 ; Samus X
     dw $0AFA, $008B ; Samus Y
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_kpdr22_tourian_escape_climb:
@@ -2422,6 +2430,7 @@ preset_kpdr22_tourian_escape_climb:
     dw $0AF6, $0151 ; Samus X
     dw $0AFA, $018B ; Samus Y
     dw !PRESET_DOORS, $0001 ; doors closed
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_kpdr22_tourian_escape_parlor:

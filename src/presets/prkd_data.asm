@@ -955,6 +955,7 @@ preset_prkd_upper_norfair_business_center_postelev:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $02A8  ; Samus Y
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_prkd_upper_norfair_hi_jump_etank:
@@ -973,6 +974,7 @@ preset_prkd_upper_norfair_hi_jump_etank:
     dw $0AF6, $0049  ; Samus X
     dw $0AFA, $058B  ; Samus Y
     dw $D8B8, $2000  ; Doors
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_prkd_upper_norfair_leaving_hi_jump:
@@ -1645,6 +1647,7 @@ preset_prkd_lower_norfair_reverse_plowerhouse:
     dw $0AF6, $02B1  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw $D8BA, $D5F1  ; Doors
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_prkd_lower_norfair_wasteland_revisit:
@@ -1655,6 +1658,7 @@ preset_prkd_lower_norfair_wasteland_revisit:
     dw $0913, $8800  ; Screen subpixel Y position
     dw $09C2, $00C8  ; Health
     dw $0AF6, $02DC  ; Samus X
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_prkd_lower_norfair_kihunter_stairs_up:
@@ -1780,6 +1784,7 @@ preset_prkd_kraid_entering_kraids_lair:
     dw $0913, $0000  ; Screen subpixel Y position
     dw $09C2, $006A  ; Health
     dw $09CA, $0006  ; Supers
+    dw $09D2, $0002 ; Currently selected item
     dw $0A1C, $009B  ; Samus position/state
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0080  ; Samus X
@@ -1800,6 +1805,7 @@ preset_prkd_kraid_kraid_kihunters:
     dw $0919, $0100  ; Layer 2 Y position
     dw $09C2, $006F  ; Health
     dw $09CA, $0005  ; Supers
+    dw $09D2, $0000 ; Currently selected item
     dw $0A1C, $0001  ; Samus position/state
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $016B  ; Samus X
@@ -2535,6 +2541,7 @@ preset_prkd_tourian_escape_room_4:
     dw $0919, $0015  ; Layer 2 Y position
     dw $0AF6, $05D6  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_prkd_tourian_escape_climb:
@@ -2551,6 +2558,7 @@ preset_prkd_tourian_escape_climb:
     dw $0AF6, $0151  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw !PRESET_DOORS, $0001 ; doors closed
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_prkd_tourian_escape_parlor:

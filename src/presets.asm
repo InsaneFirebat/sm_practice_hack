@@ -312,16 +312,15 @@ category_preset_load:
 
 category_preset_data_table:
 {
-  dl preset_spazer_crateria_ceres_elevator
-;  dl preset_kpdr21_crateria_ceres_elevator
+  dl preset_kpdr21_crateria_ceres_elevator
   dl preset_kpdr22_crateria_ceres_elevator
-;  dl preset_spazer_crateria_ceres_elevator
+  dl preset_prkd15_crateria_ceres_elevator
   dl preset_prkd_crateria_ceres_elevator
-;  dl preset_prkd15_crateria_ceres_elevator
-  dl preset_pkrd_crateria_ship
+  dl preset_pkrd_crateria_ceres_elevator
+  dl preset_spazer_crateria_ceres_elevator
   dl preset_kpdr25_bombs_ceres_elevator
   dl preset_gtclassic_crateria_ceres_elevator
-  dl preset_gtmax_crateria_ship
+  dl preset_gtmax_crateria_ceres_elevator
   dl preset_14ice_crateria_ceres_elevator
   dl preset_14speed_crateria_ceres_elevator
   dl preset_100early_crateria_ceres_elevator
@@ -330,7 +329,7 @@ category_preset_data_table:
   dl preset_rbo_bombs_ceres_elevator
   dl preset_ngplasma_ceres_station_ceres_elevator
   dl preset_nghyper_ceres_station_ceres_elevator
-  dl preset_nintendopower_crateria_ship
+  dl preset_nintendopower_crateria_ceres_elevator
   dl preset_allbosskpdr_crateria_ceres_elevator
   dl preset_allbosspkdr_crateria_ceres_elevator
   dl preset_allbossprkd_crateria_ceres_elevator

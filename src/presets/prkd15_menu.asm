@@ -11,7 +11,7 @@ PresetsMenuPrkd15:
     dw #presets_goto_prkd15_backtracking
     dw #presets_goto_prkd15_tourian
     dw #$0000
-    %cm_header("PRESETS FOR ANY% PRKD")
+    %cm_header("PRESETS FOR 19% PRKD")
 
 presets_goto_prkd15_crateria:
     %cm_submenu("Crateria", #presets_submenu_prkd15_crateria)
@@ -35,7 +35,7 @@ presets_goto_prkd15_lower_norfair_nox:
     %cm_submenu("Lower Norfair No-X Ridley", #presets_submenu_prkd15_lower_norfair_nox)
 
 presets_goto_prkd15_kraid:
-    %cm_submenu("Kraid", #presets_submenu_prkd15_kraid)
+    %cm_submenu("Kraid's Lair", #presets_submenu_prkd15_kraid)
 
 presets_goto_prkd15_maridia:
     %cm_submenu("Maridia", #presets_submenu_prkd15_maridia)
@@ -47,6 +47,9 @@ presets_goto_prkd15_tourian:
     %cm_submenu("Tourian", #presets_submenu_prkd15_tourian)
 
 presets_submenu_prkd15_crateria:
+    dw #presets_prkd15_crateria_ceres_elevator
+    dw #presets_prkd15_crateria_ceres_escape
+    dw #presets_prkd15_crateria_ceres_last_3_rooms
     dw #presets_prkd15_crateria_ship
     dw #presets_prkd15_crateria_parlor
     dw #presets_prkd15_crateria_parlor_downback
@@ -199,7 +202,7 @@ presets_submenu_prkd15_kraid:
     dw #presets_prkd15_kraid_kraid_kihunters_revisit
     dw #presets_prkd15_kraid_leaving_kraids_lair
     dw #$0000
-    %cm_header("KRAID")
+    %cm_header("KRAID'S LAIR")
 
 presets_submenu_prkd15_maridia:
     dw #presets_prkd15_maridia_maridia_tube_revisit
@@ -244,13 +247,26 @@ presets_submenu_prkd15_tourian:
     dw #presets_prkd15_tourian_gadora_room
     dw #presets_prkd15_tourian_rinka_shaft
     dw #presets_prkd15_tourian_zeb_skip
+    dw #presets_prkd15_tourian_mother_brain_2
+    dw #presets_prkd15_tourian_mother_brain_3
+    dw #presets_prkd15_tourian_zebes_escape
     dw #presets_prkd15_tourian_escape_room_3
-    dw #presets_prkd15_tourian_climb_spark
+    dw #presets_prkd15_tourian_escape_room_4
+    dw #presets_prkd15_tourian_escape_climb
     dw #presets_prkd15_tourian_escape_parlor
     dw #$0000
     %cm_header("TOURIAN")
 
 ; Crateria
+presets_prkd15_crateria_ceres_elevator:
+    %cm_preset("Ceres Elevator", #preset_prkd15_crateria_ceres_elevator)
+
+presets_prkd15_crateria_ceres_escape:
+    %cm_preset("Ceres Escape", #preset_prkd15_crateria_ceres_escape)
+
+presets_prkd15_crateria_ceres_last_3_rooms:
+    %cm_preset("Ceres Last 3 Rooms", #preset_prkd15_crateria_ceres_last_3_rooms)
+
 presets_prkd15_crateria_ship:
     %cm_preset("Ship", #preset_prkd15_crateria_ship)
 
@@ -574,9 +590,9 @@ presets_prkd15_lower_norfair_business_center_final:
     %cm_preset("Business Center Final", #preset_prkd15_lower_norfair_business_center_final)
 
 
-; Kraid
+; Kraid's Lair
 presets_prkd15_kraid_entering_kraids_lair:
-    %cm_preset("Entering Kraids Lair", #preset_prkd15_kraid_entering_kraids_lair)
+    %cm_preset("Entering Kraid's Lair", #preset_prkd15_kraid_entering_kraids_lair)
 
 presets_prkd15_kraid_kraid_kihunters:
     %cm_preset("Kraid Kihunters", #preset_prkd15_kraid_kraid_kihunters)
@@ -707,11 +723,23 @@ presets_prkd15_tourian_rinka_shaft:
 presets_prkd15_tourian_zeb_skip:
     %cm_preset("Zeb Skip", #preset_prkd15_tourian_zeb_skip)
 
+presets_prkd15_tourian_mother_brain_2:
+    %cm_preset("Mother Brain 2", #preset_prkd15_tourian_mother_brain_2)
+
+presets_prkd15_tourian_mother_brain_3:
+    %cm_preset("Mother Brain 3", #preset_prkd15_tourian_mother_brain_3)
+
+presets_prkd15_tourian_zebes_escape:
+    %cm_preset("Zebes Escape", #preset_prkd15_tourian_zebes_escape)
+
 presets_prkd15_tourian_escape_room_3:
     %cm_preset("Escape Room 3", #preset_prkd15_tourian_escape_room_3)
 
-presets_prkd15_tourian_climb_spark:
-    %cm_preset("Climb Spark", #preset_prkd15_tourian_climb_spark)
+presets_prkd15_tourian_escape_room_4:
+    %cm_preset("Escape Room 4", #preset_prkd15_tourian_escape_room_4)
+
+presets_prkd15_tourian_escape_climb:
+    %cm_preset("Escape Climb", #preset_prkd15_tourian_escape_climb)
 
 presets_prkd15_tourian_escape_parlor:
     %cm_preset("Escape Parlor", #preset_prkd15_tourian_escape_parlor)

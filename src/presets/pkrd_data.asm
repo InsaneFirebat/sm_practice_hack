@@ -1000,6 +1000,7 @@ preset_pkrd_upper_norfair_business_center:
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $0078  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_pkrd_upper_norfair_hi_jump_etank:
@@ -1015,6 +1016,7 @@ preset_pkrd_upper_norfair_hi_jump_etank:
     dw $0AF6, $003C  ; Samus X
     dw $0AFA, $058B  ; Samus Y
     dw $D8B8, $20EF  ; Doors
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_pkrd_upper_norfair_leaving_hi_jump:
@@ -1479,6 +1481,7 @@ preset_pkrd_lower_norfair_reverse_plowerhouse:
     dw $0AF6, $02C9  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw $D8BA, $D5F1  ; Doors
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_pkrd_lower_norfair_wasteland_revisit:
@@ -1490,6 +1493,7 @@ preset_pkrd_lower_norfair_wasteland_revisit:
     dw $09C2, $00D3  ; Health
     dw $09CA, $0006  ; Supers
     dw $0AF6, $02DC  ; Samus X
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_pkrd_lower_norfair_kihunter_stairs_up:
@@ -2152,6 +2156,7 @@ preset_pkrd_tourian_escape_room_4:
     dw $0919, $0015  ; Layer 2 Y position
     dw $0AF6, $05D6  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_pkrd_tourian_escape_climb:
@@ -2168,6 +2173,7 @@ preset_pkrd_tourian_escape_climb:
     dw $0AF6, $0151  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw !PRESET_DOORS, $0001 ; doors closed
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_pkrd_tourian_escape_parlor:

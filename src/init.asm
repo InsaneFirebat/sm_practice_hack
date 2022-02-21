@@ -162,7 +162,7 @@ init_sram:
     LDA #$0001 : STA !sram_phantoon_intro ; 1 - skip
     LDA #$0000 : STA !sram_kraid_intro
     LDA #$0001 : STA !sram_preset_open_doors
-    LDA #$0000 : STA !sram_preset_ship_landing ; 0 - off
+    LDA #$0001 : STA !sram_preset_ship_landing ; 1 - on until ship presets are fixed
     LDA #$0000 : STA !sram_preset_enemies
 
     LDA #$0000 : STA !sram_countdamage
