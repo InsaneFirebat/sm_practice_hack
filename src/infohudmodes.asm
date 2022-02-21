@@ -196,7 +196,7 @@ status_shinetune:
 
     ; Skip drawing if minimap on
     LDA !ram_minimap : BNE .reset
-    LDA !ram_shinetune_late_4 : LDX #$00C0 : JSR Draw4
+    LDA !ram_shinetune_late_4 : LDX #$00C0 : JSR Draw3
 
   .reset
     LDA #$0000 : STA !ram_shine_counter
@@ -883,6 +883,7 @@ endif
     LDA #$0001 : STA !ram_roomstrat_counter : STA !ram_walljump_counter
 
     ; Print initial jump speed over item%
+    LDA !sram_top_display_mode : BNE .skipprint
     LDA $0B1A : BNE .skipprint
     LDA $7EC612 : STA $14
     LDA $0B2D : AND #$0FFF

@@ -1,7 +1,10 @@
 
 ## Changelog since v2.2.7
 
-* [2.4.0.19] Just backend stuff so far...
+* [2.4.0.20] Scroll fixes for Bowling and Pre-Pillars rooms in presets
+* [2.4.0.20] More work on vanilla HUD display by idlechild
+* [2.4.0.20] Added more early and late game presets to all categories by idlechild
+* [2.4.0.19] Backend work to free up more menu space
 * [2.4.0.18] Fixed rare crash when opening the pause menu
 * [2.4.0.18] Removed bomb blocks blocking Terminator presets by idlechild
 * [2.4.0.18] Fixed custom presets in Ceres by idlechild
