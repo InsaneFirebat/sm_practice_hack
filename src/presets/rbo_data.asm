@@ -9,6 +9,8 @@ preset_rbo_bombs_ceres_elevator:
     dw $0911, $0000  ; Screen X position in pixels
     dw $0913, $0000  ; Screen subpixel Y position
     dw $0915, $0000  ; Screen Y position in pixels
+    dw $0917, $0000  ; Layer 2 X position
+    dw $0919, $0000  ; Layer 2 Y position
     dw $093F, $0000  ; Ceres escape flag
     dw $09A2, $0000  ; Equipped Items
     dw $09A4, $0000  ; Collected Items
@@ -31,7 +33,9 @@ preset_rbo_bombs_ceres_elevator:
     dw $0A68, $0000  ; Flash suit
     dw $0A76, $0000  ; Hyper beam
     dw $0AF6, $0080  ; Samus X
+    dw $0AF8, $0000  ; Samus subpixel X
     dw $0AFA, $0048  ; Samus Y
+    dw $0AFC, $0000  ; Samus subpixel Y
     dw $0B3F, $0000  ; Blue suit
     dw $D820, $0000  ; Events
     dw $D822, $0000  ; Events
@@ -60,50 +64,63 @@ preset_rbo_bombs_ceres_elevator:
     dw $D8C0, $0000  ; Doors
     dw $D8C2, $0000  ; Doors
     dw $D8C4, $0000  ; Doors
+    dw $D908, $0000  ; Map Stations
+    dw $D90A, $0000  ; Map Stations
+    dw $D90C, $0000  ; Map Stations
     dw #$FFFF
-.after
 
-preset_rbo_bombs_ceres_last_3_rooms:
+preset_rbo_bombs_ceres_escape:
     dw #preset_rbo_bombs_ceres_elevator ; Bombs: Ceres Elevator
-    dw $078D, $ABA0  ; DDB
-    dw $079B, $E021  ; MDB
+    dw $078D, $ABAC  ; DDB
+    dw $079B, $E0B5  ; MDB
     dw $07F3, $0024  ; Music Bank
     dw $07F5, $0007  ; Music Track
-    dw $090F, $6900  ; Screen subpixel X position
-    dw $0913, $E800  ; Screen subpixel Y position
+    dw $090F, $8000  ; Screen subpixel X position
+    dw $0913, $9400  ; Screen subpixel Y position
     dw $093F, $0002  ; Ceres escape flag
     dw $09C2, $0018  ; Health
-    dw $0A1C, $0006  ; Samus position/state
+    dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
-    dw $0AF6, $004A  ; Samus X
-    dw $0AFA, $009E  ; Samus Y
+    dw $0AF6, $0033  ; Samus X
+    dw $0AF8, $B000  ; Samus subpixel X
+    dw $0AFA, $008B  ; Samus Y
+    dw $0AFC, $FFFF  ; Samus subpixel Y
     dw $D82E, $0001  ; Bosses
     dw #$FFFF
-.after
+
+preset_rbo_bombs_ceres_last_3_rooms:
+    dw #preset_rbo_bombs_ceres_escape ; Bombs: Ceres Escape
+    dw $078D, $ABA0  ; DDB
+    dw $079B, $E021  ; MDB
+    dw $090F, $7400  ; Screen subpixel X position
+    dw $0913, $F000  ; Screen subpixel Y position
+    dw $0AF6, $004E  ; Samus X
+    dw $0AFA, $00A2  ; Samus Y
+    dw #$FFFF
 
 preset_rbo_bombs_ship:
-    dw #preset_rbo_bombs_ceres_last_3_rooms ; Bombs: Ceres Last 3 rooms
-    dw $078B, $0012  ; Elevator Index
+    dw #preset_rbo_bombs_ceres_last_3_rooms ; Bombs: Ceres Last 3 Rooms
     dw $078D, $88FE  ; DDB
     dw $079B, $91F8  ; MDB
     dw $07F3, $0006  ; Music Bank
     dw $07F5, $0005  ; Music Track
-    dw $090F, $1000  ; Screen subpixel X position
+    dw $090F, $8000  ; Screen subpixel X position
     dw $0911, $0400  ; Screen X position in pixels
     dw $0913, $0000  ; Screen subpixel Y position
-    dw $0915, $03D0  ; Screen Y position in pixels
+    dw $0915, $0400  ; Screen Y position in pixels
+    dw $0917, $0200  ; Layer 2 X position
     dw $093F, $0000  ; Ceres escape flag
     dw $09C2, $0063  ; Health
     dw $0A1C, $0000  ; Samus position/state
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0481  ; Samus X
-    dw $0AFA, $0440  ; Samus Y
+    dw $0AF8, $0000  ; Samus subpixel X
+    dw $0AFA, $0471  ; Samus Y
+    dw $0AFC, $8000  ; Samus subpixel Y
     dw #$FFFF
-.after
 
 preset_rbo_bombs_parlor_down:
     dw #preset_rbo_bombs_ship ; Bombs: Ship
-    dw $078B, $0000  ; Elevator Index
     dw $090F, $F000  ; Screen subpixel X position
     dw $0911, $0000  ; Screen X position in pixels
     dw $0913, $1400  ; Screen subpixel Y position
@@ -112,8 +129,8 @@ preset_rbo_bombs_parlor_down:
     dw $0A1E, $0104  ; More position/state
     dw $0AF6, $0033  ; Samus X
     dw $0AFA, $048B  ; Samus Y
+    dw $0AFC, $FFFF  ; Samus subpixel Y
     dw #$FFFF
-.after
 
 preset_rbo_bombs_morph:
     dw #preset_rbo_bombs_parlor_down ; Bombs: Parlor Down
@@ -129,7 +146,6 @@ preset_rbo_bombs_morph:
     dw $0AF6, $0580  ; Samus X
     dw $0AFA, $02A8  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_bombs_pit_room:
     dw #preset_rbo_bombs_morph ; Bombs: Morph
@@ -151,7 +167,6 @@ preset_rbo_bombs_pit_room:
     dw $D872, $0400  ; Items
     dw $D874, $0004  ; Items
     dw #$FFFF
-.after
 
 preset_rbo_bombs_retro_etank:
     dw #preset_rbo_bombs_pit_room ; Bombs: Pit Room
@@ -170,7 +185,6 @@ preset_rbo_bombs_retro_etank:
     dw $D8B2, $0600  ; Doors
     dw $D8B6, $0004  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_bombs_climb:
     dw #preset_rbo_bombs_retro_etank ; Bombs: Retro E-Tank
@@ -186,7 +200,6 @@ preset_rbo_bombs_climb:
     dw $0AF6, $0076  ; Samus X
     dw $D872, $3400  ; Items
     dw #$FFFF
-.after
 
 preset_rbo_bombs_parlor_up:
     dw #preset_rbo_bombs_climb ; Bombs: Climb
@@ -202,7 +215,6 @@ preset_rbo_bombs_parlor_up:
     dw $0AF6, $0198  ; Samus X
     dw $0AFA, $0040  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_bombs_bomb_torizo:
     dw #preset_rbo_bombs_parlor_up ; Bombs: Parlor Up
@@ -217,7 +229,6 @@ preset_rbo_bombs_bomb_torizo:
     dw $0AFA, $008B  ; Samus Y
     dw $D8B2, $2600  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_bombs_alcatraz:
     dw #preset_rbo_bombs_bomb_torizo ; Bombs: Bomb Torizo
@@ -235,7 +246,6 @@ preset_rbo_bombs_alcatraz:
     dw $D870, $0080  ; Items
     dw $D8B2, $2E00  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_bombs_terminator:
     dw #preset_rbo_bombs_alcatraz ; Bombs: Alcatraz
@@ -248,7 +258,6 @@ preset_rbo_bombs_terminator:
     dw $0AF6, $0118  ; Samus X
     dw $0AFA, $0082  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_green_brinstar_elevator:
     dw #preset_rbo_bombs_terminator ; Bombs: Terminator
@@ -266,7 +275,6 @@ preset_rbo_brinstar_green_brinstar_elevator:
     dw $0AFA, $008B  ; Samus Y
     dw $D870, $0180  ; Items
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_early_supers_reserve:
     dw #preset_rbo_brinstar_green_brinstar_elevator ; Brinstar: Green Brinstar Elevator
@@ -285,7 +293,6 @@ preset_rbo_brinstar_early_supers_reserve:
     dw $0AFA, $048B  ; Samus Y
     dw $D8B4, $0002  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_early_supers_collection:
     dw #preset_rbo_brinstar_early_supers_reserve ; Brinstar: Early Supers Reserve
@@ -305,7 +312,6 @@ preset_rbo_brinstar_early_supers_collection:
     dw $D872, $3402  ; Items
     dw $D8B4, $0042  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_dachora_room:
     dw #preset_rbo_brinstar_early_supers_collection ; Brinstar: Early Supers Collection
@@ -325,7 +331,6 @@ preset_rbo_brinstar_dachora_room:
     dw $D872, $3403  ; Items
     dw $D8B4, $0046  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_big_pink:
     dw #preset_rbo_brinstar_dachora_room ; Brinstar: Dachora Room
@@ -339,7 +344,6 @@ preset_rbo_brinstar_big_pink:
     dw $0AF6, $05DB  ; Samus X
     dw $0AFA, $00AB  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_green_hill_zone:
     dw #preset_rbo_brinstar_big_pink ; Brinstar: Big Pink
@@ -357,7 +361,6 @@ preset_rbo_brinstar_green_hill_zone:
     dw $D872, $3483  ; Items
     dw $D8B4, $0246  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_red_tower_up:
     dw #preset_rbo_brinstar_green_hill_zone ; Brinstar: Green Hill Zone
@@ -373,7 +376,6 @@ preset_rbo_brinstar_red_tower_up:
     dw $0AFA, $00AB  ; Samus Y
     dw $D8B6, $000C  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_hellway:
     dw #preset_rbo_brinstar_red_tower_up ; Brinstar: Red Tower (Up)
@@ -387,7 +389,6 @@ preset_rbo_brinstar_hellway:
     dw $0AF6, $00A1  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_alpha_pbs:
     dw #preset_rbo_brinstar_hellway ; Brinstar: Hellway
@@ -404,7 +405,6 @@ preset_rbo_brinstar_alpha_pbs:
     dw $0AFA, $078B  ; Samus Y
     dw $D8B6, $200C  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_reverse_hellway:
     dw #preset_rbo_brinstar_alpha_pbs ; Brinstar: Alpha PBs
@@ -420,7 +420,6 @@ preset_rbo_brinstar_reverse_hellway:
     dw $D874, $0104  ; Items
     dw $D8B6, $300C  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_red_tower_moonfalls:
     dw #preset_rbo_brinstar_reverse_hellway ; Brinstar: Reverse Hellway
@@ -434,7 +433,6 @@ preset_rbo_brinstar_red_tower_moonfalls:
     dw $0AF6, $002A  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_spazer:
     dw #preset_rbo_brinstar_red_tower_moonfalls ; Brinstar: Red Tower Moonfalls
@@ -450,7 +448,6 @@ preset_rbo_brinstar_spazer:
     dw $0AF6, $0029  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_norfair_first_visit_norfair_elevator:
     dw #preset_rbo_brinstar_spazer ; Brinstar: Spazer
@@ -469,7 +466,6 @@ preset_rbo_norfair_first_visit_norfair_elevator:
     dw $D874, $0504  ; Items
     dw $D8B6, $B00C  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_norfair_first_visit_high_jump:
     dw #preset_rbo_norfair_first_visit_norfair_elevator ; Norfair (First Visit): Norfair Elevator
@@ -486,7 +482,6 @@ preset_rbo_norfair_first_visit_high_jump:
     dw $0AFA, $058B  ; Samus Y
     dw $D8B8, $2000  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_norfair_first_visit_business_center_up:
     dw #preset_rbo_norfair_first_visit_high_jump ; Norfair (First Visit): High Jump
@@ -508,7 +503,6 @@ preset_rbo_norfair_first_visit_business_center_up:
     dw $D876, $0120  ; Items
     dw $D8BA, $0001  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_norfair_first_visit_first_hell_run:
     dw #preset_rbo_norfair_first_visit_business_center_up ; Norfair (First Visit): Business Center (Up)
@@ -521,7 +515,6 @@ preset_rbo_norfair_first_visit_first_hell_run:
     dw $0AF6, $00A0  ; Samus X
     dw $0AFA, $038B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_norfair_first_visit_bubble_mountain:
     dw #preset_rbo_norfair_first_visit_first_hell_run ; Norfair (First Visit): First Hell Run
@@ -540,7 +533,6 @@ preset_rbo_norfair_first_visit_bubble_mountain:
     dw $0AFA, $008B  ; Samus Y
     dw $D8B8, $2600  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_norfair_first_visit_bat_cave_speed_farm:
     dw #preset_rbo_norfair_first_visit_bubble_mountain ; Norfair (First Visit): Bubble Mountain
@@ -557,7 +549,6 @@ preset_rbo_norfair_first_visit_bat_cave_speed_farm:
     dw $0AF6, $01BD  ; Samus X
     dw $D8BA, $0011  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_norfair_first_visit_leaving_speed_speed_farm_2:
     dw #preset_rbo_norfair_first_visit_bat_cave_speed_farm ; Norfair (First Visit): Bat Cave (Speed Farm)
@@ -581,7 +572,6 @@ preset_rbo_norfair_first_visit_leaving_speed_speed_farm_2:
     dw $D878, $0004  ; Items
     dw $D8BA, $0031  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_norfair_first_visit_wave_escape:
     dw #preset_rbo_norfair_first_visit_leaving_speed_speed_farm_2 ; Norfair (First Visit): Leaving Speed (Speed Farm 2)
@@ -603,7 +593,6 @@ preset_rbo_norfair_first_visit_wave_escape:
     dw $D878, $001C  ; Items
     dw $D8BA, $00F1  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_cleanup_alpha_spark:
     dw #preset_rbo_norfair_first_visit_wave_escape ; Norfair (First Visit): Wave Escape
@@ -620,7 +609,6 @@ preset_rbo_brinstar_cleanup_alpha_spark:
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $0087  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_cleanup_red_tower_up_2:
     dw #preset_rbo_brinstar_cleanup_alpha_spark ; Brinstar Cleanup: Alpha Spark
@@ -635,7 +623,6 @@ preset_rbo_brinstar_cleanup_red_tower_up_2:
     dw $0AF6, $0052  ; Samus X
     dw $0AFA, $009B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_cleanup_green_brinstar_backdoor:
     dw #preset_rbo_brinstar_cleanup_red_tower_up_2 ; Brinstar Cleanup: Red Tower (Up)
@@ -649,7 +636,6 @@ preset_rbo_brinstar_cleanup_green_brinstar_backdoor:
     dw $0AF6, $00AF  ; Samus X
     dw $0AFA, $048B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_cleanup_big_pink_cleanup_1:
     dw #preset_rbo_brinstar_cleanup_green_brinstar_backdoor ; Brinstar Cleanup: Green Brinstar (Backdoor)
@@ -664,7 +650,6 @@ preset_rbo_brinstar_cleanup_big_pink_cleanup_1:
     dw $0AF6, $002C  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_cleanup_spore_spawn_supers:
     dw #preset_rbo_brinstar_cleanup_big_pink_cleanup_1 ; Brinstar Cleanup: Big Pink (Cleanup 1)
@@ -680,7 +665,6 @@ preset_rbo_brinstar_cleanup_spore_spawn_supers:
     dw $0AF6, $0389  ; Samus X
     dw $0AFA, $05AB  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_cleanup_spore_spawn_supers_escape:
     dw #preset_rbo_brinstar_cleanup_spore_spawn_supers ; Brinstar Cleanup: Spore Spawn Supers
@@ -699,7 +683,6 @@ preset_rbo_brinstar_cleanup_spore_spawn_supers_escape:
     dw $0AFA, $088B  ; Samus Y
     dw $D870, $4180  ; Items
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_cleanup_wave_gate_etank:
     dw #preset_rbo_brinstar_cleanup_spore_spawn_supers_escape ; Brinstar Cleanup: Spore Spawn Supers (Escape)
@@ -719,7 +702,6 @@ preset_rbo_brinstar_cleanup_wave_gate_etank:
     dw $D8B4, $0346  ; Doors
     dw $D8B6, $B02C  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_cleanup_dachora_room_2:
     dw #preset_rbo_brinstar_cleanup_wave_gate_etank ; Brinstar Cleanup: Wave Gate E-Tank
@@ -739,7 +721,6 @@ preset_rbo_brinstar_cleanup_dachora_room_2:
     dw $D874, $050C  ; Items
     dw $D8B6, $B0EC  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_cleanup_green_shaft_down:
     dw #preset_rbo_brinstar_cleanup_dachora_room_2 ; Brinstar Cleanup: Dachora Room 2
@@ -754,7 +735,6 @@ preset_rbo_brinstar_cleanup_green_shaft_down:
     dw $0AF6, $0091  ; Samus X
     dw $0AFA, $0685  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_cleanup_etecoon_supers:
     dw #preset_rbo_brinstar_cleanup_green_shaft_down ; Brinstar Cleanup: Green Shaft (Down)
@@ -771,7 +751,6 @@ preset_rbo_brinstar_cleanup_etecoon_supers:
     dw $0AF6, $0038  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_cleanup_etecoon_power_bombs_optional:
     dw #preset_rbo_brinstar_cleanup_etecoon_supers ; Brinstar Cleanup: Etecoon Supers
@@ -792,7 +771,6 @@ preset_rbo_brinstar_cleanup_etecoon_power_bombs_optional:
     dw $D872, $F483  ; Items
     dw $D8B6, $B0FC  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_cleanup_green_shaft_up:
     dw #preset_rbo_brinstar_cleanup_etecoon_power_bombs_optional ; Brinstar Cleanup: Etecoon Power Bombs (Optional)
@@ -810,7 +788,6 @@ preset_rbo_brinstar_cleanup_green_shaft_up:
     dw $0AFA, $078B  ; Samus Y
     dw $D870, $6180  ; Items
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_cleanup_reverse_terminator:
     dw #preset_rbo_brinstar_cleanup_green_shaft_up ; Brinstar Cleanup: Green Shaft (Up)
@@ -829,7 +806,6 @@ preset_rbo_brinstar_cleanup_reverse_terminator:
     dw $0AF6, $005F  ; Samus X
     dw $0AFA, $048B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_cleanup_climb_supers_moonfall:
     dw #preset_rbo_brinstar_cleanup_reverse_terminator ; Brinstar Cleanup: Reverse Terminator
@@ -844,7 +820,6 @@ preset_rbo_brinstar_cleanup_climb_supers_moonfall:
     dw $0AF6, $018D  ; Samus X
     dw $0AFA, $04C2  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_cleanup_pit_room_shortcharge:
     dw #preset_rbo_brinstar_cleanup_climb_supers_moonfall ; Brinstar Cleanup: Climb Supers Moonfall
@@ -864,7 +839,6 @@ preset_rbo_brinstar_cleanup_pit_room_shortcharge:
     dw $D870, $6980  ; Items
     dw $D8B2, $2E08  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_cleanup_retro_brinstar_powerbombs:
     dw #preset_rbo_brinstar_cleanup_pit_room_shortcharge ; Brinstar Cleanup: Pit Room Shortcharge
@@ -882,7 +856,6 @@ preset_rbo_brinstar_cleanup_retro_brinstar_powerbombs:
     dw $0AF6, $0052  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_brinstar_cleanup_ball_buster:
     dw #preset_rbo_brinstar_cleanup_retro_brinstar_powerbombs ; Brinstar Cleanup: Retro Brinstar Powerbombs
@@ -902,7 +875,6 @@ preset_rbo_brinstar_cleanup_ball_buster:
     dw $D872, $FC83  ; Items
     dw $D8B6, $B0FE  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_norfair_second_visit_ice_entry:
     dw #preset_rbo_brinstar_cleanup_ball_buster ; Brinstar Cleanup: Ball Buster
@@ -921,7 +893,6 @@ preset_rbo_norfair_second_visit_ice_entry:
     dw $0AFA, $0393  ; Samus Y
     dw $D8B8, $2E00  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_norfair_second_visit_ice_escape:
     dw #preset_rbo_norfair_second_visit_ice_entry ; Norfair (Second Visit): Ice Entry
@@ -940,7 +911,6 @@ preset_rbo_norfair_second_visit_ice_escape:
     dw $0AFA, $008B  ; Samus Y
     dw $D876, $0124  ; Items
     dw #$FFFF
-.after
 
 preset_rbo_norfair_second_visit_ice_escape_2:
     dw #preset_rbo_norfair_second_visit_ice_escape ; Norfair (Second Visit): Ice Escape
@@ -956,7 +926,6 @@ preset_rbo_norfair_second_visit_ice_escape_2:
     dw $0AF6, $00C9  ; Samus X
     dw $0AFA, $028B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_norfair_second_visit_croc_shaft_moonfall:
     dw #preset_rbo_norfair_second_visit_ice_escape_2 ; Norfair (Second Visit): Ice Escape 2
@@ -973,7 +942,6 @@ preset_rbo_norfair_second_visit_croc_shaft_moonfall:
     dw $0AF6, $00B0  ; Samus X
     dw $0AFA, $03AB  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_norfair_second_visit_croc_speedway:
     dw #preset_rbo_norfair_second_visit_croc_shaft_moonfall ; Norfair (Second Visit): Croc Shaft Moonfall
@@ -989,7 +957,6 @@ preset_rbo_norfair_second_visit_croc_speedway:
     dw $0AF6, $00DB  ; Samus X
     dw $0AFA, $0336  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_norfair_second_visit_croc:
     dw #preset_rbo_norfair_second_visit_croc_speedway ; Norfair (Second Visit): Croc Speedway
@@ -1008,7 +975,6 @@ preset_rbo_norfair_second_visit_croc:
     dw $0AFA, $02C9  ; Samus Y
     dw $D8B8, $6E00  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_norfair_second_visit_grapple_shaft_down:
     dw #preset_rbo_norfair_second_visit_croc ; Norfair (Second Visit): Croc
@@ -1032,7 +998,6 @@ preset_rbo_norfair_second_visit_grapple_shaft_down:
     dw $D876, $0334  ; Items
     dw $D8BA, $00F3  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_norfair_second_visit_grapple_escape:
     dw #preset_rbo_norfair_second_visit_grapple_shaft_down ; Norfair (Second Visit): Grapple Shaft (Down)
@@ -1052,7 +1017,6 @@ preset_rbo_norfair_second_visit_grapple_escape:
     dw $0AFA, $028B  ; Samus Y
     dw $D876, $1334  ; Items
     dw #$FFFF
-.after
 
 preset_rbo_norfair_second_visit_grapple_shaft_up:
     dw #preset_rbo_norfair_second_visit_grapple_escape ; Norfair (Second Visit): Grapple Escape
@@ -1067,7 +1031,6 @@ preset_rbo_norfair_second_visit_grapple_shaft_up:
     dw $0AF6, $065E  ; Samus X
     dw $0AFA, $0265  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_norfair_second_visit_croc_revisit:
     dw #preset_rbo_norfair_second_visit_grapple_shaft_up ; Norfair (Second Visit): Grapple Shaft (Up)
@@ -1086,7 +1049,6 @@ preset_rbo_norfair_second_visit_croc_revisit:
     dw $0AF6, $01C3  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_norfair_second_visit_lava_dive_grapple_room:
     dw #preset_rbo_norfair_second_visit_croc_revisit ; Norfair (Second Visit): Croc (Re-visit)
@@ -1100,7 +1062,6 @@ preset_rbo_norfair_second_visit_lava_dive_grapple_room:
     dw $0AFA, $007E  ; Samus Y
     dw $D8B8, $EE00  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_norfair_second_visit_lava_dive_entry_room:
     dw #preset_rbo_norfair_second_visit_lava_dive_grapple_room ; Norfair (Second Visit): Lava Dive (Grapple Room)
@@ -1115,7 +1076,6 @@ preset_rbo_norfair_second_visit_lava_dive_entry_room:
     dw $0AF6, $03C4  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_lower_norfair_entry_room:
     dw #preset_rbo_norfair_second_visit_lava_dive_entry_room ; Norfair (Second Visit): Lava Dive (Entry Room)
@@ -1136,7 +1096,6 @@ preset_rbo_lower_norfair_entry_room:
     dw $0AFA, $0288  ; Samus Y
     dw $D8BA, $01F3  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_lower_norfair_green_gate_glitch:
     dw #preset_rbo_lower_norfair_entry_room ; Lower Norfair: Entry Room
@@ -1148,7 +1107,6 @@ preset_rbo_lower_norfair_green_gate_glitch:
     dw $0AF6, $07C8  ; Samus X
     dw $0AFA, $0299  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_lower_norfair_golden_torizo:
     dw #preset_rbo_lower_norfair_green_gate_glitch ; Lower Norfair: Green Gate Glitch
@@ -1169,7 +1127,6 @@ preset_rbo_lower_norfair_golden_torizo:
     dw $0AFA, $029B  ; Samus Y
     dw $D878, $801C  ; Items
     dw #$FFFF
-.after
 
 preset_rbo_lower_norfair_energy_refill_escape:
     dw #preset_rbo_lower_norfair_golden_torizo ; Lower Norfair: Golden Torizo
@@ -1193,7 +1150,6 @@ preset_rbo_lower_norfair_energy_refill_escape:
     dw $D878, $809C  ; Items
     dw $D8BA, $03F3  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_lower_norfair_fast_pillars:
     dw #preset_rbo_lower_norfair_energy_refill_escape ; Lower Norfair: Energy Refill (Escape)
@@ -1209,7 +1165,6 @@ preset_rbo_lower_norfair_fast_pillars:
     dw $0A1E, $0008  ; More position/state
     dw $0AF6, $02C3  ; Samus X
     dw #$FFFF
-.after
 
 preset_rbo_lower_norfair_writg:
     dw #preset_rbo_lower_norfair_fast_pillars ; Lower Norfair: Fast Pillars
@@ -1225,7 +1180,6 @@ preset_rbo_lower_norfair_writg:
     dw $0AF6, $03D3  ; Samus X
     dw $0AFA, $0074  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_lower_norfair_amphitheater:
     dw #preset_rbo_lower_norfair_writg ; Lower Norfair: WRITG
@@ -1244,7 +1198,6 @@ preset_rbo_lower_norfair_amphitheater:
     dw $0AF6, $00B1  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_lower_norfair_firefleas_entry:
     dw #preset_rbo_lower_norfair_amphitheater ; Lower Norfair: Amphitheater
@@ -1259,7 +1212,6 @@ preset_rbo_lower_norfair_firefleas_entry:
     dw $0AF6, $02B9  ; Samus X
     dw $0AFA, $00BB  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_lower_norfair_kihunter_stairs_down:
     dw #preset_rbo_lower_norfair_firefleas_entry ; Lower Norfair: Firefleas Entry
@@ -1279,7 +1231,6 @@ preset_rbo_lower_norfair_kihunter_stairs_down:
     dw $0AFA, $038B  ; Samus Y
     dw $D87A, $0001  ; Items
     dw #$FFFF
-.after
 
 preset_rbo_lower_norfair_ninja_pirates:
     dw #preset_rbo_lower_norfair_kihunter_stairs_down ; Lower Norfair: Kihunter Stairs (Down)
@@ -1295,7 +1246,6 @@ preset_rbo_lower_norfair_ninja_pirates:
     dw $0AFA, $028B  ; Samus Y
     dw $D8BA, $C3F3  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_lower_norfair_preridley:
     dw #preset_rbo_lower_norfair_ninja_pirates ; Lower Norfair: Ninja Pirates
@@ -1312,7 +1262,6 @@ preset_rbo_lower_norfair_preridley:
     dw $0AFA, $008B  ; Samus Y
     dw $D8BC, $0001  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_lower_norfair_ridley:
     dw #preset_rbo_lower_norfair_preridley ; Lower Norfair: Pre-Ridley
@@ -1329,7 +1278,6 @@ preset_rbo_lower_norfair_ridley:
     dw $0AFA, $009B  ; Samus Y
     dw $D8BA, $D3F3  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_norfair_escape_ridley_etank:
     dw #preset_rbo_lower_norfair_ridley ; Lower Norfair: Ridley
@@ -1354,7 +1302,6 @@ preset_rbo_norfair_escape_ridley_etank:
     dw $D878, $C09C  ; Items
     dw $D8BA, $DBF3  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_norfair_escape_postridley:
     dw #preset_rbo_norfair_escape_ridley_etank ; Norfair Escape: Ridley E-Tank
@@ -1369,7 +1316,6 @@ preset_rbo_norfair_escape_postridley:
     dw $0AF6, $0050  ; Samus X
     dw $0AFA, $019B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_norfair_escape_firefleas:
     dw #preset_rbo_norfair_escape_postridley ; Norfair Escape: Post-Ridley
@@ -1391,7 +1337,6 @@ preset_rbo_norfair_escape_firefleas:
     dw $D878, $D09C  ; Items
     dw $D8BA, $DFF3  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_norfair_escape_firefleas_exit_spikesuit:
     dw #preset_rbo_norfair_escape_firefleas ; Norfair Escape: Firefleas
@@ -1410,7 +1355,6 @@ preset_rbo_norfair_escape_firefleas_exit_spikesuit:
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $015F  ; Samus X
     dw #$FFFF
-.after
 
 preset_rbo_norfair_escape_3_musketeers:
     dw #preset_rbo_norfair_escape_firefleas_exit_spikesuit ; Norfair Escape: Firefleas Exit (Spikesuit)
@@ -1426,7 +1370,6 @@ preset_rbo_norfair_escape_3_musketeers:
     dw $0A68, $0001  ; Flash suit
     dw $0AF6, $0070  ; Samus X
     dw #$FFFF
-.after
 
 preset_rbo_norfair_escape_3_musketeers_exit:
     dw #preset_rbo_norfair_escape_3_musketeers ; Norfair Escape: 3 Musketeers
@@ -1440,7 +1383,6 @@ preset_rbo_norfair_escape_3_musketeers_exit:
     dw $0A1E, $0104  ; More position/state
     dw $0AF6, $016A  ; Samus X
     dw #$FFFF
-.after
 
 preset_rbo_norfair_escape_croc_gate_farm:
     dw #preset_rbo_norfair_escape_3_musketeers_exit ; Norfair Escape: 3 Musketeers Exit
@@ -1457,7 +1399,6 @@ preset_rbo_norfair_escape_croc_gate_farm:
     dw $0AF6, $0058  ; Samus X
     dw $0AFA, $038B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_norfair_escape_business_center_up_2:
     dw #preset_rbo_norfair_escape_croc_gate_farm ; Norfair Escape: Croc Gate Farm
@@ -1473,7 +1414,6 @@ preset_rbo_norfair_escape_business_center_up_2:
     dw $0AF6, $0031  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_maridia_maridia_entry_spikesuit:
     dw #preset_rbo_norfair_escape_business_center_up_2 ; Norfair Escape: Business Center (Up)
@@ -1488,7 +1428,6 @@ preset_rbo_maridia_maridia_entry_spikesuit:
     dw $0AFA, $018B  ; Samus Y
     dw $0B3F, $0001  ; Blue suit
     dw #$FFFF
-.after
 
 preset_rbo_maridia_mt_everest:
     dw #preset_rbo_maridia_maridia_entry_spikesuit ; Maridia: Maridia Entry (Spikesuit)
@@ -1507,7 +1446,6 @@ preset_rbo_maridia_mt_everest:
     dw $0B3F, $0000  ; Blue suit
     dw $D820, $0801  ; Events
     dw #$FFFF
-.after
 
 preset_rbo_maridia_aqueduct:
     dw #preset_rbo_maridia_mt_everest ; Maridia: Mt. Everest
@@ -1527,7 +1465,6 @@ preset_rbo_maridia_aqueduct:
     dw $0AFA, $038B  ; Samus Y
     dw $D8C0, $8000  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_maridia_prebotwoon_ice_clip:
     dw #preset_rbo_maridia_aqueduct ; Maridia: Aqueduct
@@ -1544,7 +1481,6 @@ preset_rbo_maridia_prebotwoon_ice_clip:
     dw $0AF6, $0090  ; Samus X
     dw $0AFA, $006B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_maridia_botwoon:
     dw #preset_rbo_maridia_prebotwoon_ice_clip ; Maridia: Pre-Botwoon (Ice Clip)
@@ -1560,7 +1496,6 @@ preset_rbo_maridia_botwoon:
     dw $0AF6, $03A2  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_maridia_postbotwoon_shinespark:
     dw #preset_rbo_maridia_botwoon ; Maridia: Botwoon
@@ -1579,7 +1514,6 @@ preset_rbo_maridia_postbotwoon_shinespark:
     dw $0AFA, $008E  ; Samus Y
     dw $D82C, $0002  ; Bosses
     dw #$FFFF
-.after
 
 preset_rbo_maridia_colosseum:
     dw #preset_rbo_maridia_postbotwoon_shinespark ; Maridia: Post-Botwoon (Shinespark)
@@ -1595,7 +1529,6 @@ preset_rbo_maridia_colosseum:
     dw $0AF6, $00C6  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_maridia_draygon:
     dw #preset_rbo_maridia_colosseum ; Maridia: Colosseum
@@ -1612,7 +1545,6 @@ preset_rbo_maridia_draygon:
     dw $0AFA, $028B  ; Samus Y
     dw $D8C2, $0C00  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_maridia_draygon_escape:
     dw #preset_rbo_maridia_draygon ; Maridia: Draygon
@@ -1639,7 +1571,6 @@ preset_rbo_maridia_draygon_escape:
     dw $D882, $0400  ; Items
     dw $D8C2, $8C00  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_maridia_reverse_colosseum:
     dw #preset_rbo_maridia_draygon_escape ; Maridia: Draygon Escape
@@ -1658,7 +1589,6 @@ preset_rbo_maridia_reverse_colosseum:
     dw $0B3F, $0000  ; Blue suit
     dw $D8C2, $CC00  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_maridia_cac_alley:
     dw #preset_rbo_maridia_reverse_colosseum ; Maridia: Reverse Colosseum
@@ -1674,7 +1604,6 @@ preset_rbo_maridia_cac_alley:
     dw $0AFA, $0184  ; Samus Y
     dw $D8C2, $DC00  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_maridia_plasma_spark_room:
     dw #preset_rbo_maridia_cac_alley ; Maridia: Cac Alley
@@ -1692,7 +1621,6 @@ preset_rbo_maridia_plasma_spark_room:
     dw $0AF6, $03D0  ; Samus X
     dw $0AFA, $058D  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_maridia_kassiuz_room:
     dw #preset_rbo_maridia_plasma_spark_room ; Maridia: Plasma Spark Room
@@ -1707,7 +1635,6 @@ preset_rbo_maridia_kassiuz_room:
     dw $0AFA, $018B  ; Samus Y
     dw $D8C2, $DC08  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_maridia_plasma_screw_attack_strat:
     dw #preset_rbo_maridia_kassiuz_room ; Maridia: Kassiuz Room
@@ -1724,7 +1651,6 @@ preset_rbo_maridia_plasma_screw_attack_strat:
     dw $0AF6, $005F  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_maridia_leaving_maridia:
     dw #preset_rbo_maridia_plasma_screw_attack_strat ; Maridia: Plasma (Screw Attack Strat)
@@ -1746,7 +1672,6 @@ preset_rbo_maridia_leaving_maridia:
     dw $D880, $8000  ; Items
     dw $D8C2, $DC0A  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_wrecked_ship_forgotten_highway:
     dw #preset_rbo_maridia_leaving_maridia ; Maridia: Leaving Maridia
@@ -1763,7 +1688,6 @@ preset_rbo_wrecked_ship_forgotten_highway:
     dw $0AF6, $007C  ; Samus X
     dw $0AFA, $00AB  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_wrecked_ship_east_ocean:
     dw #preset_rbo_wrecked_ship_forgotten_highway ; Wrecked Ship: Forgotten Highway
@@ -1779,7 +1703,6 @@ preset_rbo_wrecked_ship_east_ocean:
     dw $0AF6, $00C4  ; Samus X
     dw $0AFA, $007B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_wrecked_ship_wrecked_ship_backdoor_entry:
     dw #preset_rbo_wrecked_ship_east_ocean ; Wrecked Ship: East Ocean
@@ -1793,7 +1716,6 @@ preset_rbo_wrecked_ship_wrecked_ship_backdoor_entry:
     dw $0AF6, $0093  ; Samus X
     dw $0AFA, $049B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_wrecked_ship_ws_shaft_down:
     dw #preset_rbo_wrecked_ship_wrecked_ship_backdoor_entry ; Wrecked Ship: Wrecked Ship Backdoor Entry
@@ -1809,7 +1731,6 @@ preset_rbo_wrecked_ship_ws_shaft_down:
     dw $0AFA, $00AF  ; Samus Y
     dw $0B3F, $0001  ; Blue suit
     dw #$FFFF
-.after
 
 preset_rbo_wrecked_ship_phantoon:
     dw #preset_rbo_wrecked_ship_ws_shaft_down ; Wrecked Ship: WS Shaft (Down)
@@ -1824,7 +1745,6 @@ preset_rbo_wrecked_ship_phantoon:
     dw $0B3F, $0000  ; Blue suit
     dw $D8C0, $8010  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_wrecked_ship_ws_shaft_up:
     dw #preset_rbo_wrecked_ship_phantoon ; Wrecked Ship: Phantoon
@@ -1841,7 +1761,6 @@ preset_rbo_wrecked_ship_ws_shaft_up:
     dw $D82A, $0107  ; Bosses
     dw $D8C0, $8070  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_wrecked_ship_west_ocean:
     dw #preset_rbo_wrecked_ship_ws_shaft_up ; Wrecked Ship: WS Shaft (Up)
@@ -1858,7 +1777,6 @@ preset_rbo_wrecked_ship_west_ocean:
     dw $0AFA, $038B  ; Samus Y
     dw $D8C0, $8074  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_kraidg4_kihunters_room_down:
     dw #preset_rbo_wrecked_ship_west_ocean ; Wrecked Ship: West Ocean
@@ -1875,7 +1793,6 @@ preset_rbo_kraidg4_kihunters_room_down:
     dw $0AF6, $0022  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_kraidg4_red_brinstar_elevator_down:
     dw #preset_rbo_kraidg4_kihunters_room_down ; Kraid-G4: Kihunters Room (Down)
@@ -1893,7 +1810,6 @@ preset_rbo_kraidg4_red_brinstar_elevator_down:
     dw $D8B0, $4000  ; Doors
     dw $D8B2, $2E09  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_kraidg4_red_tower_moonfall_screw_attack:
     dw #preset_rbo_kraidg4_red_brinstar_elevator_down ; Kraid-G4: Red Brinstar Elevator (Down)
@@ -1907,7 +1823,6 @@ preset_rbo_kraidg4_red_tower_moonfall_screw_attack:
     dw $0AF6, $0021  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_kraidg4_kraid_entry:
     dw #preset_rbo_kraidg4_red_tower_moonfall_screw_attack ; Kraid-G4: Red Tower Moonfall (Screw Attack)
@@ -1923,7 +1838,6 @@ preset_rbo_kraidg4_kraid_entry:
     dw $0AFA, $018B  ; Samus Y
     dw $0B3F, $0001  ; Blue suit
     dw #$FFFF
-.after
 
 preset_rbo_kraidg4_kraid_hallway:
     dw #preset_rbo_kraidg4_kraid_entry ; Kraid-G4: Kraid Entry
@@ -1938,7 +1852,6 @@ preset_rbo_kraidg4_kraid_hallway:
     dw $0AF6, $0167  ; Samus X
     dw $0B3F, $0000  ; Blue suit
     dw #$FFFF
-.after
 
 preset_rbo_kraidg4_kraid:
     dw #preset_rbo_kraidg4_kraid_hallway ; Kraid-G4: Kraid Hallway
@@ -1954,7 +1867,6 @@ preset_rbo_kraidg4_kraid:
     dw $0AF6, $01D0  ; Samus X
     dw $D8B8, $EE24  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_kraidg4_kraid_hallway_exit:
     dw #preset_rbo_kraidg4_kraid ; Kraid-G4: Kraid
@@ -1974,7 +1886,6 @@ preset_rbo_kraidg4_kraid_hallway_exit:
     dw $D828, $0104  ; Bosses
     dw $D8B8, $EEA4  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_kraidg4_kraid_escape:
     dw #preset_rbo_kraidg4_kraid_hallway_exit ; Kraid-G4: Kraid Hallway (Exit)
@@ -1995,7 +1906,6 @@ preset_rbo_kraidg4_kraid_escape:
     dw $0B3F, $0000  ; Blue suit
     dw $D8B8, $EEAC  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_kraidg4_red_tower_up_3:
     dw #preset_rbo_kraidg4_kraid_escape ; Kraid-G4: Kraid Escape
@@ -2011,7 +1921,6 @@ preset_rbo_kraidg4_red_tower_up_3:
     dw $0AF6, $0049  ; Samus X
     dw $0AFA, $009B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_kraidg4_kihunters_room_up:
     dw #preset_rbo_kraidg4_red_tower_up_3 ; Kraid-G4: Red Tower (Up)
@@ -2026,7 +1935,6 @@ preset_rbo_kraidg4_kihunters_room_up:
     dw $0AF6, $006C  ; Samus X
     dw $0AFA, $00AB  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_kraidg4_ship_room:
     dw #preset_rbo_kraidg4_kihunters_room_up ; Kraid-G4: Kihunters Room (Up)
@@ -2038,7 +1946,6 @@ preset_rbo_kraidg4_ship_room:
     dw $0AF6, $00BB  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_kraidg4_terminator_2:
     dw #preset_rbo_kraidg4_ship_room ; Kraid-G4: Ship Room
@@ -2053,7 +1960,6 @@ preset_rbo_kraidg4_terminator_2:
     dw $0AF6, $0120  ; Samus X
     dw $0AFA, $0074  ; Samus Y
     dw #$FFFF
-.after
 
 preset_rbo_kraidg4_g4:
     dw #preset_rbo_kraidg4_terminator_2 ; Kraid-G4: Terminator
@@ -2071,7 +1977,6 @@ preset_rbo_kraidg4_g4:
     dw $0AFA, $068B  ; Samus Y
     dw $D8B2, $6E09  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_tourian_metroids:
     dw #preset_rbo_kraidg4_g4 ; Kraid-G4: G4
@@ -2085,8 +1990,8 @@ preset_rbo_tourian_metroids:
     dw $0AF6, $0039  ; Samus X
     dw $0AFA, $038B  ; Samus Y
     dw $D820, $0FC1  ; Events
+    dw $D90C, $0100  ; Map Stations
     dw #$FFFF
-.after
 
 preset_rbo_tourian_metroids_2:
     dw #preset_rbo_tourian_metroids ; Tourian: Metroids
@@ -2106,7 +2011,6 @@ preset_rbo_tourian_metroids_2:
     dw $D822, $0021  ; Events
     dw $D8C4, $0001  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_tourian_metroids_3:
     dw #preset_rbo_tourian_metroids_2 ; Tourian: Metroids 2
@@ -2124,7 +2028,6 @@ preset_rbo_tourian_metroids_3:
     dw $D822, $0023  ; Events
     dw $D8C4, $0003  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_tourian_metroids_4:
     dw #preset_rbo_tourian_metroids_3 ; Tourian: Metroids 3
@@ -2142,7 +2045,6 @@ preset_rbo_tourian_metroids_4:
     dw $D822, $0027  ; Events
     dw $D8C4, $0007  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_tourian_baby_skip:
     dw #preset_rbo_tourian_metroids_4 ; Tourian: Metroids 4
@@ -2162,7 +2064,6 @@ preset_rbo_tourian_baby_skip:
     dw $D822, $002F  ; Events
     dw $D8C4, $000F  ; Doors
     dw #$FFFF
-.after
 
 preset_rbo_tourian_zeb_skip:
     dw #preset_rbo_tourian_baby_skip ; Tourian: Baby Skip
@@ -2179,35 +2080,83 @@ preset_rbo_tourian_zeb_skip:
     dw $0AFA, $028B  ; Samus Y
     dw $D8C4, $03AF  ; Doors
     dw #$FFFF
-.after
 
-preset_rbo_tourian_escape_room_3:
+preset_rbo_tourian_mother_brain_2:
     dw #preset_rbo_tourian_zeb_skip ; Tourian: Zeb Skip
-    dw $078D, $AAEC  ; DDB
-    dw $079B, $DE7A  ; MDB
+    dw $078D, $AAC8  ; DDB
+    dw $079B, $DD58  ; MDB
+    dw $07F3, $0021  ; Music Bank
+    dw $090F, $79FF  ; Screen subpixel X position
+    dw $0915, $0000  ; Screen Y position in pixels
+    dw $0919, $0000  ; Layer 2 Y position
+    dw $09C2, $0302  ; Health
+    dw $09C6, $0006  ; Missiles
+    dw $09CA, $0007  ; Supers
+    dw $0AF6, $00CF  ; Samus X
+    dw $0AFA, $009B  ; Samus Y
+    dw $D820, $0FC5  ; Events
+    dw #$FFFF
+
+preset_rbo_tourian_zebes_escape:
+    dw #preset_rbo_tourian_mother_brain_2 ; Tourian: Mother Brain 2
     dw $07F3, $0024  ; Music Bank
     dw $07F5, $0007  ; Music Track
-    dw $090F, $2000  ; Screen subpixel X position
-    dw $0913, $0000  ; Screen subpixel Y position
-    dw $0915, $00C6  ; Screen Y position in pixels
     dw $09A6, $1009  ; Beams
     dw $09C2, $0293  ; Health
-    dw $09C6, $0000  ; Missiles
+    dw $09C6, $007F  ; Missiles
     dw $09CA, $0000  ; Supers
     dw $09CE, $0000  ; Pbs
     dw $09D6, $0064  ; Reserves
-    dw $0A1C, $0029  ; Samus position/state
-    dw $0A1E, $0608  ; More position/state
     dw $0A76, $8000  ; Hyper beam
-    dw $0AF6, $00DB  ; Samus X
-    dw $0AFA, $0136  ; Samus Y
+    dw $0AF6, $0025  ; Samus X
+    dw $0AFA, $00C3  ; Samus Y
     dw $D820, $4FC5  ; Events
     dw $D82C, $0203  ; Bosses
     dw #$FFFF
-.after
+
+preset_rbo_tourian_escape_room_3:
+    dw #preset_rbo_tourian_zebes_escape ; Tourian: Zebes Escape
+    dw $078D, $AAEC  ; DDB
+    dw $079B, $DE7A  ; MDB
+    dw $090F, $2000  ; Screen subpixel X position
+    dw $0913, $0000  ; Screen subpixel Y position
+    dw $0915, $00C6  ; Screen Y position in pixels
+    dw $0A1C, $0029  ; Samus position/state
+    dw $0A1E, $0608  ; More position/state
+    dw $0AF6, $00DB  ; Samus X
+    dw $0AFA, $0136  ; Samus Y
+    dw #$FFFF
+
+preset_rbo_tourian_escape_room_4:
+    dw #preset_rbo_tourian_escape_room_3 ; Tourian: Escape Room 3
+    dw $078D, $AB04  ; DDB
+    dw $079B, $DEA7  ; MDB
+    dw $090F, $3000  ; Screen subpixel X position
+    dw $0911, $0500  ; Screen X position in pixels
+    dw $0913, $4C00  ; Screen subpixel Y position
+    dw $0915, $001C  ; Screen Y position in pixels
+    dw $0917, $03C0  ; Layer 2 X position
+    dw $0919, $0015  ; Layer 2 Y position
+    dw $0AF6, $05D6  ; Samus X
+    dw $0AFA, $008B  ; Samus Y
+    dw #$FFFF
+
+preset_rbo_tourian_escape_climb:
+    dw #preset_rbo_tourian_escape_room_4 ; Tourian: Escape Room 4
+    dw $078D, $AB1C  ; DDB
+    dw $079B, $DEDE  ; MDB
+    dw $090F, $0000  ; Screen subpixel X position
+    dw $0911, $00F1  ; Screen X position in pixels
+    dw $0913, $A400  ; Screen subpixel Y position
+    dw $0915, $00FB  ; Screen Y position in pixels
+    dw $0917, $00B4  ; Layer 2 X position
+    dw $0919, $00BC  ; Layer 2 Y position
+    dw $0AF6, $0151  ; Samus X
+    dw $0AFA, $018B  ; Samus Y
+    dw #$FFFF
 
 preset_rbo_tourian_escape_parlor:
-    dw #preset_rbo_tourian_escape_room_3 ; Tourian: Escape Room 3
+    dw #preset_rbo_tourian_escape_climb ; Tourian: Escape Climb
     dw $078D, $AB34  ; DDB
     dw $079B, $96BA  ; MDB
     dw $090F, $C000  ; Screen subpixel X position
@@ -2220,4 +2169,3 @@ preset_rbo_tourian_escape_parlor:
     dw $0AF6, $019B  ; Samus X
     dw $0AFA, $005B  ; Samus Y
     dw #$FFFF
-.after

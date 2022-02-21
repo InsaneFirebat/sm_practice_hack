@@ -48,6 +48,7 @@ presets_goto_kpdr22_tourian:
 
 presets_submenu_kpdr22_crateria:
     dw #presets_kpdr22_crateria_ceres_elevator
+    dw #presets_kpdr22_crateria_ceres_escape
     dw #presets_kpdr22_crateria_ceres_last_3_rooms
     dw #presets_kpdr22_crateria_ship
     dw #presets_kpdr22_crateria_parlor
@@ -230,10 +231,14 @@ presets_submenu_kpdr22_tourian:
     dw #presets_kpdr22_tourian_metroids_4
     dw #presets_kpdr22_tourian_giant_hoppers
     dw #presets_kpdr22_tourian_baby_skip
-    dw #presets_kpdr22_tourian_gedora_room
+    dw #presets_kpdr22_tourian_gadora_room
     dw #presets_kpdr22_tourian_zeb_skip
+    dw #presets_kpdr22_tourian_mother_brain_2
+    dw #presets_kpdr22_tourian_mother_brain_3
+    dw #presets_kpdr22_tourian_zebes_escape
     dw #presets_kpdr22_tourian_escape_room_3
-    dw #presets_kpdr22_tourian_climb_spark
+    dw #presets_kpdr22_tourian_escape_room_4
+    dw #presets_kpdr22_tourian_escape_climb
     dw #presets_kpdr22_tourian_escape_parlor
     dw #$0000
     %cm_header("TOURIAN")
@@ -241,6 +246,9 @@ presets_submenu_kpdr22_tourian:
 ; Crateria
 presets_kpdr22_crateria_ceres_elevator:
     %cm_preset("Ceres Elevator", #preset_kpdr22_crateria_ceres_elevator)
+
+presets_kpdr22_crateria_ceres_escape:
+    %cm_preset("Ceres Escape", #preset_kpdr22_crateria_ceres_escape)
 
 presets_kpdr22_crateria_ceres_last_3_rooms:
     %cm_preset("Ceres Last 3 Rooms", #preset_kpdr22_crateria_ceres_last_3_rooms)
@@ -688,17 +696,29 @@ presets_kpdr22_tourian_giant_hoppers:
 presets_kpdr22_tourian_baby_skip:
     %cm_preset("Baby Skip", #preset_kpdr22_tourian_baby_skip)
 
-presets_kpdr22_tourian_gedora_room:
-    %cm_preset("Gedora Room", #preset_kpdr22_tourian_gedora_room)
+presets_kpdr22_tourian_gadora_room:
+    %cm_preset("Gadora Room", #preset_kpdr22_tourian_gadora_room)
 
 presets_kpdr22_tourian_zeb_skip:
     %cm_preset("Zeb Skip", #preset_kpdr22_tourian_zeb_skip)
 
+presets_kpdr22_tourian_mother_brain_2:
+    %cm_preset("Mother Brain 2", #preset_kpdr22_tourian_mother_brain_2)
+
+presets_kpdr22_tourian_mother_brain_3:
+    %cm_preset("Mother Brain 3", #preset_kpdr22_tourian_mother_brain_3)
+
+presets_kpdr22_tourian_zebes_escape:
+    %cm_preset("Zebes Escape", #preset_kpdr22_tourian_zebes_escape)
+
 presets_kpdr22_tourian_escape_room_3:
     %cm_preset("Escape Room 3", #preset_kpdr22_tourian_escape_room_3)
 
-presets_kpdr22_tourian_climb_spark:
-    %cm_preset("Climb Spark", #preset_kpdr22_tourian_climb_spark)
+presets_kpdr22_tourian_escape_room_4:
+    %cm_preset("Escape Room 4", #preset_kpdr22_tourian_escape_room_4)
+
+presets_kpdr22_tourian_escape_climb:
+    %cm_preset("Escape Climb", #preset_kpdr22_tourian_escape_climb)
 
 presets_kpdr22_tourian_escape_parlor:
     %cm_preset("Escape Parlor", #preset_kpdr22_tourian_escape_parlor)

@@ -25,7 +25,7 @@ presets_goto_allbosspkdr_upper_norfair:
     %cm_submenu("Upper Norfair", #presets_submenu_allbosspkdr_upper_norfair)
 
 presets_goto_allbosspkdr_kraids_lair:
-    %cm_submenu("Kraid's Lair", #presets_submenu_allbosspkdr_kraids_lair)
+    %cm_submenu("Kraids Lair", #presets_submenu_allbosspkdr_kraids_lair)
 
 presets_goto_allbosspkdr_maridia:
     %cm_submenu("Maridia", #presets_submenu_allbosspkdr_maridia)
@@ -44,6 +44,7 @@ presets_goto_allbosspkdr_tourian:
 
 presets_submenu_allbosspkdr_crateria:
     dw #presets_allbosspkdr_crateria_ceres_elevator
+    dw #presets_allbosspkdr_crateria_ceres_escape
     dw #presets_allbosspkdr_crateria_ceres_last_3_rooms
     dw #presets_allbosspkdr_crateria_ship
     dw #presets_allbosspkdr_crateria_pit_room
@@ -104,7 +105,7 @@ presets_submenu_allbosspkdr_kraids_lair:
     dw #presets_allbosspkdr_kraids_lair_baby_kraid_entering_2
     dw #presets_allbosspkdr_kraids_lair_leaving_kraids_lair
     dw #$0000
-    %cm_header("KRAID'S LAIR")
+    %cm_header("KRAIDS LAIR")
 
 presets_submenu_allbosspkdr_maridia:
     dw #presets_allbosspkdr_maridia_mt_everest
@@ -175,6 +176,9 @@ presets_submenu_allbosspkdr_tourian:
 ; Crateria
 presets_allbosspkdr_crateria_ceres_elevator:
     %cm_preset("Ceres Elevator", #preset_allbosspkdr_crateria_ceres_elevator)
+
+presets_allbosspkdr_crateria_ceres_escape:
+    %cm_preset("Ceres Escape", #preset_allbosspkdr_crateria_ceres_escape)
 
 presets_allbosspkdr_crateria_ceres_last_3_rooms:
     %cm_preset("Ceres Last 3 Rooms", #preset_allbosspkdr_crateria_ceres_last_3_rooms)
@@ -297,9 +301,9 @@ presets_allbosspkdr_upper_norfair_business_center_revisit:
     %cm_preset("Business Center Revisit", #preset_allbosspkdr_upper_norfair_business_center_revisit)
 
 
-; Kraid's Lair
+; Kraids Lair
 presets_allbosspkdr_kraids_lair_entering_kraids_lair:
-    %cm_preset("Entering Kraid's Lair", #preset_allbosspkdr_kraids_lair_entering_kraids_lair)
+    %cm_preset("Entering Kraids Lair", #preset_allbosspkdr_kraids_lair_entering_kraids_lair)
 
 presets_allbosspkdr_kraids_lair_baby_kraid_entering:
     %cm_preset("Baby Kraid (Entering)", #preset_allbosspkdr_kraids_lair_baby_kraid_entering)
@@ -311,7 +315,7 @@ presets_allbosspkdr_kraids_lair_baby_kraid_entering_2:
     %cm_preset("Baby Kraid (Entering)", #preset_allbosspkdr_kraids_lair_baby_kraid_entering_2)
 
 presets_allbosspkdr_kraids_lair_leaving_kraids_lair:
-    %cm_preset("Leaving Kraid's Lair", #preset_allbosspkdr_kraids_lair_leaving_kraids_lair)
+    %cm_preset("Leaving Kraids Lair", #preset_allbosspkdr_kraids_lair_leaving_kraids_lair)
 
 
 ; Maridia
