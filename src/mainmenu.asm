@@ -199,8 +199,11 @@ action_presets_submenu:
 preset_category_submenus:
 {
     dw #PresetsMenuKpdr21
+    dw #PresetsMenuKpdr22
+    dw #PresetsMenuPrkd15
     dw #PresetsMenuPrkd
     dw #PresetsMenuPkrd
+    dw #PresetsMenuSpazer
     dw #PresetsMenuKpdr25
     dw #PresetsMenuGtclassic
     dw #PresetsMenuGtmax
@@ -222,8 +225,11 @@ preset_category_submenus:
 preset_category_banks:
 {
     dw #PresetsMenuKpdr21>>16
+    dw #PresetsMenuKpdr22>>16
+    dw #PresetsMenuPrkd15>>16
     dw #PresetsMenuPrkd>>16
     dw #PresetsMenuPkrd>>16
+    dw #PresetsMenuSpazer>>16
     dw #PresetsMenuKpdr25>>16
     dw #PresetsMenuGtclassic>>16
     dw #PresetsMenuGtmax>>16
@@ -322,7 +328,7 @@ PresetsMenu:
     dw #$FFFF
     dw #presets_open_doors
     dw #presets_enemies
-    dw #presets_ship_landing
+;    dw #presets_ship_landing
 if !RAW_TILE_GRAPHICS
     dw #$FFFF
     dw #presets_compressed_graphics
@@ -401,8 +407,11 @@ SelectPresetCategoryMenu:
     dw #presets_current
     dw #$FFFF
     dw #precat_kpdr21
+    dw #precat_kpdr22
+    dw #precat_prkd15
     dw #precat_prkd
     dw #precat_pkrd
+    dw #precat_spazer
     dw #precat_kpdr25
     dw #precat_gtclassic
     dw #precat_gtmax
@@ -426,12 +435,17 @@ presets_current:
     dl #!sram_preset_category
     dw #.routine
     db #$28, "CURRENT PRESET", #$FF
-        db #$28, "  ANY% KPDR", #$FF
-        db #$28, "  ANY% PRKD", #$FF
+        db #$28, "   KPDR 21%", #$FF
+        db #$28, "   KPDR 22%", #$FF
+        db #$28, "   PRKD 19%", #$FF
+        db #$28, "   PRKD 20%", #$FF
         db #$28, "  ANY% PKRD", #$FF
+        db #$28, "     SPAZER", #$FF
         db #$28, "   KPDR ICE", #$FF
         db #$28, " GT CLASSIC", #$FF
-        db #$28, "     GT MAX", #$FF
+        db #$28, "    GT MAX%", #$FF
+        db #$28, "    14% ICE", #$FF
+        db #$28, "  14% SPEED", #$FF
         db #$28, " 100% EARLY", #$FF
         db #$28, "  100% LATE", #$FF
         db #$28, "   100% MAP", #$FF
@@ -450,58 +464,67 @@ presets_current:
     RTS
 
 precat_kpdr21:
-    %cm_jsr("Any% KPDR", #action_select_preset_category, #$0000)
+    %cm_jsr("21% KPDR 3 E-Tanks", #action_select_preset_category, #$0000)
+
+precat_kpdr22:
+    %cm_jsr("22% KPDR 4 E-Tanks", #action_select_preset_category, #$0001)
+
+precat_prkd15:
+    %cm_jsr("19% PRKD 15 Missiles", #action_select_preset_category, #$0002)
 
 precat_prkd:
-    %cm_jsr("Any% PRKD", #action_select_preset_category, #$0001)
+    %cm_jsr("20% PRKD 20 Missiles", #action_select_preset_category, #$0003)
 
 precat_pkrd:
-    %cm_jsr("Any% PKRD", #action_select_preset_category, #$0002)
+    %cm_jsr("20% PKRD", #action_select_preset_category, #$0004)
+
+precat_spazer:
+    %cm_jsr("22% KPDR with Spazer", #action_select_preset_category, #$0005)
 
 precat_kpdr25:
-    %cm_jsr("Any% KPDR Early Ice", #action_select_preset_category, #$0003)
+    %cm_jsr("25% KPDR Early Ice", #action_select_preset_category, #$0006)
 
 precat_gtclassic:
-    %cm_jsr("GT Classic", #action_select_preset_category, #$0004)
+    %cm_jsr("GT Classic", #action_select_preset_category, #$0007)
 
 precat_gtmax:
-    %cm_jsr("GT Max%", #action_select_preset_category, #$0005)
-
-precat_100early:
-    %cm_jsr("100% Early Crocomire", #action_select_preset_category, #$0006)
-
-precat_hundo:
-    %cm_jsr("100% Late Crocomire", #action_select_preset_category, #$0007)
-
-precat_100map:
-    %cm_jsr("100% Map Completion", #action_select_preset_category, #$0008)
+    %cm_jsr("GT Max%", #action_select_preset_category, #$0008)
 
 precat_14ice:
-    %cm_jsr("Low% Ice", #action_select_preset_category, #$0009)
+    %cm_jsr("14% Ice", #action_select_preset_category, #$0009)
 
 precat_14speed:
-    %cm_jsr("Low% Speed", #action_select_preset_category, #$000A)
+    %cm_jsr("14% Speed", #action_select_preset_category, #$000A)
+
+precat_100early:
+    %cm_jsr("100% Early Crocomire", #action_select_preset_category, #$000B)
+
+precat_hundo:
+    %cm_jsr("100% Late Crocomire", #action_select_preset_category, #$000C)
+
+precat_100map:
+    %cm_jsr("100% Map Completion", #action_select_preset_category, #$000D)
 
 precat_rbo:
-    %cm_jsr("Reverse Boss Order", #action_select_preset_category, #$000B)
+    %cm_jsr("Reverse Boss Order", #action_select_preset_category, #$000E)
 
 precat_ngplasma:
-    %cm_jsr("NewGamePlus Plasma", #action_select_preset_category, #$000C)
+    %cm_jsr("NewGame+ Plasma", #action_select_preset_category, #$000F)
 
 precat_nghyper:
-    %cm_jsr("NewGamePlus Hyper", #action_select_preset_category, #$000D)
+    %cm_jsr("NewGame+ Hyper", #action_select_preset_category, #$0010)
 
 precat_nintendopower:
-    %cm_jsr("Nintendo Power%", #action_select_preset_category, #$000E)
+    %cm_jsr("Nintendo Power%", #action_select_preset_category, #$0011)
 
 precat_allbosskpdr:
-    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$000F)
+    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$0012)
 
 precat_allbosspkdr:
-    %cm_jsr("All Bosses PKDR", #action_select_preset_category, #$0010)
+    %cm_jsr("All Bosses PKDR", #action_select_preset_category, #$0013)
 
 precat_allbossprkd:
-    %cm_jsr("All Bosses PRKD", #action_select_preset_category, #$0011)
+    %cm_jsr("All Bosses PRKD", #action_select_preset_category, #$0014)
 
 action_select_preset_category:
 {

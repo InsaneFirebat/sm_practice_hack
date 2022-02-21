@@ -533,6 +533,7 @@ preset_kpdr25_upper_norfair_business_center:
     dw $D874, $0C04  ; Items
     dw $D8B8, $00EF  ; Doors
     dw !PRESET_DOORS, $0000 ; doors opened
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_kpdr25_upper_norfair_leaving_hijump:
@@ -558,6 +559,7 @@ preset_kpdr25_upper_norfair_leaving_hijump:
     dw $D8BA, $0001  ; Doors
     dw !PRESET_DOORS, $0001 ; doors closed
     dw !PRESET_SPECIAL, $0001 ; remove shot blocks
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_kpdr25_upper_norfair_precathedral:
@@ -839,6 +841,7 @@ preset_kpdr25_wrecked_ship_post_power_bombs:
     dw $09C2, $014B  ; Health
     dw $09CE, $0005  ; Pbs
     dw $09D0, $0005  ; Max pbs
+    dw $09D2, $0003  ; Currently selected item
     dw $0A1C, $000B  ; Samus position/state
     dw $0A1E, $0108  ; More position/state
     dw $0AF6, $02CA  ; Samus X
@@ -856,7 +859,6 @@ preset_kpdr25_wrecked_ship_premoat:
     dw $0917, $0000  ; Layer 2 X position
     dw $09CA, $0004  ; Supers
     dw $09CE, $0004  ; Pbs
-    dw $09D2, $0003  ; Currently selected item
     dw $0A1C, $0002  ; Samus position/state
     dw $0A1E, $0004  ; More position/state
     dw $0AF6, $007D  ; Samus X
@@ -1847,6 +1849,7 @@ preset_kpdr25_tourian_escape_room_4:
     dw $0919, $0015  ; Layer 2 Y position
     dw $0AF6, $05D6  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_kpdr25_tourian_escape_climb:
@@ -1863,6 +1866,7 @@ preset_kpdr25_tourian_escape_climb:
     dw $0AF6, $0151  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw !PRESET_DOORS, $0001 ; doors closed
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_kpdr25_tourian_escape_parlor:

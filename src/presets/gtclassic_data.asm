@@ -767,6 +767,7 @@ preset_gtclassic_bootless_upper_norfair_business_center:
     dw $0A1E, $0000  ; More position/state
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $02A8  ; Samus Y
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_gtclassic_bootless_upper_norfair_cathedral:
@@ -787,6 +788,7 @@ preset_gtclassic_bootless_upper_norfair_cathedral:
     dw $0AFA, $008B  ; Samus Y
     dw $D8B8, $04EF  ; Doors
     dw !PRESET_DOORS, $0000 ; doors opened
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_gtclassic_bootless_upper_norfair_rising_tide:
@@ -946,6 +948,7 @@ preset_gtclassic_hi_jump_upper_norfair_business_center:
     dw $0AF6, $0080  ; Samus X
     dw $0AFA, $02A8  ; Samus Y
     dw !PRESET_DOORS, $0000 ; doors opened
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_gtclassic_hi_jump_upper_norfair_hi_jump_etank:
@@ -959,6 +962,7 @@ preset_gtclassic_hi_jump_upper_norfair_hi_jump_etank:
     dw $0AF6, $0041  ; Samus X
     dw $0AFA, $058B  ; Samus Y
     dw $D8B8, $20EC  ; Doors
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_gtclassic_hi_jump_upper_norfair_leaving_hi_jump:
@@ -2189,6 +2193,7 @@ preset_gtclassic_tourian_escape_room_4:
     dw $0919, $0013  ; Layer 2 Y position
     dw $0AF6, $05DB  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_gtclassic_tourian_escape_climb:
@@ -2204,6 +2209,7 @@ preset_gtclassic_tourian_escape_climb:
     dw $0AF6, $0154  ; Samus X
     dw $0AFA, $018B  ; Samus Y
     dw !PRESET_DOORS, $0001 ; doors closed
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_gtclassic_tourian_escape_parlor:

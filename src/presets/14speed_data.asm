@@ -763,6 +763,7 @@ preset_14speed_upper_norfair_precathedral:
     dw $0AFA, $02A8  ; Samus Y
     dw $D874, $0904  ; Items
     dw $D8B8, $00EF  ; Doors
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_14speed_upper_norfair_bubble_mountain:
@@ -783,6 +784,7 @@ preset_14speed_upper_norfair_bubble_mountain:
     dw $0AF6, $04B5  ; Samus X
     dw $0AFA, $008B  ; Samus Y
     dw $D8B8, $06EF  ; Doors
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_14speed_upper_norfair_bubble_mountain_revisit:
@@ -1534,6 +1536,7 @@ preset_14speed_tourian_escape_room_4:
     dw $0919, $0015  ; Layer 2 Y position
     dw $0AF6, $05D6  ; Samus X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_ENEMIES, $0001 ; enemies alive
     dw #$FFFF
 
 preset_14speed_tourian_escape_climb:
@@ -1549,6 +1552,7 @@ preset_14speed_tourian_escape_climb:
     dw $09C2, $0171  ; Health
     dw $0AF6, $0151  ; Samus X
     dw $0AFA, $018B  ; Samus Y
+    dw !PRESET_ENEMIES, $0000 ; enemies cleared
     dw #$FFFF
 
 preset_14speed_tourian_escape_parlor:
