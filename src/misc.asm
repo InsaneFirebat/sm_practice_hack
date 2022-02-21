@@ -321,14 +321,30 @@ endif
 
     ; To account for various changes, we may need to tack on more clock cycles
     ; These can be removed as code is added to maintain CPU parity during normal gameplay
-    ASL #2 : INC  ; Add 4 loops (22 clock cycles including the INC)
-    ASL : INC     ; Add 2 loops (12 clock cycles including the INC)
-    ASL
-    NOP           ; Add 2 more clock cycles
+    LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_display_lag_loop
+    LDA !sram_artificial_lag
+
+    ASL #4
+    NOP #2 ; Add 4 more clock cycles
     TAX
+
   .lagloop
     DEX : BNE .lagloop
+
   .endlag
+    RTL
+
+  .vanilla_display_lag_loop
+    ; Vanilla display logic uses more CPU so reduce artificial lag
+    LDA !sram_artificial_lag
+    DEC : BEQ .endlag   ; Remove 76 clock cycles
+    DEC : BEQ .endlag   ; Remove 76 clock cycles
+    ASL #2 : INC ; Add 4 loops (22 clock cycles including the INC)
+    ASL #2 : INC ; Add 1 loop (7 clock cycles including the INC)
+    TAX
+
+  .vanilla_lagloop
+    DEX : BNE .vanilla_lagloop
     RTL
 }
 

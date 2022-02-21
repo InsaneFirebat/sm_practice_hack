@@ -47,13 +47,13 @@
 !ram_slowdown_controller_2 = !WRAM_START+$22
 !ram_slowdown_frames = !WRAM_START+$24
 
-!ram_tmp_1 = !WRAM_START+$26
-!ram_tmp_2 = !WRAM_START+$28
-!ram_tmp_3 = !WRAM_START+$2A
-!ram_tmp_4 = !WRAM_START+$2C
+!ram_momentum_sum = !WRAM_START+$26
+!ram_momentum_count = !WRAM_START+$28
+!ram_momentum_direction = !WRAM_START+$2A
+!ram_momentum_last = !WRAM_START+$2C
 !ram_last_hp = !WRAM_START+$2E
-!ram_pct_1 = !WRAM_START+$30
-!ram_pct_2 = !WRAM_START+$32
+!ram_metronome = !WRAM_START+$30
+!ram_metronome_counter = !WRAM_START+$32
 !ram_armed_shine_duration = !WRAM_START+$34
 !ram_minimap = !WRAM_START+$36
 !ram_map_counter = !WRAM_START+$38
@@ -93,8 +93,7 @@
 !ram_game_mode_extras = !WRAM_START+$74
 !ram_sprite_features_active = !WRAM_START+$76
 
-!ram_metronome = !WRAM_START+$78
-!ram_metronome_counter = !WRAM_START+$7A
+; FREE SPACE ^
 
 !ram_fix_scroll_offsets = !WRAM_START+$7C
 

@@ -6,10 +6,10 @@ org $809B51
     JMP $9BFB    ; skip drawing auto reserve icon and normal energy numbers and tanks during HUD routine
 
 org $82AED9      ; routine to draw auto reserve icon on HUD from equip screen
-    NOP : NOP : NOP
+    JSR mm_refresh_reserves
 
 org $82AEAF      ; routine to remove auto reserve icon on HUD from equip screen
-    NOP : NOP : NOP
+    JSR mm_refresh_reserves
 
 org $809AF3
     JSL mm_initialize_minimap
@@ -117,17 +117,19 @@ mm_write_hud_tiles_during_door_transition:
 
     ; Load in normal vram
     JSR $E039
-    dl $9AB200
-    dw $4000
-    dw $1000
+    dl $9AB200 : dw $4000, $1000
     JMP $E492  ; resume logic
 
   .minimap_vram
     JSR $E039
-    dl $DFD500
-    dw $4000
-    dw $1000
+    dl $DFD500 : dw $4000, $1000
     JMP $E492  ; resume logic
+}
+
+mm_refresh_reserves:
+{
+    LDA #$FFFF : STA !ram_reserves_last
+    RTS
 }
 
 print pc, " minimap bank82 end"

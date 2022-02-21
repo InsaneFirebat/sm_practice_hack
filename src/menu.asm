@@ -813,7 +813,7 @@ draw_numfield_sound:
     ; set position for the number
     TXA : CLC : ADC #$0030 : TAX
 
-    LDA [$08] : AND #$00FF : STA !ram_tmp_2
+    LDA [$08] : AND #$00FF : STA $C1
 
     ; Clear out the area (black tile)
     LDA #$281F : STA !ram_tilemap_buffer+0,X
@@ -821,11 +821,11 @@ draw_numfield_sound:
 
     ; Draw numbers
     ; (00X0)
-    LDA !ram_tmp_2 : AND #$00F0 : LSR #3 : TAY
+    LDA $C1 : AND #$00F0 : LSR #3 : TAY
     LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer,X
         
     ; (000X)
-    LDA !ram_tmp_2 : AND #$000F : ASL : TAY
+    LDA $C1 : AND #$000F : ASL : TAY
     LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X
 
   .done
@@ -845,7 +845,7 @@ draw_numfield_hex_word:
     ; set position for the number
     TXA : CLC : ADC #$002C : TAX
 
-    LDA [$08] : STA !ram_tmp_2
+    LDA [$08] : STA $C1
 
     ; Clear out the area (black tile)
     LDA #$281F : STA !ram_tilemap_buffer+0,X
@@ -855,19 +855,19 @@ draw_numfield_hex_word:
 
     ; Draw numbers
     ; (X000)
-    LDA !ram_tmp_2 : AND #$F000 : XBA : LSR #3 : TAY
+    LDA $C1 : AND #$F000 : XBA : LSR #3 : TAY
     LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer,X
         
     ; (0X00)
-    LDA !ram_tmp_2 : AND #$0F00 : XBA : ASL : TAY
+    LDA $C1 : AND #$0F00 : XBA : ASL : TAY
     LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X
 
     ; (00X0)
-    LDA !ram_tmp_2 : AND #$00F0 : LSR #3 : TAY
+    LDA $C1 : AND #$00F0 : LSR #3 : TAY
     LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+4,X
         
     ; (000X)
-    LDA !ram_tmp_2 : AND #$000F : ASL : TAY
+    LDA $C1 : AND #$000F : ASL : TAY
     LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+6,X
 
   .done
@@ -890,7 +890,7 @@ draw_numfield_color:
     ; set position for the number
     TXA : CLC : ADC #$0030 : TAX
 
-    LDA [$08] : AND #$00FF : STA !ram_tmp_2
+    LDA [$08] : AND #$00FF : STA $C1
 
     ; Clear out the area (black tile)
     LDA #$281F : STA !ram_tilemap_buffer+0,X
@@ -898,12 +898,12 @@ draw_numfield_color:
 
     ; Draw numbers
     ; (00X0)
-    LDA !ram_tmp_2 : AND #$001E : TAY
+    LDA $C1 : AND #$001E : TAY
     LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer,X
 
     ; (000X)
-    LDA !ram_tmp_2 : AND #$0001 : ASL #4 : STA $0E
-    LDA !ram_tmp_2 : AND #$001C : LSR : CLC : ADC $0E : TAY
+    LDA $C1 : AND #$0001 : ASL #4 : STA $0E
+    LDA $C1 : AND #$001C : LSR : CLC : ADC $0E : TAY
     LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X
 
   .done
@@ -1817,7 +1817,6 @@ cm_divide_100:
     LDA #$64 : STA $4206
     PHA : PLA : PHA : PLA
     %a16()
-    LDA $4214 : ADC !ram_tmp_1 : STA !ram_tmp_1
     LDA $4214
     RTS
 }
