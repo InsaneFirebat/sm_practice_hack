@@ -3155,7 +3155,8 @@ preset_spazer_tourian_zebes_escape_start:
     dw $09C2, $01DF ; Health
     dw $0A1C, $009B ; Samus position/state
     dw $0A1E, $0000 ; More position/state
-    dw $0AF6, $0030 ; Samus X
+    dw $0AF6, $0025 ; Samus X
+    dw $0AFA, $009E ; Samus Y
     dw $0AF8, $0000 ; Samus subpixel X
     dw $D820, $4FC5 ; Events
     dw $D82C, $0203 ; Bosses
