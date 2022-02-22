@@ -16,10 +16,6 @@ endif
 org $82EEDF
     LDA #$C100
 
-; Fix Zebes planet tiling error
-org $8C9607
-    dw #$0E2F
-
 
 ; Enable version display
 org $8B8697
@@ -41,11 +37,6 @@ else
     db #$20, #$20, #$20, #$20, #$20
 endif
 endif
-
-
-; Fix Zebes planet tiling error
-org $8C9607
-    dw #$0E2F
 
 
 ; Skips the waiting time after teleporting
@@ -94,57 +85,6 @@ org $808F24
 ; $80:8F68 AA          TAX                    ; X = [music data]
 org $808F65
     JML hook_set_music_data
-
-
-; swap Enemy HP to MB HP when entering MB's room
-;org $83AAD2 ; Where is MB's room? Probably not here
-;    dw #MotherBrainHP
-
-
-; Ceres Ridley modified state check to support presets
-org $8FE0C0
-    dw layout_asm_ceres_ridley_room_state_check
-
-; Ceres Ridley room setup asm when timer is not running
-org $8FE0DF
-    dw layout_asm_ceres_ridley_room_no_timer
-
-
-;org $8FEA00 ; free space for door asm
-if !FEATURE_REDESIGN
-org $8FFFD0
-else
-org $8FFB81
-endif
-print pc, " misc bank8F start"
-
-layout_asm_ceres_ridley_room_state_check:
-{
-    LDA $0943 : BEQ .no_timer
-    LDA $0001,X : TAX
-    JMP $E5E6
-  .no_timer
-    STZ $093F
-    INX #3
-    RTS
-}
-
-layout_asm_ceres_ridley_room_no_timer:
-{
-    ; Same as original setup asm, except force blue background
-    PHP
-    %a8()
-    LDA #$66 : STA $5D
-    PLP
-    JSL $88DDD0
-    LDA #$0009 : STA $07EB
-    RTS
-}
-if !FEATURE_REDESIGN
-else
-warnpc $8FFBA8
-endif
-print pc, " misc bank8F end"
 
 
 org $87D000
@@ -214,17 +154,34 @@ gamemode_end:
 
     ; To account for various changes, we may need to tack on more clock cycles
     ; These can be removed as code is added to maintain CPU parity during normal gameplay
+    LDA !sram_top_display_mode : CMP !TOP_DISPLAY_VANILLA : BEQ .vanilla_display_lag_loop
+    LDA !sram_artificial_lag
     ASL
     ASL
-    INC  ; Add 4 loops (22 clock cycles including the INC)
     ASL
-    INC  ; Add 2 loops (12 clock cycles including the INC)
     ASL
+    NOP  ; Add 2 more clock cycles
     NOP  ; Add 2 more clock cycles
     TAX
   .lagloop
     DEX : BNE .lagloop
   .endlag
+    RTL
+
+  .vanilla_display_lag_loop
+    ; Vanilla display logic uses more CPU so reduce artificial lag
+    LDA !sram_artificial_lag
+    DEC : BEQ .endlag   ; Remove 76 clock cycles
+    DEC : BEQ .endlag   ; Remove 76 clock cycles
+    ASL
+    ASL
+    INC  ; Add 4 loops (22 clock cycles including the INC)
+    ASL
+    ASL
+    INC  ; Add 1 loop (7 clock cycles including the INC)
+    TAX
+  .vanilla_lagloop
+    DEX : BNE .vanilla_lagloop
     RTL
 }
 

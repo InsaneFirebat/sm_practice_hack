@@ -2,12 +2,15 @@
 ; Custom Presets
 ; --------------
 
+org $85B000
+print pc, " custompresets start"
+
 custom_preset_save:
 {
     LDA !sram_custom_preset_slot
     ASL : XBA : TAX ; multiply by 200h (slot offset)
     LDA #$5AFE : STA !PRESET_SLOTS+$00,X   ; mark this slot as "SAFE" to load
-    LDA #$01EA : STA !PRESET_SLOTS+$02,X   ; record slot size for future compatibility
+    LDA #$01EE : STA !PRESET_SLOTS+$02,X   ; record slot size for future compatibility
     LDA $078B : STA !PRESET_SLOTS+$04,X    ; Elevator Index
     LDA $078D : STA !PRESET_SLOTS+$06,X    ; DDB
     LDA $078F : STA !PRESET_SLOTS+$08,X    ; DoorOut Index
@@ -73,7 +76,9 @@ custom_preset_save:
     MVN $7EF0                    ; srcBank, destBank
     PLB : PLX
 
-    ; next available byte is $7031EA
+    LDA $0AF8 : STA $7031EA,X    ; Samus subpixel X
+    LDA $0AFC : STA $7031EC,X    ; Samus subpixel Y
+    ; next available byte is $7031EE
 
     RTL
 }
@@ -149,14 +154,165 @@ custom_preset_load:
 
     LDA !PRESET_SLOTS+$02,X : CMP #$01BA : BMI .done_no_scrolls
     LDA #$5AFE : STA !ram_custom_preset
+
+    LDA $703002,X : CMP #$01EC : BMI .done_with_scrolls
+    LDA $7031EA,X : STA $0AF8    ; Samus subpixel X
+    LDA $7031EC,X : STA $0AFC    ; Samus subpixel Y
+
+  .done_with_scrolls
     RTL
 
-    ; next available byte is $7031EA
+    ; next available byte is $7031EE
 
   .done_no_scrolls
     LDA #$0000 : STA !ram_custom_preset
     RTL
 }
 
-print pc, " custom presets end"
+preset_scroll_fixes:
+{
+    ; Fixes bad scrolling caused by loading into a position that
+    ; is normally hidden until passing over a red scroll block.
+    ; These fixes can often be found in nearby door asm.
+    PHP
+    PHB
+    %ai16()
+    STZ $0921 : STZ $0923
+    LDA !ram_custom_preset : CMP #$5AFE : BNE .category_presets
+    BRL .custom_presets
+
+  .category_presets
+    PEA $7E7E : PLB : PLB
+    %a8()
+    LDA #$01 : LDX !ROOM_ID      ; X = room ID
+
+if !FEATURE_REDESIGN
+    CPX #$9D19 : BNE +           ; Preset: Hi Jump Boots - Charge Hoppers
+    LDA #$02 : STA $7ECD2C : STA $7ECD2D
+    STA $7ECD26 : STA $7ECD27 : STA $7ECD28
+    BRA .done
++   CPX #$A923 : BNE +           ; Preset: Hi Jump Boots - Lake Spark
+    LDA #$00 : STA $7ECD21
+    BRA .done
++   CPX #$AB64 : BNE +           ; Preset: Lower Norfair - After Super Blockade
+    LDA #$00 : STA $7ECD26 : STA $7ECD2B
+    BRA .done
++   CPX #$ACB3 : BNE +           ; Preset: Grapple - Guardian Runback
+    STA $7ECD23
+    BRA .done
++   CPX #$CAF6 : BNE +           ; Preset: Tourian - M10 Kill 3
+    STA $7ECD26 : STA $7ECD26
+    STA $7ECD26 : STA $7ECD23
++   CPX #$CE8A : BNE +           ; Preset: Final Escape - Mushroom Run
+    LDA #$00 : STA $7ECD20 : STA $7ECD21
+endif
+
+  .done
++   PLB
+    PLP
+    RTL
+
+    ; -----------------------------------------
+    ; Ceres Fixes (Category and Custom Presets)
+    ; -----------------------------------------
+  .ceres_elevator
+    STZ $091E : STZ $0920
+    BRA .ceresdone
+
+  .ceres
+    STZ $5F            ; Initialize mode 7
+    CPX #$DF45 : BEQ .ceres_elevator
+    %a16()
+    STZ $78            ; Ceres Elevator room already does this
+    STZ $7A : STZ $7C  ; Other Ceres rooms should zero out the values
+    STZ $7E : STZ $80
+    STZ $82
+    %a8()
+    CPX #$DF8D : BEQ .ceres_falling_tiles
+    CPX #$DFD7 : BEQ .ceres_magnet_stairs
+    CPX #$E021 : BEQ .ceres_dead_scientists
+    CPX #$E06B : BEQ .ceres_58_escape
+    CPX #$E0B5 : BEQ .ceres_ridley
+
+  .ceresdone
+    PLB
+    PLP
+    RTL
+
+  .ceres_falling_tiles
+    LDA #$01 : STA $091E
+    LDA #$02 : STA $0920
+    BRA .ceresdone
+
+  .ceres_magnet_stairs
+    LDA #$03 : STA $091E
+    LDA #$02 : STA $0920
+    BRA .ceresdone
+
+  .ceres_dead_scientists
+    LDA #$04 : STA $091E
+    LDA #$03 : STA $0920
+    BRA .ceresdone
+
+  .ceres_58_escape
+    LDA #$06 : STA $091E
+    LDA #$03 : STA $0920
+    BRA .ceresdone
+
+  .ceres_ridley
+    LDA #$08 : STA $091E
+    LDA #$03 : STA $0920
+    BRA .ceresdone
+
+  .custom_presets
+    LDA !sram_custom_preset_slot
+    ASL : XBA
+    CLC : ADC #$31E9 : TAX       ; X = Source
+    LDY #$CD51 : LDA #$0031      ; Y = Destination, A = Size-1
+    MVP $F07E                    ; srcBank, destBank
+    TDC : STA !ram_custom_preset
+
+    %a8() : LDX !ROOM_ID         ; X = room ID
+    CPX #$DF45 : BMI .specialized_fixes
+    BRL .ceres                   ; For ceres, use same fixes as category presets
+
+    ; -----------------------------------------------
+    ; Specialized Fixes (Category and Custom Presets)
+    ; -----------------------------------------------
+  .specialized_parlor
+    LDY !SAMUS_Y : CPY #$00D0    ; no fix if Ypos > 208
+    BPL .specialdone
+    LDY !SAMUS_X : CPY #$0175    ; no fix if Xpos > 373
+    BPL .specialdone
+    %a16() : LDA #$00FF
+    STA $7F05C0 : STA $7F05C2
+    LDY !SAMUS_PBS_MAX           ; only clear bottom row if no power bombs
+    BEQ .specialdone
+    STA $7F0520 : STA $7F0522
+    STA $7F0480 : STA $7F0482
+    BRA .specialdone
+
+  .specialized_fixes
+;    CPX #$92FD : BEQ .specialized_parlor
+  .specialdone
+    PLB
+    PLP
+    RTL
+}
+
+preset_special_fixes:
+{
+    ; Grapple - Guardian Runback
+    LDA !ROOM_ID : CMP #$ACB3 : BNE +
+    LDA #$00FF
+    STA $7F0B08 : STA $7F0BC8
+    STA $7F0C88 : STA $7F0D48
+    STA $7F0E08 : STA $7F0EC8
+    STA $7F0F88 : STA $7F1048
+
++   RTL
+}
 warnpc $85F000
+
+print pc, " custompresets end"
+
