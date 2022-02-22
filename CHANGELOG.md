@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.1]    Added option to load preset in order with the Random Preset shortcut by idlechild
 * [2.4.0.20] Scroll fixes for Bowling and Pre-Pillars rooms in presets
 * [2.4.0.20] More work on vanilla HUD display by idlechild
 * [2.4.0.20] Added more early and late game presets to all categories by idlechild

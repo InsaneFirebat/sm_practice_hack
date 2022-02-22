@@ -400,7 +400,7 @@ endif
 
 if !FEATURE_DEV
 presets_random_preset_rng:
-    %cm_toggle("Preset Debugger", !ram_random_preset_rng, #$0001, #0)
+    %cm_toggle("Presets in Order", !ram_random_preset_rng, #$0001, #0)
 endif
 
 SelectPresetCategoryMenu:
