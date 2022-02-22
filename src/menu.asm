@@ -52,11 +52,16 @@ cm_start:
     LDA #$0F : STA $2100
     %a16()
 
+    ; Ensure sound is enabled when menu is open
+    LDA !DISABLE_SOUNDS : PHA
+    STZ !DISABLE_SOUNDS
+    LDA !PB_EXPLOSION_STATUS : PHA
+    STZ !PB_EXPLOSION_STATUS
+    JSL $82BE17               ; Cancel sound effects
+
     LDA #$0001 : STA !ram_cm_menu_active
 
     JSR cm_init
-
-    JSL $82BE17               ; Cancel sound effects
     JSL initialize_ppu_long   ; Initialise PPU for message boxes
 
     JSR cm_transfer_custom_tileset
@@ -66,6 +71,12 @@ cm_start:
     JSL play_music_long ; Play 2 lag frames of music and sound effects
 
     JSR cm_loop         ; Handle message box interaction
+
+    ; Restore sounds variables
+    PLA : STA !PB_EXPLOSION_STATUS
+    PLA : STA !DISABLE_SOUNDS
+    ; Makes the game check Samus' health again, to see if we need annoying sound
+    STZ !SAMUS_HEALTH_WARNING
 
     JSR cm_transfer_original_tileset
     JSR cm_transfer_original_cgram
@@ -108,7 +119,7 @@ cm_init:
     STA !ram_cm_ctrl_timer
     STA $8F
     STA $8B
-    LDA $05B6 : STA !ram_cm_input_counter
+    LDA !FRAME_COUNTER : STA !ram_cm_input_counter
 
     LDA.l #MainMenu
     STA.l !ram_cm_menu_stack
@@ -246,20 +257,26 @@ cm_transfer_custom_cgram:
     ; $3A = Sel Num        $0000, $761F
     PHP
     %a16()
+    ; Backup gameplay palette
     LDA $7EC00A : STA !ram_cgram_cache
-    LDA $7EC012 : STA !ram_cgram_cache+2
-    LDA $7EC01A : STA !ram_cgram_cache+4
-    LDA $7EC01C : STA !ram_cgram_cache+6
-    LDA $7EC032 : STA !ram_cgram_cache+8
-    LDA $7EC034 : STA !ram_cgram_cache+10
-    LDA $7EC03A : STA !ram_cgram_cache+12
-    LDA $7EC03C : STA !ram_cgram_cache+14
+    LDA $7EC00E : STA !ram_cgram_cache+$02
+    LDA $7EC012 : STA !ram_cgram_cache+$04
+    LDA $7EC014 : STA !ram_cgram_cache+$06
+    LDA $7EC016 : STA !ram_cgram_cache+$08
+    LDA $7EC01A : STA !ram_cgram_cache+$0A
+    LDA $7EC01C : STA !ram_cgram_cache+$0C
+    LDA $7EC032 : STA !ram_cgram_cache+$0E
+    LDA $7EC034 : STA !ram_cgram_cache+$10
+    LDA $7EC03A : STA !ram_cgram_cache+$12
+    LDA $7EC03C : STA !ram_cgram_cache+$14
 
+    ; Set menu palette
     LDA #$7277 : STA $7EC00A
-    LDA #$0000 : STA $7EC00E : STA $7EC016 : STA $7EC036 : STA $7EC03A
+    LDA #$0000 : STA $7EC00E : STA $7EC016
+    STA $7EC01A : STA $7EC036 : STA $7EC03A
     LDA #$48F3 : STA $7EC012
     LDA #$7FFF : STA $7EC014 : STA $7EC01C
-    LDA #$4676 : STA $7EC032
+    LDA #$4376 : STA $7EC032
     LDA #$761F : STA $7EC034 : STA $7EC03C
 
     JSL transfer_cgram_long
@@ -271,14 +288,19 @@ cm_transfer_original_cgram:
 {
     PHP
     %a16()
+
+    ; Restore gameplay palette
     LDA !ram_cgram_cache : STA $7EC00A
-    LDA !ram_cgram_cache+2 : STA $7EC012
-    LDA !ram_cgram_cache+4 : STA $7EC01A
-    LDA !ram_cgram_cache+6 : STA $7EC01C
-    LDA !ram_cgram_cache+8 : STA $7EC032
-    LDA !ram_cgram_cache+10 : STA $7EC034
-    LDA !ram_cgram_cache+12 : STA $7EC03A
-    LDA !ram_cgram_cache+14 : STA $7EC03C
+    LDA !ram_cgram_cache+$02 : STA $7EC00E
+    LDA !ram_cgram_cache+$04 : STA $7EC012
+    LDA !ram_cgram_cache+$06 : STA $7EC014
+    LDA !ram_cgram_cache+$08 : STA $7EC016
+    LDA !ram_cgram_cache+$0A : STA $7EC01A
+    LDA !ram_cgram_cache+$0C : STA $7EC01C
+    LDA !ram_cgram_cache+$0E : STA $7EC032
+    LDA !ram_cgram_cache+$10 : STA $7EC034
+    LDA !ram_cgram_cache+$12 : STA $7EC03A
+    LDA !ram_cgram_cache+$14 : STA $7EC03C
 
     JSL transfer_cgram_long
     PLP
@@ -494,6 +516,7 @@ cm_draw_action_table:
     dw draw_toggle_inverted
     dw draw_numfield_color
     dw draw_controller_input
+    dw draw_toggle_bit_inverted
 
     draw_toggle:
     {
@@ -604,6 +627,42 @@ cm_draw_action_table:
 
         ; grab the value at that memory address
         LDA [$08] : AND $0C : BNE .checked
+
+        ; Off
+        LDA #$244B : STA !ram_tilemap_buffer+0,X
+        LDA #$244D : STA !ram_tilemap_buffer+2,X
+        LDA #$244D : STA !ram_tilemap_buffer+4,X
+        RTS
+
+      .checked
+        ; On
+        %a16()
+        LDA #$384B : STA !ram_tilemap_buffer+2,X
+        LDA #$384C : STA !ram_tilemap_buffer+4,X
+        RTS
+    }
+
+    draw_toggle_bit_inverted:
+    {
+        ; grab the memory address (long)
+        LDA [$04] : INC $04 : INC $04 : STA $08
+        LDA [$04] : INC $04 : STA $0A
+
+        ; grab bitmask
+        LDA [$04] : INC $04 : INC $04 : STA $0C
+
+        ; increment past JSR
+        INC $04 : INC $04
+
+        ; Draw the text
+        %item_index_to_vram_index()
+        PHX : JSR cm_draw_text : PLX
+
+        ; Set position for ON/OFF
+        TXA : CLC : ADC #$002C : TAX
+
+        ; grab the value at that memory address
+        LDA [$08] : AND $0C : BEQ .checked
 
         ; Off
         LDA #$244B : STA !ram_tilemap_buffer+0,X
@@ -752,7 +811,7 @@ cm_draw_action_table:
         ; set position for the number
         TXA : CLC : ADC #$002E : TAX
 
-        LDA [$08] : AND #$00FF : STA !ram_tmp_2
+        LDA [$08] : AND #$00FF : STA $C1
 
         ; Clear out the area (black tile)
         LDA #$281F : STA !ram_tilemap_buffer+0,X
@@ -760,11 +819,11 @@ cm_draw_action_table:
 
         ; Draw numbers
         ; (00X0)
-        LDA !ram_tmp_2 : AND #$00F0 : LSR #3 : TAY
+        LDA $C1 : AND #$00F0 : LSR #3 : TAY
         LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer,X
         
         ; (000X)
-        LDA !ram_tmp_2 : AND #$000F : ASL : TAY
+        LDA $C1 : AND #$000F : ASL : TAY
         LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X
 
       .done
@@ -787,7 +846,7 @@ cm_draw_action_table:
         ; set position for the number
         TXA : CLC : ADC #$002E : TAX
 
-        LDA [$08] : AND #$00FF : STA !ram_tmp_2
+        LDA [$08] : AND #$00FF : STA $C1
 
         ; Clear out the area (black tile)
         LDA #$281F : STA !ram_tilemap_buffer+0,X
@@ -795,12 +854,12 @@ cm_draw_action_table:
 
         ; Draw numbers
         ; (00X0)
-        LDA !ram_tmp_2 : AND #$001E : TAY
+        LDA $C1 : AND #$001E : TAY
         LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer,X
 
         ; (000X)
-        LDA !ram_tmp_2 : AND #$0001 : ASL #4 : STA $0E
-        LDA !ram_tmp_2 : AND #$001C : LSR : CLC : ADC $0E : TAY
+        LDA $C1 : AND #$0001 : ASL #4 : STA $0E
+        LDA $C1 : AND #$001C : LSR : CLC : ADC $0E : TAY
         LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X
 
       .done
@@ -995,7 +1054,7 @@ cm_loop:
     JSL $8289EF ; Sound fx queue
 
     LDA !ram_cm_leave : BEQ +
-    JMP .done
+    RTS ; Exit menu loop
 
     +
     LDA !ram_cm_ctrl_mode : BEQ +
@@ -1056,14 +1115,12 @@ cm_loop:
 
   .pressedStart
   .pressedSelect
-    BRA .done
+    LDA #$0001 : STA !ram_cm_leave
+    JMP .inputLoop
 
   .redraw
     JSL cm_draw
     JMP .inputLoop
-
-  .done
-    RTS
 }
 
 cm_ctrl_mode:
@@ -1155,7 +1212,7 @@ cm_calculate_max:
 cm_get_inputs:
 {
     ; Make sure we don't read joysticks twice in the same frame
-    LDA $05B6 : CMP !ram_cm_input_counter : PHP : STA !ram_cm_input_counter : PLP : BNE +
+    LDA !FRAME_COUNTER : CMP !ram_cm_input_counter : PHP : STA !ram_cm_input_counter : PLP : BNE +
 
     JSL $809459 ; Read controller input
 
@@ -1248,6 +1305,7 @@ cm_execute_action_table:
     dw execute_toggle
     dw execute_numfield_color
     dw execute_controller_input
+    dw execute_toggle_bit
 
     execute_toggle:
     {
@@ -1627,7 +1685,6 @@ cm_divide_100:
     STA $4204 : SEP #$20
     LDA #$64 : STA $4206
     PHA : PLA : PHA : PLA : REP #$20
-    LDA $4214 : ADC !ram_tmp_1 : STA !ram_tmp_1
     LDA $4214
     RTS
 

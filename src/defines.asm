@@ -6,10 +6,12 @@
 !ORIGINAL_MESSAGE_TEXT ?= 0
 !PRESERVE_WRAM_DURING_SPACETIME ?= 1
 !FEATURE_MORPHLOCK ?= 0
+!FEATURE_DEV ?= 0
+!RAW_TILE_GRAPHICS ?= 0
 
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 4
-!VERSION_BUILD = 0
+!VERSION_BUILD = 1
 !VERSION_REV_1 = 0
 !VERSION_REV_2 = 0
 
@@ -42,16 +44,17 @@
 !ram_slowdown_controller_2 = !WRAM_START+$20
 !ram_slowdown_frames = !WRAM_START+$22
 
-!ram_tmp_1 = !WRAM_START+$24
-!ram_tmp_2 = !WRAM_START+$26
-!ram_tmp_3 = !WRAM_START+$28
-!ram_tmp_4 = !WRAM_START+$2A
+!ram_momentum_sum = !WRAM_START+$24
+!ram_momentum_count = !WRAM_START+$26
+!ram_momentum_direction = !WRAM_START+$28
+!ram_momentum_last = !WRAM_START+$2A
 
 !ram_last_hp = !WRAM_START+$2C
 !ram_reserves_last = !WRAM_START+$2E
 
-!ram_pct_1 = !WRAM_START+$30
-!ram_pct_2 = !WRAM_START+$32
+!ram_metronome = !WRAM_START+$30
+!ram_metronome_counter = !WRAM_START+$32
+
 !ram_armed_shine_duration = !WRAM_START+$34
 !ram_minimap = !WRAM_START+$36
 !ram_map_counter = !WRAM_START+$38
@@ -65,38 +68,33 @@
 !ram_sprite_enemyproj_hitbox_active = !WRAM_START+$46
 !ram_custom_preset = !WRAM_START+$48
 !ram_fix_scroll_offsets = !WRAM_START+$4A
-
-; ^ FREE SPACE ^ up to +$4E
+!ram_random_preset_rng = !WRAM_START+$4C
+!ram_random_preset_value = !WRAM_START+$4E
 
 !ram_magic_pants_enabled = !WRAM_START+$50
 !ram_magic_pants_state = !WRAM_START+$52
 !ram_magic_pants_pal1 = !WRAM_START+$54
 !ram_magic_pants_pal2 = !WRAM_START+$56
 !ram_magic_pants_pal3 = !WRAM_START+$58
-!ram_draygon_rng_left = !WRAM_START+$5E
-!ram_draygon_rng_right = !WRAM_START+$60
-
 !ram_room_has_set_rng = !WRAM_START+$5A
 !ram_kraid_rng = !WRAM_START+$5C
 !ram_crocomire_rng = !WRAM_START+$5E
-!ram_phantoon_rng_1 = !WRAM_START+$60
-!ram_phantoon_rng_2 = !WRAM_START+$62
-!ram_phantoon_rng_3 = !WRAM_START+$64
-!ram_phantoon_rng_4 = !WRAM_START+$66
-!ram_phantoon_rng_5 = !WRAM_START+$68
-!ram_botwoon_rng = !WRAM_START+$6A
-!ram_draygon_rng_left = !WRAM_START+$6C
-!ram_draygon_rng_right = !WRAM_START+$6E
+!ram_phantoon_rng_round_1 = !WRAM_START+$60
+!ram_phantoon_rng_round_2 = !WRAM_START+$62
+!ram_phantoon_rng_inverted = !WRAM_START+$64
+!ram_phantoon_rng_eyeclose = !WRAM_START+$66
+!ram_phantoon_rng_flames = !WRAM_START+$68
+!ram_phantoon_rng_next_flames = !WRAM_START+$6A
+!ram_botwoon_rng = !WRAM_START+$6C
+!ram_draygon_rng_left = !WRAM_START+$6E
+!ram_draygon_rng_right = !WRAM_START+$70
 
-!ram_game_loop_extras = !WRAM_START+$70
-!ram_game_mode_extras = !WRAM_START+$72
-!ram_sprite_features_active = !WRAM_START+$74
+!ram_game_loop_extras = !WRAM_START+$72
+!ram_game_mode_extras = !WRAM_START+$74
+!ram_sprite_features_active = !WRAM_START+$76
 
-!ram_suits_enemy_damage_check = !WRAM_START+$76
-!ram_suits_periodic_damage_check = !WRAM_START+$78
-
-!ram_metronome = !WRAM_START+$7A
-!ram_metronome_counter = !WRAM_START+$7C
+!ram_suits_enemy_damage_check = !WRAM_START+$78
+!ram_suits_periodic_damage_check = !WRAM_START+$7A
 
 ; ^ FREE SPACE ^ up to +$86
 
@@ -205,26 +203,33 @@
 !ram_cm_watch_bank = !WRAM_MENU_START+$9E
 !ram_cm_watch_common_address = !WRAM_MENU_START+$A0
 
+!ram_cm_phan_first_phase = !WRAM_MENU_START+$80
+!ram_cm_phan_second_phase = !WRAM_MENU_START+$82
+
 ; ^ FREE SPACE ^ up to +$CE
 
-!ram_cgram_cache = !WRAM_MENU_START+$D0         ; 20 bytes
+; Reserve 48 bytes for CGRAM cache
+; Currently first 22 bytes and last 2 bytes are used
+
+!ram_cgram_cache = !WRAM_MENU_START+$D0
 
 !ram_hex2dec_first_digit = $14
 !ram_hex2dec_second_digit = $16
 !ram_hex2dec_third_digit = $18
 !ram_hex2dec_rest = $1A
 
-!ACTION_TOGGLE          = #$0000
-!ACTION_TOGGLE_BIT      = #$0002
-!ACTION_JSR             = #$0004
-!ACTION_NUMFIELD        = #$0006
-!ACTION_CHOICE          = #$0008
-!ACTION_CTRL_SHORTCUT   = #$000A
-!ACTION_NUMFIELD_HEX    = #$000C
-!ACTION_NUMFIELD_WORD   = #$000E
-!ACTION_TOGGLE_INVERTED = #$0010
-!ACTION_NUMFIELD_COLOR  = #$0012
-!ACTION_CTRL_INPUT      = #$0014
+!ACTION_TOGGLE              = #$0000
+!ACTION_TOGGLE_BIT          = #$0002
+!ACTION_JSR                 = #$0004
+!ACTION_NUMFIELD            = #$0006
+!ACTION_CHOICE              = #$0008
+!ACTION_CTRL_SHORTCUT       = #$000A
+!ACTION_NUMFIELD_HEX        = #$000C
+!ACTION_NUMFIELD_WORD       = #$000E
+!ACTION_TOGGLE_INVERTED     = #$0010
+!ACTION_NUMFIELD_COLOR      = #$0012
+!ACTION_CTRL_INPUT          = #$0014
+!ACTION_TOGGLE_BIT_INVERTED = #$0016
 
 !SOUND_MENU_MOVE = $0039
 !SOUND_MENU_JSR = $0039
@@ -252,25 +257,25 @@ endif
 !IH_BLANK = #$2C0F
 !IH_PERCENT = #$0C0A
 !IH_DECIMAL = #$0CCB
-!IH_HYPHEN = #$0C60
-!IH_RESERVE_AUTO = #$0C32
-!IH_RESERVE_EMPTY = #$0C33
+!IH_HYPHEN = #$0C55
+!IH_RESERVE_AUTO = #$0C0C
+!IH_RESERVE_EMPTY = #$0C0D
 !IH_MORPHBALL = #$1CC9
-!IH_ELEVATOR = #$1CCE
-!IH_SHINETIMER = #$00CF
-!IH_HEALTHBOMB = #$0847
-!IH_LETTER_A = #$0CD8
-!IH_LETTER_B = #$0CD9
-!IH_LETTER_C = #$0C33
-!IH_LETTER_D = #$0C45
-!IH_LETTER_E = #$0C47
-!IH_LETTER_F = #$0C48
-!IH_LETTER_H = #$0CCA
-!IH_LETTER_L = #$0C0B
-!IH_LETTER_N = #$0CB8
-!IH_LETTER_R = #$0C0C
-!IH_LETTER_X = #$0CDA
-!IH_LETTER_Y = #$0CDB
+!IH_ELEVATOR = #$1C0B
+!IH_SHINETIMER = #$0032
+!IH_HEALTHBOMB = #$085A
+!IH_LETTER_A = #$0C64
+!IH_LETTER_B = #$0C65
+!IH_LETTER_C = #$0C58
+!IH_LETTER_D = #$0C59
+!IH_LETTER_E = #$0C5A
+!IH_LETTER_F = #$0C5B
+!IH_LETTER_H = #$0C6C
+!IH_LETTER_L = #$0C68
+!IH_LETTER_N = #$0C56
+!IH_LETTER_R = #$0C69
+!IH_LETTER_X = #$0C66
+!IH_LETTER_Y = #$0C67
 
 !IH_PAUSE = #$0100 ; right
 !IH_SLOWDOWN = #$0400 ; down
@@ -282,6 +287,7 @@ endif
 !IH_INPUT_START = #$1000
 !IH_INPUT_UP = #$0800
 !IH_INPUT_DOWN = #$0400
+!IH_INPUT_LEFTRIGHT = #$0300
 !IH_INPUT_LEFT = #$0200
 !IH_INPUT_RIGHT = #$0100
 !IH_INPUT_HELD = #$0001 ; used by menu
@@ -313,8 +319,15 @@ endif
 !SFX_LIB3 = $809143
 
 !OAM_STACK_POINTER = $0590
+!PB_EXPLOSION_STATUS = $0592
+!FRAME_COUNTER = $05B6
+!CACHED_RANDOM_NUMBER = $05E5
+!DISABLE_SOUNDS = $05F5
 !SOUND_TIMER = $0686
 !ROOM_ID = $079B
+!AREA_ID = $079F
+!ROOM_WIDTH_BLOCKS = $07A5
+!ROOM_WIDTH_SCROLLS = $07A9
 !MUSIC_DATA = $07F3
 !MUSIC_TRACK = $07F5
 !LAYER1_X = $0911
@@ -335,9 +348,14 @@ endif
 !SAMUS_PBS_MAX = $09D0
 !SAMUS_RESERVE_MAX = $09D4
 !SAMUS_RESERVE_ENERGY = $09D6
+!SAMUS_LAST_HP = $0A06
 !SAMUS_POSE = $0A1C
 !SAMUS_POSE_DIRECTION = $0A1E
 !SAMUS_MOVEMENT_TYPE = $0A1F
+!SAMUS_PREVIOUS_POSE = $0A20
+!SAMUS_PREVIOUS_POSE_DIRECTION = $0A22
+!SAMUS_PREVIOUS_MOVEMENT_TYPE = $0A23
+!SAMUS_HEALTH_WARNING = $0A6A
 !SAMUS_X = $0AF6
 !SAMUS_X_SUBPX = $0AF8
 !SAMUS_Y = $0AFA
@@ -346,9 +364,14 @@ endif
 !SAMUS_Y_RADIUS = $0B00
 !SAMUS_SPRITEMAP_X = $0B04
 !SAMUS_Y_SUBSPEED = $0B2C
+!SAMUS_Y_SPEEDCOMBINED = $0B2D
 !SAMUS_Y_SPEED = $0B2E
 !SAMUS_Y_DIRECTION = $0B36
 !SAMUS_DASH_COUNTER = $0B3F
+!SAMUS_X_RUNSPEED = $0B42
+!SAMUS_X_SUBRUNSPEED = $0B44
+!SAMUS_X_MOMENTUM = $0B46
+!SAMUS_X_SUBMOMENTUM = $0B48
 !SAMUS_PROJ_X = $0B64
 !SAMUS_PROJ_Y = $0B78
 !SAMUS_PROJ_RADIUS_X = $0BB4
@@ -374,51 +397,59 @@ endif
 ; SRAM
 ; -----
 
-!sram_initialized = $F02200
-
-!sram_ctrl_menu = $F02202
-!sram_ctrl_kill_enemies = $F02204
-!sram_ctrl_full_equipment = $F02206
-!sram_ctrl_reset_segment_timer = $F02208
-!sram_ctrl_reset_segment_later = $F0220A
-!sram_ctrl_load_state = $F0220C
-!sram_ctrl_save_state = $F0220E
-!sram_ctrl_load_last_preset = $F02210
-!sram_ctrl_random_preset = $F02212
-!sram_ctrl_save_custom_preset = $F02214
-!sram_ctrl_load_custom_preset = $F02216
-!sram_ctrl_inc_custom_preset = $F02218
-!sram_ctrl_dec_custom_preset = $F0221A
-!sram_ctrl_toggle_tileviewer = $F0221C
-!sram_ctrl_update_timers = $F0221E
-
-; FREE SPACE ^
-
-!sram_artificial_lag = $F02220
-!sram_rerandomize = $F02222
-!sram_fanfare_toggle = $F02224
-!sram_frame_counter_mode = $F02226
-!sram_display_mode = $F02228
-!sram_music_toggle = $F0222A
-!sram_last_preset = $F0222C
-!sram_save_has_set_rng = $F0222E
-!sram_preset_category = $F02230
-!sram_custom_preset_slot = $F02232
-!sram_room_strat = $F02234
-!sram_sprite_prio_flag = $F02236
-!sram_metronome_tickrate = $F02238
-!sram_metronome_sfx = $F0223A
-!sram_status_icons = $F0223C
-!sram_top_display_mode = $F0203E
-!sram_healthalarm = $F02040
-!sram_room_layout = $F02042
-!sram_cutscenes = $F02044
-!sram_compressed_graphics = $F02046
-!sram_lag_counter_mode = $F02048
-
-; ^ FREE SPACE ^ up to $F02FFF
-
 !PRESET_SLOTS = $F03000
+
+!SRAM_START = $F02200
+
+!sram_initialized = !SRAM_START+$00
+
+!sram_ctrl_menu = !SRAM_START+$02
+!sram_ctrl_kill_enemies = !SRAM_START+$04
+!sram_ctrl_full_equipment = !SRAM_START+$06
+!sram_ctrl_reset_segment_timer = !SRAM_START+$08
+!sram_ctrl_reset_segment_later = !SRAM_START+$0A
+!sram_ctrl_load_state = !SRAM_START+$0C
+!sram_ctrl_save_state = !SRAM_START+$0E
+!sram_ctrl_load_last_preset = !SRAM_START+$10
+!sram_ctrl_random_preset = !SRAM_START+$12
+!sram_ctrl_save_custom_preset = !SRAM_START+$14
+!sram_ctrl_load_custom_preset = !SRAM_START+$16
+!sram_ctrl_inc_custom_preset = !SRAM_START+$18
+!sram_ctrl_dec_custom_preset = !SRAM_START+$1A
+!sram_ctrl_toggle_tileviewer = !SRAM_START+$1C
+!sram_ctrl_update_timers = !SRAM_START+$1E
+
+!sram_artificial_lag = !SRAM_START+$20
+!sram_rerandomize = !SRAM_START+$22
+!sram_fanfare_toggle = !SRAM_START+$24
+!sram_frame_counter_mode = !SRAM_START+$26
+!sram_display_mode = !SRAM_START+$28
+!sram_music_toggle = !SRAM_START+$2A
+!sram_last_preset = !SRAM_START+$2C
+!sram_save_has_set_rng = !SRAM_START+$2E
+!sram_preset_category = !SRAM_START+$30
+!sram_custom_preset_slot = !SRAM_START+$32
+!sram_room_strat = !SRAM_START+$34
+!sram_sprite_prio_flag = !SRAM_START+$36
+!sram_metronome_tickrate = !SRAM_START+$38
+!sram_metronome_sfx = !SRAM_START+$3A
+!sram_status_icons = !SRAM_START+$3C
+!sram_suit_properties = !SRAM_START+$3E
+!sram_top_display_mode = !SRAM_START+$40
+!sram_healthalarm = !SRAM_START+$42
+!sram_room_layout = !SRAM_START+$44
+!sram_cutscenes = !SRAM_START+$46
+!sram_preset_options = !SRAM_START+$48
+!sram_lag_counter_mode = !SRAM_START+$4A
+
+; ^ FREE SPACE ^ up to +$0FCE
+
+; SM specific things
+!SRAM_MUSIC_DATA = !SRAM_START+$0FD0
+!SRAM_MUSIC_TRACK = !SRAM_START+$0FD2
+!SRAM_SOUND_TIMER = !SRAM_START+$0FD4
+
+; ^ FREE SPACE ^ up to +$0FFE
 
 
 ; ----------
@@ -432,9 +463,4 @@ endif
 
 !SRAM_DMA_BANK = $770000
 !SRAM_SAVED_SP = $774004
-
-; SM specific things
-!SRAM_MUSIC_DATA = $701FD0
-!SRAM_MUSIC_TRACK = $701FD2
-!SRAM_SOUND_TIMER = $701FD4
 
