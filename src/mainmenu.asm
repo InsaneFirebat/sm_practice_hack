@@ -1479,10 +1479,10 @@ ihmode_spikesuit:
     %cm_jsr("Spikesuit Trainer", #action_select_infohud_mode, #$0009)
 
 ihmode_lagcounter:
-    %cm_jsr("CPU Usage", #action_select_infohud_mode, #$000A)
+    %cm_jsr("Lag Counter", #action_select_infohud_mode, #$000A)
 
 ihmode_cpuusage:
-    %cm_jsr("Lag Counter", #action_select_infohud_mode, #$000B)
+    %cm_jsr("CPU Usage", #action_select_infohud_mode, #$000B)
 
 ihmode_xpos:
     %cm_jsr("X Position", #action_select_infohud_mode, #$000C)
