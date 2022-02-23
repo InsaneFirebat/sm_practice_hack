@@ -321,8 +321,6 @@ category_preset_data_table:
   dl preset_kpdr25_bombs_ceres_elevator
   dl preset_gtclassic_crateria_ceres_elevator
   dl preset_gtmax_crateria_ceres_elevator
-  dl preset_14ice_crateria_ceres_elevator
-  dl preset_14speed_crateria_ceres_elevator
   dl preset_100early_crateria_ceres_elevator
   dl preset_hundo_bombs_ceres_elevator
   dl preset_100map_bombs_ceres_elevator

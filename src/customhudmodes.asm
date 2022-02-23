@@ -26,6 +26,15 @@ status_ridleygrab:
 
 status_dboost:
 {
+; http://patrickjohnston.org/bank/91#fEDB0 comments explain knockback direction
+;    $0A52: Knockback direction
+;        1: Up left
+;        2: Up right
+;        4: Down left
+;        5: Down right
+;    $0A54: Knockback X direction. 0 = left, 1 = right
+;    $18AA: Knockback timer
+
     LDA !SAMUS_MOVEMENT_TYPE : AND #$00FF
     CMP #$000A : BEQ .knockback
 ;    CMP #$0019 : BEQ .dboost

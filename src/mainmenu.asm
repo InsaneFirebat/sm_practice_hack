@@ -444,11 +444,11 @@ presets_current:
         db #$28, "   KPDR ICE", #$FF
         db #$28, " GT CLASSIC", #$FF
         db #$28, "    GT MAX%", #$FF
-        db #$28, "    14% ICE", #$FF
-        db #$28, "  14% SPEED", #$FF
         db #$28, " 100% EARLY", #$FF
         db #$28, "  100% LATE", #$FF
         db #$28, "   100% MAP", #$FF
+        db #$28, "    14% ICE", #$FF
+        db #$28, "  14% SPEED", #$FF
         db #$28, "        RBO", #$FF
         db #$28, " NG+ PLASMA", #$FF
         db #$28, "  NG+ HYPER", #$FF
@@ -488,20 +488,20 @@ precat_gtclassic:
 precat_gtmax:
     %cm_jsr("GT Max%", #action_select_preset_category, #$0008)
 
-precat_14ice:
-    %cm_jsr("Low% Ice", #action_select_preset_category, #$0009)
-
-precat_14speed:
-    %cm_jsr("Low% Speed", #action_select_preset_category, #$000A)
-
 precat_100early:
-    %cm_jsr("100% Early Crocomire", #action_select_preset_category, #$000B)
+    %cm_jsr("100% Early Crocomire", #action_select_preset_category, #$0009)
 
 precat_hundo:
-    %cm_jsr("100% Late Crocomire", #action_select_preset_category, #$000C)
+    %cm_jsr("100% Late Crocomire", #action_select_preset_category, #$000A)
 
 precat_100map:
-    %cm_jsr("100% Map Completion", #action_select_preset_category, #$000D)
+    %cm_jsr("100% Map Completion", #action_select_preset_category, #$000B)
+
+precat_14ice:
+    %cm_jsr("14% Ice", #action_select_preset_category, #$000C)
+
+precat_14speed:
+    %cm_jsr("14% Speed", #action_select_preset_category, #$000D)
 
 precat_rbo:
     %cm_jsr("Reverse Boss Order", #action_select_preset_category, #$000E)
