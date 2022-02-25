@@ -3,7 +3,7 @@
 ;
 
 ;org $80D000
-org $80FA00
+org $80FB00
 print pc, " save start"
 
 ; These can be modified to do game-specific things before and after saving and loading
@@ -407,4 +407,4 @@ vm:
 }
 
 print pc, " save end"
-warnpc $80FDFF
+warnpc $80FFC0

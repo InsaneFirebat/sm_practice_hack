@@ -1,6 +1,6 @@
 ;org $82FA00
 org $81F4D0
-print pc, " presets bank82 start"
+print pc, " presets bank81 start"
 
 preset_load:
 {
@@ -10,7 +10,7 @@ preset_load:
 
     JSL $809E93  ; Clear timer RAM
     JSL preset_load_bank82 ; few JSR's in Bank 82
-    JSL $91E00D  ; Initialise Samus
+    JSL $91E00D  ; Initialize Samus
 
     JSL preset_load_preset
 
@@ -19,15 +19,11 @@ preset_load:
     JSL $809A79  ; HUD routine when game is loading
     JSL $90AD22  ; Reset projectile data
 
-    PHP
-    REP #$30
-    LDY #$0020
-    LDX #$0000
+    PHP : %ai16()
+    LDX #$0000 : LDY #$0020
   .paletteLoop
-    LDA $7EC180,x : STA $7EC380,x  ; Target Samus' palette = [Samus' palette]
-    INX #2
-    DEY #2
-    BNE .paletteLoop
+    LDA $7EC180,X : STA $7EC380,X  ; Target Samus' palette = [Samus' palette]
+    INX #2 : DEY #2 : BNE .paletteLoop
     PLP
 
     LDA #$0000
@@ -49,33 +45,23 @@ preset_load:
   .loopSomething
     JSL $A08CD7  ; Transfer enemy tiles to VRAM and initialize enemies
     JSL $808338  ; Wait for NMI
-    DEC $0DA0    ; Decrement $0DA0
-    BPL .loopSomething
+    DEC $0DA0 : BPL .loopSomething ; loop counter
 
     LDA #$0008 : STA !GAMEMODE
     %a8() : LDA #$0F : STA $51 : %a16()
 
-    PHP
-    REP #$30
-    LDY #$0200
-    LDX #$0000
+    PHP : %a16()
+    LDX #$0000 : LDY #$0200
   .paletteLoop2
-    LDA $7EC200,x
-    STA $7EC000,x  ; Palettes = [target palettes]
-    INX #2
-    DEY #2
-    BNE .paletteLoop2
+    LDA $7EC200,X : STA $7EC000,X  ; Palettes = [target palettes]
+    INX #2 : DEY #2 : BNE .paletteLoop2
     PLP
 
-    ; Fix Samus' palette
-    JSL $91DEBA
+
+    JSL $91DEBA  ; Fix Samus' palette
 
     ; Re-upload OOB viewer tiles if needed
-    LDA !ram_oob_watch_active : BEQ +
-    JSL upload_sprite_oob_tiles
-
-    ; Re-upload OOB viewer tiles if needed
-+   LDA !ram_oob_watch_active : BEQ .done_upload_sprite_oob_tiles
+    LDA !ram_oob_watch_active : BEQ .done_upload_sprite_oob_tiles
     JSL upload_sprite_oob_tiles
 
   .done_upload_sprite_oob_tiles
@@ -105,7 +91,7 @@ preset_load:
 clear_all_enemies:
 {
     ; Clear enemies (8000 = solid to Samus, 0400 = Ignore Samus projectiles)
-    LDA #$0000 : STA $0E52
+    LDA #$0000
   .loop
     TAX : LDA $0F86,X : BIT #$8400 : BNE .done_clearing
     ORA #$0200 : STA $0F86,X
@@ -119,14 +105,10 @@ preset_load_destination_state_and_tiles:
 {
     ; Original logic from $82E76B
     PHP : PHB
-    REP #$30
+    %a16()
     PEA $8F00
     PLB : PLB
-    JSR $DDF1  ; Load destination room CRE bitset
-    JSR $DE12  ; Load door header
-    JSR $DE6F  ; Load room header
-    JSR $DEF2  ; Load state header
-    JMP $E78C
+    JML preset_load_destination_state_and_tiles_bank82
 }
 
 if !RAW_TILE_GRAPHICS
@@ -307,11 +289,12 @@ category_preset_load:
 category_preset_data_table:
     dl presets_redesign_crateria_ceres_elevator
 
-warnpc $81F800 ; Redesign code?
-print pc, " presets bank82 end"
+warnpc $81F780 ; Axeil/Redesign code?
+print pc, " presets bank81 end"
 
 
 org $82FD80
+print pc, " presets bank82 start"
 preset_load_bank82:
 {
     JSR $819B    ; Initialize IO registers
@@ -319,7 +302,19 @@ preset_load_bank82:
     JSR $82C5    ; Load initial palette
     RTL
 }
+
+preset_load_destination_state_and_tiles_bank82:
+    JSR $DDF1  ; Load destination room CRE bitset
+    JSR $DE12  ; Load door header
+    JSR $DE6F  ; Load room header
+    JSR $DEF2  ; Load state header
+if !RAW_TILE_GRAPHICS
+    JML load_raw_tile_graphics
+else
+    JMP $E78C
+endif
 warnpc $82FD9B
+print pc, " presets bank82 end"
 
 org $82E8D9
     JSL preset_room_setup_asm_fixes
@@ -641,55 +636,6 @@ endif
     PLB : PLP : RTL
 }
 
-
-LoadRandomPreset:
-{
-    PHY : PHX
-    JSL $808111 : STA $12     ; random number
-
-    LDA #$0089 : STA $18      ; this routine lives in bank $89
-    LDA !sram_preset_category : ASL : TAY
-    LDA #preset_category_submenus : STA $16
-    LDA [$16],Y : TAX         ; preset category submenu table
-    LDA #preset_category_banks : STA $16
-    LDA [$16],Y : STA $18     ; preset category menu bank
-
-    STX $16 : LDY #$0000
-  .toploop
-    INY #2
-    LDA [$16],Y : BNE .toploop
-    TYA : LSR : TAY           ; Y = size of preset category submenu table
-
-    LDA $12 : XBA : AND #$00FF : STA $4204
-    %a8()
-    STY $4206                 ; divide top half of random number by Y
-    %a16()
-    PEA $0000 : PLA
-    LDA $4216 : ASL : TAY     ; randomly selected subcategory
-    LDA [$16],Y : STA $16     ; increment four bytes to get the subcategory table
-    LDY #$0004 : LDA [$16],Y : STA $16
-
-    LDY #$0000
-  .subloop
-    INY #2
-    LDA [$16],Y : BNE .subloop
-    TYA : LSR : TAY           ; Y = size of subcategory table
-
-    LDA $12 : AND #$00FF : STA $4204
-    %a8()
-    STY $4206                 ; divide bottom half of random number by Y
-    %a16()
-    PEA $0000 : PLA
-    LDA $4216 : ASL : TAY     ; randomly selected preset
-    LDA [$16],Y : STA $16     ; increment four bytes to get the data
-    LDY #$0004 : LDA [$16],Y
-
-    STA !ram_load_preset
-
-    PLX : PLY
-    RTL
-}
-
 transfer_cgram_long:
 {
     PHP
@@ -702,7 +648,7 @@ transfer_cgram_long:
 
 
 print pc, " presets bank80 end"
-warnpc $80FDFD
+warnpc $80FB00 ; save.asm
 
 
 ; -------------------

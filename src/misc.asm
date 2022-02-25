@@ -13,8 +13,8 @@ endif
 
 ; Skip intro
 ; $82:EEDF A9 95 A3    LDA #$A395
-org $82EEDF
-    LDA #$C100
+;org $82EEDF
+;    LDA #$C100
 
 
 ; Enable version display
@@ -71,8 +71,8 @@ org $828ADD       ; Resume original logic
     .skip_debug_brightness
 
 
-org $CF8BBF       ; Set map scroll beep to high priority
-    dw $2A97
+;org $CF8BBF       ; Set map scroll beep to high priority
+;    dw $2A97
 
 
 ; $80:8F24 9C F6 07    STZ $07F6  [$7E:07F6]  ;/
@@ -300,6 +300,7 @@ warnpc $90F8A7
 if !FEATURE_REDESIGN
 ; Rewrite morph lock code
 org $80D000
+print pc, " morphlock start"
     LDA !ram_cm_menu_active : BEQ +
     LDA $4218
     RTS
@@ -330,5 +331,21 @@ org $80D000
 +   LDA $4218
     AND #$F3FF
     RTS
+
+print pc, " morphlock end"
+else
+org $80CF80
+print pc, " morphlock start"
+;    LDA !ram_cm_menu_active : BEQ +
+;    LDA $4218
+;    RTS
+
+;+   LDA $4218 : STA $CB
+;    EOR $C7 : AND $CB : STA $CF
+
+;    LDA $0998 : CMP #$0013 : BMI .check_bombjump
+;    CMP #$0018 : BPL .check_bombjump
+
+print pc, " morphlock end"
 endif
 

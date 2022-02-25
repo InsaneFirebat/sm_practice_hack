@@ -1401,7 +1401,7 @@ warnpc $FEE000
 
 ; Stuff that needs to be placed in bank 80
 ;org $80D300
-org $80E3E0
+org $80E3F2
 print pc, " infohud bank80 start"
 
 ih_fix_scroll_offsets:

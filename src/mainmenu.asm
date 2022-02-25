@@ -388,6 +388,67 @@ action_load_preset:
     RTS
 }
 
+LoadRandomPreset:
+{
+    PHY : PHX
+    LDA !ram_random_preset_rng : BEQ .seedrandom
+    LDA !ram_random_preset_value : STA $12
+    BRA .seedpicked
+
+  .seedrandom
+    JSL $808111 : STA $12     ; random number
+
+  .seedpicked
+    LDA #$0089 : STA $18      ; this routine lives in bank $89
+    LDA !sram_preset_category : ASL : TAY
+    LDA.l #preset_category_submenus : STA $16
+    LDA [$16],Y : TAX         ; preset category submenu table
+    LDA.l #preset_category_banks : STA $16
+    LDA [$16],Y : STA $18     ; preset category menu bank
+
+    STX $16 : LDY #$0000
+  .toploop
+    INY #2
+    LDA [$16],Y : BNE .toploop
+    TYA : LSR : TAY           ; Y = size of preset category submenu table
+
+    LDA $12 : XBA : AND #$00FF : STA $4204
+    %a8()
+    STY $4206                 ; divide top half of random number by Y
+    %a16()
+    PEA $0000 : PLA : PEA $0000 : PLA
+    LDA $4216 : ASL : TAY     ; randomly selected subcategory
+    LDA [$16],Y : STA $16     ; increment four bytes to get the subcategory table
+    LDY #$0004 : LDA [$16],Y : STA $16
+
+    LDY #$0000
+  .subloop
+    INY #2
+    LDA [$16],Y : BNE .subloop
+    TYA : LSR : TAY           ; Y = size of subcategory table
+
+    LDA $12 : AND #$00FF : STA $4204
+    %a8()
+    STY $14 : STY $4206       ; divide bottom half of random number by Y
+    %a16()
+    PEA $0000 : PLA : PEA $0000 : PLA
+    LDA $4216 : STA $12       ; randomly selected preset
+
+    ASL : TAY
+    LDA [$16],Y : STA $16     ; increment four bytes to get the data
+    LDY #$0004 : LDA [$16],Y
+    STA !ram_load_preset
+    LDA !ram_random_preset_rng : BEQ .done
+    LDA !ram_random_preset_value : INC : STA !ram_random_preset_value
+    LDA $12 : INC : CMP $14 : BMI .done
+    LDA !ram_random_preset_value : XBA : INC : XBA
+    AND #$FF00 : STA !ram_random_preset_value
+
+  .done
+    PLX : PLY
+    RTL
+}
+
 
 ; ----------------
 ; Equipment menu

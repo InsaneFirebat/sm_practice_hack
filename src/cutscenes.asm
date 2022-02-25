@@ -1,10 +1,10 @@
 
 org $82EEE0
-    dw cutscenes_load_intro
+;    dw cutscenes_load_intro
 
 
 org $8BB240
-    JSR cutscenes_load_ceres_arrival
+;    JSR cutscenes_load_ceres_arrival
 
 
 org $8BF800

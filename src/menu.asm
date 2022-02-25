@@ -31,7 +31,7 @@ maybe_trigger_pause_long:
     RTL
 
 print pc, " menu bank85 end"
-warnpc $85FFBF
+warnpc $85FF00 ; misc.asm
 
 ;org $B8A2E5
 org $B8C470

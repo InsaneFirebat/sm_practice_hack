@@ -104,4 +104,5 @@ hook_resume_room_music:
     JSL $808FC1
     RTL
 
+warnpc $85FFC0
 print pc, " fanfare end"
