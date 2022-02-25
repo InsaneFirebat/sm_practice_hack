@@ -39,7 +39,7 @@ endmacro
 macro setupRGB(addr)
     LDA.w #<addr>>>16 : STA $C3
     LDA.w #<addr> : STA $C1
-    JSR cm_setup_RGB
+    JSL cm_setup_RGB
     RTS
 endmacro
 
@@ -96,7 +96,7 @@ ifb_palette2custom:
     %cm_jsr("Copy Palette to Custom", .routine, #$0000)
   .routine
     JSL copy_menu_palette
-    RTS
+    RTL
 
 ifb_paletterando:
     %cm_submenu("Randomize Custom Palette", #PaletteRandoConfirm)
@@ -122,7 +122,7 @@ paletterando_abort:
   .routine
     %sfxgoback()
     JSL cm_previous_menu
-    RTS
+    RTL
 
 paletterando_confirm:
     %cm_jsr("RANDOMIZE!", #.routine, #$0000)
@@ -144,7 +144,7 @@ paletterando_confirm:
     JSL PrepMenuPalette_customPalette ; points to a branch within PrepMenuPalette
     JSL refresh_custom_palettes
     %sfxbubble()
-    RTS
+    RTL
 
 ifb_customsfx:
     %cm_submenu("Customize Menu Sounds", #CustomMenuSFXMenu)
@@ -232,7 +232,7 @@ ifb_dummy_num:
 MixRGB_long:
 {
     JSL MixRGB
-    RTS
+    RTL
 }
 
 
@@ -329,12 +329,12 @@ ifb_sfx_reset:
     LDA #$0038 : STA !sram_customsfx_confirm
     LDA #$0007 : STA !sram_customsfx_goback
     %sfxquake()
-    RTS
+    RTL
 
 action_test_sfx:
 {
     JSL !SFX_LIB1
-    RTS
+    RTL
 }
 
 
@@ -353,16 +353,16 @@ ifb_menuscroll_button:
   .routine
     LDA !sram_scroll_button : BEQ +
     LDA #$4000 : STA !sram_cm_scroll_button
-    RTS
+    RTL
 +   LDA #$0040 : STA !sram_cm_scroll_button
-    RTS
+    RTL
 
 ifb_menuscroll_delay:
     %cm_numfield("Menu Scroll Delay", !sram_cm_scroll_delay, 1, 10, 1, 2, .routine)
   .routine
     LDA !sram_cm_scroll_delay : BNE +
     LDA #$000A : STA !sram_cm_scroll_delay
-+   RTS
++   RTL
 
 
 ; ---------
@@ -416,7 +416,7 @@ copy_menu_palette:
     PHB
     PHK : PLB
     LDA !sram_custompalette_profile : BNE + : BRL .fail
-+   ASL : TAX : LDA PaletteProfileTables,X : STA $16
++   ASL : TAX : LDA.l PaletteProfileTables,X : STA $16
 
     ; copy table to SRAM, Y is already zero from JSR menu macro
     LDA ($16),Y : STA !sram_custompalette_menuborder : INY #2
@@ -549,11 +549,15 @@ HUDProfileTable:
 
 cm_colors:
 {
+print pc, " DEBUG %%%%%%%%%%%%%%% cm_colors"
+    PHB
+    PHK : PLB
     LDA !ram_cm_cursor_stack+4 : CMP #$0002 : BNE .done ; exit if not in color menu
     LDA !ram_cm_cursor_stack+6 : CMP #$0016 : BPL .done ; exit if beyond table boundaries
     TAX : JSR (ColorMenuTable,X)
 
   .done
+    PLB
     RTL
 }
 
@@ -562,7 +566,7 @@ cm_setup_RGB:
     LDA [$C1] : AND #$7C00 : XBA : LSR #2 : STA !sram_custompalette_blue
     LDA [$C1] : AND #$03E0 : LSR #5 : STA !sram_custompalette_green
     LDA [$C1] : AND #$001F : STA !sram_custompalette_red
-    RTS
+    RTL
 }
 
 MixRGB:
