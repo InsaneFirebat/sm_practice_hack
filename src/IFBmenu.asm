@@ -2,6 +2,10 @@
 ; Firebat Menu   IFBMenu:
 ; ----------
 
+pushpc
+org $85A000
+print pc, " mainmenuu IFBmenu start"
+
 IFBMenu:
     dw #ifb_customizemenu
     dw #$FFFF
@@ -71,7 +75,7 @@ BRBMenu:
     dw ifb_brb_palette_cycle
     dw #$FFFF
     dw #ifb_soundtest_goto_music
-    dw #game_music_toggle
+    dw #ifb_game_music_toggle
     dw #$0000
     %cm_header("BRB SCREEN MENU")
 
@@ -79,7 +83,7 @@ ifb_brb_screen:
     %cm_jsr("Launch BRB Screen", .routine, #0)
   .routine
     LDA #$0001 : STA !ram_cm_brb
-    RTS
+    RTL
 
 ifb_brb_timer_mode:
     dw !ACTION_CHOICE
@@ -102,7 +106,7 @@ ifb_brb_timer_clear:
   .routine
     TYA : STA !ram_cm_brb_mins
     STA !ram_cm_brb_secs : STA !ram_cm_brb_frames
-    RTS
+    RTL
 
 ifb_brb_cycle_timer:
     %cm_numfield_word("Cycle Timer (seconds)", !ram_cm_brb_set_cycle, 1, 600, 1, 10, .routine)
@@ -110,12 +114,14 @@ ifb_brb_cycle_timer:
     LDA !ram_cm_brb_set_cycle : BNE +
     LDA #$0009 ; default to ~10s
 +   ASL #6 : STA !ram_cm_brb_cycle_time
-    RTS
+    RTL
 
 ifb_brb_palette_cycle:
     %cm_toggle_bit_inverted("Cycle Palettes", !ram_cm_brb_palette, #$FFFF, #0)
 
+print pc, " BRB start"
 incsrc BRBmenu.asm
+print pc, " BRB end"
 
 
 ; ----------
@@ -167,28 +173,28 @@ DebugTeleportCrateriaMenu:
     %cm_header("CRATERIA DEBUG LOAD")
 
 tel_crat_08:
-    %cm_jsr("Crateria 08", #action_teleport, #$0008)
+    %cm_jsr("Crateria 08", #action_teleport_long, #$0008)
 
 tel_crat_09:
-    %cm_jsr("Crateria 09", #action_teleport, #$0009)
+    %cm_jsr("Crateria 09", #action_teleport_long, #$0009)
 
 tel_crat_0A:
-    %cm_jsr("Crateria 0A", #action_teleport, #$000A)
+    %cm_jsr("Crateria 0A", #action_teleport_long, #$000A)
 
 tel_crat_0B:
-    %cm_jsr("Crateria 0B", #action_teleport, #$000B)
+    %cm_jsr("Crateria 0B", #action_teleport_long, #$000B)
 
 tel_crat_0C:
-    %cm_jsr("Crateria 0C", #action_teleport, #$000C)
+    %cm_jsr("Crateria 0C", #action_teleport_long, #$000C)
 
 tel_crat_10:
-    %cm_jsr("Crateria 10", #action_teleport, #$0010)
+    %cm_jsr("Crateria 10", #action_teleport_long, #$0010)
 
 tel_crat_11:
-    %cm_jsr("Crateria 11", #action_teleport, #$0011)
+    %cm_jsr("Crateria 11", #action_teleport_long, #$0011)
 
 tel_crat_12:
-    %cm_jsr("Crateria 12", #action_teleport, #$0012)
+    %cm_jsr("Crateria 12", #action_teleport_long, #$0012)
 
 DebugTeleportBrinstarMenu:
     dw #tel_brin_08
@@ -201,22 +207,22 @@ DebugTeleportBrinstarMenu:
     %cm_header("BRINSTAR DEBUG LOAD")
 
 tel_brin_08:
-    %cm_jsr("Brinstar 08", #action_teleport, #$0108)
+    %cm_jsr("Brinstar 08", #action_teleport_long, #$0108)
 
 tel_brin_09:
-    %cm_jsr("Brinstar 09", #action_teleport, #$0109)
+    %cm_jsr("Brinstar 09", #action_teleport_long, #$0109)
 
 tel_brin_0A:
-    %cm_jsr("Brinstar 0A", #action_teleport, #$010A)
+    %cm_jsr("Brinstar 0A", #action_teleport_long, #$010A)
 
 tel_brin_0B:
-    %cm_jsr("Brinstar 0B", #action_teleport, #$010B)
+    %cm_jsr("Brinstar 0B", #action_teleport_long, #$010B)
 
 tel_brin_11:
-    %cm_jsr("Brinstar 11", #action_teleport, #$0111)
+    %cm_jsr("Brinstar 11", #action_teleport_long, #$0111)
 
 tel_brin_12:
-    %cm_jsr("Brinstar 12", #action_teleport, #$0112)
+    %cm_jsr("Brinstar 12", #action_teleport_long, #$0112)
 
 DebugTeleportNorfairMenu:
     dw #tel_norf_08
@@ -232,31 +238,31 @@ DebugTeleportNorfairMenu:
     %cm_header("NORFAIR DEBUG LOAD")
 
 tel_norf_08:
-    %cm_jsr("Norfair 08", #action_teleport, #$0208)
+    %cm_jsr("Norfair 08", #action_teleport_long, #$0208)
 
 tel_norf_09:
-    %cm_jsr("Norfair 09", #action_teleport, #$0209)
+    %cm_jsr("Norfair 09", #action_teleport_long, #$0209)
 
 tel_norf_0A:
-    %cm_jsr("Norfair 0A", #action_teleport, #$020A)
+    %cm_jsr("Norfair 0A", #action_teleport_long, #$020A)
 
 tel_norf_11:
-    %cm_jsr("Norfair 11", #action_teleport, #$0211)
+    %cm_jsr("Norfair 11", #action_teleport_long, #$0211)
 
 tel_norf_12:
-    %cm_jsr("Norfair 12", #action_teleport, #$0212)
+    %cm_jsr("Norfair 12", #action_teleport_long, #$0212)
 
 tel_norf_13:
-    %cm_jsr("Norfair 13", #action_teleport, #$0213)
+    %cm_jsr("Norfair 13", #action_teleport_long, #$0213)
 
 tel_norf_14:
-    %cm_jsr("Norfair 14", #action_teleport, #$0214)
+    %cm_jsr("Norfair 14", #action_teleport_long, #$0214)
 
 tel_norf_15:
-    %cm_jsr("Norfair 15", #action_teleport, #$0215)
+    %cm_jsr("Norfair 15", #action_teleport_long, #$0215)
 
 tel_norf_16:
-    %cm_jsr("Norfair 16", #action_teleport, #$0216)
+    %cm_jsr("Norfair 16", #action_teleport_long, #$0216)
 
 DebugTeleportWreckedShipMenu:
     dw #tel_ship_10
@@ -265,10 +271,10 @@ DebugTeleportWreckedShipMenu:
     %cm_header("WRECKED SHIP DEBUG LOAD")
 
 tel_ship_10:
-    %cm_jsr("Wrecked Ship 10", #action_teleport, #$0310)
+    %cm_jsr("Wrecked Ship 10", #action_teleport_long, #$0310)
 
 tel_ship_11:
-    %cm_jsr("Wrecked Ship 11", #action_teleport, #$0311)
+    %cm_jsr("Wrecked Ship 11", #action_teleport_long, #$0311)
 
 DebugTeleportMaridiaMenu:
     dw #tel_mari_08
@@ -280,19 +286,19 @@ DebugTeleportMaridiaMenu:
     %cm_header("MARIDIA DEBUG LOAD")
 
 tel_mari_08:
-    %cm_jsr("Maridia 08", #action_teleport, #$0408)
+    %cm_jsr("Maridia 08", #action_teleport_long, #$0408)
 
 tel_mari_10:
-    %cm_jsr("Maridia 10", #action_teleport, #$0410)
+    %cm_jsr("Maridia 10", #action_teleport_long, #$0410)
 
 tel_mari_11:
-    %cm_jsr("Maridia 11", #action_teleport, #$0411)
+    %cm_jsr("Maridia 11", #action_teleport_long, #$0411)
 
 tel_mari_12:
-    %cm_jsr("Maridia 12", #action_teleport, #$0412)
+    %cm_jsr("Maridia 12", #action_teleport_long, #$0412)
 
 tel_mari_13:
-    %cm_jsr("Maridia 13", #action_teleport, #$0413)
+    %cm_jsr("Maridia 13", #action_teleport_long, #$0413)
 
 
 DebugTeleportTourianMenu:
@@ -303,10 +309,10 @@ DebugTeleportTourianMenu:
     %cm_header("TOURIAN DEBUG LOAD")
 
 tel_tour_08:
-    %cm_jsr("Tourian 08", #action_teleport, #$0508)
+    %cm_jsr("Tourian 08", #action_teleport_long, #$0508)
 
 tel_tour_10:
-    %cm_jsr("Tourian 10", #action_teleport, #$0510)
+    %cm_jsr("Tourian 10", #action_teleport_long, #$0510)
 
 DebugTeleportExtraMenu:
     dw #tel_ceres
@@ -315,10 +321,16 @@ DebugTeleportExtraMenu:
     %cm_header("EXTRA DEBUG LOAD")
 
 tel_ceres:
-    %cm_jsr("Ceres Station", #action_teleport, #$0600)
+    %cm_jsr("Ceres Station", #action_teleport_long, #$0600)
 
 tel_debug:
-    %cm_jsr("Debug Room CRASH", #action_teleport, #$0700)
+    %cm_jsr("Debug Room CRASH", #action_teleport_long, #$0700)
+
+action_teleport_long:
+{
+    JSL action_teleport
+    RTL
+}
 
 
 ; ------------
@@ -381,7 +393,7 @@ presetrando_pbs:
 
 SoundTestMenu:
     dw #ifb_soundtest_goto_music
-    dw #game_music_toggle
+    dw #ifb_game_music_toggle
     dw #$FFFF
     dw #ifb_soundtest_lib1_sound
     dw #ifb_soundtest_lib2_sound
@@ -395,25 +407,25 @@ ifb_soundtest_lib1_sound:
     %cm_numfield_sound("Library One Sound", !ram_soundtest_lib1, 1, 66, 1, .routine)
   .routine
     LDA !ram_soundtest_lib1 : JSL !SFX_LIB1
-    RTS
+    RTL
 
 ifb_soundtest_lib2_sound:
     %cm_numfield_sound("Library Two Sound", !ram_soundtest_lib2, 1, 127, 1, .routine)
   .routine
     LDA !ram_soundtest_lib2 : JSL !SFX_LIB2
-    RTS
+    RTL
 
 ifb_soundtest_lib3_sound:
     %cm_numfield_sound("Library Three Sound", !ram_soundtest_lib3, 1, 47, 1, .routine)
   .routine
     LDA !ram_soundtest_lib3 : JSL !SFX_LIB3
-    RTS
+    RTL
 
 ifb_soundtest_silence:
     %cm_jsr("Silence Sound FX", .routine, #0)
   .routine
     JSL stop_all_sounds
-    RTS
+    RTL
 
 ifb_soundtest_goto_music:
     %cm_submenu("Music Selection", #MusicSelectMenu1)
@@ -503,7 +515,8 @@ ifb_soundtest_music_goto_2:
     %cm_jsr("GOTO PAGE TWO", .routine, #MusicSelectMenu2)
   .routine
     JSL cm_go_back
-    JMP action_submenu
+    %setmenubank()
+    JML action_submenu
 
 MusicSelectMenu2:
     dw #ifb_soundtest_music_preboss1
@@ -574,7 +587,32 @@ ifb_soundtest_music_goto_1:
     %cm_jsr("GOTO PAGE ONE", .routine, #MusicSelectMenu1)
   .routine
     JSL cm_go_back
-    JMP action_submenu
+    %setmenubank()
+    JML action_submenu
+
+ifb_game_music_toggle:
+    dw !ACTION_CHOICE
+    dl #!sram_music_toggle
+    dw .routine
+    db #$28, "Music", #$FF
+    db #$28, "        OFF", #$FF
+    db #$28, "         ON", #$FF
+    db #$28, "   FAST OFF", #$FF
+    db #$28, " PRESET OFF", #$FF
+    db #$FF
+  .routine
+    ; Clear music queue
+    STZ $0629 : STZ $062B : STZ $062D : STZ $062F
+    STZ $0631 : STZ $0633 : STZ $0635 : STZ $0637
+    STZ $0639 : STZ $063B : STZ $063D : STZ $063F
+    CMP #$0001 : BEQ .resume_music
+    STZ $2140
+    RTL
+
+  .resume_music
+    LDA !MUSIC_DATA : CLC : ADC #$FF00 : PHA : STZ !MUSIC_DATA : PLA : JSL !MUSIC_ROUTINE
+    LDA !MUSIC_TRACK : PHA : STZ !MUSIC_TRACK : PLA : JSL !MUSIC_ROUTINE
+    RTL
 
 action_soundtest_playmusic:
 {
@@ -586,7 +624,7 @@ action_soundtest_playmusic:
     STA $07CB                                        ; store data index to the room
     ORA #$FF00 : JSL !MUSIC_ROUTINE                  ; play from negative data index
     LDA !ram_soundtest_music : JSL !MUSIC_ROUTINE    ; play from track index
-    RTS
+    RTL
 }
 
 
@@ -608,7 +646,7 @@ ifb_factory_reset_abort:
   .routine
     %sfxgoback()
     JSL cm_previous_menu
-    RTS
+    RTL
 
 ifb_factory_reset_keep_presets:
     %cm_jsr("Yes, keep my presets", #action_factory_reset, #$0000)
@@ -642,194 +680,6 @@ action_factory_reset:
     JML $80841C
 }
 
-
-; ---------------------
-; Additional Menu Space
-; ---------------------
-
-pushpc
-org $B6F200
-print pc, " mainmenu bankB6 start"
-
-set_category_loadout:
-    TYA : ASL #4 : TAX
-
-    ; Items
-    LDA.l EquipmentTable,X : STA $7E09A4 : STA $7E09A2 : INX #2
-
-    ; Beams
-    LDA.l EquipmentTable,X : STA $7E09A8 : TAY
-    AND #$000C : CMP #$000C : BEQ .murderBeam
-    TYA : STA $7E09A6 : INX #2 : BRA +
-
-  .murderBeam
-    TYA : AND #$100B : STA $7E09A6 : INX #2
-
-    ; Health
-+   LDA.l EquipmentTable,X : STA $7E09C2 : STA $7E09C4 : INX #2
-
-    ; Missiles
-    LDA.l EquipmentTable,X : STA $7E09C6 : STA $7E09C8 : INX #2
-
-    ; Supers
-    LDA.l EquipmentTable,X : STA $7E09CA : STA $7E09CC : INX #2
-
-    ; PBs
-    LDA.l EquipmentTable,X : STA $7E09CE : STA $7E09D0 : INX #2
-
-    ; Reserves
-    LDA.l EquipmentTable,X : STA $7E09D4 : STA $7E09D6 : INX #2
-
-    JSL cm_set_etanks_and_reserve
-
-    %sfxmissile()
-    RTL
-
-EquipmentTable:
-    ;  Items,  Beams,  Health, Miss,   Supers, PBs,    Reserv, Dummy
-    dw #$F32F, #$100F, #$05DB, #$00E6, #$0032, #$0032, #$0190, #$0000        ; 100%
-    dw #$3125, #$1007, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% new
-    dw #$3325, #$100B, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% old
-    dw #$1025, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% ice
-    dw #$3025, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% speed
-    dw #$F33F, #$100F, #$02BC, #$0064, #$0014, #$0014, #$012C, #$0000        ; gt code
-if !FEATURE_PAL
-    dw #$F33F, #$100F, #$0834, #$0145, #$0041, #$0046, #$02BC, #$0000        ; 136%
-else
-    dw #$F33F, #$100F, #$0834, #$0145, #$0041, #$0041, #$02BC, #$0000        ; 135%
-endif
-    dw #$710C, #$1001, #$031F, #$001E, #$0019, #$0014, #$0064, #$0000        ; rbo
-    dw #$9004, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0000, #$0000        ; any% glitched
-    dw #$F32F, #$100F, #$0031, #$01A4, #$005A, #$0063, #$0000, #$0000        ; crystal flash
-    dw #$0000, #$0000, #$0063, #$0000, #$0000, #$0000, #$0000, #$0000        ; nothing
-if !FEATURE_PAL
-    dw #$9005, #$1002, #$012B, #$000A, #$000A, #$0005, #$0064, #$0000        ; 14% x-ice
-    dw #$1105, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% iceboots
-    dw #$3105, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% speedboots
-endif
-
-
-check_duplicate_inputs:
-{
-    ; ram_cm_ctrl_assign = word address of input being assigned
-    ; ram_cm_ctrl_swap = previous input bitmask being moved
-    ; X / $C2 = word address of new input
-    ; Y / $C4 = new input bitmask
-
-    LDA #$09B2 : CMP $C2 : BEQ .check_jump      ; check if we just assigned shot
-    LDA $09B2 : BEQ +                           ; check if shot is unassigned
-    CMP $C4 : BNE .check_jump                   ; skip to check_jump if not a duplicate assignment
-+   JMP .shot                                   ; swap with shot
-
-  .check_jump
-    LDA #$09B4 : CMP $C2 : BEQ .check_dash
-    LDA $09B4 : BEQ +
-    CMP $C4 : BNE .check_dash
-+   JMP .jump
-
-  .check_dash
-    LDA #$09B6 : CMP $C2 : BEQ .check_cancel
-    LDA $09B6 : BEQ +
-    CMP $C4 : BNE .check_cancel
-+   JMP .dash
-
-  .check_cancel
-    LDA #$09B8 : CMP $C2 : BEQ .check_select
-    LDA $09B8 : BEQ +
-    CMP $C4 : BNE .check_select
-+   JMP .cancel
-
-  .check_select
-    LDA #$09BA : CMP $C2 : BEQ .check_up
-    LDA $09BA : BEQ +
-    CMP $C4 : BNE .check_up
-+   JMP .select
-
-  .check_up
-    LDA #$09BE : CMP $C2 : BEQ .check_down
-    LDA $09BE : BEQ +
-    CMP $C4 : BNE .check_down
-+   JMP .up
-
-  .check_down
-    LDA #$09BC : CMP $C2 : BEQ .not_detected
-    LDA $09BC : BEQ +
-    CMP $C4 : BNE .not_detected
-+   JMP .down
-
-  .not_detected
-    LDA #$FFFF
-    RTL
-
-  .shot
-    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +  ; check if old input is L or R
-    LDA #$0000 : STA $09B2                      ; unassign input
-    RTL
-+   LDA !ram_cm_ctrl_swap : STA $09B2           ; input is safe to be assigned
-    RTL
-
-  .jump
-    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +
-    LDA #$0000 : STA $09B4
-    RTL
-+   LDA !ram_cm_ctrl_swap : STA $09B4
-    RTL
-
-  .dash
-    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +
-    LDA #$0000 : STA $09B6
-    RTL
-+   LDA !ram_cm_ctrl_swap : STA $09B6
-    RTL
-
-  .cancel
-    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +
-    LDA #$0000 : STA $09B8
-    RTL
-+   LDA !ram_cm_ctrl_swap : STA $09B8
-    RTL
-
-  .select
-    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +
-    LDA #$0000 : STA $09BA
-    RTL
-+   LDA !ram_cm_ctrl_swap : STA $09BA
-    RTL
-
-  .up
-    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ .unbind_up  ; check if input is L or R, unbind if not
-    LDA !ram_cm_ctrl_swap : STA $09BE                    ; safe to assign input
-    CMP $09BC : BEQ .swap_down                           ; check if input matches angle down
-    RTL
-
-  .unbind_up
-    STA $09BE               ; unassign up
-    RTL
-
-  .swap_down
-    CMP #$0020 : BNE +      ; check if angle up is assigned to L
-    LDA #$0010 : STA $09BC  ; assign R to angle down
-    RTL
-+   LDA #$0020 : STA $09BC  ; assign L to angle down
-    RTL
-
-  .down
-    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ .unbind_down
-    LDA !ram_cm_ctrl_swap : STA $09BC
-    CMP $09BE : BEQ .swap_up
-    RTL
-
-  .unbind_down
-    STA $09BC               ; unassign down
-    RTL
-
-  .swap_up
-    CMP #$0020 : BNE +
-    LDA #$0010 : STA $09BE
-    RTL
-+   LDA #$0020 : STA $09BE
-    RTL
-}
-
-print pc, " mainmenu bankB6 end"
+print pc, " mainmenuu IFBmenu end"
+warnpc $85F800 ; gamemode.asm
 pullpc

@@ -14,7 +14,7 @@
 !VERSION_MINOR = 4
 !VERSION_BUILD = 1
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 0
+!VERSION_REV_2 = 1
 
 
 ; ---------
@@ -172,18 +172,20 @@
 !ram_cm_controller = !WRAM_MENU_START+$24
 !ram_cm_menu_bank = !WRAM_MENU_START+$26
 
-!ram_cm_etanks = !WRAM_MENU_START+$28
-!ram_cm_reserve = !WRAM_MENU_START+$2A
-!ram_cm_leave = !WRAM_MENU_START+$2C
-!ram_cm_input_counter = !WRAM_MENU_START+$2E
-!ram_cm_last_nmi_counter = !WRAM_MENU_START+$30
+; ^ FREE SPACE @ +$28
 
-!ram_cm_ctrl_mode = !WRAM_MENU_START+$32
-!ram_cm_ctrl_timer = !WRAM_MENU_START+$34
-!ram_cm_ctrl_last_input = !WRAM_MENU_START+$36
-!ram_cm_ctrl_assign = !WRAM_MENU_START+$38
-!ram_cm_ctrl_swap = !WRAM_MENU_START+$3A
-!ram_cm_slow_graphics = !WRAM_MENU_START+$3E
+!ram_cm_etanks = !WRAM_MENU_START+$2A
+!ram_cm_reserve = !WRAM_MENU_START+$2C
+!ram_cm_leave = !WRAM_MENU_START+$2E
+!ram_cm_input_counter = !WRAM_MENU_START+$30
+!ram_cm_last_nmi_counter = !WRAM_MENU_START+$32
+
+!ram_cm_ctrl_mode = !WRAM_MENU_START+$34
+!ram_cm_ctrl_timer = !WRAM_MENU_START+$36
+!ram_cm_ctrl_last_input = !WRAM_MENU_START+$38
+!ram_cm_ctrl_assign = !WRAM_MENU_START+$3A
+!ram_cm_ctrl_swap = !WRAM_MENU_START+$3C
+!ram_cm_botwoon_rng = !WRAM_MENU_START+$3E
 
 ; ^ FREE SPACE ^ up to +$7A
 
@@ -243,6 +245,7 @@
 !ACTION_NUMFIELD_SOUND      = #$0016
 !ACTION_CTRL_INPUT          = #$0018
 !ACTION_TOGGLE_BIT_INVERTED = #$001A
+!ACTION_JSR_SUBMENU         = #$001C
 
 ; using macros instead of these in custom builds
 !SOUND_MENU_MOVE = $0039

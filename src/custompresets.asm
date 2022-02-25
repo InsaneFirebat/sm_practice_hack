@@ -580,7 +580,8 @@ preset_special_fixes:
 
 LoadRandomPreset:
 {
-    PHY : PHX
+    PHY : PHX : PHB
+    PHK : PLB
     LDA !ram_random_preset_rng : BEQ .seedrandom
     LDA !ram_random_preset_value : STA $12
     BRA .seedpicked
@@ -589,11 +590,11 @@ LoadRandomPreset:
     JSL MenuRNG : STA $12
 
   .seedpicked
-    LDA #$00B8 : STA $18                       ; bank in $18
+    LDA.l #preset_category_banks>>16 : STA $18 ; bank of category list in $18
     LDA !sram_preset_category : ASL : TAY      ; selected category index in Y
-    LDA #preset_category_submenus : STA $16    ; pointer to category list in $16
+    LDA.l #preset_category_submenus : STA $16  ; pointer to category list in $16
     LDA [$16],Y : TAX                          ; pointer to submenu table in X
-    LDA #preset_category_banks : STA $16       ; bank of submenu table in $16
+    LDA.l #preset_category_banks : STA $16     ; bank of submenu table in $16
     LDA [$16],Y : STA $18                      ; pointer to category grouping table in $18
 
     STX $16 : LDY #$0000                       ; pointer to submenu table in $16, reset Y
@@ -636,7 +637,7 @@ LoadRandomPreset:
     AND #$FF00 : STA !ram_random_preset_value
 
   .done
-    PLX : PLY
+    PLB : PLX : PLY
     RTL
 }
 
@@ -795,4 +796,5 @@ PresetRandoETankTable:
     dw #$0063, #$00C7, #$012B, #$018F, #$01F3, #$0257, #$02BB, #$031F, #$0383, #$03E7, #$044B, #$04AF, #$0513, #$0517, #$05DB
 }
 
+warnpc $B3C000 ; mainmenu.asm
 print pc, " custom presets end"

@@ -38,7 +38,9 @@ cm_brb_loop:
 
   .check_input
     ; Make sure we don't read joysticks twice in the same frame
-    LDA !FRAME_COUNTER : CMP !ram_cm_input_counter : PHP : STA !ram_cm_input_counter : PLP : BNE +
+    LDA !FRAME_COUNTER : CMP !ram_cm_input_counter : PHP
+    STA !ram_cm_input_counter
+    PLP : BNE +
     JSL $809459 ; Read controller input
 
 +   LDA !IH_CONTROLLER_PRI_NEW : BEQ .loop
@@ -208,7 +210,7 @@ cm_draw_brb_text:
     LDA [$04],Y : CMP #$FF : BEQ .end           ; terminator
     STA !ram_tilemap_buffer,X : INX             ; tile
     LDA $0E : STA !ram_tilemap_buffer,X : INX   ; palette
-    INY : JMP .loop
+    INY : BRA .loop
 
   .end
     %a16()

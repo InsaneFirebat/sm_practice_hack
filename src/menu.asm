@@ -87,7 +87,7 @@ cm_start:
     LDA $C1 : STA !ram_gametime_room
     LDA $C3 : STA !ram_last_gametime_room
     JSL $809B44
-    JSL GameLoopExtras_long       ; check if game_loop_extras needs to be disabled
+    JSL GameLoopExtras            ; check if game_loop_extras needs to be disabled
 
     ; I think the above subroutines erases some of infohud, so we make sure we redraw it.
     JSL ih_update_hud_code
@@ -119,9 +119,9 @@ cm_init:
     LDA !FRAME_COUNTER : STA !ram_cm_input_counter
 
     LDA.l #MainMenu
-    STA.l !ram_cm_menu_stack
+    STA !ram_cm_menu_stack
     LDA.l #MainMenu>>16
-    STA.l !ram_cm_menu_bank
+    STA !ram_cm_menu_bank
 
     JSL cm_calculate_max
     JSL cm_set_etanks_and_reserve
@@ -412,8 +412,7 @@ cm_tilemap_menu:
     ; $0E[0x2] = palette ORA for tilemap entry (for indicating selected menu)
     LDX !ram_cm_stack_index
     LDA !ram_cm_menu_stack,X : STA $00
-    LDA !ram_cm_menu_bank : STA $02
-    LDA !ram_cm_menu_bank : STA $06
+    LDA !ram_cm_menu_bank : STA $02 : STA $06
 
     LDY #$0000
   .loop
@@ -501,12 +500,6 @@ cm_tilemap_bg_interior:
     RTL
 }
 
-macro item_index_to_vram_index()
-    ; Find screen position from Y (item number)
-    TYA : ASL #5
-    CLC : ADC #$0146 : TAX
-endmacro
-
 cm_draw_action_table:
 {
     dw draw_toggle
@@ -523,6 +516,7 @@ cm_draw_action_table:
     dw draw_numfield_sound
     dw draw_controller_input
     dw draw_toggle_bit_inverted
+    dw draw_submenu
 
 draw_toggle:
 {
@@ -685,6 +679,7 @@ draw_toggle_bit_inverted:
 }
 
 draw_jsr:
+draw_submenu:
 {
     ; skip JSR address
     INC $04 : INC $04
@@ -913,7 +908,7 @@ draw_numfield_color:
 draw_choice:
 {
     ; $04[0x3] = address
-    ; $08[0x2] = jsr target
+    ; $08[0x3] = jsr target
 
     ; grab the memory address (long)
     LDA [$04] : INC $04 : INC $04 : STA $08
@@ -1014,7 +1009,6 @@ CtrlMenuGFXTable:
     ;  0080   8000   0040   4000   0020   0010   2000
     dw $288F, $2887, $288E, $2886, $288D, $288C, $2885
 }
-}
 
 cm_draw_text:
     ; X = pointer to tilemap area (STA !ram_tilemap_buffer,X)
@@ -1035,6 +1029,7 @@ cm_draw_text:
   .end
     %a16()
     RTS
+
 
 ; --------------
 ; Input Display
@@ -1246,7 +1241,7 @@ cm_go_back:
     LDA !ram_cm_stack_index
     BNE .end
     LDA.l #MainMenu>>16       ; Reset submenu bank when back at main menu
-    STA.l !ram_cm_menu_bank
+    STA !ram_cm_menu_bank
 
   .end
     %sfxgoback()
@@ -1368,6 +1363,7 @@ cm_execute_action_table:
     dw execute_numfield_sound
     dw execute_controller_input
     dw execute_toggle_bit
+    dw execute_submenu
 
 execute_toggle:
 {
@@ -1378,7 +1374,7 @@ execute_toggle:
     ; Grab toggle value
     LDA [$00] : INC $00 : AND #$00FF : STA $08
 
-    ; Grab JSR target
+    ; Grab JSL target
     LDA [$00] : INC $00 : INC $00 : STA $0A
 
     %a8()
@@ -1393,9 +1389,14 @@ execute_toggle:
   .jsr
     %a16()
     LDA $0A : BEQ .end
+
+    ; Set return address for indirect JSL
+    LDA !ram_cm_menu_bank : STA $0C
+    PHK : PEA .end-1
+
     LDA [$04]
     LDX #$0000
-    JSL MainMenuJSR_toggle
+    JML [$000A]
 
   .end
     %sfxtoggle()
@@ -1419,9 +1420,13 @@ execute_toggle_bit:
 
     LDA $0A : BEQ .end
 
+    ; Set return address for indirect JSL
+    LDA !ram_cm_menu_bank : STA $0C
+    PHK : PEA .end-1
+
     LDA [$04]
     LDX #$0000
-    JSL MainMenuJSR_toggle_bit
+    JML [$000A]
 
  .end
     %sfxtoggle()
@@ -1434,14 +1439,44 @@ execute_jsr:
     ; also ignore input held flag
     LDA !ram_cm_controller : BIT #$0341 : BNE .end
 
-    ; $02 = JSR target
+    ; $02 = JSL target
     LDA [$00] : INC $00 : INC $00 : STA $04
+
+    ; Set return address for indirect JSL
+    LDA !ram_cm_menu_bank : STA $06
+    PHK : PEA .end-1
 
     ; Y = Argument
     LDA [$00] : TAY
 
     LDX #$0000
-    JSL MainMenuJSR_jsr
+    JML [$0004]
+
+  .end
+    RTS
+}
+
+execute_submenu:
+{
+    ; <, > and X should do nothing here
+    ; also ignore input held flag
+    LDA !ram_cm_controller : BIT #$0341 : BNE .end
+
+    ; $04 = JSL target
+    LDA [$00] : INC $00 : INC $00 : STA $04
+
+    ; Use bank of action_submenu
+    ; instead of the new menu's bank
+    LDA.l #action_submenu>>16 : STA $06
+
+    ; Set return address for indirect JSL
+    PHK : PEA .end-1
+
+    ; Y = Argument
+    LDA [$00] : TAY
+
+    LDX #$0000
+    JML [$0004]
 
   .end
     RTS
@@ -1498,9 +1533,13 @@ execute_numfield_hex:
   .jsr
     LDA $20 : BEQ .end
 
+    ; Set return address for indirect JSL
+    LDA !ram_cm_menu_bank : STA $22
+    PHK : PEA .end-1
+
     LDA [$04]
     LDX #$0000
-    JSL MainMenuJSR_numfield
+    JML [$0020]
 
   .end
     %sfxnumber()
@@ -1548,9 +1587,13 @@ execute_numfield_sound:
   .jsr
     LDA $20 : BEQ .end
 
+    ; Set return address for indirect JSL
+    LDA !ram_cm_menu_bank : STA $22
+    PHK : PEA .end-1
+
     LDA [$04]
     LDX #$0000
-    JSL MainMenuJSR_numfield_sound
+    JML [$0020]
 
   .end
 ;    %sfxnumber()
@@ -1607,9 +1650,13 @@ execute_numfield_word:
   .jsr
     LDA $20 : BEQ .end
 
+    ; Set return address for indirect JSL
+    LDA !ram_cm_menu_bank : STA $22
+    PHK : PEA .end-1
+
     LDA [$04]
     LDX #$0000
-    JSL MainMenuJSR_numfield_word
+    JML [$0020]
 
   .end
     %sfxnumber()
@@ -1649,9 +1696,13 @@ execute_numfield_color:
   .jsr
     LDA $20 : BEQ .end
 
+    ; Set return address for indirect JSL
+    LDA !ram_cm_menu_bank : STA $22
+    PHK : PEA .end-1
+
     LDA [$04]
     LDX #$0000
-    JSL MainMenuJSR_numfield_color
+    JML [$0020]
 
   .end
     %sfxnumber()
@@ -1715,9 +1766,13 @@ execute_choice:
 
     LDA $08 : BEQ .end
 
+    ; Set return address for indirect JSL
+    LDA !ram_cm_menu_bank : STA $0A
+    PHK : PEA .end-1
+
     LDA [$04]
     LDX #$0000
-    JSL MainMenuJSR_choice
+    JML [$0008]
 
   .end
     %sfxtoggle()
@@ -1759,14 +1814,21 @@ execute_controller_input:
     LDA [$00] : INC $00 : INC $00 : INC $00
     STA !ram_cm_ctrl_assign
 
-    ; $02 = JSR target
+    ; $04 = JSL target
     LDA [$00] : INC $00 : INC $00 : STA $04
+
+    ; Use bank of action_submenu
+    ; instead of new menu's bank
+    LDA.l #action_submenu>>16 : STA $06
+
+    ; Set return address for indirect JSL
+    PHK : PEA .end-1
 
     ; Y = Argument
     LDA [$00] : TAY
 
     LDX #$0000
-    JSL MainMenuJSR_controller_input
+    JML [$0004]
 
   .end
     RTS
@@ -1837,6 +1899,7 @@ DecMenuGFXTable:
     dw $2C20, $2C21, $2C22, $2C23, $2C24, $2C25, $2C26, $2C27, $2C28, $2C29
 
 MenuResources:
+; for BRBmenu.asm
 
 print pc, " menu end"
 

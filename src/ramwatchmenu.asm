@@ -29,10 +29,11 @@ ih_prepare_ram_watch_menu:
     SEC : SBC #$0F78 : STA !ram_cm_watch_enemy_index
     AND #$003E : LSR : STA !ram_cm_watch_enemy_property
     LDA !ram_cm_watch_enemy_index : AND #$07C0
-    ASL : ASL : XBA : STA !ram_cm_watch_enemy_index
+    ASL #2 : XBA : STA !ram_cm_watch_enemy_index
 
   .submenu
-    JMP action_submenu
+    %setmenubank()
+    JML action_submenu
 
 RAMWatchMenu:
     dw ramwatch_enable
@@ -105,7 +106,7 @@ ramwatch_common_enemy_apply:
     %cm_jsr("Apply to RAM Watch", .routine, #$0000)
   .routine
     LDA !ram_cm_watch_enemy_index
-    XBA : LSR : LSR : TAX ; index * 40h = X
+    XBA : LSR #2 : TAX ; index * 40h = X
 
     LDA !ram_cm_watch_enemy_side : BEQ .left
 
@@ -125,9 +126,9 @@ ramwatch_common_enemy_apply:
     LDA !ram_cm_stack_index : DEC #4
     STA !ram_cm_stack_index
     JSL cm_previous_menu
-    JSR ih_prepare_ram_watch_menu
+    JSL ih_prepare_ram_watch_menu
     %sfxconfirm()
-    RTS
+    RTL
 
 ramwatch_common_enemy_property:
     dw !ACTION_CHOICE
@@ -378,7 +379,8 @@ ramwatch_common_misc_1842:
 action_select_common_address:
 {
     TYA : STA !ram_cm_watch_common_address
-    LDY #RAMWatchCommonConfirm : JMP action_submenu
+    LDY #RAMWatchCommonConfirm : %setmenubank()
+    JML action_submenu
 }
 
 RAMWatchCommonConfirm:
@@ -408,9 +410,9 @@ ramwatch_common_addr_done:
     LDA !ram_cm_stack_index : DEC #6
     STA !ram_cm_stack_index
     JSL cm_previous_menu
-    JSR ih_prepare_ram_watch_menu
+    JSL ih_prepare_ram_watch_menu
     %sfxconfirm()
-    RTS
+    RTL
 
 ramwatch_common_back:
     %cm_jsr("Go Back", .routine, #0)
@@ -418,14 +420,14 @@ ramwatch_common_back:
     LDA !ram_cm_stack_index : DEC #4
     STA !ram_cm_stack_index
     JSL cm_previous_menu
-    RTS
+    RTL
 
 ramwatch_enable:
     %cm_jsr("Turn On RAM Watch", .routine, !IH_MODE_RAMWATCH_INDEX)
   .routine
     TYA : STA !sram_display_mode
     %sfxconfirm()
-    RTS
+    RTL
 
 ramwatch_bank:
     dw !ACTION_CHOICE
@@ -451,84 +453,84 @@ ramwatch_left_hi:
   .routine
     XBA : ORA !ram_cm_watch_left_lo
     STA !ram_watch_left
-    RTS
+    RTL
 
 ramwatch_left_lo:
     %cm_numfield_hex("Address 1 Low", !ram_cm_watch_left_lo, 0, 255, 1, 8, #.routine)
   .routine
     XBA : ORA !ram_cm_watch_left_hi
     XBA : STA !ram_watch_left
-    RTS
+    RTL
 
 ramwatch_left_index_hi:
     %cm_numfield_hex("Offset 1 High", !ram_cm_watch_left_index_hi, 0, 255, 1, 8, #.routine)
   .routine
     XBA : ORA !ram_cm_watch_left_index_lo
     STA !ram_watch_left_index
-    RTS
+    RTL
 
 ramwatch_left_index_lo:
     %cm_numfield_hex("Offset 1 Low", !ram_cm_watch_left_index_lo, 0, 255, 1, 8, #.routine)
   .routine
     XBA : ORA !ram_cm_watch_left_index_hi
     XBA : STA !ram_watch_left_index
-    RTS
+    RTL
 
 ramwatch_left_edit_hi:
     %cm_numfield_hex("Value 1 High", !ram_cm_watch_edit_left_hi, 0, 255, 1, 8, #.routine)
   .routine
     XBA : ORA !ram_cm_watch_edit_left_lo
     STA !ram_watch_edit_left
-    RTS
+    RTL
 
 ramwatch_left_edit_lo:
     %cm_numfield_hex("Value 1 Low", !ram_cm_watch_edit_left_lo, 0, 255, 1, 8, #.routine)
   .routine
     XBA : ORA !ram_cm_watch_edit_left_hi
     XBA : STA !ram_watch_edit_left
-    RTS
+    RTL
 
 ramwatch_right_hi:
     %cm_numfield_hex("Address 2 High", !ram_cm_watch_right_hi, 0, 255, 1, 8, #.routine)
   .routine
     XBA : ORA !ram_cm_watch_right_lo
     STA !ram_watch_right
-    RTS
+    RTL
 
 ramwatch_right_lo:
     %cm_numfield_hex("Address 2 Low", !ram_cm_watch_right_lo, 0, 255, 1, 8, #.routine)
   .routine
     XBA : ORA !ram_cm_watch_right_hi
     XBA : STA !ram_watch_right
-    RTS
+    RTL
 
 ramwatch_right_index_hi:
     %cm_numfield_hex("Offset 2 High", !ram_cm_watch_right_index_hi, 0, 255, 1, 8, #.routine)
   .routine
     XBA : ORA !ram_cm_watch_right_index_lo
     STA !ram_watch_right_index
-    RTS
+    RTL
 
 ramwatch_right_index_lo:
     %cm_numfield_hex("Offset 2 Low", !ram_cm_watch_right_index_lo, 0, 255, 1, 8, #.routine)
   .routine
     XBA : ORA !ram_cm_watch_right_index_hi
     XBA : STA !ram_watch_right_index
-    RTS
+    RTL
 
 ramwatch_right_edit_hi:
     %cm_numfield_hex("Value 2 High", !ram_cm_watch_edit_right_hi, 0, 255, 1, 8, #.routine)
   .routine
     XBA : ORA !ram_cm_watch_edit_right_lo
     STA !ram_watch_edit_right
-    RTS
+    RTL
 
 ramwatch_right_edit_lo:
     %cm_numfield_hex("Value 2 Low", !ram_cm_watch_edit_right_lo, 0, 255, 1, 8, #.routine)
   .routine
     XBA : ORA !ram_cm_watch_edit_right_hi
     XBA : STA !ram_watch_edit_right
-    RTS
+    RTL
 
 ramwatch_execute_left:
     %cm_jsr("Write to Address 1", #action_ramwatch_edit_left, #$0000)
@@ -558,7 +560,7 @@ action_ramwatch_edit_left:
 +   %a16()
     LDA !IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
     %sfxgrapple()
-    RTS
+    RTL
 }
 
 action_ramwatch_edit_right:
@@ -577,12 +579,12 @@ action_ramwatch_edit_right:
 +   %a16()
     LDA !IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
     %sfxgrapple()
-    RTS
+    RTL
 }
 
 action_HUD_ramwatch:
 {
     LDA !IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
-    RTS
+    RTL
 }
 
