@@ -1,4 +1,6 @@
 
+if !FEATURE_REDESIGN
+
 ; Mother Brain right door asm pointer
 org $83AAD2
     dw #layout_asm_mbhp
@@ -14,6 +16,8 @@ org $83AB6E
 ; Magnet Stairs right door asm pointer
 org $83AB92
     dw #layout_asm_magnetstairs
+
+endif
 
 ; Ceres Ridley modified state check to support presets
 org $8FE0C0
@@ -38,6 +42,28 @@ layout_asm_mbhp:
     RTS
 }
 
+layout_asm_magnetstairs:
+{
+    PHP
+    %a16()
+    LDA !sram_room_layout : BIT !ROOM_LAYOUT_MAGNET_STAIRS : BEQ .done
+
+    ; change tile type and BTS
+    %a8()
+
+    ; Convert solid tiles to slope tiles
+    LDA #$10 : STA $7F01F9 : STA $7F02EB
+    LDA #$53 : STA $7F64FD : STA $7F6576
+
+  .done
+    PLP
+    RTS
+}
+
+if !FEATURE_REDESIGN
+else
+org $8FFB80 ; Axeil has very little freespace in $8F
+endif
 layout_asm_ceres_ridley_room_state_check:
 {
     LDA $0943 : BEQ .no_timer
@@ -61,20 +87,7 @@ layout_asm_ceres_ridley_room_no_timer:
     RTS
 }
 
-layout_asm_magnetstairs:
-{
-    PHP
-    %a16()
-    LDA !sram_room_layout : BIT !ROOM_LAYOUT_MAGNET_STAIRS : BEQ .done
-
-    ; change tile type and BTS
-    %a8()
-
-    ; Convert solid tiles to slope tiles
-    LDA #$10 : STA $7F01F9 : STA $7F02EB
-    LDA #$53 : STA $7F64FD : STA $7F6576
-
-  .done
-    PLP
-    RTS
-}
+if !FEATURE_REDESIGN
+else
+warnpc $8FFBA8 ; Axeil code
+endif

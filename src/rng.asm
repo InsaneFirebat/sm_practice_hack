@@ -422,6 +422,7 @@ org $A6F66A
     LDA $7ED82E
 
 
+if !FEATURE_REDESIGN
 org $A6FEC0
 print pc, " ridley rng start"
 
@@ -477,6 +478,81 @@ ridley_ceres_door_escape_instructions:
     dw $80ED, $F598
 
 print pc, " ridley rng end"
+
+else
+
+org $A8FD00
+
+    ; Ceres Ridley is already dead, so skip to the escape
+    ; We do need to mark Ceres Ridley alive
+    ; to keep the door locked until the timer starts
+    AND #$FFFE : STA $7ED82E
+
+    ; Clear out the room main asm so it doesn't also trigger the escape
+    STZ $07DF
+
+    ; Set up the escape timer routine
+    LDA #$0001 : STA $093F
+    LDA #$E0E6 : STA $0A5A
+
+    ; Prepare to jump to the escape
+    LDA #$AB37
+    STA $0FA8
+    RTL
+
+print pc, " ridley rng part-2 start"
+warnpc $F8FEF0 ; Axeil Code
+
+org $A6FFB7
+print pc, " ridley rng part-2 start"
+ridley_init_hook:
+{
+    LDA $079B : CMP #$E0B5 : BNE .continue
+    LDA $7ED82E : BIT #$0001 : BEQ .continue
+
+    ; Jump to somewhere with more freespace
+    JSL $A8FD00
+
+    ; Jump to the escape
+    JMP ($0FA8)
+
+  .continue
+    LDA #$A377
+    STA $0FA8
+    JMP ($0FA8)
+}
+
+ceres_ridley_draw_metroid:
+{
+    LDA $7ED82E : BIT #$0001 : BNE .end
+    LDA $093F : BNE .end
+    JSR $BF1A
+
+  .end
+    JMP $A2FA
+}
+
+ridley_ceres_door_original_instructions:
+    dw $F6A6
+    dw #$0002, $FA13
+    dw $F66A, $F55C
+    dw $F6B0
+    dw $80ED, $F598
+
+print pc, " ridley rng part-2 end"
+
+org $A6FEC0
+print pc, " ridley rng part-3 start"
+ridley_ceres_door_escape_instructions:
+    dw $F6B0
+    dw #$0002, $FA13
+    dw $F66A, $F55C
+    dw $80ED, $F598
+
+print pc, " ridley rng part-3 end"
+warnpc $A6FED0 ; Axeil Code
+
+endif
 
 
 org $A7FFB6
