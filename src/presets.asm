@@ -85,7 +85,7 @@ endif
     JSL reset_all_counters
 
     ; Clear enemies if not in certain rooms
-    LDA $079B : CMP #$9804 : BEQ .set_mb_state
+    LDA !ROOM_ID : CMP #$9804 : BEQ .set_mb_state
     CMP #$DD58 : BEQ .set_mb_state
     LDA !PRESET_ENEMIES : BNE .done
     LDA !sram_preset_enemies : BNE .done
