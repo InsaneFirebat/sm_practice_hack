@@ -15,6 +15,7 @@
 !VERSION_BUILD = 1
 !VERSION_REV_1 = 0
 !VERSION_REV_2 = 1
+!VERSION_HEADER = $FB
 
 
 ; ---------

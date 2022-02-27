@@ -46,6 +46,9 @@ else
 endif
 endif
 
+org $80FFDB
+    db !VERSION_HEADER
+
 
 ; Fix Zebes planet tiling error
 org $8C9607
