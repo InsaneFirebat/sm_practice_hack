@@ -377,11 +377,9 @@ PrepMenuPalette:
     LDA !sram_custompalette_profile : ASL : TAX
     BEQ .customPalette
 
-  .profilePalette
     PHB
     PHK : PLB
     LDA.l PaletteProfileTables,X : STA $12
-
     LDY #$0000 : LDA ($12),Y : STA !ram_custompalette_menuborder
     LDY #$0002 : LDA ($12),Y : STA !ram_custompalette_menuheaderoutline
     LDY #$0004 : LDA ($12),Y : STA !ram_custompalette_menutext
@@ -495,7 +493,7 @@ PaletteProfileTables:
 
 ; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
 CustomProfileTable: ; custom always first
-    dw $7277, $48F3, $7FFF, $0000, $0000, $7FFF, $4376, $761F, $0000, $0000, $761F
+    dw $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000
 
 TwitchProfileTable:
     dw $550D, $550D, $7FFF, $0000, $0000, $7FFF, $550D, $550D, $0000, $550D, $7FFF
@@ -549,7 +547,6 @@ HUDProfileTable:
 
 cm_colors:
 {
-print pc, " DEBUG %%%%%%%%%%%%%%% cm_colors"
     PHB
     PHK : PLB
     LDA !ram_cm_cursor_stack+4 : CMP #$0002 : BNE .done ; exit if not in color menu

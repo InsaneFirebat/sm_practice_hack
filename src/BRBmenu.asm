@@ -6,15 +6,14 @@ cm_brb_loop:
     LDA $06 : PHA
     PHX : PHY
 
-    LDA !ram_cm_brb_palette : PHA
-    CMP #$FFFF : BEQ +
+    LDA !ram_cm_brb_palette : PHA ; preserve menu palette
+    CMP #$FFFF : BEQ + ; check if palette swapping disabled
     LDA #$0000 : STA !ram_cm_brb_palette
-
 +   LDA #$0000 : STA !ram_cm_brb_screen
     STA !ram_cm_brb_frames : STA !ram_cm_brb_timer
 
     JSR cm_transfer_brb_tileset
-    JSL wait_for_lag_frame_long  ; Wait for lag frame
+    JSL wait_for_lag_frame_long ; Wait for lag frame
     JSL $808F0C ; Music queue
     JSL $8289EF ; Sound fx queue
 
@@ -28,9 +27,9 @@ cm_brb_loop:
     LDA !ram_cm_brb : BNE .check_input
     ; Exit brb loop
     LDA #$0000 : STA !ram_cm_leave
-    PLA : STA !ram_cm_brb_palette
+    PLA : STA !ram_cm_brb_palette ; restore menu palette
     LDA #$0046 : JSL !SFX_LIB2 ; lavaquake sfx
-    JSL wait_for_lag_frame_long  ; Wait for lag frame
+    JSL wait_for_lag_frame_long ; Wait for lag frame
     PLY : PLX
     PLA : STA $06
     PLA : STA $04
@@ -76,7 +75,7 @@ cm_tilemap_brb:
     CMP #$0011 : BMI +
     LDA #$0000 : STA !ram_cm_brb_palette
 +   ASL : TAX
-    JSL PrepMenuPalette_profilePalette
+    JSL PrepMenuPalette
     JSR cm_transfer_brb_cgram
 
   .draw_brb_stuff
