@@ -323,7 +323,7 @@ mm_goto_ctrlsmenu:
     %cm_mainmenu("Controller Shortcuts", #CtrlMenu)
 
 mm_goto_IFBmenu:
-    %cm_submenu("Extras Menu", #IFBMenu)
+    %cm_mainmenu("Extras Menu", #IFBMenu)
 
 
 ; -------------
@@ -1218,6 +1218,17 @@ misc_elevatorfix:
     LDA #$0000 : STA $7E0E16
     %sfxconfirm()
     RTL
+
+GameLoopExtras:
+{
+    LDA !ram_magic_pants_enabled : BNE .enabled
+    LDA !ram_metronome : BNE .enabled
+    LDA !ram_infinite_ammo
+
+  .enabled
+    STA !ram_game_loop_extras
+    RTL
+}
 
 
 ; ---------------
@@ -2267,17 +2278,6 @@ game_clear_minimap:
 game_cutscenes:
     %cm_submenu("Cutscenes", #CutscenesMenu)
 
-GameLoopExtras:
-{
-    LDA !ram_magic_pants_enabled : BNE .enabled
-    LDA !ram_metronome : BNE .enabled
-    LDA !ram_infinite_ammo
-
-  .enabled
-    STA !ram_game_loop_extras
-    RTL
-}
-
 
 ; ---------------
 ; Cutscenes menu
@@ -2305,6 +2305,9 @@ cutscenes_skip_ceres_arrival:
 
 kraid_skip_intro:
     %cm_toggle("Skip Kraid Intro", !sram_kraid_intro, #$0001, #0)
+
+phan_skip_intro:
+    %cm_toggle_bit("Skip Phantoon Intro", !sram_phantoon_intro, #$0001, 0)
 
 !CUTSCENE_SKIP_G4 = #$0080
 cutscenes_g4_skip:
@@ -2842,9 +2845,6 @@ phan_next_flamepattern:
     db #$28, "    3333333", #$FF
     db #$28, "    1424212", #$FF
     db #$FF
-
-phan_skip_intro:
-    %cm_toggle_bit("Skip Phantoon Intro", !sram_phantoon_intro, #$0001, 0)
 
 rng_botwoon_rng:
     dw !ACTION_CHOICE
