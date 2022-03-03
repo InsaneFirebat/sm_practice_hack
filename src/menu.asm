@@ -1104,6 +1104,9 @@ cm_loop:
     JSR cm_transfer_custom_cgram
     JMP .redraw
 
++   LDA !CRASHDUMP+$0E : BEQ +
+    INC : JSL cm_crash
+
 +   LDA !ram_cm_ctrl_mode : BEQ +
     JSR cm_ctrl_mode
     BRA .inputLoop

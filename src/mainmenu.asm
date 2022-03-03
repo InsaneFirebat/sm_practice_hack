@@ -1257,6 +1257,7 @@ sprites_oob_viewer:
     %cm_toggle("OoB Tile Viewer", !ram_oob_watch_active, #1, .routine)
   .routine
     LDA !ram_oob_watch_active : BEQ +
+    STA !ram_sprite_features_active
     JSL upload_sprite_oob_tiles
     RTL
 +   LDA #$0000 : STA !ram_sprite_features_active
@@ -1489,7 +1490,7 @@ boss_mb:
 ; --------------
 
 pushpc
-org $B3C000
+org $85C000
 print pc, " mainmenu InfoHUD start"
 
 InfoHudMenu:

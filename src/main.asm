@@ -18,6 +18,7 @@ incsrc rng.asm
 incsrc presets.asm
 incsrc custompresets.asm
 incsrc misc.asm
+incsrc crash.asm
 incsrc layout.asm
 incsrc cutscenes.asm
 incsrc init.asm

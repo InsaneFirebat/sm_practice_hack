@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.1.2]  Added a crash handler to display a stackdump in the event of a crash
 * [2.4.1.1]  More backend work to free up a lot of menu space
 * [2.4.1]    Added option to load preset in order with the Random Preset shortcut by idlechild
 * [2.4.0.20] Scroll fixes for Bowling and Pre-Pillars rooms in presets
