@@ -18,6 +18,7 @@ incsrc infohud.asm
 incsrc rng.asm
 incsrc presets.asm
 incsrc misc.asm
+incsrc crash.asm
 incsrc init.asm
 incsrc fanfare.asm
 incsrc spriteprio.asm

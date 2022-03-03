@@ -402,6 +402,8 @@ endif
 
 !SRAM_START = $F02200
 
+!CRASHDUMP = $702F00
+
 !sram_initialized = !SRAM_START+$00
 
 !sram_ctrl_menu = !SRAM_START+$02
@@ -464,4 +466,3 @@ endif
 
 !SRAM_DMA_BANK = $770000
 !SRAM_SAVED_SP = $774004
-

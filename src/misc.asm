@@ -10,6 +10,9 @@ else
     db $05 ; 64kb
 endif
 
+; Set version in game header
+org $00FFDB
+    db !VERSION_HEADER
 
 ; Skip intro
 ; $82:EEDF A9 95 A3    LDA #$A395
