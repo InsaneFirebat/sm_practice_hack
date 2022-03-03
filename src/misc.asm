@@ -10,6 +10,9 @@ else
     db $05 ; 64kb
 endif
 
+; Set version in game header
+org $00FFDB
+    db !VERSION_HEADER
 
 ; Enable version display
 org $8B8697
@@ -45,9 +48,6 @@ else
     db #$20, #$20, #$20, #$20, #$20
 endif
 endif
-
-org $80FFDB
-    db !VERSION_HEADER
 
 
 ; Fix Zebes planet tiling error

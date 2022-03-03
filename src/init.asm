@@ -211,6 +211,10 @@ init_sram:
     LDA #$0000 : STA !sram_dummy_off
     LDA #$FFFF : STA !sram_dummy_num
 
+    LDA #$0000 : LDX #$007E
+-   STA !CRASHDUMP+$00,X
+    DEX #2 : BPL -
+
     LDA #$0000
     STA !ram_infinite_ammo
     STA !ram_infiniteammo_check
