@@ -9,9 +9,17 @@
 
 lorom
 
-; Hijack crash handler
+; Hijack generic crash handler
 org $808573
     JML CrashHandler
+
+; Hijack native BRK vector
+org $00FFE6
+    dw BRKHandler
+
+; Hijack emulation IRQ/BRK vector
+org $00FFFE
+    dw BRKHandler
 
 org $80E000
 print pc, " crash handler bank80 start"
@@ -30,16 +38,23 @@ CrashHandler:
     TSC : STA !CRASHDUMP+$08  ; SP
 
     ; loop: stack -> SRAM
-    TAY : LDX #$0000
--   LDA $0000,Y : STA !CRASHDUMP+$10,X
-    INX #2 : CPX #$0030 : BPL .bytesWritten ; max 30h bytes
-    INY #2 : CPY #$2000 : BMI -
+    INC : TAY : LDX #$0000
+  .loopStack
+    LDA $0000,Y : STA !CRASHDUMP+$10,X
+    INX #2 : CPX #$0030 : BPL .maxStack ; max 30h bytes
+    INY #2 : CPY #$2000 : BMI .loopStack
+    BRA .stackSize
 
-  .bytesWritten
+  .maxStack
     ; we only saved 30h bytes, so inc until we
     ; know the total number of bytes on the stack
-    INY : INX : CPY #$2000 : BMI .bytesWritten
-    TXA : STA !CRASHDUMP+$0A
+    INY : INX : CPY #$2000 : BMI .maxStack
+
+  .stackSize
+    ; check if we copied an extra byte
+    CPY #$2000 : BEQ +
+    DEX ; don't count it
++   TXA : STA !CRASHDUMP+$0A
 
     ; launch menu to display crash
     LDA #$0004 : STA $AB
@@ -49,13 +64,31 @@ CrashHandler:
   .crash
     JML .crash
 }
-print pc, " crash handler bank80 end"
 
+BRKHandler:
+{
+    JML .setBank
+  .setBank
+    PHP : PHB
+    PHK : PLB
+    %ai16()
 
-; The rest of this can live anywhere
-; but it should probably stay together
-org CrashHandler_crash+4
-print pc, " crash handler bank80 start"
+    ; store CPU registers
+    STA !CRASHDUMP+$00        ; A
+    TXA : STA !CRASHDUMP+$02  ; X
+    TYA : STA !CRASHDUMP+$04  ; Y
+    PLA : STA !CRASHDUMP+$06  ; DB + P
+    TSC : STA !CRASHDUMP+$08  ; SP
+
+    ; prep for .loopStack
+    INC : TAY : LDX #$0000
+
+    ; store crash type, 1 = BRK
+    LDA #$0001 : STA !CRASHDUMP+$0C
+
+    JMP CrashHandler_loopStack
+}
+
 cm_crash:
 {
     ; $00[0x3] = Table Address (Long)
@@ -130,22 +163,23 @@ cm_crash:
     JSR crash_draw4
 
     ; -- Detect and Draw BRK --
+    LDA !CRASHDUMP+$0C : BEQ +
     %a8()
-    LDA !CRASHDUMP+$07 : BIT #$04 : BEQ +
-    AND #$FB : STA $C1 ; BRK pushes without the flag
+    LDA !CRASHDUMP+$10 : STA $C1
     LDX #$031C : JSR crash_draw2 ; P
 
-    LDA !CRASHDUMP+$23 : STA $C1
+    LDA !CRASHDUMP+$13 : STA $C1
     LDX #$0324 : JSR crash_draw2 ; bank
+
     %a16()
-    LDA !CRASHDUMP+$21 : DEC #2 : STA $C1
+    LDA !CRASHDUMP+$11 : DEC #2 : STA $C1
     LDX #$0328 : JSR crash_draw4 ; addr
 
-    LDA #$2851 : STA !ram_tilemap_buffer+$310 ; B
-    LDA #$2861 : STA !ram_tilemap_buffer+$312 ; R
-    LDA #$285A : STA !ram_tilemap_buffer+$314 ; K
-    LDA #$284A : STA !ram_tilemap_buffer+$316 ; :
-    LDA #$284E : STA !ram_tilemap_buffer+$322 ; $
+    LDA #$2C51 : STA !ram_tilemap_buffer+$310 ; B
+    LDA #$2C61 : STA !ram_tilemap_buffer+$312 ; R
+    LDA #$2C5A : STA !ram_tilemap_buffer+$314 ; K
+    LDA #$2C4A : STA !ram_tilemap_buffer+$316 ; :
+    LDA #$2C4E : STA !ram_tilemap_buffer+$322 ; $
 
     ; -- Draw Stack Values --
     ; start by setting up tilemap position
@@ -161,8 +195,9 @@ cm_crash:
 +   %a8()
     LDA #$00 : STA $C5
 
+  .drawStack
     ; draw a byte
--   PHX : %i8()
+    PHX : %i8()
     LDA $C5 : TAX
     LDA !CRASHDUMP+$10,X : STA $C1
     %i16() : PLX
@@ -181,7 +216,7 @@ cm_crash:
 
     ; inc bytes drawn
 +   LDA $C5 : INC : STA $C5
-    CMP $C7 : BNE -
+    CMP $C7 : BNE .drawStack
 
   .done
     ; -- Transfer to VRAM --
