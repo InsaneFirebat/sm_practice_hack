@@ -642,7 +642,7 @@ transfer_cgram_long:
 ;}
 
 print pc, " presets bank80 end"
-warnpc $80F800
+warnpc $80F800 ; save.asm
 
 
 ; $80:9AB1: Add x-ray and grapple HUD items if necessary

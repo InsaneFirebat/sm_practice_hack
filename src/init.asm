@@ -122,4 +122,4 @@ init_sram:
 }
 
 print pc, " init end"
-warnpc $81FF00 ;;; $FF00: Thanks Genji! ;;;
+warnpc $81FF00 ; Special thanks
