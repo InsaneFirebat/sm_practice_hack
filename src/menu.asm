@@ -498,6 +498,12 @@ cm_tilemap_transfer:
     RTS
 }
 
+cm_tilemap_transfer_long:
+{
+    JSR cm_tilemap_transfer
+    RTL
+}
+
 cm_draw_action_table:
 {
     dw draw_toggle
@@ -1054,7 +1060,7 @@ cm_loop:
     RTS ; Exit menu loop
 
 +   LDA !CRASHDUMP+$0E : BEQ +
-    INC : JSL cm_crash
+    JSL cm_crash
 
 +   LDA !ram_cm_ctrl_mode : BEQ +
     JSR cm_ctrl_mode
@@ -1472,8 +1478,8 @@ cm_execute_action_table:
 
       .jsl
         LDA $20 : BEQ .end
-        ; Set return address for indirect JSL
 
+        ; Set return address for indirect JSL
         LDA !ram_cm_menu_bank : STA $22
         PHK : PEA .end-1
 
