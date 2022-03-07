@@ -229,21 +229,19 @@ CrashLoop:
 {
     ; stuck in a loop, only able to soft reset or change the palette
     JSL wait_for_lag_frame_long ; Wait for lag frame
-    JSL $808F0C ; Music queue
-    JSL $8289EF ; Sound fx queue
     JSL $809459 ; Read controller input
 
     ; new inputs in X, to be copied back to A later
-    LDA $8F : TAX : BEQ CrashLoop
+    LDA !IH_CONTROLLER_PRI_NEW : TAX : BEQ CrashLoop
 
     ; check for soft reset shortcut (Select+Start+L+R)
-    LDA $8B : AND #$3030 : CMP #$3030 : BNE +
-    AND $8F : BNE .reset
+    LDA !IH_CONTROLLER_PRI : AND #$3030 : CMP #$3030 : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BNE .reset
 
 if !FEATURE_SD2SNES
     ; check for load state shortcut
-+   LDA $8B : CMP !sram_ctrl_load_state : BNE +
-    AND $8F : BEQ +
++   LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_load_state : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
 
     ; prepare to jump to load_state
     %a8()
