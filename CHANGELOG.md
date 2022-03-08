@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.1.4]  More work on the crash handler we hope you never have to see
 * [2.4.1.3]  Added a break handler to properly identify those types of crashes
 * [2.4.1.2]  Added a crash handler to display a stackdump in the event of a crash
 * [2.4.1.1]  More backend work to free up a lot of menu space

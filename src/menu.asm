@@ -493,7 +493,6 @@ cm_tilemap_transfer_long:
     JSR cm_tilemap_transfer
     RTL
 }
-
 cm_tilemap_bg_interior:
 {
     JSR cm_tilemap_bg_fill_interior
@@ -1104,19 +1103,16 @@ cm_loop:
     JSR cm_transfer_custom_cgram
     JMP .redraw
 
-+   LDA !CRASHDUMP+$0E : BEQ +
-    INC : JSL cm_crash
-
 +   LDA !ram_cm_ctrl_mode : BEQ +
     JSR cm_ctrl_mode
     BRA .inputLoop
 
     ; not sure if still necessary
     ; needs flash cart testing
-+   JSR cm_transfer_original_cgram
+    JSR cm_transfer_original_cgram
     JSR cm_transfer_custom_cgram
 
-    JSR cm_get_inputs : STA !ram_cm_controller : BEQ .inputLoop
++   JSR cm_get_inputs : STA !ram_cm_controller : BEQ .inputLoop
 
     BIT #$0080 : BEQ + : JMP .pressedA ; more wiggle room with branch limits...
 +   BIT #$8000 : BEQ + : JMP .pressedB
@@ -1915,3 +1911,10 @@ org $B88000
 print pc, " mainmenu start"
 incsrc mainmenu.asm
 print pc, " mainmenu end"
+
+
+; -------------
+; Crash handler
+; -------------
+
+incsrc crash.asm
