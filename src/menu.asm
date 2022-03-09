@@ -1883,6 +1883,13 @@ cm_divide_100:
 }
 
 
+; -------------
+; Crash handler
+; -------------
+
+incsrc crash.asm
+
+
 ; ----------
 ; Resources
 ; ----------
@@ -1911,10 +1918,3 @@ org $B88000
 print pc, " mainmenu start"
 incsrc mainmenu.asm
 print pc, " mainmenu end"
-
-
-; -------------
-; Crash handler
-; -------------
-
-incsrc crash.asm
