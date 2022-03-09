@@ -1219,6 +1219,17 @@ misc_elevatorfix:
     %sfxconfirm()
     RTL
 
+GameLoopExtras:
+{
+    LDA !ram_magic_pants_enabled : BNE .enabled
+    LDA !ram_metronome : BNE .enabled
+    LDA !ram_infinite_ammo
+
+  .enabled
+    STA !ram_game_loop_extras
+    RTL
+}
+
 
 ; ---------------
 ; Sprite Features
@@ -1256,11 +1267,9 @@ sprites_show_samusproj_hitbox:
 sprites_oob_viewer:
     %cm_toggle("OoB Tile Viewer", !ram_oob_watch_active, #1, .routine)
   .routine
-    LDA !ram_oob_watch_active : BEQ +
+    LDA !ram_oob_watch_active : BEQ action_sprite_features
     STA !ram_sprite_features_active
     JSL upload_sprite_oob_tiles
-    RTL
-+   LDA #$0000 : STA !ram_sprite_features_active
     RTL
 
 action_sprite_features:
@@ -2268,17 +2277,6 @@ game_clear_minimap:
 
 game_cutscenes:
     %cm_submenu("Cutscenes", #CutscenesMenu)
-
-GameLoopExtras:
-{
-    LDA !ram_magic_pants_enabled : BNE .enabled
-    LDA !ram_metronome : BNE .enabled
-    LDA !ram_infinite_ammo
-
-  .enabled
-    STA !ram_game_loop_extras
-    RTL
-}
 
 
 ; ---------------

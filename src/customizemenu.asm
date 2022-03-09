@@ -71,7 +71,7 @@ ifb_custompalettes_menu:
 ifb_paletteprofile:
     dw !ACTION_CHOICE
     dl #!sram_custompalette_profile
-    dw #$0000
+    dw .routine
     db #$28, "Menu Palette", #$FF
         db #$28, "     CUSTOM", #$FF ; CUSTOM should always be first
         db #$28, "     TWITCH", #$FF
@@ -91,6 +91,9 @@ ifb_paletteprofile:
         db #$28, "     PURPLE", #$FF
         db #$28, "        HUD", #$FF
     db #$FF
+  .routine
+    JSL cm_refresh_cgram_long
+    RTL
 
 ifb_palette2custom:
     %cm_jsr("Copy Palette to Custom", .routine, #$0000)
