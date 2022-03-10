@@ -147,7 +147,7 @@ init_sram:
     LDA #$0001 : STA !sram_top_display_mode ; 1 - Reserves
     LDA #$0000 : STA !sram_last_preset
     LDA #$0000 : STA !sram_save_has_set_rng
-    LDA #$0000 : STA !sram_preset_category
+    LDA #$0007 : STA !sram_preset_category ; 7 - gtclassic
     LDA #$0000 : STA !sram_custom_preset_slot
     LDA #$0000 : STA !sram_room_strat
     LDA #$0000 : STA !sram_sprite_prio_flag
