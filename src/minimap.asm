@@ -77,7 +77,8 @@ org $80994D
 
 
 ; Placed in bank 82 so that the jumps work
-org $82F70F
+;org $82F70F
+org $82F723
 print pc, " minimap bank82 start"
 
 mm_write_and_clear_hud_tiles:
@@ -136,7 +137,7 @@ mm_refresh_reserves:
 }
 
 print pc, " minimap bank82 end"
-warnpc $82FA00
+warnpc $82F800 ; Contamination code
 
 
 ; Placed in bank 90 so that the jumps work

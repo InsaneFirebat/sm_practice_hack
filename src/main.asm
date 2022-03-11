@@ -16,7 +16,6 @@ incsrc minimap.asm
 incsrc menu.asm
 incsrc infohud.asm
 incsrc rng.asm
-incsrc custompresets.asm
 incsrc presets.asm
 incsrc misc.asm
 incsrc init.asm

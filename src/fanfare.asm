@@ -16,6 +16,7 @@ print pc, " fanfare restore start"
     BRL .continue    ; jump back to the original logic
 
 print pc, " fanfare restore end"
+warnpc $84FFD0 ; Contamination code
 
 ; $84:8BDD: Instruction - clear music queue and queue music track [[Y]] ;;;
 org $848BDD

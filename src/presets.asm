@@ -371,7 +371,7 @@ preset_start_gameplay:
     JSL $A08A1E  ; Load enemies
     JSL $80A23F  ; Clear BG2 tilemap
     JSL $82E7D3  ; Load level data, CRE, tile table, scroll data, create PLMs and execute door ASM and room setup ASM
-endif
+
     JSL preset_scroll_fixes
 
     LDA !sram_preset_options : BIT !PRESETS_CLOSE_BLUE_DOORS : BNE .done_opening_doors
