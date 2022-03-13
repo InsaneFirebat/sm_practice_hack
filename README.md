@@ -1,8 +1,10 @@
-# Super Metroid Practice Hack
+# Contamination Practice Hack
 
 This page hosts the source material for the Super Metroid Practice Hack, adapted to work with this romhack. You should know that the person adapting this work has not played this romhack outside of basic testing. Some features may not be updated from their vanilla counterparts. If you have suggestions, requests, or bugs to report, please contact InsaneFirebat on Discord or open an issue here on GitHub.
 
 ## Getting Started:
+
+Pre-made IPS files are provided in the \releases\ directory.
 
 1. Download and install Python 3 from https://python.org. Windows users will need to set the PATH environmental variable to point to their Python installation folder.
 2. Run build.bat to create IPS patch files.

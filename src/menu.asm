@@ -1780,7 +1780,8 @@ print pc, " menu end"
 ; -----------
 
 pushpc
-org $B88000
+;org $B88000
+org $B8B260
 print pc, " mainmenu start"
 incsrc mainmenu.asm
 print pc, " mainmenu end"

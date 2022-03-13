@@ -237,10 +237,10 @@ ih_after_room_transition:
     LDA #$0000 : STA !ram_transition_flag
 
     ; Check if MBHP needs to be disabled
-    LDA !sram_display_mode : CMP #!IH_MODE_ROOMSTRAT_INDEX : BNE +
-    LDA !sram_room_strat : CMP #!IH_STRAT_MBHP_INDEX : BNE +
-    LDA !ROOM_ID : CMP #$DD58 : BEQ +
-    LDA #$0000 : STA !sram_display_mode
+;    LDA !sram_display_mode : CMP #!IH_MODE_ROOMSTRAT_INDEX : BNE +
+;    LDA !sram_room_strat : CMP #!IH_STRAT_MBHP_INDEX : BNE +
+;    LDA !ROOM_ID : CMP #$DD58 : BEQ +
+;    LDA #$0000 : STA !sram_display_mode
 
     ; Maybe reset segment timer
 +   LDA !ram_reset_segment_later : BEQ +

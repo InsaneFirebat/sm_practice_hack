@@ -214,11 +214,11 @@ MainMenu:
     dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
-    %cm_version_header("HACK PRACTICE HACK", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
+    %cm_version_header("CONTAMINATION", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
 
 MainMenuBanks:
     dw #EquipmentMenu>>16
-    dw #preset_category_banks>>16 ; dummy
+;    dw #preset_category_banks>>16 ; dummy
     dw #PresetsMenu>>16
     dw #TeleportMenu>>16
     dw #EventsMenu>>16
@@ -347,7 +347,7 @@ presets_current:
     RTL
 
 precat_prkd:
-    %cm_jsr("Any% PRKD (Placeholder)", #action_select_preset_category, #$0000)
+    %cm_jsl("Any% PRKD (Placeholder)", #action_select_preset_category, #$0000)
 
 action_select_preset_category:
 {
@@ -738,7 +738,7 @@ ti_xray:
 action_equip_collected_items:
 {
     LDA !SAMUS_ITEMS_COLLECTED : STA !SAMUS_ITEMS_EQUIPPED
-    RTS
+    RTL
 }
 
 
@@ -780,13 +780,13 @@ action_equip_collected_beams:
     LDA !SAMUS_BEAMS_COLLECTED : STA !SAMUS_BEAMS_EQUIPPED : TAY
     AND #$000C : CMP #$000C : BEQ .murderBeam
     TYA : STA $7E09A6
-    RTS
+    RTL
 
   .murderBeam
     TYA : AND #$100B : STA $7E09A6
 
   .done
-    RTS
+    RTL
 }
 
 
@@ -813,7 +813,7 @@ gb_chainsaw:
     %cm_jsl("Chainsaw Beam", action_glitched_beam, #$100D)
 
 gb_unnamed:
-    %cm_jsl("Unnamed Glitched Beam", action_glitched_beam, #$100C)
+    %cm_jsl("Unnamed (CSP)", action_glitched_beam, #$100C)
 
 action_glitched_beam:
 {
@@ -829,82 +829,57 @@ action_glitched_beam:
 ; ---------------
 
 TeleportMenu:
-    dw #tel_goto_crat
-    dw #tel_goto_brin
-    dw #tel_goto_norf
-    dw #tel_goto_ship
-    dw #tel_goto_mari
-    dw #tel_goto_tour
-    dw #tel_goto_debug
-    dw #$0000
-    %cm_header("TELEPORT TO SAVE STATION")
-
-tel_goto_crat:
-    %cm_submenu("Crateria", #TeleportCrateriaMenu)
-
-tel_goto_brin:
-    %cm_submenu("Brinstar", #TeleportBrinstarMenu)
-
-tel_goto_norf:
-    %cm_submenu("Norfair", #TeleportNorfairMenu)
-
-tel_goto_ship:
-    %cm_submenu("Wrecked Ship", #TeleportWreckedShipMenu)
-
-tel_goto_mari:
-    %cm_submenu("Maridia", #TeleportMaridiaMenu)
-
-tel_goto_tour:
-    %cm_submenu("Tourian", #TeleportTourianMenu)
-
-tel_goto_debug:
-    %cm_submenu("Debug Teleports", #DebugTeleportMenu)
-
-TeleportCrateriaMenu:
-    dw #tel_crateriaship
-    dw #tel_crateriaparlor
-    dw #$0000
-    %cm_header("CRATERIA SAVE STATIONS")
-
-tel_crateriaship:
-    %cm_jsl("Crateria Ship", #action_teleport, #$0000)
-
-tel_crateriaparlor:
-    %cm_jsl("Crateria Parlor", #action_teleport, #$0001)
-
-TeleportBrinstarMenu:
-    dw #tel_brinstarpink
-    dw #tel_brinstargreenshaft
-    dw #tel_brinstargreenetecoons
-    dw #tel_brinstarkraid
+    dw #tel_two
+    dw #tel_six
+    dw #tel_eight
+    dw #tel_bee
+    dw #tel_emm
+    dw #tel_que
     dw #tel_brinstarredtower
-    dw #$0000
-    %cm_header("BRINSTAR SAVE STATIONS")
-
-tel_brinstarpink:
-    %cm_jsl("Brinstar Pink Spospo", #action_teleport, #$0100)
-
-tel_brinstargreenshaft:
-    %cm_jsl("Brinstar Green Shaft", #action_teleport, #$0101)
-
-tel_brinstargreenetecoons:
-    %cm_jsl("Brinstar Green Etecoons", #action_teleport, #$0102)
-
-tel_brinstarkraid:
-    %cm_jsl("Brinstar Kraid", #action_teleport, #$0103)
-
-tel_brinstarredtower:
-    %cm_jsl("Brinstar Red Tower", #action_teleport, #$0104)
-
-TeleportNorfairMenu:
     dw #tel_norfairgrapple
     dw #tel_norfairbubble
     dw #tel_norfairtunnel
     dw #tel_norfaircrocomire
     dw #tel_norfairlnelevator
     dw #tel_norfairridley
+    dw #tel_wreckedship
+    dw #tel_maridiatube
+    dw #tel_maridiaelevator
+    dw #tel_maridiaaqueduct
+    dw #tel_maridiadraygon
+    dw #tel_debug_eye
+    dw #tel_debug_que
+    dw #tel_goto_debug
     dw #$0000
-    %cm_header("NORFAIR SAVE STATIONS")
+    %cm_header("TELEPORT TO SAVE STATIONS")
+    %cm_footer("THESE NEED WORK, USE DEBUG")
+
+tel_two:
+    %cm_jsl("Two - Four", #action_teleport, #$0003)
+
+tel_six:
+    %cm_jsl("Six - Seven", #action_teleport, #$0201)
+
+tel_eight:
+    %cm_jsl("Eight - AYY", #action_teleport, #$0100)
+
+tel_bee:
+    %cm_jsl("BEE", #action_teleport, #$0403)
+
+tel_emm:
+    %cm_jsl("EMM", #action_teleport, #$0100)
+
+tel_que:
+    %cm_jsl("QUE", #action_teleport, #$0101)
+
+tel_debug_eye:
+    %cm_jsl("DEBUG - EYE", #action_teleport, #$0103)
+
+tel_debug_que:
+    %cm_jsl("DEBUG - QUE", #action_teleport, #$0002)
+
+tel_brinstarredtower:
+    %cm_jsl("Brinstar Red Tower", #action_teleport, #$0104)
 
 tel_norfairgrapple:
     %cm_jsl("Norfair Grapple", #action_teleport, #$0200)
@@ -924,21 +899,8 @@ tel_norfairlnelevator:
 tel_norfairridley:
     %cm_jsl("Norfair Ridley", #action_teleport, #$0205)
 
-TeleportWreckedShipMenu:
-    dw #tel_wreckedship
-    dw #$0000
-    %cm_header("WRECKED SHIP SAVE STATIONS")
-
 tel_wreckedship:
     %cm_jsl("Wrecked Ship", #action_teleport, #$0300)
-
-TeleportMaridiaMenu:
-    dw #tel_maridiatube
-    dw #tel_maridiaelevator
-    dw #tel_maridiaaqueduct
-    dw #tel_maridiadraygon
-    dw #$0000
-    %cm_header("MARIDIA SAVE STATIONS")
 
 tel_maridiatube:
     %cm_jsl("Maridia Tube", #action_teleport, #$0400)
@@ -952,17 +914,17 @@ tel_maridiaaqueduct:
 tel_maridiadraygon:
     %cm_jsl("Maridia Draygon", #action_teleport, #$0403)
 
-TeleportTourianMenu:
-    dw #tel_tourianentrance
-    dw #tel_tourianmb
-    dw #$0000
-    %cm_header("TOURIAN SAVE STATIONS")
-
 tel_tourianentrance:
     %cm_jsl("Tourian Entrance", #action_teleport, #$0501)
 
 tel_tourianmb:
     %cm_jsl("Tourian MB", #action_teleport, #$0500)
+
+tel_debug:
+    %cm_jsl("Outside WHY", #action_teleport, #$0101)
+
+tel_goto_debug:
+    %cm_submenu("Debug Teleports", #DebugTeleportMenu)
 
 DebugTeleportMenu:
     dw #tel_debug_area
@@ -988,7 +950,7 @@ tel_debug_station:
     %cm_numfield_hex("Station ID", !ram_tel_debug_station, 0, 22, 1, 4, #0)
 
 tel_debug_execute:
-    %cm_jsr("TELEPORT", #action_debug_teleport, #$0000)
+    %cm_jsl("TELEPORT", #action_debug_teleport, #$0000)
 
 action_teleport:
 {
@@ -1162,7 +1124,7 @@ sprites_oob_viewer:
     RTL
 
   .oob_off
-    LDA #$0000 : STA !ram_sprite_features_active
+    JSL action_sprite_features
     RTL
 }
 
@@ -1349,16 +1311,14 @@ boss_mb:
 ; --------------
 
 pushpc
-org $85C000
+;org $85C000
+org $85E4FA
 print pc, " mainmenu InfoHUD start"
 
 InfoHudMenu:
     dw #ih_goto_display_mode
     dw #ih_display_mode
     dw #$FFFF
-;    dw #ih_goto_room_strat
-;    dw #ih_room_strat
-;    dw #$FFFF
     dw #ih_top_HUD_mode
     dw #$FFFF
     dw #ih_room_counter
@@ -1492,89 +1452,6 @@ ih_display_mode:
     db #$28, "  RAM WATCH", #$FF
     db #$FF
 
-ih_goto_room_strat:
-    %cm_submenu("Select Room Strat", #RoomStratMenu)
-
-RoomStratMenu:
-    dw ihstrat_doorskip
-    dw ihstrat_tacotank
-    dw ihstrat_gateglitch
-    dw ihstrat_moatcwj
-    dw ihstrat_robotflush
-    dw ihstrat_shinetopb
-    dw ihstrat_elevatorcf
-    dw ihstrat_botwooncf
-    dw ihstrat_snailclip
-    dw ihstrat_threejumpskip
-    dw ihstrat_mbhp
-    dw #$0000
-    %cm_header("INFOHUD ROOM STRAT")
-    %cm_footer("ROOM STRAT MUST BE ACTIVE")
-
-ihstrat_doorskip:
-    %cm_jsl("Parlor-Climb Door Skip", #action_select_room_strat, #$0000)
-
-ihstrat_tacotank:
-    %cm_jsl("Taco Tank", #action_select_room_strat, #$0001)
-
-ihstrat_gateglitch:
-    %cm_jsl("Gate Glitch", #action_select_room_strat, #$0002)
-
-ihstrat_moatcwj:
-    %cm_jsl("Moat CWJ", #action_select_room_strat, #$0003)
-
-ihstrat_robotflush:
-    %cm_jsl("Robot Flush", #action_select_room_strat, #$0004)
-
-ihstrat_shinetopb:
-    %cm_jsl("Shine to PB", #action_select_room_strat, #$0005)
-
-ihstrat_elevatorcf:
-    %cm_jsl("Elevator Crystal Flash", #action_select_room_strat, #$0006)
-
-ihstrat_botwooncf:
-    %cm_jsl("Botwoon Crystal Flash", #action_select_room_strat, #$0007)
-
-ihstrat_snailclip:
-    %cm_jsl("Aqueduct Snail Clip", #action_select_room_strat, #$0008)
-
-ihstrat_threejumpskip:
-    %cm_jsl("Three Jump Baby Skip", #action_select_room_strat, #$0009)
-
-!IH_STRAT_MBHP_INDEX = $000A
-ihstrat_mbhp:
-    %cm_jsl("Mother Brain HP", #action_select_room_strat, #$000A)
-
-action_select_room_strat:
-{
-    TYA : STA !sram_room_strat
-    LDA #!IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
-    JSL cm_go_back
-    JSL cm_calculate_max
-    RTL
-}
-
-ih_room_strat:
-    dw !ACTION_CHOICE
-    dl #!sram_room_strat
-    dw #.routine
-    db #$28, "Current Strat", #$FF
-    db #$28, "  DOOR SKIP", #$FF
-    db #$28, "  TACO TANK", #$FF
-    db #$28, "GATE GLITCH", #$FF
-    db #$28, "   MOAT CWJ", #$FF
-    db #$28, "ROBOT FLUSH", #$FF
-    db #$28, "SHINE TO PB", #$FF
-    db #$28, "ELEVATOR CF", #$FF
-    db #$28, " BOTWOON CF", #$FF
-    db #$28, " SNAIL CLIP", #$FF
-    db #$28, "3 JUMP SKIP", #$FF
-    db #$28, "      MB HP", #$FF
-    db #$FF
-    .routine
-        LDA #$0001 : STA !sram_display_mode
-        RTL
-
 ih_top_HUD_mode:
     dw !ACTION_CHOICE
     dl #!sram_top_display_mode
@@ -1626,7 +1503,7 @@ ih_ram_watch:
 incsrc ramwatchmenu.asm
 
 print pc, " mainmenu InfoHUD end"
-warnpc $B3F000 ; mainmenu.asm
+warnpc $85F800 ; mainmenu.asm
 pullpc
 
 
@@ -1786,12 +1663,6 @@ game_clear_minimap:
     DEX : DEX : BPL .clear_minimap_loop
     LDA #!SOUND_MENU_JSL : JSL !SFX_LIB1
     RTL
-
-GameLoopExtras_long:
-{
-    JSR GameLoopExtras
-    RTL
-}
 
 ; -------------------
 ; Controller Settings
@@ -2502,11 +2373,5 @@ GameModeExtras:
 
   .enabled
     STA !ram_game_mode_extras
-    RTL
-}
-
-init_wram_based_on_sram:
-{
-    JSL init_suit_properties_ram
     RTL
 }
