@@ -1535,6 +1535,7 @@ InfoHudMenu:
     dw #ih_reset_seg_later
     dw #ih_lag
     dw #ih_top_HUD_mode
+    dw #ih_spacetime_infohud
     dw #ih_status_icons
     dw #$FFFF
     dw #ih_ram_watch
@@ -2158,6 +2159,15 @@ ih_top_HUD_mode:
 
 !TOP_HUD_RESERVES_INDEX = #$0001
 !TOP_HUD_VANILLA_INDEX = #$0002
+
+ih_spacetime_infohud:
+    dw !ACTION_CHOICE
+    dl #!ram_spacetime_infohud
+    dw #$0000
+    db #$28, "Spacetime HUD ", #$FF
+    db #$28, "    VANILLA", #$FF
+    db #$28, "  PRESERVED", #$FF
+    db #$FF
 
 print pc, " mainmenu InfoHUD end"
 warnpc $B3F000 ; mainmenu.asm

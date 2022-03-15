@@ -15,7 +15,7 @@
 !VERSION_MINOR = 4
 !VERSION_BUILD = 1
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 8
+!VERSION_REV_2 = 9
 
 
 ; ---------
@@ -100,6 +100,11 @@
 
 ; ^ FREE SPACE ^ up to +$7E
 
+!ram_spacetime_read_address = !WRAM_START+$80
+!ram_spacetime_read_bank = !WRAM_START+$82
+!ram_spacetime_y = !WRAM_START+$84
+!ram_spacetime_infohud = !WRAM_START+$86
+
 !ram_watch_bank = !WRAM_START+$88
 !ram_watch_write_mode = !WRAM_START+$8A
 !ram_watch_left = !WRAM_START+$8C
@@ -112,8 +117,6 @@
 !ram_watch_edit_lock_right = !WRAM_START+$9A
 !ram_watch_left_index = !WRAM_START+$9C
 !ram_watch_right_index = !WRAM_START+$9E
-
-; ^ FREE SPACE ^ up to +$9E
 
 !ram_HUD_check = !WRAM_START+$A0
 !ram_roomstrat_counter = !WRAM_START+$A2
