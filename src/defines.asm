@@ -275,9 +275,9 @@
 !ram_crash_page = !CRASHDUMP+$40
 !ram_crash_palette = !CRASHDUMP+$42
 !ram_crash_cursor = !CRASHDUMP+$44
-!ram_crash_stack_bytes_written = !CRASHDUMP+$46
-!ram_crash_stack_bytes_to_be_written = !CRASHDUMP+$48
-!ram_crash_stack_line_loop_counter = !CRASHDUMP+$4A
+!ram_crash_stack_size = !CRASHDUMP+$46
+!ram_crash_stack_bytes_written = !CRASHDUMP+$48
+!ram_crash_stack_line_position = !CRASHDUMP+$4A
 !ram_crash_text = !CRASHDUMP+$4C
 !ram_crash_text_bank = !CRASHDUMP+$4E
 !ram_crash_text_palette = !CRASHDUMP+$50

@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.1.6]  Additional work on crash handler
 * [2.4.1.5]  Fixed crash handler not being visible if crash occurred in a door transition
 * [2.4.1.4]  More work on the crash handler we hope you never have to see
 * [2.4.1.3]  Added a break handler to properly identify those types of crashes
