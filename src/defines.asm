@@ -15,7 +15,7 @@
 !VERSION_MINOR = 4
 !VERSION_BUILD = 1
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 5
+!VERSION_REV_2 = 6
 
 
 ; ---------
@@ -24,7 +24,7 @@
 
 !WRAM_BANK = #$007E
 !WRAM_SIZE = #$0200
-!WRAM_START = $7EFB00
+!WRAM_START = $7EFD00
 
 !ram_load_preset = !WRAM_START+$00
 !ram_custom_preset = !WRAM_START+$02
@@ -152,7 +152,7 @@
 ; RAM (Bank 7E required)
 ; -----------------------
 
-!ram_slowdown_mode = $7EFBFE
+!ram_slowdown_mode = $7EFDFE
 !PRESET_DOORS = $7EFDF0
 !PRESET_SPECIAL = $7EFDF2
 !PRESET_ENEMIES = $7EFDF4
@@ -162,7 +162,9 @@
 ; RAM Menu
 ; ---------
 
-!WRAM_MENU_START = $7EFC00
+!ram_tilemap_buffer = $7E5800
+
+!WRAM_MENU_START = $7EFE00
 
 !ram_cm_stack_index = $05D5
 !ram_cm_menu_stack = !WRAM_MENU_START+$00         ; 16 bytes
@@ -252,6 +254,35 @@
 !SOUND_MENU_MOVE = $0039
 !SOUND_MENU_JSR = $0039
 !SOUND_MENU_FAIL = $0007
+
+
+; -----------------
+; Crash Handler RAM
+; -----------------
+
+!ram_crash_a = !CRASHDUMP
+!ram_crash_x = !CRASHDUMP+$02
+!ram_crash_y = !CRASHDUMP+$04
+!ram_crash_dbp = !CRASHDUMP+$06
+!ram_crash_sp = !CRASHDUMP+$08
+!ram_crash_type = !CRASHDUMP+$0A
+!ram_crash_draw_value = !CRASHDUMP+$0C
+!ram_crash_stack_size = !CRASHDUMP+$0E
+
+; Reserve 48 bytes for stack
+!ram_crash_stack = !CRASHDUMP+$10
+
+!ram_crash_page = !CRASHDUMP+$40
+!ram_crash_palette = !CRASHDUMP+$42
+!ram_crash_cursor = !CRASHDUMP+$44
+!ram_crash_stack_bytes_written = !CRASHDUMP+$46
+!ram_crash_stack_bytes_to_be_written = !CRASHDUMP+$48
+!ram_crash_stack_line_loop_counter = !CRASHDUMP+$4A
+!ram_crash_text = !CRASHDUMP+$4C
+!ram_crash_text_bank = !CRASHDUMP+$4E
+!ram_crash_text_palette = !CRASHDUMP+$50
+!ram_crash_mem_viewer = !CRASHDUMP+$52
+!ram_crash_mem_viewer_bank = !CRASHDUMP+$54
 
 
 ; ---------
