@@ -492,6 +492,7 @@ cm_tilemap_transfer_long:
     JSR cm_tilemap_transfer
     RTL
 }
+
 cm_tilemap_bg_interior:
 {
     JSR cm_tilemap_bg_fill_interior
