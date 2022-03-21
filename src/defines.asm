@@ -15,7 +15,7 @@
 !VERSION_MINOR = 4
 !VERSION_BUILD = 1
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 6
+!VERSION_REV_2 = 7
 
 
 ; ---------
@@ -283,6 +283,11 @@
 !ram_crash_text_palette = !CRASHDUMP+$50
 !ram_crash_mem_viewer = !CRASHDUMP+$52
 !ram_crash_mem_viewer_bank = !CRASHDUMP+$54
+
+!ram_crash_input = !CRASHDUMP+$60
+!ram_crash_input_new = !CRASHDUMP+$62
+!ram_crash_input_prev = !CRASHDUMP+$64
+!ram_crash_input_timer = !CRASHDUMP+$66
 
 
 ; ---------
