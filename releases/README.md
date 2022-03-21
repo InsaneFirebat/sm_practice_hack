@@ -16,7 +16,7 @@ Some patches might come in other formats besides IPS. [FLIPS](https://www.romhac
 
 Regardless of which tool you use, the process is the same: you select the .IPS file and an original ROM file, and it will replace the original ROM with a patched ROM. Then simply load up the patched ROM in your emulator or flash cart of choice. If all goes well, you're done and can delete the .IPS file if you like.
 
-## Additional Features
+## Exclusive Features
 
 * Super HUD InfoHUD mode to run multiple modes at once
 * InfoHUD Mode to display a damage counter that resets at Phantoon and Ridley
