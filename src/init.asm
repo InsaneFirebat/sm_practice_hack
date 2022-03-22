@@ -49,11 +49,9 @@ if !PRESERVE_WRAM_DURING_SPACETIME
     ; WRAM located in bank 7E, clear it later
 else
     ; Clear WRAM
-    LDA #$0000
-    LDX !WRAM_SIZE-2
-
+    LDA #$0000 : LDX !WRAM_SIZE-2
 -   STA !WRAM_START,X
-    DEX : DEX : BPL -
+    DEX #2 : BPL -
 
     JSL init_nonzero_wram
 endif
@@ -211,25 +209,6 @@ init_sram:
     LDA #$0001 : STA !sram_dummy_on
     LDA #$0000 : STA !sram_dummy_off
     LDA #$FFFF : STA !sram_dummy_num
-
-    LDA #$0000 : LDX #$007E
--   STA !CRASHDUMP+$00,X
-    DEX #2 : BPL -
-
-    LDA #$0000
-    STA !ram_infinite_ammo
-    STA !ram_infiniteammo_check
-    STA !ram_display_backup
-    STA !ram_magnetstairs
-    STA !ram_dboost_state
-    STA !ram_dboost_kbmax
-    STA !ram_dboost_kb
-    STA !ram_dboost_counter
-    STA !ram_lag_counter
-if !FEATURE_EXTRAS
-    STA !ram_noclip
-    STA !ram_steamcollision
-endif
 
     LDA !SRAM_VERSION : STA !sram_initialized
 

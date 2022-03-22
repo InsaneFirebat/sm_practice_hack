@@ -862,7 +862,8 @@ crash_read_inputs:
 CrashTextHeader:
     table ../resources/header.tbl
     db "SM SHOT ITSELF IN THE FOOT", #$FF
-    table ../resources/normal.tbl
+;    table ../resources/normal.tbl
+    table ../resources/thinfont.tbl
 
 CrashTextFooter1:
 ; Navigate pages with A or B
@@ -881,7 +882,8 @@ CrashTextStack2:
 CrashTextHeader2:
     table ../resources/header.tbl
     db "CRASH MEMORY VIEWER", #$FF
-    table ../resources/normal.tbl
+;    table ../resources/normal.tbl
+    table ../resources/thinfont.tbl
 
 CrashTextMemAddress:
     db "ADDRESS:  $", #$FF
@@ -901,7 +903,8 @@ CrashTextMemSelectLow:
 CrashTextHeader3:
     table ../resources/header.tbl
     db "BUT WHAT DOES IT ALL MEAN?", #$FF
-    table ../resources/normal.tbl
+;    table ../resources/normal.tbl
+    table ../resources/thinfont.tbl
 
 CrashTextInfo1:
     db "Super Metroid has crashed!", #$FF
@@ -940,4 +943,5 @@ CrashTextInfo11:
     db "Press ", #$8D, #$8C, #$85, #$84, " to soft reset", #$FF
 
 print pc, " crash handler bank89 end"
+    table ../resources/normal.tbl
 

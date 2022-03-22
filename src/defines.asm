@@ -23,7 +23,7 @@
 ; ---------
 
 !WRAM_BANK = #$007E
-!WRAM_SIZE = #$0200
+!WRAM_SIZE = #$0500
 !WRAM_START = $7EFD00
 
 !ram_load_preset = !WRAM_START+$00
@@ -152,10 +152,7 @@
 ; RAM (Bank 7E required)
 ; -----------------------
 
-!ram_slowdown_mode = $7EFDFE
-!PRESET_DOORS = $7EFDF0
-!PRESET_SPECIAL = $7EFDF2
-!PRESET_ENEMIES = $7EFDF4
+!ram_slowdown_mode = $7EFFFE
 
 
 ; ---------
@@ -447,46 +444,50 @@
 ; SRAM
 ; -----
 
-!sram_initialized = $F02000
+!SRAM_START = $702000
 
-!sram_ctrl_menu = $F02002
-!sram_ctrl_kill_enemies = $F02004
-!sram_ctrl_full_equipment = $F02006
-!sram_ctrl_reset_segment_timer = $F02008
-!sram_ctrl_reset_segment_later = $F0200A
-!sram_ctrl_load_state = $F0200C
-!sram_ctrl_save_state = $F0200E
-!sram_ctrl_load_last_preset = $F02010
-!sram_ctrl_random_preset = $F02012
-!sram_ctrl_save_custom_preset = $F02014
-!sram_ctrl_load_custom_preset = $F02016
-!sram_ctrl_inc_custom_preset = $F02018
-!sram_ctrl_dec_custom_preset = $F0201A
-!sram_ctrl_toggle_tileviewer = $F0201C
-!sram_ctrl_update_timers = $F0201E
+!sram_initialized = !SRAM_START+$00
 
-!sram_artificial_lag = $F02020
-!sram_rerandomize = $F02022
-!sram_fanfare_toggle = $F02024
-!sram_frame_counter_mode = $F02026
-!sram_display_mode = $F02028
-!sram_music_toggle = $F0202A
-!sram_last_preset = $F0202C
-!sram_save_has_set_rng = $F0202E
-!sram_preset_category = $F02030
-!sram_custom_preset_slot = $F02032
-!sram_room_strat = $F02034
-!sram_sprite_prio_flag = $F02036
-!sram_metronome_tickrate = $F02038
-!sram_metronome_sfx = $F0203A
-!sram_status_icons = $F0203C
-!sram_suit_properties = $F0203E
-!sram_top_display_mode = $F02040
-!sram_healthalarm = $F02042
-!sram_room_layout = $F02044
-!sram_cutscenes = $F02046
-!sram_compressed_graphics = $F02048
-!sram_lag_counter_mode = $F0204A
+!sram_ctrl_menu = !SRAM_START+$02
+!sram_ctrl_kill_enemies = !SRAM_START+$04
+!sram_ctrl_full_equipment = !SRAM_START+$06
+!sram_ctrl_reset_segment_timer = !SRAM_START+$08
+!sram_ctrl_reset_segment_later = !SRAM_START+$0A
+!sram_ctrl_load_state = !SRAM_START+$0C
+!sram_ctrl_save_state = !SRAM_START+$0E
+!sram_ctrl_load_last_preset = !SRAM_START+$10
+!sram_ctrl_random_preset = !SRAM_START+$12
+!sram_ctrl_save_custom_preset = !SRAM_START+$14
+!sram_ctrl_load_custom_preset = !SRAM_START+$16
+!sram_ctrl_inc_custom_preset = !SRAM_START+$18
+!sram_ctrl_dec_custom_preset = !SRAM_START+$1A
+!sram_ctrl_toggle_tileviewer = !SRAM_START+$1C
+!sram_ctrl_update_timers = !SRAM_START+$1E
+
+; ^ FREE SPACE ^
+
+!sram_artificial_lag = !SRAM_START+$20
+!sram_rerandomize = !SRAM_START+$22
+!sram_fanfare_toggle = !SRAM_START+$24
+!sram_frame_counter_mode = !SRAM_START+$26
+!sram_display_mode = !SRAM_START+$28
+!sram_music_toggle = !SRAM_START+$2A
+!sram_last_preset = !SRAM_START+$2C
+!sram_save_has_set_rng = !SRAM_START+$2E
+!sram_preset_category = !SRAM_START+$30
+!sram_custom_preset_slot = !SRAM_START+$32
+!sram_room_strat = !SRAM_START+$34
+!sram_sprite_prio_flag = !SRAM_START+$36
+!sram_metronome_tickrate = !SRAM_START+$38
+!sram_metronome_sfx = !SRAM_START+$3A
+!sram_status_icons = !SRAM_START+$3C
+!sram_suit_properties = !SRAM_START+$3E
+!sram_top_display_mode = !SRAM_START+$40
+!sram_healthalarm = !SRAM_START+$42
+!sram_room_layout = !SRAM_START+$44
+!sram_cutscenes = !SRAM_START+$46
+!sram_compressed_graphics = !SRAM_START+$48
+!sram_lag_counter_mode = !SRAM_START+$4A
 
 ; ^ FREE SPACE ^ up to $F03000
 
@@ -516,176 +517,185 @@
 ;                             Custom Features                             ;
 ; ----------------------------------------------------------------------- ;
 
-!ram_HUD_top = $F02100
-!ram_HUD_middle = $F02102
-!ram_HUD_bottom = $F02104
-!ram_HUD_top_counter = $F02106
-!ram_HUD_middle_counter = $F02108
-
-!ram_cm_rng = $F0210C
-
-!ram_cm_brb = !WRAM_MENU_START+$60
-!ram_cm_brb_timer = !WRAM_MENU_START+$62
-!ram_cm_brb_frames = !WRAM_MENU_START+$64
-!ram_cm_brb_secs = !WRAM_MENU_START+$66
-!ram_cm_brb_mins = !WRAM_MENU_START+$68
-!ram_cm_brb_screen = !WRAM_MENU_START+$6A
-!ram_cm_brb_palette = !WRAM_MENU_START+$6C
-!ram_cm_brb_timer_mode = !WRAM_MENU_START+$6E
-!ram_cm_brb_set_cycle = !WRAM_MENU_START+$70
-!ram_cm_brb_cycle_time = !WRAM_MENU_START+$72
+; Reserving up to $17F for master branch
 
 ; FREE SPACE ^
 
-!ram_infinite_ammo = $F02110
-!ram_infiniteammo_check = $F02112
+!ram_cm_brb = !WRAM_START+$1A0
+!ram_cm_brb_timer = !WRAM_START+$1A2
+!ram_cm_brb_frames = !WRAM_START+$1A4
+!ram_cm_brb_secs = !WRAM_START+$1A6
+!ram_cm_brb_mins = !WRAM_START+$1A8
+!ram_cm_brb_screen = !WRAM_START+$1AA
+!ram_cm_brb_palette = !WRAM_START+$1AC
+!ram_cm_brb_timer_mode = !WRAM_START+$1AE
+!ram_cm_brb_set_cycle = !WRAM_START+$1B0
+!ram_cm_brb_cycle_time = !WRAM_START+$1B2
+
+!ram_cm_rng = !WRAM_START+$1C0
+
+; FREE SPACE ^
+
+!ram_HUD_top = !WRAM_START+$200
+!ram_HUD_middle = !WRAM_START+$202
+!ram_HUD_bottom = !WRAM_START+$204
+!ram_HUD_top_counter = !WRAM_START+$206
+!ram_HUD_middle_counter = !WRAM_START+$208
+
+; FREE SPACE ^
+
+!ram_countdamage = $0B0C
 !ram_ammo_missiles = $05C9
 !ram_ammo_supers = $05CB
 !ram_ammo_powerbombs = $05CD
 
-!ram_countdamage = $0B0C
-!ram_nodamage = $F02114
-!ram_display_backup = $F02116
-
-!ram_dboost_state = $F02118
-!ram_dboost_kbmax = $F0211A
-!ram_dboost_kb = $F0211C
-!ram_dboost_counter = $F0211E
-!ram_spark_icon = $F02120
-!ram_lag_counter = $F02122
-!ram_lag_counter_HUD = $F02124
-
-!sram_phantoon_intro = $F02126
-!sram_kraid_intro = $F02128
-
-!ram_magnetstairs = $F0212A
+!ram_infinite_ammo = !WRAM_START+$210
+!ram_infiniteammo_check = !WRAM_START+$212
+!ram_nodamage = !WRAM_START+$214
+!ram_display_backup = !WRAM_START+$216
+!ram_dboost_state = !WRAM_START+$218
+!ram_dboost_kbmax = !WRAM_START+$21A
+!ram_dboost_kb = !WRAM_START+$21C
+!ram_dboost_counter = !WRAM_START+$21E
+!ram_spark_icon = !WRAM_START+$220
+!ram_lag_counter = !WRAM_START+$222
+!ram_lag_counter_HUD = !WRAM_START+$224
 
 ; FREE SPACE ^
 
 if !FEATURE_EXTRAS
-    !ram_noclip = $F02130
-    !ram_steamcollision = $F02132
+    !ram_noclip = !WRAM_START+$230
+    !ram_steamcollision = !WRAM_START+$232
 ; FREE SPACE ^
 endif
 
-!ram_enemy0_last_xpos = $F02140
-!ram_enemy0_last_ypos = $F02142
-;!ram_enemy1_last_xpos = $F02144
-;!ram_enemy1_last_ypos = $F02146
-!ram_enemy2_last_xpos = $F02148
-!ram_enemy2_last_ypos = $F0214A
-;!ram_enemy3_last_xpos = $F0214C
-;!ram_enemy3_last_ypos = $F0214E
-!ram_enemy4_last_xpos = $F02150
-!ram_enemy4_last_ypos = $F02152
-;!ram_enemy5_last_xpos = $F02154
-;!ram_enemy5_last_ypos = $F02156
-!ram_enemy6_last_xpos = $F02158
-!ram_enemy6_last_ypos = $F0215A
-!ram_enemy7_last_xpos = $F0215C
-!ram_enemy7_last_ypos = $F0215E
-!ram_enemy8_last_xpos = $F02160
-!ram_enemy8_last_ypos = $F02162
-!ram_radar1 = $F02164
-!ram_radar2 = $F02166
+!ram_enemy0_last_xpos = !WRAM_START+$240
+!ram_enemy0_last_ypos = !WRAM_START+$242
+;!ram_enemy1_last_xpos = !WRAM_START+$244
+;!ram_enemy1_last_ypos = !WRAM_START+$246
+!ram_enemy2_last_xpos = !WRAM_START+$248
+!ram_enemy2_last_ypos = !WRAM_START+$24A
+;!ram_enemy3_last_xpos = !WRAM_START+$24C
+;!ram_enemy3_last_ypos = !WRAM_START+$24E
+!ram_enemy4_last_xpos = !WRAM_START+$250
+!ram_enemy4_last_ypos = !WRAM_START+$252
+;!ram_enemy5_last_xpos = !WRAM_START+$254
+;!ram_enemy5_last_ypos = !WRAM_START+$256
+!ram_enemy6_last_xpos = !WRAM_START+$258
+!ram_enemy6_last_ypos = !WRAM_START+$25A
+!ram_enemy7_last_xpos = !WRAM_START+$25C
+!ram_enemy7_last_ypos = !WRAM_START+$25E
+!ram_enemy8_last_xpos = !WRAM_START+$260
+!ram_enemy8_last_ypos = !WRAM_START+$262
+!ram_radar1 = !WRAM_START+$264
+!ram_radar2 = !WRAM_START+$266
 
 ; FREE SPACE ^
 
-!ram_custompalette_menuborder = $F021E0
-!ram_custompalette_menuheaderoutline = $F021E2
-!ram_custompalette_menutext = $F021E4
-!ram_custompalette_menubackground = $F021E6
-!ram_custompalette_menunumoutline = $F021E8
-!ram_custompalette_menunumfill = $F021EA
-!ram_custompalette_menutoggleon = $F021EC
-!ram_custompalette_menuseltext = $F021EE
-!ram_custompalette_menuseltextbg = $F021F0
-!ram_custompalette_menunumseloutline = $F021F2
-!ram_custompalette_menunumsel = $F021F4
+!ram_custompalette_menuborder = !WRAM_START+$2E0
+!ram_custompalette_menuheaderoutline = !WRAM_START+$2E2
+!ram_custompalette_menutext = !WRAM_START+$2E4
+!ram_custompalette_menubackground = !WRAM_START+$2E6
+!ram_custompalette_menunumoutline = !WRAM_START+$2E8
+!ram_custompalette_menunumfill = !WRAM_START+$2EA
+!ram_custompalette_menutoggleon = !WRAM_START+$2EC
+!ram_custompalette_menuseltext = !WRAM_START+$2EE
+!ram_custompalette_menuseltextbg = !WRAM_START+$2F0
+!ram_custompalette_menunumseloutline = !WRAM_START+$2F2
+!ram_custompalette_menunumsel = !WRAM_START+$2F4
 
 ; FREE SPACE ^
 
-!ram_soundtest_lib1 = $F021F8
-!ram_soundtest_lib2 = $F021FA
-!ram_soundtest_lib3 = $F021FC
-!ram_soundtest_music = $F021FE
+!ram_soundtest_lib1 = !WRAM_START+$2F8
+!ram_soundtest_lib2 = !WRAM_START+$2FA
+!ram_soundtest_lib3 = !WRAM_START+$2FC
+!ram_soundtest_music = !WRAM_START+$2FE
 
 
 ; ---------
 ; Pointers
 ; ---------
 
-!PRESET_SLOTS = $F03000
-!CRASHDUMP = $F02F00
+!PRESET_SLOTS = $703000
+!CRASHDUMP = !WRAM_START+$400
+
+!PRESET_DOORS = !WRAM_START+$180
+!PRESET_SPECIAL = !WRAM_START+$182
+!PRESET_ENEMIES = !WRAM_START+$184
 
 !BRB_METROID = #$287F
 
 
-; -----
+; ------------------------
 ; SRAM for custom features
-; -----
+; ------------------------
 
-!sram_ctrl_reveal_damage = $F02200
-!sram_ctrl_randomize_rng = $F02202
-!sram_ctrl_force_stand = $F02204
+!sram_ctrl_reveal_damage = !SRAM_START+$200
+!sram_ctrl_randomize_rng = !SRAM_START+$202
+!sram_ctrl_force_stand = !SRAM_START+$204
+!sram_ctrl_update_timers = !SRAM_START+$206
 
-!sram_scroll_button = $F02210
-!sram_cm_scroll_button = $F02212
-!sram_cm_scroll_delay = $F02214
+!sram_menu_background = !SRAM_START+$210
+!sram_scroll_button = !SRAM_START+$212
+!sram_cm_scroll_button = !SRAM_START+$214
+!sram_cm_scroll_delay = !SRAM_START+$216
 
-!sram_countdamage = $F02220
-!sram_menu_background = $F02222
-
-!sram_preset_open_doors = $F02228
-!sram_preset_ship_landing = $F0222A
-!sram_preset_enemies = $F0222C
+!sram_phantoon_intro = !SRAM_START+$220
+!sram_kraid_intro = !SRAM_START+$222
+!ram_magnetstairs = !SRAM_START+$224
+!sram_preset_open_doors = !SRAM_START+$226
+!sram_preset_ship_landing = !SRAM_START+$228
+!sram_preset_enemies = !SRAM_START+$22A
 
 ; FREE SPACE ^
 
-!sram_superhud = $F02282
-!sram_superhud_bottom = $F02284
-!sram_superhud_middle = $F02286
-!sram_superhud_top = $F02288
+!sram_countdamage = !SRAM_START+$240
+!sram_superhud = !SRAM_START+$242
+!sram_superhud_bottom = !SRAM_START+$244
+!sram_superhud_middle = !SRAM_START+$246
+!sram_superhud_top = !SRAM_START+$248
 
-!sram_presetrando = $F02290
-!sram_presetrando_morph = $F02292
-!sram_presetrando_charge = $F02294
-!sram_presetrando_max_etanks = $F02296
-!sram_presetrando_max_reserves = $F02298
-!sram_presetrando_max_missiles = $F0229A
-!sram_presetrando_max_supers = $F0229C
-!sram_presetrando_max_pbs = $F0229E
-!sram_presetrando_beampref = $F022A0
+; FREE SPACE ^
 
-!sram_custompalette_blue = $F022A2
-!sram_custompalette_green = $F022A4
-!sram_custompalette_red = $F022A6
+!sram_presetrando = !SRAM_START+$290
+!sram_presetrando_morph = !SRAM_START+$292
+!sram_presetrando_charge = !SRAM_START+$294
+!sram_presetrando_max_etanks = !SRAM_START+$296
+!sram_presetrando_max_reserves = !SRAM_START+$298
+!sram_presetrando_max_missiles = !SRAM_START+$29A
+!sram_presetrando_max_supers = !SRAM_START+$29C
+!sram_presetrando_max_pbs = !SRAM_START+$29E
+!sram_presetrando_beampref = !SRAM_START+$2A0
+
+!sram_custompalette_blue = !SRAM_START+$2A2
+!sram_custompalette_green = !SRAM_START+$2A4
+!sram_custompalette_red = !SRAM_START+$2A6
 
 ; FREE SPACE ^
 
 ; do not change order without updating custom palette profiles in menu.asm
-!sram_custompalette_menuborder = $F022B0
-!sram_custompalette_menuheaderoutline = $F022B2
-!sram_custompalette_menutext = $F022B4
-!sram_custompalette_menunumoutline = $F022B6
-!sram_custompalette_menunumfill = $F022B8
-!sram_custompalette_menutoggleon = $F022BA
-!sram_custompalette_menuseltext = $F022BC
-!sram_custompalette_menuseltextbg = $F022BE
-!sram_custompalette_menubackground = $F022C0
-!sram_custompalette_menunumseloutline = $F022C2
-!sram_custompalette_menunumsel = $F022C4
-!sram_custompalette_profile = $F022C6
+!sram_custompalette_menuborder = !SRAM_START+$2B0
+!sram_custompalette_menuheaderoutline = !SRAM_START+$2B2
+!sram_custompalette_menutext = !SRAM_START+$2B4
+!sram_custompalette_menunumoutline = !SRAM_START+$2B6
+!sram_custompalette_menunumfill = !SRAM_START+$2B8
+!sram_custompalette_menutoggleon = !SRAM_START+$2BA
+!sram_custompalette_menuseltext = !SRAM_START+$2BC
+!sram_custompalette_menuseltextbg = !SRAM_START+$2BE
+!sram_custompalette_menubackground = !SRAM_START+$2C0
+!sram_custompalette_menunumseloutline = !SRAM_START+$2C2
+!sram_custompalette_menunumsel = !SRAM_START+$2C4
+!sram_custompalette_profile = !SRAM_START+$2C6
 
 ; FREE SPACE ^
 
-!sram_customsfx_move = $F022F0
-!sram_customsfx_toggle = $F022F2
-!sram_customsfx_number = $F022F4
-!sram_customsfx_confirm = $F022F6
-!sram_customsfx_goback = $F022F8
+!sram_customsfx_move = !SRAM_START+$2F0
+!sram_customsfx_toggle = !SRAM_START+$2F2
+!sram_customsfx_number = !SRAM_START+$2F4
+!sram_customsfx_confirm = !SRAM_START+$2F6
+!sram_customsfx_goback = !SRAM_START+$2F8
 
-!sram_dummy_on = $F022FA
-!sram_dummy_off = $F022FC
-!sram_dummy_num = $F022FE
+!sram_dummy_on = !SRAM_START+$2FA
+!sram_dummy_off = !SRAM_START+$2FC
+!sram_dummy_num = !SRAM_START+$2FE
 
