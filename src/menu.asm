@@ -1091,6 +1091,10 @@ cm_loop:
 
     JSL wait_for_lag_frame_long  ; Wait for lag frame
 
+    ; not sure if still necessary
+    ; needs flash cart testing
+    JSL cm_refresh_cgram_long
+
     JSL $808F0C ; Music queue
     JSL $8289EF ; Sound fx queue
 
@@ -1106,11 +1110,6 @@ cm_loop:
 +   LDA !ram_cm_ctrl_mode : BEQ +
     JSR cm_ctrl_mode
     BRA .inputLoop
-
-    ; not sure if still necessary
-    ; needs flash cart testing
-    JSR cm_transfer_original_cgram
-    JSR cm_transfer_custom_cgram
 
 +   JSR cm_get_inputs : STA !ram_cm_controller : BEQ .inputLoop
 
