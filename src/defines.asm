@@ -24,7 +24,7 @@
 
 !WRAM_BANK = #$007E
 !WRAM_SIZE = #$0500
-!WRAM_START = $7EFD00
+!WRAM_START = $7EFB00
 
 !ram_load_preset = !WRAM_START+$00
 !ram_custom_preset = !WRAM_START+$02
@@ -657,6 +657,9 @@ endif
 !sram_superhud_top = !SRAM_START+$248
 
 ; FREE SPACE ^
+
+!sram_seed_X = !SRAM_START+$28C
+!sram_seed_Y = !SRAM_START+$28E
 
 !sram_presetrando = !SRAM_START+$290
 !sram_presetrando_morph = !SRAM_START+$292

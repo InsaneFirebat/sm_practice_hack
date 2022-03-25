@@ -85,6 +85,8 @@ cm_start:
     JSL $809A79
     LDA $C1 : STA !ram_gametime_room
     LDA $C3 : STA !ram_last_gametime_room
+    LDA !ram_seed_X : STA !sram_seed_X
+    LDA !ram_seed_Y : STA !sram_seed_Y
     JSL $809B44
     JSL GameLoopExtras            ; check if game_loop_extras needs to be disabled
 

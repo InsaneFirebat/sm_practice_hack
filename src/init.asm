@@ -1,4 +1,7 @@
-!SRAM_VERSION = #$000D
+; increment least significant bits when
+; allocating to SRAM on the master branch
+; decrement most significant bits for custom branches
+!SRAM_VERSION = #$F00D
 
 
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values
@@ -73,8 +76,8 @@ init_nonzero_wram:
     ; RAM $7E0000 fluctuates so it is not a good default value
     LDA #$0F8C : STA !ram_watch_left ; Enemy HP
     LDA #$09C2 : STA !ram_watch_right ; Samus HP
-    LDA #$FEED : STA !ram_seed_X
-    LDA #$5EED : STA !ram_seed_Y
+    LDA !sram_seed_X : STA !ram_seed_X
+    LDA !sram_seed_Y : STA !ram_seed_Y
 
     LDA #$0000
     STA !ram_watch_bank : STA !ram_cm_watch_enemy_side
@@ -195,6 +198,9 @@ init_sram:
     LDA #$0001 : STA !sram_scroll_button
     LDA #$4000 : STA !sram_cm_scroll_button
     LDA #$0003 : STA !sram_cm_scroll_delay
+
+    LDA #$FEED : STA !sram_seed_X
+    LDA #$5EED : STA !sram_seed_Y
 
     LDA #$0000 : STA !sram_presetrando
     LDA #$0001 : STA !sram_presetrando_morph
