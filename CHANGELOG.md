@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.1.8]  Re-optimized RAM Watch HUD mode
+* [2.4.1.8]  Fixed stack underflow/overflow crash handling and added more palettes
 * [2.4.1.7]  Fixed more situations where crash handler didn't draw correctly
 * [2.4.1.6]  Additional work on crash handler
 * [2.4.1.5]  Fixed crash handler not being visible if crash occurred in a door transition
