@@ -36,7 +36,7 @@
 !ram_last_door_lag_frames = !WRAM_START+$0E
 !ram_transition_counter = !WRAM_START+$10
 !ram_transition_flag = !WRAM_START+$12
-!ram_transition_flag_2 = !WRAM_START+$14
+!ram_last_realtime_door = !WRAM_START+$14
 
 !ram_seg_rt_frames = !WRAM_START+$16
 !ram_seg_rt_seconds = !WRAM_START+$18
@@ -53,6 +53,7 @@
 !ram_momentum_direction = !WRAM_START+$2A
 !ram_momentum_last = !WRAM_START+$2C
 !ram_last_hp = !WRAM_START+$2E
+
 !ram_metronome = !WRAM_START+$30
 !ram_metronome_counter = !WRAM_START+$32
 !ram_armed_shine_duration = !WRAM_START+$34
