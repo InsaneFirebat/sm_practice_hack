@@ -589,8 +589,19 @@ endif
     ; Skip door lag and segment timer when shinetune enabled
     LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BEQ .end
 
-    ; Door lag
-    BRA .pick_vanilla_infohud_transition_time
+    ; Door lag / transition time
+    LDA !sram_lag_counter_mode : BNE .transition_time_full
+    LDA !ram_last_door_lag_frames
+    BRA .infohud_transition_time
+  .transition_time_full
+    LDA !ram_last_realtime_door
+  .infohud_transition_time
+    LDX #$00C2 : JSR Draw3
+    BRA .pick_segment_timer
+
+  .end
+    PLB : PLP : PLY : PLX
+    RTL
 
   .vanilla_infohud_draw_lag_and_reserves
     LDA !SAMUS_RESERVE_MODE : CMP #$0001 : BNE .vanilla_infohud_draw_lag
@@ -609,13 +620,14 @@ endif
     ; Skip door lag and segment timer when shinetune enabled
     LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BEQ .end
 
-  .pick_vanilla_infohud_transition_time
     ; Door lag / transition time
     LDA !sram_lag_counter_mode : BNE .vanilla_infohud_transition_time_full
     LDA !ram_last_door_lag_frames
     BRA .draw_vanilla_infohud_transition_time
+
   .vanilla_infohud_transition_time_full
     LDA !ram_last_realtime_door
+
   .draw_vanilla_infohud_transition_time
     LDX #$00C2 : JSR Draw2
 
@@ -629,10 +641,6 @@ endif
     LDA #$09DA : STA $00
     LDA #$007E : STA $02
     BRA .draw_segment_timer
-
-  .end
-    PLB : PLP : PLY : PLX
-    RTL
 
   .draw_segment_timer
     ; Frames
@@ -651,7 +659,7 @@ endif
     ; Draw decimal seperators
     LDA !IH_DECIMAL : STA $7EC6B4 : STA $7EC6BA
     LDA !IH_BLANK : STA $7EC6C0
-    BRA .end
+    BRL .end
 }
 
 ih_update_hud_early:
