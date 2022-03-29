@@ -76,6 +76,7 @@ cm_start:
     ; Makes the game check Samus' health again, to see if we need annoying sound
     STZ !SAMUS_HEALTH_WARNING
 
+    JSL wait_for_lag_frame_long
     JSR cm_transfer_original_tileset
     JSR cm_transfer_original_cgram
 
@@ -1105,6 +1106,7 @@ cm_loop:
 
 +   LDA !ram_cm_brb : BEQ +
     JSL cm_brb_loop
+    JSL wait_for_lag_frame_long
     JSR cm_transfer_custom_tileset
     JSR cm_transfer_custom_cgram
     JMP .redraw
