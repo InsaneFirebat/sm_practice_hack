@@ -2167,7 +2167,7 @@ GameMenu:
 if !FEATURE_PAL
     dw #game_paldebug
 endif
-    dw #game_nodamage
+    dw #game_pacifist
     dw #game_debugprojectiles
     dw #game_debugfixscrolloffsets
     dw #$FFFF
@@ -2243,8 +2243,8 @@ game_paldebug:
     %cm_toggle_inverted("PAL Debug Movement", $7E09E6, #$0001, #0)
 endif
 
-game_nodamage:
-    %cm_toggle_inverted("Disable Samus Damage", !ram_nodamage, #$0001, #0)
+game_pacifist:
+    %cm_toggle("Pacifist Mode", !ram_pacifist, #$0001, #0)
 
 game_debugprojectiles:
     %cm_toggle_bit("Enable Projectiles", $7E198D, #$8000, #0)

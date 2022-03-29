@@ -90,8 +90,7 @@ init_nonzero_wram:
     LDA #$0258 : STA !ram_cm_brb_cycle_time
 
     LDA #$0001
-    STA !ram_nodamage : STA !ram_soundtest_lib1
-    STA !ram_soundtest_lib2 : STA !ram_soundtest_lib3
+    STA !ram_soundtest_lib1 : STA !ram_soundtest_lib2 : STA !ram_soundtest_lib3
 
     ; Check if any less common controller shortcuts are configured
     JML GameModeExtras
