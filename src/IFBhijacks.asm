@@ -82,11 +82,11 @@ ResetCountDamagePhan:
 print pc, " misc bankA7 end"
 
 
-org $A0FFC7         ; count damage in free space at end of bank
+org $A0FFA0         ; count damage in free space at end of bank
 print pc, " misc bankA0 start"
 CountDamage:
 {
-    LDA !ram_nodamage : BEQ .no_damage
+    LDA !ram_pacifist : BEQ .no_damage
     CLC : LDA !ram_countdamage : ADC $187A
     STA !sram_countdamage : STA !ram_countdamage
     LDA $0F8C,X ; original code
@@ -95,12 +95,16 @@ CountDamage:
   .no_damage
     ; pull return address and jump past saving enemy hp
     PLA
+if !FEATURE_PAL
+    JMP $A8CA
+else
     JMP $A8BA
+endif
 }
 
 CountDamageShinespark:
 {
-    LDA !ram_nodamage : BEQ .no_damage
+    LDA !ram_pacifist : BEQ .no_damage
     LDA !ram_countdamage : CLC : ADC $12
     STA !sram_countdamage : STA !ram_countdamage
     LDA $0F8C,X ; original code
@@ -109,8 +113,28 @@ CountDamageShinespark:
   .no_damage
     ; pull return address and jump past saving enemy hp
     PLA
+if !FEATURE_PAL
+    JMP $A86A
+else
     JMP $A55A
+endif
 }
+
+EnemyDamagePowerBomb:
+{
+    LDA !ram_pacifist : BNE .no_damage
+    LDA !ram_countdamage : CLC : ADC $12
+    STA !sram_countdamage : STA !ram_countdamage
+    LDA $0F8C,X ; original code
+    RTS
+
+  .no_damage
+    PLA ; pull return address and jump past storing enemy hp
+if !FEATURE_PAL
+    JMP $A64C
+else
+    JMP $A63C
+endif
 print pc, " misc bankA0 end"
 
 

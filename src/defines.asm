@@ -94,9 +94,11 @@
 !ram_game_mode_extras = !WRAM_START+$74
 !ram_sprite_features_active = !WRAM_START+$76
 
-; FREE SPACE ^
+; ^ FREE SPACE ^ up to +$7A
 
-!ram_fix_scroll_offsets = !WRAM_START+$7C
+!ram_pacifist = !WRAM_START+$7C
+
+; ^ FREE SPACE ^ up to +$7E
 
 !ram_watch_bank = !WRAM_START+$88
 !ram_watch_write_mode = !WRAM_START+$8A
@@ -552,7 +554,7 @@
 
 !ram_infinite_ammo = !WRAM_START+$210
 !ram_infiniteammo_check = !WRAM_START+$212
-!ram_nodamage = !WRAM_START+$214
+; ^ FREE SPACE @ +$214
 !ram_display_backup = !WRAM_START+$216
 !ram_dboost_state = !WRAM_START+$218
 !ram_dboost_kbmax = !WRAM_START+$21A

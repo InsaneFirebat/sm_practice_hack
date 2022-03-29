@@ -324,6 +324,8 @@ category_preset_data_table:
   dl preset_100early_crateria_ceres_elevator
   dl preset_hundo_bombs_ceres_elevator
   dl preset_100map_bombs_ceres_elevator
+  dl preset_14ice_crateria_ceres_elevator
+  dl preset_14speed_crateria_ceres_elevator
   dl preset_rbo_bombs_ceres_elevator
   dl preset_ngplasma_ceres_station_ceres_elevator
   dl preset_nghyper_ceres_station_ceres_elevator

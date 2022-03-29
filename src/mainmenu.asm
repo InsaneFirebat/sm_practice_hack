@@ -192,6 +192,25 @@ action_submenu_jump:
     PLB
     RTL
 }
+  dl preset_kpdr21_crateria_ceres_elevator
+  dl preset_kpdr22_crateria_ceres_elevator
+  dl preset_prkd15_crateria_ceres_elevator
+  dl preset_prkd_crateria_ceres_elevator
+  dl preset_pkrd_crateria_ceres_elevator
+  dl preset_spazer_crateria_ceres_elevator
+  dl preset_kpdr25_bombs_ceres_elevator
+  dl preset_gtclassic_crateria_ceres_elevator
+  dl preset_gtmax_crateria_ceres_elevator
+  dl preset_100early_crateria_ceres_elevator
+  dl preset_hundo_bombs_ceres_elevator
+  dl preset_100map_bombs_ceres_elevator
+  dl preset_rbo_bombs_ceres_elevator
+  dl preset_ngplasma_ceres_station_ceres_elevator
+  dl preset_nghyper_ceres_station_ceres_elevator
+  dl preset_nintendopower_crateria_ceres_elevator
+  dl preset_allbosskpdr_crateria_ceres_elevator
+  dl preset_allbosspkdr_crateria_ceres_elevator
+  dl preset_allbossprkd_crateria_ceres_elevator
 
 preset_category_submenus:
 {
@@ -204,11 +223,11 @@ preset_category_submenus:
     dw #PresetsMenuKpdr25
     dw #PresetsMenuGtclassic
     dw #PresetsMenuGtmax
-    dw #PresetsMenu14ice
-    dw #PresetsMenu14speed
     dw #PresetsMenu100early
     dw #PresetsMenuHundo
     dw #PresetsMenu100map
+    dw #PresetsMenu14ice
+    dw #PresetsMenu14speed
     dw #PresetsMenuRbo
     dw #PresetsMenuNgplasma
     dw #PresetsMenuNghyper
@@ -230,11 +249,11 @@ preset_category_banks:
     dw #PresetsMenuKpdr25>>16
     dw #PresetsMenuGtclassic>>16
     dw #PresetsMenuGtmax>>16
-    dw #PresetsMenu14ice>>16
-    dw #PresetsMenu14speed>>16
     dw #PresetsMenu100early>>16
     dw #PresetsMenuHundo>>16
     dw #PresetsMenu100map>>16
+    dw #PresetsMenu14ice>>16
+    dw #PresetsMenu14speed>>16
     dw #PresetsMenuRbo>>16
     dw #PresetsMenuNgplasma>>16
     dw #PresetsMenuNghyper>>16
@@ -2168,7 +2187,7 @@ GameMenu:
 if !FEATURE_PAL
     dw #game_paldebug
 endif
-    dw #game_nodamage
+    dw #game_pacifist
     dw #game_debugprojectiles
     dw #game_debugfixscrolloffsets
     dw #$FFFF
@@ -2244,8 +2263,8 @@ game_paldebug:
     %cm_toggle_inverted("PAL Debug Movement", $7E09E6, #$0001, #0)
 endif
 
-game_nodamage:
-    %cm_toggle_inverted("Disable Samus Damage", !ram_nodamage, #$0001, #0)
+game_pacifist:
+    %cm_toggle("Pacifist Mode", !ram_pacifist, #$0001, #0)
 
 game_debugprojectiles:
     %cm_toggle_bit("Enable Projectiles", $7E198D, #$8000, #0)
