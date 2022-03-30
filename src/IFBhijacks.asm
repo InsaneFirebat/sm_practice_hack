@@ -86,7 +86,7 @@ org $A0FFA0         ; count damage in free space at end of bank
 print pc, " misc bankA0 start"
 CountDamage:
 {
-    LDA !ram_pacifist : BEQ .no_damage
+    LDA !ram_pacifist : BNE .no_damage
     CLC : LDA !ram_countdamage : ADC $187A
     STA !sram_countdamage : STA !ram_countdamage
     LDA $0F8C,X ; original code
@@ -104,7 +104,7 @@ endif
 
 CountDamageShinespark:
 {
-    LDA !ram_pacifist : BEQ .no_damage
+    LDA !ram_pacifist : BNE .no_damage
     LDA !ram_countdamage : CLC : ADC $12
     STA !sram_countdamage : STA !ram_countdamage
     LDA $0F8C,X ; original code
