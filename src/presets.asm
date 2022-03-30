@@ -98,6 +98,8 @@ endif
     LDA $7ED820 : BIT #$0004 : BEQ .done
     ; Set health to 1 as a hint this was done by a preset
     LDA #$0001 : STA $0FCC
+    ; Don't reset segment timer when exiting the room
+    LDA #$0000 : STA !ram_reset_segment_later
 
   .done
     PLP
