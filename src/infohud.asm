@@ -676,8 +676,7 @@ ih_update_hud_early:
     LDA !ram_gametime_room : STA !ram_last_gametime_room
     LDA !ram_realtime_room : STA !ram_last_realtime_room
 
-
-  .update_hud
+    ; update HUD
     LDA $12 : PHA : LDA $14 : PHA
     JSL ih_update_hud_code
     PLA : STA $14 : PLA : STA $12
@@ -1549,7 +1548,7 @@ ControllerLayoutTable:
     dw !CTRL_X, !CTRL_B, !CTRL_Y, !CTRL_SELECT, !CTRL_A,      !CTRL_R, !CTRL_L ; SMW Style (D5)
 
 print pc, " infohud bank80 end"
-warnpc $80FFC0 ; header
+warnpc $80FFB0 ; header
 
 
 ; Main Menu Tilemap
