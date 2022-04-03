@@ -1518,7 +1518,7 @@ boss_mb:
 ; --------------
 
 pushpc
-org $85C000
+org $85A000
 print pc, " mainmenu InfoHUD start"
 
 InfoHudMenu:
@@ -2170,7 +2170,7 @@ ih_spacetime_infohud:
     db #$FF
 
 print pc, " mainmenu InfoHUD end"
-warnpc $B3F000 ; mainmenu.asm
+warnpc $85C000 ; IFBmenu.asm
 pullpc
 
 
