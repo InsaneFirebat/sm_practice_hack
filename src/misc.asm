@@ -206,8 +206,14 @@ endif
 
 
 ; Skips the waiting time after teleporting
+if !FEATURE_PAL
+org $90E874
+else
 org $90E877
-    BRA $1F
+endif
+    LDA $07F5
+    JSL $808FC1 ; queue room music track
+    BRA $18
 
 
 ; Adds frames when unpausing (nmi is turned off during vram transfers)
