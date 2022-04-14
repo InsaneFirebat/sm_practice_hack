@@ -1,5 +1,5 @@
 [submodule "asar"]
-	path = tools/asar
+	path = asar
 	url = https://github.com/RPGHacker/asar
 	update = merge
 	branch = main
