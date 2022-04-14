@@ -2,6 +2,8 @@
 *.bst
 *.s[mf]c
 build/*.ips
+build/*.sym
+build/*.log
 build/HACK/*
 !build/HACK/.gitkeep
 *.sw[op]
