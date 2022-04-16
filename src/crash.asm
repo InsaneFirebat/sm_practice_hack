@@ -99,7 +99,7 @@ CrashHandler:
 
     ; restore last two stack bytes if underflow
     LDA !ram_crash_type : AND #$4000 : BEQ +
-    LDA !ram_crash_temp : STA !ram_crash_stack+$3E
+    LDA !ram_crash_temp : STA !ram_crash_stack+$2E
 
     ; launch CrashViewer to display dump
 +   JML CrashViewer
@@ -399,9 +399,7 @@ CrashDump:
 
   .drawStartingPosition
     LDX #$0228 : JSR crash_draw4
-    BRA .drawStackBytesWritten
 
-  .drawStackBytesWritten
     ; -- Draw stack bytes written --
     LDA !ram_crash_stack_size : STA !ram_crash_draw_value
     BPL +
@@ -992,8 +990,8 @@ crash_read_inputs:
 CrashTextHeader:
     table ../resources/header.tbl
     db "SM SHOT ITSELF IN THE FOOT", #$FF
-;    table ../resources/normal.tbl
-    table ../resources/thinfont.tbl
+    table ../resources/normal.tbl
+;    table ../resources/thinfont.tbl
 
 CrashTextFooter1:
 ; Navigate pages with A or B
@@ -1018,8 +1016,8 @@ CrashTextStack4:
 CrashTextHeader2:
     table ../resources/header.tbl
     db "CRASH MEMORY VIEWER", #$FF
-;    table ../resources/normal.tbl
-    table ../resources/thinfont.tbl
+    table ../resources/normal.tbl
+;    table ../resources/thinfont.tbl
 
 CrashTextMemAddress:
     db "ADDRESS:  $", #$FF
@@ -1039,8 +1037,8 @@ CrashTextMemSelectLow:
 CrashTextHeader3:
     table ../resources/header.tbl
     db "BUT WHAT DOES IT ALL MEAN?", #$FF
-;    table ../resources/normal.tbl
-    table ../resources/thinfont.tbl
+    table ../resources/normal.tbl
+;    table ../resources/thinfont.tbl
 
 CrashTextInfo1:
     db "Super Metroid has crashed!", #$FF
