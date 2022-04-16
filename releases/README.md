@@ -25,7 +25,6 @@ Regardless of which tool you use, the process is the same: you select the .IPS f
 * Room Strat to track off-screen nails during Kraid's intro
 * HUD timers update on shinespark crash
 * Option to enable infinite ammo
-* Option to disable Samus's attack damage
 * Controller shortcut to toggle the damage counter InfoHUD Mode
 * Controller shortcut to advance the RNG seed
 * Event flags for Zebetites
