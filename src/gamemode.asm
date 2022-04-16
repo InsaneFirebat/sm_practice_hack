@@ -275,6 +275,8 @@ endif
     LDA $AB : PHA
     LDA #$0004 : STA $AB
 
+    JSR skip_pause
+
     ; Enter MainMenu
     JSL cm_start
 
@@ -299,6 +301,26 @@ gamemode_door_transition:
     RTL
 }
 endif
+
+; If the current game mode is $C (fading out to pause), set it to $8 (normal), so that
+;  shortcuts involving the start button don't trigger accidental pauses.
+; Called after handling most controller shortcuts, except save/load state (because the 
+;  user might want to practice gravity jumps or something) and load preset (because
+;  presets reset the game mode anyway).
+skip_pause:
+{
+    LDA !GAMEMODE : CMP #$000C : BNE .done
+    LDA #$0008 : STA !GAMEMODE
+
+    ; clear screen fade delay/counter
+    STZ $0723 : STZ $0725
+
+    ; Brightness = $F (max)
+    LDA $51 : ORA #$000F : STA $51
+
+  .done
+    RTS
+}
 
 print pc, " gamemode end"
 warnpc $85FD00
