@@ -169,9 +169,9 @@ BRB_handle_countup_timer:
 BRB_handle_countdown_timer:
 {
     LDA !ram_cm_brb_frames : DEC : STA !ram_cm_brb_frames : BPL +
-    LDA #$003C : STA !ram_cm_brb_frames
+    LDA #$003B : STA !ram_cm_brb_frames
     LDA !ram_cm_brb_secs : DEC : STA !ram_cm_brb_secs : BPL +
-    LDA #$003C : STA !ram_cm_brb_secs
+    LDA #$003B : STA !ram_cm_brb_secs
     LDA !ram_cm_brb_mins : DEC : STA !ram_cm_brb_mins : BPL +
     LDA #$0001 : STA !ram_cm_brb_timer_mode
     STA !ram_cm_brb_frames
