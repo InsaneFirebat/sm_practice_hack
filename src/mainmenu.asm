@@ -2316,6 +2316,9 @@ cutscenes_skip_ceres_arrival:
 kraid_skip_intro:
     %cm_toggle("Skip Kraid Intro", !sram_kraid_intro, #$0001, #0)
 
+phan_skip_intro:
+    %cm_toggle_bit("Skip Phantoon Intro", !sram_phantoon_intro, #$0001, 0)
+
 !CUTSCENE_SKIP_G4 = #$0080
 cutscenes_g4_skip:
     %cm_toggle_bit("Skip G4", !sram_cutscenes, !CUTSCENE_SKIP_G4, #0)
@@ -2852,9 +2855,6 @@ phan_next_flamepattern:
     db #$28, "    3333333", #$FF
     db #$28, "    1424212", #$FF
     db #$FF
-
-phan_skip_intro:
-    %cm_toggle_bit("Skip Phantoon Intro", !sram_phantoon_intro, #$0001, 0)
 
 rng_botwoon_rng:
     dw !ACTION_CHOICE
