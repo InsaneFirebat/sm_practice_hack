@@ -62,7 +62,7 @@ cm_start:
 
     JSL initialize_ppu_long   ; Initialise PPU for message boxes
 
-    JSR cm_transfer_custom_tileset
+    JSL cm_transfer_custom_tileset
     JSR cm_transfer_custom_cgram
     JSL cm_draw         ; Initialise message box
 
@@ -160,7 +160,7 @@ cm_transfer_custom_tileset:
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
     PLP
-    RTS
+    RTL
 
   .kraid_vram
     ; Load custom vram to kraid location
@@ -175,7 +175,7 @@ cm_transfer_custom_tileset:
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
     PLP
-    RTS
+    RTL
 }
 
 cm_transfer_original_tileset:
@@ -1103,13 +1103,6 @@ cm_loop:
 
     LDA !ram_cm_leave : BEQ +
     RTS ; Exit menu loop
-
-+   LDA !ram_cm_brb : BEQ +
-    JSL cm_brb_loop
-    JSL wait_for_lag_frame_long
-    JSR cm_transfer_custom_tileset
-    JSL cm_refresh_cgram_long
-    JMP .redraw
 
 +   LDA !ram_cm_ctrl_mode : BEQ +
     JSR cm_ctrl_mode

@@ -80,6 +80,8 @@ BRBMenu:
     dw ifb_brb_cycle_timer
     dw ifb_brb_palette_cycle
     dw #$FFFF
+    dw ifb_brb_scroll
+    dw #$FFFF
     dw #ifb_soundtest_goto_music
     dw #ifb_game_music_toggle
     dw #$0000
@@ -88,7 +90,10 @@ BRBMenu:
 ifb_brb_screen:
     %cm_jsr("Launch BRB Screen", .routine, #0)
   .routine
-    LDA #$0001 : STA !ram_cm_brb
+    JSL cm_brb_loop
+    JSL wait_for_lag_frame_long
+    JSL cm_transfer_custom_tileset
+    JSL cm_refresh_cgram_long
     RTL
 
 ifb_brb_timer_mode:
@@ -124,6 +129,9 @@ ifb_brb_cycle_timer:
 
 ifb_brb_palette_cycle:
     %cm_toggle_bit_inverted("Cycle Palettes", !ram_cm_brb_palette, #$FFFF, #0)
+
+ifb_brb_scroll:
+    %cm_toggle("Screen Scrolling", !ram_cm_scroll, #$0001, #0)
 
 print pc, " BRB start"
 incsrc BRBmenu.asm

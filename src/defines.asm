@@ -538,10 +538,23 @@
 !ram_cm_brb_set_cycle = !WRAM_START+$1B0
 !ram_cm_brb_cycle_time = !WRAM_START+$1B2
 
-!ram_crop_mode = !WRAM_START+$1B4
-!ram_crop_tile = !WRAM_START+$1B6
+; FREE SPACE ^
 
-!ram_cm_rng = !WRAM_START+$1C0
+!ram_crop_mode = !WRAM_START+$1C0
+!ram_crop_tile = !WRAM_START+$1C2
+
+; FREE SPACE ^
+
+!ram_cm_scroll = !WRAM_START+$1D0
+!ram_cm_scroll_X = !WRAM_START+$1D2
+!ram_cm_scroll_Y = !WRAM_START+$1D4
+!ram_cm_scroll_H = !WRAM_START+$1D6
+!ram_cm_scroll_V = !WRAM_START+$1D8
+!ram_cm_scroll_timer = !WRAM_START+$1DA
+
+; FREE SPACE ^
+
+!ram_cm_rng = !WRAM_START+$1F0
 
 ; FREE SPACE ^
 
