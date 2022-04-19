@@ -1108,7 +1108,7 @@ cm_loop:
     JSL cm_brb_loop
     JSL wait_for_lag_frame_long
     JSR cm_transfer_custom_tileset
-    JSR cm_transfer_custom_cgram
+    JSL cm_refresh_cgram_long
     JMP .redraw
 
 +   LDA !ram_cm_ctrl_mode : BEQ +
