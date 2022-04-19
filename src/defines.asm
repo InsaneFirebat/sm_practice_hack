@@ -646,6 +646,7 @@ endif
 !PRESET_ENEMIES = !WRAM_START+$184
 
 !BRB_METROID = #$287F
+!BRB_HEART = #$2891
 
 
 ; ------------------------

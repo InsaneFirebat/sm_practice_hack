@@ -372,7 +372,7 @@ cm_tilemap_bg:
     LDA #$281F
 
   .interior_loop
-    STA !ram_tilemap_buffer+$004,X
+;    STA !ram_tilemap_buffer+$004,X
     STA !ram_tilemap_buffer+$084,X
     STA !ram_tilemap_buffer+$0C4,X
     STA !ram_tilemap_buffer+$104,X

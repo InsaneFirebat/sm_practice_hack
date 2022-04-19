@@ -15,7 +15,8 @@ cm_brb_loop:
 +   LDA #$0000 : STA !ram_cm_brb_screen
     STA !ram_cm_brb_frames : STA !ram_cm_brb_timer
     STA !ram_cm_scroll_H : STA !ram_cm_scroll_V
-    STA !ram_cm_scroll_X : STA !ram_cm_scroll_Y
+    STA !ram_cm_scroll_X
+    LDA #$0008 : STA !ram_cm_scroll_Y
 
     JSR cm_transfer_brb_tileset
     JSL wait_for_lag_frame_long ; Wait for lag frame
@@ -59,6 +60,19 @@ cm_brb_loop:
 
 +   LDA !IH_CONTROLLER_PRI_NEW : BEQ .loop
 
+    ; A = cycle now, B = exit
+    CMP #$8000 : BEQ .done
+    CMP #$0080 : BEQ .forceIncScreen
+    JMP .loop
+
+  .forceIncScreen
+    LDA !ram_cm_brb_screen : INC : STA !ram_cm_brb_screen
+    CMP #$00015 : BMI .loop
+    LDA #$0000
+    STA !ram_cm_brb_screen : STA !ram_cm_brb_timer
+    JMP .loop
+
+  .done
     LDA #$0001 : STA !ram_cm_leave
     BRA .exit
 }
@@ -259,17 +273,18 @@ cm_scroll_BG3:
     RTL
 
 +   LDA !ram_cm_scroll_timer : INC : STA !ram_cm_scroll_timer
-    CMP #$0006 : BNE .verticalScrolling
+    CMP #$0007 : BNE .verticalScrolling
     LDA #$0000 : STA !ram_cm_scroll_timer
 
   .verticalScrolling
     PHP : %a16()
-    ; vertical scrolling
-    LDA !ram_cm_scroll_timer : CMP #$0003 : BNE .horizontalScrolling
+    ; vertical scrolling at 3 5
+    LDA !ram_cm_scroll_timer : CMP #$0003 : BEQ +
+    CMP #$0005 : BNE .horizontalScrolling
 
-    LDA !ram_cm_scroll_V : BNE .moveUp
++   LDA !ram_cm_scroll_V : BNE .moveUp
     LDA !ram_cm_scroll_Y : INC : STA !ram_cm_scroll_Y
-    CMP #$0010 : BNE .horizontalScrolling
+    CMP #$0011 : BNE .horizontalScrolling
 
   .reverseV
     LDA !ram_cm_scroll_V : BEQ .incV
@@ -287,11 +302,11 @@ cm_scroll_BG3:
     BRA .reverseV
 
   .horizontalScrolling
-    ; horizontal scrolling
-    LDA !ram_cm_scroll_timer : CMP #$0003 : BPL .applyScrolls
+    ; horizontal scrolling at 1 3 5
+    LDA !ram_cm_scroll_timer : AND #$0001 : BEQ .applyScrolls
     LDA !ram_cm_scroll_H : BNE .moveLeft
     LDA !ram_cm_scroll_X : INC : STA !ram_cm_scroll_X
-    CMP #$0010 : BEQ .reverseH
+    CMP #$000F : BEQ .reverseH
     CMP #$0400 : BNE .applyScrolls
     LDA #$0000 : STA !ram_cm_scroll_X
     BRA .applyScrolls
@@ -299,7 +314,7 @@ cm_scroll_BG3:
   .moveLeft
     LDA !ram_cm_scroll_X : DEC : STA !ram_cm_scroll_X
     BMI .dec3FF
-    CMP #$03F0 : BNE .applyScrolls
+    CMP #$03F1 : BNE .applyScrolls
 
   .reverseH
     LDA !ram_cm_scroll_H : BEQ .incH
@@ -323,7 +338,7 @@ cm_scroll_BG3:
     STA $2111 : XBA : STA $2111
     %a16()
 
-    LDA !ram_cm_scroll_Y
+    LDA !ram_cm_scroll_Y : DEC
     %a8()
     STA $2112 : XBA : STA $2112
 
