@@ -1569,7 +1569,8 @@ execute_numfield_sound:
     STA [$04] : BRA .end
 
   .pressed_left
-    LDA [$04] : SEC : SBC $0C : BMI .set_to_max
+    LDA [$04] : SEC : SBC $0C
+    CMP $08 : BMI .set_to_max
     CMP $0A : BCS .set_to_max
     STA [$04] : BRA .end
 
@@ -1632,7 +1633,8 @@ execute_numfield_word:
     STA [$04] : BRA .jsr
 
   .pressed_left
-    LDA [$04] : SEC : SBC $0C : BMI .set_to_max
+    LDA [$04] : SEC : SBC $0C
+    CMP $08 : BMI .set_to_max
     CMP $0A : BCS .set_to_max
     STA [$04] : BRA .jsr
 
