@@ -42,4 +42,5 @@ Regardless of which tool you use, the process is the same: you select the .IPS f
 * Sound Test menu with options to play music and sound effects
 * Options to randomize your equipment when loading presets
 * Access to developer/debug load points
+* Option to draw a border (or fill the screen) for easier capture cropping
 * Option to factory reset practice rom settings
