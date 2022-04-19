@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.1.11] Added an option for easier capture cropping
 * [2.4.1.10] Prevent accidental pauses when opening the menu by NobodyNada
 * [2.4.1.10] Fixed a rare decompression error with preset loading by P.JBoy and idlechild
 * [2.4.1.9]  Don't reset segment timer on room exit with MB presets by idlechild

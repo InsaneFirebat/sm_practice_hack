@@ -346,5 +346,135 @@ TimerNumberGFX2:
     dw #$2870, #$2871, #$2872, #$2873, #$2874, #$2875, #$2876, #$2877, #$2878, #$2879
     dw #$2870, #$2871, #$2872, #$2873, #$2874, #$2875, #$2876, #$2877, #$2878, #$2879
 
-pullpc
 
+; ----------------
+; Capture Cropping
+; ----------------
+
+cm_crop_mode:
+{
+    PHP : %a16() : %i8()
+
+    ; turn on forced blank
+    LDX #$80 : STX $2100
+    
+    ; fix BG3 scroll offset
+    LDX #$FF : STX $2112
+    LDX #$03 : STX $2112
+
+    LDA #$0000 : STA !ram_crash_palette
+    
+    ; pattern or solid color?
+    LDA !ram_crop_tile : BEQ .boxes
+    LDA #$2891 : STA $C1
+    BRA .draw
+
+  .boxes
+    LDA #$2890 : STA $C1
+    
+  .draw
+    ; wait for lag frame
+-   LDX $05B8 : CPX $05B8 : BEQ -
+
+    ; draw around the border or fill the screen?
+    LDA !ram_crop_mode : BNE .fill
+    JSR cm_crop_border
+    BRA .drawing_done
+
+  .fill
+    JSR cm_crop_fill
+
+  .drawing_done
+    ; turn off forced blank
+    LDX #$0F : STX $2100
+
+  .loop
+    ; Make sure we don't read joysticks twice in the same frame
+    ; wait for lag frame
+-   LDX $05B8 : CPX $05B8 : BEQ -
+    LDA !FRAME_COUNTER : CMP !ram_cm_input_counter : PHP
+    STA !ram_cm_input_counter
+    PLP : BNE +
+    JSL $809459 ; Read controller input
+
++   LDA !IH_CONTROLLER_PRI_NEW : BEQ .loop
+    CMP #$8000 : BEQ .exit       ; B
+    CMP #$0020 : BEQ .decPalette ; L
+    CMP #$0010 : BEQ .incPalette ; R
+    BRA .loop
+
+  .decPalette
+    LDA !ram_crash_palette : BNE +
+    LDA #$0008
++   DEC : STA !ram_crash_palette
+    JSL crash_cgram_transfer
+    BRA .loop
+
+  .incPalette
+    LDA !ram_crash_palette : CMP #$0007 : BMI +
+    LDA #$FFFF
++   INC : STA !ram_crash_palette
+    JSL crash_cgram_transfer
+    BRA .loop
+
+  .exit
+    ; restore BG3 scroll offset
+    LDA $BB
+    %ai8()
+    LDX #$80 : STX $2100
+    STA $2112 : XBA : STA $2112
+    LDX #$0F : STX $2100
+
+    PLP
+    RTL
+}
+
+cm_crop_border:
+{
+    ; top
+    LDX #$80 : STX $2115
+    LDA #$5800 : STA $2116
+    LDA $C1 : LDX #$00
+-   STA $2118
+    INX : CPX #$20 : BNE -
+
+    ; bottom
+    LDX #$80 : STX $2115
+    LDA #$5B60 : STA $2116
+    LDA $C1 : LDX #$00
+-   STA $2118
+    INX : CPX #$40 : BNE -
+
+    ; left
+    LDX #$81 : STX $2115
+    LDA #$5820 : STA $2116
+    LDA $C1 : LDX #$00
+-   STA $2118
+    INX : CPX #$1D : BNE -
+
+    ; right
+    LDX #$81 : STX $2115
+    LDA #$583F : STA $2116
+    LDA $C1 : LDX #$00
+-   STA $2118
+    INX : CPX #$1D : BNE -
+
+    RTS
+}
+
+cm_crop_fill:
+{
+    LDX #$80 : STX $2115
+    LDA #$5800 : STA $2116
+    PHP : %i16()
+    LDA $C1 : LDX #$0400
+
+-   STA $2118
+    DEX : BPL -
+
+    PLP
+    RTS
+}
+
+print pc, " brb menu end"
+pullpc

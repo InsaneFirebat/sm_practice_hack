@@ -15,7 +15,7 @@
 !VERSION_MINOR = 4
 !VERSION_BUILD = 1
 !VERSION_REV_1 = 1
-!VERSION_REV_2 = 0
+!VERSION_REV_2 = 1
 
 
 ; ---------
@@ -538,6 +538,9 @@
 !ram_cm_brb_timer_mode = !WRAM_START+$1AE
 !ram_cm_brb_set_cycle = !WRAM_START+$1B0
 !ram_cm_brb_cycle_time = !WRAM_START+$1B2
+
+!ram_crop_mode = !WRAM_START+$1B4
+!ram_crop_tile = !WRAM_START+$1B6
 
 !ram_cm_rng = !WRAM_START+$1C0
 
