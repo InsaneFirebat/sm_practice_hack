@@ -19,6 +19,7 @@ if !FEATURE_EXTRAS
     dw #ifb_nosteam
 endif
     dw #$FFFF
+    dw #ifb_capture_cropping
     dw #$FFFF
     dw #ifb_factory_reset
     dw #$0000
@@ -48,8 +49,12 @@ if !FEATURE_EXTRAS
         %cm_toggle("No Steam Collision", !ram_steamcollision, #$0001, #0)
 endif
 
+ifb_capture_cropping:
+    %cm_submenu("Capture Cropping Mode", #CaptureCroppingMenu)
+
 ifb_factory_reset:
     %cm_submenu("Factory Reset", #FactoryResetConfirm)
+
 
 ; -------------------
 ; Custom Menu Palette
@@ -58,6 +63,7 @@ ifb_factory_reset:
 print pc, " customizemenu start"
 incsrc customizemenu.asm
 print pc, " customizemenu end"
+
 
 ; --------
 ; BRB Menu
@@ -626,6 +632,44 @@ action_soundtest_playmusic:
     LDA !ram_soundtest_music : JSL !MUSIC_ROUTINE    ; play from track index
     RTL
 }
+
+
+; ----------------
+; Capture Cropping
+; ----------------
+
+CaptureCroppingMenu:
+    dw #ifb_launch_crop_mode
+    dw #$FFFF
+    dw #ifb_crop_mode
+    dw #ifb_crop_tile
+    dw #$0000
+    %cm_header("CAPTURE CROPPING MODE")
+
+ifb_launch_crop_mode:
+    %cm_jsr("Capture Crop Mode", .routine, #0)
+  .routine
+    JSL cm_crop_mode
+    JSL cm_refresh_cgram_long
+    RTL
+
+ifb_crop_mode:
+    dw !ACTION_CHOICE
+    dl #!ram_crop_mode
+    dw #$0000
+    db #$28, "Drawing Method", #$FF
+    db #$28, "     BORDER", #$FF
+    db #$28, "       FILL", #$FF
+    db #$FF
+
+ifb_crop_tile:
+    dw !ACTION_CHOICE
+    dl #!ram_crop_tile
+    dw #$0000
+    db #$28, "Cropping Tile", #$FF
+    db #$28, "          ", #$90, #$FF
+    db #$28, "          ", #$91, #$FF
+    db #$FF
 
 
 ; -------------
