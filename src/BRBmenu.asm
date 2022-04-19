@@ -14,6 +14,8 @@ cm_brb_loop:
     LDA #$0000 : STA !ram_cm_brb_palette
 +   LDA #$0000 : STA !ram_cm_brb_screen
     STA !ram_cm_brb_frames : STA !ram_cm_brb_timer
+    STA !ram_cm_scroll_H : STA !ram_cm_scroll_V
+    STA !ram_cm_scroll_X : STA !ram_cm_scroll_Y
 
     JSR cm_transfer_brb_tileset
     JSL wait_for_lag_frame_long ; Wait for lag frame
@@ -27,12 +29,22 @@ cm_brb_loop:
     ; [do loop stuff down here]
 
   .exit
-    LDA !ram_cm_brb : BNE .check_input
+    LDA !ram_cm_leave : BEQ .check_input
     ; Exit brb loop
     LDA #$0000 : STA !ram_cm_leave
     PLA : STA !ram_cm_brb_palette ; restore menu palette
     LDA #$0046 : JSL !SFX_LIB2 ; lavaquake sfx
     JSL wait_for_lag_frame_long ; Wait for lag frame
+
+    LDA $B9
+    %a8()
+    STA $2111 : XBA : STA $2111
+    %a16()
+    LDA $BB
+    %a8()
+    STA $2112 : XBA : STA $2112
+    %a16()
+
     PLY : PLX
     PLA : STA $06
     PLA : STA $04
@@ -47,7 +59,7 @@ cm_brb_loop:
 
 +   LDA !IH_CONTROLLER_PRI_NEW : BEQ .loop
 
-    LDA #$0000 : STA !ram_cm_brb
+    LDA #$0001 : STA !ram_cm_leave
     BRA .exit
 }
 
@@ -56,6 +68,7 @@ cm_draw_brb:
     JSL cm_tilemap_bg_interior
     JSR cm_tilemap_brb
     JSL cm_tilemap_transfer_long
+    JSL cm_scroll_BG3
     RTS
 }
 
@@ -238,6 +251,88 @@ cm_transfer_brb_tileset:
     RTS
 }
 
+cm_scroll_BG3:
+{
+    LDA !ram_cm_scroll : BNE +
+
+  .skip
+    RTL
+
++   LDA !ram_cm_scroll_timer : INC : STA !ram_cm_scroll_timer
+    CMP #$0006 : BNE .verticalScrolling
+    LDA #$0000 : STA !ram_cm_scroll_timer
+
+  .verticalScrolling
+    PHP : %a16()
+    ; vertical scrolling
+    LDA !ram_cm_scroll_timer : CMP #$0003 : BNE .horizontalScrolling
+
+    LDA !ram_cm_scroll_V : BNE .moveUp
+    LDA !ram_cm_scroll_Y : INC : STA !ram_cm_scroll_Y
+    CMP #$0010 : BNE .horizontalScrolling
+
+  .reverseV
+    LDA !ram_cm_scroll_V : BEQ .incV
+    LDA #$0000 : STA !ram_cm_scroll_V
+    BRA .horizontalScrolling
+
+  .incV
+    INC : STA !ram_cm_scroll_V
+    BRA .horizontalScrolling
+
+  .moveUp
+    LDA !ram_cm_scroll_Y : DEC : STA !ram_cm_scroll_Y
+    BPL .horizontalScrolling
+    LDA #$0001 : STA !ram_cm_scroll_Y
+    BRA .reverseV
+
+  .horizontalScrolling
+    ; horizontal scrolling
+    LDA !ram_cm_scroll_timer : CMP #$0003 : BPL .applyScrolls
+    LDA !ram_cm_scroll_H : BNE .moveLeft
+    LDA !ram_cm_scroll_X : INC : STA !ram_cm_scroll_X
+    CMP #$0010 : BEQ .reverseH
+    CMP #$0400 : BNE .applyScrolls
+    LDA #$0000 : STA !ram_cm_scroll_X
+    BRA .applyScrolls
+
+  .moveLeft
+    LDA !ram_cm_scroll_X : DEC : STA !ram_cm_scroll_X
+    BMI .dec3FF
+    CMP #$03F0 : BNE .applyScrolls
+
+  .reverseH
+    LDA !ram_cm_scroll_H : BEQ .incH
+    LDA #$0000 : STA !ram_cm_scroll_H
+    BRA .applyScrolls
+
+  .incH
+    INC : STA !ram_cm_scroll_H
+    BRA .applyScrolls
+    
+  .dec3FF
+    LDA #$03FF : STA !ram_cm_scroll_X
+
+  .applyScrolls
+    ; force blank and apply scrolls
+    %i8()
+    LDX #$80 : STX $2100
+
+    LDA !ram_cm_scroll_X
+    %a8()
+    STA $2111 : XBA : STA $2111
+    %a16()
+
+    LDA !ram_cm_scroll_Y
+    %a8()
+    STA $2112 : XBA : STA $2112
+
+    LDA #$0F : STA $2100
+
+    PLP
+    RTL
+}
+
 
 ; -------------
 ; BRB Text Data
@@ -398,7 +493,7 @@ cm_crop_mode:
     JSL $809459 ; Read controller input
 
 +   LDA !IH_CONTROLLER_PRI_NEW : BEQ .loop
-    CMP #$8000 : BEQ .exit       ; B
+    CMP #$8000 : BEQ .end        ; B
     CMP #$0020 : BEQ .decPalette ; L
     CMP #$0010 : BEQ .incPalette ; R
     BRA .loop
@@ -417,7 +512,7 @@ cm_crop_mode:
     JSL crash_cgram_transfer
     BRA .loop
 
-  .exit
+  .end
     ; restore BG3 scroll offset
     LDA $BB
     %ai8()
