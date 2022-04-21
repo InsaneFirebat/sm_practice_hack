@@ -74,7 +74,7 @@ cm_brb_loop:
 
   .done
     LDA #$0001 : STA !ram_cm_leave
-    BRA .exit
+    JMP .exit
 }
 
 cm_draw_brb:
