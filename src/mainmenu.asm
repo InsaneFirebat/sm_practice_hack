@@ -1513,10 +1513,13 @@ InfoHudMenu:
     dw #ih_room_counter
     dw #ih_lag_counter
     dw #ih_reset_seg_later
-    dw #ih_lag
     dw #ih_top_HUD_mode
     dw #ih_spacetime_infohud
+if !FEATURE_SD2SNES
+    dw #ih_freeze_on_load
+endif
     dw #ih_status_icons
+    dw #ih_lag
     dw #$FFFF
     dw #ih_ram_watch
     dw #$0000
@@ -2109,6 +2112,9 @@ ih_lag_counter:
     db #$28, "       DOOR", #$FF
     db #$28, "       FULL", #$FF
     db #$FF
+
+ih_freeze_on_load:
+    %cm_toggle("Freeze on Load State", !ram_freeze_on_load, #$0001, #0)
 
 ih_status_icons:
     %cm_toggle("Status Icons", !sram_status_icons, #$0001, #.routine)

@@ -98,8 +98,7 @@
 ; ^ FREE SPACE ^ up to +$7A
 
 !ram_pacifist = !WRAM_START+$7C
-
-; ^ FREE SPACE ^ up to +$7E
+!ram_freeze_on_load = !WRAM_START+$7E
 
 !ram_spacetime_read_address = !WRAM_START+$80
 !ram_spacetime_read_bank = !WRAM_START+$82
