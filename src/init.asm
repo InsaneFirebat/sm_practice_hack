@@ -85,6 +85,9 @@ init_sram:
     LDA #$0001 : STA !sram_healthalarm
     LDA #$0000 : STA !sram_lag_counter_mode
 
+    LDA #$0000 : STA !sram_freeze_on_load
+    LDA #$0000 : STA !sram_kaizo_loadstate_death
+
     ; Input Cheat Sheet  ($4218)
     ; $8000 = B
     ; $4000 = Y

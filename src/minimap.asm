@@ -140,7 +140,8 @@ warnpc $82F800 ; layout.asm
 
 
 ; Placed in bank 90 so that the jumps work
-org $90F640
+;org $90F640
+org $90F680
 print pc, " minimap bank90 start"
 
 mm_initialize_minimap:

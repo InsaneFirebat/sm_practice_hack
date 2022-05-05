@@ -195,7 +195,7 @@ ih_nmi_end:
     LDA #$0000 : STA !ram_slowdown_mode : STA !ram_slowdown_frames
     JMP .done
 
-+   LDA !ram_freeze_on_load : BEQ +
++   LDA !sram_freeze_on_load : BEQ +
     LDA !IH_CONTROLLER_PRI_NEW : BEQ +
 
     LDA #$0000 : STA !ram_reset_segment_later
@@ -1337,7 +1337,8 @@ warnpc $F0E000 ; spritefeat.asm
 
 
 ; Stuff that needs to be placed in bank 80
-org $80FC00
+;org $80FC00
+org $80FC80 ; save.asm needs breathing room
 print pc, " infohud bank80 start"
 
 ih_fix_scroll_offsets:

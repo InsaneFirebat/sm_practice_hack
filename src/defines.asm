@@ -464,7 +464,10 @@ endif
 !sram_preset_options = !SRAM_START+$48
 !sram_lag_counter_mode = !SRAM_START+$4A
 
-; ^ FREE SPACE ^ up to +$0FCE
+; ^ FREE SPACE ^ up to +$0FCA
+
+!sram_freeze_on_load = !SRAM_START+$FCC
+!sram_kaizo_loadstate_death = !SRAM_START+$FCE
 
 ; SM specific things
 !SRAM_MUSIC_DATA = !SRAM_START+$0FD0

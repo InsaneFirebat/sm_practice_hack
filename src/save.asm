@@ -122,7 +122,7 @@ post_load_state:
     JSL init_nonzero_wram
 
     ; Freeze inputs if necessary
-    LDA !ram_freeze_on_load : BEQ .return
+    LDA !sram_freeze_on_load : BEQ .return
     LDA #$FFFF : STA !ram_slowdown_mode
     INC : STA !ram_slowdown_controller_1 : STA !ram_slowdown_controller_2
     INC : STA !ram_slowdown_frames
@@ -413,5 +413,26 @@ vm:
     JMP ($0002,X)
 }
 
+pushpc
+org $82DCB4
+    JSL Kaizo_LoadState_Respawn
+    NOP #3
+pullpc
+
+Kaizo_LoadState_Respawn:
+{
+    LDA !sram_kaizo_loadstate_death : BNE .enabled
+    LDA $0952 : JSL $818085
+    JSL $80858C
+    LDA #$0006 : STA !GAMEMODE
+    RTL
+
+  .enabled
+    %ai16()
+    PLA : PLA : PLA
+    JSL load_state
+    JML end_of_normal_gameplay
+}
+
 print pc, " save end"
-warnpc $80FC00 ; infohud.asm
+warnpc $80FC80 ; infohud.asm
