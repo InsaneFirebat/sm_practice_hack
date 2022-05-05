@@ -315,4 +315,5 @@ preset_special_fixes:
 warnpc $85F000
 
 print pc, " custompresets end"
+warnpc $B3C000 ; mainmenu.asm
 

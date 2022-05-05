@@ -1,4 +1,3 @@
-!ram_tilemap_buffer = $7E5800
 
 ;org $85FD00
 org $85FE9C
@@ -96,7 +95,7 @@ cm_start:
     LDA $C1 : STA !ram_gametime_room
     LDA $C3 : STA !ram_last_gametime_room
     JSL $809B44
-    JSL GameLoopExtras_long       ; check if game_loop_extras needs to be disabled
+    JSL GameLoopExtras            ; check if game_loop_extras needs to be disabled
 
     ; I think the above subroutines erases some of infohud, so we make sure we redraw it.
     JSL ih_update_hud_code
@@ -128,9 +127,9 @@ cm_init:
     LDA !FRAME_COUNTER : STA !ram_cm_input_counter
 
     LDA.l #MainMenu
-    STA.l !ram_cm_menu_stack
+    STA !ram_cm_menu_stack
     LDA.l #MainMenu>>16
-    STA.l !ram_cm_menu_bank
+    STA !ram_cm_menu_bank
 
     STA !ram_cm_menu_active ; for morph lock in Redesign
 
@@ -505,17 +504,11 @@ cm_tilemap_transfer:
     RTS
 }
 
-macro item_index_to_vram_index()
-    ; Find screen position from Y (item number)
-    TYA : ASL #5
-    CLC : ADC #$0146 : TAX
-endmacro
-
 cm_draw_action_table:
 {
     dw draw_toggle
     dw draw_toggle_bit
-    dw draw_jsr
+    dw draw_jsl
     dw draw_numfield
     dw draw_choice
     dw draw_ctrl_shortcut
@@ -525,6 +518,7 @@ cm_draw_action_table:
     dw draw_numfield_color
     dw draw_controller_input
     dw draw_toggle_bit_inverted
+    dw draw_jsl_submenu
 
     draw_toggle:
     {
@@ -535,7 +529,7 @@ cm_draw_action_table:
         ; grab the toggle value
         LDA [$04] : AND #$00FF : INC $04 : STA $0C
 
-        ; increment past JSR
+        ; increment past JSL
         INC $04 : INC $04
 
         ; Draw the text
@@ -579,7 +573,7 @@ cm_draw_action_table:
         ; grab the toggle value
         LDA [$04] : AND #$00FF : INC $04 : STA $0C
 
-        ; increment past JSR
+        ; increment past JSL
         INC $04 : INC $04
 
         ; Draw the text
@@ -623,7 +617,7 @@ cm_draw_action_table:
         ; grab bitmask
         LDA [$04] : INC $04 : INC $04 : STA $0C
 
-        ; increment past JSR
+        ; increment past JSL
         INC $04 : INC $04
 
         ; Draw the text
@@ -659,7 +653,7 @@ cm_draw_action_table:
         ; grab bitmask
         LDA [$04] : INC $04 : INC $04 : STA $0C
 
-        ; increment past JSR
+        ; increment past JSL
         INC $04 : INC $04
 
         ; Draw the text
@@ -686,9 +680,10 @@ cm_draw_action_table:
         RTS
     }
 
-    draw_jsr:
+    draw_jsl:
+    draw_jsl_submenu:
     {
-        ; skip JSR address
+        ; skip JSL address
         INC $04 : INC $04
 
         ; skip argument
@@ -709,7 +704,7 @@ cm_draw_action_table:
         ; skip bounds and increment values
         INC $04 : INC $04 : INC $04 : INC $04
 
-        ; increment past JSR
+        ; increment past JSL
         INC $04 : INC $04
 
         ; Draw the text
@@ -757,7 +752,7 @@ cm_draw_action_table:
         INC $04 : INC $04 : INC $04 : INC $04
         INC $04 : INC $04 : INC $04 : INC $04
 
-        ; increment past JSR
+        ; increment past JSL
         INC $04 : INC $04
 
         ; Draw the text
@@ -809,7 +804,7 @@ cm_draw_action_table:
         ; skip bounds and increment values
         INC $04 : INC $04 : INC $04 : INC $04
 
-        ; increment past JSR
+        ; increment past JSL
         INC $04 : INC $04
 
         ; Draw the text
@@ -844,7 +839,7 @@ cm_draw_action_table:
         LDA [$04] : INC $04 : INC $04 : STA $08
         LDA [$04] : INC $04 : STA $0A
 
-        ; increment past JSR
+        ; increment past JSL
         INC $04 : INC $04
 
         ; Draw the text
@@ -877,13 +872,13 @@ cm_draw_action_table:
     draw_choice:
     {
         ; $04[0x3] = address
-        ; $08[0x2] = jsr target
+        ; $08[0x3] = JSL target
 
         ; grab the memory address (long)
         LDA [$04] : INC $04 : INC $04 : STA $08
         LDA [$04] : INC $04 : STA $0A
 
-        ; grab JSR target
+        ; grab JSL target
         LDA [$04] : INC $04 : INC $04 : STA $0C
 
         ; Draw the text first
@@ -940,10 +935,10 @@ cm_draw_action_table:
         STA !ram_cm_ctrl_assign
         LDA [$04] : INC $04 : STA $0A
 
-        ; grab JSR target
+        ; grab JSL target
         LDA [$04] : INC $04 : INC $04 : STA $0C
 
-        ; skip JSR argument
+        ; skip JSL argument
         INC $04 : INC $04
 
         ; Draw the text
@@ -1064,13 +1059,11 @@ cm_loop:
     LDA !ram_cm_leave : BEQ +
     RTS ; Exit menu loop
 
-    +
-    LDA !ram_cm_ctrl_mode : BEQ +
++   LDA !ram_cm_ctrl_mode : BEQ +
     JSR cm_ctrl_mode
     BRA .inputLoop
 
-    +
-    JSR cm_get_inputs : STA !ram_cm_controller : BEQ .inputLoop
++   JSR cm_get_inputs : STA !ram_cm_controller : BEQ .inputLoop
 
     BIT #$0080 : BNE .pressedA
     BIT #$8000 : BNE .pressedB
@@ -1192,7 +1185,7 @@ cm_go_back:
     LDA !ram_cm_stack_index
     BNE +
     LDA.l #MainMenu>>16       ; Reset submenu bank when back at main menu
-    STA.l !ram_cm_menu_bank
+    STA !ram_cm_menu_bank
   +
   .end
     LDA #!SOUND_MENU_MOVE : JSL $80903F
@@ -1304,7 +1297,7 @@ cm_execute_action_table:
 {
     dw execute_toggle
     dw execute_toggle_bit
-    dw execute_jsr
+    dw execute_jsl
     dw execute_numfield
     dw execute_choice
     dw execute_ctrl_shortcut
@@ -1314,6 +1307,7 @@ cm_execute_action_table:
     dw execute_numfield_color
     dw execute_controller_input
     dw execute_toggle_bit
+    dw execute_jsl_submenu
 
     execute_toggle:
     {
@@ -1324,23 +1318,29 @@ cm_execute_action_table:
         ; Grab toggle value
         LDA [$00] : INC $00 : AND #$00FF : STA $08
 
-        ; Grab JSR target
+        ; Grab JSL target
         LDA [$00] : INC $00 : INC $00 : STA $0A
 
         %a8()
         LDA [$04] : CMP $08 : BEQ .toggleOff
 
         LDA $08 : STA [$04]
-        BRA .jsr
+        BRA .jsl
 
       .toggleOff
         LDA #$00 : STA [$04]
 
-      .jsr
+      .jsl
         %a16()
         LDA $0A : BEQ .end
+
+        ; Set return address for indirect JSL
+        LDA !ram_cm_menu_bank : STA $0C
+        PHK : PEA .end-1
+
         LDA [$04]
-        JSL MainMenuJSR_toggle
+        LDX #$0000
+        JML [$000A]
 
       .end
         LDA #!SOUND_MENU_MOVE : JSL $80903F
@@ -1356,7 +1356,7 @@ cm_execute_action_table:
         ; Load which bit(s) to toggle
         LDA [$00] : INC $00 : INC $00 : STA $08
 
-        ; Load JSR target
+        ; Load JSL target
         LDA [$00] : INC $00 : INC $00 : STA $0A
 
         ; Toggle the bit
@@ -1364,27 +1364,63 @@ cm_execute_action_table:
 
         LDA $0A : BEQ .end
 
+        ; Set return address for indirect JSL
+        LDA !ram_cm_menu_bank : STA $0C
+        PHK : PEA .end-1
+
         LDA [$04]
-        JSL MainMenuJSR_toggle_bit
+        LDX #$0000
+        JML [$000A]
 
       .end
         LDA #!SOUND_MENU_MOVE : JSL $80903F
         RTS
     }
 
-    execute_jsr:
+    execute_jsl_submenu:
     {
         ; <, > and X should do nothing here
         ; also ignore input held flag
         LDA !ram_cm_controller : BIT #$0341 : BNE .end
 
-        ; $02 = JSR target
+        ; $04 = JSL target
         LDA [$00] : INC $00 : INC $00 : STA $04
+
+        ; Set bank of action_submenu
+        ; instead of the menu we're jumping to
+        LDA.l #action_submenu>>16 : STA $06
+
+        ; Set return address for indirect JSL
+        PHK : PEA .end-1
 
         ; Y = Argument
         LDA [$00] : TAY
 
-        JSL MainMenuJSR_jsr
+        LDX #$0000
+        JML [$0004]
+
+      .end
+        RTS
+    }
+
+    execute_jsl:
+    {
+        ; <, > and X should do nothing here
+        ; also ignore input held flag
+        LDA !ram_cm_controller : BIT #$0341 : BNE .end
+
+        ; $04 = JSL target
+        LDA [$00] : INC $00 : INC $00 : STA $04
+
+        ; Set return address for indirect JSL
+        LDA !ram_cm_menu_bank : STA $06
+        PHK : PEA .end-1
+
+        ; Y = Argument
+        LDA [$00] : TAY
+
+        LDX #$0000
+        JML [$0004]
 
       .end
         RTS
@@ -1398,7 +1434,7 @@ cm_execute_action_table:
         ; $0A[0x1] = max
         ; $0C[0x1] = increment (normal)
         ; $0C[0x1] = increment (input held)
-        ; $20[0x2] = JSR target
+        ; $20[0x3] = JSL target
         LDA [$00] : INC $00 : INC $00 : STA $04
         LDA [$00] : INC $00 : STA $06
 
@@ -1407,12 +1443,12 @@ cm_execute_action_table:
 
         LDA !ram_cm_controller : BIT !IH_INPUT_HELD : BNE .input_held
         LDA [$00] : INC $00 : INC $00 : AND #$00FF : STA $0C
-        BRA .load_jsr_target
+        BRA .load_jsl_target
 
       .input_held
         INC $00 : LDA [$00] : INC $00 : AND #$00FF : STA $0C
 
-      .load_jsr_target
+      .load_jsl_target
         LDA [$00] : INC $00 : INC $00 : STA $20
 
         LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
@@ -1421,26 +1457,32 @@ cm_execute_action_table:
 
         CMP $0A : BCS .set_to_min
 
-        STA [$04] : BRA .jsr
+        STA [$04] : BRA .jsl
 
       .pressed_left
-        LDA [$04] : SEC : SBC $0C : BMI .set_to_max
+        LDA [$04] : SEC : SBC $0C
+        CMP $08 : BMI .set_to_max
 
         CMP $0A : BCS .set_to_max
 
-        STA [$04] : BRA .jsr
+        STA [$04] : BRA .jsl
 
       .set_to_min
-        LDA $08 : STA [$04] : CLC : BRA .jsr
+        LDA $08 : STA [$04] : CLC : BRA .jsl
 
       .set_to_max
         LDA $0A : DEC : STA [$04] : CLC
 
-      .jsr
+      .jsl
         LDA $20 : BEQ .end
 
+        ; Set return address for indirect JSL
+        LDA !ram_cm_menu_bank : STA $22
+        PHK : PEA .end-1
+
         LDA [$04]
-        JSL MainMenuJSR_numfield
+        LDX #$0000
+        JML [$0020]
 
       .end
         LDA #!SOUND_MENU_MOVE : JSL $80903F
@@ -1454,7 +1496,7 @@ cm_execute_action_table:
         ; $0A[0x2] = max
         ; $0C[0x2] = increment (normal)
         ; $0C[0x2] = increment (input held)
-        ; $20[0x2] = JSR target
+        ; $20[0x3] = JSL target
         LDA [$00] : INC $00 : INC $00 : STA $04
         LDA [$00] : INC $00 : STA $06
 
@@ -1463,12 +1505,12 @@ cm_execute_action_table:
 
         LDA !ram_cm_controller : BIT !IH_INPUT_HELD : BNE .input_held
         LDA [$00] : INC $00 : INC $00 : INC $00 : INC $00 : STA $0C
-        BRA .load_jsr_target
+        BRA .load_jsl_target
 
       .input_held
         INC $00 : INC $00 : LDA [$00] : INC $00 : INC $00 : STA $0C
 
-      .load_jsr_target
+      .load_jsl_target
         LDA [$00] : INC $00 : INC $00 : STA $20
 
         LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
@@ -1477,26 +1519,32 @@ cm_execute_action_table:
 
         CMP $0A : BCS .set_to_min
 
-        STA [$04] : BRA .jsr
+        STA [$04] : BRA .jsl
 
       .pressed_left
-        LDA [$04] : SEC : SBC $0C : BMI .set_to_max
+        LDA [$04] : SEC : SBC $0C
+        CMP $08 : BMI .set_to_max
 
         CMP $0A : BCS .set_to_max
 
-        STA [$04] : BRA .jsr
+        STA [$04] : BRA .jsl
 
       .set_to_min
-        LDA $08 : STA [$04] : CLC : BRA .jsr
+        LDA $08 : STA [$04] : CLC : BRA .jsl
 
       .set_to_max
         LDA $0A : DEC : STA [$04] : CLC
 
-      .jsr
+      .jsl
         LDA $20 : BEQ .end
 
+        ; Set return address for indirect JSL
+        LDA !ram_cm_menu_bank : STA $22
+        PHK : PEA .end-1
+
         LDA [$04]
-        JSL MainMenuJSR_numfield_word
+        LDX #$0000
+        JML [$0020]
 
       .end
         LDA #!SOUND_MENU_MOVE : JSL $80903F
@@ -1506,7 +1554,7 @@ cm_execute_action_table:
     execute_numfield_color:
     {
         ; $04[0x3] = memory address to manipulate
-        ; $20[0x2] = JSR target
+        ; $20[0x3] = JSL target
         LDA [$00] : INC $00 : INC $00 : STA $04
         LDA [$00] : INC $00 : STA $06
 
@@ -1515,29 +1563,34 @@ cm_execute_action_table:
         LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
 
         LDA [$04] : INC : CMP #$0020 : BCS .set_to_min
-        STA [$04] : LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BEQ .jsr
+        STA [$04] : LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BEQ .jsl
 
         LDA [$04] : INC : CMP #$0020 : BCS .set_to_min
-        STA [$04] : BRA .jsr
+        STA [$04] : BRA .jsl
 
       .pressed_left
         LDA [$04] : DEC : BMI .set_to_max
-        STA [$04] : LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BEQ .jsr
+        STA [$04] : LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BEQ .jsl
 
         LDA [$04] : DEC : BMI .set_to_max
-        STA [$04] : BRA .jsr
+        STA [$04] : BRA .jsl
 
       .set_to_min
-        LDA #$0000 : STA [$04] : CLC : BRA .jsr
+        LDA #$0000 : STA [$04] : CLC : BRA .jsl
 
       .set_to_max
         LDA #$001F : STA [$04] : CLC
 
-      .jsr
+      .jsl
         LDA $20 : BEQ .end
 
+        ; Set return address for indirect JSL
+        LDA !ram_cm_menu_bank : STA $22
+        PHK : PEA .end-1
+
         LDA [$04]
-        JSL MainMenuJSR_numfield_color
+        LDX #$0000
+        JML [$0020]
 
       .end
         LDA #!SOUND_MENU_MOVE : JSL $80903F
@@ -1547,7 +1600,7 @@ cm_execute_action_table:
     execute_choice:
     {
         ; $04[0x3] = memory to manipulate
-        ; $08[0x2] = jsr target
+        ; $08[0x3] = JSL target
         %a16()
         LDA [$00] : INC $00 : INC $00 : STA $04
         LDA [$00] : INC $00 : STA $06
@@ -1601,8 +1654,13 @@ cm_execute_action_table:
 
         LDA $08 : BEQ .end
 
+        ; Set return address for indirect JSL
+        LDA !ram_cm_menu_bank : STA $0A
+        PHK : PEA .end-1
+
         LDA [$04]
-        JSL MainMenuJSR_choice
+        LDX #$0000
+        JML [$0008]
 
       .end
         LDA #!SOUND_MENU_MOVE : JSL $80903F
@@ -1644,13 +1702,21 @@ cm_execute_action_table:
         LDA [$00] : INC $00 : INC $00 : INC $00
         STA !ram_cm_ctrl_assign
 
-        ; $02 = JSR target
+        ; $04 = JSL target
         LDA [$00] : INC $00 : INC $00 : STA $04
+
+        ; Set bank of action_submenu
+        ; instead of the menu we're jumping to
+        LDA.l #action_submenu>>16 : STA $06
+
+        ; Set return address for indirect JSL
+        PHK : PEA .end-1
 
         ; Y = Argument
         LDA [$00] : TAY
 
-        JSL MainMenuJSR_controller_input
+        LDX #$0000
+        JML [$0004]
 
       .end
         RTS
@@ -1700,6 +1766,18 @@ print pc, " menu end"
 
 
 
+; -----------
+; Main menu
+; -----------
+
+pushpc
+org $B88000
+print pc, " mainmenu start"
+incsrc mainmenu.asm
+print pc, " mainmenu end"
+pullpc
+
+
 ; ----------
 ; Resources
 ; ----------
@@ -1716,9 +1794,9 @@ print pc, " menu gfx end"
 warnpc $B8C458 ; There's a small chunk of Axeil code at $B8C459
 
 
-; -----------
-; Main menu
-; -----------
+; -------------
+; Crash handler
+; -------------
 
 org $89AF00
 print pc, " mainmenu start"
