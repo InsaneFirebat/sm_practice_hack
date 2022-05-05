@@ -116,7 +116,7 @@ post_load_state:
     LDA $770082 : STA !FRAME_COUNTER
 
   .done
-    JSL init_wram_based_on_sram
+    JSL init_suit_properties_ram
 
     ; Freeze inputs if necessary
     LDA !ram_freeze_on_load : BEQ .return
