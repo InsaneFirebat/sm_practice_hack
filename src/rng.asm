@@ -351,7 +351,7 @@ hook_botwoon_rng:
 }
 
 print pc, " rng end"
-warnpc $83B400
+warnpc $83B400 ; custompresets.asm
 
 
 ;org $A4F700
