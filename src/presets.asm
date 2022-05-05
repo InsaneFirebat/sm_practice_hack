@@ -98,6 +98,10 @@ preset_load:
     LDA $7ED820 : BIT #$0004 : BEQ .done_clearing_enemies
     ; Set health to 1 as a hint this was done by a preset
     LDA #$0001 : STA $0FCC
+    ; Reset segment timer now
+    LDA #$0000 : STA !ram_reset_segment_later
+    STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds
+    STA !ram_seg_rt_minutes
     BRA .done_clearing_enemies
 }
 
@@ -371,7 +375,6 @@ preset_start_gameplay:
     JSL $A08A1E  ; Load enemies
     JSL $80A23F  ; Clear BG2 tilemap
     JSL $82E7D3  ; Load level data, CRE, tile table, scroll data, create PLMs and execute door ASM and room setup ASM
-endif
     JSL preset_scroll_fixes
 
     LDA !sram_preset_options : BIT !PRESETS_CLOSE_BLUE_DOORS : BNE .done_opening_doors
@@ -642,7 +645,7 @@ transfer_cgram_long:
 ;}
 
 print pc, " presets bank80 end"
-warnpc $80F800
+warnpc $80F800 ; save.asm
 
 
 ; $80:9AB1: Add x-ray and grapple HUD items if necessary
@@ -657,12 +660,6 @@ warnpc $80F800
 ; $80:9AC9: Resume original logic
 ;org $809AC9
 ;  .resume_infohud_icon_initialization
-
-
-org $FD8000
-print pc, " custom presets start"
-incsrc custompresets.asm
-print pc, " custom presets end"
 
 
 ; -------------------

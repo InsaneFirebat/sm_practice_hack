@@ -137,7 +137,7 @@ mm_refresh_reserves:
 }
 
 print pc, " minimap bank82 end"
-warnpc $82FA00
+warnpc $82F800 ; layout.asm
 
 
 ; Placed in bank 90 so that the jumps work
@@ -218,5 +218,6 @@ mm_clear_boss_room_tiles:
 }
 
 print pc, " minimap bank90 end"
-warnpc $90F7F0
+warnpc $90F7F0 ; not sure what the old one was yet
+warnpc $90F800 ; misc.asm
 

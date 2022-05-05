@@ -28,82 +28,93 @@ endif
     table ../resources/normal.tbl
 endmacro
 
-macro cm_numfield(title, addr, start, end, increment, heldincrement, jsrtarget)
+macro cm_numfield(title, addr, start, end, increment, heldincrement, jsltarget)
     dw !ACTION_NUMFIELD
     dl <addr>
     db <start>, <end>, <increment>, <heldincrement>
-    dw <jsrtarget>
+    dw <jsltarget>
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_numfield_word(title, addr, start, end, increment, heldincrement, jsrtarget)
+macro cm_numfield_word(title, addr, start, end, increment, heldincrement, jsltarget)
     dw !ACTION_NUMFIELD_WORD
     dl <addr>
     dw <start>, <end>, <increment>, <heldincrement>
-    dw <jsrtarget>
+    dw <jsltarget>
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_numfield_hex(title, addr, start, end, increment, heldincrement, jsrtarget)
+macro cm_numfield_hex(title, addr, start, end, increment, heldincrement, jsltarget)
     dw !ACTION_NUMFIELD_HEX
     dl <addr>
     db <start>, <end>, <increment>, <heldincrement>
-    dw <jsrtarget>
+    dw <jsltarget>
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_numfield_color(title, addr, jsrtarget)
+macro cm_numfield_color(title, addr, jsltarget)
     dw !ACTION_NUMFIELD_COLOR
     dl <addr>
-    dw <jsrtarget>
+    dw <jsltarget>
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_toggle(title, addr, value, jsrtarget)
+macro cm_toggle(title, addr, value, jsltarget)
     dw !ACTION_TOGGLE
     dl <addr>
     db <value>
-    dw <jsrtarget>
+    dw <jsltarget>
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_toggle_inverted(title, addr, value, jsrtarget)
+macro cm_toggle_inverted(title, addr, value, jsltarget)
     dw !ACTION_TOGGLE_INVERTED
     dl <addr>
     db <value>
-    dw <jsrtarget>
+    dw <jsltarget>
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_toggle_bit(title, addr, mask, jsrtarget)
+macro cm_toggle_bit(title, addr, mask, jsltarget)
     dw !ACTION_TOGGLE_BIT
     dl <addr>
     dw <mask>
-    dw <jsrtarget>
+    dw <jsltarget>
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_toggle_bit_inverted(title, addr, mask, jsrtarget)
+macro cm_toggle_bit_inverted(title, addr, mask, jsltarget)
     dw !ACTION_TOGGLE_BIT_INVERTED
     dl <addr>
     dw <mask>
-    dw <jsrtarget>
+    dw <jsltarget>
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_jsr(title, routine, argument)
-    dw !ACTION_JSR
+macro cm_jsl(title, routine, argument)
+    dw !ACTION_JSL
     dw <routine>
     dw <argument>
     db #$28, "<title>", #$FF
 endmacro
 
+macro cm_jsl_submenu(title, routine, argument)
+    dw !ACTION_JSL_SUBMENU
+    dw <routine>
+    dw <argument>
+    db #$28, "<title>", #$FF
+endmacro
+
+macro cm_mainmenu(title, target)
+    %cm_jsl("<title>", #action_mainmenu, <target>)
+endmacro
+
 macro cm_submenu(title, target)
-    %cm_jsr("<title>", #action_submenu, <target>)
+    %cm_jsl_submenu("<title>", #action_submenu, <target>)
 endmacro
 
 macro cm_preset(title, target)
-    %cm_jsr("<title>", #action_load_preset, <target>)
+    %cm_jsl_submenu("<title>", #action_load_preset, <target>)
 endmacro
 
 macro cm_ctrl_shortcut(title, addr)
@@ -120,18 +131,30 @@ macro cm_ctrl_input(title, addr, routine, argument)
     db #$28, "<title>", #$FF
 endmacro
 
+macro setmenubank()
+    PHK : PHK : PLA
+    STA !ram_cm_menu_bank
+endmacro
+
+action_mainmenu:
+{
+    PHB
+    ; Set bank of new menu
+    LDA !ram_cm_cursor_stack : TAX
+    LDA.l MainMenuBanks,X : STA !ram_cm_menu_bank
+    STA $02 : STA $06
+
+    BRA action_submenu+1
+}
+
 action_submenu:
 {
+    PHB
     ; Increment stack pointer by 2, then store current menu
     LDA !ram_cm_stack_index : INC #2 : STA !ram_cm_stack_index : TAX
     TYA : STA !ram_cm_menu_stack,X
-    LDA #$0000 : STA !ram_cm_cursor_stack,X
 
-    LDA #!SOUND_MENU_MOVE : JSL $80903F
-    JSL cm_calculate_max
-    JSL cm_draw
-
-    RTS
+    BRA action_submenu_jump
 }
 
 action_presets_submenu:
@@ -139,21 +162,25 @@ action_presets_submenu:
     PHB
     PHK : PLB
 
-    ; Increment stack pointer by 2, then store current menu    
+    ; Increment stack pointer by 2, then store current menu
     LDA !ram_cm_stack_index : INC #2 : STA !ram_cm_stack_index : TAX
     LDA !sram_preset_category : ASL : TAY
     
     LDA.w preset_category_submenus,Y : STA !ram_cm_menu_stack,X
     LDA.w preset_category_banks,Y : STA !ram_cm_menu_bank
-    
+
+    ; continue into action_submenu_jump
+
+action_submenu_jump:
+{
     LDA #$0000 : STA !ram_cm_cursor_stack,X
 
-    LDA #!SOUND_MENU_MOVE : JSL $80903F
+    LDA #!SOUND_MENU_MOVE : JSL !SFX_LIB1
     JSL cm_calculate_max
     JSL cm_draw
 
     PLB
-    RTS
+    RTL
 }
 
 preset_category_submenus:
@@ -166,8 +193,8 @@ preset_category_banks:
 {
     dw #PresetsMenuPrkd>>16
     dw #$0000
-
 }
+
 
 ; -----------
 ; Main menu
@@ -175,55 +202,64 @@ preset_category_banks:
 
 MainMenu:
     dw #mm_goto_equipment
-;    dw #mm_goto_presets
+    dw #mm_goto_presets
     dw #mm_goto_presets_menu
     dw #mm_goto_teleport
     dw #mm_goto_events
     dw #mm_goto_misc
     dw #mm_goto_infohud
     dw #mm_goto_sprites
-    dw #mm_goto_layout
     dw #mm_goto_gamemenu
     dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
     dw #$0000
     %cm_version_header("CONTAINMENT CHAMBER", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
 
+MainMenuBanks:
+    dw #EquipmentMenu>>16
+    dw #preset_category_banks>>16 ; dummy
+    dw #PresetsMenu>>16
+    dw #TeleportMenu>>16
+    dw #EventsMenu>>16
+    dw #MiscMenu>>16
+    dw #InfoHudMenu>>16
+    dw #SpritesMenu>>16
+    dw #GameMenu>>16
+    dw #RngMenu>>16
+    dw #CtrlMenu>>16
+
 mm_goto_equipment:
-    %cm_submenu("Equipment", #EquipmentMenu)
+    %cm_mainmenu("Equipment", #EquipmentMenu)
 
 mm_goto_presets:
-    %cm_jsr("Category Presets", #action_presets_submenu, #$0000)
+    %cm_jsl("Category Presets", #action_presets_submenu, #$0000)
 
 mm_goto_presets_menu:
-    %cm_submenu("Preset Options", #PresetsMenu)
+    %cm_mainmenu("Preset Options", #PresetsMenu)
 
 mm_goto_teleport:
-    %cm_submenu("Teleport", #TeleportMenu)
+    %cm_mainmenu("Teleport", #TeleportMenu)
 
 mm_goto_events:
-    %cm_submenu("Events", #EventsMenu)
+    %cm_mainmenu("Events", #EventsMenu)
 
 mm_goto_misc:
-    %cm_submenu("Misc", #MiscMenu)
+    %cm_mainmenu("Misc", #MiscMenu)
 
 mm_goto_infohud:
-    %cm_submenu("Infohud", #InfoHudMenu)
+    %cm_mainmenu("Infohud", #InfoHudMenu)
 
 mm_goto_sprites:
-    %cm_submenu("Sprite Features", #SpritesMenu)
-
-mm_goto_layout:
-    %cm_submenu("Room Layout", #LayoutMenu)
+    %cm_mainmenu("Sprite Features", #SpritesMenu)
 
 mm_goto_gamemenu:
-    %cm_submenu("Game", #GameMenu)
+    %cm_mainmenu("Game", #GameMenu)
 
 mm_goto_rngmenu:
-    %cm_submenu("RNG Control", #RngMenu)
+    %cm_mainmenu("RNG Control", #RngMenu)
 
 mm_goto_ctrlsmenu:
-    %cm_submenu("Controller Shortcuts", #CtrlMenu)
+    %cm_mainmenu("Controller Shortcuts", #CtrlMenu)
 
 
 ; -------------
@@ -231,9 +267,9 @@ mm_goto_ctrlsmenu:
 ; -------------
 
 PresetsMenu:
-;    dw #presets_goto_select_preset_category
-;    dw #presets_current
-;    dw #$FFFF
+    dw #presets_goto_select_preset_category
+    dw #presets_current
+    dw #$FFFF
     dw #presets_custom_preset_slot
     dw #presets_save_custom_preset
     dw #presets_load_custom_preset
@@ -250,6 +286,9 @@ if !RAW_TILE_GRAPHICS
 endif
     dw #$0000
     %cm_header("PRESET OPTIONS MENU")
+if !RAW_TILE_GRAPHICS
+    %cm_footer("COMPRESSED OFF IS FASTER")
+endif
 
 presets_goto_select_preset_category:
     %cm_submenu("Select Preset Category", #SelectPresetCategoryMenu)
@@ -258,31 +297,26 @@ presets_custom_preset_slot:
     %cm_numfield("Custom Preset Slot", !sram_custom_preset_slot, 0, 39, 1, 2, #0) ; update total slots in gamemode.asm
 
 presets_save_custom_preset:
-    %cm_jsr("Save Custom Preset", #action_save_custom_preset, #$0000)
+    %cm_jsl("Save Custom Preset", #action_save_custom_preset, #$0000)
 
 presets_load_custom_preset:
-    %cm_jsr("Load Custom Preset", #action_load_custom_preset, #$0000)
+    %cm_jsl("Load Custom Preset", #action_load_custom_preset, #$0000)
 
 if !FEATURE_DEV
 presets_random_preset_rng:
     %cm_toggle_inverted("Random Preset RNG", !ram_random_preset_rng, #$0001, #0)
 endif
 
-!PRESETS_CLOSE_BLUE_DOORS = #$0008
 presets_open_blue_doors:
     %cm_toggle_bit_inverted("Open Blue Doors", !sram_preset_options, !PRESETS_CLOSE_BLUE_DOORS, #0)
 
-!PRESETS_COMPRESSED_GRAPHICS = #$0001
 if !RAW_TILE_GRAPHICS
 presets_compressed_graphics:
     %cm_toggle_bit("Compressed Graphics", !sram_preset_options, !PRESETS_COMPRESSED_GRAPHICS, #0)
 
-!PRESETS_COMPRESSED_PALETTES = #$0002
-!PRESETS_COMPRESSED_PALETTES_8BIT = #$02
 presets_compressed_palettes:
     %cm_toggle_bit("Compressed Palettes", !sram_preset_options, !PRESETS_COMPRESSED_PALETTES, #0)
 
-!PRESETS_COMPRESSED_TABLES = #$0004
 presets_compressed_tables:
     %cm_toggle_bit("Compressed Tables", !sram_preset_options, !PRESETS_COMPRESSED_TABLES, #0)
 endif
@@ -291,6 +325,21 @@ SelectPresetCategoryMenu:
     dw #presets_current
     dw #$FFFF
     dw #precat_prkd
+    dw #precat_kpdr21
+    dw #precat_hundo
+    dw #precat_100early
+    dw #precat_rbo
+    dw #precat_pkrd
+    dw #precat_kpdr25
+    dw #precat_gtclassic
+    dw #precat_gtmax
+    dw #precat_14ice
+    dw #precat_14speed
+    dw #precat_100map
+    dw #precat_nintendopower
+    dw #precat_allbosskpdr
+    dw #precat_allbosspkdr
+    dw #precat_allbossprkd
     dw #$0000
     %cm_header("SELECT PRESET CATEGORY")
 
@@ -299,14 +348,74 @@ presets_current:
     dl #!sram_preset_category
     dw #.routine
     db #$28, "CURRENT PRESET", #$FF
-        db #$28, "PLACEHOLDER", #$FF
+        db #$28, "       PRKD", #$FF
+        db #$28, "       KPDR", #$FF
+        db #$28, "  100% LATE", #$FF
+        db #$28, " 100% EARLY", #$FF
+        db #$28, "        RBO", #$FF
+        db #$28, "       PKRD", #$FF
+        db #$28, "     KPDR25", #$FF
+        db #$28, " GT CLASSIC", #$FF
+        db #$28, "    GT MAX%", #$FF
+        db #$28, "    14% ICE", #$FF
+        db #$28, "  14% SPEED", #$FF
+        db #$28, "   100% MAP", #$FF
+        db #$28, "  NIN POWER", #$FF
+        db #$28, "   ALL KPDR", #$FF
+        db #$28, "   ALL PKDR", #$FF
+        db #$28, "   ALL PRKD", #$FF
     db #$FF
   .routine
     LDA #$0000 : STA !sram_last_preset
-    RTS
+    RTL
 
 precat_prkd:
-    %cm_jsr("Any% PRKD (Placeholder)", #action_select_preset_category, #$0000)
+    %cm_jsl("Any% PRKD", #action_select_preset_category, #$0000)
+
+precat_kpdr21:
+    %cm_jsl("Any% KPDR", #action_select_preset_category, #$0001)
+
+precat_hundo:
+    %cm_jsl("100% Late Crocomire", #action_select_preset_category, #$0002)
+
+precat_100early:
+    %cm_jsl("100% Early Crocomire", #action_select_preset_category, #$0003)
+
+precat_rbo:
+    %cm_jsl("Reverse Boss Order", #action_select_preset_category, #$0004)
+
+precat_pkrd:
+    %cm_jsl("Any% PKRD", #action_select_preset_category, #$0005)
+
+precat_kpdr25:
+    %cm_jsl("Any% KPDR Early Ice", #action_select_preset_category, #$0006)
+
+precat_gtclassic:
+    %cm_jsl("GT Classic", #action_select_preset_category, #$0007)
+
+precat_gtmax:
+    %cm_jsl("GT Max%", #action_select_preset_category, #$0008)
+
+precat_14ice:
+    %cm_jsl("Low% Ice", #action_select_preset_category, #$0009)
+
+precat_14speed:
+    %cm_jsl("Low% Speed", #action_select_preset_category, #$000A)
+
+precat_100map:
+    %cm_jsl("100% Map Completion", #action_select_preset_category, #$000B)
+
+precat_nintendopower:
+    %cm_jsl("Nintendo Power", #action_select_preset_category, #$000C)
+
+precat_allbosskpdr:
+    %cm_jsl("All Bosses KPDR", #action_select_preset_category, #$000D)
+
+precat_allbosspkdr:
+    %cm_jsl("All Bosses PKDR", #action_select_preset_category, #$000E)
+
+precat_allbossprkd:
+    %cm_jsl("All Bosses PRKD", #action_select_preset_category, #$000F)
 
 action_select_preset_category:
 {
@@ -314,7 +423,7 @@ action_select_preset_category:
     LDA #$0000 : STA !sram_last_preset
     JSL cm_go_back
     JSL cm_calculate_max
-    RTS
+    RTL
 }
 
 action_save_custom_preset:
@@ -327,12 +436,12 @@ action_save_custom_preset:
   .safe
     JSL custom_preset_save
     LDA #$0001 : STA !ram_cm_leave
-    LDA !SOUND_MENU_MOVE : JSL !SFX_LIB1
-    RTS
+    LDA #!SOUND_MENU_MOVE : JSL !SFX_LIB1
+    RTL
 
   .not_safe
     LDA #!SOUND_MENU_FAIL : JSL !SFX_LIB1
-    RTS
+    RTL
 }
 
 action_load_custom_preset:
@@ -340,14 +449,14 @@ action_load_custom_preset:
     ; check if slot is populated first
     LDA !sram_custom_preset_slot
     ASL : XBA : TAX
-    LDA $F03000,X : CMP #$5AFE : BEQ .safe
+    LDA $703000,X : CMP #$5AFE : BEQ .safe
     LDA #!SOUND_MENU_FAIL : JSL !SFX_LIB1
-    RTS
+    RTL
 
   .safe
     STA !ram_custom_preset
     LDA #$0001 : STA !ram_cm_leave
-    RTS
+    RTL
 }
 
 LoadRandomPreset:
@@ -361,7 +470,7 @@ LoadRandomPreset:
     JSL $808111 : STA $12     ; random number
 
   .seedpicked
-    LDA #$00B8 : STA $18      ; this routine lives in bank B8
+    PHK : PHK : PLA : STA $18 ; this routine lives in bank B8
     LDA !sram_preset_category : ASL : TAY
     LDA #preset_category_submenus : STA $16
     LDA [$16],Y : TAX         ; preset category submenu table
@@ -420,7 +529,7 @@ action_load_preset:
     LDA #$0001 : STA !ram_cm_leave
 
     PLB
-    RTS
+    RTL
 }
 
 
@@ -452,16 +561,15 @@ EquipmentMenu:
     %cm_header("EQUIPMENT")
 
 eq_refill:
-    %cm_jsr("Refill", .refill, #$0000)
-
+    %cm_jsl("Refill", .refill, #$0000)
   .refill
     LDA $7E09C4 : STA $7E09C2 ; health
     LDA $7E09C8 : STA $7E09C6 ; missiles
     LDA $7E09CC : STA $7E09CA ; supers
     LDA $7E09D0 : STA $7E09CE ; pbs
     LDA $7E09D4 : STA $7E09D6 ; reserves
-    LDA #!SOUND_MENU_JSR : JSL $80903F
-    RTS
+    LDA #!SOUND_MENU_JSL : JSL $80903F
+    RTL
 
 eq_toggle_category:
     %cm_submenu("Category Loadouts", #ToggleCategoryMenu)
@@ -488,7 +596,7 @@ eq_setetanks:
         BRA .loop
       .endloop
         STA !SAMUS_HP_MAX : STA !SAMUS_HP
-        RTS
+        RTL
 
 eq_currentreserves:
     %cm_numfield_word("Current Reserves", $7E09D6, 0, 700, 1, 20, #0)
@@ -504,7 +612,7 @@ eq_setreserves:
         BRA .loop
       .endloop
         STA !SAMUS_RESERVE_ENERGY : STA !SAMUS_RESERVE_MAX
-        RTS
+        RTL
 
 eq_currentmissiles:
     %cm_numfield_word("Current Missiles", $7E09C6, 0, 325, 1, 20, #0)
@@ -513,7 +621,7 @@ eq_setmissiles:
     %cm_numfield_word("Missiles", $7E09C8, 0, 325, 5, 20, .routine)
     .routine
         LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES ; missiles
-        RTS
+        RTL
 
 eq_currentsupers:
     %cm_numfield("Current Super Missiles", $7E09CA, 0, 65, 1, 5, #0)
@@ -522,16 +630,16 @@ eq_setsupers:
     %cm_numfield("Super Missiles", $7E09CC, 0, 65, 5, 5, .routine)
     .routine
         LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS ; supers
-        RTS
+        RTL
 
 eq_currentpbs:
-    %cm_numfield("Current Power Bombs", $7E09CE, 0, 65, 1, 5, #0)
+    %cm_numfield("Current Power Bombs", $7E09CE, 0, 70, 1, 5, #0)
 
 eq_setpbs:
-    %cm_numfield("Power Bombs", $7E09D0, 0, 65, 5, 5, .routine)
+    %cm_numfield("Power Bombs", $7E09D0, 0, 70, 5, 5, .routine)
     .routine
         LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS ; pbs
-        RTS
+        RTL
 
 ; ---------------------
 ; Toggle Category menu
@@ -552,37 +660,37 @@ ToggleCategoryMenu:
     %cm_header("TOGGLE CATEGORY")
 
 cat_100:
-    %cm_jsr("100%", action_category, #$0000)
+    %cm_jsl("100%", action_category, #$0000)
 
 cat_any_new:
-    %cm_jsr("Any% PRKD", action_category, #$0001)
+    %cm_jsl("Any% PRKD", action_category, #$0001)
 
 cat_any_old:
-    %cm_jsr("Any% KPDR", action_category, #$0002)
+    %cm_jsl("Any% KPDR", action_category, #$0002)
 
 cat_14ice:
-    %cm_jsr("14% Ice", action_category, #$0003)
+    %cm_jsl("14% Ice", action_category, #$0003)
 
 cat_14speed:
-    %cm_jsr("14% Speed", action_category, #$0004)
+    %cm_jsl("14% Speed", action_category, #$0004)
 
 cat_gt_code:
-    %cm_jsr("GT Code", action_category, #$0005)
+    %cm_jsl("GT Code", action_category, #$0005)
 
 cat_gt_135:
-    %cm_jsr("GT Max%", action_category, #$0006)
+    %cm_jsl("GT Max%", action_category, #$0006)
 
 cat_rbo:
-    %cm_jsr("RBO", action_category, #$0007)
+    %cm_jsl("RBO", action_category, #$0007)
 
 cat_any_glitched:
-    %cm_jsr("Any% Glitched", action_category, #$0008)
+    %cm_jsl("Any% Glitched", action_category, #$0008)
 
 cat_inf_cf:
-    %cm_jsr("Infinite Crystal Flashes", action_category, #$0009)
+    %cm_jsl("Infinite Crystal Flashes", action_category, #$0009)
 
 cat_nothing:
-    %cm_jsr("Nothing", action_category, #$000A)
+    %cm_jsl("Nothing", action_category, #$000A)
 
 
 action_category:
@@ -616,8 +724,8 @@ action_category:
     LDA.l .table,X : STA $7E09D4 : STA $7E09D6 : INX #2
 
     JSL cm_set_etanks_and_reserve
-    LDA #!SOUND_MENU_JSR : JSL $80903F
-    RTS
+    LDA #!SOUND_MENU_JSL : JSL !SFX_LIB1
+    RTL
 
   .table
     ;  Items,  Beams,  Health, Miss,   Supers, PBs,    Reserv, Dummy
@@ -658,49 +766,43 @@ ToggleItemsMenu:
     %cm_header("TOGGLE ITEMS")
 
 ti_variasuit:
-    %cm_toggle_bit("Varia Suit", $7E09A4, #$0001, #action_equip_collected_items)
+    %cm_toggle_bit("Varia Suit", $7E09A4, #$0001, #0)
 
 ti_gravitysuit:
-    %cm_toggle_bit("Gravity Suit", $7E09A4, #$0020, #action_equip_collected_items)
+    %cm_toggle_bit("Gravity Suit", $7E09A4, #$0020, #0)
 
 ti_morphball:
-    %cm_toggle_bit("Morphing Ball", $7E09A4, #$0004, #action_equip_collected_items)
+    %cm_toggle_bit("Morphing Ball", $7E09A4, #$0004, #0)
 
 ti_bomb:
-    %cm_toggle_bit("Bombs", $7E09A4, #$1000, #action_equip_collected_items)
+    %cm_toggle_bit("Bombs", $7E09A4, #$1000, #0)
 
 ti_springball:
-    %cm_toggle_bit("Spring Ball", $7E09A4, #$0002, #action_equip_collected_items)
+    %cm_toggle_bit("Spring Ball", $7E09A4, #$0002, #0)
 
 ti_screwattack:
-    %cm_toggle_bit("Screw Attack", $7E09A4, #$0008, #action_equip_collected_items)
+    %cm_toggle_bit("Screw Attack", $7E09A4, #$0008, #0)
 
 ti_hijumpboots:
-    %cm_toggle_bit("Hi Jump Boots", $7E09A4, #$0100, #action_equip_collected_items)
+    %cm_toggle_bit("Hi Jump Boots", $7E09A4, #$0100, #0)
 
 ti_spacejump:
-    %cm_toggle_bit("Space Jump", $7E09A4, #$0200, #action_equip_collected_items)
+    %cm_toggle_bit("Space Jump", $7E09A4, #$0200, #0)
 
 ti_speedbooster:
-    %cm_toggle_bit("Speed Booster", $7E09A4, #$2000, #action_equip_collected_items)
+    %cm_toggle_bit("Speed Booster", $7E09A4, #$2000, #0)
 
 ti_grapple:
     %cm_toggle_bit("Grapple", $7E09A2, #$4000, .routine)
     .routine
         LDA !SAMUS_ITEMS_COLLECTED : EOR #$4000 : STA !SAMUS_ITEMS_COLLECTED
-        RTS
+        RTL
 
 ti_xray:
     %cm_toggle_bit("X-Ray", $7E09A2, #$8000, .routine)
     .routine
         LDA !SAMUS_ITEMS_COLLECTED : EOR #$8000 : STA !SAMUS_ITEMS_COLLECTED
-        RTS
-
-action_equip_collected_items:
-{
-    LDA !SAMUS_ITEMS_COLLECTED : STA !SAMUS_ITEMS_EQUIPPED
-    RTS
-}
+        RTL
 
 
 ; -----------------
@@ -719,36 +821,22 @@ ToggleBeamsMenu:
     %cm_header("TOGGLE BEAMS")
 
 tb_chargebeam:
-    %cm_toggle_bit("Charge", $7E09A8, #$1000, #action_equip_collected_beams)
+    %cm_toggle_bit("Charge", $7E09A8, #$1000, #0)
 
 tb_icebeam:
-    %cm_toggle_bit("Ice", $7E09A8, #$0002, #action_equip_collected_beams)
+    %cm_toggle_bit("Ice", $7E09A8, #$0002, #0)
 
 tb_wavebeam:
-    %cm_toggle_bit("Wave", $7E09A8, #$0001, #action_equip_collected_beams)
+    %cm_toggle_bit("Wave", $7E09A8, #$0001, #0)
 
 tb_spazerbeam:
-    %cm_toggle_bit("Spazer", $7E09A8, #$0004, #action_equip_collected_beams)
+    %cm_toggle_bit("Spazer", $7E09A8, #$0004, #0)
 
 tb_plasmabeam:
-    %cm_toggle_bit("Plasma", $7E09A8, #$0008, #action_equip_collected_beams)
+    %cm_toggle_bit("Plasma", $7E09A8, #$0008, #0)
 
 tb_glitchedbeams:
     %cm_submenu("Glitched Beams", #GlitchedBeamsMenu)
-
-action_equip_collected_beams:
-{
-    LDA !SAMUS_BEAMS_COLLECTED : STA !SAMUS_BEAMS_EQUIPPED : TAY
-    AND #$000C : CMP #$000C : BEQ .murderBeam
-    TYA : STA $7E09A6
-    RTS
-
-  .murderBeam
-    TYA : AND #$100B : STA $7E09A6
-
-  .done
-    RTS
-}
 
 
 ; -------------------
@@ -765,29 +853,29 @@ GlitchedBeamsMenu:
     %cm_footer("BEWARE OF CRASHES")
 
 gb_murder:
-    %cm_jsr("Murder Beam", action_glitched_beam, #$100F)
+    %cm_jsl("Murder Beam", action_glitched_beam, #$100F)
 
 gb_spacetime:
-    %cm_jsr("Spacetime Beam", action_glitched_beam, #$100E)
+    %cm_jsl("Spacetime Beam", action_glitched_beam, #$100E)
 
 gb_chainsaw:
-    %cm_jsr("Chainsaw Beam", action_glitched_beam, #$100D)
+    %cm_jsl("Chainsaw Beam", action_glitched_beam, #$100D)
 
 gb_unnamed:
-    %cm_jsr("Unnamed Glitched Beam", action_glitched_beam, #$100C)
+    %cm_jsl("Unnamed Glitched Beam", action_glitched_beam, #$100C)
 
 action_glitched_beam:
 {
     TYA
-    STA !SAMUS_BEAMS_EQUIPPED : STA !SAMUS_BEAMS_COLLECTED
+    STA $09A6 : STA $09A8
     LDA #$0042 : JSL !SFX_LIB1 ; unlabeled, song dependent sound
-    RTS
+    RTL
 }
 
 
-; ---------------
+; -------------
 ; Teleport menu
-; ---------------
+; -------------
 
 TeleportMenu:
     dw #tel_000
@@ -879,27 +967,19 @@ action_teleport:
     LDA #$0006 : STA $7E0998
 
     ; Make sure we can teleport to Zebes from Ceres
-    SEP #$20
+    %a8()
     LDA #$05 : STA $7ED914
-    REP #$20
+    %a16()
 
     STZ $0727 ; Pause menu index
-    STZ $0795 ; Clear message box index 
     STZ $1C1F ; Clear message box index
 
-    JSL reset_all_counters
++   JSL reset_all_counters
     JSL stop_all_sounds
 
     LDA #$0001 : STA !ram_cm_leave
 
-    RTS
-}
-
-action_debug_teleport:
-{
-    LDA !ram_tel_debug_area : XBA
-    ORA !ram_tel_debug_station : TAY
-    JMP action_teleport
+    RTL
 }
 
 
@@ -938,7 +1018,7 @@ misc_hyperbeam:
     %cm_toggle_bit("Hyper Beam", $7E0A76, #$8000, #0)
 
 misc_gooslowdown:
-    %cm_numfield("Slowdown Rate", $7E0A66, 0, 4, 1, 1, #0)
+    %cm_numfield("Goo Slowdown", $7E0A66, 0, 4, 1, 1, #0)
 
 misc_magicpants:
     %cm_toggle_bit("Magic Pants", !ram_magic_pants_enabled, #$0001, GameLoopExtras)
@@ -956,7 +1036,17 @@ misc_metronome_tickrate:
     %cm_numfield("Metronome Tickrate", !sram_metronome_tickrate, 1, 255, 1, 8, #.routine)
     .routine
         LDA #$0000 : STA !ram_metronome_counter
-        RTS
+        RTL
+
+GameLoopExtras:
+{
+    LDA !ram_magic_pants_enabled : BNE .enabled
+    LDA !ram_metronome : BNE .enabled
+    LDA #$0000
+  .enabled
+    STA !ram_game_loop_extras
+    RTL
+}
 
 misc_metronome_sfx:
     dw !ACTION_CHOICE
@@ -974,21 +1064,22 @@ misc_invincibility:
     %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
 
 misc_killenemies:
-    %cm_jsr("Kill Enemies", .kill_loop, #0)
+    %cm_jsl("Kill Enemies", .kill_loop, #0)
   .kill_loop
     ; 8000 = solid to Samus, 0400 = Ignore Samus projectiles
     TAX : LDA $0F86,X : BIT #$8400 : BNE +
     ORA #$0200 : STA $0F86,X
 +   TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
-    LDA #!SOUND_MENU_JSR : JSL !SFX_LIB1
-    RTS
+    LDA #!SOUND_MENU_JSL : JSL !SFX_LIB1
+    RTL
 
 misc_forcestand:
-    %cm_jsr("Force Samus to Stand Up", .routine, #0)
+    %cm_jsl("Force Samus to Stand Up", .routine, #0)
+
   .routine
     JSL $90E2D4
-    LDA #!SOUND_MENU_JSR : JSL $80903F
-    RTS
+    LDA #!SOUND_MENU_JSL : JSL $80903F
+    RTL
 
 
 ; ---------------
@@ -1003,6 +1094,10 @@ SpritesMenu:
     dw #sprites_show_samusproj_hitbox
     dw #sprites_show_enemyproj_hitbox
     dw #sprites_oob_viewer
+if !PRESERVE_WRAM_DURING_SPACETIME
+    dw #$FFFF
+    dw #sprites_spacetime_infohud
+endif
     dw #$0000
     %cm_header("SPRITE FEATURES")
 
@@ -1025,17 +1120,27 @@ sprites_show_samusproj_hitbox:
     %cm_toggle("S Projectile Hitboxes", !ram_sprite_samusproj_hitbox_active, #1, #action_sprite_features)
 
 sprites_oob_viewer:
-    %cm_toggle("OoB Tile Viewer", !ram_oob_watch_active, #1, #.routine)
+{
+    %cm_toggle("OOB Tile Viewer", !ram_oob_watch_active, #1, #.routine)
   .routine
     LDA !ram_oob_watch_active : BEQ .oob_off
     STA !ram_sprite_features_active
     JSL upload_sprite_oob_tiles
-    RTS
+    RTL
 
   .oob_off
     LDA #$0000 : STA !ram_sprite_features_active
-    RTS
+    RTL
 }
+
+sprites_spacetime_infohud:
+    dw !ACTION_CHOICE
+    dl #!ram_spacetime_infohud
+    dw #$0000
+    db #$28, "Spacetime HUD ", #$FF
+    db #$28, "    VANILLA", #$FF
+    db #$28, "  PRESERVED", #$FF
+    db #$FF
 
 action_sprite_features:
 {
@@ -1048,14 +1153,13 @@ action_sprite_features:
 
   .enabled
     STA !ram_sprite_features_active
-    RTS
+    RTL
 }
 
 
 ; -----------
 ; Events menu
 ; -----------
-
 EventsMenu:
     dw #events_resetevents
     dw #events_resetdoors
@@ -1079,13 +1183,13 @@ EventsMenu:
     %cm_header("EVENTS")
 
 events_resetevents:
-    %cm_jsr("Reset All Events", action_reset_events, #$0000)
+    %cm_jsl("Reset All Events", action_reset_events, #$0000)
 
 events_resetdoors:
-    %cm_jsr("Reset All Doors", action_reset_doors, #$0000)
+    %cm_jsl("Reset All Doors", action_reset_doors, #$0000)
 
 events_resetitems:
-    %cm_jsr("Reset All Items", action_reset_items, #$0000)
+    %cm_jsl("Reset All Items", action_reset_items, #$0000)
 
 events_goto_bosses:
     %cm_submenu("Bosses", #BossesMenu)
@@ -1131,8 +1235,8 @@ action_reset_events:
     LDA #$0000
     STA $7ED820
     STA $7ED822
-    LDA #!SOUND_MENU_JSR : JSL $80903F
-    RTS
+    LDA #!SOUND_MENU_JSL : JSL !SFX_LIB1
+    RTL
 }
 
 action_reset_doors:
@@ -1141,13 +1245,11 @@ action_reset_doors:
     %ai8()
     LDX #$B0
     LDA #$00
--   STA $7ED800, X
-    INX
-    CPX #$D0
-    BNE -
+-   STA $7ED800,X
+    INX : CPX #$D0 : BNE -
     PLP
-    LDA #!SOUND_MENU_JSR : JSL $80903F
-    RTS
+    LDA #!SOUND_MENU_JSL : JSL !SFX_LIB1
+    RTL
 }
 
 action_reset_items:
@@ -1156,13 +1258,11 @@ action_reset_items:
     %ai8()
     LDX #$70
     LDA #$00
--   STA $7ED800, X
-    INX
-    CPX #$90
-    BNE -
+-   STA $7ED800,X
+    INX : CPX #$90 : BNE -
     PLP
-    LDA #!SOUND_MENU_JSR : JSL $80903F
-    RTS
+    LDA #!SOUND_MENU_JSL : JSL !SFX_LIB1
+    RTL
 }
 
 
@@ -1223,20 +1323,27 @@ boss_mb:
 ; Infohud menu
 ; --------------
 
+pushpc
+org $85C000
+print pc, " mainmenu InfoHUD start"
+
 InfoHudMenu:
     dw #ih_goto_display_mode
     dw #ih_display_mode
     dw #$FFFF
-;    dw #ih_goto_room_strat
-;    dw #ih_room_strat
-;    dw #$FFFF
+    dw #ih_goto_room_strat
+    dw #ih_room_strat
+    dw #$FFFF
     dw #ih_top_HUD_mode
     dw #$FFFF
     dw #ih_room_counter
     dw #ih_lag_counter
     dw #ih_reset_seg_later
-    dw #ih_lag
+if !FEATURE_SD2SNES
+    dw #ih_freeze_on_load
+endif
     dw #ih_status_icons
+    dw #ih_lag
     dw #$FFFF
     dw #ih_ram_watch
     dw #$0000
@@ -1269,72 +1376,72 @@ DisplayModeMenu:
     %cm_header("INFOHUD DISPLAY MODE")
 
 ihmode_enemyhp:
-    %cm_jsr("Enemy HP", #action_select_infohud_mode, #$0000)
+    %cm_jsl("Enemy HP", #action_select_infohud_mode, #$0000)
 
 !IH_MODE_ROOMSTRAT_INDEX = $0001
 ihmode_roomstrat:
-    %cm_jsr("Room Strat", #action_select_infohud_mode, #$0001)
+    %cm_jsl("Room Strat", #action_select_infohud_mode, #$0001)
 
 ihmode_chargetimer:
-    %cm_jsr("Charge Timer", #action_select_infohud_mode, #$0002)
+    %cm_jsl("Charge Timer", #action_select_infohud_mode, #$0002)
 
 ihmode_xfactor:
-    %cm_jsr("X-Factor Timer", #action_select_infohud_mode, #$0003)
+    %cm_jsl("X-Factor Timer", #action_select_infohud_mode, #$0003)
 
 ihmode_cooldowncounter:
-    %cm_jsr("Cooldown Timer", #action_select_infohud_mode, #$0004)
+    %cm_jsl("Cooldown Timer", #action_select_infohud_mode, #$0004)
 
 ihmode_shinetimer:
-    %cm_jsr("Shinespark Timer", #action_select_infohud_mode, #$0005)
+    %cm_jsl("Shinespark Timer", #action_select_infohud_mode, #$0005)
 
 ihmode_dashcounter:
-    %cm_jsr("Dash Counter", #action_select_infohud_mode, #$0006)
+    %cm_jsl("Dash Counter", #action_select_infohud_mode, #$0006)
 
 !IH_MODE_SHINETUNE_INDEX = $0007
 ihmode_shinetune:
-    %cm_jsr("Shine Tune", #action_select_infohud_mode, #$0007)
+    %cm_jsl("Shine Tune", #action_select_infohud_mode, #$0007)
 
 ihmode_iframecounter:
-    %cm_jsr("I-Frame Counter", #action_select_infohud_mode, #$0008)
+    %cm_jsl("I-Frame Counter", #action_select_infohud_mode, #$0008)
 
 ihmode_spikesuit:
-    %cm_jsr("Spikesuit Trainer", #action_select_infohud_mode, #$0009)
+    %cm_jsl("Spikesuit Trainer", #action_select_infohud_mode, #$0009)
 
 ihmode_lagcounter:
-    %cm_jsr("CPU Usage", #action_select_infohud_mode, #$000A)
+    %cm_jsl("CPU Usage", #action_select_infohud_mode, #$000A)
 
 ihmode_xpos:
-    %cm_jsr("X Position", #action_select_infohud_mode, #$000B)
+    %cm_jsl("X Position", #action_select_infohud_mode, #$000B)
 
 ihmode_ypos:
-    %cm_jsr("Y Position", #action_select_infohud_mode, #$000C)
+    %cm_jsl("Y Position", #action_select_infohud_mode, #$000C)
 
 ihmode_hspeed:
-    %cm_jsr("Horizontal Speed", #action_select_infohud_mode, #$000D)
+    %cm_jsl("Horizontal Speed", #action_select_infohud_mode, #$000D)
 
 !IH_MODE_VSPEED_INDEX = $000E
 ihmode_vspeed:
-    %cm_jsr("Vertical Speed", #action_select_infohud_mode, #$000E)
+    %cm_jsl("Vertical Speed", #action_select_infohud_mode, #$000E)
 
 ihmode_quickdrop:
-    %cm_jsr("Quickdrop Trainer", #action_select_infohud_mode, #$000F)
+    %cm_jsl("Quickdrop Trainer", #action_select_infohud_mode, #$000F)
 
 ihmode_walljump:
-    %cm_jsr("Walljump Trainer", #action_select_infohud_mode, #$0010)
+    %cm_jsl("Walljump Trainer", #action_select_infohud_mode, #$0010)
 
 ihmode_shottimer:
-    %cm_jsr("Shot Timer", #action_select_infohud_mode, #$0011)
+    %cm_jsl("Shot Timer", #action_select_infohud_mode, #$0011)
 
 !IH_MODE_RAMWATCH_INDEX = $0012
 ihmode_ramwatch:
-    %cm_jsr("RAM Watch", #action_select_infohud_mode, #$0012)
+    %cm_jsl("RAM Watch", #action_select_infohud_mode, #$0012)
 
 action_select_infohud_mode:
 {
     TYA : STA !sram_display_mode
     JSL cm_go_back
     JSL cm_calculate_max
-    RTS
+    RTL
 }
 
 ih_display_mode:
@@ -1383,38 +1490,38 @@ RoomStratMenu:
     %cm_footer("ROOM STRAT MUST BE ACTIVE")
 
 ihstrat_doorskip:
-    %cm_jsr("Parlor-Climb Door Skip", #action_select_room_strat, #$0000)
+    %cm_jsl("Parlor-Climb Door Skip", #action_select_room_strat, #$0000)
 
 ihstrat_tacotank:
-    %cm_jsr("Taco Tank", #action_select_room_strat, #$0001)
+    %cm_jsl("Taco Tank", #action_select_room_strat, #$0001)
 
 ihstrat_gateglitch:
-    %cm_jsr("Gate Glitch", #action_select_room_strat, #$0002)
+    %cm_jsl("Gate Glitch", #action_select_room_strat, #$0002)
 
 ihstrat_moatcwj:
-    %cm_jsr("Moat CWJ", #action_select_room_strat, #$0003)
+    %cm_jsl("Moat CWJ", #action_select_room_strat, #$0003)
 
 ihstrat_robotflush:
-    %cm_jsr("Robot Flush", #action_select_room_strat, #$0004)
+    %cm_jsl("Robot Flush", #action_select_room_strat, #$0004)
 
 ihstrat_shinetopb:
-    %cm_jsr("Shine to PB", #action_select_room_strat, #$0005)
+    %cm_jsl("Shine to PB", #action_select_room_strat, #$0005)
 
 ihstrat_elevatorcf:
-    %cm_jsr("Elevator Crystal Flash", #action_select_room_strat, #$0006)
+    %cm_jsl("Elevator Crystal Flash", #action_select_room_strat, #$0006)
 
 ihstrat_botwooncf:
-    %cm_jsr("Botwoon Crystal Flash", #action_select_room_strat, #$0007)
+    %cm_jsl("Botwoon Crystal Flash", #action_select_room_strat, #$0007)
 
 ihstrat_snailclip:
-    %cm_jsr("Aqueduct Snail Clip", #action_select_room_strat, #$0008)
+    %cm_jsl("Aqueduct Snail Clip", #action_select_room_strat, #$0008)
 
 ihstrat_threejumpskip:
-    %cm_jsr("Three Jump Baby Skip", #action_select_room_strat, #$0009)
+    %cm_jsl("Three Jump Baby Skip", #action_select_room_strat, #$0009)
 
 !IH_STRAT_MBHP_INDEX = $000A
 ihstrat_mbhp:
-    %cm_jsr("Mother Brain HP", #action_select_room_strat, #$000A)
+    %cm_jsl("Mother Brain HP", #action_select_room_strat, #$000A)
 
 action_select_room_strat:
 {
@@ -1422,7 +1529,7 @@ action_select_room_strat:
     LDA #!IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
     JSL cm_go_back
     JSL cm_calculate_max
-    RTS
+    RTL
 }
 
 ih_room_strat:
@@ -1444,7 +1551,7 @@ ih_room_strat:
     db #$FF
     .routine
         LDA #$0001 : STA !sram_display_mode
-        RTS
+        RTL
 
 ih_top_HUD_mode:
     dw !ACTION_CHOICE
@@ -1455,8 +1562,6 @@ ih_top_HUD_mode:
     db #$28, "ay RESERVES", #$FF
     db #$28, "ay  VANILLA", #$FF
     db #$FF
-
-!TOP_DISPLAY_VANILLA = #$0002
 
 ih_room_counter:
     dw !ACTION_CHOICE
@@ -1476,48 +1581,41 @@ ih_lag_counter:
     db #$28, "       FULL", #$FF
     db #$FF
 
-ih_status_icons:
-    %cm_toggle("Status Icons", !sram_status_icons, #1, #toggle_status_icons)
+ih_freeze_on_load:
+    %cm_toggle("Freeze on Load State", !ram_freeze_on_load, #$0001, #0)
 
-toggle_status_icons:
-{
+ih_reset_seg_later:
+    %cm_jsl("Reset Segment Next Room", #.routine, #$FFFF)
+  .routine
+    TYA : STA !ram_reset_segment_later
+    RTL
+
+ih_status_icons:
+    %cm_toggle("Status Icons", !sram_status_icons, #1, #.routine)
+  .routine
     LDA !IH_BLANK : STA $7EC654 : STA $7EC656 : STA $7EC658
-    RTS
-}
+    RTL
 
 ih_lag:
     %cm_numfield("Artificial Lag", !sram_artificial_lag, 0, 64, 1, 4, #0)
 
-ih_reset_seg_later:
-    %cm_jsr("Reset Segment in Next Room", #.routine, #$FFFF)
-    .routine
-        TYA : STA !ram_reset_segment_later
-        RTS
-
 ih_ram_watch:
-    %cm_jsr("Customize RAM Watch", #ih_prepare_ram_watch_menu, #RAMWatchMenu)
+    %cm_jsl("Customize RAM Watch", #ih_prepare_ram_watch_menu, #RAMWatchMenu)
 
 incsrc ramwatchmenu.asm
 
-
-; -----------------
-; Room Layout menu
-; -----------------
-
-LayoutMenu:
-    dw #layout_magnetstairs
-    dw #$0000
-    %cm_header("ROOM LAYOUT")
-    %cm_footer("APPLIED WHEN ROOM RELOADED")
-
-!ROOM_LAYOUT_MAGNET_STAIRS = #$0001
-layout_magnetstairs:
-    %cm_toggle_bit("Remove Magnet Stairs", !sram_room_layout, !ROOM_LAYOUT_MAGNET_STAIRS, #0)
+print pc, " mainmenu InfoHUD end"
+warnpc $B3F000 ; mainmenu.asm
+pullpc
 
 
 ; ----------
 ; Game menu
 ; ----------
+
+pushpc
+org $B3F000
+print pc, " mainmenu GameMenu start"
 
 GameMenu:
     dw #game_alternatetext
@@ -1525,11 +1623,14 @@ GameMenu:
     dw #game_iconcancel
     dw #game_goto_controls
     dw #$FFFF
+    dw #game_cutscenes
     dw #game_fanfare_toggle
     dw #game_music_toggle
+    dw #game_healthalarm
     dw #$FFFF
     dw #game_debugmode
     dw #game_debugbrightness
+    dw #game_pacifist
     dw #game_debugprojectiles
     dw #game_debugfixscrolloffsets
     dw #$FFFF
@@ -1544,6 +1645,9 @@ GameMenu:
 
 game_alternatetext:
     %cm_toggle("Japanese Text", $7E09E2, #$0001, #0)
+
+game_pacifist:
+    %cm_toggle("Pacifist Mode", !ram_pacifist, #$0001, #0)
 
 game_debugprojectiles:
     %cm_toggle_bit("Enable Projectiles", $7E198D, #$8000, #0)
@@ -1579,27 +1683,21 @@ CutscenesMenu:
     dw #$0000
     %cm_header("CUTSCENES")
 
-!CUTSCENE_SKIP_INTRO = #$0001
 cutscenes_skip_intro:
     %cm_toggle_bit("Skip Intro", !sram_cutscenes, !CUTSCENE_SKIP_INTRO, #0)
 
-!CUTSCENE_SKIP_CERES_ARRIVAL = #$0002
 cutscenes_skip_ceres_arrival:
     %cm_toggle_bit("Skip Ceres Arrival", !sram_cutscenes, !CUTSCENE_SKIP_CERES_ARRIVAL, #0)
 
-!CUTSCENE_SKIP_G4 = #$0080
 cutscenes_skip_g4:
     %cm_toggle_bit("Skip G4", !sram_cutscenes, !CUTSCENE_SKIP_G4, #0)
 
-!CUTSCENE_FAST_KRAID = #$0400
 cutscenes_fast_kraid:
     %cm_toggle_bit("Skip Kraid Intro", !sram_cutscenes, !CUTSCENE_FAST_KRAID, #0)
 
-!CUTSCENE_FAST_PHANTOON = #$0200
 cutscenes_fast_phantoon:
     %cm_toggle_bit("Skip Phantoon Intro", !sram_cutscenes, !CUTSCENE_FAST_PHANTOON, #0)
 
-!CUTSCENE_FAST_MB = #$0100
 cutscenes_fast_mb:
     %cm_toggle_bit("Fast Mother Brain", !sram_cutscenes, !CUTSCENE_FAST_MB, #0)
 
@@ -1623,11 +1721,22 @@ game_music_toggle:
     STZ $0639 : STZ $063B : STZ $063D : STZ $063F
     CMP #$0001 : BEQ .resume_music
     STZ $2140
-    RTS
+    RTL
   .resume_music
     LDA !MUSIC_DATA : CLC : ADC #$FF00 : PHA : STZ !MUSIC_DATA : PLA : JSL !MUSIC_ROUTINE
     LDA !MUSIC_TRACK : PHA : STZ !MUSIC_TRACK : PLA : JSL !MUSIC_ROUTINE
-    RTS
+    RTL
+
+game_healthalarm:
+    dw !ACTION_CHOICE
+    dl #!sram_healthalarm
+    dw #$0000
+    db #$28, "Low Health Ala", #$FF
+    db #$28, "rm    NEVER", #$FF
+    db #$28, "rm  VANILLA", #$FF
+    db #$28, "rm   PB FIX", #$FF
+    db #$28, "rm IMPROVED", #$FF
+    db #$FF
 
 game_debugmode:
     %cm_toggle("Debug Mode", $7E05D1, #$0001, #0)
@@ -1639,7 +1748,7 @@ game_minimap:
     %cm_toggle("Minimap", !ram_minimap, #$0001, #0)
 
 game_clear_minimap:
-    %cm_jsr("Clear Minimap", .clear_minimap, #$0000)
+    %cm_jsl("Clear Minimap", .clear_minimap, #$0000)
 
   .clear_minimap
     LDA #$0000 : STA !ram_map_counter : STA $7E0789
@@ -1654,25 +1763,9 @@ game_clear_minimap:
     STA $7EDB1C,X : STA $7EDC1C,X
     STA $7EDD1C,X : STA $7E07F7,X
     DEX : DEX : BPL .clear_minimap_loop
-    LDA #!SOUND_MENU_JSR : JSL $80903F
-    RTS
-
-GameLoopExtras:
-{
-    LDA !ram_magic_pants_enabled : BNE .enabled
-    LDA !ram_metronome : BNE .enabled
-    LDA #$0000 : STA !ram_game_loop_extras
-    RTS
-  .enabled
-    LDA #$0001 : STA !ram_game_loop_extras
-    RTS
-}
-
-GameLoopExtras_long:
-{
-    JSR GameLoopExtras
+    LDA #!SOUND_MENU_JSL : JSL !SFX_LIB1
     RTL
-}
+
 
 ; -------------------
 ; Controller Settings
@@ -1717,7 +1810,7 @@ controls_angle_down:
     %cm_ctrl_input("  ANGLE DOWN", !IH_INPUT_ANGLE_DOWN, action_submenu, #AssignAngleControlsMenu)
 
 controls_save_to_file:
-    %cm_jsr("Save to File", .routine, #0)
+    %cm_jsl("Save to File", .routine, #0)
   .routine
     LDA $0998 : CMP #$0002 : BEQ .fail
     LDA $0952 : BEQ .fileA
@@ -1726,7 +1819,7 @@ controls_save_to_file:
 
   .fail
     LDA #!SOUND_MENU_FAIL : JSL !SFX_LIB1
-    RTS
+    RTL
 
   .fileA
     LDX #$0020 : BRA .save
@@ -1745,8 +1838,8 @@ controls_save_to_file:
     LDA $09BA : STA $F00000,X : INX #2
     LDA $09BC : STA $F00000,X : INX #2
     LDA $09BE : STA $F00000,X
-    LDA #!SOUND_MENU_JSR : JSL !SFX_LIB1
-    RTS
+    LDA #!SOUND_MENU_JSL : JSL !SFX_LIB1
+    RTL
 
 AssignControlsMenu:
     dw controls_assign_A
@@ -1760,25 +1853,25 @@ AssignControlsMenu:
     %cm_header("ASSIGN AN INPUT")
 
 controls_assign_A:
-    %cm_jsr("A", action_assign_input, !CTRL_A)
+    %cm_jsl("A", action_assign_input, !CTRL_A)
 
 controls_assign_B:
-    %cm_jsr("B", action_assign_input, !CTRL_B)
+    %cm_jsl("B", action_assign_input, !CTRL_B)
 
 controls_assign_X:
-    %cm_jsr("X", action_assign_input, !CTRL_X)
+    %cm_jsl("X", action_assign_input, !CTRL_X)
 
 controls_assign_Y:
-    %cm_jsr("Y", action_assign_input, !CTRL_Y)
+    %cm_jsl("Y", action_assign_input, !CTRL_Y)
 
 controls_assign_Select:
-    %cm_jsr("Select", action_assign_input, !CTRL_SELECT)
+    %cm_jsl("Select", action_assign_input, !CTRL_SELECT)
 
 controls_assign_L:
-    %cm_jsr("L", action_assign_input, !CTRL_L)
+    %cm_jsl("L", action_assign_input, !CTRL_L)
 
 controls_assign_R:
-    %cm_jsr("R", action_assign_input, !CTRL_R)
+    %cm_jsl("R", action_assign_input, !CTRL_R)
 
 AssignAngleControlsMenu:
     dw #controls_assign_L
@@ -1794,13 +1887,13 @@ action_assign_input:
     TYA : STA $7E0000,X                      ; store new input
     STY $C4                                  ; saved new input for later
 
-    JSR check_duplicate_inputs
+    JSL check_duplicate_inputs
 
-    LDA !ram_cm_ctrl_assign : CMP #$FFFF : BEQ +
-    LDA #!SOUND_MENU_JSR : JSL !SFX_LIB1
+    CMP #$FFFF : BEQ +                       ; skip sfx if detection failed
+    LDA #!SOUND_MENU_JSL : JSL !SFX_LIB1
 +   JSL cm_go_back
     JSL cm_calculate_max
-    RTS
+    RTL
 }
 
 check_duplicate_inputs:
@@ -1853,79 +1946,78 @@ check_duplicate_inputs:
 
   .not_detected
     LDA #!SOUND_MENU_FAIL : JSL !SFX_LIB1
-    LDA #$FFFF : STA !ram_cm_ctrl_assign
+    LDA #$FFFF
     JSL cm_go_back
-    JSL cm_calculate_max
-    RTS
+    JML cm_calculate_max
 
   .shot
     LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +  ; check if old input is L or R
     LDA #$0000 : STA $09B2                      ; unassign input
-    RTS
+    RTL
 +   LDA !ram_cm_ctrl_swap : STA $09B2           ; input is safe to be assigned
-    RTS
+    RTL
 
   .jump
     LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +
     LDA #$0000 : STA $09B4
-    RTS
+    RTL
 +   LDA !ram_cm_ctrl_swap : STA $09B4
-    RTS
+    RTL
 
   .dash
     LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +
     LDA #$0000 : STA $09B6
-    RTS
+    RTL
 +   LDA !ram_cm_ctrl_swap : STA $09B6
-    RTS
+    RTL
 
   .cancel
     LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +
     LDA #$0000 : STA $09B8
-    RTS
+    RTL
 +   LDA !ram_cm_ctrl_swap : STA $09B8
-    RTS
+    RTL
 
   .select
     LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +
     LDA #$0000 : STA $09BA
-    RTS
+    RTL
 +   LDA !ram_cm_ctrl_swap : STA $09BA
-    RTS
+    RTL
 
   .up
     LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ .unbind_up  ; check if input is L or R, unbind if not
     LDA !ram_cm_ctrl_swap : STA $09BE                    ; safe to assign input
     CMP $09BC : BEQ .swap_down                           ; check if input matches angle down
-    RTS
+    RTL
 
   .unbind_up
     STA $09BE               ; unassign up
-    RTS
+    RTL
 
   .swap_down
     CMP #$0020 : BNE +      ; check if angle up is assigned to L
     LDA #$0010 : STA $09BC  ; assign R to angle down
-    RTS
+    RTL
 +   LDA #$0020 : STA $09BC  ; assign L to angle down
-    RTS
+    RTL
 
   .down
     LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ .unbind_down
     LDA !ram_cm_ctrl_swap : STA $09BC
     CMP $09BE : BEQ .swap_up
-    RTS
+    RTL
 
   .unbind_down
     STA $09BC               ; unassign down
-    RTS
+    RTL
 
   .swap_up
     CMP #$0020 : BNE +
     LDA #$0010 : STA $09BE
-    RTS
+    RTL
 +   LDA #$0020 : STA $09BE
-    RTS
+    RTL
 }
 
 ControllerCommonMenu:
@@ -1939,19 +2031,19 @@ ControllerCommonMenu:
     %cm_footer("WIKI.SUPERMETROID.RUN")
 
 controls_common_default:
-    %cm_jsr("Default (D1)", #action_set_common_controls, #$0000)
+    %cm_jsl("Default (D1)", #action_set_common_controls, #$0000)
 
 controls_common_d2:
-    %cm_jsr("Select+Cancel Swap (D2)", #action_set_common_controls, #$000E)
+    %cm_jsl("Select+Cancel Swap (D2)", #action_set_common_controls, #$000E)
 
 controls_common_d3:
-    %cm_jsr("D2 + Shot+Select Swap (D3)", #action_set_common_controls, #$001C)
+    %cm_jsl("D2 + Shot+Select Swap (D3)", #action_set_common_controls, #$001C)
 
 controls_common_d4:
-    %cm_jsr("MMX Style (D4)", #action_set_common_controls, #$002A)
+    %cm_jsl("MMX Style (D4)", #action_set_common_controls, #$002A)
 
 controls_common_d5:
-    %cm_jsr("SMW Style (D5)", #action_set_common_controls, #$0038)
+    %cm_jsl("SMW Style (D5)", #action_set_common_controls, #$0038)
 
 action_set_common_controls:
 {
@@ -1965,7 +2057,7 @@ action_set_common_controls:
     LDA.l ControllerLayoutTable+12,X : STA !IH_INPUT_ANGLE_DOWN
     JSL cm_go_back
     JSL cm_calculate_max
-    RTS
+    RTL
 
 ControllerLayoutTable:
     ;  shot     jump     dash     cancel        select        up       down
@@ -1975,6 +2067,9 @@ ControllerLayoutTable:
     dw !CTRL_Y, !CTRL_B, !CTRL_A, !CTRL_SELECT, !CTRL_X,      !CTRL_R, !CTRL_L ; MMX Style (D4)
     dw !CTRL_X, !CTRL_B, !CTRL_Y, !CTRL_SELECT, !CTRL_A,      !CTRL_R, !CTRL_L ; SMW Style (D5)
 }
+
+print pc, " mainmenu GameMenu start"
+pullpc
 
 
 ; ----------
@@ -2002,7 +2097,7 @@ rng_rerandomize:
     %cm_toggle("Rerandomize", !sram_rerandomize, #$0001, #0)
 
 rng_goto_phanmenu:
-    %cm_jsr("Phantoon", #ih_prepare_phantoon_menu, #PhantoonMenu)
+    %cm_jsl("Phantoon", #ih_prepare_phantoon_menu, #PhantoonMenu)
 
 rng_botwoon_rng:
     dw !ACTION_CHOICE
@@ -2019,7 +2114,7 @@ rng_botwoon_rng:
     LDA !ram_cm_botwoon_rng : BEQ +
     DEC : ASL #3 : INC
 +   STA !ram_botwoon_rng
-    RTS
+    RTL
 
 rng_draygon_rng_right:
     dw !ACTION_CHOICE
@@ -2067,10 +2162,11 @@ rng_kraid_rng:
 ; --------------
 ih_prepare_phantoon_menu:
     LDA !ram_phantoon_rng_inverted : PHA
-    JSR phan_set_phan_first_phase
-    JSR phan_set_phan_second_phase
+    JSL phan_set_phan_first_phase
+    JSL phan_set_phan_second_phase
     PLA : STA !ram_phantoon_rng_inverted
-    JMP action_submenu
+    %setmenubank()
+    JML action_submenu
 
 PhantoonMenu:
     dw #phan_first_phase
@@ -2105,17 +2201,17 @@ phan_set_phan_first_phase:
     LDX #$0000
     LDA !ram_phantoon_rng_round_1 : BEQ .end_first_loop
   .first_loop
-    CMP phan_set_phan_phase_table,X : BEQ .end_first_loop
+    CMP.l phan_set_phan_phase_table,X : BEQ .end_first_loop
     INX : INX : CPX #$0018 : BNE .first_loop
   .end_first_loop
     TXA : LSR : STA !ram_cm_phan_first_phase
-    RTS
+    RTL
 
 phan_set_phan_second_phase:
     LDX #$0000
     LDA !ram_phantoon_rng_round_2 : BEQ .end_second_loop
   .second_loop
-    CMP phan_set_phan_phase_table,X : BEQ .end_second_loop
+    CMP.l phan_set_phan_phase_table,X : BEQ .end_second_loop
     INX : INX : CPX #$0018 : BNE .second_loop
   .end_second_loop
     TXA : LSR : STA !ram_cm_phan_second_phase
@@ -2123,7 +2219,7 @@ phan_set_phan_second_phase:
     LDA #$0002
   .set_inverted
     STA !ram_phantoon_rng_inverted
-    RTS
+    RTL
 
 
 phan_first_phase:
@@ -2147,8 +2243,8 @@ phan_first_phase:
     db #$FF
   .routine
     ASL : TAX
-    LDA phan_set_phan_phase_table,X : STA !ram_phantoon_rng_round_1
-    RTS
+    LDA.l phan_set_phan_phase_table,X : STA !ram_phantoon_rng_round_1
+    RTL
 
 phan_fast_left_1:
     %cm_toggle_bit("#1 Fast Left", !ram_phantoon_rng_round_1, #$0020, phan_set_phan_first_phase)
@@ -2191,12 +2287,12 @@ phan_second_phase:
     db #$FF
   .routine
     ASL : TAX
-    LDA phan_set_phan_phase_table,X : STA !ram_phantoon_rng_round_2
+    LDA.l phan_set_phan_phase_table,X : STA !ram_phantoon_rng_round_2
     BEQ .set_inverted : TXA : BEQ .set_inverted
     LDA #$0002
   .set_inverted
     STA !ram_phantoon_rng_inverted
-    RTS
+    RTL
 
 phan_fast_left_2:
     %cm_toggle_bit("#2 Fast Left", !ram_phantoon_rng_round_2, #$0020, phan_set_phan_second_phase)
@@ -2274,8 +2370,8 @@ CtrlMenu:
         dw #ctrl_save_state
         dw #ctrl_load_state
     endif
-;    dw #ctrl_load_last_preset
-;    dw #ctrl_random_preset
+    dw #ctrl_load_last_preset
+    dw #ctrl_random_preset
     dw #ctrl_save_custom_preset
     dw #ctrl_load_custom_preset
     dw #ctrl_inc_custom_preset
@@ -2338,7 +2434,7 @@ ctrl_update_timers:
     %cm_ctrl_shortcut("Update Timers", !sram_ctrl_update_timers)
 
 ctrl_clear_shortcuts:
-    %cm_jsr("Clear Shortcuts", action_clear_shortcuts, #$0000)
+    %cm_jsl("Clear Shortcuts", action_clear_shortcuts, #$0000)
 
 action_clear_shortcuts:
 {
@@ -2360,8 +2456,8 @@ action_clear_shortcuts:
     STA !sram_ctrl_update_timers
     ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
-    LDA #!SOUND_MENU_JSR : JSL !SFX_LIB1
-    RTS
+    LDA #!SOUND_MENU_JSL : JSL !SFX_LIB1
+    RTL
 }
 
 GameModeExtras:
@@ -2380,32 +2476,5 @@ GameModeExtras:
 
   .enabled
     STA !ram_game_mode_extras
-    RTL
-}
-
-MainMenuJSR:
-{
-  .toggle
-  .toggle_bit
-    LDX #$0000
-    JSR ($000A,X)
-    RTL
-
-  .jsr
-  .controller_input
-    LDX #$0000
-    JSR ($0004,X)
-    RTL
-
-  .numfield
-  .numfield_word
-  .numfield_color
-    LDX #$0000
-    JSR ($0020,X)
-    RTL
-
-  .choice
-    LDX #$0000
-    JSR ($0008,X)
     RTL
 }
