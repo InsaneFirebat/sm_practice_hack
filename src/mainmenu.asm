@@ -834,9 +834,9 @@ action_glitched_beam:
 }
 
 
-; -------------
+; ---------------
 ; Teleport menu
-; -------------
+; ---------------
 
 TeleportMenu:
     dw #tel_goto_crat
@@ -1031,13 +1031,22 @@ TeleportTourianMenu:
     dw #tel_tourian08
     dw #tel_tourian11
     dw #$0000
-    %cm_header("TELEPORT")
+    %cm_header("CRATERIA SAVE STATIONS")
 
 tel_crateriaship:
     %cm_jsl("Crateria Ship", #action_teleport, #$0000)
 
 tel_crateriaparlor:
     %cm_jsl("Crateria Parlor", #action_teleport, #$0001)
+
+TeleportBrinstarMenu:
+    dw #tel_brinstarpink
+    dw #tel_brinstargreenshaft
+    dw #tel_brinstargreenetecoons
+    dw #tel_brinstarkraid
+    dw #tel_brinstarredtower
+    dw #$0000
+    %cm_header("BRINSTAR SAVE STATIONS")
 
 tel_brinstarpink:
     %cm_jsl("Brinstar Pink Spospo", #action_teleport, #$0100)
@@ -1053,6 +1062,16 @@ tel_brinstarkraid:
 
 tel_brinstarredtower:
     %cm_jsl("Brinstar Red Tower", #action_teleport, #$0104)
+
+TeleportNorfairMenu:
+    dw #tel_norfairgrapple
+    dw #tel_norfairbubble
+    dw #tel_norfairtunnel
+    dw #tel_norfaircrocomire
+    dw #tel_norfairlnelevator
+    dw #tel_norfairridley
+    dw #$0000
+    %cm_header("NORFAIR SAVE STATIONS")
 
 tel_norfairgrapple:
     %cm_jsl("Norfair Grapple", #action_teleport, #$0200)
@@ -1072,8 +1091,21 @@ tel_norfairlnelevator:
 tel_norfairridley:
     %cm_jsl("Norfair Ridley", #action_teleport, #$0205)
 
+TeleportWreckedShipMenu:
+    dw #tel_wreckedship
+    dw #$0000
+    %cm_header("WRECKED SHIP SAVE STATIONS")
+
 tel_wreckedship:
     %cm_jsl("Wrecked Ship", #action_teleport, #$0300)
+
+TeleportMaridiaMenu:
+    dw #tel_maridiatube
+    dw #tel_maridiaelevator
+    dw #tel_maridiaaqueduct
+    dw #tel_maridiadraygon
+    dw #$0000
+    %cm_header("MARIDIA SAVE STATIONS")
 
 tel_maridiatube:
     %cm_jsl("Maridia Tube", #action_teleport, #$0400)
@@ -1087,8 +1119,14 @@ tel_maridiaaqueduct:
 tel_maridiadraygon:
     %cm_jsl("Maridia Draygon", #action_teleport, #$0403)
 
+TeleportTourianMenu:
+    dw #tel_tourianentrance
+    dw #tel_tourianmb
+    dw #$0000
+    %cm_header("TOURIAN SAVE STATIONS")
+
 tel_tourianentrance:
-    %cm_jsr("Tourian Entrance", #action_teleport, #$0500)
+    %cm_jsl("Tourian Entrance", #action_teleport, #$0500)
 
 tel_tourianmb:
     %cm_jsr("Mother Brain", #action_teleport, #$0501)
@@ -1149,6 +1187,32 @@ tel_debug_station:
 tel_debug_execute:
     %cm_jsr("TELEPORT", #action_debug_teleport, #$0000)
 
+DebugTeleportMenu:
+    dw #tel_debug_area
+    dw #tel_debug_station
+    dw #tel_debug_execute
+    dw #$0000
+    %cm_header("DEBUG LOAD POINTS")
+
+tel_debug_area:
+    dw !ACTION_CHOICE
+    dl #!ram_tel_debug_area
+    dw #$0000
+    db #$28, "Select Area", #$FF
+        db #$28, "   CRATERIA", #$FF
+        db #$28, "   BRINSTAR", #$FF
+        db #$28, "    NORFAIR", #$FF
+        db #$28, "  REQT SHIP", #$FF
+        db #$28, "    MARIDIA", #$FF
+        db #$28, "    TOURIAN", #$FF
+    db #$FF
+
+tel_debug_station:
+    %cm_numfield_hex("Station ID", !ram_tel_debug_station, 0, 22, 1, 4, #0)
+
+tel_debug_execute:
+    %cm_jsl("TELEPORT", #action_debug_teleport, #$0000)
+
 action_teleport:
 {
     ; teleport destination in Y when called
@@ -1170,12 +1234,19 @@ action_teleport:
 
     LDA $09A1 : AND #$7FFF : STA $09A1
 
-+   JSL reset_all_counters
+    JSL reset_all_counters
     JSL stop_all_sounds
 
     LDA #$0001 : STA !ram_cm_leave
 
-    RTL
+    RTS
+}
+
+action_debug_teleport:
+{
+    LDA !ram_tel_debug_area : XBA
+    ORA !ram_tel_debug_station : TAY
+    JMP action_teleport
 }
 
 action_text:
