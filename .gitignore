@@ -5,6 +5,7 @@ resources/smpal_orig.s[mf]c
 build/*.ips
 build/*.smc
 build/*.sfc
+build/HACKS/*
 *.sw[op]
 tools/*.smv
 tools/*.asm
