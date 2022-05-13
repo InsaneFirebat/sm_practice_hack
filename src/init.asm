@@ -197,6 +197,8 @@ init_sram:
     LDA #$4000 : STA !sram_cm_scroll_button
     LDA #$0002 : STA !sram_cm_scroll_delay
 
+    LDA #$0000 : STA !sram_cm_font
+
     LDA #$FEED : STA !sram_seed_X
     LDA #$5EED : STA !sram_seed_Y
 

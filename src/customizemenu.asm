@@ -57,6 +57,8 @@ CustomizeMenu:
     dw #$FFFF
     dw #ifb_customsfx
     dw #$FFFF
+    dw #ifb_customfont
+    dw #$FFFF
     dw #ifb_menuscroll_button
     dw #ifb_menuscroll_delay
     dw #$0000
@@ -151,6 +153,11 @@ paletterando_confirm:
 
 ifb_customsfx:
     %cm_submenu("Customize Menu Sounds", #CustomMenuSFXMenu)
+
+ifb_customfont:
+    %cm_numfield("Select Font", !sram_cm_font, 0, 1, 1, 1, .routine)
+  .routine
+    JML cm_transfer_custom_tileset
 
 CustomPalettesMenu:
     dw #custompalettes_menutext

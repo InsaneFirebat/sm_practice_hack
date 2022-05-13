@@ -146,15 +146,26 @@ cm_transfer_custom_tileset:
 {
     PHP
     %a16()
-    LDA !ROOM_ID : CMP #$A59F : BEQ .kraid_vram
+
+    ; Choose font
+    LDA !sram_cm_font : BNE .font2
+    LDA.l #cm_hud_table : STA $C1
+    LDA.l #cm_hud_table>>16 : STA $C3
+    BRA +
+
+  .font2
+    LDA.l #cm_hud_table2 : STA $C1
+    LDA.l #cm_hud_table2>>16 : STA $C3
+
++   LDA !ROOM_ID : CMP #$A59F : BEQ .kraid_vram
 
     ; Load custom vram to normal location
     %a8()
     LDA #$04 : STA $210C
     LDA #$80 : STA $2115 ; word-access, incr by 1
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
-    LDX #cm_hud_table : STX $4302 ; Source offset
-    LDA #cm_hud_table>>16 : STA $4304 ; Source bank
+    LDX $C1 : STX $4302 ; Source offset
+    LDA $C3 : STA $4304 ; Source bank
     LDX #$1000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
@@ -168,8 +179,8 @@ cm_transfer_custom_tileset:
     LDA #$02 : STA $210C
     LDA #$80 : STA $2115 ; word-access, incr by 1
     LDX #$2000 : STX $2116 ; VRAM address (4000 in vram)
-    LDX #cm_hud_table : STX $4302 ; Source offset
-    LDA #cm_hud_table>>16 : STA $4304 ; Source bank
+    LDX $C1 : STX $4302 ; Source offset
+    LDA $C3 : STA $4304 ; Source bank
     LDX #$0900 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
@@ -1906,6 +1917,12 @@ MenuResources:
 ; for BRBmenu.asm
 
 print pc, " menu end"
+
+
+org $FF8000
+cm_hud_table2:
+    ; 1000h bytes
+    incbin ../resources/cm_gfx2.bin
 
 
 ; -----------
