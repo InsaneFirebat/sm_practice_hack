@@ -508,6 +508,11 @@ else
 endif
 
   .mb
+    LDA !sram_cutscenes : BIT !CUTSCENE_FAST_MB : BNE .fast_mb_enabled
+    ; Lower acid if rando settings not enabled
+    LDA #$0002 : JSL $89AB02
+
+  .fast_mb_enabled
     LDA $0FCC : BEQ .init_health
     LDA #$0000 : STA $0FB2 : STA $0FCC
     BRA .continue

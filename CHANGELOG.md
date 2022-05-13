@@ -1,6 +1,9 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.1]  Fixed acid not lowering far enough in MB2 presets if fast MB is off
+* [2.4.2]    Added experimental option to freeze the game on loadstate by idlechild
+* [2.4.2]    Fixed decrementing past minimum in menu numfield
 * [2.4.1.11] Added an option for easier capture cropping
 * [2.4.1.10] Prevent accidental pauses when opening the menu by NobodyNada
 * [2.4.1.10] Fixed a rare decompression error with preset loading by P.JBoy and idlechild
