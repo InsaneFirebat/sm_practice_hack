@@ -15,7 +15,7 @@
 !VERSION_MINOR = 4
 !VERSION_BUILD = 2
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 1
+!VERSION_REV_2 = 2
 
 
 ; ---------
@@ -662,6 +662,7 @@ endif
 !sram_scroll_button = !SRAM_START+$212
 !sram_cm_scroll_button = !SRAM_START+$214
 !sram_cm_scroll_delay = !SRAM_START+$216
+!sram_cm_font = !SRAM_START+$218
 
 !sram_phantoon_intro = !SRAM_START+$220
 !sram_kraid_intro = !SRAM_START+$222

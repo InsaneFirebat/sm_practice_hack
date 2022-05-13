@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.2]  Added option to change the menu font
 * [2.4.2.1]  Fixed acid not lowering far enough in MB2 presets if fast MB is off
 * [2.4.2]    Added experimental option to freeze the game on loadstate by idlechild
 * [2.4.2]    Fixed decrementing past minimum in menu numfield
