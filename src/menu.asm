@@ -78,6 +78,7 @@ cm_start:
 
     JSL wait_for_lag_frame_long
     JSR cm_transfer_original_tileset
+    JSL overwrite_HUD_numbers
     JSR cm_transfer_original_cgram
 
     ; Update HUD (in case we added missiles etc.)

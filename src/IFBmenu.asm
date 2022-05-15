@@ -8,6 +8,7 @@ print pc, " mainmenuu IFBmenu start"
 
 IFBMenu:
     dw #ifb_customizemenu
+    dw #ifb_customizehud
     dw #$FFFF
 ;    dw #ifb_brb
     dw #ifb_soundtest
@@ -22,12 +23,19 @@ endif
     dw #ifb_capture_cropping
     dw #$FFFF
     dw #ifb_factory_reset
+if !FEATURE_DEV
+    dw #$FFFF
+    dw #ifb_emu_test
+endif
     dw #$0000
     %cm_header("CUSTOM ROMS ONLY")
     %cm_footer("MODIFIED BY INSANEFIREBAT")
 
 ifb_customizemenu:
     %cm_submenu("Customize Practice Menu", #CustomizeMenu)
+
+ifb_customizehud:
+    %cm_numfield("HUD Number Font", !sram_number_gfx_choice, 0, 22, 1, 2, #0)
 
 ifb_brb:
     %cm_submenu("BRB Screen", #BRBMenu)
@@ -54,6 +62,23 @@ ifb_capture_cropping:
 
 ifb_factory_reset:
     %cm_submenu("Factory Reset", #FactoryResetConfirm)
+
+if !FEATURE_DEV
+ifb_emu_test:
+    %cm_jsr("BRK 9F (crash) if bad emu", .routine, #0)
+  .routine
+    %a8()
+    LDA #$06 : STA $4202
+    LDA #$05 : STA $4203
+    %a16()
+    LDA $4216 : CMP #$001E : BEQ .badEmu
+    RTL
+
+  .badEmu
+    ; didn't wait for math
+;print pc, " DEBUG %%%%%%%%%% BRK #$9F bad emu"
+    BRK #$9F
+endif
 
 
 ; -------------------

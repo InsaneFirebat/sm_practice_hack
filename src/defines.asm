@@ -314,8 +314,8 @@
 !IH_HEALTHBOMB = #$085A
 !IH_RESERVE_AUTO = #$0C0C
 !IH_RESERVE_EMPTY = #$0C0D
-!IH_LETTER_A = #$0C64
-!IH_LETTER_B = #$0C65
+!IH_LETTER_A = #$0C76
+!IH_LETTER_B = #$0C77
 !IH_LETTER_C = #$0C58
 !IH_LETTER_D = #$0C59
 !IH_LETTER_E = #$0C5A
@@ -662,6 +662,7 @@ endif
 !sram_cm_scroll_button = !SRAM_START+$214
 !sram_cm_scroll_delay = !SRAM_START+$216
 !sram_cm_font = !SRAM_START+$218
+!sram_number_gfx_choice = !SRAM_START+$21A
 
 !sram_phantoon_intro = !SRAM_START+$220
 !sram_kraid_intro = !SRAM_START+$222

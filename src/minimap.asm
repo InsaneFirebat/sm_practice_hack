@@ -32,6 +32,7 @@ org $90A80A      ; normally runs after minimap grid has been drawn
 
 org $8282E5      ; write and clear tiles to VRAM
     JSR mm_write_and_clear_hud_tiles
+    JSL overwrite_HUD_numbers
     BRA .write_next_tiles
 
 org $828305
@@ -118,6 +119,7 @@ mm_write_hud_tiles_during_door_transition:
     ; Load in normal vram
     JSR $E039
     dl $9AB200 : dw $4000, $1000
+    JSL overwrite_HUD_numbers
     JMP $E492  ; resume logic
 
   .minimap_vram

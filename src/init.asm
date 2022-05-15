@@ -59,6 +59,7 @@ else
     JSL init_nonzero_wram
 endif
 
+  .done
     PLA
     ; Execute overwritten logic and return
 if !FEATURE_PAL
