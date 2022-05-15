@@ -1446,6 +1446,72 @@ print pc, " infohud end"
 warnpc $F0E000 ; spritefeat.asm
 
 
+org $FFE000
+print pc, " HUD number GFX bankFF start"
+
+NumberGFXChoice:
+incbin ../resources/num_gfx_choice.bin
+
+overwrite_HUD_numbers:
+{
+; runs after cm_original_tileset_transfer
+    ; vanilla first
+    PHP : %ai16()
+    PHB : PEA $0000 : PLB : PLB
+    LDA !sram_number_gfx_choice : BNE .custom_HUD_numbers
+    PLB : PLP
+    RTL
+
+  .custom_HUD_numbers
+    ; multiply by 100h and add to addr
+    XBA : CLC : ADC.l #NumberGFXChoice : TAY
+    %a8()
+
+    ; DMA tiles 1-9, 0
+    LDA #$80 : STA $2115 ; word access, inc by 1
+    LDX #$4000 : STX $2116 ; VRAM addr ($4000 x 2 = $8000)
+    STY $4302 ; src addr
+    LDA #NumberGFXChoice>>16 : STA $4304 ; src bank
+    LDX #$00A0 : STX $4305 ; size
+    LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
+    LDA #$18 : STA $4301 ; destination (VRAM write)
+    LDA #$01 : STA $420B ; initiate DMA (channel 1)
+
+    ; fix src addr in Y
+    %a16()
+    TYA : CLC : ADC #$00A0 : TAY
+    %a8()
+
+    ; DMA tiles A-B
+    LDX #$43B0 : STX $2116 ; VRAM addr ($43B0 x 2 = $8760)
+    STY $4302 ; src addr
+    LDA #NumberGFXChoice>>16 : STA $4304 ; src bank
+    LDX #$0020 : STX $4305 ; size
+    LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
+    LDA #$18 : STA $4301 ; destination (VRAM write)
+    LDA #$01 : STA $420B ; initiate DMA (channel 1)
+
+    ; fix src addr in Y again
+    %a16()
+    TYA : CLC : ADC #$0020 : TAY
+    %a8()
+
+    ; DMA tiles C-F
+    LDX #$42C0 : STX $2116 ; VRAM addr ($42C0 x 2 = $8580)
+    STY $4302 ; src addr
+    LDA #NumberGFXChoice>>16 : STA $4304 ; src bank
+    LDX #$0040 : STX $4305 ; size
+    LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
+    LDA #$18 : STA $4301 ; destination (VRAM write)
+    LDA #$01 : STA $420B ; initiate DMA (channel 1)
+
+  .done
+    PLB : PLP
+    RTL
+}
+print pc, " HUD number GFX bankFF start"
+
+
 ; Stuff that needs to be placed in bank 80
 org $80FC00
 print pc, " infohud bank80 start"
@@ -1500,7 +1566,7 @@ NumberGFXTable:
 
 HexGFXTable:
     dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
-    dw #$0C64, #$0C65, #$0C58, #$0C59, #$0C5A, #$0C5B
+    dw #$0C76, #$0C77, #$0C58, #$0C59, #$0C5A, #$0C5B
 
 ControllerTable1:
     dw #$0020, #$0800, #$0010, #$4000, #$0040, #$2000
