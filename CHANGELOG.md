@@ -1,7 +1,8 @@
 
 ## Changelog since v2.2.7
 
-* [2.4.2.2]  Added option to change the HUD number font (graphics from ALttP prac hack)
+* [2.4.2.2]  Press L+R+Sl+X at in-game Special Settings menu to reset practice menu shortcut
+* [2.4.2.2]  Added option to change the HUD number font (graphics from ALttP practice hack)
 * [2.4.2.2]  Added option to change the menu font
 * [2.4.2.1]  Fixed acid not lowering far enough in MB2 presets if fast MB is off
 * [2.4.2]    Added experimental option to freeze the game on loadstate by idlechild
