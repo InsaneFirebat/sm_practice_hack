@@ -255,6 +255,11 @@ org $808F65
     JML hook_set_music_data
 
 
+org $82F071
+    JSL IconCancelMenu
+    NOP
+
+
 org $87D000
 print pc, " misc start"
 
@@ -388,6 +393,18 @@ GameModeExtras:
 
   .enabled
     STA !ram_game_mode_extras
+    RTL
+}
+
+IconCancelMenu:
+{
+    ; Reset to default menu shortcut if L+R+Sl+X held
+    LDA !IH_CONTROLLER_PRI : CMP #$2060 : BNE .done
+    LDA #$3000 : STA !sram_ctrl_menu
+
+  .done
+    ; overwritten code
+    LDA !IH_CONTROLLER_PRI_NEW : BIT #$1380
     RTL
 }
 print pc, " misc end"
