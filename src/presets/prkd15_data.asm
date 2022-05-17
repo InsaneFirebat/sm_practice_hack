@@ -1218,14 +1218,11 @@ preset_prkd15_upper_norfair_double_chamber_revisited:
     dw $0919, $0000 ; Layer 2 Y position
     dw $09A6, $1007 ; Beams
     dw $09A8, $1007 ; Beams
-    dw $09C6, $0014 ; Missiles
-    dw $09C8, $0014 ; Max missiles
     dw $09CA, $0008 ; Supers
     dw $0A1C, $0002 ; Samus position/state
     dw $0A1E, $0004 ; More position/state
     dw $0AF6, $004F ; Samus X
     dw $0AFA, $008B ; Samus Y
-    dw $D878, $001C ; Items
     dw $D8BA, $00F1 ; Doors
     dw #$FFFF
 
@@ -1288,7 +1285,7 @@ preset_prkd15_upper_norfair_lava_spark:
     dw $0911, $0100 ; Screen X position in pixels
     dw $0913, $C000 ; Screen subpixel Y position
     dw $0917, $0100 ; Layer 2 X position
-    dw $09C6, $0010 ; Missiles
+    dw $09C6, $000B ; Missiles
     dw $09CE, $0005 ; Pbs
     dw $0A1C, $0002 ; Samus position/state
     dw $0A1E, $0004 ; More position/state
@@ -2048,7 +2045,7 @@ preset_prkd15_maridia_botwoon_etank:
     dw $0917, $0100 ; Layer 2 X position
     dw $0919, $0000 ; Layer 2 Y position
     dw $09C2, $00C0 ; Health
-    dw $09C6, $000E ; Missiles
+    dw $09C6, $0009 ; Missiles
     dw $09CA, $0004 ; Supers
     dw $09CE, $0005 ; Pbs
     dw $0AF6, $01C5 ; Samus X
@@ -2069,7 +2066,7 @@ preset_prkd15_maridia_halfie_setup:
     dw $0919, $001F ; Layer 2 Y position
     dw $09C2, $018F ; Health
     dw $09C4, $018F ; Max health
-    dw $09C6, $0010 ; Missiles
+    dw $09C6, $000F ; Missiles
     dw $0AF6, $0099 ; Samus X
     dw $0AFA, $009B ; Samus Y
     dw !PRESET_DOORS, $0001 ; doors closed
@@ -2087,7 +2084,7 @@ preset_prkd15_maridia_draygon:
     dw $0917, $0000 ; Layer 2 X position
     dw $0919, $0180 ; Layer 2 Y position
     dw $09C2, $0110 ; Health
-    dw $09C6, $0014 ; Missiles
+    dw $09C6, $000F ; Missiles
     dw $09CA, $0002 ; Supers
     dw $0A1C, $0002 ; Samus position/state
     dw $0A1E, $0004 ; More position/state
@@ -2103,7 +2100,7 @@ preset_prkd15_maridia_spikesuit_reverse_halfie:
     dw $090F, $0000 ; Screen subpixel X position
     dw $0915, $0000 ; Screen Y position in pixels
     dw $09C2, $00D8 ; Health
-    dw $09C6, $000F ; Missiles
+    dw $09C6, $000A ; Missiles
     dw $09CA, $0003 ; Supers
     dw $0A68, $0001 ; Flash suit
     dw $0AF6, $003F ; Samus X
@@ -2191,7 +2188,7 @@ preset_prkd15_backtracking_red_brinstar_green_gate:
     dw $0917, $001A ; Layer 2 X position
     dw $0919, $0000 ; Layer 2 Y position
     dw $09C2, $008E ; Health
-    dw $09C6, $0011 ; Missiles
+    dw $09C6, $000B ; Missiles
     dw $09CA, $0006 ; Supers
     dw $0AF6, $007F ; Samus X
     dw $0AFA, $008B ; Samus Y
@@ -2224,7 +2221,7 @@ preset_prkd15_backtracking_parlor_return:
     dw $0913, $0000 ; Screen subpixel Y position
     dw $0915, $0400 ; Screen Y position in pixels
     dw $0917, $02F1 ; Layer 2 X position
-    dw $09C6, $0010 ; Missiles
+    dw $09C6, $0009 ; Missiles
     dw $0A1C, $0002 ; Samus position/state
     dw $0A1E, $0004 ; More position/state
     dw $0AF6, $0683 ; Samus X
@@ -2342,7 +2339,7 @@ preset_prkd15_tourian_metroids_2:
     dw $0917, $00D2 ; Layer 2 X position
     dw $0919, $0000 ; Layer 2 Y position
     dw $09C2, $006B ; Health
-    dw $09C6, $0014 ; Missiles
+    dw $09C6, $000F ; Missiles
     dw $09CA, $0006 ; Supers
     dw $0AF6, $0197 ; Samus X
     dw $0AFA, $00AB ; Samus Y
