@@ -50,7 +50,7 @@ tile_table_28_draygon:
 incbin ../resources/tile_table_28_draygon.bin
 
 print pc, " raw tile tables crossbank end"
-warnpc $E8E000
+warnpc $E8E000 ; presets.asm
 check bankcross on
 
 
@@ -254,7 +254,7 @@ preset_load_level_tile_tables_scrolls_plms_and_execute_asm:
 {
     ; Original logic from $82E7D3
     PHP : PHB
-    REP #$30
+    %ai16()
 
     ; More efficient method to clear level data
     PEA $7F00 : PLB : PLB
@@ -558,17 +558,6 @@ optimized_decompression:
   .read_extended_size_skip_inc
     BRA .data_read
 
-  .option0:
-    ; Option X = 0: Directly copy Y bytes
-    LDA ($47)
-    INC $47 : BNE .option0_read_skip_inc
-    INC $48 : BNE .option0_read_skip_inc
-    JSR decompression_increment_bank
-  .option0_read_skip_inc
-    STA [$4C],Y
-    INY : DEX : BNE .option0
-    BRL .next_byte
-
   .one_byte_size
     AND #$E0 : PHA
     TDC : LDA $4A : AND #$1F
@@ -589,6 +578,17 @@ optimized_decompression:
     INC : INY : DEX : BNE .option3_read_skip_inc
     BRL .next_byte
 
+  .option0:
+    ; Option X = 0: Directly copy Y bytes
+    LDA ($47)
+    INC $47 : BNE .option0_read_skip_inc
+    INC $48 : BNE .option0_read_skip_inc
+    JSR decompression_increment_bank
+  .option0_read_skip_inc
+    STA [$4C],Y
+    INY : DEX : BNE .option0
+    BRL .next_byte
+
   .option1:
     ; Option X = 1: Copy the next byte Y times
     LDA ($47)
@@ -602,8 +602,6 @@ optimized_decompression:
 
   .option2:
     ; Option X = 2: Copy the next two bytes, one at a time, for the next Y bytes
-    ; Apply PJ's fix to divide X by 2 and set carry if X was odd
-    REP #$20 : TXA : LSR : TAX : SEP #$20
     LDA ($47)
     INC $47 : BNE .option2_lsb_read_skip_inc
     INC $48 : BNE .option2_lsb_read_skip_inc
@@ -614,14 +612,13 @@ optimized_decompression:
     INC $48 : BNE .option2_msb_read_skip_inc
     JSR decompression_increment_bank
   .option2_msb_read_skip_inc
-    XBA : REP #$20
+    XBA : %a16()
   .option2_loop
     STA [$4C],Y
-    INY : INY : DEX : BNE .option2_loop
-    ; PJ's fix to account for case where X was odd
-    SEP #$20 : BCC .option2_end
-    STA [$4C],Y : INY
+    INY : DEX : BEQ .option2_end
+    INY : DEX : BNE .option2_loop
   .option2_end
+    %a8()
     BRL .next_byte
 
   .option4567:
@@ -644,7 +641,7 @@ optimized_decompression:
 
   .option_dictionary
     SBC $44 : STA $44
-    SEP #$20
+    %a8()
     LDA $4E : BCS .skip_carry_subtraction
     DEC
   .skip_carry_subtraction
@@ -672,7 +669,7 @@ optimized_decompression:
     INC $48 : BNE .option67_read_skip_inc
     JSR decompression_increment_bank
   .option67_read_skip_inc
-    REP #$20
+    %a16()
     STA $44 : LDA $4C
     BRA .option_dictionary
 }
