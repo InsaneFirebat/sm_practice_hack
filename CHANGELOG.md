@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.3]  Fixed loading presets into West Ocean room
 * [2.4.2.2]  Press L+R+Sl+X at in-game Special Settings menu to reset practice menu shortcut
 * [2.4.2.2]  Added option to change the HUD number font (graphics from ALttP practice hack)
 * [2.4.2.2]  Added option to change the menu font
