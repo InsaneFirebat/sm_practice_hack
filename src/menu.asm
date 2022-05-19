@@ -1756,7 +1756,7 @@ cm_divide_100:
 ; -----------
 
 pushpc
-org $B88000
+;org $B88000
 print pc, " mainmenu start"
 incsrc mainmenu.asm
 print pc, " mainmenu end"
@@ -1778,12 +1778,7 @@ HexMenuGFXTable:
 ; Crash handler
 ; -------------
 
-;org $B88000
-print pc, " mainmenu start"
-incsrc mainmenu.asm
-print pc, " mainmenu end"
+;incsrc crash.asm
 
 print pc, " menu end"
 warnpc $B8DFFF
-
-;incsrc crash.asm
