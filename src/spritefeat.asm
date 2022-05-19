@@ -50,6 +50,10 @@ update_sprite_features:
 +   LDA !ram_sprite_extended_hitbox_active : BEQ +
     JSR update_extended_spritemap_hitbox
 
+    ; Draw extended spritemap hitboxes if activated
++   LDA !ram_sprite_mb_hitbox_active : BEQ +
+    JSR mother_brain_sprite_hitbox
+
     ; Draw enemy projectile hitboxes if activated
 +   LDA !ram_sprite_enemyproj_hitbox_active : BEQ +
     JSR update_enemyproj_sprite_hitbox
@@ -409,8 +413,7 @@ update_enemy_sprite_hitbox:
 update_extended_spritemap_hitbox:
 ; draw hitboxes around enemies that use extended spritemaps
 {
-    ; Kraid, Crocomire, and Mother Brain use a custom hitbox format
-    ; Kraid causes a crash, while everything else seems ok?
+    ; Kraid has too many hitboxes and overflows the OAM stack
     LDA !ROOM_ID : CMP #$A59F : BEQ .end ; check for Kraid's room
 
     LDX #$0000 ; X = enemy index
@@ -673,6 +676,121 @@ update_samusproj_sprite_hitbox:
     JMP .skipProjectile
 
   .fullStack
+    RTS
+}
+
+
+mother_brain_sprite_hitbox:
+{
+    LDA !ROOM_ID : CMP #$DD58 : BEQ +
++   LDA $7E7800 : CMP #$0002 : BPL +
+
+  .end
+    RTS
+
++   LDA $7E7808 : BEQ .end : STA $C1
+    LDX #$0000 : LDY !OAM_STACK_POINTER ; X = enemy index
+    LDA #$00A9 : STA $12
+
+    ; draw body hitboxes
+    LSR $C1 : BCC .head
+    LDA #$B429 : STA $10
+
+    ; first body hitbox
+    LDA #$FFE0 : STA $14 ; left offset
+    LDA #$FFE8 : STA $16 ; top offset
+    LDA #$002A : STA $18 ; right offset
+    LDA #$0038 : STA $1A ; bottom offset
+    JSR DrawEnemyHitbox
+
+    ; second body hitbox
+    LDA #$FFE8 : STA $14 ; left offset
+    LDA #$FFD6 : STA $16 ; top offset
+    LDA #$001C : STA $18 ; right offset
+    LDA #$FFE7 : STA $1A ; bottom offset
+    JSR DrawEnemyHitbox
+
+  .head
+    ; draw head hitboxes
+    LSR $C1 : BCC .neck
+    LDA #$B43B : STA $10
+    LDX #$0040
+
+    ; first head hitbox
+    LDA #$FFE8 : STA $14 ; left offset
+    LDA #$FFEA : STA $16 ; top offset
+    LDA #$0016 : STA $18 ; right offset
+    LDA #$0000 : STA $1A ; bottom offset
+    JSR DrawEnemyHitbox
+
+    ; second head hitbox
+    LDA #$FFEA : STA $14 ; left offset
+    LDA #$0001 : STA $16 ; top offset
+    LDA #$0010 : STA $18 ; right offset
+    LDA #$0014 : STA $1A ; bottom offset
+    JSR DrawEnemyHitbox
+
+  .neck
+    ; draw neck hitboxes
+    LSR $C1 : BCC .done
+
+    ; second head hitbox
+    LDA #$FFF8 : STA $14 ; left offset
+    LDA #$FFF8 : STA $16 ; top offset
+    LDA #$0008 : STA $18 ; right offset
+    LDA #$0008 : STA $1A ; bottom offset
+
+    LDX #$0200
+    LDA $7E804A : STA !ENEMY_X,X
+    LDA $7E804C : STA !ENEMY_Y,X
+    JSR DrawEnemyHitbox
+
+    LDX #$0240
+    LDA $7E8050 : STA !ENEMY_X,X
+    LDA $7E8052 : STA !ENEMY_Y,X
+    JSR DrawEnemyHitbox
+
+    LDX #$0280
+    LDA $7E8056 : STA !ENEMY_X,X
+    LDA $7E8058 : STA !ENEMY_Y,X
+    JSR DrawEnemyHitbox
+
+  .done
+    RTS
+}
+
+DrawEnemyHitbox:
+{
+    LDA !ENEMY_Y,X : SEC : SBC !LAYER1_Y : STA $1C ; top edge
+    LDA !ENEMY_X,X : SEC : SBC !LAYER1_X : STA $1D ; left edge
+
+    ; calculate sprite positions
+    %a8()
+;    LDA $1D ; X coord
+    CLC : ADC $14
+    STA $0370,Y : STA $0378,Y ; sprite X pos
+    LDA $1D : CLC : ADC $18
+    SEC : SBC #$08
+    STA $0374,Y : STA $037C,Y
+
+    LDA $1C : DEC ; Y coord
+    CLC : ADC $16
+    STA $0371,Y : STA $0375,Y ; sprite Y pos
+    LDA $1C : CLC : ADC $1A
+    SEC : SBC #$08
+    STA $0379,Y : STA $037D,Y
+
+    ; Sprite Attributes - xxxxxxxx yyyyyyyy YXPPpppt tttttttt
+    ; x=X pos, y=Y pos, Y=Y flip, X=X flip
+    ; P=Priority, p=Palette, t=Tile number
+    %ai16()
+    LDA #$3A47 : STA $0372,Y ; %00111010 top-left
+    LDA #$7A47 : STA $0376,Y ; %01111010 top-right
+    LDA #$BA47 : STA $037A,Y ; %10111010 bottom-left
+    LDA #$FA47 : STA $037E,Y ; %11111010 bottom-right
+
+    ; inc oam stack
+    TYA : CLC : ADC #$0010 : STA !OAM_STACK_POINTER : TAY
     RTS
 }
 

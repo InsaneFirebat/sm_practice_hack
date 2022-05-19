@@ -70,7 +70,7 @@
 !ram_suits_periodic_damage_check = !WRAM_START+$48
 !ram_sprite_samusproj_hitbox_active = !WRAM_START+$4A
 !ram_sprite_enemyproj_hitbox_active = !WRAM_START+$4C
-!ram_fix_scroll_offsets = !WRAM_START+$4E
+!ram_sprite_mb_hitbox_active = !WRAM_START+$4E
 
 !ram_magic_pants_enabled = !WRAM_START+$50
 !ram_magic_pants_state = !WRAM_START+$52
@@ -94,8 +94,9 @@
 !ram_game_loop_extras = !WRAM_START+$72
 !ram_game_mode_extras = !WRAM_START+$74
 !ram_sprite_features_active = !WRAM_START+$76
+!ram_fix_scroll_offsets = !WRAM_START+$78
 
-; ^ FREE SPACE ^ up to +$7A
+!FREE_SPAQCE = !WRAM_START+$7A
 
 !ram_pacifist = !WRAM_START+$7C
 !ram_freeze_on_load = !WRAM_START+$7E

@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.4]  Addded option to draw Mother Brain's custom hitboxes
 * [2.4.2.4]  Upgrade extended spritemap hitbox viewer to handle more enemies (Ridley, MB)
 * [2.4.2.3]  Fixed loading presets into West Ocean room
 * [2.4.2.2]  Press L+R+Sl+X at in-game Special Settings menu to reset practice menu shortcut
