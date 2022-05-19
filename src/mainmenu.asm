@@ -1232,6 +1232,7 @@ SpritesMenu:
     dw #sprites_show_samus_hitbox
     dw #sprites_show_enemy_hitbox
     dw #sprites_show_extended_spritemap_hitbox
+    dw #sprites_show_mb_hitbox
     dw #sprites_show_enemyproj_hitbox
     dw #sprites_show_samusproj_hitbox
     dw #sprites_oob_viewer
@@ -1249,6 +1250,9 @@ sprites_show_enemy_hitbox:
 
 sprites_show_extended_spritemap_hitbox:
     %cm_toggle("Ext. Spritemap Hitboxes", !ram_sprite_extended_hitbox_active, #1, #action_sprite_features)
+
+sprites_show_mb_hitbox:
+    %cm_toggle("MB Special Hitboxes", !ram_sprite_mb_hitbox_active, #1, #action_sprite_features)
 
 sprites_show_enemyproj_hitbox:
     %cm_toggle("Enemy Projectile Hitbox", !ram_sprite_enemyproj_hitbox_active, #1, #action_sprite_features)
@@ -1269,6 +1273,7 @@ action_sprite_features:
     LDA !ram_sprite_samus_hitbox_active : BNE .enabled
     LDA !ram_sprite_enemy_hitbox_active : BNE .enabled
     LDA !ram_sprite_extended_hitbox_active : BNE .enabled
+    LDA !ram_sprite_mb_hitbox_active : BNE .enabled
     LDA !ram_sprite_enemyproj_hitbox_active : BNE .enabled
     LDA !ram_sprite_samusproj_hitbox_active : BNE .enabled
     LDA !ram_oob_watch_active
