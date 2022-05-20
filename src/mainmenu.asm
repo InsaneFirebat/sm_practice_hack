@@ -1050,7 +1050,7 @@ action_teleport:
 
     LDA #$0001 : STA !ram_cm_leave
 
-    RTS
+    RTL
 }
 
 action_debug_teleport:
