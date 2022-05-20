@@ -1778,7 +1778,7 @@ HexMenuGFXTable:
 ; Crash handler
 ; -------------
 
-;incsrc crash.asm
+incsrc crash.asm
 
 print pc, " menu end"
 warnpc $B8DFFF
