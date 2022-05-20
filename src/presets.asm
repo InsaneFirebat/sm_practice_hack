@@ -245,7 +245,7 @@ category_preset_load:
   .build_list_loop
     ; Build list of presets to traverse
     LDA [$C3] : BEQ .prepare_traverse_list_loop
-    INX : INX : STA $7F0002,X
+    INX #2 : STA $7F0002,X
     CMP $C3 : STA $C3 : BCC .build_list_loop
     ; We just crossed back into the starting bank
     DEC $C5
@@ -260,24 +260,24 @@ category_preset_load:
   .traverse_list_loop_with_bank_check
     ; Now traverse from the first preset until the last one
     LDA $7F0002,X : TAY : CMP $C1 : BCC .increment_bank_before_inner_loop
-    INY : INY
+    INY #2
     BRA .inner_loop_with_bank_check_load_address
 
     ; For each preset, load and store address and value pairs
   .inner_loop_with_bank_check
-    STA $C3 : INY : INY
+    STA $C3 : INY #2
     CPY #$0000 : BEQ .increment_bank_before_load_value
-    LDA ($00),Y : STA [$C3] : INY : INY
+    LDA ($00),Y : STA [$C3] : INY #2
   .inner_loop_with_bank_check_load_address
     CPY #$0000 : BEQ .increment_bank_before_load_address
     LDA ($00),Y : CMP #$FFFF : BNE .inner_loop_with_bank_check
 
-    DEX : DEX : BPL .traverse_list_loop_with_bank_check
+    DEX #2 : BPL .traverse_list_loop_with_bank_check
     RTS
 
   .increment_bank_before_inner_loop
     %a8() : PHB : PLA : INC : PHA : PLB : %a16()
-    INY : INY
+    INY #2
     BRA .inner_loop_load_address
 
   .increment_bank_before_load_address
@@ -292,24 +292,24 @@ category_preset_load:
 
   .traverse_list_loop
     ; Continue traversing from the first preset until the last one
-    LDA $7F0002,X : TAY : INY : INY
+    LDA $7F0002,X : TAY : INY #2
     BRA .inner_loop_load_address
 
     ; For each preset, load and store address and value pairs
   .inner_loop
-    STA $C3 : INY : INY
+    STA $C3 : INY #2
   .inner_loop_load_value
-    LDA ($00),Y : STA [$C3] : INY : INY
+    LDA ($00),Y : STA [$C3] : INY #2
   .inner_loop_load_address
     LDA ($00),Y : CMP #$FFFF : BNE .inner_loop
 
-    DEX : DEX : BPL .traverse_list_loop
+    DEX #2 : BPL .traverse_list_loop
     RTS
 }
 
-preset_banks:
+category_preset_data_table:
 {
-  dw preset_SZM101_bombs_landing_site>>16
+  dl preset_SZM101_bombs_landing_site
 }
 
 print pc, " presets bank82 end"
@@ -626,96 +626,6 @@ endif
     PLB : PLP : RTL
 }
 
-preset_scroll_fixes:
-{
-    ; Fixes bad scrolling caused by a loading into a position that
-    ; is normally hidden until passing over a red scroll block.
-    ; These fixes can often be found in nearby door asm.
-    PHP
-    %ai16()
-    LDA !ram_custom_preset : CMP #$5AFE : BNE .category_presets
-    BRL .custom_presets
-
-  .category_presets
-    %a8() : %i16()
-    LDA #$01 : LDX $079B         ; X = room ID
-    CPX #$A4B1 : BPL .halfway    ; organized by room ID so we only have to check half
-
-+   CPX #$8091 : BNE +           ; Preset: Pirate Ship Ridley - Ridley
-    STA $7ECD21
-    LDA #$00 : STA $7ECD20
-    BRA .end
-+   CPX #$87B7 : BNE +           ; Preset: Chozodia - Waterway Speedkeep
-    LDA #$02 : STA $7ECD25
-    BRA .end
-+   CPX #$96BA : BNE +           ; Preset: Tourian - Tourian Escape
-    STA $7ECD3E
-    BRA .end
-+   CPX #$9AD9 : BNE +           ; Preset: Cleanup 1 - Super Door Over Crumples
-    STA $7ECD39 : STA $7ECD3D
-    LDA #$00 : STA $7ECD38
-    BRA .end
-+   CPX #$9F11 : BNE +
-    LDY $0AFA : CPY #$029A       ; two presets, each with scroll issues
-    BPL ++                       ; branch if Ypos > 666
-    STA $7ECD21                  ; Preset: Pirate Ship Ridley - Two Gate
-    BRA .end
-++  STA $7ECD25 : STA $7ECD26    ; Preset: Pirate Ship Draygon - Underground Path
-    STA $7ECD27 : STA $7ECD28 : STA $7ECD29
-    BRA .end
-+   CPX #$A011 : BNE +           ; Preset: Cleanup 1 - Crumble Pillers
-    STA $7ECD26
-    BRA .end
-+   CPX #$A3AE : BNE +           ; Preset: Cleanup 2 - Slick Space Boost
-    LDA #$00 : STA $7ECD32
-
-  .end
-    PLP
-    RTS
-
-  .halfway
-+   CPX #$A4B1 : BNE +           ; Preset: Cleanup 2 - Mini Kraid Long Room
-    STA $7ECD28 : STA $7ECD29
-    BRA .done
-+   CPX #$A618 : BNE +           ; Preset: Lower Norfair - Leaving Spark Puzzle
-    STA $7ECD20 : STA $7ECD21 : STA $7ECD22
-    BRA .done
-+   CPX #$B6EE : BNE +           ; Preset: Lower Norfair - Chain Spark Puzzle
-    STA $7ECD37
-    BRA .done
-+   CPX #$C0E4 : BNE +           ; Preset: Pirate Ship Ridley - Kihunter Zoo
-    STA $7ECD2A : STA $7ECD2B
-    STA $7ECD2D : STA $7ECD2E
-    BRA .done
-+   CPX #$C2B0 : BNE +           ; Preset: Pirate Shipe Ridley - Inside Outside Spark
-    LDA #$04 : STA $1982
-    STA $1984 : STA $1986
-    BRA +
-+   CPX #$DB31 : BNE +           ; Preset: Tourian - Blind Speedkeep
-    STA $7ECD22
-    LDA #$00 : STA $7ECD21
-    BRA .done
-+   CPX #$DE4D : BNE +           ; Preset: Tourian - Vault Missile
-    STA $7ECD22
-    BRA .done
-
-  .done
-+   PLP
-    RTS
-
-  .custom_presets
-    PHB
-    LDA !sram_custom_preset_slot
-    ASL : XBA
-    CLC : ADC #$31E9 : TAX       ; X = Source
-    LDY #$CD52 : LDA #$0031      ; Y = Destination, A = Size-1
-    MVP $F07E                    ; srcBank, destBank
-    LDA #$0000 : STA !ram_custom_preset
-    PLB
-    PLP
-    RTS
-}
-
 transfer_cgram_long:
 {
     PHP
@@ -759,8 +669,10 @@ warnpc $80F800 ; save.asm
 ; -------------------
 
 ; Preset data/menus can be anywhere in the rom, even in separate banks
-org $FE8000
+org $EE8000
 print pc, " preset menu/data start"
+dw #$5AFE
+
 incsrc presets/szm101_menu.asm
 incsrc presets/szm101_data.asm
 print pc, " preset menu/data end"

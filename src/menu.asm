@@ -32,7 +32,7 @@ print pc, " menu bank85 end"
 warnpc $85FE00 ; fanfare.asm
 
 ;org $B88000
-org $B88350
+org $B88330
 print pc, " menu start"
 
 cm_start:
@@ -1755,12 +1755,12 @@ cm_divide_100:
 ; Main menu
 ; -----------
 
-pushpc
+;pushpc
 ;org $B88000
 print pc, " mainmenu start"
 incsrc mainmenu.asm
 print pc, " mainmenu end"
-pullpc
+;pullpc
 
 
 ; ----------
