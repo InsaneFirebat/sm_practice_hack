@@ -3,7 +3,7 @@
 ;
 
 org $80F700
-print pc, " save start"
+print pc, " tinysave start"
 
 ; These can be modified to do game-specific things before and after saving and loading
 ; Both A and X/Y are 16-bit here
@@ -16,8 +16,26 @@ pre_load_state:
     ; Rerandomize
     LDA !sram_save_has_set_rng : BNE .done
     LDA !sram_rerandomize : AND #$00FF : BEQ .done
-    LDA $05E5 : STA $770080
-    LDA !FRAME_COUNTER : STA $770082
+    LDA !RANDOM_NUMBER : STA $737F80
+    LDA !FRAME_COUNTER : STA $737F82
+    
+    ; Force blank and disable NMI
+    %a8()
+    LDA #$80 : STA $2100
+    LDA #$00 : STA $4200
+    %ai16()
+
+    ; Restore LoRAM so we can load in the proper graphics etc
+    LDA #$8000 : STA $4310
+    LDA #$4000 : STA $4312
+    LDA #$0070 : STA $4314
+    LDA #$001F : STA $4316
+    STZ $2181 : STZ $2183
+    LDA #$0002 : STA $420B
+
+    ; Load all room elements (before restoring the reset of the RAM so we can overwrite parts of it)
+    JSL preset_load_level_tile_tables_scrolls_plms_and_execute_asm
+    JSL $82E783 ; Load CRE tiles, tileset tiles and tileset palette
 
   .done
     RTS
@@ -30,23 +48,23 @@ post_load_state:
     LDY !MUSIC_TRACK
     LDA $0639 : CMP $063B : BEQ .music_queue_empty
 
-    DEC : DEC : AND #$000E : TAX
+    DEC #2 : AND #$000E : TAX
     LDA $0619,X : BMI .queued_music_data
     TXA : TAY : CMP $063B : BEQ .no_music_data
 
-  .no_music_data
-    LDA !sram_music_toggle : CMP #$0002 : BPL .music_fast_off_preset_off
-
   .music_queue_data_search
-    DEC : DEC : AND #$000E : TAX
+    DEC #2: AND #$000E : TAX
     LDA $0619,X : BMI .queued_music_data
     TXA : CMP $063B : BNE .music_queue_data_search
+
+  .no_music_data
+    LDA !sram_music_toggle : CMP #$0002 : BPL .music_fast_off_preset_off
 
     ; No data found in queue, check if we need to insert it
     LDA !SRAM_MUSIC_DATA : CMP !MUSIC_DATA : BEQ .music_queue_increase_timer
 
     ; Insert queued music data
-    DEX : DEX : TXA : AND #$000E : TAX
+    DEX #2 : TXA : AND #$000E : TAX
     LDA #$FF00 : CLC : ADC !MUSIC_DATA : STA $0619,X
     LDA #$0008 : STA $0629,X
 
@@ -83,12 +101,12 @@ post_load_state:
 
   .queued_music_data_clear_track
     ; Insert clear track before queued music data and start queue there
-    DEX : DEX : TXA : AND #$000E : STA $063B : TAX
+    DEX #2 : TXA : AND #$000E : STA $063B : TAX
     STZ $0619,X : STZ $063D
 
     ; Clear all timers before this point
   .music_clear_timer_loop
-    TXA : DEC : DEC : AND #$000E : TAX
+    TXA : DEC #2 : AND #$000E : TAX
     STZ $0629,X : CPX $0639 : BNE .music_clear_timer_loop
 
     ; Set timer on the clear track command
@@ -112,11 +130,11 @@ post_load_state:
     ; Rerandomize
     LDA !sram_save_has_set_rng : BNE .done
     LDA !sram_rerandomize : AND #$00FF : BEQ .done
-    LDA $770080 : STA $05E5
-    LDA $770082 : STA !FRAME_COUNTER
+    LDA $737F80 : STA $05E5
+    LDA $737F82 : STA $05B6
 
   .done
-    JSL init_suit_properties_ram
+    JSL init_wram_based_on_sram
 
     ; Freeze inputs if necessary
     LDA !ram_freeze_on_load : BEQ .return
@@ -139,22 +157,21 @@ register_restore_return:
 
 save_state:
 {
-    PEA $0000
-    PLB : PLB
+    PEA $0000 : PLB : PLB
 
     ; Store DMA registers to SRAM
-    %a8()
+    %a8();
     LDY #$0000 : TYX
 
   .save_dma_regs
     LDA $4300,X : STA !SRAM_DMA_BANK,X
-    INX : INY
-    CPY #$000B : BNE .save_dma_regs
-    CPX #$007B : BEQ .done
+    INX
+    INY : CPY #$000B : BNE .save_dma_regs
+    CPX #$007B : BEQ .save_dma_regs_done
     INX #5 : LDY #$0000
     BRA .save_dma_regs
 
-  .done
+  .save_dma_regs_done
     %ai16()
     LDX #save_write_table
 }
@@ -165,90 +182,98 @@ run_vm:
     JMP vm
 }
 
+macro wram_to_sram(wram_addr, size, sram_addr)
+    dw $0000|$4312, <sram_addr>&$FFFF
+    dw $0000|$4314, ((<sram_addr>>>16)&$FF)|((<size>&$FF)<<8)
+    dw $0000|$4316, (<size>>>8)&$FF
+    dw $0000|$2181, <wram_addr>&$FFFF
+    dw $0000|$2183, ((<wram_addr>>>16)&$FF)-$7E
+    dw $0000|$420B, $02
+endmacro
+
+macro vram_to_sram(vram_addr, size, sram_addr)
+    dw $0000|$2116, <vram_addr>&$FFFF                            ; VRAM address >> 1.
+    dw $9000|$2139, $0000                                        ; VRAM dummy read.
+    dw $0000|$4312, <sram_addr>&$FFFF                            ; A addr = $xx0000
+    dw $0000|$4314, ((<sram_addr>>>16)&$FF)|((<size>&$FF)<<8)    ; A addr = $75xxxx, size = $xx00
+    dw $0000|$4316, (<size>>>8)&$FF                              ; size = $80xx ($0000), unused bank reg = $00.
+    dw $1000|$420B, $02                                          ; Trigger DMA on channel 1
+endmacro
+
+
 save_write_table:
     ; Turn PPU off
     dw $1000|$2100, $80
     dw $1000|$4200, $00
     ; Single address, B bus -> A bus.  B address = reflector to WRAM ($2180).
     dw $0000|$4310, $8080  ; direction = B->A, byte reg, B addr = $2180
-    ; Copy WRAM 7E0000-7E7FFF to SRAM 710000-717FFF.
-    dw $0000|$4312, $0000  ; A addr = $xx0000
-    dw $0000|$4314, $0071  ; A addr = $71xxxx, size = $xx00
-    dw $0000|$4316, $0080  ; size = $80xx ($8000), unused bank reg = $00.
-    dw $0000|$2181, $0000  ; WRAM addr = $xx0000
-    dw $1000|$2183, $00    ; WRAM addr = $7Exxxx  (bank is relative to $7E)
-    dw $1000|$420B, $02    ; Trigger DMA on channel 1
-    ; Copy WRAM 7E8000-7EFFFF to SRAM 720000-727FFF.
-    dw $0000|$4312, $0000  ; A addr = $xx0000
-    dw $0000|$4314, $0072  ; A addr = $72xxxx, size = $xx00
-    dw $0000|$4316, $0080  ; size = $80xx ($8000), unused bank reg = $00.
-    dw $0000|$2181, $8000  ; WRAM addr = $xx8000
-    dw $1000|$2183, $00    ; WRAM addr = $7Exxxx  (bank is relative to $7E)
-    dw $1000|$420B, $02    ; Trigger DMA on channel 1
-    ; Copy WRAM 7F0000-7F7FFF to SRAM 730000-737FFF.
-    dw $0000|$4312, $0000  ; A addr = $xx0000
-    dw $0000|$4314, $0073  ; A addr = $73xxxx, size = $xx00
-    dw $0000|$4316, $0080  ; size = $80xx ($8000), unused bank reg = $00.
-    dw $0000|$2181, $0000  ; WRAM addr = $xx0000
-    dw $1000|$2183, $01    ; WRAM addr = $7Fxxxx  (bank is relative to $7E)
-    dw $1000|$420B, $02    ; Trigger DMA on channel 1
-    ; Copy WRAM 7F8000-7FFFFF to SRAM 740000-747FFF.
-    dw $0000|$4312, $0000  ; A addr = $xx0000
-    dw $0000|$4314, $0074  ; A addr = $74xxxx, size = $xx00
-    dw $0000|$4316, $0080  ; size = $80xx ($8000), unused bank reg = $00.
-    dw $0000|$2181, $8000  ; WRAM addr = $xx8000
-    dw $1000|$2183, $01    ; WRAM addr = $7Fxxxx  (bank is relative to $7E)
-    dw $1000|$420B, $02    ; Trigger DMA on channel 1
+    
+    ; Copy WRAM segments
+    %wram_to_sram($7E0000, $2000, $704000)
+    %wram_to_sram($7E7000, $1000, $706000) 
+    %wram_to_sram($7E8000, $2000, $710000) 
+    %wram_to_sram($7EC000, $34A0, $712000)    
+    %wram_to_sram($7F0000, $2B00, $715500)
+    %wram_to_sram($7F2B00, $6B01, $720000)
+    
     ; Address pair, B bus -> A bus.  B address = VRAM read ($2139).
     dw $0000|$4310, $3981  ; direction = B->A, word reg, B addr = $2139
     dw $1000|$2115, $0000  ; VRAM address increment mode.
-    ; Copy VRAM 0000-7FFF to SRAM 750000-757FFF.
-    dw $0000|$2116, $0000  ; VRAM address >> 1.
-    dw $9000|$2139, $0000  ; VRAM dummy read.
-    dw $0000|$4312, $0000  ; A addr = $xx0000
-    dw $0000|$4314, $0075  ; A addr = $75xxxx, size = $xx00
-    dw $0000|$4316, $0080  ; size = $80xx ($0000), unused bank reg = $00.
-    dw $1000|$420B, $02    ; Trigger DMA on channel 1
-    ; Copy VRAM 8000-7FFF to SRAM 760000-767FFF.
-    dw $0000|$2116, $4000  ; VRAM address >> 1.
-    dw $9000|$2139, $0000  ; VRAM dummy read.
-    dw $0000|$4312, $0000  ; A addr = $xx0000
-    dw $0000|$4314, $0076  ; A addr = $76xxxx, size = $xx00
-    dw $0000|$4316, $0080  ; size = $80xx ($0000), unused bank reg = $00.
-    dw $1000|$420B, $02    ; Trigger DMA on channel 1
-    ; Copy CGRAM 000-1FF to SRAM 772000-7721FF.
+
+    ; Copy VRAM segments
+    %vram_to_sram($3E00, $400,  $726C00)
+    %vram_to_sram($4800, $1000, $727000)
+    %vram_to_sram($5000, $2000, $730000)
+    %vram_to_sram($6000, $4000, $732000)
+
+    ; Copy CGRAM 000-1FF to SRAM 735000-7351FF
     dw $1000|$2121, $00    ; CGRAM address
     dw $0000|$4310, $3B80  ; direction = B->A, byte reg, B addr = $213B
-    dw $0000|$4312, $2000  ; A addr = $xx2000
-    dw $0000|$4314, $0077  ; A addr = $77xxxx, size = $xx00
+    dw $0000|$4312, $5000  ; A addr = $xx2000
+    dw $0000|$4314, $0073  ; A addr = $77xxxx, size = $xx00
     dw $0000|$4316, $0002  ; size = $02xx ($0200), unused bank reg = $00.
     dw $1000|$420B, $02    ; Trigger DMA on channel 1
+    
     ; Done
     dw $0000, save_return
 
 save_return:
 {
-    PEA $0000
-    PLB : PLB
+    PEA $0000 : PLB : PLB
 
     %ai16()
     LDA !ram_room_has_set_rng : STA !sram_save_has_set_rng
 
-    TSC
-    STA !SRAM_SAVED_SP
+    TSC : STA !SRAM_SAVED_SP
     JMP register_restore_return
 }
 
 load_state:
 {
     JSR pre_load_state
-    PEA $0000
-    PLB : PLB
+    PEA $0000 : PLB : PLB
 
     %a8()
     LDX #load_write_table
     JMP run_vm
 }
+
+macro sram_to_wram(wram_addr, size, sram_addr)
+    dw $0000|$4312, <sram_addr>&$FFFF                     ; A addr = $xx0000
+    dw $0000|$4314, ((<sram_addr>>>16)&$FF)|((<size>&$FF)<<8)    ; A addr = $71xxxx, size = $xx00
+    dw $0000|$4316, (<size>>>8)&$FF                       ; size = $80xx ($8000), unused bank reg = $00.
+    dw $0000|$2181, <wram_addr>&$FFFF                     ; WRAM addr = $xx0000
+    dw $1000|$2183, ((<wram_addr>>>16)&$FF)-$7E           ; WRAM addr = $7Exxxx  (bank is relative to $7E)
+    dw $1000|$420B, $02    ; Trigger DMA on channel 1
+endmacro
+
+macro sram_to_vram(vram_addr, size, sram_addr)
+    dw $0000|$2116, <vram_addr>&$FFFF                     ; VRAM address >> 1.
+    dw $0000|$4312, <sram_addr>&$FFFF                     ; A addr = $xx0000
+    dw $0000|$4314, ((<sram_addr>>>16)&$FF)|((<size>&$FF)<<8)    ; A addr = $75xxxx, size = $xx00
+    dw $0000|$4316, (<size>>>8)&$FF                       ; size = $80xx ($0000), unused bank reg = $00.
+    dw $1000|$420B, $02                                 ; Trigger DMA on channel 1
+endmacro
 
 load_write_table:
     ; Disable HDMA
@@ -258,56 +283,34 @@ load_write_table:
     dw $1000|$4200, $00
     ; Single address, A bus -> B bus.  B address = reflector to WRAM ($2180).
     dw $0000|$4310, $8000  ; direction = A->B, B addr = $2180
-    ; Copy SRAM 710000-717FFF to WRAM 7E0000-7E7FFF.
-    dw $0000|$4312, $0000  ; A addr = $xx0000
-    dw $0000|$4314, $0071  ; A addr = $71xxxx, size = $xx00
-    dw $0000|$4316, $0080  ; size = $80xx ($8000), unused bank reg = $00.
-    dw $0000|$2181, $0000  ; WRAM addr = $xx0000
-    dw $1000|$2183, $00    ; WRAM addr = $7Exxxx  (bank is relative to $7E)
-    dw $1000|$420B, $02    ; Trigger DMA on channel 1
-    ; Copy SRAM 720000-727FFF to WRAM 7E8000-7EFFFF.
-    dw $0000|$4312, $0000  ; A addr = $xx0000
-    dw $0000|$4314, $0072  ; A addr = $72xxxx, size = $xx00
-    dw $0000|$4316, $0080  ; size = $80xx ($8000), unused bank reg = $00.
-    dw $0000|$2181, $8000  ; WRAM addr = $xx8000
-    dw $1000|$2183, $00    ; WRAM addr = $7Exxxx  (bank is relative to $7E)
-    dw $1000|$420B, $02    ; Trigger DMA on channel 1
-    ; Copy SRAM 730000-737FFF to WRAM 7F0000-7F7FFF.
-    dw $0000|$4312, $0000  ; A addr = $xx0000
-    dw $0000|$4314, $0073  ; A addr = $73xxxx, size = $xx00
-    dw $0000|$4316, $0080  ; size = $80xx ($8000), unused bank reg = $00.
-    dw $0000|$2181, $0000  ; WRAM addr = $xx0000
-    dw $1000|$2183, $01    ; WRAM addr = $7Fxxxx  (bank is relative to $7E)
-    dw $1000|$420B, $02    ; Trigger DMA on channel 1
-    ; Copy SRAM 740000-747FFF to WRAM 7F8000-7FFFFF.
-    dw $0000|$4312, $0000  ; A addr = $xx0000
-    dw $0000|$4314, $0074  ; A addr = $74xxxx, size = $xx00
-    dw $0000|$4316, $0080  ; size = $80xx ($8000), unused bank reg = $00.
-    dw $0000|$2181, $8000  ; WRAM addr = $xx8000
-    dw $1000|$2183, $01    ; WRAM addr = $7Fxxxx  (bank is relative to $7E)
-    dw $1000|$420B, $02    ; Trigger DMA on channel 1
+
+
+    ; Copy WRAM segments, uses $703000-$724B02
+    %sram_to_wram($7E0000, $2000, $704000)
+    %sram_to_wram($7E7000, $1000, $706000) 
+    %sram_to_wram($7E8000, $2000, $710000) 
+    %sram_to_wram($7EC000, $34A0, $712000)
+    %sram_to_wram($7F0000, $2B00, $715500)
+    %sram_to_wram($7F2B00, $6B01, $720000)
+
     ; Address pair, A bus -> B bus.  B address = VRAM write ($2118).
     dw $0000|$4310, $1801  ; direction = A->B, B addr = $2118
     dw $1000|$2115, $0000  ; VRAM address increment mode.
-    ; Copy SRAM 750000-757FFF to VRAM 0000-7FFF.
-    dw $0000|$2116, $0000  ; VRAM address >> 1.
-    dw $0000|$4312, $0000  ; A addr = $xx0000
-    dw $0000|$4314, $0075  ; A addr = $75xxxx, size = $xx00
-    dw $0000|$4316, $0080  ; size = $80xx ($0000), unused bank reg = $00.
-    dw $1000|$420B, $02    ; Trigger DMA on channel 1
-    ; Copy SRAM 760000-767FFF to VRAM 8000-7FFF.
-    dw $0000|$2116, $4000  ; VRAM address >> 1.
-    dw $0000|$4312, $0000  ; A addr = $xx0000
-    dw $0000|$4314, $0076  ; A addr = $76xxxx, size = $xx00
-    dw $0000|$4316, $0080  ; size = $80xx ($0000), unused bank reg = $00.
-    dw $1000|$420B, $02    ; Trigger DMA on channel 1
-    ; Copy SRAM 772000-7721FF to CGRAM 000-1FF.
+
+    ; Copy VRAM segments, uses $724C00-$735000
+    %sram_to_vram($3E00, $400,  $726C00)
+    %sram_to_vram($4800, $1000, $727000)
+    %sram_to_vram($5000, $2000, $730000)
+    %sram_to_vram($6000, $4000, $732000)
+
+    ; Copy SRAM 735000-7351FF to CGRAM 000-1FF.
     dw $1000|$2121, $00    ; CGRAM address
     dw $0000|$4310, $2200  ; direction = A->B, byte reg, B addr = $2122
     dw $0000|$4312, $2000  ; A addr = $xx2000
-    dw $0000|$4314, $0077  ; A addr = $77xxxx, size = $xx00
-    dw $0000|$4316, $0002  ; size = $02xx ($0200), unused bank reg = $00.
+    dw $0000|$4314, $0073  ; A addr = $77xxxx, size = $xx00
+    dw $0000|$4316, $0005  ; size = $02xx ($0200), unused bank reg = $00.
     dw $1000|$420B, $02    ; Trigger DMA on channel 1
+    
     ; Done
     dw $0000, load_return
 
@@ -316,8 +319,7 @@ load_return:
     %ai16()
     LDA !SRAM_SAVED_SP : TCS
 
-    PEA $0000
-    PLB : PLB
+    PEA $0000 : PLB : PLB
 
     ; rewrite inputs so that holding load won't keep loading, as well as rewriting saving input to loading input
     LDA !SS_INPUT_CUR : EOR !sram_ctrl_save_state : ORA !sram_ctrl_load_state
@@ -328,8 +330,8 @@ load_return:
 
   .load_dma_regs
     LDA !SRAM_DMA_BANK,X : STA $4300,X
-    INX : INY
-    CPY #$000B : BNE .load_dma_regs
+    INX
+    INY : CPY #$000B : BNE .load_dma_regs
     CPX #$007B : BEQ .load_dma_regs_done
     INX #5 : LDY #$0000
     BRA .load_dma_regs
@@ -369,7 +371,7 @@ vm:
     STA $0000,Y
     BRA vm
   .vm_read
-    ; "Subtract" $8000 from Y by taking advantage of bank wrapping.
+    ; "Subtract" $8000 from y by taking advantage of bank wrapping.
     LDA $8000,Y
     BRA vm
   .vm_done
@@ -379,5 +381,5 @@ vm:
     JMP ($0002,X)
 }
 
-print pc, " save end"
-warnpc $80FC00
+print pc, " tinysave end"
+warnpc $80FC00 ; infohud.asm
