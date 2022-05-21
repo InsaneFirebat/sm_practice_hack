@@ -4,10 +4,14 @@ org $008000
 
 ; Set SRAM size
 org $00FFD8
+if !FEATURE_TINYSTATES
+    db $07 ; 128kb
+else
 if !FEATURE_SD2SNES
     db $08 ; 256kb
 else
     db $05 ; 64kb
+endif
 endif
 
 ; Set version in game header

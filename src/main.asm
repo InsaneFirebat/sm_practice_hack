@@ -5,11 +5,23 @@ table ../resources/normal.tbl
 incsrc macros.asm
 incsrc defines.asm
 
-incsrc gamemode.asm
+print ""
 if !FEATURE_SD2SNES
 print "SAVESTATES ENABLED"
 incsrc save.asm
+else
+print "SAVESTATES DISABLED"
 endif
+
+if !FEATURE_TINYSTATES
+print "TINYSTATES ENABLED"
+incsrc tinystates.asm
+!FEATURE_SD2SNES = 1       ; Set this to enable savestate features
+else
+print "TINYSTATES DISABLED"
+endif
+
+incsrc gamemode.asm
 incsrc minimap.asm
 incsrc menu.asm
 incsrc infohud.asm
