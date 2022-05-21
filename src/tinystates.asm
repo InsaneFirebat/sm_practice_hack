@@ -53,7 +53,7 @@ post_load_state:
     TXA : TAY : CMP $063B : BEQ .no_music_data
 
   .music_queue_data_search
-    DEC #2: AND #$000E : TAX
+    DEC #2 : AND #$000E : TAX
     LDA $0619,X : BMI .queued_music_data
     TXA : CMP $063B : BNE .music_queue_data_search
 
@@ -134,7 +134,7 @@ post_load_state:
     LDA $737F82 : STA $05B6
 
   .done
-    JSL init_wram_based_on_sram
+    JSL init_suit_properties_ram
 
     ; Freeze inputs if necessary
     LDA !ram_freeze_on_load : BEQ .return

@@ -8,6 +8,8 @@ Always use an UNHEADERED (UH) rom for patching the practice hack.
 
 The patch file with "Savestates" in the filename is only intended for SD2SNES, FXPAK, and Super NTs (with "jailbreak" firmware). It may cause crashes or serious graphical errors if used with emulators or Everdrives.
 
+The patch with "TinyStates" in the filename is an experimental version with slower, but more widely compatible savesates. It should work on any modern PC emulator. EverDrive and SNES Classics may be supported. Please test and let me know!
+
 ## How to Patch
 
 The most commonly used tool to apply .IPS patches is [Lunar IPS](http://fusoya.eludevisibility.org/lips/), but you can also use [Floating IPS](https://www.romhacking.net/utilities/1040/), [SNES Tool](http://www.romhacking.net/utilities/18/), [ucon64](http://ucon64.sourceforge.net/), or [MultiPatch](http://projects.sappharad.com/tools/multipatch.html), among others.
