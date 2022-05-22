@@ -19,13 +19,16 @@ pre_load_state:
     LDA !RANDOM_NUMBER : STA $737F80
     LDA !FRAME_COUNTER : STA $737F82
     
+
+  .done
     ; Force blank and disable NMI
     %a8()
     LDA #$80 : STA $2100
     LDA #$00 : STA $4200
     %ai16()
 
-    ; Restore LoRAM so we can load in the proper graphics etc
+    ; Restore parts of LoRAM so we can load in the proper graphics etc
+    ; This doesn't overwrite the stack.
     LDA #$8000 : STA $4310
     LDA #$4000 : STA $4312
     LDA #$0070 : STA $4314
@@ -33,16 +36,19 @@ pre_load_state:
     STZ $2181 : STZ $2183
     LDA #$0002 : STA $420B
 
-    ; Load all room elements (before restoring the reset of the RAM so we can overwrite parts of it)
-    JSL preset_load_level_tile_tables_scrolls_plms_and_execute_asm
-    JSL $82E783 ; Load CRE tiles, tileset tiles and tileset palette
+    ; Load graphics tiles and tile tables back into RAM/WRAM
+    ; before restoring the rest of the state from SRAM
+    JSL preset_load_destination_state_and_tiles
+    JSL preset_load_library_background
+    JSL tinystates_load_level_tile_tables_scrolls_plms_and_execute_asm
+    JSL tinystates_preload_bg_data
 
-  .done
     RTS
 }
 
 post_load_state:
 {
+    JSL tinystates_mirror_bg_data
     JSL stop_all_sounds
 
     LDY !MUSIC_TRACK
@@ -143,6 +149,12 @@ post_load_state:
     INC : STA !ram_slowdown_frames
 
   .return
+    ; Re-enable NMI, turn on force-blank and wait NMI to execute.
+    ; This prevents some annoying flashing when loading states where
+    ; graphics changes otherwise happens mid-frame    
+    JSL $80834B
+    JSL $80836F
+
     RTS
 }
 
@@ -151,7 +163,7 @@ register_restore_return:
 {
     %a8()
     LDA $84 : STA $4200
-    LDA #$0F : STA $13 : STA $2100
+    LDA #$0F : STA $13 : STA $51 : STA $2100
     RTL
 }
 
@@ -160,7 +172,7 @@ save_state:
     PEA $0000 : PLB : PLB
 
     ; Store DMA registers to SRAM
-    %a8();
+    %a8()
     LDY #$0000 : TYX
 
   .save_dma_regs
@@ -226,10 +238,10 @@ save_write_table:
     %vram_to_sram($5000, $2000, $730000)
     %vram_to_sram($6000, $4000, $732000)
 
-    ; Copy CGRAM 000-1FF to SRAM 735000-7351FF
+    ; Copy CGRAM 000-1FF to SRAM 736000-7361FF
     dw $1000|$2121, $00    ; CGRAM address
     dw $0000|$4310, $3B80  ; direction = B->A, byte reg, B addr = $213B
-    dw $0000|$4312, $5000  ; A addr = $xx2000
+    dw $0000|$4312, $6000  ; A addr = $xx2000
     dw $0000|$4314, $0073  ; A addr = $77xxxx, size = $xx00
     dw $0000|$4316, $0002  ; size = $02xx ($0200), unused bank reg = $00.
     dw $1000|$420B, $02    ; Trigger DMA on channel 1
@@ -303,12 +315,12 @@ load_write_table:
     %sram_to_vram($5000, $2000, $730000)
     %sram_to_vram($6000, $4000, $732000)
 
-    ; Copy SRAM 735000-7351FF to CGRAM 000-1FF.
+    ; Copy SRAM 736000-7361FF to CGRAM 000-1FF.
     dw $1000|$2121, $00    ; CGRAM address
     dw $0000|$4310, $2200  ; direction = A->B, byte reg, B addr = $2122
     dw $0000|$4312, $2000  ; A addr = $xx2000
     dw $0000|$4314, $0073  ; A addr = $77xxxx, size = $xx00
-    dw $0000|$4316, $0005  ; size = $02xx ($0200), unused bank reg = $00.
+    dw $0000|$4316, $0006  ; size = $02xx ($0200), unused bank reg = $00.
     dw $1000|$420B, $02    ; Trigger DMA on channel 1
     
     ; Done
@@ -383,3 +395,36 @@ vm:
 
 print pc, " tinysave end"
 warnpc $80FC00 ; infohud.asm
+
+print pc, " tinysave bank82 start"
+org $82FE00
+
+tinystates_preload_bg_data:
+  JSR $82E2 ; Re-load BG3 tiles
+  RTL
+
+tinystates_mirror_bg_data:
+  PHB        
+  PEA $7F00  
+  PLB        
+  PLB        
+  LDA $0000  
+  TAX        
+  LSR A      
+  ADC $0000  
+  ADC $0000  
+  TAY        
+  BRA +
+-             
+  LDA $0002,y
+  STA $9602,x
++             
+  DEY        
+  DEY        
+  DEX        
+  DEX        
+  BPL -
+  PLB
+  RTL
+
+print pc, " tinysave bank82 end"

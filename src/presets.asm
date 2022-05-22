@@ -340,7 +340,7 @@ category_preset_data_table:
 }
 
 print pc, " presets bank82 end"
-
+warnpc $82FE00
 
 org $82E8D9
     JSL preset_room_setup_asm_fixes
