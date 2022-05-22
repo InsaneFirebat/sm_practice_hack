@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.6]  Speed up tiny state loadtimes by total
+* [2.4.2.5]  Experimental "tiny states" build for higher platform compatibility by total
 * [2.4.2.4]  Addded option to draw Mother Brain's custom hitboxes
 * [2.4.2.4]  Upgrade extended spritemap hitbox viewer to handle more enemies (Ridley, MB)
 * [2.4.2.3]  Fixed loading presets into West Ocean room
