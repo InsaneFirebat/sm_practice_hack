@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.6]  Fixed BG3 reloading and BG2 mirroring by total
 * [2.4.2.6]  Speed up tiny state loadtimes by total
 * [2.4.2.5]  Experimental "tiny states" build for higher platform compatibility by total
 * [2.4.2.4]  Addded option to draw Mother Brain's custom hitboxes

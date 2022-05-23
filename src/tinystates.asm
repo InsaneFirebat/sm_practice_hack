@@ -396,35 +396,27 @@ vm:
 print pc, " tinysave end"
 warnpc $80FC00 ; infohud.asm
 
-print pc, " tinysave bank82 start"
 org $82FE00
-
+print pc, " tinysave bank82 start"
 tinystates_preload_bg_data:
-  JSR $82E2 ; Re-load BG3 tiles
-  RTL
+    JSR $82E2 ; Re-load BG3 tiles
+    RTL
 
 tinystates_mirror_bg_data:
-  PHB        
-  PEA $7F00  
-  PLB        
-  PLB        
-  LDA $0000  
-  TAX        
-  LSR A      
-  ADC $0000  
-  ADC $0000  
-  TAY        
-  BRA +
--             
-  LDA $0002,y
-  STA $9602,x
-+             
-  DEY        
-  DEY        
-  DEX        
-  DEX        
-  BPL -
-  PLB
-  RTL
+{
+    PHB
+    PEA $7F00 : PLB : PLB
+    LDA $0000 : TAX
+    LSR : ADC $0000 : ADC $0000 : TAY
+    BRA .startLoop
 
+  .loop
+    LDA $0002,Y : STA $9602,X
+  .startLoop
+    DEY #2
+    DEX #2 : BPL .loop
+
+    PLB
+    RTL
+}
 print pc, " tinysave bank82 end"
