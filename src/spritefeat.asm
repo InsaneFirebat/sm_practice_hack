@@ -436,8 +436,9 @@ update_extended_spritemap_hitbox:
     LDA !ENEMY_BANK,X : STA $12
 
     ; get number of spritemaps
-    LDA [$10] : BEQ .nextEnemy
-    STA $C1 ; number of spritemap entries
+    ; Ceres steam has $1001 here ??
+    LDA [$10] : AND #$00FF : BEQ .nextEnemy
+    STA $C1
 
     ; get spritemap X/Y offsets
     LDA $10 : CLC : ADC #$0002 : STA $10
