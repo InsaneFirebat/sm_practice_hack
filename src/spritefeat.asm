@@ -683,16 +683,19 @@ update_samusproj_sprite_hitbox:
 custom_sprite_hitbox:
 {
     LDA !ROOM_ID : CMP #$DD58 : BEQ .mother_brain
-    LDA !ROOM_ID : CMP #$B32E : BNE .end
+    LDA !ROOM_ID : CMP #$B32E : BEQ .ridley_bridge
+    LDA !ROOM_ID : CMP #$E0B5 : BNE .end
+
+  .ridley_bridge
     JMP .ridley
 
   .end
     RTS
 
   .mother_brain
-    LDA $7E7800 : CMP #$0002 : BPL +
+    LDA $7E7800 : CMP #$0002 : BMI .end
 
-+   LDA $7E7808 : BEQ .end : STA $C1
+    LDA $7E7808 : BEQ .end : STA $C1
     LDX #$0000 : LDY !OAM_STACK_POINTER ; X = enemy index
     LDA #$00A9 : STA $12 ; MB bank
 
