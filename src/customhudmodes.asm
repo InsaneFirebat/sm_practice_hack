@@ -837,3 +837,49 @@ status_kraidradar:
   .done
     RTS
 }
+
+status_zebskip:
+{
+    ; check if MB room, $DD58
+    LDA !ROOM_ID : CMP #$DD58 : BNE .end
+
+    ; check if first zeb dead, $7ED821 : AND #$0008
+    LDA $7ED820 : AND #$0008 : BNE .secondZeb
+
+    ; check if X position is beyond first zeb
+    ; exit if first zeb alive and X beyond first zeb
+    LDA !SAMUS_X : CMP #$0334 : BMI .end
+    BRA .firstZeb
+
+  .end
+    RTS
+
+  .firstZeb
+    LDA !SAMUS_X : CMP #$0345 : BMI .stuck
+    LDA !IH_BLANK : STA $7EC68E
+    BRA .iFrames
+
+  .secondZeb
+    ; check if X is beyond 2nd zeb, exit if so
+    LDA !SAMUS_X : CMP #$0274 : BMI .end
+    CMP #$0285 : BMI .stuck
+    LDA !IH_BLANK : STA $7EC68E
+    BRA .iFrames
+
+  .stuck
+    LDA #$106B : STA $7EC68E
+
+  .iFrames
+    LDA !SAMUS_IFRAME_TIMER : BEQ .noIframes
+    AND #$00FF ; don't draw out-of-range garbage
+    LDX #$0088 : JSR Draw2
+    RTS
+
+  .noIframes
+    LDA #$2009 : STA $7EC68A
+    LDA !IH_BLANK : STA $7EC688
+    RTS
+}
+
+; negative = left, positive = right
+; 344 is in the first zeb
