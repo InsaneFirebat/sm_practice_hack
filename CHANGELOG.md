@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.8]  Added Ridley's tail to special boss hitbox viewer
+* [2.4.2.8]  Fixed crash when using extended spritemap hitbox viewer with Ceres steam
 * [2.4.2.8]  Added simple Zeb Skip trainer to room strats
 * [2.4.2.7]  Fixed BG3 reloading and BG2 mirroring by total
 * [2.4.2.6]  Speed up tiny state loadtimes by total
