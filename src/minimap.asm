@@ -137,7 +137,7 @@ mm_refresh_reserves:
 }
 
 print pc, " minimap bank82 end"
-warnpc $82F800 ; layout.asm
+warnpc $82FA00 ; presets.asm
 
 
 ; Placed in bank 90 so that the jumps work

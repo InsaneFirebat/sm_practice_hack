@@ -873,9 +873,7 @@ action_glitched_beam:
 }
 
 
-; -------------
 ; Teleport menu
-; -------------
 
 TeleportMenu:
     dw #tel_000
@@ -892,43 +890,43 @@ TeleportMenu:
     dw #tel_209
     dw #tel_goto_debug
     dw #$0000
-    %cm_header("TELEPOT TO SAVE STATION")
+    %cm_header("TELEPORT TO SAVE STATION")
 
 tel_000:
-    %cm_jsr("ZERO", #action_teleport, #$0000)
+    %cm_jsl("ZERO", #action_teleport, #$0000)
 
 tel_001:
-    %cm_jsr("FOUR", #action_teleport, #$0001)
+    %cm_jsl("FOUR", #action_teleport, #$0001)
 
 tel_002:
-    %cm_jsr("SEVEN", #action_teleport, #$0002)
+    %cm_jsl("SEVEN", #action_teleport, #$0002)
 
 tel_00B:
-    %cm_jsr("DEBUG - Charge Beam", #action_teleport, #$000B)
+    %cm_jsl("DEBUG - Charge Beam", #action_teleport, #$000B)
 
 tel_200:
-    %cm_jsr("Norfair ????", #action_teleport, #$0200)
+    %cm_jsl("Norfair ????", #action_teleport, #$0200)
 
 tel_209:
-    %cm_jsr("DEBUG - Kraid!", #action_teleport, #$0209)
+    %cm_jsl("DEBUG - Kraid!", #action_teleport, #$0209)
 
 tel_400:
-    %cm_jsr("BEE", #action_teleport, #$0400)
+    %cm_jsl("BEE", #action_teleport, #$0400)
 
 tel_401:
-    %cm_jsr("EFF", #action_teleport, #$0401)
+    %cm_jsl("EFF", #action_teleport, #$0401)
 
 tel_402:
-    %cm_jsr("DEE", #action_teleport, #$0402)
+    %cm_jsl("DEE", #action_teleport, #$0402)
 
 tel_412:
-    %cm_jsr("DEBUG - GEE", #action_teleport, #$0412)
+    %cm_jsl("DEBUG - GEE", #action_teleport, #$0412)
 
 tel_500:
-    %cm_jsr("JAY", #action_teleport, #$0500)
+    %cm_jsl("JAY", #action_teleport, #$0500)
 
 tel_501:
-    %cm_jsr("EMM", #action_teleport, #$0501)
+    %cm_jsl("EMM", #action_teleport, #$0501)
 
 tel_goto_debug:
     %cm_submenu("Debug Teleports", #DebugTeleportMenu)
@@ -957,7 +955,7 @@ tel_debug_station:
     %cm_numfield_hex("Station ID", !ram_tel_debug_station, 0, 22, 1, 4, #0)
 
 tel_debug_execute:
-    %cm_jsr("TELEPORT", #action_debug_teleport, #$0000)
+    %cm_jsl("TELEPORT", #action_debug_teleport, #$0000)
 
 action_teleport:
 {
@@ -972,14 +970,22 @@ action_teleport:
     %a16()
 
     STZ $0727 ; Pause menu index
+    STZ $0795 ; Clear message box index 
     STZ $1C1F ; Clear message box index
 
-+   JSL reset_all_counters
+    JSL reset_all_counters
     JSL stop_all_sounds
 
     LDA #$0001 : STA !ram_cm_leave
 
     RTL
+}
+
+action_debug_teleport:
+{
+    LDA !ram_tel_debug_area : XBA
+    ORA !ram_tel_debug_station : TAY
+    JMP action_teleport
 }
 
 
@@ -1633,10 +1639,6 @@ GameMenu:
     dw #game_pacifist
     dw #game_debugprojectiles
     dw #game_debugfixscrolloffsets
-    dw #$FFFF
-    dw #game_metronome
-    dw #game_metronome_tickrate
-    dw #game_metronome_sfx
     dw #$FFFF
 ;    dw #game_minimap
 ;    dw #game_clear_minimap
