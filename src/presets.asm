@@ -308,7 +308,7 @@ category_preset_load:
 }
 
 category_preset_data_table:
-    dl preset_prkd_crateria_ceres_elevator
+    dl preset_cchamber_crateria_puzzle_1
 
 print pc, " presets bank82 end"
 
@@ -670,13 +670,13 @@ warnpc $80F800 ; save.asm
 org $FE8000
 check bankcross off
 print pc, " preset data crossbank start"
-  incsrc presets/prkd_data.asm
+  incsrc presets/cchamber_data.asm
 print pc, " preset data crossbank end"
 warnpc $FEE000
 check bankcross on
 
 org $FEE000
 print pc, " preset menu bankFE start"
-  incsrc presets/prkd_menu.asm
+  incsrc presets/cchamber_menu.asm
 print pc, " preset menu bankFE end"
 
