@@ -67,6 +67,7 @@ preset_cchamber_crateria_puzzle_1:
     dw $D908, $0000  ; Map Stations
     dw $D90A, $0000  ; Map Stations
     dw $D90C, $0000  ; Map Stations
+    dw !PRESET_DOORS, $0001  ; Doors closed
     dw #$FFFF
 
 preset_cchamber_crateria_puzzle_2:
@@ -85,6 +86,7 @@ preset_cchamber_crateria_puzzle_2:
     dw $0AF8, $D000  ; Samus subpixel X
     dw $0AFA, $028B  ; Samus Y
     dw $D872, $0400  ; Items
+    dw !PRESET_DOORS, $0000  ; Doors opened
     dw #$FFFF
 
 preset_cchamber_crateria_puzzle_3:
@@ -178,7 +180,7 @@ preset_cchamber_crateria_puzzle_5_super:
     dw $0AF8, $4C00  ; Samus subpixel X
     dw $0AFA, $008B  ; Samus Y
     dw !PRESET_DOORS, $0000  ; Doors opened
-    dw !PRESET_ENEMIES, $0001 ; Enemies cleared
+    dw !PRESET_ENEMIES, $0000 ; Enemies cleared
     dw #$FFFF
 
 preset_cchamber_crateria_puzzle_6:
