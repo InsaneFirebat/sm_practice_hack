@@ -87,6 +87,7 @@ preset_load:
     ; Clear enemies if not in certain rooms
     LDA $079B : CMP #$9804 : BEQ .done_clearing_enemies
     CMP #$DD58 : BEQ .set_mb_state
+    LDA !PRESET_ENEMIES : BNE .done_clearing_enemies ; don't kill enemies if preset is marked
     JSR clear_all_enemies
 
   .done_clearing_enemies
@@ -203,6 +204,7 @@ preset_load_preset:
 {
     PHB
     LDA #$0000
+    STA !PRESET_DOORS : STA !PRESET_ENEMIES
     STA $7E09D2 ; Current selected weapon
     STA $7E0A04 ; Auto-cancel item
     LDA #$5AFE : STA $0917 ; Load garbage into Layer 2 X position
@@ -378,9 +380,12 @@ preset_start_gameplay:
     JSL preset_scroll_fixes
 
     LDA !sram_preset_options : BIT !PRESETS_CLOSE_BLUE_DOORS : BNE .done_opening_doors
-    LDA !SAMUS_POSE : BEQ .done_opening_doors
+    LDA !PRESET_DOORS : CMP #$FFFF : BEQ .done_opening_doors
+    LDA !SAMUS_POSE : BEQ + : CMP #$009B : BEQ .done_opening_doors
     CMP #$009B : BEQ .done_opening_doors
-    JSR preset_open_all_blue_doors
+    LDA !PRESET_DOORS : CMP #$0001 : BEQ .done_opening_doors
+    LDA $7ED914 : CMP #$0005 : BNE .done_opening_doors
++   JSR preset_open_all_blue_doors
 
   .done_opening_doors
     JSL $89AB82  ; Load FX
@@ -536,9 +541,13 @@ preset_open_all_blue_doors:
     %a16() : TYA : ASL : TAX : %a8()
     LDA $0001,X : BIT #$30 : BNE .bts_continue
 
+    ; check if door is forced open by preset
+    %a16()
+    LDA !PRESET_DOORS : CMP #$FFFF : BEQ .preset_forced_open
+
     ; If this door has a red scroll, then leave it closed
     ; Most of the work is to determine the scroll index
-    %a16() : TYA : DEC : LSR : LSR : LSR : LSR : STA $004204
+    TYA : DEC : LSR #4 : STA $004204
     %a8() : LDA $C7 : STA $004206
     %a16() : PHA : PLA : PHA : PLA
     LDA $004216 : STA $C8
@@ -549,6 +558,9 @@ preset_open_all_blue_doors:
     LDA $004216 : CLC : ADC $C8
     PHX : TAX : LDA $7ECD20,X : PLX
     CMP #$00 : BEQ .bts_continue
+
+  .preset_forced_open
+    %a8()
 
     ; Check what type of door we need to open
     LDA $6401,Y : BIT #$02 : BNE .bts_check_up_or_down

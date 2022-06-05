@@ -160,6 +160,8 @@ preset_cchamber_crateria_puzzle_5_gate:
     dw $0AF6, $02A2  ; Samus X
     dw $0AF8, $6000  ; Samus subpixel X
     dw $0AFA, $018B  ; Samus Y
+    dw !PRESET_DOORS, $0001  ; Doors closed
+    dw !PRESET_ENEMIES, $0001 ; Enemies alive
     dw #$FFFF
 
 preset_cchamber_crateria_puzzle_5_super:
@@ -175,6 +177,8 @@ preset_cchamber_crateria_puzzle_5_super:
     dw $0AF6, $0031  ; Samus X
     dw $0AF8, $4C00  ; Samus subpixel X
     dw $0AFA, $008B  ; Samus Y
+    dw !PRESET_DOORS, $0000  ; Doors opened
+    dw !PRESET_ENEMIES, $0001 ; Enemies cleared
     dw #$FFFF
 
 preset_cchamber_crateria_puzzle_6:
