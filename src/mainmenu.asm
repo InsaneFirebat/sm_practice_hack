@@ -1262,8 +1262,8 @@ InfoHudMenu:
     dw #ih_goto_display_mode
     dw #ih_display_mode
     dw #$FFFF
-    dw #ih_goto_room_strat
-    dw #ih_room_strat
+;    dw #ih_goto_room_strat
+;    dw #ih_room_strat
     dw #$FFFF
     dw #ih_top_HUD_mode
     dw #$FFFF
