@@ -23,6 +23,7 @@
     dw status_quickdrop
     dw status_walljump
     dw status_shottimer
+    dw status_gateglitch
     dw status_ramwatch
 
 status_enemyhp:
@@ -1580,42 +1581,15 @@ status_gateglitch:
     INC : STA !ram_roomstrat_counter
     BRA .roomcheck
 
-  .greenhills
-    LDA #$0654 : STA !ram_xpos
-    BRA .checkglitch
-
-  .grappletutorial
-    LDA #$02B4 : STA !ram_xpos
-    BRA .checkglitch
-
-  .doublechamber
-    LDA #$01B4 : STA !ram_xpos
-    BRA .checkglitch
-
-  .kronic
-    LDA #$0084 : STA !ram_xpos
-    BRA .checkglitch
-
   .clearstate
     LDA #$0000 : STA !ram_roomstrat_state
 
   .roomcheck
     ; The gate location is hard-coded depending on the room
-    LDA !ROOM_ID : CMP #$9E52 : BEQ .greenhills : CMP #$AB64 : BEQ .grappletutorial
-    CMP #$ADAD : BEQ .doublechamber : CMP #$AE74 : BEQ .kronic
-    CMP #$AF72 : BEQ .unfarm : CMP #$B2DA : BEQ .fastripper : CMP #$D08A : BEQ .crabtunnel
-    BRA .done
+    LDA !ROOM_ID : CMP #$9F64 : BNE .done
 
-  .unfarm
-    LDA #$0074 : STA !ram_xpos
-    BRA .checkglitch
-
-  .fastripper
-    LDA #$0354 : STA !ram_xpos
-    BRA .checkglitch
-
-  .crabtunnel
-    LDA #$00F4 : STA !ram_xpos
+    ; Against the gate, minus 1
+    LDA #$0254 : STA !ram_xpos
     BRA .checkglitch
 
   .checkglitch

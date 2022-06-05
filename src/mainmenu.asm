@@ -1302,6 +1302,7 @@ DisplayModeMenu:
     dw ihmode_quickdrop
     dw ihmode_walljump
     dw ihmode_shottimer
+    dw ihmode_gateglitch
     dw ihmode_ramwatch
     dw #$0000
     %cm_header("INFOHUD DISPLAY MODE")
@@ -1363,9 +1364,12 @@ ihmode_walljump:
 ihmode_shottimer:
     %cm_jsl("Shot Timer", #action_select_infohud_mode, #$0011)
 
-!IH_MODE_RAMWATCH_INDEX = $0012
+ihmode_gateglitch:
+    %cm_jsl("Gate Glitch Trainer", #action_select_infohud_mode, #$0012)
+
+!IH_MODE_RAMWATCH_INDEX = $0013
 ihmode_ramwatch:
-    %cm_jsl("RAM Watch", #action_select_infohud_mode, #$0012)
+    %cm_jsl("RAM Watch", #action_select_infohud_mode, #$0013)
 
 action_select_infohud_mode:
 {
@@ -1398,6 +1402,7 @@ ih_display_mode:
     db #$28, " QUICK DROP", #$FF
     db #$28, "  WALL JUMP", #$FF
     db #$28, " SHOT TIMER", #$FF
+    db #$28, "GATE GLITCH", #$FF
     db #$28, "  RAM WATCH", #$FF
     db #$FF
 
