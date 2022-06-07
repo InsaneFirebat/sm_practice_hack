@@ -60,6 +60,7 @@ status_roomstrat:
     dw status_kihuntermanip
     dw status_kraidradar
     dw status_zebskip
+    dw status_pitdoor
 }
 
 status_chargetimer:

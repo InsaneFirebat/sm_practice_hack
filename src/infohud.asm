@@ -356,8 +356,7 @@ ih_before_room_transition:
 
     ; Realtime
     LDA !ram_realtime_room : STA !ram_last_realtime_room
-    LDA #$0000 : STA !ram_realtime_room
-    LDA #$0000 : STA !ram_last_realtime_door
+    LDA #$0000 : STA !ram_realtime_room : STA !ram_last_realtime_door
 
     ; Save temp variables
     LDA $12 : PHA
