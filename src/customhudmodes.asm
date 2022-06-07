@@ -890,5 +890,19 @@ status_zebskip:
     RTS
 }
 
+status_pitdoor:
+{
+    LDA !ROOM_ID : CMP #$975C : BNE .done
+    LDA $7EDE64 : BNE .draw_N
+    LDA !IH_LETTER_Y : STA $7EC68E
+    RTS
+
+  .draw_N
+    LDA !IH_LETTER_N : STA $7EC68E
+
+  .done
+    RTS
+}
+
 ; negative = left, positive = right
 ; 344 is in the first zeb

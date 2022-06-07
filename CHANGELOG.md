@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.9]  Added a room strat for Pit Room right door in True Completion
 * [2.4.2.8]  Added Ridley's tail to special boss hitbox viewer
 * [2.4.2.8]  Fixed crash when using extended spritemap hitbox viewer with Ceres steam
 * [2.4.2.8]  Added simple Zeb Skip trainer to room strats
