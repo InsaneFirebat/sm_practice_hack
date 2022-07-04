@@ -340,6 +340,7 @@ PresetsMenu:
     dw #$FFFF
     dw #presets_open_doors
     dw #presets_enemies
+    dw #presets_map_tiles
 ;    dw #presets_ship_landing
 if !RAW_TILE_GRAPHICS
     dw #$FFFF
@@ -395,6 +396,9 @@ presets_open_doors:
 
 presets_enemies:
     %cm_toggle("Load with Enemies", !sram_preset_enemies, #$0001, #0)
+
+presets_map_tiles:
+    %cm_toggle("Clear Map Tiles", !sram_preset_map_tiles, #$0001, #0)
 
 presets_ship_landing:
     %cm_toggle("Ship Landing Sequence", !sram_preset_ship_landing, #$0001, #0)

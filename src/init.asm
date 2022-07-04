@@ -165,7 +165,7 @@ init_sram:
     LDA #$0001 : STA !sram_preset_open_doors
     LDA #$0001 : STA !sram_preset_ship_landing ; 1 - on until ship presets are fixed
     LDA #$0000 : STA !sram_preset_enemies
-
+    LDA #$0001 : STA !sram_preset_map_tiles
     LDA #$0000 : STA !sram_countdamage
     LDA #$0001 : STA !sram_menu_background
     LDA #$000A : STA !sram_metronome_tickrate
