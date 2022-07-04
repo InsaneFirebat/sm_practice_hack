@@ -84,6 +84,11 @@ endif
   .done_upload_sprite_oob_tiles
     JSL reset_all_counters
 
+    ; Clear minimap tiles
+    LDA !sram_preset_map_tiles : BEQ .enemies
+    JSL game_clear_minimap_clear_minimap
+
+  .enemies
     ; Clear enemies if not in certain rooms
     LDA !ROOM_ID : CMP #$9804 : BEQ .set_mb_state
     CMP #$DD58 : BEQ .set_mb_state

@@ -15,8 +15,8 @@
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 4
 !VERSION_BUILD = 2
-!VERSION_REV_1 = 0
-!VERSION_REV_2 = 9
+!VERSION_REV_1 = 1
+!VERSION_REV_2 = 0
 
 
 ; ---------
@@ -496,6 +496,7 @@
 !sram_cutscenes = !SRAM_START+$46
 !sram_compressed_graphics = !SRAM_START+$48
 !sram_lag_counter_mode = !SRAM_START+$4A
+!sram_preset_map_tiles = !SRAM_START+$4C
 
 ; ^ FREE SPACE ^ up to $F03000
 
