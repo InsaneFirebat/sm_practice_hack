@@ -613,6 +613,7 @@ EquipmentMenu:
     dw #$FFFF
     dw #eq_currentreserves
     dw #eq_setreserves
+    dw #eq_reservemode
     dw #$FFFF
     dw #eq_currentmissiles
     dw #eq_setmissiles
@@ -680,6 +681,21 @@ eq_setreserves:
       .endloop
         STA !SAMUS_RESERVE_ENERGY : STA !SAMUS_RESERVE_MAX
         RTL
+
+eq_reservemode:
+    dw !ACTION_CHOICE
+    dl #$7E0000+!SAMUS_RESERVE_MODE
+    dw #.routine
+    db #$28, "Reserve Mode", #$FF
+    db #$28, " UNOBTAINED", #$FF
+    db #$28, "       AUTO", #$FF
+    db #$28, "     MANUAL", #$FF
+    db #$FF
+  .routine
+    LDA !SAMUS_RESERVE_MAX : BNE +
+    STA !SAMUS_RESERVE_MODE
+    %sfxdamage()
++   RTL
 
 eq_currentmissiles:
     %cm_numfield_word("Current Missiles", $7E09C6, 0, 325, 1, 20, #0)
@@ -1102,7 +1118,6 @@ MiscMenu:
     dw #misc_bluesuit
     dw #misc_flashsuit
     dw #misc_hyperbeam
-    dw #misc_reserve_mode
     dw #$FFFF
     dw #misc_invincibility
     dw #misc_infiniteammo
@@ -1131,21 +1146,6 @@ misc_flashsuit:
 
 misc_hyperbeam:
     %cm_toggle_bit("Hyper Beam", $7E0A76, #$8000, #0)
-
-misc_reserve_mode:
-    dw !ACTION_CHOICE
-    dl #$7E0000+!SAMUS_RESERVE_MODE
-    dw #.routine
-    db #$28, "Reserve Mode", #$FF
-    db #$28, " UNOBTAINED", #$FF
-    db #$28, "       AUTO", #$FF
-    db #$28, "     MANUAL", #$FF
-    db #$FF
-  .routine
-    LDA !SAMUS_RESERVE_MAX : BNE +
-    STA !SAMUS_RESERVE_MODE
-    %sfxdamage()
-+   RTL
 
 misc_slowdownrate:
     %cm_numfield("Samus Slowdown Rate", $7E0A66, 0, 4, 1, 1, #0)

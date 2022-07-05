@@ -1,6 +1,10 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.12] Added a menu option to change reserve modes
+* [2.4.2.11] Fixed compatibility with cout's timer tracking tool
+* [2.4.2.10] Added option to clear map tiles on preset load
+* [2.4.2.10] Updated MM2 menu palette profile
 * [2.4.2.9]  Added a room strat for Pit Room right door in True Completion
 * [2.4.2.8]  Added Ridley's tail to special boss hitbox viewer
 * [2.4.2.8]  Fixed crash when using extended spritemap hitbox viewer with Ceres steam
