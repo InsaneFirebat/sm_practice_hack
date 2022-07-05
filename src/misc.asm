@@ -2,6 +2,7 @@
 org $008000
     db $FF
 
+
 ; Set SRAM size
 org $00FFD8
 if !FEATURE_TINYSTATES
@@ -14,9 +15,16 @@ else
 endif
 endif
 
+
 ; Set version in game header
 org $00FFDB
     db !VERSION_HEADER
+
+
+; Write offset to hack RAM for cout's timer tracking tool
+org $80FFF0
+    dl !TIMER_WRAM
+
 
 ; Enable version display
 org $8B8697
