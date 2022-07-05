@@ -16,7 +16,7 @@
 !VERSION_MINOR = 4
 !VERSION_BUILD = 2
 !VERSION_REV_1 = 1
-!VERSION_REV_2 = 1
+!VERSION_REV_2 = 2
 
 
 ; ---------
@@ -26,24 +26,23 @@
 !WRAM_BANK = #$007E
 !WRAM_SIZE = #$0500
 !WRAM_START = $7EFB00
+!TIMER_WRAM = $7EFD00
 
-!ram_custom_preset = !WRAM_START+$02
+;FREE_SPACE = !WRAM_START+$00
+!ram_gametime_room = !TIMER_WRAM+$02
+!ram_last_gametime_room = !TIMER_WRAM+$04
+!ram_realtime_room = !TIMER_WRAM+$06
+!ram_last_realtime_room = !TIMER_WRAM+$08
+!ram_last_room_lag = !TIMER_WRAM+$0A
+!ram_last_door_lag_frames = !TIMER_WRAM+$0C
+!ram_transition_counter = !TIMER_WRAM+$0E
+!ram_transition_flag = !TIMER_WRAM+$10
+!ram_last_realtime_door = !TIMER_WRAM+$12
 
-!ram_load_preset = !WRAM_START+$200
-!ram_gametime_room = !WRAM_START+$202
-!ram_last_gametime_room = !WRAM_START+$204
-!ram_realtime_room = !WRAM_START+$206
-!ram_last_realtime_room = !WRAM_START+$208
-!ram_last_room_lag = !WRAM_START+$20A
-!ram_last_door_lag_frames = !WRAM_START+$20C
-!ram_transition_counter = !WRAM_START+$20E
-!ram_transition_flag = !WRAM_START+$210
-!ram_last_realtime_door = !WRAM_START+$212
-
-!ram_seg_rt_frames = !WRAM_START+$214
-!ram_seg_rt_seconds = !WRAM_START+$216
-!ram_seg_rt_minutes = !WRAM_START+$218
-!ram_reset_segment_later = !WRAM_START+$21A
+!ram_seg_rt_frames = !TIMER_WRAM+$14
+!ram_seg_rt_seconds = !TIMER_WRAM+$16
+!ram_seg_rt_minutes = !TIMER_WRAM+$18
+!ram_reset_segment_later = !TIMER_WRAM+$1A
 
 !ram_ih_controller = !WRAM_START+$1E
 !ram_slowdown_controller_1 = !WRAM_START+$20
@@ -98,7 +97,7 @@
 !ram_sprite_features_active = !WRAM_START+$76
 !ram_fix_scroll_offsets = !WRAM_START+$78
 
-!FREE_SPACE = !WRAM_START+$7A
+;!FREE_SPACE = !WRAM_START+$7A
 
 !ram_pacifist = !WRAM_START+$7C
 !ram_freeze_on_load = !WRAM_START+$7E
@@ -150,8 +149,10 @@
 !ram_momentum_direction = !WRAM_START+$D4
 !ram_momentum_last = !WRAM_START+$D6
 
-; ^ FREE SPACE ^ up to +$F8
+; ^ FREE SPACE ^ up to +$F4
 
+!ram_load_preset = !WRAM_START+$F6
+!ram_custom_preset = !WRAM_START+$F8
 !ram_random_preset_rng = !WRAM_START+$FA
 !ram_random_preset_value = !WRAM_START+$FC
 
