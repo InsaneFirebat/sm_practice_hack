@@ -822,6 +822,7 @@ draw_numfield_sound:
     ; set position for the number
     TXA : CLC : ADC #$0030 : TAX
 
+    ; load the value
     LDA [$08] : AND #$00FF : STA $C1
 
     ; Clear out the area (black tile)
@@ -832,12 +833,17 @@ draw_numfield_sound:
     ; (00X0)
     LDA $C1 : AND #$00F0 : LSR #3 : TAY
     LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer,X
-        
+
     ; (000X)
     LDA $C1 : AND #$000F : ASL : TAY
     LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X
 
-  .done
+    ; overwrite palette bytes
+    %a8()
+    LDA #$24 : ORA $0E
+    STA !ram_tilemap_buffer+1,X : STA !ram_tilemap_buffer+3,X
+    %a16()
+
     RTS
 }
 
@@ -879,6 +885,13 @@ draw_numfield_hex_word:
     LDA $C1 : AND #$000F : ASL : TAY
     LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+6,X
 
+    ; overwrite palette bytes
+    %a8()
+    LDA #$24 : ORA $0E
+    STA !ram_tilemap_buffer+1,X : STA !ram_tilemap_buffer+3,X
+    STA !ram_tilemap_buffer+5,X : STA !ram_tilemap_buffer+7,X
+    %a16()
+
   .done
     RTS
 }
@@ -911,9 +924,15 @@ draw_numfield_color:
     LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer,X
 
     ; (000X)
-    LDA $C1 : AND #$0001 : ASL #4 : STA $0E
-    LDA $C1 : AND #$001C : LSR : CLC : ADC $0E : TAY
+    LDA $C1 : AND #$0001 : ASL #4 : STA $C3
+    LDA $C1 : AND #$001C : LSR : CLC : ADC $C3 : TAY
     LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X
+
+    ; overwrite palette bytes
+    %a8()
+    LDA #$24 : ORA $0E
+    STA !ram_tilemap_buffer+1,X : STA !ram_tilemap_buffer+3,X
+    %a16()
 
   .done
     RTS

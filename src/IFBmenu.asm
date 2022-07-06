@@ -76,7 +76,9 @@ ifb_emu_test:
 
   .badEmu
     ; didn't wait for math
-;print pc, " DEBUG %%%%%%%%%% BRK #$9F bad emu"
+    LDA #$BADD
+    LDX #$FOOD
+    LDY #$DEAD
     BRK #$9F
 endif
 
