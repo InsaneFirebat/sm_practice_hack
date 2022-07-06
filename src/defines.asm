@@ -16,7 +16,7 @@
 !VERSION_MINOR = 4
 !VERSION_BUILD = 2
 !VERSION_REV_1 = 1
-!VERSION_REV_2 = 3
+!VERSION_REV_2 = 4
 
 
 ; ---------
@@ -708,6 +708,8 @@ endif
 !sram_custompalette_blue = !SRAM_START+$2A2
 !sram_custompalette_green = !SRAM_START+$2A4
 !sram_custompalette_red = !SRAM_START+$2A6
+!sram_custompalette_hi = !SRAM_START+$2A8
+!sram_custompalette_lo = !SRAM_START+$2AA
 
 ; FREE SPACE ^
 
