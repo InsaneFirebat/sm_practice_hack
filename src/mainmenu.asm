@@ -2335,6 +2335,7 @@ game_cutscenes:
 ; ---------------
 
 CutscenesMenu:
+    dw #cutscenes_fast_nintendo_logo
     dw #cutscenes_skip_intro
     dw #cutscenes_skip_ceres_arrival
     dw #$FFFF
@@ -2345,6 +2346,9 @@ CutscenesMenu:
     dw #cutscenes_fast_mb
     dw #$0000
     %cm_header("CUTSCENES")
+
+cutscenes_fast_nintendo_logo:
+    %cm_toggle("Fast Nintendo Logo", !sram_fast_nintendo_logo, #$0001, #0)
 
 !CUTSCENE_SKIP_INTRO = #$0001
 cutscenes_skip_intro:
