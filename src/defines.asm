@@ -242,7 +242,7 @@
 
 !ACTION_TOGGLE              = #$0000
 !ACTION_TOGGLE_BIT          = #$0002
-!ACTION_JSR                 = #$0004
+!ACTION_JSL                 = #$0004
 !ACTION_NUMFIELD            = #$0006
 !ACTION_CHOICE              = #$0008
 !ACTION_CTRL_SHORTCUT       = #$000A
@@ -254,11 +254,11 @@
 !ACTION_NUMFIELD_SOUND      = #$0016
 !ACTION_CTRL_INPUT          = #$0018
 !ACTION_TOGGLE_BIT_INVERTED = #$001A
-!ACTION_JSR_SUBMENU         = #$001C
+!ACTION_JSL_SUBMENU         = #$001C
 
 ; using macros instead of these in custom builds
 !SOUND_MENU_MOVE = $0039
-!SOUND_MENU_JSR = $0039
+!SOUND_MENU_JSL = $0039
 !SOUND_MENU_FAIL = $0007
 
 

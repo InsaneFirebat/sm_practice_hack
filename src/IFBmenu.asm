@@ -65,7 +65,7 @@ ifb_factory_reset:
 
 if !FEATURE_DEV
 ifb_emu_test:
-    %cm_jsr("BRK 9F (crash) if bad emu", .routine, #0)
+    %cm_jsl("BRK 9F (crash) if bad emu", .routine, #0)
   .routine
     %a8()
     LDA #$06 : STA $4202
@@ -77,7 +77,7 @@ ifb_emu_test:
   .badEmu
     ; didn't wait for math
     LDA #$BADD
-    LDX #$FOOD
+    LDX #$F00D
     LDY #$DEAD
     BRK #$9F
 endif
@@ -115,7 +115,7 @@ BRBMenu:
     %cm_header("BRB SCREEN MENU")
 
 ifb_brb_screen:
-    %cm_jsr("Launch BRB Screen", .routine, #0)
+    %cm_jsl("Launch BRB Screen", .routine, #0)
   .routine
     JSL cm_brb_loop
     JSL wait_for_lag_frame_long
@@ -140,7 +140,7 @@ ifb_brb_timer_sec:
     %cm_numfield("Seconds on Timer", !ram_cm_brb_secs, 0, 59, 1, 5, #0)
 
 ifb_brb_timer_clear:
-    %cm_jsr("Clear Timer", .routine, #0)
+    %cm_jsl("Clear Timer", .routine, #0)
   .routine
     TYA : STA !ram_cm_brb_mins
     STA !ram_cm_brb_secs : STA !ram_cm_brb_frames
@@ -214,28 +214,28 @@ DebugTeleportCrateriaMenu:
     %cm_header("CRATERIA DEBUG LOAD")
 
 tel_crat_08:
-    %cm_jsr("Crateria 08", #action_teleport_long, #$0008)
+    %cm_jsl("Crateria 08", #action_teleport_long, #$0008)
 
 tel_crat_09:
-    %cm_jsr("Crateria 09", #action_teleport_long, #$0009)
+    %cm_jsl("Crateria 09", #action_teleport_long, #$0009)
 
 tel_crat_0A:
-    %cm_jsr("Crateria 0A", #action_teleport_long, #$000A)
+    %cm_jsl("Crateria 0A", #action_teleport_long, #$000A)
 
 tel_crat_0B:
-    %cm_jsr("Crateria 0B", #action_teleport_long, #$000B)
+    %cm_jsl("Crateria 0B", #action_teleport_long, #$000B)
 
 tel_crat_0C:
-    %cm_jsr("Crateria 0C", #action_teleport_long, #$000C)
+    %cm_jsl("Crateria 0C", #action_teleport_long, #$000C)
 
 tel_crat_10:
-    %cm_jsr("Crateria 10", #action_teleport_long, #$0010)
+    %cm_jsl("Crateria 10", #action_teleport_long, #$0010)
 
 tel_crat_11:
-    %cm_jsr("Crateria 11", #action_teleport_long, #$0011)
+    %cm_jsl("Crateria 11", #action_teleport_long, #$0011)
 
 tel_crat_12:
-    %cm_jsr("Crateria 12", #action_teleport_long, #$0012)
+    %cm_jsl("Crateria 12", #action_teleport_long, #$0012)
 
 DebugTeleportBrinstarMenu:
     dw #tel_brin_08
@@ -248,22 +248,22 @@ DebugTeleportBrinstarMenu:
     %cm_header("BRINSTAR DEBUG LOAD")
 
 tel_brin_08:
-    %cm_jsr("Brinstar 08", #action_teleport_long, #$0108)
+    %cm_jsl("Brinstar 08", #action_teleport_long, #$0108)
 
 tel_brin_09:
-    %cm_jsr("Brinstar 09", #action_teleport_long, #$0109)
+    %cm_jsl("Brinstar 09", #action_teleport_long, #$0109)
 
 tel_brin_0A:
-    %cm_jsr("Brinstar 0A", #action_teleport_long, #$010A)
+    %cm_jsl("Brinstar 0A", #action_teleport_long, #$010A)
 
 tel_brin_0B:
-    %cm_jsr("Brinstar 0B", #action_teleport_long, #$010B)
+    %cm_jsl("Brinstar 0B", #action_teleport_long, #$010B)
 
 tel_brin_11:
-    %cm_jsr("Brinstar 11", #action_teleport_long, #$0111)
+    %cm_jsl("Brinstar 11", #action_teleport_long, #$0111)
 
 tel_brin_12:
-    %cm_jsr("Brinstar 12", #action_teleport_long, #$0112)
+    %cm_jsl("Brinstar 12", #action_teleport_long, #$0112)
 
 DebugTeleportNorfairMenu:
     dw #tel_norf_08
@@ -279,31 +279,31 @@ DebugTeleportNorfairMenu:
     %cm_header("NORFAIR DEBUG LOAD")
 
 tel_norf_08:
-    %cm_jsr("Norfair 08", #action_teleport_long, #$0208)
+    %cm_jsl("Norfair 08", #action_teleport_long, #$0208)
 
 tel_norf_09:
-    %cm_jsr("Norfair 09", #action_teleport_long, #$0209)
+    %cm_jsl("Norfair 09", #action_teleport_long, #$0209)
 
 tel_norf_0A:
-    %cm_jsr("Norfair 0A", #action_teleport_long, #$020A)
+    %cm_jsl("Norfair 0A", #action_teleport_long, #$020A)
 
 tel_norf_11:
-    %cm_jsr("Norfair 11", #action_teleport_long, #$0211)
+    %cm_jsl("Norfair 11", #action_teleport_long, #$0211)
 
 tel_norf_12:
-    %cm_jsr("Norfair 12", #action_teleport_long, #$0212)
+    %cm_jsl("Norfair 12", #action_teleport_long, #$0212)
 
 tel_norf_13:
-    %cm_jsr("Norfair 13", #action_teleport_long, #$0213)
+    %cm_jsl("Norfair 13", #action_teleport_long, #$0213)
 
 tel_norf_14:
-    %cm_jsr("Norfair 14", #action_teleport_long, #$0214)
+    %cm_jsl("Norfair 14", #action_teleport_long, #$0214)
 
 tel_norf_15:
-    %cm_jsr("Norfair 15", #action_teleport_long, #$0215)
+    %cm_jsl("Norfair 15", #action_teleport_long, #$0215)
 
 tel_norf_16:
-    %cm_jsr("Norfair 16", #action_teleport_long, #$0216)
+    %cm_jsl("Norfair 16", #action_teleport_long, #$0216)
 
 DebugTeleportWreckedShipMenu:
     dw #tel_ship_10
@@ -312,10 +312,10 @@ DebugTeleportWreckedShipMenu:
     %cm_header("WRECKED SHIP DEBUG LOAD")
 
 tel_ship_10:
-    %cm_jsr("Wrecked Ship 10", #action_teleport_long, #$0310)
+    %cm_jsl("Wrecked Ship 10", #action_teleport_long, #$0310)
 
 tel_ship_11:
-    %cm_jsr("Wrecked Ship 11", #action_teleport_long, #$0311)
+    %cm_jsl("Wrecked Ship 11", #action_teleport_long, #$0311)
 
 DebugTeleportMaridiaMenu:
     dw #tel_mari_08
@@ -327,19 +327,19 @@ DebugTeleportMaridiaMenu:
     %cm_header("MARIDIA DEBUG LOAD")
 
 tel_mari_08:
-    %cm_jsr("Maridia 08", #action_teleport_long, #$0408)
+    %cm_jsl("Maridia 08", #action_teleport_long, #$0408)
 
 tel_mari_10:
-    %cm_jsr("Maridia 10", #action_teleport_long, #$0410)
+    %cm_jsl("Maridia 10", #action_teleport_long, #$0410)
 
 tel_mari_11:
-    %cm_jsr("Maridia 11", #action_teleport_long, #$0411)
+    %cm_jsl("Maridia 11", #action_teleport_long, #$0411)
 
 tel_mari_12:
-    %cm_jsr("Maridia 12", #action_teleport_long, #$0412)
+    %cm_jsl("Maridia 12", #action_teleport_long, #$0412)
 
 tel_mari_13:
-    %cm_jsr("Maridia 13", #action_teleport_long, #$0413)
+    %cm_jsl("Maridia 13", #action_teleport_long, #$0413)
 
 
 DebugTeleportTourianMenu:
@@ -350,13 +350,13 @@ DebugTeleportTourianMenu:
     %cm_header("TOURIAN DEBUG LOAD")
 
 tel_tour_08:
-    %cm_jsr("Tourian 08", #action_teleport_long, #$0508)
+    %cm_jsl("Tourian 08", #action_teleport_long, #$0508)
 
 tel_tour_10:
-    %cm_jsr("Tourian 10", #action_teleport_long, #$0510)
+    %cm_jsl("Tourian 10", #action_teleport_long, #$0510)
 
 tel_tour_11:
-    %cm_jsr("Tourian Baby Skip", #action_teleport_long, #$0511)
+    %cm_jsl("Tourian Baby Skip", #action_teleport_long, #$0511)
 
 DebugTeleportExtraMenu:
     dw #tel_ceres
@@ -365,10 +365,10 @@ DebugTeleportExtraMenu:
     %cm_header("EXTRA DEBUG LOAD")
 
 tel_ceres:
-    %cm_jsr("Ceres Station", #action_teleport_long, #$0600)
+    %cm_jsl("Ceres Station", #action_teleport_long, #$0600)
 
 tel_debug:
-    %cm_jsr("Debug Room CRASH", #action_teleport_long, #$0700)
+    %cm_jsl("Debug Room CRASH", #action_teleport_long, #$0700)
 
 action_teleport_long:
 {
@@ -466,7 +466,7 @@ ifb_soundtest_lib3_sound:
     RTL
 
 ifb_soundtest_silence:
-    %cm_jsr("Silence Sound FX", .routine, #0)
+    %cm_jsl("Silence Sound FX", .routine, #0)
   .routine
     JSL stop_all_sounds
     RTL
@@ -499,64 +499,64 @@ MusicSelectMenu1:
     %cm_header("PLAY MUSIC - PAGE ONE")
 
 ifb_soundtest_music_title1:
-    %cm_jsr("Title Theme Part 1", #action_soundtest_playmusic, #$0305)
+    %cm_jsl("Title Theme Part 1", #action_soundtest_playmusic, #$0305)
 
 ifb_soundtest_music_title2:
-    %cm_jsr("Title Theme Part 2", #action_soundtest_playmusic, #$0306)
+    %cm_jsl("Title Theme Part 2", #action_soundtest_playmusic, #$0306)
 
 ifb_soundtest_music_intro:
-    %cm_jsr("Intro", #action_soundtest_playmusic, #$3605)
+    %cm_jsl("Intro", #action_soundtest_playmusic, #$3605)
 
 ifb_soundtest_music_ceres:
-    %cm_jsr("Ceres Station", #action_soundtest_playmusic, #$2D06)
+    %cm_jsl("Ceres Station", #action_soundtest_playmusic, #$2D06)
 
 ifb_soundtest_music_escape:
-    %cm_jsr("Escape Sequence", #action_soundtest_playmusic, #$2407)
+    %cm_jsl("Escape Sequence", #action_soundtest_playmusic, #$2407)
 
 ifb_soundtest_music_rainstorm:
-    %cm_jsr("Zebes Rainstorm", #action_soundtest_playmusic, #$0605)
+    %cm_jsl("Zebes Rainstorm", #action_soundtest_playmusic, #$0605)
 
 ifb_soundtest_music_spacepirate:
-    %cm_jsr("Space Pirate Theme", #action_soundtest_playmusic, #$0905)
+    %cm_jsl("Space Pirate Theme", #action_soundtest_playmusic, #$0905)
 
 ifb_soundtest_music_samustheme:
-    %cm_jsr("Samus Theme", #action_soundtest_playmusic, #$0C05)
+    %cm_jsl("Samus Theme", #action_soundtest_playmusic, #$0C05)
 
 ifb_soundtest_music_greenbrinstar:
-    %cm_jsr("Green Brinstar", #action_soundtest_playmusic, #$0F05)
+    %cm_jsl("Green Brinstar", #action_soundtest_playmusic, #$0F05)
 
 ifb_soundtest_music_redbrinstar:
-    %cm_jsr("Red Brinstar", #action_soundtest_playmusic, #$1205)
+    %cm_jsl("Red Brinstar", #action_soundtest_playmusic, #$1205)
 
 ifb_soundtest_music_uppernorfair:
-    %cm_jsr("Upper Norfair", #action_soundtest_playmusic, #$1505)
+    %cm_jsl("Upper Norfair", #action_soundtest_playmusic, #$1505)
 
 ifb_soundtest_music_lowernorfair:
-    %cm_jsr("Lower Norfair", #action_soundtest_playmusic, #$1805)
+    %cm_jsl("Lower Norfair", #action_soundtest_playmusic, #$1805)
 
 ifb_soundtest_music_easternmaridia:
-    %cm_jsr("Eastern Maridia", #action_soundtest_playmusic, #$1B05)
+    %cm_jsl("Eastern Maridia", #action_soundtest_playmusic, #$1B05)
 
 ifb_soundtest_music_westernmaridia:
-    %cm_jsr("Western Maridia", #action_soundtest_playmusic, #$1B06)
+    %cm_jsl("Western Maridia", #action_soundtest_playmusic, #$1B06)
 
 ifb_soundtest_music_wreckedshipoff:
-    %cm_jsr("Wrecked Ship Unpowered", #action_soundtest_playmusic, #$3005)
+    %cm_jsl("Wrecked Ship Unpowered", #action_soundtest_playmusic, #$3005)
 
 ifb_soundtest_music_wreckedshipon:
-    %cm_jsr("Wrecked Ship", #action_soundtest_playmusic, #$3006)
+    %cm_jsl("Wrecked Ship", #action_soundtest_playmusic, #$3006)
 
 ifb_soundtest_music_hallway:
-    %cm_jsr("Hallway to Statue", #action_soundtest_playmusic, #$0004)
+    %cm_jsl("Hallway to Statue", #action_soundtest_playmusic, #$0004)
 
 ifb_soundtest_music_goldenstatue:
-    %cm_jsr("Golden Statue", #action_soundtest_playmusic, #$0906)
+    %cm_jsl("Golden Statue", #action_soundtest_playmusic, #$0906)
 
 ifb_soundtest_music_tourian:
-    %cm_jsr("Tourian", #action_soundtest_playmusic, #$1E05)
+    %cm_jsl("Tourian", #action_soundtest_playmusic, #$1E05)
 
 ifb_soundtest_music_goto_2:
-    %cm_jsr("GOTO PAGE TWO", .routine, #MusicSelectMenu2)
+    %cm_jsl("GOTO PAGE TWO", .routine, #MusicSelectMenu2)
   .routine
     JSL cm_go_back
     %setmenubank()
@@ -583,52 +583,52 @@ MusicSelectMenu2:
     %cm_header("PLAY MUSIC - PAGE TWO")
 
 ifb_soundtest_music_preboss1:
-    %cm_jsr("Chozo Statue Awakens", #action_soundtest_playmusic, #$2406)
+    %cm_jsl("Chozo Statue Awakens", #action_soundtest_playmusic, #$2406)
 
 ifb_soundtest_music_preboss2:
-    %cm_jsr("Approaching Confrontation", #action_soundtest_playmusic, #$2706)
+    %cm_jsl("Approaching Confrontation", #action_soundtest_playmusic, #$2706)
 
 ifb_soundtest_music_miniboss:
-    %cm_jsr("Miniboss Fight", #action_soundtest_playmusic, #$2A05)
+    %cm_jsl("Miniboss Fight", #action_soundtest_playmusic, #$2A05)
 
 ifb_soundtest_music_smallboss:
-    %cm_jsr("Small Boss Confrontation", #action_soundtest_playmusic, #$2705)
+    %cm_jsl("Small Boss Confrontation", #action_soundtest_playmusic, #$2705)
 
 ifb_soundtest_music_bigboss:
-    %cm_jsr("Big Boss Confrontation", #action_soundtest_playmusic, #$2405)
+    %cm_jsl("Big Boss Confrontation", #action_soundtest_playmusic, #$2405)
 
 ifb_soundtest_music_motherbrain:
-    %cm_jsr("Mother Brain Fight", #action_soundtest_playmusic, #$2105)
+    %cm_jsl("Mother Brain Fight", #action_soundtest_playmusic, #$2105)
 
 ifb_soundtest_music_credits:
-    %cm_jsr("Credits", #action_soundtest_playmusic, #$3C05)
+    %cm_jsl("Credits", #action_soundtest_playmusic, #$3C05)
 
 ifb_soundtest_music_itemroom:
-    %cm_jsr("Item - Elevator Room", #action_soundtest_playmusic, #$0003)
+    %cm_jsl("Item - Elevator Room", #action_soundtest_playmusic, #$0003)
 
 ifb_soundtest_music_itemfanfare:
-    %cm_jsr("Item Fanfare", #action_soundtest_playmusic, #$0002)
+    %cm_jsl("Item Fanfare", #action_soundtest_playmusic, #$0002)
 
 ifb_soundtest_music_spacecolony:
-    %cm_jsr("Arrival at Space Colony", #action_soundtest_playmusic, #$2D05)
+    %cm_jsl("Arrival at Space Colony", #action_soundtest_playmusic, #$2D05)
 
 ifb_soundtest_music_zebesexplodes:
-    %cm_jsr("Zebes Explodes", #action_soundtest_playmusic, #$3305)
+    %cm_jsl("Zebes Explodes", #action_soundtest_playmusic, #$3305)
 
 ifb_soundtest_music_loadsave:
-    %cm_jsr("Samus Appears", #action_soundtest_playmusic, #$0001)
+    %cm_jsl("Samus Appears", #action_soundtest_playmusic, #$0001)
 
 ifb_soundtest_music_death:
-    %cm_jsr("Death", #action_soundtest_playmusic, #$3905)
+    %cm_jsl("Death", #action_soundtest_playmusic, #$3905)
 
 ifb_soundtest_music_lastmetroid:
-    %cm_jsr("Last Metroid in Captivity", #action_soundtest_playmusic, #$3F05)
+    %cm_jsl("Last Metroid in Captivity", #action_soundtest_playmusic, #$3F05)
 
 ifb_soundtest_music_galaxypeace:
-    %cm_jsr("The Galaxy is at Peace", #action_soundtest_playmusic, #$4205)
+    %cm_jsl("The Galaxy is at Peace", #action_soundtest_playmusic, #$4205)
 
 ifb_soundtest_music_goto_1:
-    %cm_jsr("GOTO PAGE ONE", .routine, #MusicSelectMenu1)
+    %cm_jsl("GOTO PAGE ONE", .routine, #MusicSelectMenu1)
   .routine
     JSL cm_go_back
     %setmenubank()
@@ -685,7 +685,7 @@ CaptureCroppingMenu:
     %cm_header("CAPTURE CROPPING MODE")
 
 ifb_launch_crop_mode:
-    %cm_jsr("Capture Crop Mode", .routine, #0)
+    %cm_jsl("Capture Crop Mode", .routine, #0)
   .routine
     JSL cm_crop_mode
     JSL cm_refresh_cgram_long
@@ -724,17 +724,17 @@ FactoryResetConfirm:
     %cm_footer("THIS WILL REBOOT THE GAME")
 
 ifb_factory_reset_abort:
-    %cm_jsr("ABORT", #.routine, #$0000)
+    %cm_jsl("ABORT", #.routine, #$0000)
   .routine
     %sfxgoback()
     JSL cm_previous_menu
     RTL
 
 ifb_factory_reset_keep_presets:
-    %cm_jsr("Yes, keep my presets", #action_factory_reset, #$0000)
+    %cm_jsl("Yes, keep my presets", #action_factory_reset, #$0000)
 
 ifb_factory_reset_delete_presets:
-    %cm_jsr("No, mark them as empty", .routine, #$0000)
+    %cm_jsl("No, mark them as empty", .routine, #$0000)
   .routine
     TYX : TXA
 -   STA !PRESET_SLOTS,X ; overwrite "5AFE" words

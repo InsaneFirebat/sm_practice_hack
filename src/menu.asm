@@ -518,7 +518,7 @@ cm_draw_action_table:
 {
     dw draw_toggle
     dw draw_toggle_bit
-    dw draw_jsr
+    dw draw_jsl
     dw draw_numfield
     dw draw_choice
     dw draw_ctrl_shortcut
@@ -541,7 +541,7 @@ draw_toggle:
     ; grab the toggle value
     LDA [$04] : AND #$00FF : INC $04 : STA $0C
 
-    ; increment past JSR
+    ; increment past JSL
     INC $04 : INC $04
 
     ; Draw the text
@@ -585,7 +585,7 @@ draw_toggle_inverted:
     ; grab the toggle value
     LDA [$04] : AND #$00FF : INC $04 : STA $0C
 
-    ; increment past JSR
+    ; increment past JSL
     INC $04 : INC $04
 
     ; Draw the text
@@ -629,7 +629,7 @@ draw_toggle_bit:
     ; grab bitmask
     LDA [$04] : INC $04 : INC $04 : STA $0C
 
-    ; increment past JSR
+    ; increment past JSL
     INC $04 : INC $04
 
     ; Draw the text
@@ -665,7 +665,7 @@ draw_toggle_bit_inverted:
     ; grab bitmask
     LDA [$04] : INC $04 : INC $04 : STA $0C
 
-    ; increment past JSR
+    ; increment past JSL
     INC $04 : INC $04
 
     ; Draw the text
@@ -692,10 +692,10 @@ draw_toggle_bit_inverted:
     RTS
 }
 
-draw_jsr:
+draw_jsl:
 draw_submenu:
 {
-    ; skip JSR address
+    ; skip JSL address
     INC $04 : INC $04
 
     ; skip argument
@@ -716,7 +716,7 @@ draw_numfield:
     ; skip bounds and increment values
     INC $04 : INC $04 : INC $04; : INC $04
 
-    ; increment past JSR
+    ; increment past JSL
     INC $04 : INC $04
 
     ; Draw the text
@@ -759,7 +759,7 @@ draw_numfield_word:
     INC $04 : INC $04 : INC $04; : INC $04
     INC $04 : INC $04 : INC $04; : INC $04
 
-    ; increment past JSR
+    ; increment past JSL
     INC $04 : INC $04
 
     ; Draw the text
@@ -812,7 +812,7 @@ draw_numfield_sound:
     ; skip bounds and increment values
     INC $04 : INC $04 : INC $04; : INC $04
 
-    ; increment past JSR
+    ; increment past JSL
     INC $04 : INC $04
 
     ; Draw the text
@@ -902,7 +902,7 @@ draw_numfield_color:
     LDA [$04] : INC $04 : INC $04 : STA $08
     LDA [$04] : INC $04 : STA $0A
 
-    ; increment past JSR
+    ; increment past JSL
     INC $04 : INC $04
 
     ; Draw the text
@@ -941,13 +941,13 @@ draw_numfield_color:
 draw_choice:
 {
     ; $04[0x3] = address
-    ; $08[0x3] = jsr target
+    ; $08[0x3] = JSL target
 
     ; grab the memory address (long)
     LDA [$04] : INC $04 : INC $04 : STA $08
     LDA [$04] : INC $04 : STA $0A
 
-    ; grab JSR target
+    ; grab JSL target
     LDA [$04] : INC $04 : INC $04 : STA $0C
 
     ; Draw the text first
@@ -1005,10 +1005,10 @@ draw_controller_input:
     STA !ram_cm_ctrl_assign
     LDA [$04] : INC $04 : STA $0A
 
-    ; grab JSR target
+    ; grab JSL target
     LDA [$04] : INC $04 : INC $04 : STA $0C
 
-    ; skip JSR argument
+    ; skip JSL argument
     INC $04 : INC $04
 
     ; Draw the text
@@ -1377,7 +1377,7 @@ cm_execute:
 cm_execute_action_table:
     dw execute_toggle
     dw execute_toggle_bit
-    dw execute_jsr
+    dw execute_jsl
     dw execute_numfield
     dw execute_choice
     dw execute_ctrl_shortcut
@@ -1407,12 +1407,12 @@ execute_toggle:
     LDA [$04] : CMP $08 : BEQ .toggleOff
 
     LDA $08 : STA [$04]
-    BRA .jsr
+    BRA .jsl
 
   .toggleOff
     LDA #$00 : STA [$04]
 
-  .jsr
+  .jsl
     %a16()
     LDA $0A : BEQ .end
 
@@ -1438,7 +1438,7 @@ execute_toggle_bit:
     ; Load which bit(s) to toggle
     LDA [$00] : INC $00 : INC $00 : STA $08
 
-    ; Load JSR target
+    ; Load JSL target
     LDA [$00] : INC $00 : INC $00 : STA $0A
 
     ; Toggle the bit
@@ -1459,7 +1459,7 @@ execute_toggle_bit:
     RTS
 }
 
-execute_jsr:
+execute_jsl:
 {
     ; <, > and X should do nothing here
     ; also ignore input held flag
@@ -1516,7 +1516,7 @@ execute_numfield_hex:
     ; $0A[0x1] = max
     ; $0C[0x1] = increment (normal)
     ; $0C[0x1] = increment (input held)
-    ; $20[0x2] = JSR target
+    ; $20[0x2] = JSL target
     LDA [$00] : INC $00 : INC $00 : STA $04
     LDA [$00] : INC $00 : STA $06
 
@@ -1531,32 +1531,32 @@ execute_numfield_hex:
     ; "hold dpad to fast-scroll" is disabled here
 ;    LDA !ram_cm_controller : BIT !IH_INPUT_HELD : BNE .input_held
 ;    LDA [$00] : INC $00 : INC $00; : AND #$00FF : STA $0C
-;    BRA .load_jsr_target
+;    BRA .load_jsl_target
 
   .input_held
 ;    INC $00 : LDA [$00] : INC $00 : AND #$00FF : STA $0C
 
-  .load_jsr_target
+  .load_jsl_target
 +   LDA [$00] : INC $00 : INC $00 : STA $20
 
     LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
 
     LDA [$04] : CLC : ADC $0C
     CMP $0A : BCS .set_to_min
-    PHP : %a8() : STA [$04] : PLP : BRA .jsr
+    PHP : %a8() : STA [$04] : PLP : BRA .jsl
 
   .pressed_left
     LDA [$04] : SEC : SBC $0C : BMI .set_to_max
     CMP $0A : BCS .set_to_max
-    PHP : %a8() : STA [$04] : PLP : BRA .jsr
+    PHP : %a8() : STA [$04] : PLP : BRA .jsl
 
   .set_to_min
-    LDA $08 : PHP : %a8() : STA [$04] : PLP : BRA .jsr
+    LDA $08 : PHP : %a8() : STA [$04] : PLP : BRA .jsl
 
   .set_to_max
     LDA $0A : DEC : PHP : %a8() : STA [$04] : PLP : CLC
 
-  .jsr
+  .jsl
     LDA $20 : BEQ .end
 
     ; Set return address for indirect JSL
@@ -1578,7 +1578,7 @@ execute_numfield_sound:
     ; $08[0x1] = min
     ; $0A[0x1] = max
     ; $0C[0x1] = increment
-    ; $20[0x2] = JSR target
+    ; $20[0x2] = JSL target
     LDA [$00] : INC $00 : INC $00 : STA $04
     LDA [$00] : INC $00 : STA $06
 
@@ -1592,18 +1592,18 @@ execute_numfield_sound:
 
 +   LDA [$00] : INC $00 : INC $00 : STA $20
 
-    LDA !ram_cm_controller : BIT #$4000 : BNE .jsr ; check for Y pressed
+    LDA !ram_cm_controller : BIT #$4000 : BNE .jsl ; check for Y pressed
     LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
 
     LDA [$04] : CLC : ADC $0C
     CMP $0A : BCS .set_to_min
-    PHP : %a8() : STA [$04] : PLP : BRA .jsr
+    PHP : %a8() : STA [$04] : PLP : BRA .jsl
 
   .pressed_left
     LDA [$04] : SEC : SBC $0C
     CMP $08 : BMI .set_to_max
     CMP $0A : BCS .set_to_max
-    PHP : %a8() : STA [$04] : PLP : BRA .jsr
+    PHP : %a8() : STA [$04] : PLP : BRA .jsl
 
   .set_to_min
     LDA $08 : STA [$04] : CLC : BRA .end
@@ -1611,7 +1611,7 @@ execute_numfield_sound:
   .set_to_max
     LDA $0A : DEC : STA [$04] : CLC : BRA .end
 
-  .jsr
+  .jsl
     LDA $20 : BEQ .end
 
     ; Set return address for indirect JSL
@@ -1634,7 +1634,7 @@ execute_numfield_word:
     ; $0A[0x2] = max
     ; $0C[0x2] = increment (normal)
     ; $0C[0x2] = increment (input held)
-    ; $20[0x2] = JSR target
+    ; $20[0x2] = JSL target
     LDA [$00] : INC $00 : INC $00 : STA $04
     LDA [$00] : INC $00 : STA $06
 
@@ -1649,33 +1649,33 @@ execute_numfield_word:
     ; "hold dpad to fast-scroll" is disabled here
 ;    LDA !ram_cm_controller : BIT !IH_INPUT_HELD : BNE .input_held
 ;    LDA [$00] : INC $00 : INC $00; : AND #$00FF : STA $0C
-;    BRA .load_jsr_target
+;    BRA .load_jsl_target
 
   .input_held
 ;    INC $00 : LDA [$00] : INC $00 : AND #$00FF : STA $0C
 
-  .load_jsr_target
+  .load_jsl_target
 +   LDA [$00] : INC $00 : INC $00 : STA $20
 
     LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
 
     LDA [$04] : CLC : ADC $0C
     CMP $0A : BCS .set_to_min
-    STA [$04] : BRA .jsr
+    STA [$04] : BRA .jsl
 
   .pressed_left
     LDA [$04] : SEC : SBC $0C
     CMP $08 : BMI .set_to_max
     CMP $0A : BCS .set_to_max
-    STA [$04] : BRA .jsr
+    STA [$04] : BRA .jsl
 
   .set_to_min
-    LDA $08 : STA [$04] : CLC : BRA .jsr
+    LDA $08 : STA [$04] : CLC : BRA .jsl
 
   .set_to_max
     LDA $0A : DEC : STA [$04] : CLC
 
-  .jsr
+  .jsl
     LDA $20 : BEQ .end
 
     ; Set return address for indirect JSL
@@ -1694,7 +1694,7 @@ execute_numfield_word:
 execute_numfield_color:
 {
     ; $04[0x3] = memory address to manipulate
-    ; $20[0x2] = JSR target
+    ; $20[0x2] = JSL target
     LDA [$00] : INC $00 : INC $00 : STA $04
     LDA [$00] : INC $00 : STA $06
 
@@ -1703,25 +1703,25 @@ execute_numfield_color:
     LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
 
     LDA [$04] : INC : CMP #$0020 : BCS .set_to_min
-    STA [$04] : LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BEQ .jsr
+    STA [$04] : LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BEQ .jsl
 
     LDA [$04] : INC : CMP #$0020 : BCS .set_to_min
-    STA [$04] : BRA .jsr
+    STA [$04] : BRA .jsl
 
   .pressed_left
     LDA [$04] : DEC : BMI .set_to_max
-    STA [$04] : LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BEQ .jsr
+    STA [$04] : LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BEQ .jsl
 
     LDA [$04] : DEC : BMI .set_to_max
-    STA [$04] : BRA .jsr
+    STA [$04] : BRA .jsl
 
   .set_to_min
-    LDA #$0000 : STA [$04] : CLC : BRA .jsr
+    LDA #$0000 : STA [$04] : CLC : BRA .jsl
 
   .set_to_max
     LDA #$001F : STA [$04] : CLC
 
-  .jsr
+  .jsl
     LDA $20 : BEQ .end
 
     ; Set return address for indirect JSL
@@ -1740,7 +1740,7 @@ execute_numfield_color:
 execute_choice:
 {
     ; $04[0x3] = memory to manipulate
-    ; $08[0x2] = jsr target
+    ; $08[0x2] = JSL target
     %a16()
     LDA [$00] : INC $00 : INC $00 : STA $04
     LDA [$00] : INC $00 : STA $06
