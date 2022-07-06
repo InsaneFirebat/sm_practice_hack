@@ -343,7 +343,7 @@ tel_mari_13:
 DebugTeleportTourianMenu:
     dw #tel_tour_08
     dw #tel_tour_10
-    dw #tel_tourianbbyskip
+    dw #tel_tour_11
     dw #$0000
     %cm_header("TOURIAN DEBUG LOAD")
 
@@ -352,6 +352,9 @@ tel_tour_08:
 
 tel_tour_10:
     %cm_jsr("Tourian 10", #action_teleport_long, #$0510)
+
+tel_tour_11:
+    %cm_jsr("Tourian Baby Skip", #action_teleport_long, #$0511)
 
 DebugTeleportExtraMenu:
     dw #tel_ceres
