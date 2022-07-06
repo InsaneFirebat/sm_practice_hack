@@ -1524,18 +1524,18 @@ execute_numfield_hex:
 
     LDA [$04] : CLC : ADC $0C
     CMP $0A : BCS .set_to_min
-    STA [$04] : BRA .jsr
+    PHP : %a8() : STA [$04] : PLP : BRA .jsr
 
   .pressed_left
     LDA [$04] : SEC : SBC $0C : BMI .set_to_max
     CMP $0A : BCS .set_to_max
-    STA [$04] : BRA .jsr
+    PHP : %a8() : STA [$04] : PLP : BRA .jsr
 
   .set_to_min
-    LDA $08 : STA [$04] : CLC : BRA .jsr
+    LDA $08 : PHP : %a8() : STA [$04] : PLP : BRA .jsr
 
   .set_to_max
-    LDA $0A : DEC : STA [$04] : CLC
+    LDA $0A : DEC : PHP : %a8() : STA [$04] : PLP : CLC
 
   .jsr
     LDA $20 : BEQ .end
@@ -1578,13 +1578,13 @@ execute_numfield_sound:
 
     LDA [$04] : CLC : ADC $0C
     CMP $0A : BCS .set_to_min
-    STA [$04] : BRA .end
+    PHP : %a8() : STA [$04] : PLP : BRA .jsr
 
   .pressed_left
     LDA [$04] : SEC : SBC $0C
     CMP $08 : BMI .set_to_max
     CMP $0A : BCS .set_to_max
-    STA [$04] : BRA .end
+    PHP : %a8() : STA [$04] : PLP : BRA .jsr
 
   .set_to_min
     LDA $08 : STA [$04] : CLC : BRA .end

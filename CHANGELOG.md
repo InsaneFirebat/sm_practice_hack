@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.14] Added SNES BGR format as an addition method of editing colors
 * [2.4.2.13] Added an option for faster Nintendo logo at boot by NobodyNada
 * [2.4.2.13] Added a toggle for liquid physics in the current room by NobodyNada
 * [2.4.2.12] Added a menu option to change reserve modes

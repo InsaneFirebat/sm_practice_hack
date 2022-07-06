@@ -217,7 +217,7 @@ init_sram:
 
     LDA #$0001 : STA !sram_dummy_on
     LDA #$0000 : STA !sram_dummy_off
-    LDA #$FFFF : STA !sram_dummy_num
+    LDA #$00FF : STA !sram_dummy_num
 
     LDA !SRAM_VERSION : STA !sram_initialized
 

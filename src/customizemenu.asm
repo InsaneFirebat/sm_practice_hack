@@ -15,9 +15,9 @@ macro examplemenu()
     dw #ifb_dummy_num
 endmacro
 
-macro palettemenu(title, pointer)
+macro palettemenu(title, pointer, addr)
     %cm_submenu("<title>", <pointer>)
-    
+
 <pointer>:
     dw #custompalettes_hex_red
     dw #custompalettes_hex_green
@@ -27,13 +27,33 @@ macro palettemenu(title, pointer)
     dw #custompalettes_dec_green
     dw #custompalettes_dec_blue
     dw #$FFFF
-    dw #$FFFF
-    dw #$FFFF
-    dw #$FFFF
-    dw #$FFFF
+    dw <pointer>_hex_hi
+    dw <pointer>_hex_lo
     %examplemenu()
     dw #$0000
     %cm_header("<title>")
+    %cm_footer("THREE WAYS TO EDIT COLORS")
+
+<pointer>_hex_hi:
+    %cm_numfield_hex("SNES BGR - HI BYTE", !sram_custompalette_hi, 0, 255, 1, 8, .routine_hi)
+  .routine_hi
+    %a8() ; sram_custompalette_hi already in A
+    XBA : LDA !sram_custompalette_lo
+    %a16()
+    STA <addr>
+    JSL cm_colors
+    JML MixRGB
+
+<pointer>_hex_lo:
+    %cm_numfield_hex("SNES BGR - LO BYTE", !sram_custompalette_lo, 0, 255, 1, 8, .routine_lo)
+  .routine_lo
+    %a8() ; sram_custompalette_lo already in A
+    XBA : LDA !sram_custompalette_hi : XBA
+    %a16()
+    STA <addr>
+    JSL cm_colors
+    JML MixRGB
+}
 endmacro
 
 macro setupRGB(addr)
@@ -177,37 +197,37 @@ CustomPalettesMenu:
     %cm_header("CUSTOMIZE MENU PALETTE")
 
 custompalettes_menutext:
-    %palettemenu("Text", #CustomPalettesMenu_menutext)
+    %palettemenu("Text", CustomPalettesMenu_menutext, !sram_custompalette_menutext)
 
 custompalettes_menuseltext:
-    %palettemenu("Selected Text", #CustomPalettesMenu_menuseltext)
+    %palettemenu("Selected Text", CustomPalettesMenu_menuseltext, !sram_custompalette_menuseltext)
 
 custompalettes_menuseltextbg:
-    %palettemenu("Selected Text Background", #CustomPalettesMenu_menuseltextbg)
+    %palettemenu("Selected Text Background", CustomPalettesMenu_menuseltextbg, !sram_custompalette_menuseltextbg)
 
 custompalettes_menuheaderoutline:
-    %palettemenu("Header Outline", #CustomPalettesMenu_menuheaderoutline)
+    %palettemenu("Header Outline", CustomPalettesMenu_menuheaderoutline, !sram_custompalette_menuheaderoutline)
 
 custompalettes_menunumfill:
-    %palettemenu("Number Field Text", #CustomPalettesMenu_menunumfill)
+    %palettemenu("Number Field Text", CustomPalettesMenu_menunumfill, !sram_custompalette_menunumfill)
 
 custompalettes_menunumoutline:
-    %palettemenu("Number Field Outline", #CustomPalettesMenu_menunumoutline)
+    %palettemenu("Number Field Outline", CustomPalettesMenu_menunumoutline, !sram_custompalette_menunumoutline)
 
 custompalettes_menunumsel:
-    %palettemenu("Selected Num-Field Text", #CustomPalettesMenu_menunumsel)
+    %palettemenu("Selected Num-Field Text", CustomPalettesMenu_menunumsel, !sram_custompalette_menunumsel)
 
 custompalettes_menunumseloutline:
-    %palettemenu("Selected Num-Field Outline", #CustomPalettesMenu_menunumseloutline)
+    %palettemenu("Selected Num-Field Outline", CustomPalettesMenu_menunumseloutline, !sram_custompalette_menunumseloutline)
 
 custompalettes_menutoggleon:
-    %palettemenu("Toggle ON", #CustomPalettesMenu_menutoggleon)
+    %palettemenu("Toggle ON", CustomPalettesMenu_menutoggleon, !sram_custompalette_menutoggleon)
 
 custompalettes_menuborder:
-    %palettemenu("Toggle OFF + Border", #CustomPalettesMenu_menuborder)
+    %palettemenu("Toggle OFF + Border", CustomPalettesMenu_menuborder, !sram_custompalette_menuborder)
 
 custompalettes_menubackground:
-    %palettemenu("Background", #CustomPalettesMenu_menubackground)
+    %palettemenu("Background", CustomPalettesMenu_menubackground, !sram_custompalette_menubackground)
 
 custompalettes_hex_red:
     %cm_numfield_color("Hexadecimal Red", !sram_custompalette_red, #MixRGB_long)
@@ -559,8 +579,12 @@ cm_colors:
 {
     PHB
     PHK : PLB
-    LDA !ram_cm_cursor_stack+4 : CMP #$0002 : BNE .done ; exit if not in color menu
-    LDA !ram_cm_cursor_stack+6 : CMP #$0016 : BPL .done ; exit if beyond table boundaries
+    ; exit if not in color menu
+    LDA !ram_cm_stack_index : DEC #2 : TAX
+    LDA !ram_cm_menu_stack,X : CMP #CustomPalettesMenu : BNE .done
+    ; exit if beyond table boundaries
+    LDA !ram_cm_cursor_stack,X : CMP #$0016 : BPL .done
+
     TAX : JSR (ColorMenuTable,X)
 
   .done
@@ -573,22 +597,32 @@ cm_setup_RGB:
     LDA [$C1] : AND #$7C00 : XBA : LSR #2 : STA !sram_custompalette_blue
     LDA [$C1] : AND #$03E0 : LSR #5 : STA !sram_custompalette_green
     LDA [$C1] : AND #$001F : STA !sram_custompalette_red
+    LDA [$C1] : AND #$7FFF
+    %a8()
+    STA !sram_custompalette_lo : XBA : STA !sram_custompalette_hi
+    %a16()
     RTL
 }
 
 MixRGB:
 {
     ; figure out which menu element is being edited
-    LDA !ram_cm_cursor_stack+6 : TAX
+    LDA !ram_cm_stack_index : DEC #2 : TAX
+    LDA !ram_cm_cursor_stack,X : TAX
     LDA.l MenuPaletteTable,X : STA $12 ; store indirect address
-    LDA #$00F0 : STA $14 ; store indirect bank
+    LDA.w #!SRAM_START>>16 : STA $14 ; store indirect bank
 
     ; mix RGB values
     LDA !sram_custompalette_blue : XBA : ASL #2 : STA $16
     LDA !sram_custompalette_green : ASL #5 : ORA $16 : STA $16
     LDA !sram_custompalette_red : ORA $16
 
-    STA [$12] ; store combined color value
+    ; store combined color value
+    STA [$12]
+    %a8()
+    STA !sram_custompalette_lo : XBA : STA !sram_custompalette_hi
+    %a16()
+
     JSL refresh_custom_palettes
     RTL
 
