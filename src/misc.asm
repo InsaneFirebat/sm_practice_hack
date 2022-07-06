@@ -61,6 +61,14 @@ else
 endif
 endif
 
+if !FEATURE_PAL
+org $8B92B5
+else
+org $8B930C
+endif
+    JSL FastNintendoLogo
+    BRA $00 ; NOP #2
+
 
 ; Fix Zebes planet tiling error
 org $8C9607
@@ -405,6 +413,17 @@ GameModeExtras:
 
   .enabled
     STA !ram_game_mode_extras
+    RTL
+}
+
+FastNintendoLogo:
+{
+    LDA !sram_fast_nintendo_logo : BEQ .normal
+    LDA #$0001 : STA $0DE2
+    RTL
+
+  .normal
+    LDA #$0078 : STA $0DE2
     RTL
 }
 
