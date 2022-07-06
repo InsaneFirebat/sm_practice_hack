@@ -28,27 +28,27 @@ endif
     table ../resources/normal.tbl
 endmacro
 
-macro cm_numfield(title, addr, start, end, increment, heldincrement, jsrtarget)
+macro cm_numfield(title, addr, start, end, increment, heldincrement, jsltarget)
     dw !ACTION_NUMFIELD
     dl <addr>
     db <start>, <end>, <increment>;, <heldincrement>
-    dw <jsrtarget>
+    dw <jsltarget>
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_numfield_word(title, addr, start, end, increment, heldincrement, jsrtarget)
+macro cm_numfield_word(title, addr, start, end, increment, heldincrement, jsltarget)
     dw !ACTION_NUMFIELD_WORD
     dl <addr>
     dw <start>, <end>, <increment>;, <heldincrement>
-    dw <jsrtarget>
+    dw <jsltarget>
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_numfield_hex(title, addr, start, end, increment, heldincrement, jsrtarget)
+macro cm_numfield_hex(title, addr, start, end, increment, heldincrement, jsltarget)
     dw !ACTION_NUMFIELD_HEX
     dl <addr>
     db <start>, <end>, <increment>;, <heldincrement>
-    dw <jsrtarget>
+    dw <jsltarget>
     db #$28, "<title>", #$FF
 endmacro
 
@@ -58,77 +58,77 @@ macro cm_numfield_hex_word(title, addr)
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_numfield_color(title, addr, jsrtarget)
+macro cm_numfield_color(title, addr, jsltarget)
     dw !ACTION_NUMFIELD_COLOR
     dl <addr>
-    dw <jsrtarget>
+    dw <jsltarget>
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_numfield_sound(title, addr, start, end, increment, jsrtarget)
+macro cm_numfield_sound(title, addr, start, end, increment, jsltarget)
     dw !ACTION_NUMFIELD_SOUND
     dl <addr>
     db <start>, <end>, <increment>
-    dw <jsrtarget>
+    dw <jsltarget>
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_toggle(title, addr, value, jsrtarget)
+macro cm_toggle(title, addr, value, jsltarget)
     dw !ACTION_TOGGLE
     dl <addr>
     db <value>
-    dw <jsrtarget>
+    dw <jsltarget>
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_toggle_inverted(title, addr, value, jsrtarget)
+macro cm_toggle_inverted(title, addr, value, jsltarget)
     dw !ACTION_TOGGLE_INVERTED
     dl <addr>
     db <value>
-    dw <jsrtarget>
+    dw <jsltarget>
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_toggle_bit(title, addr, mask, jsrtarget)
+macro cm_toggle_bit(title, addr, mask, jsltarget)
     dw !ACTION_TOGGLE_BIT
     dl <addr>
     dw <mask>
-    dw <jsrtarget>
+    dw <jsltarget>
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_toggle_bit_inverted(title, addr, mask, jsrtarget)
+macro cm_toggle_bit_inverted(title, addr, mask, jsltarget)
     dw !ACTION_TOGGLE_BIT_INVERTED
     dl <addr>
     dw <mask>
-    dw <jsrtarget>
+    dw <jsltarget>
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_jsr(title, routine, argument)
-    dw !ACTION_JSR
+macro cm_jsl(title, routine, argument)
+    dw !ACTION_JSL
     dw <routine>
     dw <argument>
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_jsr_submenu(title, routine, argument)
-    dw !ACTION_JSR_SUBMENU
+macro cm_jsl_submenu(title, routine, argument)
+    dw !ACTION_JSL_SUBMENU
     dw <routine>
     dw <argument>
     db #$28, "<title>", #$FF
 endmacro
 
 macro cm_mainmenu(title, target)
-    %cm_jsr("<title>", #action_mainmenu, <target>)
+    %cm_jsl("<title>", #action_mainmenu, <target>)
 endmacro
 
 macro cm_submenu(title, target)
-    %cm_jsr_submenu("<title>", #action_submenu, <target>)
+    %cm_jsl_submenu("<title>", #action_submenu, <target>)
 endmacro
 
 macro cm_preset(title, target)
-    %cm_jsr_submenu("<title>", #action_load_preset, <target>)
+    %cm_jsl_submenu("<title>", #action_load_preset, <target>)
 endmacro
 
 macro cm_ctrl_shortcut(title, addr)
@@ -290,7 +290,7 @@ mm_goto_equipment:
     %cm_mainmenu("Equipment", #EquipmentMenu)
 
 mm_goto_presets:
-    %cm_jsr("Category Presets", #action_presets_submenu, #$0000)
+    %cm_jsl("Category Presets", #action_presets_submenu, #$0000)
 
 mm_goto_presets_menu:
     %cm_mainmenu("Presets Menu", #PresetsMenu)
@@ -369,7 +369,7 @@ else
 endif
 
 presets_save_custom_preset:
-    %cm_jsr("Save Custom Preset", .routine, #$0000)
+    %cm_jsl("Save Custom Preset", .routine, #$0000)
   .routine
     JSL custom_preset_save
     LDA #$0001 : STA !ram_cm_leave
@@ -377,7 +377,7 @@ presets_save_custom_preset:
     RTL
 
 presets_load_custom_preset:
-    %cm_jsr("Load Custom Preset", .routine, #$0000)
+    %cm_jsl("Load Custom Preset", .routine, #$0000)
   .routine
     ; check if slot is populated first
     LDA !sram_custom_preset_slot
@@ -482,67 +482,67 @@ presets_current:
     RTL
 
 precat_kpdr21:
-    %cm_jsr("Any% KPDR 3 E-Tanks", #action_select_preset_category, #$0000)
+    %cm_jsl("Any% KPDR 3 E-Tanks", #action_select_preset_category, #$0000)
 
 precat_kpdr22:
-    %cm_jsr("Any% KPDR 4 E-Tanks", #action_select_preset_category, #$0001)
+    %cm_jsl("Any% KPDR 4 E-Tanks", #action_select_preset_category, #$0001)
 
 precat_prkd15:
-    %cm_jsr("Any% PRKD 15 Missiles", #action_select_preset_category, #$0002)
+    %cm_jsl("Any% PRKD 15 Missiles", #action_select_preset_category, #$0002)
 
 precat_prkd:
-    %cm_jsr("Any% PRKD 20 Missiles", #action_select_preset_category, #$0003)
+    %cm_jsl("Any% PRKD 20 Missiles", #action_select_preset_category, #$0003)
 
 precat_pkrd:
-    %cm_jsr("Any% PKRD", #action_select_preset_category, #$0004)
+    %cm_jsl("Any% PKRD", #action_select_preset_category, #$0004)
 
 precat_spazer:
-    %cm_jsr("Spazer Any%", #action_select_preset_category, #$0005)
+    %cm_jsl("Spazer Any%", #action_select_preset_category, #$0005)
 
 precat_kpdr25:
-    %cm_jsr("Any% KPDR Early Ice", #action_select_preset_category, #$0006)
+    %cm_jsl("Any% KPDR Early Ice", #action_select_preset_category, #$0006)
 
 precat_gtclassic:
-    %cm_jsr("GT Classic", #action_select_preset_category, #$0007)
+    %cm_jsl("GT Classic", #action_select_preset_category, #$0007)
 
 precat_gtmax:
-    %cm_jsr("GT Max%", #action_select_preset_category, #$0008)
+    %cm_jsl("GT Max%", #action_select_preset_category, #$0008)
 
 precat_100early:
-    %cm_jsr("100% Early Crocomire", #action_select_preset_category, #$0009)
+    %cm_jsl("100% Early Crocomire", #action_select_preset_category, #$0009)
 
 precat_hundo:
-    %cm_jsr("100% Late Crocomire", #action_select_preset_category, #$000A)
+    %cm_jsl("100% Late Crocomire", #action_select_preset_category, #$000A)
 
 precat_100map:
-    %cm_jsr("100% Map Completion", #action_select_preset_category, #$000B)
+    %cm_jsl("100% Map Completion", #action_select_preset_category, #$000B)
 
 precat_14ice:
-    %cm_jsr("14% Ice", #action_select_preset_category, #$000C)
+    %cm_jsl("14% Ice", #action_select_preset_category, #$000C)
 
 precat_14speed:
-    %cm_jsr("14% Speed", #action_select_preset_category, #$000D)
+    %cm_jsl("14% Speed", #action_select_preset_category, #$000D)
 
 precat_rbo:
-    %cm_jsr("Reverse Boss Order", #action_select_preset_category, #$000E)
+    %cm_jsl("Reverse Boss Order", #action_select_preset_category, #$000E)
 
 precat_ngplasma:
-    %cm_jsr("NewGamePlus Plasma", #action_select_preset_category, #$000F)
+    %cm_jsl("NewGamePlus Plasma", #action_select_preset_category, #$000F)
 
 precat_nghyper:
-    %cm_jsr("NewGamePlus Hyper", #action_select_preset_category, #$0010)
+    %cm_jsl("NewGamePlus Hyper", #action_select_preset_category, #$0010)
 
 precat_nintendopower:
-    %cm_jsr("Nintendo Power%", #action_select_preset_category, #$0011)
+    %cm_jsl("Nintendo Power%", #action_select_preset_category, #$0011)
 
 precat_allbosskpdr:
-    %cm_jsr("All Bosses KPDR", #action_select_preset_category, #$0012)
+    %cm_jsl("All Bosses KPDR", #action_select_preset_category, #$0012)
 
 precat_allbosspkdr:
-    %cm_jsr("All Bosses PKDR", #action_select_preset_category, #$0013)
+    %cm_jsl("All Bosses PKDR", #action_select_preset_category, #$0013)
 
 precat_allbossprkd:
-    %cm_jsr("All Bosses PRKD", #action_select_preset_category, #$0014)
+    %cm_jsl("All Bosses PRKD", #action_select_preset_category, #$0014)
 
 action_select_preset_category:
 {
@@ -628,7 +628,7 @@ EquipmentMenu:
     %cm_footer("HOLD Y FOR FAST SCROLL")
 
 eq_refill:
-    %cm_jsr("Refill", .refill, #$0000)
+    %cm_jsl("Refill", .refill, #$0000)
   .refill
     LDA $7E09C4 : STA $7E09C2 ; health
     LDA $7E09C8 : CMP $7E09C6 : BCC + : STA $7E09C6 ; missiles
@@ -753,47 +753,47 @@ endif
     %cm_header("CATEGORY PRESETS")
 
 cat_100:
-    %cm_jsr("100%", action_category, #$0000)
+    %cm_jsl("100%", action_category, #$0000)
 
 cat_any_new:
-    %cm_jsr("Any% PRKD", action_category, #$0001)
+    %cm_jsl("Any% PRKD", action_category, #$0001)
 
 cat_any_old:
-    %cm_jsr("Any% KPDR", action_category, #$0002)
+    %cm_jsl("Any% KPDR", action_category, #$0002)
 
 cat_14ice:
-    %cm_jsr("14% Ice", action_category, #$0003)
+    %cm_jsl("14% Ice", action_category, #$0003)
 
 cat_14speed:
-    %cm_jsr("14% Speed", action_category, #$0004)
+    %cm_jsl("14% Speed", action_category, #$0004)
 
 cat_gt_code:
-    %cm_jsr("GT Code", action_category, #$0005)
+    %cm_jsl("GT Code", action_category, #$0005)
 
 cat_gt_135:
-    %cm_jsr("GT Max%", action_category, #$0006)
+    %cm_jsl("GT Max%", action_category, #$0006)
 
 cat_rbo:
-    %cm_jsr("RBO", action_category, #$0007)
+    %cm_jsl("RBO", action_category, #$0007)
 
 cat_any_glitched:
-    %cm_jsr("Any% Glitched", action_category, #$0008)
+    %cm_jsl("Any% Glitched", action_category, #$0008)
 
 cat_inf_cf:
-    %cm_jsr("Infinite Crystal Flashes", action_category, #$0009)
+    %cm_jsl("Infinite Crystal Flashes", action_category, #$0009)
 
 cat_nothing:
-    %cm_jsr("Nothing", action_category, #$000A)
+    %cm_jsl("Nothing", action_category, #$000A)
 
 if !FEATURE_PAL
 cat_14xice:
-    %cm_jsr("14% X-Ice", action_category, #$000B)
+    %cm_jsl("14% X-Ice", action_category, #$000B)
 
 cat_14iceboots:
-    %cm_jsr("14% Ice Boots", action_category, #$000C)
+    %cm_jsl("14% Ice Boots", action_category, #$000C)
 
 cat_14speedboots:
-    %cm_jsr("14% Speed Boots", action_category, #$000D)
+    %cm_jsl("14% Speed Boots", action_category, #$000D)
 endif
 
 action_category:
@@ -1016,16 +1016,16 @@ GlitchedBeamsMenu:
     %cm_footer("BEWARE OF CRASHES")
 
 gb_murder:
-    %cm_jsr("Murder Beam", action_glitched_beam, #$100F)
+    %cm_jsl("Murder Beam", action_glitched_beam, #$100F)
 
 gb_spacetime:
-    %cm_jsr("Spacetime Beam", action_glitched_beam, #$100E)
+    %cm_jsl("Spacetime Beam", action_glitched_beam, #$100E)
 
 gb_chainsaw:
-    %cm_jsr("Chainsaw Beam", action_glitched_beam, #$100D)
+    %cm_jsl("Chainsaw Beam", action_glitched_beam, #$100D)
 
 gb_unnamed:
-    %cm_jsr("Unnamed Glitched Beam", action_glitched_beam, #$100C)
+    %cm_jsl("Unnamed Glitched Beam", action_glitched_beam, #$100C)
 
 action_glitched_beam:
 {
@@ -1067,67 +1067,67 @@ TeleportMenu:
     %cm_header("SAVE STATIONS")
 
 tel_crateriaship:
-    %cm_jsr("Crateria Ship", #action_teleport, #$0000)
+    %cm_jsl("Crateria Ship", #action_teleport, #$0000)
 
 tel_crateriaparlor:
-    %cm_jsr("Crateria Parlor", #action_teleport, #$0001)
+    %cm_jsl("Crateria Parlor", #action_teleport, #$0001)
 
 tel_brinstarpink:
-    %cm_jsr("Brinstar Pink Spospo", #action_teleport, #$0100)
+    %cm_jsl("Brinstar Pink Spospo", #action_teleport, #$0100)
 
 tel_brinstargreenshaft:
-    %cm_jsr("Brinstar Green Shaft", #action_teleport, #$0101)
+    %cm_jsl("Brinstar Green Shaft", #action_teleport, #$0101)
 
 tel_brinstargreenetecoons:
-    %cm_jsr("Brinstar Green Etecoons", #action_teleport, #$0102)
+    %cm_jsl("Brinstar Green Etecoons", #action_teleport, #$0102)
 
 tel_brinstarkraid:
-    %cm_jsr("Brinstar Kraid", #action_teleport, #$0103)
+    %cm_jsl("Brinstar Kraid", #action_teleport, #$0103)
 
 tel_brinstarredtower:
-    %cm_jsr("Brinstar Red Tower", #action_teleport, #$0104)
+    %cm_jsl("Brinstar Red Tower", #action_teleport, #$0104)
 
 tel_norfairgrapple:
-    %cm_jsr("Norfair Grapple", #action_teleport, #$0200)
+    %cm_jsl("Norfair Grapple", #action_teleport, #$0200)
 
 tel_norfairbubble:
-    %cm_jsr("Norfair Bubble Mountain", #action_teleport, #$0201)
+    %cm_jsl("Norfair Bubble Mountain", #action_teleport, #$0201)
 
 tel_norfairtunnel:
-    %cm_jsr("Norfair Tunnel", #action_teleport, #$0202)
+    %cm_jsl("Norfair Tunnel", #action_teleport, #$0202)
 
 tel_norfaircrocomire:
-    %cm_jsr("Norfair Crocomire", #action_teleport, #$0203)
+    %cm_jsl("Norfair Crocomire", #action_teleport, #$0203)
 
 tel_norfairlnelevator:
-    %cm_jsr("Norfair LN Elevator", #action_teleport, #$0204)
+    %cm_jsl("Norfair LN Elevator", #action_teleport, #$0204)
 
 tel_norfairridley:
-    %cm_jsr("Norfair Ridley", #action_teleport, #$0205)
+    %cm_jsl("Norfair Ridley", #action_teleport, #$0205)
 
 tel_wreckedship:
-    %cm_jsr("Wrecked Ship", #action_teleport, #$0300)
+    %cm_jsl("Wrecked Ship", #action_teleport, #$0300)
 
 tel_maridiatube:
-    %cm_jsr("Maridia Tube", #action_teleport, #$0400)
+    %cm_jsl("Maridia Tube", #action_teleport, #$0400)
 
 tel_maridiaelevator:
-    %cm_jsr("Maridia Elevator", #action_teleport, #$0401)
+    %cm_jsl("Maridia Elevator", #action_teleport, #$0401)
 
 tel_maridiaaqueduct:
-    %cm_jsr("Maridia Aqueduct", #action_teleport, #$0402)
+    %cm_jsl("Maridia Aqueduct", #action_teleport, #$0402)
 
 tel_maridiadraygon:
-    %cm_jsr("Maridia Draygon", #action_teleport, #$0403)
+    %cm_jsl("Maridia Draygon", #action_teleport, #$0403)
 
 tel_tourianentrance:
-    %cm_jsr("Tourian Entrance", #action_teleport, #$0501)
+    %cm_jsl("Tourian Entrance", #action_teleport, #$0501)
 
 tel_tourianbbyskip:
-    %cm_jsr("Tourian Baby Skip", #action_teleport, #$0511)
+    %cm_jsl("Tourian Baby Skip", #action_teleport, #$0511)
 
 tel_tourianmb:
-    %cm_jsr("Tourian MB", #action_teleport, #$0500)
+    %cm_jsl("Tourian MB", #action_teleport, #$0500)
 
 action_teleport:
 {
@@ -1285,7 +1285,7 @@ misc_metronome_sfx:
     db #$FF
 
 misc_killenemies:
-    %cm_jsr("Kill Enemies", .kill_loop, #0)
+    %cm_jsl("Kill Enemies", .kill_loop, #0)
   .kill_loop
     ; 8000 = solid to Samus, 0400 = Ignore Samus projectiles
     TAX : LDA $0F86,X : BIT #$8400 : BNE +
@@ -1295,14 +1295,14 @@ misc_killenemies:
     RTL
 
 misc_forcestand:
-    %cm_jsr("Force Samus to Stand Up", .routine, #0)
+    %cm_jsl("Force Samus to Stand Up", .routine, #0)
   .routine
     JSL $90E2D4
     %sfxconfirm()
     RTL
 
 misc_elevatorfix:
-    %cm_jsr("OoB Elevator Tile Fix", .routine, #0)
+    %cm_jsl("OoB Elevator Tile Fix", .routine, #0)
   .routine
     LDA #$0000 : STA $7E0E16
     %sfxconfirm()
@@ -1457,7 +1457,7 @@ EventsMenu:
     %cm_header("EVENT FLAGS")
 
 events_resetevents:
-    %cm_jsr("Reset All Events", .routine, #$0000)
+    %cm_jsl("Reset All Events", .routine, #$0000)
   .routine
     LDA #$0000
     STA $7ED820 : STA $7ED822
@@ -1465,7 +1465,7 @@ events_resetevents:
     RTL
 
 events_resetdoors:
-    %cm_jsr("Reset All Doors", .routine, #$0000)
+    %cm_jsl("Reset All Doors", .routine, #$0000)
   .routine
     %ai8()
     LDA #$00 : LDX #$B0
@@ -1476,7 +1476,7 @@ events_resetdoors:
     RTL
 
 events_resetitems:
-    %cm_jsr("Reset All Items", .routine, #$0000)
+    %cm_jsl("Reset All Items", .routine, #$0000)
   .routine
     %ai8()
     LDA #$00 : LDX #$70
@@ -1657,77 +1657,77 @@ DisplayModeMenu2:
 ;    %cm_header("INFOHUD DISPLAY MODE")
 
 ihmode_enemyhp:
-    %cm_jsr("Enemy HP", #action_select_infohud_mode, #$0000)
+    %cm_jsl("Enemy HP", #action_select_infohud_mode, #$0000)
 
 ihmode_roomstrat:
 !IH_MODE_ROOMSTRAT_INDEX = #$0001
-    %cm_jsr("Room Strat", #action_select_infohud_mode, #$0001)
+    %cm_jsl("Room Strat", #action_select_infohud_mode, #$0001)
 
 ihmode_chargetimer:
-    %cm_jsr("Charge Timer", #action_select_infohud_mode, #$0002)
+    %cm_jsl("Charge Timer", #action_select_infohud_mode, #$0002)
 
 ihmode_xfactor:
-    %cm_jsr("X-Factor Timer", #action_select_infohud_mode, #$0003)
+    %cm_jsl("X-Factor Timer", #action_select_infohud_mode, #$0003)
 
 ihmode_cooldowncounter:
-    %cm_jsr("Cooldown Timer", #action_select_infohud_mode, #$0004)
+    %cm_jsl("Cooldown Timer", #action_select_infohud_mode, #$0004)
 
 ihmode_shinetimer:
-    %cm_jsr("Shinespark Timer", #action_select_infohud_mode, #$0005)
+    %cm_jsl("Shinespark Timer", #action_select_infohud_mode, #$0005)
 
 ihmode_dashcounter:
-    %cm_jsr("Dash Counter", #action_select_infohud_mode, #$0006)
+    %cm_jsl("Dash Counter", #action_select_infohud_mode, #$0006)
 
 ihmode_shinetune:
 !IH_MODE_SHINETUNE_INDEX = #$0007
-    %cm_jsr("Shine Tune", #action_select_infohud_mode, #$0007)
+    %cm_jsl("Shine Tune", #action_select_infohud_mode, #$0007)
 
 ihmode_iframecounter:
-    %cm_jsr("I-Frame Counter", #action_select_infohud_mode, #$0008)
+    %cm_jsl("I-Frame Counter", #action_select_infohud_mode, #$0008)
 
 ihmode_spikesuit:
-    %cm_jsr("Spikesuit Trainer", #action_select_infohud_mode, #$0009)
+    %cm_jsl("Spikesuit Trainer", #action_select_infohud_mode, #$0009)
 
 ihmode_lagcounter:
-    %cm_jsr("Lag Counter", #action_select_infohud_mode, #$000A)
+    %cm_jsl("Lag Counter", #action_select_infohud_mode, #$000A)
 
 ihmode_cpuusage:
-    %cm_jsr("CPU Usage", #action_select_infohud_mode, #$000B)
+    %cm_jsl("CPU Usage", #action_select_infohud_mode, #$000B)
 
 ihmode_xpos:
-    %cm_jsr("X Position", #action_select_infohud_mode, #$000C)
+    %cm_jsl("X Position", #action_select_infohud_mode, #$000C)
 
 ihmode_ypos:
-    %cm_jsr("Y Position", #action_select_infohud_mode, #$000D)
+    %cm_jsl("Y Position", #action_select_infohud_mode, #$000D)
 
 ihmode_hspeed:
-    %cm_jsr("Horizontal Speed", #action_select_infohud_mode, #$000E)
+    %cm_jsl("Horizontal Speed", #action_select_infohud_mode, #$000E)
 
 !IH_MODE_VSPEED_INDEX = #$000F
 ihmode_vspeed:
-    %cm_jsr("Vertical Speed", #action_select_infohud_mode, #$000F)
+    %cm_jsl("Vertical Speed", #action_select_infohud_mode, #$000F)
 
 ihmode_quickdrop:
-    %cm_jsr("Quickdrop Trainer", #action_select_infohud_mode, #$0010)
+    %cm_jsl("Quickdrop Trainer", #action_select_infohud_mode, #$0010)
 
 ihmode_walljump:
-    %cm_jsr("Walljump Trainer", #action_select_infohud_mode, #$0011)
+    %cm_jsl("Walljump Trainer", #action_select_infohud_mode, #$0011)
 
 ihmode_shottimer:
-    %cm_jsr("Shot Timer", #action_select_infohud_mode, #$0012)
+    %cm_jsl("Shot Timer", #action_select_infohud_mode, #$0012)
 
 ihmode_countdamage:
-    %cm_jsr("Boss Damage Counter", #action_select_infohud_mode, #$0013)
+    %cm_jsl("Boss Damage Counter", #action_select_infohud_mode, #$0013)
 
 ihmode_ridleygrab:
-    %cm_jsr("Ridley Death Grab Attempts", #action_select_infohud_mode, #$0014)
+    %cm_jsl("Ridley Death Grab Attempts", #action_select_infohud_mode, #$0014)
 
 !IH_MODE_RAMWATCH_INDEX = #$0015
 ihmode_ramwatch:
-    %cm_jsr("Custom RAM Watch", #action_select_infohud_mode, #$0015)
+    %cm_jsl("Custom RAM Watch", #action_select_infohud_mode, #$0015)
 
 ;ihmode_dboost:
-;    %cm_jsr("WIP - Damage Boost Trainer", #action_select_infohud_mode, #$0016)
+;    %cm_jsl("WIP - Damage Boost Trainer", #action_select_infohud_mode, #$0016)
 
 ;ihmode_GOTO_PAGE_ONE:
 ;    %cm_submenu("GOTO PAGE ONE", #DisplayModeMenu)
@@ -1798,53 +1798,53 @@ RoomStratMenu:
     %cm_footer("ROOM STRAT MUST BE ACTIVE")
 
 ihstrat_superhud:
-    %cm_jsr("Super HUD", #action_select_room_strat, #$0000)
+    %cm_jsl("Super HUD", #action_select_room_strat, #$0000)
 
 ihstrat_mbhp:
 !IH_STRAT_MBHP_INDEX = #$0001
-    %cm_jsr("Mother Brain HP", #action_select_room_strat, #$0001)
+    %cm_jsl("Mother Brain HP", #action_select_room_strat, #$0001)
 
 ihstrat_moatcwj:
-    %cm_jsr("Moat CWJ", #action_select_room_strat, #$0002)
+    %cm_jsl("Moat CWJ", #action_select_room_strat, #$0002)
 
 ihstrat_gateglitch:
-    %cm_jsr("Gate Glitch", #action_select_room_strat, #$0003)
+    %cm_jsl("Gate Glitch", #action_select_room_strat, #$0003)
 
 ihstrat_tacotank:
-    %cm_jsr("Taco Tank", #action_select_room_strat, #$0004)
+    %cm_jsl("Taco Tank", #action_select_room_strat, #$0004)
 
 ihstrat_robotflush:
-    %cm_jsr("Robot Flush", #action_select_room_strat, #$0005)
+    %cm_jsl("Robot Flush", #action_select_room_strat, #$0005)
 
 ihstrat_shinetopb:
-    %cm_jsr("Shine to PB", #action_select_room_strat, #$0006)
+    %cm_jsl("Shine to PB", #action_select_room_strat, #$0006)
 
 ihstrat_elevatorcf:
-    %cm_jsr("Elevator Crystal Flash", #action_select_room_strat, #$0007)
+    %cm_jsl("Elevator Crystal Flash", #action_select_room_strat, #$0007)
 
 ihstrat_botwooncf:
-    %cm_jsr("Botwoon Crystal Flash", #action_select_room_strat, #$0008)
+    %cm_jsl("Botwoon Crystal Flash", #action_select_room_strat, #$0008)
 
 ihstrat_doorskip:
-    %cm_jsr("Parlor Door Skip", #action_select_room_strat, #$0009)
+    %cm_jsl("Parlor Door Skip", #action_select_room_strat, #$0009)
 
 ihstrat_snailclip:
-    %cm_jsr("Aqueduct Snail Clip", #action_select_room_strat, #$000A)
+    %cm_jsl("Aqueduct Snail Clip", #action_select_room_strat, #$000A)
 
 ihstrat_threejumpskip:
-    %cm_jsr("Three Jump Baby Skip", #action_select_room_strat, #$000B)
+    %cm_jsl("Three Jump Baby Skip", #action_select_room_strat, #$000B)
 
 ihstrat_kihuntermanip:
-    %cm_jsr("Kihunter Manipulation", #action_select_room_strat, #$000C)
+    %cm_jsl("Kihunter Manipulation", #action_select_room_strat, #$000C)
 
 ihstrat_kraidradar:
-    %cm_jsr("Kraid Nail Radar", #action_select_room_strat, #$000D)
+    %cm_jsl("Kraid Nail Radar", #action_select_room_strat, #$000D)
 
 ihstrat_zebskip:
-    %cm_jsr("Zeb Skip Indicator", #action_select_room_strat, #$000E)
+    %cm_jsl("Zeb Skip Indicator", #action_select_room_strat, #$000E)
 
 ihstrat_pitdoor:
-    %cm_jsr("Pit Room Right Door", #action_select_room_strat, #$000F)
+    %cm_jsl("Pit Room Right Door", #action_select_room_strat, #$000F)
 
 action_select_room_strat:
 {
@@ -1959,73 +1959,73 @@ SuperHUDBottomMenu:
     %cm_header("SUPERHUD MODE")
 
 ih_superhud_enemyhp:
-    %cm_jsr("Enemy HP", #action_select_superhud_bottom, #$0000)
+    %cm_jsl("Enemy HP", #action_select_superhud_bottom, #$0000)
 
 ih_superhud_chargetimer:
-    %cm_jsr("Charge Timer", #action_select_superhud_bottom, #$0001)
+    %cm_jsl("Charge Timer", #action_select_superhud_bottom, #$0001)
 
 ih_superhud_xfactor:
-    %cm_jsr("X-Factor Timer", #action_select_superhud_bottom, #$0002)
+    %cm_jsl("X-Factor Timer", #action_select_superhud_bottom, #$0002)
 
 ih_superhud_cooldowncounter:
-    %cm_jsr("Cooldown Timer", #action_select_superhud_bottom, #$0003)
+    %cm_jsl("Cooldown Timer", #action_select_superhud_bottom, #$0003)
 
 ih_superhud_shinetimer:
-    %cm_jsr("Shinespark Timer", #action_select_superhud_bottom, #$0004)
+    %cm_jsl("Shinespark Timer", #action_select_superhud_bottom, #$0004)
 
 ih_superhud_iframecounter:
-    %cm_jsr("I-Frame Counter", #action_select_superhud_bottom, #$0005)
+    %cm_jsl("I-Frame Counter", #action_select_superhud_bottom, #$0005)
 
 ih_superhud_spikesuit:
-    %cm_jsr("Spikesuit Trainer", #action_select_superhud_bottom, #$0006)
+    %cm_jsl("Spikesuit Trainer", #action_select_superhud_bottom, #$0006)
 
 ih_superhud_xpos:
-    %cm_jsr("X Position", #action_select_superhud_bottom, #$0007)
+    %cm_jsl("X Position", #action_select_superhud_bottom, #$0007)
 
 ih_superhud_ypos:
-    %cm_jsr("Y Position", #action_select_superhud_bottom, #$0008)
+    %cm_jsl("Y Position", #action_select_superhud_bottom, #$0008)
 
 ih_superhud_hspeed:
-    %cm_jsr("Horizontal Speed", #action_select_superhud_bottom, #$0009)
+    %cm_jsl("Horizontal Speed", #action_select_superhud_bottom, #$0009)
 
 ih_superhud_quickdrop:
-    %cm_jsr("Quickdrop Trainer", #action_select_superhud_bottom, #$000A)
+    %cm_jsl("Quickdrop Trainer", #action_select_superhud_bottom, #$000A)
 
 ih_superhud_walljump:
-    %cm_jsr("Walljump Trainer", #action_select_superhud_bottom, #$000B)
+    %cm_jsl("Walljump Trainer", #action_select_superhud_bottom, #$000B)
 
 ih_superhud_shottimer:
-    %cm_jsr("Shot Timer", #action_select_superhud_bottom, #$000C)
+    %cm_jsl("Shot Timer", #action_select_superhud_bottom, #$000C)
 
 ih_superhud_countdamage:
-    %cm_jsr("Boss Damage Counter", #action_select_superhud_bottom, #$000D)
+    %cm_jsl("Boss Damage Counter", #action_select_superhud_bottom, #$000D)
 
 ih_superhud_ridleygrab:
-    %cm_jsr("Ridley Death Grab Attempts", #action_select_superhud_bottom, #$000E)
+    %cm_jsl("Ridley Death Grab Attempts", #action_select_superhud_bottom, #$000E)
 
 ih_superhud_ramwatch:
-    %cm_jsr("Custom RAM Watch", #action_select_superhud_bottom, #$000F)
+    %cm_jsl("Custom RAM Watch", #action_select_superhud_bottom, #$000F)
 
 ih_superhud_moatcwj:
-    %cm_jsr("Moat CWJ", #action_select_superhud_bottom, #$0010)
+    %cm_jsl("Moat CWJ", #action_select_superhud_bottom, #$0010)
 
 ih_superhud_gateglitch:
-    %cm_jsr("Gate Glitch", #action_select_superhud_bottom, #$0011)
+    %cm_jsl("Gate Glitch", #action_select_superhud_bottom, #$0011)
 
 ih_superhud_tacotank:
-    %cm_jsr("Taco Tank", #action_select_superhud_bottom, #$0012)
+    %cm_jsl("Taco Tank", #action_select_superhud_bottom, #$0012)
 
 ih_superhud_robotflush:
-    %cm_jsr("Robot Flush", #action_select_superhud_bottom, #$0013)
+    %cm_jsl("Robot Flush", #action_select_superhud_bottom, #$0013)
 
 ih_superhud_elevatorcf:
-    %cm_jsr("Elevator Crystal Flash", #action_select_superhud_bottom, #$0014)
+    %cm_jsl("Elevator Crystal Flash", #action_select_superhud_bottom, #$0014)
 
 ih_superhud_botwooncf:
-    %cm_jsr("Botwoon Crystal Flash", #action_select_superhud_bottom, #$0015)
+    %cm_jsl("Botwoon Crystal Flash", #action_select_superhud_bottom, #$0015)
 
 ih_superhud_doorskip:
-    %cm_jsr("Parlor Door Skip", #action_select_superhud_bottom, #$0016)
+    %cm_jsl("Parlor Door Skip", #action_select_superhud_bottom, #$0016)
 
 action_select_superhud_bottom:
 {
@@ -2071,37 +2071,37 @@ SuperHUDMiddleMenu:
     %cm_header("MIDDLE DISPLAY MODE")
 
 ih_superhud_middle_off:
-    %cm_jsr("Disabled", #action_select_superhud_middle, #$0000)
+    %cm_jsl("Disabled", #action_select_superhud_middle, #$0000)
 
 ih_superhud_middle_xfactor:
-    %cm_jsr("X-Factor Timer", #action_select_superhud_middle, #$0001)
+    %cm_jsl("X-Factor Timer", #action_select_superhud_middle, #$0001)
 
 ih_superhud_middle_shinetimer:
-    %cm_jsr("Shinespark Timer", #action_select_superhud_middle, #$0002)
+    %cm_jsl("Shinespark Timer", #action_select_superhud_middle, #$0002)
 
 ih_superhud_middle_iframecounter:
-    %cm_jsr("I-Frame Counter", #action_select_superhud_middle, #$0003)
+    %cm_jsl("I-Frame Counter", #action_select_superhud_middle, #$0003)
 
 ih_superhud_middle_lagcounter:
-    %cm_jsr("Lag Counter", #action_select_superhud_middle, #$0004)
+    %cm_jsl("Lag Counter", #action_select_superhud_middle, #$0004)
 
 ih_superhud_middle_cpuusage:
-    %cm_jsr("CPU Usage", #action_select_superhud_middle, #$0005)
+    %cm_jsl("CPU Usage", #action_select_superhud_middle, #$0005)
 
 ih_superhud_middle_shottimer:
-    %cm_jsr("Shot Timer", #action_select_superhud_middle, #$0006)
+    %cm_jsl("Shot Timer", #action_select_superhud_middle, #$0006)
 
 ih_superhud_middle_chargetimer:
-    %cm_jsr("Charge Timer", #action_select_superhud_middle, #$0007)
+    %cm_jsl("Charge Timer", #action_select_superhud_middle, #$0007)
 
 ih_superhud_middle_dashcounter:
-    %cm_jsr("Dash Counter", #action_select_superhud_middle, #$0008)
+    %cm_jsl("Dash Counter", #action_select_superhud_middle, #$0008)
 
 ih_superhud_middle_cooldowncounter:
-    %cm_jsr("Cooldown Timer", #action_select_superhud_middle, #$0009)
+    %cm_jsl("Cooldown Timer", #action_select_superhud_middle, #$0009)
 
 ih_superhud_middle_ridleygrab:
-    %cm_jsr("Ridley Death Grab Attempts", #action_select_superhud_middle, #$000A)
+    %cm_jsl("Ridley Death Grab Attempts", #action_select_superhud_middle, #$000A)
     
 action_select_superhud_middle:
 {
@@ -2147,40 +2147,40 @@ SuperHUDTopMenu:
     %cm_header("TOP DISPLAY MODE")
 
 ih_superhud_top_off:
-    %cm_jsr("Disabled", #action_select_superhud_top, #$0000)
+    %cm_jsl("Disabled", #action_select_superhud_top, #$0000)
 
 ih_superhud_top_xfactor:
-    %cm_jsr("X-Factor Timer", #action_select_superhud_top, #$0001)
+    %cm_jsl("X-Factor Timer", #action_select_superhud_top, #$0001)
 
 ih_superhud_top_shinetimer:
-    %cm_jsr("Shinespark Timer", #action_select_superhud_top, #$0002)
+    %cm_jsl("Shinespark Timer", #action_select_superhud_top, #$0002)
 
 ih_superhud_top_iframecounter:
-    %cm_jsr("I-Frame Counter", #action_select_superhud_top, #$0003)
+    %cm_jsl("I-Frame Counter", #action_select_superhud_top, #$0003)
 
 ih_superhud_top_lagcounter:
-    %cm_jsr("Lag Counter", #action_select_superhud_top, #$0004)
+    %cm_jsl("Lag Counter", #action_select_superhud_top, #$0004)
 
 ih_superhud_top_cpuusage:
-    %cm_jsr("CPU Usage", #action_select_superhud_top, #$0005)
+    %cm_jsl("CPU Usage", #action_select_superhud_top, #$0005)
 
 ih_superhud_top_shottimer:
-    %cm_jsr("Shot Timer", #action_select_superhud_top, #$0006)
+    %cm_jsl("Shot Timer", #action_select_superhud_top, #$0006)
 
 ih_superhud_top_chargetimer:
-    %cm_jsr("Charge Timer", #action_select_superhud_top, #$0007)
+    %cm_jsl("Charge Timer", #action_select_superhud_top, #$0007)
 
 ih_superhud_top_dashcounter:
-    %cm_jsr("Dash Counter", #action_select_superhud_top, #$0008)
+    %cm_jsl("Dash Counter", #action_select_superhud_top, #$0008)
 
 ih_superhud_top_cooldowncounter:
-    %cm_jsr("Cooldown Timer", #action_select_superhud_top, #$0009)
+    %cm_jsl("Cooldown Timer", #action_select_superhud_top, #$0009)
 
 ih_superhud_top_ridleygrab:
-    %cm_jsr("Ridley Death Grab Attempts", #action_select_superhud_top, #$000A)
+    %cm_jsl("Ridley Death Grab Attempts", #action_select_superhud_top, #$000A)
 
 ih_superhud_enable:
-    %cm_jsr("Enable Super HUD", .routine, #$0001)
+    %cm_jsl("Enable Super HUD", .routine, #$0001)
   .routine
     TYA : STA !sram_display_mode
     DEC : STA !sram_room_strat
@@ -2196,7 +2196,7 @@ action_select_superhud_top:
 print pc, " superhud menu end"
 
 ih_ram_watch:
-    %cm_jsr("Customize RAM Watch", #ih_prepare_ram_watch_menu, #RAMWatchMenu)
+    %cm_jsl("Customize RAM Watch", #ih_prepare_ram_watch_menu, #RAMWatchMenu)
 
 incsrc ramwatchmenu.asm
 
@@ -2232,7 +2232,7 @@ ih_lag:
     %cm_numfield("Artificial Lag", !sram_artificial_lag, 0, 64, 1, 4, #0)
 
 ih_reset_seg_later:
-    %cm_jsr("Reset Segment in Next Room", #.routine, #$FFFF)
+    %cm_jsl("Reset Segment in Next Room", #.routine, #$FFFF)
   .routine
     TYA : STA !ram_reset_segment_later
     %sfxquake()
@@ -2377,7 +2377,7 @@ game_minimap:
     %cm_toggle("Minimap", !ram_minimap, #$0001, #0)
 
 game_clear_minimap:
-    %cm_jsr("Clear Minimap", .clear_minimap, #$0000)
+    %cm_jsl("Clear Minimap", .clear_minimap, #$0000)
 
   .clear_minimap
     LDA #$0000 : STA !ram_map_counter : STA $7E0789
@@ -2485,7 +2485,7 @@ controls_angle_down:
     %cm_ctrl_input("  ANGLE DOWN", !IH_INPUT_ANGLE_DOWN, action_submenu, #AssignAngleControlsMenu)
 
 controls_save_to_file:
-    %cm_jsr("Save to File", .routine, #0)
+    %cm_jsl("Save to File", .routine, #0)
   .routine
     LDA $0998 : CMP #$0002 : BEQ .fail
     LDA $0952 : BEQ .fileA
@@ -2528,25 +2528,25 @@ AssignControlsMenu:
     %cm_header("ASSIGN AN INPUT")
 
 controls_assign_A:
-    %cm_jsr("A", action_assign_input, !CTRL_A)
+    %cm_jsl("A", action_assign_input, !CTRL_A)
 
 controls_assign_B:
-    %cm_jsr("B", action_assign_input, !CTRL_B)
+    %cm_jsl("B", action_assign_input, !CTRL_B)
 
 controls_assign_X:
-    %cm_jsr("X", action_assign_input, !CTRL_X)
+    %cm_jsl("X", action_assign_input, !CTRL_X)
 
 controls_assign_Y:
-    %cm_jsr("Y", action_assign_input, !CTRL_Y)
+    %cm_jsl("Y", action_assign_input, !CTRL_Y)
 
 controls_assign_Select:
-    %cm_jsr("Select", action_assign_input, !CTRL_SELECT)
+    %cm_jsl("Select", action_assign_input, !CTRL_SELECT)
 
 controls_assign_L:
-    %cm_jsr("L", action_assign_input, !CTRL_L)
+    %cm_jsl("L", action_assign_input, !CTRL_L)
 
 controls_assign_R:
-    %cm_jsr("R", action_assign_input, !CTRL_R)
+    %cm_jsl("R", action_assign_input, !CTRL_R)
 
 AssignAngleControlsMenu:
     dw #controls_assign_L
@@ -2709,19 +2709,19 @@ ControllerCommonMenu:
     %cm_footer("CONTROLS.SPAZER.LINK")
 
 controls_common_default:
-    %cm_jsr("Default (D1)", #action_set_common_controls, #$0000)
+    %cm_jsl("Default (D1)", #action_set_common_controls, #$0000)
 
 controls_common_d2:
-    %cm_jsr("Select+Cancel Swap (D2)", #action_set_common_controls, #$000E)
+    %cm_jsl("Select+Cancel Swap (D2)", #action_set_common_controls, #$000E)
 
 controls_common_d3:
-    %cm_jsr("D2 + Shot+Select Swap (D3)", #action_set_common_controls, #$001C)
+    %cm_jsl("D2 + Shot+Select Swap (D3)", #action_set_common_controls, #$001C)
 
 controls_common_d4:
-    %cm_jsr("MMX Style (D4)", #action_set_common_controls, #$002A)
+    %cm_jsl("MMX Style (D4)", #action_set_common_controls, #$002A)
 
 controls_common_d5:
-    %cm_jsr("SMW Style (D5)", #action_set_common_controls, #$0038)
+    %cm_jsl("SMW Style (D5)", #action_set_common_controls, #$0038)
 
 action_set_common_controls:
 {
@@ -2768,7 +2768,7 @@ rng_rerandomize:
     %cm_toggle("Rerandomize", !sram_rerandomize, #$0001, #0)
 
 rng_goto_phanmenu:
-    %cm_jsr("Phantoon Menu", ih_prepare_phantoon_menu, #PhantoonMenu)
+    %cm_jsl("Phantoon Menu", ih_prepare_phantoon_menu, #PhantoonMenu)
 
 ih_prepare_phantoon_menu:
 {
@@ -3118,7 +3118,7 @@ ctrl_update_timers:
     %cm_ctrl_shortcut("Update Timers", !sram_ctrl_update_timers)
 
 ctrl_clear_shortcuts:
-    %cm_jsr("Clear Shortcuts", .routine, #$0000)
+    %cm_jsl("Clear Shortcuts", .routine, #$0000)
   .routine
     TYA
     STA !ram_game_mode_extras
@@ -3145,7 +3145,7 @@ ctrl_clear_shortcuts:
     RTL
 
 ctrl_reset_defaults:
-    %cm_jsr("Reset to Defaults", .routine, #$0000)
+    %cm_jsl("Reset to Defaults", .routine, #$0000)
   .routine
     LDA #$3000 : STA !sram_ctrl_menu                   ; Start + Select
     LDA #$6010 : STA !sram_ctrl_save_state             ; Select + Y + R

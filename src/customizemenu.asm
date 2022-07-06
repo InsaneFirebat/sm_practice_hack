@@ -118,7 +118,7 @@ ifb_paletteprofile:
     RTL
 
 ifb_palette2custom:
-    %cm_jsr("Copy Palette to Custom", .routine, #$0000)
+    %cm_jsl("Copy Palette to Custom", .routine, #$0000)
   .routine
     JSL copy_menu_palette
     RTL
@@ -143,14 +143,14 @@ PaletteRandoConfirm:
     %cm_footer("YOU WILL LOSE SAVED COLORS")
 
 paletterando_abort:
-    %cm_jsr("ABORT", #.routine, #$0000)
+    %cm_jsl("ABORT", #.routine, #$0000)
   .routine
     %sfxgoback()
     JSL cm_previous_menu
     RTL
 
 paletterando_confirm:
-    %cm_jsr("RANDOMIZE!", #.routine, #$0000)
+    %cm_jsl("RANDOMIZE!", #.routine, #$0000)
   .routine
     LDA !ram_seed_Y : AND #$7FFF : STA !sram_custompalette_menuborder
     JSL MenuRNG : AND #$7FFF : STA !sram_custompalette_menuheaderoutline
@@ -351,7 +351,7 @@ ifb_sfx_confirm:
     %cm_numfield_sound("Confirm Selection", !sram_customsfx_confirm, 1, 63, 1, #action_test_sfx)
 
 ifb_sfx_reset:
-    %cm_jsr("Reset to Defaults", .routine, #$0000)
+    %cm_jsl("Reset to Defaults", .routine, #$0000)
   .routine
     LDA #$0037 : STA !sram_customsfx_move    ; these are customized
     LDA #$002A : STA !sram_customsfx_toggle
@@ -446,7 +446,7 @@ copy_menu_palette:
     LDA !sram_custompalette_profile : BNE + : BRL .fail
 +   ASL : TAX : LDA.l PaletteProfileTables,X : STA $16
 
-    ; copy table to SRAM, Y is already zero from JSR menu macro
+    ; copy table to SRAM, Y is already zero from JSL menu macro
     LDA ($16),Y : STA !sram_custompalette_menuborder : INY #2
     LDA ($16),Y : STA !sram_custompalette_menuheaderoutline : INY #2
     LDA ($16),Y : STA !sram_custompalette_menutext : INY #2
