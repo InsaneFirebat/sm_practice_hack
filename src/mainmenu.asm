@@ -1122,7 +1122,7 @@ MiscMenu:
     dw #misc_invincibility
     dw #misc_infiniteammo
     dw #misc_slowdownrate
-    dw #misc_roomliquid
+    dw #misc_waterphysics
     dw #misc_suit_properties
     dw #$FFFF
     dw #misc_magicpants
@@ -1160,8 +1160,8 @@ misc_spacepants:
 misc_loudpants:
     %cm_toggle_bit("Loud Pants", !ram_magic_pants_enabled, #$0004, GameLoopExtras)
 
-misc_roomliquid:
-    %cm_toggle("Room Liquid", $7E197E, #$0004, #0)
+misc_waterphysics:
+    %cm_toggle("Disable Water Physics", $7E197E, #$0004, #0)
 
 misc_suit_properties:
     dw !ACTION_CHOICE
