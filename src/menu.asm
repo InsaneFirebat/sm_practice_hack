@@ -1127,7 +1127,7 @@ cm_loop:
 
     ; not sure if still necessary
     ; needs flash cart testing
-    JSL cm_refresh_cgram_long
+;    JSL cm_refresh_cgram_long
 
     JSL $808F0C ; Music queue
     JSL $8289EF ; Sound fx queue
