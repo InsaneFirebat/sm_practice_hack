@@ -141,8 +141,8 @@ if !FEATURE_TINYSTATES
     ; Disallow tiny states outside of gameplay
     ; Most other gamemodes will crash on load
     LDA !GAMEMODE : CMP #$0020 : BEQ .save ; end of Ceres allowed
-    CMP #$0007 : BMI .fail
-    CMP #$001C : BPL .fail
+    CMP #$0007 : BMI .save_fail
+    CMP #$001C : BPL .save_fail
 endif
   .save
     JSL save_state
@@ -151,12 +151,12 @@ endif
 
   .load_state
     ; check if a saved state exists
-    LDA !SRAM_SAVED_STATE : CMP #$5AFE : BNE .fail
+    LDA !SRAM_SAVED_STATE : CMP #$5AFE : BNE .save_fail
     JSL load_state
     ; SEC to skip normal gameplay for one frame after loading state
     SEC : RTS
 
-  .fail
+  .save_fail
     ; CLC to continue normal gameplay
     CLC : JMP skip_pause
 endif
@@ -219,13 +219,13 @@ endif
     ; check if slot is populated first
     LDA !sram_custom_preset_slot
     ASL : XBA : TAX
-    LDA !PRESET_SLOTS,X : CMP #$5AFE : BNE .fail
+    LDA !PRESET_SLOTS,X : CMP #$5AFE : BNE .load_fail
     STA !ram_custom_preset
     JSL preset_load
     ; SEC to skip normal gameplay for one frame after loading preset
     SEC : RTS
 
-  .fail
+  .load_fail
     %sfxgoback()
     ; CLC to continue normal gameplay after failing to save or load a custom preset
     CLC : RTS

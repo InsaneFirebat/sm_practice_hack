@@ -2026,6 +2026,7 @@ preset_prkd15_maridia_botwoon:
     dw $0915, $0001 ; Screen Y position in pixels
     dw $0917, $023F ; Layer 2 X position
     dw $0919, $0001 ; Layer 2 Y position
+    dw $09D2, $0003  ; Currently selected item
     dw $0A1C, $0001 ; Samus position/state
     dw $0A1E, $0008 ; More position/state
     dw $0AF6, $039D ; Samus X
@@ -2048,6 +2049,7 @@ preset_prkd15_maridia_botwoon_etank:
     dw $09C6, $0009 ; Missiles
     dw $09CA, $0004 ; Supers
     dw $09CE, $0005 ; Pbs
+    dw $09D2, $0000  ; Currently selected item
     dw $0AF6, $01C5 ; Samus X
     dw $D82C, $0002 ; Bosses
     dw #$FFFF
