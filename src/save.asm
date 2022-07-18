@@ -16,8 +16,8 @@ pre_load_state:
     ; Rerandomize
     LDA !sram_save_has_set_rng : BNE .done
     LDA !sram_rerandomize : AND #$00FF : BEQ .done
-    LDA $05E5 : STA $770080
-    LDA !FRAME_COUNTER : STA $770082
+    LDA !CACHED_RANDOM_NUMBER : STA !SRAM_SAVED_RNG
+    LDA !FRAME_COUNTER : STA !SRAM_SAVED_FRAME_COUNTER
 
   .done
     RTS
@@ -112,8 +112,8 @@ post_load_state:
     ; Rerandomize
     LDA !sram_save_has_set_rng : BNE .done
     LDA !sram_rerandomize : AND #$00FF : BEQ .done
-    LDA $770080 : STA $05E5
-    LDA $770082 : STA !FRAME_COUNTER
+    LDA !SRAM_SAVED_RNG : STA !CACHED_RANDOM_NUMBER
+    LDA !SRAM_SAVED_FRAME_COUNTER : STA !FRAME_COUNTER
 
   .done
     JSL init_suit_properties_ram
@@ -233,6 +233,8 @@ save_return:
 
     %ai16()
     LDA !ram_room_has_set_rng : STA !sram_save_has_set_rng
+
+    LDA #$5AFE : STA !SRAM_SAVED_STATE
 
     TSC
     STA !SRAM_SAVED_SP
@@ -380,4 +382,4 @@ vm:
 }
 
 print pc, " save end"
-warnpc $80FC00
+warnpc $80FD00 ; infohud.asm

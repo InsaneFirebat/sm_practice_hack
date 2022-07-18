@@ -1512,7 +1512,7 @@ print pc, " HUD number GFX bankFF start"
 
 
 ; Stuff that needs to be placed in bank 80
-org $80FC00
+org $80FD00
 print pc, " infohud bank80 start"
 
 ih_fix_scroll_offsets:
