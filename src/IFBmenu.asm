@@ -67,11 +67,11 @@ if !FEATURE_DEV
 ifb_emu_test:
     %cm_jsl("BRK 9F (crash) if bad emu", .routine, #0)
   .routine
+    LDA #$0050 : STA $4204
     %a8()
-    LDA #$06 : STA $4202
-    LDA #$05 : STA $4203
+    LDA #$0A : STA $4206
     %a16()
-    LDA $4216 : CMP #$001E : BEQ .badEmu
+    LDA $4214 : CMP #$0008 : BEQ .badEmu
     RTL
 
   .badEmu

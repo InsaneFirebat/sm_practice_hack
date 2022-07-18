@@ -252,6 +252,7 @@ cm_transfer_brb_tileset:
 
     ; Load custom vram to normal location
     %a8()
+    LDA #$80 : STA $802100 ; enable forced blanking
     LDA #$04 : STA $210C
     LDA #$80 : STA $2115 ; word-access, incr by 1
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
@@ -261,6 +262,7 @@ cm_transfer_brb_tileset:
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
+    LDA #$0F : STA $0F2100 ; disable forced blanking
     PLP
     RTS
 }
