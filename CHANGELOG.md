@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.16] Fixed graphics for TinyStates saved in the pause menu
 * [2.4.2.16] Improve menu color changes on console
 * [2.4.2.16] Fixed some crashes from saving/loading invalid savestates
 * [2.4.2.15] Fixed Kraid graphics when using experimental TinyStates by NobodyNada
