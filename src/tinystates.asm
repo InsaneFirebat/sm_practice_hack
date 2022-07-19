@@ -2,6 +2,43 @@
 ; by acmlm, total, Myria
 ;
 
+
+macro wram_to_sram(wram_addr, size, sram_addr)
+    dw $0000|$4312, <sram_addr>&$FFFF                            ; VRAM address >> 1.
+    dw $0000|$4314, ((<sram_addr>>>16)&$FF)|((<size>&$FF)<<8)    ; A addr = $70xxxx, size = $xx00
+    dw $0000|$4316, (<size>>>8)&$FF                              ; size = $80xx ($8000), unused bank reg = $00.
+    dw $0000|$2181, <wram_addr>&$FFFF                            ; WRAM addr = $xx0000
+    dw $0000|$2183, ((<wram_addr>>>16)&$FF)-$7E                  ; WRAM addr = $7Exxxx  (bank is relative to $7E)
+    dw $0000|$420B, $02                                          ; Trigger DMA on channel 1
+endmacro
+
+macro vram_to_sram(vram_addr, size, sram_addr)
+    dw $0000|$2116, <vram_addr>&$FFFF                            ; VRAM address >> 1.
+    dw $9000|$2139, $0000                                        ; VRAM dummy read.
+    dw $0000|$4312, <sram_addr>&$FFFF                            ; A addr = $xx0000
+    dw $0000|$4314, ((<sram_addr>>>16)&$FF)|((<size>&$FF)<<8)    ; A addr = $70xxxx, size = $xx00
+    dw $0000|$4316, (<size>>>8)&$FF                              ; size = $80xx ($0000), unused bank reg = $00.
+    dw $1000|$420B, $02                                          ; Trigger DMA on channel 1
+endmacro
+
+macro sram_to_wram(wram_addr, size, sram_addr)
+    dw $0000|$4312, <sram_addr>&$FFFF                            ; A addr = $xx0000
+    dw $0000|$4314, ((<sram_addr>>>16)&$FF)|((<size>&$FF)<<8)    ; A addr = $70xxxx, size = $xx00
+    dw $0000|$4316, (<size>>>8)&$FF                              ; size = $80xx ($8000), unused bank reg = $00.
+    dw $0000|$2181, <wram_addr>&$FFFF                            ; WRAM addr = $xx0000
+    dw $1000|$2183, ((<wram_addr>>>16)&$FF)-$7E                  ; WRAM addr = $7Exxxx  (bank is relative to $7E)
+    dw $1000|$420B, $02                                          ; Trigger DMA on channel 1
+endmacro
+
+macro sram_to_vram(vram_addr, size, sram_addr)
+    dw $0000|$2116, <vram_addr>&$FFFF                            ; VRAM address >> 1.
+    dw $0000|$4312, <sram_addr>&$FFFF                            ; A addr = $xx0000
+    dw $0000|$4314, ((<sram_addr>>>16)&$FF)|((<size>&$FF)<<8)    ; A addr = $70xxxx, size = $xx00
+    dw $0000|$4316, (<size>>>8)&$FF                              ; size = $80xx ($0000), unused bank reg = $00.
+    dw $1000|$420B, $02                                          ; Trigger DMA on channel 1
+endmacro
+
+
 org $80F700
 print pc, " tinysave start"
 
@@ -194,25 +231,6 @@ run_vm:
     JMP vm
 }
 
-macro wram_to_sram(wram_addr, size, sram_addr)
-    dw $0000|$4312, <sram_addr>&$FFFF
-    dw $0000|$4314, ((<sram_addr>>>16)&$FF)|((<size>&$FF)<<8)
-    dw $0000|$4316, (<size>>>8)&$FF
-    dw $0000|$2181, <wram_addr>&$FFFF
-    dw $0000|$2183, ((<wram_addr>>>16)&$FF)-$7E
-    dw $0000|$420B, $02
-endmacro
-
-macro vram_to_sram(vram_addr, size, sram_addr)
-    dw $0000|$2116, <vram_addr>&$FFFF                            ; VRAM address >> 1.
-    dw $9000|$2139, $0000                                        ; VRAM dummy read.
-    dw $0000|$4312, <sram_addr>&$FFFF                            ; A addr = $xx0000
-    dw $0000|$4314, ((<sram_addr>>>16)&$FF)|((<size>&$FF)<<8)    ; A addr = $75xxxx, size = $xx00
-    dw $0000|$4316, (<size>>>8)&$FF                              ; size = $80xx ($0000), unused bank reg = $00.
-    dw $1000|$420B, $02                                          ; Trigger DMA on channel 1
-endmacro
-
-
 save_write_table:
     ; Turn PPU off
     dw $1000|$2100, $80
@@ -222,9 +240,10 @@ save_write_table:
     
     ; Copy WRAM segments
     %wram_to_sram($7E0000, $2000, $704000)
-    %wram_to_sram($7E7000, $1000, $706000) 
-    %wram_to_sram($7E8000, $2000, $710000) 
-    %wram_to_sram($7EC000, $34A0, $712000)    
+    %wram_to_sram($7E7000, $1000, $706000)
+    %wram_to_sram($7E3300, $0200, $707000)
+    %wram_to_sram($7E8000, $2000, $710000)
+    %wram_to_sram($7EC000, $34A0, $712000)
     %wram_to_sram($7F0000, $2B00, $715500)
     %wram_to_sram($7F2B00, $6B01, $720000)
     
@@ -241,8 +260,8 @@ save_write_table:
     ; Copy CGRAM 000-1FF to SRAM 736000-7361FF
     dw $1000|$2121, $00    ; CGRAM address
     dw $0000|$4310, $3B80  ; direction = B->A, byte reg, B addr = $213B
-    dw $0000|$4312, $6000  ; A addr = $xx2000
-    dw $0000|$4314, $0073  ; A addr = $77xxxx, size = $xx00
+    dw $0000|$4312, $6000  ; A addr = $xx6000
+    dw $0000|$4314, $0073  ; A addr = $73xxxx, size = $xx00
     dw $0000|$4316, $0002  ; size = $02xx ($0200), unused bank reg = $00.
     dw $1000|$420B, $02    ; Trigger DMA on channel 1
     
@@ -272,23 +291,6 @@ load_state:
     JMP run_vm
 }
 
-macro sram_to_wram(wram_addr, size, sram_addr)
-    dw $0000|$4312, <sram_addr>&$FFFF                     ; A addr = $xx0000
-    dw $0000|$4314, ((<sram_addr>>>16)&$FF)|((<size>&$FF)<<8)    ; A addr = $71xxxx, size = $xx00
-    dw $0000|$4316, (<size>>>8)&$FF                       ; size = $80xx ($8000), unused bank reg = $00.
-    dw $0000|$2181, <wram_addr>&$FFFF                     ; WRAM addr = $xx0000
-    dw $1000|$2183, ((<wram_addr>>>16)&$FF)-$7E           ; WRAM addr = $7Exxxx  (bank is relative to $7E)
-    dw $1000|$420B, $02    ; Trigger DMA on channel 1
-endmacro
-
-macro sram_to_vram(vram_addr, size, sram_addr)
-    dw $0000|$2116, <vram_addr>&$FFFF                     ; VRAM address >> 1.
-    dw $0000|$4312, <sram_addr>&$FFFF                     ; A addr = $xx0000
-    dw $0000|$4314, ((<sram_addr>>>16)&$FF)|((<size>&$FF)<<8)    ; A addr = $75xxxx, size = $xx00
-    dw $0000|$4316, (<size>>>8)&$FF                       ; size = $80xx ($0000), unused bank reg = $00.
-    dw $1000|$420B, $02                                 ; Trigger DMA on channel 1
-endmacro
-
 load_write_table:
     ; Disable HDMA
     dw $1000|$420C, $00
@@ -299,10 +301,11 @@ load_write_table:
     dw $0000|$4310, $8000  ; direction = A->B, B addr = $2180
 
 
-    ; Copy WRAM segments, uses $703000-$724B02
+    ; Copy WRAM segments, uses $703000-$726B02
     %sram_to_wram($7E0000, $2000, $704000)
-    %sram_to_wram($7E7000, $1000, $706000) 
-    %sram_to_wram($7E8000, $2000, $710000) 
+    %sram_to_wram($7E7000, $1000, $706000)
+    %sram_to_wram($7E3300, $0200, $707000)
+    %sram_to_wram($7E8000, $2000, $710000)
     %sram_to_wram($7EC000, $34A0, $712000)
     %sram_to_wram($7F0000, $2B00, $715500)
     %sram_to_wram($7F2B00, $6B01, $720000)
@@ -311,17 +314,17 @@ load_write_table:
     dw $0000|$4310, $1801  ; direction = A->B, B addr = $2118
     dw $1000|$2115, $0000  ; VRAM address increment mode.
 
-    ; Copy VRAM segments, uses $724C00-$735000
+    ; Copy VRAM segments, uses $726C00-$735FFF
     %sram_to_vram($3E00, $400,  $726C00)
     %sram_to_vram($4800, $1000, $727000)
     %sram_to_vram($5000, $2000, $730000)
     %sram_to_vram($6000, $4000, $732000)
 
-    ; Copy SRAM 736000-7361FF to CGRAM 000-1FF.
+    ; Copy SRAM $736000-$7361FF to CGRAM 000-1FF.
     dw $1000|$2121, $00    ; CGRAM address
     dw $0000|$4310, $2200  ; direction = A->B, byte reg, B addr = $2122
-    dw $0000|$4312, $2000  ; A addr = $xx2000
-    dw $0000|$4314, $0073  ; A addr = $77xxxx, size = $xx00
+    dw $0000|$4312, $6000  ; A addr = $xx6000
+    dw $0000|$4314, $0073  ; A addr = $73xxxx, size = $xx00
     dw $0000|$4316, $0006  ; size = $02xx ($0200), unused bank reg = $00.
     dw $1000|$420B, $02    ; Trigger DMA on channel 1
     
@@ -341,6 +344,12 @@ load_return:
 
     JSL tinystates_load_kraid
 
+    ; pause menu graphics
+    LDA !GAMEMODE : CMP #$0010 : BPL .not_paused
+    CMP #$000C : BMI .not_paused
+    JSL tinystates_load_paused
+
+  .not_paused
     %a8()
     LDX #$0000 : TXY
 
@@ -395,6 +404,34 @@ vm:
     ; Return to caller.  The word in the table after the terminator is the
     ; code address to return to.
     JMP ($0002,X)
+}
+
+tinystates_load_paused:
+{
+    ; restore gameplay palettes before running pause routines
+    LDX #$0000 : LDY #$0100
+-   LDA $7E3300,X : STA $7EC000,X
+    INX #2
+    DEY : BNE -
+
+    JSL $828E75 ; Load pause menu tiles and clear BG2 tilemap
+    JSL $828EDA ; Load pause screen base tilemaps
+    JSL $8293C3 ; Load pause menu map tilemap and area label
+
+    ; backup gameplay palettes
+    LDX #$0000 : LDY #$0100
+-   LDA $7EC000,X : STA $7E3300,X
+    INX #2
+    DEY : BNE -
+
+    ; load pause screen palettes
+    LDX #$0000 : LDY #$0100
+-   LDA $B6F000,X : STA $7EC000,X
+    INX #2
+    DEY : BNE -
+
+    JSL $82B62B ; Draw pause menu during fade in
+    RTL
 }
 
 print pc, " tinysave end"
@@ -510,7 +547,7 @@ tinystates_load_kraid:
   .call_pause_hook
     ; We jump into the middle of the hook (to skip waiting for an NMI), so we have to be careful
     ;   with the stack & processor status
-    PHP : SEP #$20
+    PHP : %a8()
   if !FEATURE_PAL
     JML $A7C289
   else
