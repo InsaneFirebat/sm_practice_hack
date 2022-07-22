@@ -334,6 +334,9 @@ PresetsMenu:
     dw #presets_goto_select_preset_category
     dw #presets_current
     dw #$FFFF
+    dw #presets_reload
+    dw #presets_random
+    dw #$FFFF
     dw #presets_custom_preset_slot
     dw #presets_save_custom_preset
     dw #presets_load_custom_preset
@@ -360,6 +363,19 @@ endif
 
 presets_goto_select_preset_category:
     %cm_submenu("Select Preset Category", #SelectPresetCategoryMenu)
+
+presets_reload:
+    %cm_jsl("Reload Last Preset", .routine, #$0000)
+  .routine
+    LDA !sram_last_preset : STA !ram_load_preset
+    LDA #$0001 : STA !ram_cm_leave
+    RTL
+
+presets_random:
+    %cm_jsl("Reload Last Preset", .routine, #$0000)
+  .routine
+    LDA #$0001 : STA !ram_cm_leave
+    JML LoadRandomPreset
 
 presets_custom_preset_slot:
 if !FEATURE_TINYSTATES

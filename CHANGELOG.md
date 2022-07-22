@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.17] Options to reload the last preset or load a random preset from the menu
 * [2.4.2.16] Fixed graphics for TinyStates saved in the pause menu
 * [2.4.2.16] Improve menu color changes on console
 * [2.4.2.16] Fixed some crashes from saving/loading invalid savestates
