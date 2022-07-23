@@ -1,14 +1,36 @@
-macro ppu_off()
-    LDA #$80 : STA $2100 : STA $13
-    STZ $420C : LDA $9B : PHA : STZ $9B
-    STZ $4200
+
+; ---------------
+; General Purpose
+; ---------------
+
+macro a8() ; A = 8-bit
+    SEP #$20
 endmacro
 
-macro ppu_on()
-    LDA #$A1 : STA $4200
-    LDA #$0F : STA $13 : STA $2100
-    PLA : STA $9B : STA $420C
+macro a16() ; A = 16-bit
+    REP #$20
 endmacro
+
+macro i8() ; X/Y = 8-bit
+    SEP #$10
+endmacro
+
+macro i16() ; X/Y = 16-bit
+    REP #$10
+endmacro
+
+macro ai8() ; A + X/Y = 8-bit
+    SEP #$30
+endmacro
+
+macro ai16() ; A + X/Y = 16-bit
+    REP #$30
+endmacro
+
+
+; -------------
+; Practice Menu
+; -------------
 
 macro item_index_to_vram_index()
     ; Find screen position from Y (item number)
@@ -16,37 +38,233 @@ macro item_index_to_vram_index()
     CLC : ADC #$0146 : TAX
 endmacro
 
-macro setmenubank()
-    PHK : PHK : PLA
-    STA !ram_cm_menu_bank
+macro cm_header(title)
+    table ../resources/header.tbl
+    db #$28, "<title>", #$FF
+    table ../resources/normal.tbl
 endmacro
 
-macro a8() ; A = 8-bit
-    sep #$20
+macro cm_footer(title)
+    table ../resources/header.tbl
+    dw #$F007 : db #$28, "<title>", #$FF
+    table ../resources/normal.tbl
 endmacro
 
-macro a16() ; A = 16-bit
-    rep #$20
+macro cm_version_header(title, major, minor, build, rev_1, rev_2)
+    table ../resources/header.tbl
+if !VERSION_REV_1
+    db #$28, "<title> v<major>.<minor>.<build>.<rev_1><rev_2>", #$FF
+else
+if !VERSION_REV_2
+    db #$28, "<title> v<major>.<minor>.<build>.<rev_2>", #$FF
+else
+    db #$28, "<title> v<major>.<minor>.<build>", #$FF
+endif
+endif
+    table ../resources/normal.tbl
 endmacro
 
-macro i8() ; X/Y = 8-bit
-    sep #$10
+macro cm_numfield(title, addr, start, end, increment, heldincrement, jsltarget)
+    dw !ACTION_NUMFIELD
+    dl <addr>
+    db <start>, <end>, <increment>;, <heldincrement>
+    dw <jsltarget>
+    db #$28, "<title>", #$FF
 endmacro
 
-macro i16() ; X/Y = 16-bit
-    rep #$10
+macro cm_numfield_word(title, addr, start, end, increment, heldincrement, jsltarget)
+    dw !ACTION_NUMFIELD_WORD
+    dl <addr>
+    dw <start>, <end>, <increment>;, <heldincrement>
+    dw <jsltarget>
+    db #$28, "<title>", #$FF
 endmacro
 
-macro ai8() ; A + X/Y = 8-bit
-    sep #$30
+macro cm_numfield_hex(title, addr, start, end, increment, heldincrement, jsltarget)
+    dw !ACTION_NUMFIELD_HEX
+    dl <addr>
+    db <start>, <end>, <increment>;, <heldincrement>
+    dw <jsltarget>
+    db #$28, "<title>", #$FF
 endmacro
 
-macro ai16() ; A + X/Y = 16-bit
-    rep #$30
+macro cm_numfield_hex_word(title, addr)
+    dw !ACTION_NUMFIELD_HEX_WORD
+    dl <addr>
+    db #$28, "<title>", #$FF
 endmacro
 
-macro wdm()
-    dw $4242
+macro cm_numfield_color(title, addr, jsltarget)
+    dw !ACTION_NUMFIELD_COLOR
+    dl <addr>
+    dw <jsltarget>
+    db #$28, "<title>", #$FF
+endmacro
+
+macro cm_numfield_sound(title, addr, start, end, increment, jsltarget)
+    dw !ACTION_NUMFIELD_SOUND
+    dl <addr>
+    db <start>, <end>, <increment>
+    dw <jsltarget>
+    db #$28, "<title>", #$FF
+endmacro
+
+macro cm_toggle(title, addr, value, jsltarget)
+    dw !ACTION_TOGGLE
+    dl <addr>
+    db <value>
+    dw <jsltarget>
+    db #$28, "<title>", #$FF
+endmacro
+
+macro cm_toggle_inverted(title, addr, value, jsltarget)
+    dw !ACTION_TOGGLE_INVERTED
+    dl <addr>
+    db <value>
+    dw <jsltarget>
+    db #$28, "<title>", #$FF
+endmacro
+
+macro cm_toggle_bit(title, addr, mask, jsltarget)
+    dw !ACTION_TOGGLE_BIT
+    dl <addr>
+    dw <mask>
+    dw <jsltarget>
+    db #$28, "<title>", #$FF
+endmacro
+
+macro cm_toggle_bit_inverted(title, addr, mask, jsltarget)
+    dw !ACTION_TOGGLE_BIT_INVERTED
+    dl <addr>
+    dw <mask>
+    dw <jsltarget>
+    db #$28, "<title>", #$FF
+endmacro
+
+macro cm_jsl(title, routine, argument)
+    dw !ACTION_JSL
+    dw <routine>
+    dw <argument>
+    db #$28, "<title>", #$FF
+endmacro
+
+macro cm_jsl_submenu(title, routine, argument)
+    dw !ACTION_JSL_SUBMENU
+    dw <routine>
+    dw <argument>
+    db #$28, "<title>", #$FF
+endmacro
+
+macro cm_mainmenu(title, target)
+    %cm_jsl("<title>", #action_mainmenu, <target>)
+endmacro
+
+macro cm_submenu(title, target)
+    %cm_jsl_submenu("<title>", #action_submenu, <target>)
+endmacro
+
+macro cm_preset(title, target)
+    %cm_jsl_submenu("<title>", #action_load_preset, <target>)
+endmacro
+
+macro cm_ctrl_shortcut(title, addr)
+    dw !ACTION_CTRL_SHORTCUT
+    dl <addr>
+    db #$28, "<title>", #$FF
+endmacro
+
+macro cm_ctrl_input(title, addr, routine, argument)
+    dw !ACTION_CTRL_INPUT
+    dl <addr>
+    dw <routine>
+    dw <argument>
+    db #$28, "<title>", #$FF
+endmacro
+
+macro examplemenu()
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #ifb_dummy_on
+    dw #ifb_dummy_off
+    dw #ifb_dummy_hexnum
+    dw #ifb_dummy_num
+endmacro
+
+macro palettemenu(title, pointer, addr)
+    %cm_submenu("<title>", <pointer>)
+
+<pointer>:
+    dw #custompalettes_hex_red
+    dw #custompalettes_hex_green
+    dw #custompalettes_hex_blue
+    dw #$FFFF
+    dw #custompalettes_dec_red
+    dw #custompalettes_dec_green
+    dw #custompalettes_dec_blue
+    dw #$FFFF
+    dw <pointer>_hex_hi
+    dw <pointer>_hex_lo
+    %examplemenu()
+    dw #$0000
+    %cm_header("<title>")
+    %cm_footer("THREE WAYS TO EDIT COLORS")
+
+<pointer>_hex_hi:
+    %cm_numfield_hex("SNES BGR - HI BYTE", !sram_custompalette_hi, 0, 255, 1, 8, .routine_hi)
+  .routine_hi
+    %a8() ; sram_custompalette_hi already in A
+    XBA : LDA !sram_custompalette_lo
+    %a16()
+    STA <addr>
+    JSL cm_colors
+    JML MixRGB
+
+<pointer>_hex_lo:
+    %cm_numfield_hex("SNES BGR - LO BYTE", !sram_custompalette_lo, 0, 255, 1, 8, .routine_lo)
+  .routine_lo
+    %a8() ; sram_custompalette_lo already in A
+    XBA : LDA !sram_custompalette_hi : XBA
+    %a16()
+    STA <addr>
+    JSL cm_colors
+    JML MixRGB
+}
+endmacro
+
+macro setupRGB(addr)
+    LDA.w #<addr>>>16 : STA $C3
+    LDA.w #<addr> : STA $C1
+    JSL cm_setup_RGB
+    RTS
+endmacro
+
+
+; -------------
+; Sound Effects
+; -------------
+
+macro sfxmove() ; Move Cursor
+    LDA !sram_customsfx_move : JSL !SFX_LIB1
+endmacro
+
+macro sfxconfirm() ; Confirm Selection
+    LDA !sram_customsfx_confirm : JSL !SFX_LIB1
+endmacro
+
+macro sfxtoggle() ; Toggle
+    LDA !sram_customsfx_toggle : JSL !SFX_LIB1
+endmacro
+
+macro sfxnumber() ; Number Selection
+    LDA !sram_customsfx_number : JSL !SFX_LIB1
+endmacro
+
+macro sfxgoback() ; Go Back
+    LDA !sram_customsfx_goback : JSL !SFX_LIB1
 endmacro
 
 macro sfxclick() ; play click sound lib1
@@ -117,22 +335,6 @@ macro sfxsave() ; play save station sound lib1
     LDA #$002E : JSL !SFX_LIB1
 endmacro
 
-macro sfxmove() ; Move Cursor
-    LDA !sram_customsfx_move : JSL !SFX_LIB1
-endmacro
-
-macro sfxconfirm() ; Confirm Selection
-    LDA !sram_customsfx_confirm : JSL !SFX_LIB1
-endmacro
-
-macro sfxtoggle() ; Toggle
-    LDA !sram_customsfx_toggle : JSL !SFX_LIB1
-endmacro
-
-macro sfxnumber() ; Number Selection
-    LDA !sram_customsfx_number : JSL !SFX_LIB1
-endmacro
-
-macro sfxgoback() ; Go Back
-    LDA !sram_customsfx_goback : JSL !SFX_LIB1
+macro sfxfail() ; play grapple end sound lib1
+    LDA #$0007 : JSL !SFX_LIB1
 endmacro

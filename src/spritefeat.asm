@@ -13,10 +13,7 @@ org $828B98
     JSL update_sprite_features
 
 
-
-;
 ; Add hitbox graphic to free sprite VRAM slot
-;
 org $9ADAE0
 db $FF, $FF, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80
 db $FF, $FF, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80
@@ -76,228 +73,216 @@ endif
 update_sprite_tiles_loading:
     LDA !ram_oob_watch_active : BEQ +
     JSL upload_sprite_oob_tiles
-+   JSL $80894D
++   JSL $80894D ; Handle fading in
     RTL
 
 upload_sprite_oob_tiles:
-    LDX $330
-    LDA #$0400
-    STA $D0, X
-    LDA #(sprite_tiles+$200)
-    STA $D2, X
-    LDA #((sprite_tiles+$200)>>8)
-    STA $D3, X
-    LDA #$6D00
-    STA $D5, X
+    LDX $0330
+    LDA #$0400 : STA $D0,X
+    LDA #(sprite_tiles+$200) : STA $D2,X
+    LDA #((sprite_tiles+$200)>>8) : STA $D3,X
+    LDA #$6D00 : STA $D5,X
     TXA : CLC : ADC #$0007 : STA $0330
     RTL
 
 update_sprite_oob:
-    !oob_width = $000D
-    !oob_height = $0009
-    LDA $590 : STA $C8
+!oob_width = $000D
+!oob_height = $0009
+    LDA !OAM_STACK_POINTER : STA $C8
 
-    LDA $0AF6
-    SEC : SBC #(!oob_width*8)
-    STA $12 ; cameraX - (oob_width*8)
-    AND #$000F
-    STA $C4
+    ; cameraX - (oob_width*8)
+    LDA !SAMUS_X : SEC : SBC #(!oob_width*8) : STA $12
+    AND #$000F : STA $C4
 
-    LDA $12
-    LSR #4
-    STA $22 ; cameraX - (oob_width*8) / 16
+    ; cameraX - (oob_width*8) / 16
+    LDA $12 : LSR #4 : STA $22
 
+    ; cameraY - (oob_height*8)
+    LDA !SAMUS_Y : SEC : SBC #((!oob_height-2)*8) : STA $14
+    AND #$000F : STA $C6
 
-    LDA $0AFA
-    SEC : SBC #((!oob_height-2)*8)
-    STA $14 ; cameraY - (oob_height*8)
-    AND #$000F
-    STA $C6
+    ; cameraY - (oob_height*8) / 16
+    LDA $14 : LSR #4 : STA $24
 
-    LDA $14
-    LSR #4
-    STA $24 ; cameraY - (oob_height*8) / 16
-
-
-    LDA $07A5
-    STA $16 ; width
+    LDA !ROOM_WIDTH_BLOCKS : STA $16
 
     LDY #$0000
-    .loop_y
-        LDX #$0000
-        SEP #$20
-        LDA $16
-        STA $4202
-        TYA : CLC : ADC $24
-        STA $4203
-        NOP : NOP : REP #$30
-        LDA $4216
-        STA $18
-        .loop_x
-            PHY : PHX
-            REP #$20
-            STX $C0 : STY $C2
+  .loop_y
+    LDX #$0000
+    %a8()
+    LDA $16 : STA $4202
+    TYA : CLC : ADC $24 : STA $4203
+    NOP #2 ; wait for CPU math
+    %ai16()
+    LDA $4216 : STA $18
 
-            TXA : CLC : ADC $22   ; cameraX + (x * 16)
-            AND #$0FFF
+  .loop_x
+    PHY : PHX
+    %a16()
+    STX $C0 : STY $C2
 
-            CLC : ADC $18   ; a = (width * bit.lrshift(bit.band(cameraY+y*16, 0xFFF), 4)) + bit.lrshift(bit.band(cameraX+x*16, 0xFFFF), 4)
-            ASL             ; a = a * 2
-            TAX : LDA.l $7F0003, X ; Load clipdata of block
-            AND #$00FF : LSR #4
-            TAX : LDA.l block_gfx, X ; Get sprite id for this BTS
-            AND #$00FF
-            CMP #$00d0 : BEQ .next
+    ; cameraX + (x * 16)
+    TXA : CLC : ADC $22 : AND #$0FFF
 
-            SEP #$20
+    ; a = (width * bit.lrshift(bit.band(cameraY+y*16, 0xFFF), 4)) + bit.lrshift(bit.band(cameraX+x*16, 0xFFFF), 4)
+    CLC : ADC $18
+    ; a = a * 2
+    ASL : TAX
+    ; Load clipdata of block
+    LDA.l $7F0003,X : AND #$00FF : LSR #4 : TAX
+    ; Get sprite ID for this BTS
+    LDA.l block_gfx,X : AND #$00FF : CMP #$00D0 : BEQ .next
 
-            LDY $0590
-            STA $0372, Y        ; Set sprite ID
+    ; Set sprite ID
+    %a8()
+    LDY !OAM_STACK_POINTER : STA $0372,Y    
 
-            LDA $C0 : CLC : ADC #$02 : ASL #4 : SEC : SBC $C4 ; Get X coord
-            STA $0370, Y
+    ; Get X coord
+    LDA $C0 : CLC : ADC #$02 : ASL #4 : SEC : SBC $C4
+    STA $0370,Y
 
-            LDA $C2 : CLC : ADC #$04 : ASL #4 : SEC : SBC $C6 ; Get Y coord
-            STA $0371, Y
+    ; Get Y coord
+    LDA $C2 : CLC : ADC #$04 : ASL #4 : SEC : SBC $C6
+    STA $0371,Y
 
-            LDA #%00111010
-            STA $0373, Y
+    ; Sprite Attributes - xxxxxxxx yyyyyyyy YXPPpppt tttttttt
+    ; x=X pos, y=Y pos (low nibbles only), Y=Y flip, X=X flip
+    ; P=Priority, p=Palette, t=Tile number
+    ; Priority bits set, palette = 101
+    LDA #%00111010 : STA $0373,Y
 
-            REP #$20
+    %a16()
 
-            INY #4
-            STY $0590
+    INY #4
+    STY !OAM_STACK_POINTER
 
-            .next
+  .next
+    PLX : PLY
 
-            PLX
-            PLY
+    INX : CPX #!oob_width : BEQ +
+    JMP .loop_x
 
-            INX
-            CPX #!oob_width
-            BEQ +
-            JMP .loop_x
-            +
-        INY
-        CPY #!oob_height
-        BEQ +
-        JMP .loop_y
-        +
++   INY : CPY #!oob_height : BEQ +
+    JMP .loop_y
 
-    LDA $590
-    BEQ .end
++   LDA !OAM_STACK_POINTER : BEQ .end
     LSR #4 : INC : STA $CA
     LDA $C8 : LSR #4 : STA $C8
 
-    SEP #$20
+    %a8()
     LDX $C8
-    -
-        LDA #%10101010 : STA $570, X
-        INX : CPX $CA : BNE -
-    REP #$30
 
-.end
+    ; $0570..8F: High OAM. 2 bit entries
+    ; ddccbbsx
+    ; x: X position (upper 1 bit)
+    ; s: Size
+    ; b: sx for sprite 4n+1
+    ; c: sx for sprite 4n+2
+    ; d: sx for sprite 4n+3
+-   LDA #%10101010 : STA $0570,X
+    INX : CPX $CA : BNE -
+    %ai16()
+
+  .end
     JSR sprite_draw_oob_samus_hitbox
     RTS
 
 block_gfx:
-    ; d0 = transparent
-    ; d2 = white
-    ; d4 = yellow
-    ; d6 = brown
-    ; d8 = pink
-    ; da = darkgreen
-    ; dc = blue
-    ; de = mint
+    ; D0 = transparent
+    ; D2 = white
+    ; D4 = yellow
+    ; D6 = brown
+    ; D8 = pink
+    ; DA = darkgreen
+    ; DC = blue
+    ; DE = mint
 
     ;  air, slope, air (trick xray), treadmill, ?? ,      h-extend,  ??,  ??,  solid, door, spike, crumble, shot, v-xtend, grapple, bomb
-    db $d0, $de,   $d0,              $dc,       $d0,      $d0,       $d0, $d0, $d6,   $d4,  $dc,   $dc,     $d2,  $d0,     $da,     $dc
+    db $D0, $DE,   $D0,              $DC,       $D0,      $D0,       $D0, $D0, $D6,   $D4,  $DC,   $DC,     $D2,  $D0,     $DA,     $DC
 
 ; draw hitbox around samus for the oob viewer (static position on the screen)
 sprite_draw_oob_samus_hitbox:
 {
-    ;LDA $0AFA : SEC : SBC $0915 : PHA ; top edge
-    ;LDA $0B04 : PHA ; left edge
+    ; LDA !SAMUS_Y : SEC : SBC !LAYER1_Y : PHA ; top edge
+    ; LDA !SAMUS_SPRITEMAP_X : PHA ; left edge
 
     LDA.w #(137-16) : PHA
     LDA.w #136 : PHA
 
     LDA #$0000
-    SEP #$20
-    LDY $0590
+    %a8()
+    LDY !OAM_STACK_POINTER
     PLA ; X coord
-    SEC : SBC $0AFE
-    STA $0370, Y
-    STA $0378, Y
-    CLC : ADC $0AFE : ADC $0AFE : SEC : SBC #$08
-    STA $0374, Y
-    STA $037C, Y
+    SEC : SBC !SAMUS_X_RADIUS
+    STA $0370,Y : STA $0378,Y
+    CLC : ADC !SAMUS_X_RADIUS : ADC !SAMUS_X_RADIUS : SEC : SBC #$08
+    STA $0374,Y : STA $037C,Y
+    PLA ; discard high byte
 
-    PLA : PLA : DEC ; Y coord
-    SEC : SBC $0B00
-    STA $0371, Y
-    STA $0375, Y
-    CLC : ADC $0B00 : ADC $0B00 : SEC : SBC #$08
-    STA $0379, Y
-    STA $037D, Y
-    PLA
-
+    PLA : DEC ; Y coord
+    SEC : SBC !SAMUS_Y_RADIUS
+    STA $0371,Y : STA $0375,Y
+    CLC : ADC !SAMUS_Y_RADIUS : ADC !SAMUS_Y_RADIUS : SEC : SBC #$08
+    STA $0379,Y : STA $037D,Y
+    PLA ; discard high byte
 
     LDA #%00111010
-    STA $0373, Y        ; Sprite 1 ATTR
-    STA $0377, Y        ; Sprite 2 ATTR
-    STA $037B, Y        ; Sprite 3 ATTR
-    STA $037F, Y        ; Sprite 4 ATTR
+    STA $0373,Y ; Sprite 1 ATTR
+    STA $0377,Y ; Sprite 2 ATTR
+    STA $037B,Y ; Sprite 3 ATTR
+    STA $037F,Y ; Sprite 4 ATTR
 
-    LDA #$DC
-    STA $0372, Y
-    LDA #$DD
-    STA $0376, Y
-    LDA #$EC
-    STA $037A, Y
-    LDA #$ED
-    STA $037E, Y
+    LDA #$DC : STA $0372,Y
+    LDA #$DD : STA $0376,Y
+    LDA #$EC : STA $037A,Y
+    LDA #$ED : STA $037E,Y
 
     ; Normally the high sprite bits are cleared to zero so this shouldn't be needed for 8x8 sprites,
     ; but the hitbox drawing code will overwrite 1-3 extra sprite bits to gain speed so instead we
     ; compensate for it here to just have to do it once
 
-    REP #$30
+    %ai16()
     PHY
-    TYA : LSR #2 : TAX : PHX         ; Sprite number
+    ; Sprite number
+    TYA : LSR #2 : TAX : PHX
+    ; Table offset
+    LSR #2 : TAY
+    TXA : AND #$0003 : ASL : TAX
 
-        LSR #2 : TAY                 ; Table offset
-        TXA : AND #$0003 : ASL : TAX
-        LDA $570, Y                  ; Get high sprite offset
-        AND.l spr_clr_flags, X       ; Mask off bits to clear
-        STA $570, Y                  ; Save back
+    ; Mask off bits to clear high sprite offset
+    LDA $0570,Y : AND.l spr_clr_flags,X : STA $0570,Y
 
-        PLX : INX : TXA : PHX
-        LSR #2 : TAY                 ; Table offset
-        TXA : AND #$0003 : ASL : TAX
-        LDA $570, Y                  ; Get high sprite offset
-        AND.l spr_clr_flags, X       ; Mask off bits to clear
-        STA $570, Y                  ; Save back
+    ; Sprite number
+    PLX : INX : TXA : PHX
+    ; Table offset
+    LSR #2 : TAY
+    TXA : AND #$0003 : ASL : TAX
 
-        PLX : INX : TXA : PHX
-        LSR #2 : TAY                 ; Table offset
-        TXA : AND #$0003 : ASL : TAX
-        LDA $570, Y                  ; Get high sprite offset
-        AND.l spr_clr_flags, X       ; Mask off bits to clear
-        STA $570, Y                  ; Save back
+    ; Mask off bits to clear high sprite offset
+    LDA $0570,Y : AND.l spr_clr_flags,X : STA $0570,Y
 
-        PLX : INX : TXA : PHX
-        LSR #2 : TAY                 ; Table offset
-        TXA : AND #$0003 : ASL : TAX
-        LDA $570, Y                  ; Get high sprite offset
-        AND.l spr_clr_flags, X       ; Mask off bits to clear
-        STA $570, Y                  ; Save back
-        PLX
-    PLY
+    ; Sprite number
+    PLX : INX : TXA : PHX
+    ; Table offset
+    LSR #2 : TAY
+    TXA : AND #$0003 : ASL : TAX
 
+    ; Mask off bits to clear high sprite offset
+    LDA $0570,Y : AND.l spr_clr_flags,X : STA $0570,Y
 
-    REP #$30
-    TYA : CLC : ADC #$0010 : STA $0590
+    ; Sprite number
+    PLX : INX : TXA : PHX
+    ; Table offset
+    LSR #2 : TAY
+    TXA : AND #$0003 : ASL : TAX
+
+    ; Mask off bits to clear high sprite offset
+    LDA $0570,Y : AND.l spr_clr_flags,X : STA $0570,Y
+    PLX : PLY
+
+    ; Inc OAM stack
+    %ai16()
+    TYA : CLC : ADC #$0010 : STA !OAM_STACK_POINTER
     RTS
 }
 
@@ -313,27 +298,24 @@ update_samus_sprite_hitbox:
     LDA #$0000
     %a8()
     LDY !OAM_STACK_POINTER
-    PLA ; X coord
-    SEC : SBC !SAMUS_X_RADIUS
+    ; X coord
+    PLA : SEC : SBC !SAMUS_X_RADIUS
     STA $0370,Y : STA $0378,Y
     CLC : ADC !SAMUS_X_RADIUS : ADC !SAMUS_X_RADIUS : SEC : SBC #$08
     STA $0374,Y : STA $037C,Y
+    PLA ; discard high byte
 
-    PLA : PLA : DEC ; Y coord
-    SEC : SBC !SAMUS_Y_RADIUS
+    ; Y coord
+    PLA : DEC : SEC : SBC !SAMUS_Y_RADIUS
     STA $0371,Y : STA $0375,Y
     CLC : ADC !SAMUS_Y_RADIUS : ADC !SAMUS_Y_RADIUS : SEC : SBC #$08
     STA $0379,Y : STA $037D,Y
-    PLA
+    PLA ; discard high byte
 
-    LDA #%00111010
-    STA $0373,Y        ; Sprite 1 ATTR
-    LDA #%01111010
-    STA $0377,Y        ; Sprite 2 ATTR
-    LDA #%10111010
-    STA $037B,Y        ; Sprite 3 ATTR
-    LDA #%11111010
-    STA $037F,Y        ; Sprite 4 ATTR
+    LDA #%00111010 : STA $0373,Y ; Sprite 1 ATTR
+    LDA #%01111010 : STA $0377,Y ; Sprite 2 ATTR
+    LDA #%10111010 : STA $037B,Y ; Sprite 3 ATTR
+    LDA #%11111010 : STA $037F,Y ; Sprite 4 ATTR
 
     LDA #$47 ; tile number (8/9 bits)
     STA $0372,Y : STA $0376,Y
@@ -345,7 +327,7 @@ update_samus_sprite_hitbox:
 }
 
 update_enemy_sprite_hitbox:
-; draw hitboxes around first 8 enemies
+; draw hitboxes around first 12 enemies
 {
     LDX #$0000 ; X = enemy index
     LDY !OAM_STACK_POINTER ; Y = OAM stack pointer
@@ -376,24 +358,22 @@ update_enemy_sprite_hitbox:
     LDA !ENEMY_X,X : SEC : SBC !LAYER1_X : PHA ; left edge
 
     %a8()
-    PLA ; X coord
-    SEC : SBC !ENEMY_X_RADIUS,X
+    ; X coord
+    PLA : SEC : SBC !ENEMY_X_RADIUS,X
     STA $0370,Y : STA $0378,Y ; X pos
     CLC : ADC !ENEMY_X_RADIUS,X : ADC !ENEMY_X_RADIUS,X
     SEC : SBC #$08
     STA $0374,Y : STA $037C,Y
+    PLA ; discard high byte
 
-    PLA : PLA : DEC ; Y coord
-    SEC : SBC !ENEMY_Y_RADIUS,X
+    ; Y coord
+    PLA : DEC : SEC : SBC !ENEMY_Y_RADIUS,X
     STA $0371,Y : STA $0375,Y
     CLC : ADC !ENEMY_Y_RADIUS,X : ADC !ENEMY_Y_RADIUS,X
     SEC : SBC #$08
     STA $0379,Y : STA $037D,Y
-    PLA
+    PLA ; discard high byte
 
-    ; Sprite Attributes - xxxxxxxx yyyyyyyy YXPPpppt tttttttt
-    ; x=X pos, y=Y pos (low nibbles only), Y=Y flip, X=X flip
-    ; P=Priority, p=Palette, t=Tile number
     %ai16()
     LDA #$3A47 : STA $0372,Y ; %00111010 top-left
     LDA #$7A47 : STA $0376,Y ; %01111010 top-right
@@ -403,7 +383,8 @@ update_enemy_sprite_hitbox:
     ; inc oam stack
     TYA : CLC : ADC #$0010 : STA !OAM_STACK_POINTER : TAY
 
-    CPX #$0300 : BEQ .done ; limit # of hitboxes drawn
+    ; limit # of hitboxes drawn
+    CPX #$0300 : BEQ .done
     TXA : CLC : ADC #$0040 : TAX : JMP .loopEnemies
 
   .done
@@ -493,18 +474,16 @@ update_extended_spritemap_hitbox:
 
     ; calculate sprite positions
     %a8()
-    LDA $1D ; X coord
-    CLC : ADC $14
+    ; X coord
+    LDA $1D : CLC : ADC $14
     STA $0370,Y : STA $0378,Y ; sprite X pos
-    LDA $1D : CLC : ADC $18
-    SEC : SBC #$08
+    LDA $1D : CLC : ADC $18 : SEC : SBC #$08
     STA $0374,Y : STA $037C,Y
 
-    LDA $1C : DEC ; Y coord
-    CLC : ADC $16
+    ; Y coord
+    LDA $1C : DEC : CLC : ADC $16
     STA $0371,Y : STA $0375,Y ; sprite Y pos
-    LDA $1C : CLC : ADC $1A
-    SEC : SBC #$08
+    LDA $1C : CLC : ADC $1A : SEC : SBC #$08
     STA $0379,Y : STA $037D,Y
 
     ; Sprite Attributes - xxxxxxxx yyyyyyyy YXPPpppt tttttttt
@@ -535,7 +514,8 @@ update_extended_spritemap_hitbox:
     JMP .multiSpritemap
 
   .nextEnemy2
-    CPX #$0300 : BEQ .done ; limit # of hitboxes drawn
+    ; limit # of hitboxes drawn
+    CPX #$0300 : BEQ .done
     TXA : CLC : ADC #$0040 : TAX
     JMP .loopEnemies
 
@@ -546,7 +526,7 @@ update_extended_spritemap_hitbox:
 update_enemyproj_sprite_hitbox:
 ; draw hitboxes around enemy projectiles
 {
-    LDX #$FFFE ; X = projectile index
+    LDX #$FFFE ; X = projectile index (starts at zero)
     LDY !OAM_STACK_POINTER ; Y = OAM stack pointer
 
   .nextProjectile
@@ -578,20 +558,19 @@ update_enemyproj_sprite_hitbox:
     LDA !ENEMY_PROJ_X,X : SEC : SBC !LAYER1_X : PHA ; left edge
 
     %a8()
-    PLA ; X coord
-    SEC : SBC $12
+    ; X coord
+    PLA : SEC : SBC $12
     STA $0370,Y : STA $0378,Y ; X pos
-    CLC : ADC $12 : ADC $12
-    SEC : SBC #$08
+    CLC : ADC $12 : ADC $12 : SEC : SBC #$08
     STA $0374,Y : STA $037C,Y
+    PLA ; discard high byte
 
-    PLA : PLA : DEC ; Y coord
-    SEC : SBC $14
+    ; Y coord
+    PLA : DEC : SEC : SBC $14
     STA $0371,Y : STA $0375,Y
-    CLC : ADC $14 : ADC $14
-    SEC : SBC #$08
+    CLC : ADC $14 : ADC $14 : SEC : SBC #$08
     STA $0379,Y : STA $037D,Y
-    PLA
+    PLA ; discard high byte
 
     ; Sprite Attributes - xxxxxxxx yyyyyyyy YXPPpppt tttttttt
     ; x=X pos, y=Y pos (low nibbles only), Y=Y flip, X=X flip
@@ -644,20 +623,19 @@ update_samusproj_sprite_hitbox:
     LDA !SAMUS_PROJ_X,X : SEC : SBC !LAYER1_X : PHA ; left edge
 
     %a8()
-    PLA ; X coord
-    SEC : SBC !SAMUS_PROJ_RADIUS_X,X
+    ; X coord
+    PLA : SEC : SBC !SAMUS_PROJ_RADIUS_X,X
     STA $0370,Y : STA $0378,Y ; X pos
-    CLC : ADC !SAMUS_PROJ_RADIUS_X,X : ADC !SAMUS_PROJ_RADIUS_X,X
-    SEC : SBC #$08
+    CLC : ADC !SAMUS_PROJ_RADIUS_X,X : ADC !SAMUS_PROJ_RADIUS_X,X : SEC : SBC #$08
     STA $0374,Y : STA $037C,Y
+    PLA ; discard high byte
 
-    PLA : PLA : DEC ; Y coord
-    SEC : SBC !SAMUS_PROJ_RADIUS_Y,X
+    ; Y coord
+    PLA : DEC : SEC : SBC !SAMUS_PROJ_RADIUS_Y,X
     STA $0371,Y : STA $0375,Y ; Y pos
-    CLC : ADC !SAMUS_PROJ_RADIUS_Y,X : ADC !SAMUS_PROJ_RADIUS_Y,X
-    SEC : SBC #$08
+    CLC : ADC !SAMUS_PROJ_RADIUS_Y,X : ADC !SAMUS_PROJ_RADIUS_Y,X : SEC : SBC #$08
     STA $0379,Y : STA $037D,Y
-    PLA
+    PLA ; discard high byte
 
     ; Sprite Attributes - xxxxxxxx yyyyyyyy YXPPpppt tttttttt
     ; x=X pos, y=Y pos (low nibbles only), Y=Y flip, X=X flip
@@ -785,20 +763,19 @@ custom_sprite_hitbox:
     LDA $7E20A4 : SEC : SBC !LAYER1_X : PHA ; left edge
 
     %a8()
-    PLA ; X coord
-    SEC : SBC #$0E
+    ; X coord
+    PLA : SEC : SBC #$0E
     STA $0370,Y : STA $0378,Y ; X pos
-    CLC : ADC #$1C
-    SEC : SBC #$08
+    CLC : ADC #$1C : SEC : SBC #$08
     STA $0374,Y : STA $037C,Y
+    PLA ; discard high byte
 
-    PLA : PLA : DEC ; Y coord
-    SEC : SBC #$0E
+    ; Y coord
+    PLA : DEC : SEC : SBC #$0E
     STA $0371,Y : STA $0375,Y
-    CLC : ADC #$1C
-    SEC : SBC #$08
+    CLC : ADC #$1C : SEC : SBC #$08
     STA $0379,Y : STA $037D,Y
-    PLA
+    PLA ; discard high byte
 
     ; Sprite Attributes - xxxxxxxx yyyyyyyy YXPPpppt tttttttt
     ; x=X pos, y=Y pos (low nibbles only), Y=Y flip, X=X flip
@@ -822,18 +799,16 @@ DrawMBHitbox:
 
     ; calculate sprite positions
     %a8()
-;    LDA $1D ; X coord
+    ; X coord
     CLC : ADC $14
     STA $0370,Y : STA $0378,Y ; sprite X pos
-    LDA $1D : CLC : ADC $18
-    SEC : SBC #$08
+    LDA $1D : CLC : ADC $18 : SEC : SBC #$08
     STA $0374,Y : STA $037C,Y
 
-    LDA $1C : DEC ; Y coord
-    CLC : ADC $16
+    ; Y coord
+    LDA $1C : DEC : CLC : ADC $16
     STA $0371,Y : STA $0375,Y ; sprite Y pos
-    LDA $1C : CLC : ADC $1A
-    SEC : SBC #$08
+    LDA $1C : CLC : ADC $1A : SEC : SBC #$08
     STA $0379,Y : STA $037D,Y
 
     ; Sprite Attributes - xxxxxxxx yyyyyyyy YXPPpppt tttttttt

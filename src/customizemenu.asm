@@ -1,68 +1,3 @@
-; ------
-; Macros
-; ------
-
-macro examplemenu()
-    dw #$FFFF
-    dw #$FFFF
-    dw #$FFFF
-    dw #$FFFF
-    dw #$FFFF
-    dw #$FFFF
-    dw #ifb_dummy_on
-    dw #ifb_dummy_off
-    dw #ifb_dummy_hexnum
-    dw #ifb_dummy_num
-endmacro
-
-macro palettemenu(title, pointer, addr)
-    %cm_submenu("<title>", <pointer>)
-
-<pointer>:
-    dw #custompalettes_hex_red
-    dw #custompalettes_hex_green
-    dw #custompalettes_hex_blue
-    dw #$FFFF
-    dw #custompalettes_dec_red
-    dw #custompalettes_dec_green
-    dw #custompalettes_dec_blue
-    dw #$FFFF
-    dw <pointer>_hex_hi
-    dw <pointer>_hex_lo
-    %examplemenu()
-    dw #$0000
-    %cm_header("<title>")
-    %cm_footer("THREE WAYS TO EDIT COLORS")
-
-<pointer>_hex_hi:
-    %cm_numfield_hex("SNES BGR - HI BYTE", !sram_custompalette_hi, 0, 255, 1, 8, .routine_hi)
-  .routine_hi
-    %a8() ; sram_custompalette_hi already in A
-    XBA : LDA !sram_custompalette_lo
-    %a16()
-    STA <addr>
-    JSL cm_colors
-    JML MixRGB
-
-<pointer>_hex_lo:
-    %cm_numfield_hex("SNES BGR - LO BYTE", !sram_custompalette_lo, 0, 255, 1, 8, .routine_lo)
-  .routine_lo
-    %a8() ; sram_custompalette_lo already in A
-    XBA : LDA !sram_custompalette_hi : XBA
-    %a16()
-    STA <addr>
-    JSL cm_colors
-    JML MixRGB
-}
-endmacro
-
-macro setupRGB(addr)
-    LDA.w #<addr>>>16 : STA $C3
-    LDA.w #<addr> : STA $C1
-    JSL cm_setup_RGB
-    RTS
-endmacro
-
 
 ; -----------------------
 ; Customize Practice Menu
@@ -152,17 +87,17 @@ paletterando_abort:
 paletterando_confirm:
     %cm_jsl("RANDOMIZE!", #.routine, #$0000)
   .routine
-    LDA !ram_seed_Y : AND #$7FFF : STA !sram_custompalette_menuborder
-    JSL MenuRNG : AND #$7FFF : STA !sram_custompalette_menuheaderoutline
-    LDA !ram_seed_X : AND #$7FFF : STA !sram_custompalette_menutext
-    JSL MenuRNG2 : AND #$7FFF : STA !sram_custompalette_menubackground
-    JSL MenuRNG : AND #$7FFF : STA !sram_custompalette_menunumoutline
-    JSL MenuRNG : AND #$7FFF : STA !sram_custompalette_menunumfill
-    LDA !ram_seed_X : AND #$7FFF : STA !sram_custompalette_menutoggleon
-    JSL MenuRNG2 : AND #$7FFF : STA !sram_custompalette_menuseltext
-    JSL MenuRNG : AND #$7FFF : STA !sram_custompalette_menuseltextbg
-    JSL MenuRNG2 : AND #$7FFF : STA !sram_custompalette_menunumseloutline
-    JSL MenuRNG : AND #$7FFF : STA !sram_custompalette_menunumsel
+    LDA !ram_seed_Y : AND #$7FFF : STA !sram_palette_border
+    JSL MenuRNG : AND #$7FFF : STA !sram_palette_headeroutline
+    LDA !ram_seed_X : AND #$7FFF : STA !sram_palette_text
+    JSL MenuRNG2 : AND #$7FFF : STA !sram_palette_background
+    JSL MenuRNG : AND #$7FFF : STA !sram_palette_numoutline
+    JSL MenuRNG : AND #$7FFF : STA !sram_palette_numfill
+    LDA !ram_seed_X : AND #$7FFF : STA !sram_palette_toggleon
+    JSL MenuRNG2 : AND #$7FFF : STA !sram_palette_seltext
+    JSL MenuRNG : AND #$7FFF : STA !sram_palette_seltextbg
+    JSL MenuRNG2 : AND #$7FFF : STA !sram_palette_numseloutline
+    JSL MenuRNG : AND #$7FFF : STA !sram_palette_numsel
 
     ; play a happy sound and refresh current profile
     %ai16()
@@ -180,54 +115,54 @@ ifb_customfont:
     JML cm_transfer_custom_tileset
 
 CustomPalettesMenu:
-    dw #custompalettes_menutext
-    dw #custompalettes_menuseltext
-    dw #custompalettes_menuseltextbg
-    dw #custompalettes_menuheaderoutline
-    dw #custompalettes_menunumfill
-    dw #custompalettes_menunumoutline
-    dw #custompalettes_menunumsel
-    dw #custompalettes_menunumseloutline
-    dw #custompalettes_menutoggleon
-    dw #custompalettes_menuborder
-    dw #custompalettes_menubackground
+    dw #custompalettes_text
+    dw #custompalettes_seltext
+    dw #custompalettes_seltextbg
+    dw #custompalettes_headeroutline
+    dw #custompalettes_numfill
+    dw #custompalettes_numoutline
+    dw #custompalettes_numsel
+    dw #custompalettes_numseloutline
+    dw #custompalettes_toggleon
+    dw #custompalettes_border
+    dw #custompalettes_background
     %examplemenu()
     dw #ifb_custompalettes_display_menu
     dw #$0000
     %cm_header("CUSTOMIZE MENU PALETTE")
 
-custompalettes_menutext:
-    %palettemenu("Text", CustomPalettesMenu_menutext, !sram_custompalette_menutext)
+custompalettes_text:
+    %palettemenu("Text", CustomPalettesMenu_menutext, !sram_palette_text)
 
-custompalettes_menuseltext:
-    %palettemenu("Selected Text", CustomPalettesMenu_menuseltext, !sram_custompalette_menuseltext)
+custompalettes_seltext:
+    %palettemenu("Selected Text", CustomPalettesMenu_menuseltext, !sram_palette_seltext)
 
-custompalettes_menuseltextbg:
-    %palettemenu("Selected Text Background", CustomPalettesMenu_menuseltextbg, !sram_custompalette_menuseltextbg)
+custompalettes_seltextbg:
+    %palettemenu("Selected Text Background", CustomPalettesMenu_menuseltextbg, !sram_palette_seltextbg)
 
-custompalettes_menuheaderoutline:
-    %palettemenu("Header Outline", CustomPalettesMenu_menuheaderoutline, !sram_custompalette_menuheaderoutline)
+custompalettes_headeroutline:
+    %palettemenu("Header Outline", CustomPalettesMenu_menuheaderoutline, !sram_palette_headeroutline)
 
-custompalettes_menunumfill:
-    %palettemenu("Number Field Text", CustomPalettesMenu_menunumfill, !sram_custompalette_menunumfill)
+custompalettes_numfill:
+    %palettemenu("Number Field Text", CustomPalettesMenu_menunumfill, !sram_palette_numfill)
 
-custompalettes_menunumoutline:
-    %palettemenu("Number Field Outline", CustomPalettesMenu_menunumoutline, !sram_custompalette_menunumoutline)
+custompalettes_numoutline:
+    %palettemenu("Number Field Outline", CustomPalettesMenu_menunumoutline, !sram_palette_numoutline)
 
-custompalettes_menunumsel:
-    %palettemenu("Selected Num-Field Text", CustomPalettesMenu_menunumsel, !sram_custompalette_menunumsel)
+custompalettes_numsel:
+    %palettemenu("Selected Num-Field Text", CustomPalettesMenu_menunumsel, !sram_palette_numsel)
 
-custompalettes_menunumseloutline:
-    %palettemenu("Selected Num-Field Outline", CustomPalettesMenu_menunumseloutline, !sram_custompalette_menunumseloutline)
+custompalettes_numseloutline:
+    %palettemenu("Selected Num-Field Outline", CustomPalettesMenu_menunumseloutline, !sram_palette_numseloutline)
 
-custompalettes_menutoggleon:
-    %palettemenu("Toggle ON", CustomPalettesMenu_menutoggleon, !sram_custompalette_menutoggleon)
+custompalettes_toggleon:
+    %palettemenu("Toggle ON", CustomPalettesMenu_menutoggleon, !sram_palette_toggleon)
 
-custompalettes_menuborder:
-    %palettemenu("Toggle OFF + Border", CustomPalettesMenu_menuborder, !sram_custompalette_menuborder)
+custompalettes_border:
+    %palettemenu("Toggle OFF + Border", CustomPalettesMenu_menuborder, !sram_palette_border)
 
-custompalettes_menubackground:
-    %palettemenu("Background", CustomPalettesMenu_menubackground, !sram_custompalette_menubackground)
+custompalettes_background:
+    %palettemenu("Background", CustomPalettesMenu_menubackground, !sram_palette_background)
 
 custompalettes_hex_red:
     %cm_numfield_color("Hexadecimal Red", !sram_custompalette_red, #MixRGB_long)
@@ -270,53 +205,53 @@ ifb_custompalettes_display_menu:
     %cm_submenu("Screenshot To Share Colors", #CustomPalettesDisplayMenu)
 
 CustomPalettesDisplayMenu:
-    dw #custompalettes_menuborder_display
-    dw #custompalettes_menuheaderoutline_display
-    dw #custompalettes_menutext_display
-    dw #custompalettes_menubackground_display
-    dw #custompalettes_menunumoutline_display
-    dw #custompalettes_menunumfill_display
-    dw #custompalettes_menutoggleon_display
-    dw #custompalettes_menuseltext_display
-    dw #custompalettes_menuseltextbg_display
-    dw #custompalettes_menunumseloutline_display
-    dw #custompalettes_menunumsel_display
+    dw #custompalettes_border_display
+    dw #custompalettes_headeroutline_display
+    dw #custompalettes_text_display
+    dw #custompalettes_background_display
+    dw #custompalettes_numoutline_display
+    dw #custompalettes_numfill_display
+    dw #custompalettes_toggleon_display
+    dw #custompalettes_seltext_display
+    dw #custompalettes_seltextbg_display
+    dw #custompalettes_numseloutline_display
+    dw #custompalettes_numsel_display
     dw #$0000
     %cm_header("SHARE YOUR COLORS")
     %cm_footer("SEND A SCREENSHOT TO IFB")
 
-custompalettes_menutext_display:
-    %cm_numfield_hex_word("Text", !sram_custompalette_menutext)
+custompalettes_text_display:
+    %cm_numfield_hex_word("Text", !sram_palette_text)
 
-custompalettes_menuseltext_display:
-    %cm_numfield_hex_word("Selected Text", !sram_custompalette_menuseltext)
+custompalettes_seltext_display:
+    %cm_numfield_hex_word("Selected Text", !sram_palette_seltext)
 
-custompalettes_menuseltextbg_display:
-    %cm_numfield_hex_word("Selected Text BG", !sram_custompalette_menuseltextbg)
+custompalettes_seltextbg_display:
+    %cm_numfield_hex_word("Selected Text BG", !sram_palette_seltextbg)
 
-custompalettes_menuborder_display:
-    %cm_numfield_hex_word("Toggle OFF + Border", !sram_custompalette_menuborder)
+custompalettes_border_display:
+    %cm_numfield_hex_word("Toggle OFF + Border", !sram_palette_border)
 
-custompalettes_menuheaderoutline_display:
-    %cm_numfield_hex_word("Header Text Outline", !sram_custompalette_menuheaderoutline)
+custompalettes_headeroutline_display:
+    %cm_numfield_hex_word("Header Text Outline", !sram_palette_headeroutline)
 
-custompalettes_menunumfill_display:
-    %cm_numfield_hex_word("NumField Text", !sram_custompalette_menunumfill)
+custompalettes_numfill_display:
+    %cm_numfield_hex_word("NumField Text", !sram_palette_numfill)
 
-custompalettes_menunumoutline_display:
-    %cm_numfield_hex_word("NumField Outline", !sram_custompalette_menunumoutline)
+custompalettes_numoutline_display:
+    %cm_numfield_hex_word("NumField Outline", !sram_palette_numoutline)
 
-custompalettes_menunumsel_display:
-    %cm_numfield_hex_word("Selected NumField", !sram_custompalette_menunumsel)
+custompalettes_numsel_display:
+    %cm_numfield_hex_word("Selected NumField", !sram_palette_numsel)
 
-custompalettes_menunumseloutline_display:
-    %cm_numfield_hex_word("Selected NumField OL", !sram_custompalette_menunumseloutline)
+custompalettes_numseloutline_display:
+    %cm_numfield_hex_word("Selected NumField OL", !sram_palette_numseloutline)
 
-custompalettes_menutoggleon_display:
-    %cm_numfield_hex_word("Toggle ON", !sram_custompalette_menutoggleon)
+custompalettes_toggleon_display:
+    %cm_numfield_hex_word("Toggle ON", !sram_palette_toggleon)
 
-custompalettes_menubackground_display:
-    %cm_numfield_hex_word("Background", !sram_custompalette_menubackground)
+custompalettes_background_display:
+    %cm_numfield_hex_word("Background", !sram_palette_background)
 
 
 ; ---------------
@@ -382,17 +317,13 @@ ifb_menuscroll_button:
     db #$FF
   .routine
     LDA !sram_scroll_button : BEQ +
-    LDA #$4000 : STA !sram_cm_scroll_button
+    LDA !CTRL_Y : STA !sram_cm_scroll_button
     RTL
-+   LDA #$0040 : STA !sram_cm_scroll_button
++   LDA !CTRL_X : STA !sram_cm_scroll_button
     RTL
 
 ifb_menuscroll_delay:
-    %cm_numfield("Menu Scroll Delay", !sram_cm_scroll_delay, 1, 10, 1, 2, .routine)
-  .routine
-    LDA !sram_cm_scroll_delay : BNE +
-    LDA #$000A : STA !sram_cm_scroll_delay
-+   RTL
+    %cm_numfield("Menu Scroll Delay", !sram_cm_scroll_delay, 1, 10, 1, 2, #0)
 
 
 ; ---------
@@ -404,38 +335,40 @@ org $B5F000
 print pc, " menu customization bankB5 start"
 PrepMenuPalette:
 {
-    LDA !sram_custompalette_profile : ASL : TAX
-    BEQ .customPalette
+    LDA !sram_custompalette_profile : BEQ .customPalette
+    ASL : TAX
 
+    ; load palettes from profile table
     PHB
-    PHK : PLB
+    LDA.w #PaletteProfileTables>>16 : XBA : PHA : PLB : PLB ; set bank of tables
     LDA.l PaletteProfileTables,X : STA $12
-    LDY #$0000 : LDA ($12),Y : STA !ram_custompalette_menuborder
-    LDY #$0002 : LDA ($12),Y : STA !ram_custompalette_menuheaderoutline
-    LDY #$0004 : LDA ($12),Y : STA !ram_custompalette_menutext
-    LDY #$0006 : LDA ($12),Y : STA !ram_custompalette_menubackground
-    LDY #$0008 : LDA ($12),Y : STA !ram_custompalette_menunumoutline
-    LDY #$000A : LDA ($12),Y : STA !ram_custompalette_menunumfill
-    LDY #$000C : LDA ($12),Y : STA !ram_custompalette_menutoggleon
-    LDY #$000E : LDA ($12),Y : STA !ram_custompalette_menuseltext
-    LDY #$0010 : LDA ($12),Y : STA !ram_custompalette_menuseltextbg
-    LDY #$0012 : LDA ($12),Y : STA !ram_custompalette_menunumseloutline
-    LDY #$0014 : LDA ($12),Y : STA !ram_custompalette_menunumsel
+    LDY #$0000 : LDA ($12),Y : STA !ram_palette_border
+    LDY #$0002 : LDA ($12),Y : STA !ram_palette_headeroutline
+    LDY #$0004 : LDA ($12),Y : STA !ram_palette_text
+    LDY #$0006 : LDA ($12),Y : STA !ram_palette_background
+    LDY #$0008 : LDA ($12),Y : STA !ram_palette_numoutline
+    LDY #$000A : LDA ($12),Y : STA !ram_palette_numfill
+    LDY #$000C : LDA ($12),Y : STA !ram_palette_toggleon
+    LDY #$000E : LDA ($12),Y : STA !ram_palette_seltext
+    LDY #$0010 : LDA ($12),Y : STA !ram_palette_seltextbg
+    LDY #$0012 : LDA ($12),Y : STA !ram_palette_numseloutline
+    LDY #$0014 : LDA ($12),Y : STA !ram_palette_numsel
     PLB
     RTL
 
   .customPalette
-    LDA !sram_custompalette_menuborder : STA !ram_custompalette_menuborder
-    LDA !sram_custompalette_menuheaderoutline : STA !ram_custompalette_menuheaderoutline
-    LDA !sram_custompalette_menutext : STA !ram_custompalette_menutext
-    LDA !sram_custompalette_menubackground : STA !ram_custompalette_menubackground
-    LDA !sram_custompalette_menunumoutline : STA !ram_custompalette_menunumoutline
-    LDA !sram_custompalette_menunumfill : STA !ram_custompalette_menunumfill
-    LDA !sram_custompalette_menutoggleon : STA !ram_custompalette_menutoggleon
-    LDA !sram_custompalette_menuseltext : STA !ram_custompalette_menuseltext
-    LDA !sram_custompalette_menuseltextbg : STA !ram_custompalette_menuseltextbg
-    LDA !sram_custompalette_menunumseloutline : STA !ram_custompalette_menunumseloutline
-    LDA !sram_custompalette_menunumsel : STA !ram_custompalette_menunumsel
+    ; load palettes from SRAM
+    LDA !sram_palette_border : STA !ram_palette_border
+    LDA !sram_palette_headeroutline : STA !ram_palette_headeroutline
+    LDA !sram_palette_text : STA !ram_palette_text
+    LDA !sram_palette_background : STA !ram_palette_background
+    LDA !sram_palette_numoutline : STA !ram_palette_numoutline
+    LDA !sram_palette_numfill : STA !ram_palette_numfill
+    LDA !sram_palette_toggleon : STA !ram_palette_toggleon
+    LDA !sram_palette_seltext : STA !ram_palette_seltext
+    LDA !sram_palette_seltextbg : STA !ram_palette_seltextbg
+    LDA !sram_palette_numseloutline : STA !ram_palette_numseloutline
+    LDA !sram_palette_numsel : STA !ram_palette_numsel
     RTL
 }
 
@@ -444,20 +377,21 @@ copy_menu_palette:
     PHB
     PHK : PLB
     LDA !sram_custompalette_profile : BNE + : BRL .fail
-+   ASL : TAX : LDA.l PaletteProfileTables,X : STA $16
++   ASL : TAX
+    LDA PaletteProfileTables,X : STA $16
 
     ; copy table to SRAM, Y is already zero from JSL menu macro
-    LDA ($16),Y : STA !sram_custompalette_menuborder : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menuheaderoutline : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menutext : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menubackground : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menunumoutline : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menunumfill : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menutoggleon : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menuseltext : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menuseltextbg : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menunumseloutline : INY #2
-    LDA ($16),Y : STA !sram_custompalette_menunumsel : INY #2
+    LDA ($16),Y : STA !sram_palette_border : INY #2
+    LDA ($16),Y : STA !sram_palette_headeroutline : INY #2
+    LDA ($16),Y : STA !sram_palette_text : INY #2
+    LDA ($16),Y : STA !sram_palette_background : INY #2
+    LDA ($16),Y : STA !sram_palette_numoutline : INY #2
+    LDA ($16),Y : STA !sram_palette_numfill : INY #2
+    LDA ($16),Y : STA !sram_palette_toggleon : INY #2
+    LDA ($16),Y : STA !sram_palette_seltext : INY #2
+    LDA ($16),Y : STA !sram_palette_seltextbg : INY #2
+    LDA ($16),Y : STA !sram_palette_numseloutline : INY #2
+    LDA ($16),Y : STA !sram_palette_numsel : INY #2
 
     ; play a happy sound and refresh current profile
     JSL refresh_custom_palettes
@@ -579,8 +513,9 @@ cm_colors:
 {
     PHB
     PHK : PLB
-    ; exit if not in color menu
+    ; determine which menu element is being edited
     LDA !ram_cm_stack_index : DEC #2 : TAX
+    ; exit if not in a color menu
     LDA !ram_cm_menu_stack,X : CMP #CustomPalettesMenu : BNE .done
     ; exit if beyond table boundaries
     LDA !ram_cm_cursor_stack,X : CMP #$0016 : BPL .done
@@ -594,9 +529,12 @@ cm_colors:
 
 cm_setup_RGB:
 {
+    ; split 15-bit BGR format into 5-bit red, green, and blue
     LDA [$C1] : AND #$7C00 : XBA : LSR #2 : STA !sram_custompalette_blue
     LDA [$C1] : AND #$03E0 : LSR #5 : STA !sram_custompalette_green
     LDA [$C1] : AND #$001F : STA !sram_custompalette_red
+
+    ; split BGR value into high and low bytes
     LDA [$C1] : AND #$7FFF
     %a8()
     STA !sram_custompalette_lo : XBA : STA !sram_custompalette_hi
@@ -606,18 +544,18 @@ cm_setup_RGB:
 
 MixRGB:
 {
-    ; figure out which menu element is being edited
+    ; determine which menu element is being edited
     LDA !ram_cm_stack_index : DEC #2 : TAX
     LDA !ram_cm_cursor_stack,X : TAX
     LDA.l MenuPaletteTable,X : STA $12 ; store indirect address
     LDA.w #!SRAM_START>>16 : STA $14 ; store indirect bank
 
-    ; mix RGB values
+    ; mix 5-bit RGB values into 15-bit BGR format
     LDA !sram_custompalette_blue : XBA : ASL #2 : STA $16
     LDA !sram_custompalette_green : ASL #5 : ORA $16 : STA $16
     LDA !sram_custompalette_red : ORA $16
 
-    ; store combined color value
+    ; split BGR value into high and low bytes
     STA [$12]
     %a8()
     STA !sram_custompalette_lo : XBA : STA !sram_custompalette_hi
@@ -627,17 +565,17 @@ MixRGB:
     RTL
 
 MenuPaletteTable:
-    dw !sram_custompalette_menutext
-    dw !sram_custompalette_menuseltext
-    dw !sram_custompalette_menuseltextbg
-    dw !sram_custompalette_menuheaderoutline
-    dw !sram_custompalette_menunumfill
-    dw !sram_custompalette_menunumoutline
-    dw !sram_custompalette_menunumsel
-    dw !sram_custompalette_menunumseloutline
-    dw !sram_custompalette_menutoggleon
-    dw !sram_custompalette_menuborder
-    dw !sram_custompalette_menubackground
+    dw !sram_palette_text
+    dw !sram_palette_seltext
+    dw !sram_palette_seltextbg
+    dw !sram_palette_headeroutline
+    dw !sram_palette_numfill
+    dw !sram_palette_numoutline
+    dw !sram_palette_numsel
+    dw !sram_palette_numseloutline
+    dw !sram_palette_toggleon
+    dw !sram_palette_border
+    dw !sram_palette_background
 }
 
 ColorMenuTable:
@@ -654,37 +592,37 @@ ColorMenuTable:
     dw ColorMenuTable_background
 
 ColorMenuTable_text:
-    %setupRGB(!sram_custompalette_menutext)
+    %setupRGB(!sram_palette_text)
 
 ColorMenuTable_seltext:
-    %setupRGB(!sram_custompalette_menuseltext)
+    %setupRGB(!sram_palette_seltext)
 
 ColorMenuTable_seltextbg:
-    %setupRGB(!sram_custompalette_menuseltextbg)
+    %setupRGB(!sram_palette_seltextbg)
 
 ColorMenuTable_headeroutline:
-    %setupRGB(!sram_custompalette_menuheaderoutline)
+    %setupRGB(!sram_palette_headeroutline)
 
 ColorMenuTable_numfill:
-    %setupRGB(!sram_custompalette_menunumfill)
+    %setupRGB(!sram_palette_numfill)
 
 ColorMenuTable_numoutline:
-    %setupRGB(!sram_custompalette_menunumoutline)
+    %setupRGB(!sram_palette_numoutline)
 
 ColorMenuTable_numsel:
-    %setupRGB(!sram_custompalette_menunumsel)
+    %setupRGB(!sram_palette_numsel)
 
 ColorMenuTable_numseloutline:
-    %setupRGB(!sram_custompalette_menunumseloutline)
+    %setupRGB(!sram_palette_numseloutline)
 
 ColorMenuTable_toggleon:
-    %setupRGB(!sram_custompalette_menutoggleon)
+    %setupRGB(!sram_palette_toggleon)
 
 ColorMenuTable_border:
-    %setupRGB(!sram_custompalette_menuborder)
+    %setupRGB(!sram_palette_border)
 
 ColorMenuTable_background:
-    %setupRGB(!sram_custompalette_menubackground)
+    %setupRGB(!sram_palette_background)
 
 print pc, " menu customization bankB5 end"
 pullpc

@@ -86,90 +86,9 @@ pre_load_state:
 post_load_state:
 {
     JSL tinystates_mirror_bg_data
-    JSL stop_all_sounds
 
-    LDY !MUSIC_TRACK
-    LDA $0639 : CMP $063B : BEQ .music_queue_empty
+    JSR post_load_music
 
-    DEC #2 : AND #$000E : TAX
-    LDA $0619,X : BMI .queued_music_data
-    TXA : TAY : CMP $063B : BEQ .no_music_data
-
-  .music_queue_data_search
-    DEC #2 : AND #$000E : TAX
-    LDA $0619,X : BMI .queued_music_data
-    TXA : CMP $063B : BNE .music_queue_data_search
-
-  .no_music_data
-    LDA !sram_music_toggle : CMP #$0002 : BPL .music_fast_off_preset_off
-
-    ; No data found in queue, check if we need to insert it
-    LDA !SRAM_MUSIC_DATA : CMP !MUSIC_DATA : BEQ .music_queue_increase_timer
-
-    ; Insert queued music data
-    DEX #2 : TXA : AND #$000E : TAX
-    LDA #$FF00 : CLC : ADC !MUSIC_DATA : STA $0619,X
-    LDA #$0008 : STA $0629,X
-
-  .queued_music_data
-    LDA !sram_music_toggle : CMP #$0002 : BMI .queued_music_data_clear_track
-
-    ; There is music data in the queue, assume it was loaded
-    LDA $0619,X : STA !MUSIC_DATA
-    BRA .music_fast_off_preset_off
-
-  .music_queue_empty
-    LDA !sram_music_toggle : CMP #$0002 : BPL .music_fast_off_preset_off
-    LDA !SRAM_MUSIC_DATA : CMP !MUSIC_DATA : BNE .music_clear_track_load_data
-    BRL .music_check_track
-
-  .music_clear_track_load_data
-    LDA #$0000 : JSL !MUSIC_ROUTINE
-    LDA #$FF00 : CLC : ADC !MUSIC_DATA : JSL !MUSIC_ROUTINE
-    BRA .music_load_track
-
-  .music_fast_off_preset_off
-    ; Treat music as already loaded
-    STZ $0629 : STZ $062B : STZ $062D : STZ $062F
-    STZ $0631 : STZ $0633 : STZ $0635 : STZ $0637
-    STZ $0639 : STZ $063B : STZ $063D : STZ $063F
-    STZ $0686 : STY !MUSIC_TRACK
-    BRA .music_done
-
-  .music_queue_increase_timer
-    ; Data is correct, but we may need to increase our sound timer
-    LDA !SRAM_SOUND_TIMER : CMP $063F : BMI .music_done
-    STA $063F : STA $0686
-    BRA .music_done
-
-  .queued_music_data_clear_track
-    ; Insert clear track before queued music data and start queue there
-    DEX #2 : TXA : AND #$000E : STA $063B : TAX
-    STZ $0619,X : STZ $063D
-
-    ; Clear all timers before this point
-  .music_clear_timer_loop
-    TXA : DEC #2 : AND #$000E : TAX
-    STZ $0629,X : CPX $0639 : BNE .music_clear_timer_loop
-
-    ; Set timer on the clear track command
-    LDX $063B
-
-  .queued_music_prepare_set_timer
-    LDA !SRAM_SOUND_TIMER : BNE .queued_music_set_timer
-    INC
-
-  .queued_music_set_timer
-    STA $0629,X : STA $0686 : STA $063F
-    BRA .music_done
-
-  .music_check_track
-    LDA !SRAM_MUSIC_TRACK : CMP !MUSIC_TRACK : BEQ .music_done
-
-  .music_load_track
-    LDA !MUSIC_TRACK : JSL !MUSIC_ROUTINE
-
-  .music_done
     ; Rerandomize
     LDA !sram_save_has_set_rng : BNE .done
     LDA !sram_rerandomize : AND #$00FF : BEQ .done
@@ -192,6 +111,95 @@ post_load_state:
     JSL $80834B
     JSL $80836F
 
+    RTS
+}
+
+post_load_music:
+{
+    JSL stop_all_sounds
+
+    LDY !MUSIC_TRACK
+    LDA $0639 : CMP $063B : BEQ .music_queue_empty
+
+    DEC #2 : AND #$000E : TAX
+    LDA $0619,X : BMI .queued_music_data
+    TXA : TAY : CMP $063B : BEQ .no_music_data
+
+  .no_music_data
+    LDA !sram_music_toggle : CMP #$0002 : BPL .fast_off_preset_off
+
+  .music_queue_data_search
+    DEC #2 : AND #$000E : TAX
+    LDA $0619,X : BMI .queued_music_data
+    TXA : CMP $063B : BNE .music_queue_data_search
+
+    ; No data found in queue, check if we need to insert it
+    LDA !SRAM_MUSIC_DATA : CMP !MUSIC_DATA : BEQ .music_queue_increase_timer
+
+    ; Insert queued music data
+    DEX #2 : TXA : AND #$000E : TAX
+    LDA #$FF00 : CLC : ADC !MUSIC_DATA : STA $0619,X
+    LDA #$0008 : STA $0629,X
+
+  .queued_music_data
+    LDA !sram_music_toggle : CMP #$0002 : BMI .queued_music_data_clear_track
+
+    ; There is music data in the queue, assume it was loaded
+    LDA $0619,X : STA !MUSIC_DATA
+    BRA .fast_off_preset_off
+
+  .music_queue_empty
+    LDA !sram_music_toggle : CMP #$0002 : BPL .fast_off_preset_off
+    LDA !SRAM_MUSIC_DATA : CMP !MUSIC_DATA : BNE .clear_track_load_data
+    BRL .check_track
+
+  .clear_track_load_data
+    LDA #$0000 : JSL !MUSIC_ROUTINE
+    LDA #$FF00 : CLC : ADC !MUSIC_DATA : JSL !MUSIC_ROUTINE
+    BRA .load_track
+
+  .fast_off_preset_off
+    ; Treat music as already loaded
+    STZ $0629 : STZ $062B : STZ $062D : STZ $062F
+    STZ $0631 : STZ $0633 : STZ $0635 : STZ $0637
+    STZ $0639 : STZ $063B : STZ $063D : STZ $063F
+    STZ $0686 : STY !MUSIC_TRACK
+    BRA .done
+
+  .music_queue_increase_timer
+    ; Data is correct, but we may need to increase our sound timer
+    LDA !SRAM_SOUND_TIMER : CMP $063F : BMI .done
+    STA $063F : STA $0686
+    BRA .done
+
+  .queued_music_data_clear_track
+    ; Insert clear track before queued music data and start queue there
+    DEX #2 : TXA : AND #$000E : STA $063B : TAX
+    STZ $0619,X : STZ $063D
+
+    ; Clear all timers before this point
+  .music_clear_timer_loop
+    TXA : DEC #2 : AND #$000E : TAX
+    STZ $0629,X : CPX $0639 : BNE .music_clear_timer_loop
+
+    ; Set timer on the clear track command
+    LDX $063B
+
+  .queued_music_prepare_set_timer
+    LDA !SRAM_SOUND_TIMER : BNE .queued_music_set_timer
+    INC
+
+  .queued_music_set_timer
+    STA $0629,X : STA $0686 : STA $063F
+    BRA .done
+
+  .check_track
+    LDA !SRAM_MUSIC_TRACK : CMP !MUSIC_TRACK : BEQ .done
+
+  .load_track
+    LDA !MUSIC_TRACK : JSL !MUSIC_ROUTINE
+
+  .done
     RTS
 }
 

@@ -209,17 +209,17 @@ BRB_handle_countdown_timer:
 cm_transfer_brb_cgram:
 {
     LDA #$0000 : STA $7EC000
-    LDA !ram_custompalette_menuborder : STA $7EC00A
-    LDA !ram_custompalette_menuheaderoutline : STA $7EC012
-    LDA !ram_custompalette_menutext : STA $7EC014
-    LDA !ram_custompalette_menubackground : STA $7EC016 : STA $7EC00E
-    LDA !ram_custompalette_menunumoutline : STA $7EC01A
-    LDA !ram_custompalette_menunumfill : STA $7EC01C
-    LDA !ram_custompalette_menutoggleon : STA $7EC032
-    LDA !ram_custompalette_menuseltext : STA $7EC034
-    LDA !ram_custompalette_menuseltextbg : STA $7EC036
-    LDA !ram_custompalette_menunumseloutline : STA $7EC03A
-    LDA !ram_custompalette_menunumsel : STA $7EC03C
+    LDA !ram_palette_border : STA $7EC00A
+    LDA !ram_palette_headeroutline : STA $7EC012
+    LDA !ram_palette_text : STA $7EC014
+    LDA !ram_palette_background : STA $7EC016 : STA $7EC00E
+    LDA !ram_palette_numoutline : STA $7EC01A
+    LDA !ram_palette_numfill : STA $7EC01C
+    LDA !ram_palette_toggleon : STA $7EC032
+    LDA !ram_palette_seltext : STA $7EC034
+    LDA !ram_palette_seltextbg : STA $7EC036
+    LDA !ram_palette_numseloutline : STA $7EC03A
+    LDA !ram_palette_numsel : STA $7EC03C
     JSL transfer_cgram_long
     RTS
 }
