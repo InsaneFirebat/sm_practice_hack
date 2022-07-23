@@ -65,17 +65,20 @@ ifb_factory_reset:
 
 if !FEATURE_DEV
 ifb_emu_test:
-    %cm_jsl("BRK 9F (crash) if bad emu", .routine, #0)
+    %cm_jsl("Detect Emulator Inaccuracy", .routine, #0)
   .routine
+    ; 80 / 10 = 8
     LDA #$0050 : STA $4204
     %a8()
     LDA #$0A : STA $4206
     %a16()
     LDA $4214 : CMP #$0008 : BEQ .badEmu
+    %sfxconfirm()
     RTL
 
   .badEmu
     ; didn't wait for math
+    ; load some stuff for the crash handler
     LDA #$BADD
     LDX #$F00D
     LDY #$DEAD
@@ -559,7 +562,8 @@ ifb_soundtest_music_goto_2:
     %cm_jsl("GOTO PAGE TWO", .routine, #MusicSelectMenu2)
   .routine
     JSL cm_go_back
-    %setmenubank()
+    ; set bank for manual submenu jump
+    PHK : PHK : PLA : STA !ram_cm_menu_bank
     JML action_submenu
 
 MusicSelectMenu2:
@@ -631,7 +635,8 @@ ifb_soundtest_music_goto_1:
     %cm_jsl("GOTO PAGE ONE", .routine, #MusicSelectMenu1)
   .routine
     JSL cm_go_back
-    %setmenubank()
+    ; set bank for manual submenu jump
+    PHK : PHK : PLA : STA !ram_cm_menu_bank
     JML action_submenu
 
 ifb_game_music_toggle:
@@ -654,8 +659,8 @@ ifb_game_music_toggle:
     RTL
 
   .resume_music
-    LDA !MUSIC_DATA : CLC : ADC #$FF00 : PHA : STZ !MUSIC_DATA : PLA : JSL !MUSIC_ROUTINE
-    LDA !MUSIC_TRACK : PHA : STZ !MUSIC_TRACK : PLA : JSL !MUSIC_ROUTINE
+    LDA !MUSIC_DATA : CLC : ADC #$FF00 : STZ !MUSIC_DATA : JSL !MUSIC_ROUTINE
+    LDA !MUSIC_TRACK : STZ !MUSIC_TRACK : JSL !MUSIC_ROUTINE
     RTL
 
 action_soundtest_playmusic:
@@ -736,8 +741,9 @@ ifb_factory_reset_keep_presets:
 ifb_factory_reset_delete_presets:
     %cm_jsl("No, mark them as empty", .routine, #$0000)
   .routine
-    TYX : TXA
+    TYX : TXA ; clear registers
 -   STA !PRESET_SLOTS,X ; overwrite "5AFE" words
+    ; inc and multiply Y by $200 for next slot index
     INY : TYA : ASL : XBA : TAX
     CPY #$0020 : BNE -
     ; continue into action_factory_reset
@@ -751,7 +757,7 @@ action_factory_reset:
 
     ; Wipe custom practice hack memory
     LDX #$01FE
--   STA $F02100,X
+-   STA !SRAM_START+$100,X
     DEX #2 : BPL -
 
     ; Mark practice hack SRAM as outdated

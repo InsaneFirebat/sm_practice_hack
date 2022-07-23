@@ -10,47 +10,48 @@ print pc, " custom presets start"
 custom_preset_save:
 {
     LDA !sram_custom_preset_slot
-    ASL : XBA : TAX ; multiply by 200h (slot offset)
-    LDA #$5AFE : STA !PRESET_SLOTS+$00,X   ; mark this slot as "SAFE" to load
-    LDA #$01EE : STA !PRESET_SLOTS+$02,X   ; record slot size for future compatibility
+    ; multiply by 200h (slot offset)
+    ASL : XBA : TAX
+    LDA #$5AFE : STA !PRESET_SLOTS+$00,X ; mark this slot as "SAFE" to load
+    LDA #$01EE : STA !PRESET_SLOTS+$02,X ; record slot size for future compatibility
 ;    LDA $078B : STA !PRESET_SLOTS+$04,X    ; Elevator Index
-    LDA $078D : STA !PRESET_SLOTS+$06,X    ; DDB
+    LDA $078D : STA !PRESET_SLOTS+$06,X                   ; DDB
 ;    LDA $078F : STA !PRESET_SLOTS+$08,X    ; DoorOut Index
-    LDA $079B : STA !PRESET_SLOTS+$0A,X    ; MDB
+    LDA $079B : STA !PRESET_SLOTS+$0A,X                   ; MDB
 ;    LDA $079F : STA !PRESET_SLOTS+$0C,X    ; Region
 ;    LDA $07C3 : STA !PRESET_SLOTS+$0E,X    ; GFX Pointers
 ;    LDA $07C5 : STA !PRESET_SLOTS+$10,X    ; GFX Pointers
 ;    LDA $07C7 : STA !PRESET_SLOTS+$12,X    ; GFX Pointers
-    LDA $07F3 : STA !PRESET_SLOTS+$14,X    ; Music Bank
-    LDA $07F5 : STA !PRESET_SLOTS+$16,X    ; Music Track
-    LDA $090F : STA !PRESET_SLOTS+$18,X    ; Screen subpixel X position
-    LDA $0911 : STA !PRESET_SLOTS+$1A,X    ; Screen X position in pixels
-    LDA $0913 : STA !PRESET_SLOTS+$1C,X    ; Screen subpixel Y position
-    LDA $0915 : STA !PRESET_SLOTS+$1E,X    ; Screen Y position in pixels
-    LDA $093F : STA !PRESET_SLOTS+$20,X    ; Ceres escape flag
-    LDA $09A2 : STA !PRESET_SLOTS+$22,X    ; Equipped Items
-    LDA $09A4 : STA !PRESET_SLOTS+$24,X    ; Collected Items
-    LDA $09A6 : STA !PRESET_SLOTS+$26,X    ; Beams
-    LDA $09A8 : STA !PRESET_SLOTS+$28,X    ; Beams
-    LDA $09C0 : STA !PRESET_SLOTS+$2A,X    ; Manual/Auto reserve tank
-    LDA $09C2 : STA !PRESET_SLOTS+$2C,X    ; Health
-    LDA $09C4 : STA !PRESET_SLOTS+$2E,X    ; Max health
-    LDA $09C6 : STA !PRESET_SLOTS+$30,X    ; Missiles
-    LDA $09C8 : STA !PRESET_SLOTS+$32,X    ; Max missiles
-    LDA $09CA : STA !PRESET_SLOTS+$34,X    ; Supers
-    LDA $09CC : STA !PRESET_SLOTS+$36,X    ; Max supers
-    LDA $09CE : STA !PRESET_SLOTS+$38,X    ; Pbs
-    LDA $09D0 : STA !PRESET_SLOTS+$3A,X    ; Max pbs
-    LDA $09D2 : STA !PRESET_SLOTS+$3C,X    ; Currently selected item
-    LDA $09D4 : STA !PRESET_SLOTS+$3E,X    ; Max reserves
-    LDA $09D6 : STA !PRESET_SLOTS+$40,X    ; Reserves
-    LDA $0A1C : STA !PRESET_SLOTS+$42,X    ; Samus position/state
-    LDA $0A1E : STA !PRESET_SLOTS+$44,X    ; More position/state
-    LDA $0A68 : STA !PRESET_SLOTS+$46,X    ; Flash suit
-    LDA $0A76 : STA !PRESET_SLOTS+$48,X    ; Hyper beam
-    LDA $0AF6 : STA !PRESET_SLOTS+$4A,X    ; Samus X
-    LDA $0AFA : STA !PRESET_SLOTS+$4C,X    ; Samus Y
-    LDA $0B3F : STA !PRESET_SLOTS+$4E,X    ; Blue suit
+    LDA !MUSIC_DATA : STA !PRESET_SLOTS+$14,X             ; Music Bank
+    LDA !MUSIC_TRACK : STA !PRESET_SLOTS+$16,X            ; Music Track
+    LDA $090F : STA !PRESET_SLOTS+$18,X                   ; Screen subpixel X position
+    LDA !LAYER1_X : STA !PRESET_SLOTS+$1A,X               ; Screen X position in pixels
+    LDA $0913 : STA !PRESET_SLOTS+$1C,X                   ; Screen subpixel Y position
+    LDA !LAYER1_Y : STA !PRESET_SLOTS+$1E,X               ; Screen Y position in pixels
+    LDA $093F : STA !PRESET_SLOTS+$20,X                   ; Ceres escape flag
+    LDA !SAMUS_ITEMS_EQUIPPED : STA !PRESET_SLOTS+$22,X   ; Equipped Items
+    LDA !SAMUS_ITEMS_COLLECTED : STA !PRESET_SLOTS+$24,X  ; Collected Items
+    LDA !SAMUS_BEAMS_EQUIPPED : STA !PRESET_SLOTS+$26,X   ; Beams
+    LDA !SAMUS_BEAMS_COLLECTED : STA !PRESET_SLOTS+$28,X  ; Beams
+    LDA !SAMUS_RESERVE_MODE : STA !PRESET_SLOTS+$2A,X     ; Manual/Auto reserve tank
+    LDA !SAMUS_HP : STA !PRESET_SLOTS+$2C,X               ; Health
+    LDA !SAMUS_HP_MAX : STA !PRESET_SLOTS+$2E,X           ; Max health
+    LDA !SAMUS_MISSILES : STA !PRESET_SLOTS+$30,X         ; Missiles
+    LDA !SAMUS_MISSILES_MAX : STA !PRESET_SLOTS+$32,X     ; Max missiles
+    LDA !SAMUS_SUPERS : STA !PRESET_SLOTS+$34,X           ; Supers
+    LDA !SAMUS_SUPERS_MAX : STA !PRESET_SLOTS+$36,X       ; Max supers
+    LDA !SAMUS_PBS : STA !PRESET_SLOTS+$38,X              ; Pbs
+    LDA !SAMUS_PBS_MAX : STA !PRESET_SLOTS+$3A,X          ; Max pbs
+    LDA $09D2 : STA !PRESET_SLOTS+$3C,X                   ; Currently selected item
+    LDA !SAMUS_RESERVE_MAX : STA !PRESET_SLOTS+$3E,X      ; Max reserves
+    LDA !SAMUS_RESERVE_ENERGY : STA !PRESET_SLOTS+$40,X   ; Reserves
+    LDA !SAMUS_POSE : STA !PRESET_SLOTS+$42,X             ; Samus position/state
+    LDA !SAMUS_POSE_DIRECTION : STA !PRESET_SLOTS+$44,X   ; More position/state
+    LDA $0A68 : STA !PRESET_SLOTS+$46,X                   ; Flash suit
+    LDA !SAMUS_HYPER_BEAM : STA !PRESET_SLOTS+$48,X       ; Hyper beam
+    LDA !SAMUS_X : STA !PRESET_SLOTS+$4A,X                ; Samus X
+    LDA !SAMUS_Y : STA !PRESET_SLOTS+$4C,X                ; Samus Y
+    LDA !SAMUS_DASH_COUNTER : STA !PRESET_SLOTS+$4E,X     ; Blue suit
 
     ; Copy SRAM
     ; This was deemed unnecessary but remains reserved for backward compatibility
@@ -80,8 +81,8 @@ custom_preset_save:
     MVN $7EF0                    ; srcBank, destBank
     PLB : PLX
 
-    LDA $0AF8 : STA $7031EA,X ; Samus subpixel X
-    LDA $0AFC : STA $7031EC,X ; Samus subpixel Y
+    LDA !SAMUS_X_SUBPX : STA $7031EA,X ; Samus subpixel X
+    LDA !SAMUS_Y_SUBPX : STA $7031EC,X ; Samus subpixel Y
     ; next available byte is $7031EE
 
     RTL
@@ -90,47 +91,48 @@ custom_preset_save:
 custom_preset_load:
 {
     LDA !sram_custom_preset_slot
-    ASL : XBA : TAX              ; multiply by 200h
-                                 ; skip past "5AFE" word
-                                 ; skip past size for now
+    ; multiply by 200h
+    ASL : XBA : TAX
+    ; skip past "5AFE" word
+    ; skip past size for now
 ;    LDA !PRESET_SLOTS+$04,X : STA $078B    ; Elevator Index
-    LDA !PRESET_SLOTS+$06,X : STA $078D    ; DDB
+    LDA !PRESET_SLOTS+$06,X : STA $078D                   ; DDB
 ;    LDA !PRESET_SLOTS+$08,X : STA $078F    ; DoorOut Index
-    LDA !PRESET_SLOTS+$0A,X : STA $079B    ; MDB
+    LDA !PRESET_SLOTS+$0A,X : STA $079B                   ; MDB
 ;    LDA !PRESET_SLOTS+$0C,X : STA $079F    ; Region
 ;    LDA !PRESET_SLOTS+$0E,X : STA $07C3    ; GFX Pointers
 ;    LDA !PRESET_SLOTS+$10,X : STA $07C5    ; GFX Pointers
 ;    LDA !PRESET_SLOTS+$12,X : STA $07C7    ; GFX Pointers
-    LDA !PRESET_SLOTS+$14,X : STA $07F3    ; Music Bank
-    LDA !PRESET_SLOTS+$16,X : STA $07F5    ; Music Track
-    LDA !PRESET_SLOTS+$18,X : STA $090F    ; Screen subpixel X position
-    LDA !PRESET_SLOTS+$1A,X : STA $0911    ; Screen X position in pixels
-    LDA !PRESET_SLOTS+$1C,X : STA $0913    ; Screen subpixel Y position
-    LDA !PRESET_SLOTS+$1E,X : STA $0915    ; Screen Y position in pixels
-    LDA !PRESET_SLOTS+$20,X : STA $093F    ; Ceres escape flag
-    LDA !PRESET_SLOTS+$22,X : STA $09A2    ; Equipped Items
-    LDA !PRESET_SLOTS+$24,X : STA $09A4    ; Collected Items
-    LDA !PRESET_SLOTS+$26,X : STA $09A6    ; Beams
-    LDA !PRESET_SLOTS+$28,X : STA $09A8    ; Beams
-    LDA !PRESET_SLOTS+$2A,X : STA $09C0    ; Manual/Auto reserve tank
-    LDA !PRESET_SLOTS+$2C,X : STA $09C2    ; Health
-    LDA !PRESET_SLOTS+$2E,X : STA $09C4    ; Max health
-    LDA !PRESET_SLOTS+$30,X : STA $09C6    ; Missiles
-    LDA !PRESET_SLOTS+$32,X : STA $09C8    ; Max missiles
-    LDA !PRESET_SLOTS+$34,X : STA $09CA    ; Supers
-    LDA !PRESET_SLOTS+$36,X : STA $09CC    ; Max supers
-    LDA !PRESET_SLOTS+$38,X : STA $09CE    ; Pbs
-    LDA !PRESET_SLOTS+$3A,X : STA $09D0    ; Max pbs
-    LDA !PRESET_SLOTS+$3C,X : STA $09D2    ; Currently selected item
-    LDA !PRESET_SLOTS+$3E,X : STA $09D4    ; Max reserves
-    LDA !PRESET_SLOTS+$40,X : STA $09D6    ; Reserves
-    LDA !PRESET_SLOTS+$42,X : STA $0A1C    ; Samus position/state
-    LDA !PRESET_SLOTS+$44,X : STA $0A1E    ; More position/state
-    LDA !PRESET_SLOTS+$46,X : STA $0A68    ; Flash suit
-    LDA !PRESET_SLOTS+$48,X : STA $0A76    ; Hyper beam
-    LDA !PRESET_SLOTS+$4A,X : STA $0AF6    ; Samus X
-    LDA !PRESET_SLOTS+$4C,X : STA $0AFA    ; Samus Y
-    LDA !PRESET_SLOTS+$4E,X : STA $0B3F    ; Blue suit
+    LDA !PRESET_SLOTS+$14,X : STA !MUSIC_DATA             ; Music Bank
+    LDA !PRESET_SLOTS+$16,X : STA !MUSIC_TRACK            ; Music Track
+    LDA !PRESET_SLOTS+$18,X : STA $090F                   ; Screen subpixel X position
+    LDA !PRESET_SLOTS+$1A,X : STA !LAYER1_X               ; Screen X position in pixels
+    LDA !PRESET_SLOTS+$1C,X : STA $0913                   ; Screen subpixel Y position
+    LDA !PRESET_SLOTS+$1E,X : STA !LAYER1_Y               ; Screen Y position in pixels
+    LDA !PRESET_SLOTS+$20,X : STA $093F                   ; Ceres escape flag
+    LDA !PRESET_SLOTS+$22,X : STA !SAMUS_ITEMS_EQUIPPED   ; Equipped Items
+    LDA !PRESET_SLOTS+$24,X : STA !SAMUS_ITEMS_COLLECTED  ; Collected Items
+    LDA !PRESET_SLOTS+$26,X : STA !SAMUS_BEAMS_EQUIPPED   ; Beams
+    LDA !PRESET_SLOTS+$28,X : STA !SAMUS_BEAMS_COLLECTED  ; Beams
+    LDA !PRESET_SLOTS+$2A,X : STA !SAMUS_RESERVE_MODE     ; Manual/Auto reserve tank
+    LDA !PRESET_SLOTS+$2C,X : STA !SAMUS_HP               ; Health
+    LDA !PRESET_SLOTS+$2E,X : STA !SAMUS_HP_MAX           ; Max health
+    LDA !PRESET_SLOTS+$30,X : STA !SAMUS_MISSILES         ; Missiles
+    LDA !PRESET_SLOTS+$32,X : STA !SAMUS_MISSILES_MAX     ; Max missiles
+    LDA !PRESET_SLOTS+$34,X : STA !SAMUS_SUPERS           ; Supers
+    LDA !PRESET_SLOTS+$36,X : STA !SAMUS_SUPERS_MAX       ; Max supers
+    LDA !PRESET_SLOTS+$38,X : STA !SAMUS_PBS              ; Pbs
+    LDA !PRESET_SLOTS+$3A,X : STA !SAMUS_PBS_MAX          ; Max pbs
+    LDA !PRESET_SLOTS+$3C,X : STA $09D2                   ; Currently selected item
+    LDA !PRESET_SLOTS+$3E,X : STA !SAMUS_RESERVE_MAX      ; Max reserves
+    LDA !PRESET_SLOTS+$40,X : STA !SAMUS_RESERVE_ENERGY   ; Reserves
+    LDA !PRESET_SLOTS+$42,X : STA !SAMUS_POSE             ; Samus position/state
+    LDA !PRESET_SLOTS+$44,X : STA !SAMUS_POSE_DIRECTION   ; More position/state
+    LDA !PRESET_SLOTS+$46,X : STA $0A68                   ; Flash suit
+    LDA !PRESET_SLOTS+$48,X : STA !SAMUS_HYPER_BEAM       ; Hyper beam
+    LDA !PRESET_SLOTS+$4A,X : STA !SAMUS_X                ; Samus X
+    LDA !PRESET_SLOTS+$4C,X : STA !SAMUS_Y                ; Samus Y
+    LDA !PRESET_SLOTS+$4E,X : STA !SAMUS_DASH_COUNTER     ; Blue suit
 
     ; Copy SRAM
     TXA : CLC : ADC #$005F : TAX
@@ -153,16 +155,16 @@ custom_preset_load:
     ; Restore X for sanity, then check if we have layer 2 values
     INX : LDA !PRESET_SLOTS+$02,X : CMP #$01B0 : BEQ .done_no_scrolls
 
-    LDA !PRESET_SLOTS+$1B0,X : STA $0917    ; Layer 2 X position
-    LDA !PRESET_SLOTS+$1B2,X : STA $0919    ; Layer 2 Y position
-    LDA !PRESET_SLOTS+$1B4,X : STA $0921    ; BG2 X offset
-    LDA !PRESET_SLOTS+$1B6,X : STA $0923    ; BG2 Y offset
+    LDA !PRESET_SLOTS+$1B0,X : STA $0917 ; Layer 2 X position
+    LDA !PRESET_SLOTS+$1B2,X : STA $0919 ; Layer 2 Y position
+    LDA !PRESET_SLOTS+$1B4,X : STA $0921 ; BG2 X offset
+    LDA !PRESET_SLOTS+$1B6,X : STA $0923 ; BG2 Y offset
 
     LDA !PRESET_SLOTS+$02,X : CMP #$01BA : BMI .done_no_scrolls
     LDA #$5AFE : STA !ram_custom_preset
     LDA $703002,X : CMP #$01EC : BMI .done_with_scrolls
-    LDA $7031EA,X : STA $0AF8    ; Samus subpixel X
-    LDA $7031EC,X : STA $0AFC    ; Samus subpixel Y
+    LDA $7031EA,X : STA !SAMUS_X_SUBPX ; Samus subpixel X
+    LDA $7031EC,X : STA !SAMUS_Y_SUBPX ; Samus subpixel Y
 
   .done_with_scrolls
     RTL
@@ -649,42 +651,49 @@ Randomize_Preset_Equipment:
   .randomize
     PHX
     ; equipment
-    LDA !ram_seed_Y : AND #$F32F                                       ; get current random number
-    STA $09A2 : STA $09A4                                              ; store equipment
-    LDA !sram_presetrando_morph : BEQ +                                ; check if morph forced
-    LDA $09A2 : ORA #$0004 : STA $09A2 : STA $09A4                     ; turn on morph
+    LDA !ram_seed_Y : AND #$F32F
+    STA !SAMUS_ITEMS_EQUIPPED : STA !SAMUS_ITEMS_COLLECTED
+
+    ; check if morph forced
+    LDA !sram_presetrando_morph : BEQ +
+    ; turn on morph
+    LDA !SAMUS_ITEMS_EQUIPPED : ORA #$0004 : STA !SAMUS_ITEMS_EQUIPPED : STA !SAMUS_ITEMS_COLLECTED
 
     ; beams
-+   JSL MenuRNG                                                        ; get new random number
-    AND #$100F : STA $09A8                                             ; collected beams
-    AND #$000C : CMP #$000C : BNE .beams_done                          ; check for Spazer+Plasma
-    LDA !sram_presetrando_beampref : BEQ .random_pref                  ; check beam preference, 0 = random
-    DEC : BEQ .spazer                                                  ; after decrement, 0 = spazer, 1 = plasma
++   JSL MenuRNG
+    AND #$100F : STA !SAMUS_BEAMS_COLLECTED
+    ; check for Spazer+Plasma
+    AND #$000C : CMP #$000C : BNE .beams_done
+    ; check beam preference, 0 = random
+    LDA !sram_presetrando_beampref : BEQ .random_pref
+    ; after decrement, 0 = spazer, 1 = plasma
+    DEC : BEQ .spazer
 
   .plasma
-    LDA $09A8 : AND #$100B : STA $09A6 : BRA +                         ; unequip Spazer
-
+    LDA !SAMUS_BEAMS_COLLECTED : AND #$100B : STA !SAMUS_BEAMS_EQUIPPED
+    BRA +
   .spazer
-    LDA $09A8 : AND #$1007 : STA $09A6 : BRA +                         ; unequip Plasma
-
+    LDA !SAMUS_BEAMS_COLLECTED : AND #$1007 : STA !SAMUS_BEAMS_EQUIPPED
+    BRA +
   .random_pref
-    LDA !ram_seed_X : AND #$0001 : BEQ .spazer                         ; get random bit
+    LDA !ram_seed_X : AND #$0001 : BEQ .spazer
     BRA .plasma
-
   .beams_done
-    LDA $09A8 : STA $09A6
-    
-    ; charge
-+   LDA !sram_presetrando_charge : BEQ +                               ; check if charge forced
-    LDA $09A8 : ORA #$1000 : STA $09A8                                 ; equip charge beam and store equipped beams
-    LDA $09A6 : ORA #$1000 : STA $09A6                                 ; store equipped beams
+    LDA !SAMUS_BEAMS_COLLECTED : STA !SAMUS_BEAMS_EQUIPPED
+
+    ; check if charge forced
++   LDA !sram_presetrando_charge : BEQ +
+    ; equip charge beam
+    LDA !SAMUS_BEAMS_COLLECTED : ORA #$1000 : STA !SAMUS_BEAMS_COLLECTED                              
+    LDA !SAMUS_BEAMS_EQUIPPED : ORA #$1000 : STA !SAMUS_BEAMS_EQUIPPED
 
     ; reserves
 +   LDA !sram_presetrando_max_reserves : BEQ .no_reserves              ; check if max = 0
     LDA !ram_seed_Y : AND #$F000 : LSR #4 : XBA                        ; reuse random number
     CMP !sram_presetrando_max_reserves : BPL .cap_reserves             ; check if capped
     ASL : TAX : LDA.l PresetRandoReserveTable,X                       ; load value from table
-    STA $09D4 : STA $09D6 : BRA +                                      ; store reserves
+    STA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY                                      ; store reserves
+    BRA +
 
   .cap_reserves
     BEQ .reserves_done                                                 ; check for 0 condition (value is equal to max)
@@ -693,18 +702,19 @@ Randomize_Preset_Equipment:
 
   .reserves_done
     ASL : TAX : LDA.l PresetRandoReserveTable,X                       ; load a proper value from table
-    STA $09D4 : STA $09D6                                              ; store capped reserves
+    STA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY                                              ; store capped reserves
     BRA +
 
   .no_reserves
-    STZ $09D4 : STZ $09D6                                              ; capped at zero
+    STZ !SAMUS_RESERVE_MAX : STZ !SAMUS_RESERVE_ENERGY                                              ; capped at zero
 
     ; missiles
 +   LDA !sram_presetrando_max_missiles : BEQ .no_missiles              ; check if max = 0
     LDA !ram_seed_X : AND #$0FF0 : LSR #4                              ; reuse random number
     CMP !sram_presetrando_max_missiles : BPL .cap_missiles             ; check if capped
     ASL : TAX : LDA.l PresetRandoAmmoTable,X                       ; load a proper value from table
-    STA $09C6 : STA $09C8 : BRA +                                      ; store random missiles
+    STA !SAMUS_MISSILES : STA !SAMUS_MISSILES_MAX                                      ; store random missiles
+    BRA +
 
   .cap_missiles
     BEQ .missiles_done                                                 ; check for 0 condition (value is equal to max)
@@ -713,18 +723,19 @@ Randomize_Preset_Equipment:
 
   .missiles_done
     ASL : TAX : LDA.l PresetRandoAmmoTable,X
-    STA $09C6 : STA $09C8                                              ; store capped missiles
+    STA !SAMUS_MISSILES : STA !SAMUS_MISSILES_MAX                                              ; store capped missiles
     BRA +
 
   .no_missiles
-    STZ $09C6 : STZ $09C8                                              ; capped at zero
+    STZ !SAMUS_MISSILES : STZ !SAMUS_MISSILES_MAX                                              ; capped at zero
 
     ; supers
 +   LDA !sram_presetrando_max_supers : BEQ .no_supers                  ; check if max = 0
     JSL MenuRNG : AND #$00FF                                           ; get new random number
     CMP !sram_presetrando_max_supers : BPL .cap_supers                 ; check if capped
     ASL : TAX : LDA.l PresetRandoAmmoTable,X
-    STA $09CA : STA $09CC : BRA +                                      ; store random supers
+    STA !SAMUS_SUPERS : STA !SAMUS_SUPERS_MAX                                      ; store random supers
+    BRA +
 
   .cap_supers
     BEQ .supers_done                                                   ; check for 0 condition (value is equal to max)
@@ -733,18 +744,19 @@ Randomize_Preset_Equipment:
 
   .supers_done
     ASL : TAX : LDA.l PresetRandoAmmoTable,X
-    STA $09CA : STA $09CC                                              ; store capped supers
+    STA !SAMUS_SUPERS : STA !SAMUS_SUPERS_MAX                                              ; store capped supers
     BRA +
 
   .no_supers
-    STZ $09CA : STZ $09CC                                              ; capped at zero
+    STZ !SAMUS_SUPERS : STZ !SAMUS_SUPERS_MAX                                              ; capped at zero
 
     ; pbs
 +   LDA !sram_presetrando_max_pbs : BEQ .no_pbs                        ; check if max = 0
     LDA !ram_seed_Y : XBA : AND #$00FF                                 ; get new random number
     CMP !sram_presetrando_max_pbs : BPL .cap_pbs                       ; check if capped
     ASL : TAX : LDA.l PresetRandoAmmoTable,X
-    STA $09CE : STA $09D0 : BRA +                                      ; store random pbs
+    STA !SAMUS_PBS : STA !SAMUS_PBS_MAX                                      ; store random pbs
+    BRA +
 
   .cap_pbs
     BEQ .pbs_done                                                      ; check for 0 condition (value is equal to max)
@@ -753,18 +765,18 @@ Randomize_Preset_Equipment:
 
   .pbs_done
     ASL : TAX : LDA.l PresetRandoAmmoTable,X
-    STA $09CE : STA $09D0                                              ; store capped pbs
+    STA !SAMUS_PBS : STA !SAMUS_PBS_MAX                                              ; store capped pbs
     BRA +
 
   .no_pbs
-    STZ $09CE : STZ $09D0                                              ; capped at zero
+    STZ !SAMUS_PBS : STZ !SAMUS_PBS_MAX                                              ; capped at zero
 
     ; etanks
 +   LDA !sram_presetrando_max_etanks : BEQ .no_etanks                  ; check if max = 0
     JSL MenuRNG2 : AND #$000F                                          ; get new random number
     CMP !sram_presetrando_max_etanks : BPL .cap_etanks                 ; check if capped
     ASL : TAX : LDA.l PresetRandoETankTable,X                         ; load value from table
-    STA $09C2 : STA $09C4 : BRA .done                                  ; store energy
+    STA !SAMUS_HP : STA !SAMUS_HP_MAX : BRA .done                                  ; store energy
 
   .cap_etanks
     BEQ .etanks_done                                                   ; check for 0 condition (value is equal to max)
@@ -773,11 +785,11 @@ Randomize_Preset_Equipment:
 
   .etanks_done
     ASL : TAX : LDA.l PresetRandoETankTable,X                         ; load value from table
-    STA $09C2 : STA $09C4                                              ; store energy
+    STA !SAMUS_HP : STA !SAMUS_HP_MAX                                              ; store energy
     BRA .done
 
   .no_etanks
-    LDA #$0063 : STA $09C2 : STA $09C4                                 ; capped at zero (99)
+    LDA #$0063 : STA !SAMUS_HP : STA !SAMUS_HP_MAX                                 ; capped at zero (99)
 
   .done
     PLX

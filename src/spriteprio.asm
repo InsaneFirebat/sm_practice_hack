@@ -1,13 +1,12 @@
-; hooks
-!SPRITE_PRIO_FLAG = $
 
+; hooks
 ; $90:861C 22 AE 89 81 JSL $8189AE[$81:89AE]  ; Add Samus spritemap to OAM
-org $90861c
-    jsl oam_add_samus_sprite_with_prio
+org $90861C
+    JSL oam_add_samus_sprite_with_prio
 
 ; $90:8643 22 AE 89 81 JSL $8189AE[$81:89AE]  ; Add Samus spritemap to OAM
 org $908643
-    jsl oam_add_samus_sprite_with_prio
+    JSL oam_add_samus_sprite_with_prio
 
 
 ; This is a copy of the code that adds samus spritemap to the OAM buffer
@@ -15,7 +14,7 @@ org $908643
 ; It's a copy so that it only affects Samus, and only adds a single instruction
 ; keeping the change in timing down as much as possible.
 
-org $81ef20
+org $81EF20
 print pc, " spriteprio start"
 oam_add_samus_sprite_with_prio:
     PHB
@@ -67,4 +66,4 @@ oam_add_samus_sprite_with_prio:
     RTL
 
 print pc, " spriteprio end"
-warnpc $81f000
+warnpc $81F000

@@ -397,7 +397,8 @@ stop_all_sounds:
 
 GameModeExtras:
 {
-    ; Check if any less common shortcuts are configured
+    ; The following shortcuts will only be checked if the main flag is enabled
+    ; Set flag if any less common shortcuts are configured
     LDA !sram_ctrl_reset_segment_timer : BNE .enabled
     LDA !sram_ctrl_reset_segment_later : BNE .enabled
     LDA !sram_ctrl_kill_enemies : BNE .enabled

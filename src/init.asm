@@ -177,17 +177,17 @@ init_sram:
     LDA #$0000 : STA !sram_superhud_top
 
     LDA #$0001 : STA !sram_custompalette_profile ; 1 - Twitch
-    LDA #$7277 : STA !sram_custompalette_menuborder
-    LDA #$48F3 : STA !sram_custompalette_menuheaderoutline
-    LDA #$7FFF : STA !sram_custompalette_menutext
-    LDA #$0000 : STA !sram_custompalette_menunumoutline
-    LDA #$7FFF : STA !sram_custompalette_menunumfill
-    LDA #$4376 : STA !sram_custompalette_menutoggleon
-    LDA #$761F : STA !sram_custompalette_menuseltext
-    LDA #$0000 : STA !sram_custompalette_menuseltextbg
-    LDA #$0000 : STA !sram_custompalette_menubackground
-    LDA #$0000 : STA !sram_custompalette_menunumseloutline
-    LDA #$761F : STA !sram_custompalette_menunumsel
+    LDA #$7277 : STA !sram_palette_border
+    LDA #$48F3 : STA !sram_palette_headeroutline
+    LDA #$7FFF : STA !sram_palette_text
+    LDA #$0000 : STA !sram_palette_numoutline
+    LDA #$7FFF : STA !sram_palette_numfill
+    LDA #$4376 : STA !sram_palette_toggleon
+    LDA #$761F : STA !sram_palette_seltext
+    LDA #$0000 : STA !sram_palette_seltextbg
+    LDA #$0000 : STA !sram_palette_background
+    LDA #$0000 : STA !sram_palette_numseloutline
+    LDA #$761F : STA !sram_palette_numsel
 
     LDA #$0037 : STA !sram_customsfx_move
     LDA #$0038 : STA !sram_customsfx_toggle

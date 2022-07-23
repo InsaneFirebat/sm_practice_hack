@@ -32,7 +32,8 @@ ih_prepare_ram_watch_menu:
     ASL #2 : XBA : STA !ram_cm_watch_enemy_index
 
   .submenu
-    %setmenubank()
+    ; set bank for manual submenu jump
+    PHK : PHK : PLA : STA !ram_cm_menu_bank
     JML action_submenu
 
 RAMWatchMenu:
@@ -379,7 +380,9 @@ ramwatch_common_misc_1842:
 action_select_common_address:
 {
     TYA : STA !ram_cm_watch_common_address
-    LDY #RAMWatchCommonConfirm : %setmenubank()
+    LDY #RAMWatchCommonConfirm
+    ; set bank for manual submenu jump
+    PHK : PHK : PLA : STA !ram_cm_menu_bank
     JML action_submenu
 }
 

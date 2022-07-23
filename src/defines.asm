@@ -242,18 +242,18 @@
 
 !ACTION_TOGGLE              = #$0000
 !ACTION_TOGGLE_BIT          = #$0002
-!ACTION_JSL                 = #$0004
-!ACTION_NUMFIELD            = #$0006
-!ACTION_CHOICE              = #$0008
-!ACTION_CTRL_SHORTCUT       = #$000A
-!ACTION_NUMFIELD_HEX        = #$000C
-!ACTION_NUMFIELD_WORD       = #$000E
-!ACTION_TOGGLE_INVERTED     = #$0010
-!ACTION_NUMFIELD_COLOR      = #$0012
-!ACTION_NUMFIELD_HEX_WORD   = #$0014
-!ACTION_NUMFIELD_SOUND      = #$0016
+!ACTION_TOGGLE_INVERTED     = #$0004
+!ACTION_TOGGLE_BIT_INVERTED = #$0006
+!ACTION_NUMFIELD            = #$0008
+!ACTION_NUMFIELD_HEX        = #$000A
+!ACTION_NUMFIELD_WORD       = #$000C
+!ACTION_NUMFIELD_HEX_WORD   = #$000E
+!ACTION_NUMFIELD_COLOR      = #$0010
+!ACTION_NUMFIELD_SOUND      = #$0012
+!ACTION_CHOICE              = #$0014
+!ACTION_CTRL_SHORTCUT       = #$0016
 !ACTION_CTRL_INPUT          = #$0018
-!ACTION_TOGGLE_BIT_INVERTED = #$001A
+!ACTION_JSL                 = #$001A
 !ACTION_JSL_SUBMENU         = #$001C
 
 ; using macros instead of these in custom builds
@@ -309,6 +309,7 @@
 !IH_CONTROLLER_SEC_NEW = $91
 !IH_CONTROLLER_SEC_PREV = $99
 
+!MENU_BLANK = #$281F
 !IH_BLANK = #$2C0F
 !IH_PERCENT = #$0C0A
 !IH_DECIMAL = #$0CCB
@@ -378,9 +379,13 @@
 
 !OAM_STACK_POINTER = $0590
 !PB_EXPLOSION_STATUS = $0592
+!NMI_REQUEST_FLAG = $05B4
 !FRAME_COUNTER = $05B6
+!DEBUG_MODE_FLAG = $05D1
 !RANDOM_NUMBER = $05E5
 !DISABLE_SOUNDS = $05F5
+!SCREEN_FADE_DELAY = $0723
+!SCREEN_FADE_COUNTER = $0725
 !LOAD_STATION_INDEX = $078B
 !ROOM_ID = $079B
 !AREA_ID = $079F
@@ -411,7 +416,12 @@
 !SAMUS_POSE = $0A1C
 !SAMUS_POSE_DIRECTION = $0A1E
 !SAMUS_MOVEMENT_TYPE = $0A1F
+!SAMUS_SHINE_TIMER = $0A68
 !SAMUS_HEALTH_WARNING = $0A6A
+!SAMUS_HYPER_BEAM = $0A76
+!SAMUS_ANIMATION_TIMER = $0A94
+!SAMUS_ANIMATION_FRAME = $0A96
+!LIQUID_PHYSICS_TYPE = $0AD2
 !SAMUS_X = $0AF6
 !SAMUS_X_SUBPX = $0AF8
 !SAMUS_Y = $0AFA
@@ -434,6 +444,7 @@
 !SAMUS_PROJ_RADIUS_Y = $0BC8
 !SAMUS_COOLDOWN = $0CCC
 !SAMUS_CHARGE_TIMER = $0CD0
+!SAMUS_HEALTH_DROP_FLAG = $0E1A
 !ENEMY_X = $0F7A
 !ENEMY_Y = $0F7E
 !ENEMY_X_RADIUS = $0F82
@@ -448,6 +459,8 @@
 !ENEMY_PROJ_X = $1A4B
 !ENEMY_PROJ_Y = $1A93
 !ENEMY_PROJ_RADIUS = $1BB3
+
+!HUD_TILEMAP = $7EC600
 
 
 ; -----
@@ -629,17 +642,17 @@ endif
 
 ; FREE SPACE ^
 
-!ram_custompalette_menuborder = !WRAM_START+$2E0
-!ram_custompalette_menuheaderoutline = !WRAM_START+$2E2
-!ram_custompalette_menutext = !WRAM_START+$2E4
-!ram_custompalette_menubackground = !WRAM_START+$2E6
-!ram_custompalette_menunumoutline = !WRAM_START+$2E8
-!ram_custompalette_menunumfill = !WRAM_START+$2EA
-!ram_custompalette_menutoggleon = !WRAM_START+$2EC
-!ram_custompalette_menuseltext = !WRAM_START+$2EE
-!ram_custompalette_menuseltextbg = !WRAM_START+$2F0
-!ram_custompalette_menunumseloutline = !WRAM_START+$2F2
-!ram_custompalette_menunumsel = !WRAM_START+$2F4
+!ram_palette_border = !WRAM_START+$2E0
+!ram_palette_headeroutline = !WRAM_START+$2E2
+!ram_palette_text = !WRAM_START+$2E4
+!ram_palette_background = !WRAM_START+$2E6
+!ram_palette_numoutline = !WRAM_START+$2E8
+!ram_palette_numfill = !WRAM_START+$2EA
+!ram_palette_toggleon = !WRAM_START+$2EC
+!ram_palette_seltext = !WRAM_START+$2EE
+!ram_palette_seltextbg = !WRAM_START+$2F0
+!ram_palette_numseloutline = !WRAM_START+$2F2
+!ram_palette_numsel = !WRAM_START+$2F4
 
 ; FREE SPACE ^
 
@@ -720,17 +733,17 @@ endif
 ; FREE SPACE ^
 
 ; do not change order without updating custom palette profiles in menu.asm
-!sram_custompalette_menuborder = !SRAM_START+$2B0
-!sram_custompalette_menuheaderoutline = !SRAM_START+$2B2
-!sram_custompalette_menutext = !SRAM_START+$2B4
-!sram_custompalette_menunumoutline = !SRAM_START+$2B6
-!sram_custompalette_menunumfill = !SRAM_START+$2B8
-!sram_custompalette_menutoggleon = !SRAM_START+$2BA
-!sram_custompalette_menuseltext = !SRAM_START+$2BC
-!sram_custompalette_menuseltextbg = !SRAM_START+$2BE
-!sram_custompalette_menubackground = !SRAM_START+$2C0
-!sram_custompalette_menunumseloutline = !SRAM_START+$2C2
-!sram_custompalette_menunumsel = !SRAM_START+$2C4
+!sram_palette_border = !SRAM_START+$2B0
+!sram_palette_headeroutline = !SRAM_START+$2B2
+!sram_palette_text = !SRAM_START+$2B4
+!sram_palette_numoutline = !SRAM_START+$2B6
+!sram_palette_numfill = !SRAM_START+$2B8
+!sram_palette_toggleon = !SRAM_START+$2BA
+!sram_palette_seltext = !SRAM_START+$2BC
+!sram_palette_seltextbg = !SRAM_START+$2BE
+!sram_palette_background = !SRAM_START+$2C0
+!sram_palette_numseloutline = !SRAM_START+$2C2
+!sram_palette_numsel = !SRAM_START+$2C4
 !sram_custompalette_profile = !SRAM_START+$2C6
 
 ; FREE SPACE ^

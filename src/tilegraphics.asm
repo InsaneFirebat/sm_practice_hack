@@ -98,35 +98,35 @@ warnpc $F4D100
 ; Second byte = index into above palettes
 ; Last word = location of tile graphics
 raw_tile_graphics_table:
-    db #$48 : db #$00 : dw tiles_00_01_upper_crateria>>8
-    db #$48 : db #$01 : dw tiles_00_01_upper_crateria>>8
-    db #$48 : db #$02 : dw tiles_02_03_lower_crateria>>8
-    db #$48 : db #$03 : dw tiles_02_03_lower_crateria>>8
-    db #$48 : db #$04 : dw tiles_04_05_wrecked_ship>>8
-    db #$48 : db #$05 : dw tiles_04_05_wrecked_ship>>8
-    db #$48 : db #$06 : dw tiles_06_green_blue_brinstar>>8
-    db #$48 : db #$07 : dw tiles_07_08_red_brinstar>>8
-    db #$48 : db #$08 : dw tiles_07_08_red_brinstar>>8
-    db #$48 : db #$09 : dw tiles_09_10_norfair>>8
-    db #$48 : db #$0A : dw tiles_09_10_norfair>>8
-    db #$48 : db #$0B : dw tiles_11_sandless_maridia>>8
-    db #$48 : db #$0C : dw tiles_12_sandy_maridia>>8
-    db #$48 : db #$0D : dw tiles_13_14_tourian>>8
-    db #$48 : db #$0E : dw tiles_13_14_tourian>>8
-    db #$48 : db #$0F : dw tiles_15_16_ceres>>8
-    db #$48 : db #$10 : dw tiles_15_16_ceres>>8
-    db #$80 : db #$0F : dw tiles_17_18_ceres_elevator>>8
-    db #$80 : db #$10 : dw tiles_17_18_ceres_elevator>>8
-    db #$80 : db #$0F : dw tiles_19_20_ceres_ridley>>8
-    db #$80 : db #$10 : dw tiles_19_20_ceres_ridley>>8
-    db #$48 : db #$11 : dw tiles_21_25_utility>>8
-    db #$48 : db #$12 : dw tiles_21_25_utility>>8
-    db #$48 : db #$13 : dw tiles_21_25_utility>>8
-    db #$48 : db #$14 : dw tiles_21_25_utility>>8
-    db #$48 : db #$15 : dw tiles_21_25_utility>>8
-    db #$80 : db #$16 : dw tiles_26_kraid>>8
-    db #$48 : db #$17 : dw tiles_27_croc>>8
-    db #$48 : db #$18 : dw tiles_28_draygon>>8
+    db #$48, #$00 : dw tiles_00_01_upper_crateria>>8
+    db #$48, #$01 : dw tiles_00_01_upper_crateria>>8
+    db #$48, #$02 : dw tiles_02_03_lower_crateria>>8
+    db #$48, #$03 : dw tiles_02_03_lower_crateria>>8
+    db #$48, #$04 : dw tiles_04_05_wrecked_ship>>8
+    db #$48, #$05 : dw tiles_04_05_wrecked_ship>>8
+    db #$48, #$06 : dw tiles_06_green_blue_brinstar>>8
+    db #$48, #$07 : dw tiles_07_08_red_brinstar>>8
+    db #$48, #$08 : dw tiles_07_08_red_brinstar>>8
+    db #$48, #$09 : dw tiles_09_10_norfair>>8
+    db #$48, #$0A : dw tiles_09_10_norfair>>8
+    db #$48, #$0B : dw tiles_11_sandless_maridia>>8
+    db #$48, #$0C : dw tiles_12_sandy_maridia>>8
+    db #$48, #$0D : dw tiles_13_14_tourian>>8
+    db #$48, #$0E : dw tiles_13_14_tourian>>8
+    db #$48, #$0F : dw tiles_15_16_ceres>>8
+    db #$48, #$10 : dw tiles_15_16_ceres>>8
+    db #$80, #$0F : dw tiles_17_18_ceres_elevator>>8
+    db #$80, #$10 : dw tiles_17_18_ceres_elevator>>8
+    db #$80, #$0F : dw tiles_19_20_ceres_ridley>>8
+    db #$80, #$10 : dw tiles_19_20_ceres_ridley>>8
+    db #$48, #$11 : dw tiles_21_25_utility>>8
+    db #$48, #$12 : dw tiles_21_25_utility>>8
+    db #$48, #$13 : dw tiles_21_25_utility>>8
+    db #$48, #$14 : dw tiles_21_25_utility>>8
+    db #$48, #$15 : dw tiles_21_25_utility>>8
+    db #$80, #$16 : dw tiles_26_kraid>>8
+    db #$48, #$17 : dw tiles_27_croc>>8
+    db #$48, #$18 : dw tiles_28_draygon>>8
 
 load_raw_tile_graphics:
 {
@@ -148,7 +148,7 @@ load_raw_tile_graphics:
     LDA #$80 : STA $2115            ; word-access, incr by 1
     LDY #$0000 : STY $2116          ; VRAM address
     LDA #$00 : STA $4302            ; Source offset (low byte)
-    INX : INX : LDA.l raw_tile_graphics_table,X
+    INX #2 : LDA.l raw_tile_graphics_table,X
     STA $4303                       ; Source offset (high byte)
     INX : LDA.l raw_tile_graphics_table,X
     STA $4304                       ; Source bank
@@ -174,7 +174,7 @@ load_raw_tile_graphics:
     BRL .tileset_palette
 
   .separate_dmas
-    INX : INX : LDA.l raw_tile_graphics_table,X
+    INX #2 : LDA.l raw_tile_graphics_table,X
     CLC : ADC #$48 : BCC .simple_dmas : BEQ .simple_dmas
 
     ; The tile graphics are crossing a bank, so split into two DMAs
@@ -273,7 +273,7 @@ preset_load_level_tile_tables_scrolls_plms_and_execute_asm:
     STA $1902,X : STA $1F42,X : STA $2582,X : STA $2BC2,X
     STA $3202,X : STA $3842,X : STA $3E82,X : STA $44C2,X
     STA $4B02,X : STA $5142,X : STA $5782,X : STA $5DC2,X
-    DEX : DEX : BPL .clear_level_data_loop
+    DEX #2 : BPL .clear_level_data_loop
 
     ; Decompress level data
     LDA $7E07BE : STA $48
@@ -557,7 +557,7 @@ optimized_decompression:
     CMP #$E0 : BCC .one_byte_size
 
     ; Two byte size
-    ASL : ASL : ASL
+    ASL #3
     AND #$E0 : PHA
     LDA $4A : AND #$03 : XBA
 
@@ -705,13 +705,13 @@ preset_load_library_transfer_to_vram:
     PLX : JML $82E9E7
 
   .landing_site
-    LDA !SAMUS_Y : ASL : ASL : ASL : XBA : AND #$003C
+    LDA !SAMUS_Y : ASL #3 : XBA : AND #$003C
     BIT #$0020 : BNE .landing_site_floor
     CLC : ADC #preset_load_library_landing_site_params : TAX
     BRA .transfer
 
   .west_ocean
-    LDA !SAMUS_Y : ASL : ASL : ASL : XBA : AND #$003C
+    LDA !SAMUS_Y : ASL #3 : XBA : AND #$003C
     ; The bottom of west ocean is the same as east ocean
     CMP #$0028 : BPL .east_ocean
     CLC : ADC #preset_load_library_west_ocean_params : TAX
