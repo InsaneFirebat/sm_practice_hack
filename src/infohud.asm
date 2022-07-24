@@ -9,20 +9,23 @@ org $8094DF
     PLP          ; patch out resetting of controller 2 buttons and enable debug mode
     RTL
 
+org $828B4B      ; optional debug functions
+    JML ih_debug_patch
+
 org $80AE29      ; fix for scroll offset misalignment
     JSR ih_fix_scroll_offsets
-
-org $828B4B      ; disable debug functions
-    JML ih_debug_patch
 
 org $82EE92      ; runs on START GAME
     JSL startgame_seg_timer
 
 org $828B34      ; reset room timers for first room of Ceres
-    JML ceres_start_timers : NOP #2 : ceres_start_timers_return:
+    JML ceres_start_timers
+    NOP #2
+ceres_start_timers_return:
 
 org $90E6AA      ; hijack, runs on gamestate = 08 (main gameplay), handles most updating HUD information
-    JSL ih_gamemode_frame : NOP #2
+    JSL ih_gamemode_frame
+    NOP #2
 
 org $9493FB      ; hijack, runs when Samus hits a door BTS
     JSL ih_before_room_transition
@@ -31,10 +34,12 @@ org $9493B8      ; hijack, runs when Samus hits a door BTS
     JSL ih_before_room_transition
 
 org $82E764      ; hijack, runs when Samus is coming out of a room transition
-    JSL ih_after_room_transition : RTS
+    JSL ih_after_room_transition
+    RTS
 
 org $809B4C      ; hijack, HUD routine (game timer by Quote58)
-    JSL ih_hud_code : NOP
+    JSL ih_hud_code
+    NOP
 
 org $8290F6      ; hijack, HUD routine while paused
     JSL ih_hud_code_paused

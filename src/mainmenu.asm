@@ -234,7 +234,7 @@ presets_reload:
     RTL
 
 presets_random:
-    %cm_jsl("Reload Last Preset", .routine, #$0000)
+    %cm_jsl("Load Random Preset", .routine, #$0000)
   .routine
     LDA #$0001 : STA !ram_cm_leave
     JML LoadRandomPreset

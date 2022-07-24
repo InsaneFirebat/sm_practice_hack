@@ -56,6 +56,11 @@ else
 -   STA !WRAM_START,X
     DEX #2 : BPL -
 
+    ; Clear custom hack range
+    LDX !CUSTOM_WRAM_SIZE
+-   STA !CUSTOM_WRAM,X
+    DEX #2 : BPL -
+
     JSL init_nonzero_wram
 endif
 
@@ -75,8 +80,8 @@ init_nonzero_wram:
     JSL init_suit_properties_ram
 
     ; RAM $7E0000 fluctuates so it is not a good default value
-    LDA #$0F8C : STA !ram_watch_left ; Enemy HP
-    LDA #$09C2 : STA !ram_watch_right ; Samus HP
+    LDA #!ENEMY_HP : STA !ram_watch_left ; Enemy HP
+    LDA #!SAMUS_HP : STA !ram_watch_right ; Samus HP
     LDA !sram_seed_X : STA !ram_seed_X
     LDA !sram_seed_Y : STA !ram_seed_Y
 

@@ -23,7 +23,7 @@ org $00FFDB
 
 ; Write offset to hack RAM for cout's timer tracking tool
 org $80FFF0
-    dl !TIMER_WRAM
+    dl !WRAM_START
 
 
 ; Enable version display

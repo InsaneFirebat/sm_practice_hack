@@ -16,7 +16,7 @@
 !VERSION_MINOR = 4
 !VERSION_BUILD = 2
 !VERSION_REV_1 = 1
-!VERSION_REV_2 = 7
+!VERSION_REV_2 = 8
 
 
 ; ---------
@@ -24,25 +24,24 @@
 ; ---------
 
 !WRAM_BANK = #$007E
-!WRAM_SIZE = #$0500
-!WRAM_START = $7EFB00
-!TIMER_WRAM = $7EFD00
+!WRAM_SIZE = #$0200
+!WRAM_START = $7EFD00
 
 ;FREE_SPACE = !WRAM_START+$00
-!ram_gametime_room = !TIMER_WRAM+$02
-!ram_last_gametime_room = !TIMER_WRAM+$04
-!ram_realtime_room = !TIMER_WRAM+$06
-!ram_last_realtime_room = !TIMER_WRAM+$08
-!ram_last_room_lag = !TIMER_WRAM+$0A
-!ram_last_door_lag_frames = !TIMER_WRAM+$0C
-!ram_transition_counter = !TIMER_WRAM+$0E
-!ram_transition_flag = !TIMER_WRAM+$10
-!ram_last_realtime_door = !TIMER_WRAM+$12
+!ram_gametime_room = !WRAM_START+$02
+!ram_last_gametime_room = !WRAM_START+$04
+!ram_realtime_room = !WRAM_START+$06
+!ram_last_realtime_room = !WRAM_START+$08
+!ram_last_room_lag = !WRAM_START+$0A
+!ram_last_door_lag_frames = !WRAM_START+$0C
+!ram_transition_counter = !WRAM_START+$0E
+!ram_transition_flag = !WRAM_START+$10
+!ram_last_realtime_door = !WRAM_START+$12
 
-!ram_seg_rt_frames = !TIMER_WRAM+$14
-!ram_seg_rt_seconds = !TIMER_WRAM+$16
-!ram_seg_rt_minutes = !TIMER_WRAM+$18
-!ram_reset_segment_later = !TIMER_WRAM+$1A
+!ram_seg_rt_frames = !WRAM_START+$14
+!ram_seg_rt_seconds = !WRAM_START+$16
+!ram_seg_rt_minutes = !WRAM_START+$18
+!ram_reset_segment_later = !WRAM_START+$1A
 
 !ram_ih_controller = !WRAM_START+$1E
 !ram_slowdown_controller_1 = !WRAM_START+$20
@@ -195,11 +194,6 @@
 !ram_cm_ctrl_assign = !WRAM_MENU_START+$3A
 !ram_cm_ctrl_swap = !WRAM_MENU_START+$3C
 !ram_cm_botwoon_rng = !WRAM_MENU_START+$3E
-
-; ^ FREE SPACE ^ up to +$7A
-
-!ram_seed_X = !WRAM_MENU_START+$7C
-!ram_seed_Y = !WRAM_MENU_START+$7E
 
 
 ; ------------------
@@ -545,121 +539,127 @@ endif
 !SRAM_MUSIC_TRACK = $701FD2
 !SRAM_SOUND_TIMER = $701FD4
 
+!SRAM_SEG_TIMER_F = $737F8A
+!SRAM_SEG_TIMER_S = $737F8C
+!SRAM_SEG_TIMER_M = $737F8E
+
 
 
 ; ----------------------------------------------------------------------- ;
 ;                             Custom Features                             ;
 ; ----------------------------------------------------------------------- ;
 
-; Reserving up to $17F for master branch
-
-; FREE SPACE ^
-
-!ram_cm_brb = !WRAM_START+$1A0
-!ram_cm_brb_timer = !WRAM_START+$1A2
-!ram_cm_brb_frames = !WRAM_START+$1A4
-!ram_cm_brb_secs = !WRAM_START+$1A6
-!ram_cm_brb_mins = !WRAM_START+$1A8
-!ram_cm_brb_screen = !WRAM_START+$1AA
-!ram_cm_brb_palette = !WRAM_START+$1AC
-!ram_cm_brb_timer_mode = !WRAM_START+$1AE
-!ram_cm_brb_set_cycle = !WRAM_START+$1B0
-!ram_cm_brb_cycle_time = !WRAM_START+$1B2
-
-; FREE SPACE ^
-
-!ram_crop_mode = !WRAM_START+$1C0
-!ram_crop_tile = !WRAM_START+$1C2
-
-; FREE SPACE ^
-
-!ram_cm_scroll = !WRAM_START+$1D0
-!ram_cm_scroll_X = !WRAM_START+$1D2
-!ram_cm_scroll_Y = !WRAM_START+$1D4
-!ram_cm_scroll_H = !WRAM_START+$1D6
-!ram_cm_scroll_V = !WRAM_START+$1D8
-!ram_cm_scroll_timer = !WRAM_START+$1DA
-
-; FREE SPACE ^
-
-!ram_cm_rng = !WRAM_START+$1F0
-
-; FREE SPACE ^
-
-!ram_HUD_top = !WRAM_START+$200
-!ram_HUD_middle = !WRAM_START+$202
-!ram_HUD_bottom = !WRAM_START+$204
-!ram_HUD_top_counter = !WRAM_START+$206
-!ram_HUD_middle_counter = !WRAM_START+$208
-
-; FREE SPACE ^
-
 !ram_countdamage = $0B0C
 !ram_ammo_missiles = $05C9
 !ram_ammo_supers = $05CB
 !ram_ammo_powerbombs = $05CD
 
-!ram_infinite_ammo = !WRAM_START+$210
-!ram_infiniteammo_check = !WRAM_START+$212
-; ^ FREE SPACE @ +$214
-!ram_display_backup = !WRAM_START+$216
-!ram_dboost_state = !WRAM_START+$218
-!ram_dboost_kbmax = !WRAM_START+$21A
-!ram_dboost_kb = !WRAM_START+$21C
-!ram_dboost_counter = !WRAM_START+$21E
-!ram_spark_icon = !WRAM_START+$220
-!ram_lag_counter = !WRAM_START+$222
-!ram_lag_counter_HUD = !WRAM_START+$224
+
+!CUSTOM_WRAM = $7EFB00
+!CUSTOM_WRAM_SIZE = #$01FE
+
+!ram_HUD_top = !CUSTOM_WRAM+$00
+!ram_HUD_middle = !CUSTOM_WRAM+$02
+!ram_HUD_bottom = !CUSTOM_WRAM+$04
+!ram_HUD_top_counter = !CUSTOM_WRAM+$06
+!ram_HUD_middle_counter = !CUSTOM_WRAM+$08
+
+; FREE SPACE ^
+
+!ram_infinite_ammo = !CUSTOM_WRAM+$10
+!ram_infiniteammo_check = !CUSTOM_WRAM+$12
+;!ram_FREE_SPACE = !CUSTOM_WRAM+$14
+!ram_display_backup = !CUSTOM_WRAM+$16
+!ram_dboost_state = !CUSTOM_WRAM+$18
+!ram_dboost_kbmax = !CUSTOM_WRAM+$1A
+!ram_dboost_kb = !CUSTOM_WRAM+$1C
+!ram_dboost_counter = !CUSTOM_WRAM+$1E
+!ram_spark_icon = !CUSTOM_WRAM+$20
+!ram_lag_counter = !CUSTOM_WRAM+$22
+!ram_lag_counter_HUD = !CUSTOM_WRAM+$24
 
 ; FREE SPACE ^
 
 if !FEATURE_EXTRAS
-    !ram_noclip = !WRAM_START+$230
-    !ram_steamcollision = !WRAM_START+$232
+    !ram_noclip = !CUSTOM_WRAM+$30
+    !ram_steamcollision = !CUSTOM_WRAM+$32
 ; FREE SPACE ^
 endif
 
-!ram_enemy0_last_xpos = !WRAM_START+$240
-!ram_enemy0_last_ypos = !WRAM_START+$242
-;!ram_enemy1_last_xpos = !WRAM_START+$244
-;!ram_enemy1_last_ypos = !WRAM_START+$246
-!ram_enemy2_last_xpos = !WRAM_START+$248
-!ram_enemy2_last_ypos = !WRAM_START+$24A
-;!ram_enemy3_last_xpos = !WRAM_START+$24C
-;!ram_enemy3_last_ypos = !WRAM_START+$24E
-!ram_enemy4_last_xpos = !WRAM_START+$250
-!ram_enemy4_last_ypos = !WRAM_START+$252
-;!ram_enemy5_last_xpos = !WRAM_START+$254
-;!ram_enemy5_last_ypos = !WRAM_START+$256
-!ram_enemy6_last_xpos = !WRAM_START+$258
-!ram_enemy6_last_ypos = !WRAM_START+$25A
-!ram_enemy7_last_xpos = !WRAM_START+$25C
-!ram_enemy7_last_ypos = !WRAM_START+$25E
-!ram_enemy8_last_xpos = !WRAM_START+$260
-!ram_enemy8_last_ypos = !WRAM_START+$262
-!ram_radar1 = !WRAM_START+$264
-!ram_radar2 = !WRAM_START+$266
+!ram_enemy0_last_xpos = !CUSTOM_WRAM+$40
+!ram_enemy0_last_ypos = !CUSTOM_WRAM+$42
+;!ram_enemy1_last_xpos = !CUSTOM_WRAM+$44
+;!ram_enemy1_last_ypos = !CUSTOM_WRAM+$46
+!ram_enemy2_last_xpos = !CUSTOM_WRAM+$48
+!ram_enemy2_last_ypos = !CUSTOM_WRAM+$4A
+;!ram_enemy3_last_xpos = !CUSTOM_WRAM+$4C
+;!ram_enemy3_last_ypos = !CUSTOM_WRAM+$4E
+!ram_enemy4_last_xpos = !CUSTOM_WRAM+$50
+!ram_enemy4_last_ypos = !CUSTOM_WRAM+$52
+;!ram_enemy5_last_xpos = !CUSTOM_WRAM+$54
+;!ram_enemy5_last_ypos = !CUSTOM_WRAM+$56
+!ram_enemy6_last_xpos = !CUSTOM_WRAM+$58
+!ram_enemy6_last_ypos = !CUSTOM_WRAM+$5A
+!ram_enemy7_last_xpos = !CUSTOM_WRAM+$5C
+!ram_enemy7_last_ypos = !CUSTOM_WRAM+$5E
+!ram_enemy8_last_xpos = !CUSTOM_WRAM+$60
+!ram_enemy8_last_ypos = !CUSTOM_WRAM+$62
+!ram_radar1 = !CUSTOM_WRAM+$64
+!ram_radar2 = !CUSTOM_WRAM+$66
 
 ; FREE SPACE ^
 
-!ram_palette_border = !WRAM_START+$2E0
-!ram_palette_headeroutline = !WRAM_START+$2E2
-!ram_palette_text = !WRAM_START+$2E4
-!ram_palette_background = !WRAM_START+$2E6
-!ram_palette_numoutline = !WRAM_START+$2E8
-!ram_palette_numfill = !WRAM_START+$2EA
-!ram_palette_toggleon = !WRAM_START+$2EC
-!ram_palette_seltext = !WRAM_START+$2EE
-!ram_palette_seltextbg = !WRAM_START+$2F0
-!ram_palette_numseloutline = !WRAM_START+$2F2
-!ram_palette_numsel = !WRAM_START+$2F4
+!ram_palette_border = !CUSTOM_WRAM+$80
+!ram_palette_headeroutline = !CUSTOM_WRAM+$82
+!ram_palette_text = !CUSTOM_WRAM+$84
+!ram_palette_background = !CUSTOM_WRAM+$86
+!ram_palette_numoutline = !CUSTOM_WRAM+$88
+!ram_palette_numfill = !CUSTOM_WRAM+$8A
+!ram_palette_toggleon = !CUSTOM_WRAM+$8C
+!ram_palette_seltext = !CUSTOM_WRAM+$8E
+!ram_palette_seltextbg = !CUSTOM_WRAM+$90
+!ram_palette_numseloutline = !CUSTOM_WRAM+$92
+!ram_palette_numsel = !CUSTOM_WRAM+$94
+
+;!ram_FREE_SPACE = !CUSTOM_WRAM+$96
+
+!ram_soundtest_lib1 = !CUSTOM_WRAM+$98
+!ram_soundtest_lib2 = !CUSTOM_WRAM+$9A
+!ram_soundtest_lib3 = !CUSTOM_WRAM+$9C
+!ram_soundtest_music = !CUSTOM_WRAM+$9E
 
 ; FREE SPACE ^
 
-!ram_soundtest_lib1 = !WRAM_START+$2F8
-!ram_soundtest_lib2 = !WRAM_START+$2FA
-!ram_soundtest_lib3 = !WRAM_START+$2FC
-!ram_soundtest_music = !WRAM_START+$2FE
+!ram_cm_brb = !CUSTOM_WRAM+$A0
+!ram_cm_brb_timer = !CUSTOM_WRAM+$A2
+!ram_cm_brb_frames = !CUSTOM_WRAM+$A4
+!ram_cm_brb_secs = !CUSTOM_WRAM+$A6
+!ram_cm_brb_mins = !CUSTOM_WRAM+$A8
+!ram_cm_brb_screen = !CUSTOM_WRAM+$AA
+!ram_cm_brb_palette = !CUSTOM_WRAM+$AC
+!ram_cm_brb_timer_mode = !CUSTOM_WRAM+$AE
+!ram_cm_brb_set_cycle = !CUSTOM_WRAM+$B0
+!ram_cm_brb_cycle_time = !CUSTOM_WRAM+$B2
+
+; FREE SPACE ^
+
+!ram_crop_mode = !CUSTOM_WRAM+$C0
+!ram_crop_tile = !CUSTOM_WRAM+$C2
+
+; FREE SPACE ^
+
+!ram_cm_scroll = !CUSTOM_WRAM+$D0
+!ram_cm_scroll_X = !CUSTOM_WRAM+$D2
+!ram_cm_scroll_Y = !CUSTOM_WRAM+$D4
+!ram_cm_scroll_H = !CUSTOM_WRAM+$D6
+!ram_cm_scroll_V = !CUSTOM_WRAM+$D8
+!ram_cm_scroll_timer = !CUSTOM_WRAM+$DA
+
+; FREE SPACE ^
+
+!ram_cm_rng = !CUSTOM_WRAM+$F0
+!ram_seed_X = !CUSTOM_WRAM+$F2
+!ram_seed_Y = !CUSTOM_WRAM+$F4
 
 
 ; ---------
@@ -667,11 +667,11 @@ endif
 ; ---------
 
 !PRESET_SLOTS = $703000
-!CRASHDUMP = !WRAM_START+$400
+!CRASHDUMP = $7EFF00
 
-!PRESET_DOORS = !WRAM_START+$180
-!PRESET_SPECIAL = !WRAM_START+$182
-!PRESET_ENEMIES = !WRAM_START+$184
+!PRESET_DOORS = !CUSTOM_WRAM+$180
+!PRESET_SPECIAL = !CUSTOM_WRAM+$182
+!PRESET_ENEMIES = !CUSTOM_WRAM+$184
 
 !BRB_METROID = #$287F
 !BRB_HEART = #$2891
