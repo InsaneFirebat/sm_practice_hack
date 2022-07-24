@@ -191,7 +191,7 @@ cm_transfer_custom_tileset:
 
 cm_transfer_original_tileset:
 {
-    PHP : %a16()
+    PHP : %ai16()
     LDA !ROOM_ID : CMP #$A59F : BEQ .kraid_vram
 
     %a8()
