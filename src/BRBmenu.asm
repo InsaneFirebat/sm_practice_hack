@@ -66,6 +66,7 @@ cm_brb_loop:
     JMP .loop
 
   .forceIncScreen
+    LDA #$0000 : STA !ram_cm_brb_timer
     LDA !ram_cm_brb_screen : INC : STA !ram_cm_brb_screen
     CMP #$00015 : BMI .loop
     LDA #$0000
