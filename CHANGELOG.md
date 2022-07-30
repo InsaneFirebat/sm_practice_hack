@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.19] Optimized timers when updated outside of door transitions
 * [2.4.2.18] Fixed practice hack memory not being preserved with TinyStates
 * [2.4.2.17] Options to reload the last preset or load a random preset from the menu
 * [2.4.2.16] Fixed graphics for TinyStates saved in the pause menu
