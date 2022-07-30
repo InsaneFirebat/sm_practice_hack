@@ -82,67 +82,67 @@ endif
     JSL ih_mb2_segment
 
 if !FEATURE_PAL
-org $A0B9BE
+org $A0B937
 else             ; update timers when Ridley drops spawn
-org $A0B9AE
+org $A0B9D4
 endif
-    JSL ih_drops_segment
+    JML ih_drops_segment
 
 if !FEATURE_PAL
-org $A0B9F1
+org $A0BA17
 else             ; update timers when Crocomire drops spawn
-org $A0B9E1
+org $A0BA07
 endif
-    JSL ih_drops_segment
+    JML ih_drops_segment
 
 if !FEATURE_PAL
-org $A0BA24
+org $A0BA4A
 else             ; update timers when Phantoon drops spawn
-org $A0BA14
+org $A0BA3A
 endif
-    JSL ih_drops_segment
+    JML ih_drops_segment
 
 if !FEATURE_PAL
-org $A0BA57
+org $A0BA7D
 else             ; update timers when Botwoon drops spawn
-org $A0BA47
+org $A0BA6D
 endif
-    JSL ih_drops_segment
+    JML ih_drops_segment
 
 if !FEATURE_PAL
-org $A0BA8A
+org $A0BAB0
 else             ; update timers when Kraid drops spawn
-org $A0BA7A
+org $A0BAA0
 endif
-    JSL ih_drops_segment
+    JML ih_drops_segment
 
 if !FEATURE_PAL
-org $A0BABD
+org $A0BAE3
 else             ; update timers when Bomb Torizo drops spawn
-org $A0BAAD
+org $A0BAD3
 endif
-    JSL ih_drops_segment
+    JML ih_drops_segment
 
 if !FEATURE_PAL
-org $A0BAF0
+org $A0BB16
 else             ; update timers when Golden Torizo drops spawn
-org $A0BAE0
+org $A0BB04
 endif
-    JSL ih_drops_segment
+    JML ih_drops_segment
 
 if !FEATURE_PAL
-org $A0BB23
+org $A0BB49
 else             ; update timers when Spore Spawn drops spawn
-org $A0BB13
+org $A0BB39
 endif
-    JSL ih_drops_segment
+    JML ih_drops_segment
 
 if !FEATURE_PAL
-org $A0BB56
+org $A0BB7C
 else             ; update timers when Draygon drops spawn
-org $A0BB46
+org $A0BB6C
 endif
-    JSL ih_drops_segment
+    JML ih_drops_segment
 
 if !FEATURE_PAL
 org $AAE592
@@ -449,7 +449,9 @@ ih_drops_segment:
 {
     ; runs when boss drops spawn
     JSL ih_update_hud_early
-    JML $808111 ; overwritten code
+    ; overwritten code
+    PLP : PLY : PLX
+    RTL
 }
 
 ih_chozo_segment:
