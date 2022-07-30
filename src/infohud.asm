@@ -689,13 +689,186 @@ ih_update_hud_early:
     LDA $12 : PHA
     LDA $14 : PHA
 
-    JSL ih_update_hud_code
+    JSL ih_update_timers
 
     PLA : STA $14
     PLA : STA $12
 
     PLY : PLX : PLA
     RTL
+}
+
+ih_update_timers:
+{
+    ; Bank 80
+    PHB : PEA $8080 : PLB : PLB
+
+    LDA !ram_minimap : BNE .minimap_hud
+    BRL .start_update
+
+  .minimap_vanilla_infohud
+    BRL .end
+
+  .minimap_hud
+    ; Map visible, so draw map counter over item%
+    LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BEQ .minimap_vanilla_infohud
+    LDA !ram_map_counter : LDX #$0014 : JSR Draw3
+    LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BNE .minimap_roomtimer
+    BRL .pick_minimap_transition_time
+
+  .minimap_roomtimer
+    STZ $4205
+    LDA !sram_frame_counter_mode : BNE .minimap_ingame_roomtimer
+    LDA !ram_last_realtime_room
+    BRA .minimap_calculate_roomtimer
+
+  .minimap_ingame_roomtimer
+    LDA !ram_last_gametime_room
+
+  .minimap_calculate_roomtimer
+    ; Divide time by 60 or 50 and draw seconds and frames
+    STA $4204
+    %a8()
+if !FEATURE_PAL
+    LDA #$32
+else
+    LDA #$3C
+endif
+    STA $4206
+    %a16()
+    PEA $0000 : PLA ; wait for CPU math
+    LDA $4216 : STA $C1
+    LDA $4214 : LDX #$00B0 : JSR Draw2
+    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$B4
+    LDA $C1 : ASL : TAX
+    LDA.w HexToNumberGFX1,X : STA !HUD_TILEMAP+$B6
+    LDA.w HexToNumberGFX2,X : STA !HUD_TILEMAP+$B8
+
+  .pick_minimap_transition_time
+    LDA !sram_lag_counter_mode : BNE .minimap_transition_time_full
+    LDA !ram_last_door_lag_frames
+    BRA .draw_minimap_transition_time
+  .minimap_transition_time_full
+    LDA !ram_last_realtime_door
+  .draw_minimap_transition_time
+    LDX #$0054 : JSR Draw3
+    BRL .end
+
+  .start_update
+    ; force redraw of Samus HP
+    LDA #$FFFF : STA !ram_last_hp : STA !ram_enemy_hp
+
+    ; Determine starting point of time display
+    LDX #$003C
+    LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BNE .pick_roomtimer
+    LDX #$003A
+
+  .pick_roomtimer
+    STZ $4205
+    LDA !sram_frame_counter_mode : BNE .ingame_roomtimer
+    LDA !ram_last_realtime_room
+    BRA .calculate_roomtimer
+
+  .ingame_roomtimer
+    LDA !ram_last_gametime_room
+
+  .calculate_roomtimer
+    ; Divide time by 60 or 50 and draw seconds and frames
+    STA $4204
+    %a8()
+if !FEATURE_PAL
+    LDA #$32
+else
+    LDA #$3C
+endif
+    STA $4206
+    %a16()
+    PEA $0000 : PLA ; wait for CPU math
+    LDA $4216 : STA $C1
+    LDA $4214 : JSR Draw3
+    LDA !IH_DECIMAL : STA !HUD_TILEMAP,X
+    LDA $C1 : ASL : TAY
+    LDA.w HexToNumberGFX1,Y : STA !HUD_TILEMAP+2,X
+    LDA.w HexToNumberGFX2,Y : STA !HUD_TILEMAP+4,X
+
+    ; Lag counter
+    LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_infohud_draw_lag_and_reserves
+    LDA !ram_last_room_lag : LDX #$0080 : JSR Draw4
+
+    ; Skip door lag and segment timer when shinetune enabled
+    LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BEQ .end
+
+    ; Door lag / transition time
+    LDA !sram_lag_counter_mode : BNE .transition_time_full
+    LDA !ram_last_door_lag_frames
+    BRA .infohud_transition_time
+  .transition_time_full
+    LDA !ram_last_realtime_door
+  .infohud_transition_time
+    LDX #$00C2 : JSR Draw3
+    BRA .pick_segment_timer
+
+  .end
+    PLB
+    RTL
+
+  .vanilla_infohud_draw_lag_and_reserves
+    LDA !SAMUS_RESERVE_MODE : CMP #$0001 : BNE .vanilla_infohud_draw_lag
+
+    ; Draw reserve icon
+    LDY #$998B : LDA !SAMUS_RESERVE_ENERGY : BNE .vanilla_draw_reserve_icon
+    LDY #$9997
+
+  .vanilla_draw_reserve_icon
+    LDA $0000,Y : STA !HUD_TILEMAP+$18 : LDA $0002,Y : STA !HUD_TILEMAP+$1A
+    LDA $0004,Y : STA !HUD_TILEMAP+$58 : LDA $0006,Y : STA !HUD_TILEMAP+$5A
+
+  .vanilla_infohud_draw_lag
+    LDA !ram_last_room_lag : LDX #$007E : JSR Draw4
+
+    ; Skip door lag and segment timer when shinetune enabled
+    LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BEQ .end
+
+    ; Door lag / transition time
+    LDA !sram_lag_counter_mode : BNE .vanilla_infohud_transition_time_full
+    LDA !ram_last_door_lag_frames
+    BRA .draw_vanilla_infohud_transition_time
+
+  .vanilla_infohud_transition_time_full
+    LDA !ram_last_realtime_door
+
+  .draw_vanilla_infohud_transition_time
+    LDX #$00C2 : JSR Draw2
+
+  .pick_segment_timer
+    LDA !sram_frame_counter_mode : BNE .ingame_segment_timer
+    LDA.w #!ram_seg_rt_frames : STA $00
+    LDA !WRAM_BANK : STA $02
+    BRA .draw_segment_timer
+
+  .ingame_segment_timer
+    LDA #$09DA : STA $00
+    LDA #$007E : STA $02
+    BRA .draw_segment_timer
+
+  .draw_segment_timer
+    ; Frames
+    LDA [$00] : INC $00 : INC $00 : ASL : TAX
+    LDA.w HexToNumberGFX1,X : STA !HUD_TILEMAP+$BC
+    LDA.w HexToNumberGFX2,X : STA !HUD_TILEMAP+$BE
+
+    ; Seconds
+    LDA [$00] : INC $00 : INC $00 : ASL : TAX
+    LDA.w HexToNumberGFX1,X : STA !HUD_TILEMAP+$B6
+    LDA.w HexToNumberGFX2,X : STA !HUD_TILEMAP+$B8
+
+    ; Minutes
+    LDA [$00] : LDX #$00AE : JSR Draw3
+
+    ; Draw decimal seperators
+    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$B4 : STA !HUD_TILEMAP+$BA
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$C0
+    BRL .end
 }
 
 ih_hud_vanilla_health:
@@ -1576,7 +1749,7 @@ overwrite_HUD_numbers:
     PLB : PLP
     RTL
 }
-print pc, " HUD number GFX bankFF start"
+print pc, " HUD number GFX bankFF end"
 
 
 ; Stuff that needs to be placed in bank 80
