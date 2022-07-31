@@ -280,6 +280,10 @@ org $82F071
     NOP
 
 
+org $90D000       ; hijack, runs when a shinespark is activated
+    JMP ih_shinespark_activation
+
+
 org $87D000
 print pc, " misc start"
 
@@ -647,5 +651,15 @@ spacetime_routine:
     RTS
 }
 endif
+
+
+ih_shinespark_activation:
+{
+    ; store timer when shinespark activated
+    LDA !SAMUS_SHINE_TIMER : STA !ram_activated_shine_duration
+
+    LDA #$D068 ; overwritten code
+    JMP $D003 ; return
+}
 print pc, " misc bank90 end"
 

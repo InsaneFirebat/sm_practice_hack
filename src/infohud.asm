@@ -446,6 +446,14 @@ ih_shinespark_segment:
 {
     ; runs when shinespark bonk sound plays
     JSL $80914D ; overwritten code
+
+    PHB
+    LDA !ram_activated_shine_duration
+    LDX #$007C : PHX : PLB : PLB
+    JSR Draw2
+    LDA #$0000 : STA !ram_activated_shine_duration
+    PLB
+
     JML ih_update_hud_early
 }
 
