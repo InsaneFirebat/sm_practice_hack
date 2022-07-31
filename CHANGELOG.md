@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.19] Automatically display the remaining spark timer when shinespark crashes
 * [2.4.2.19] Optimized timers when updated outside of door transitions
 * [2.4.2.18] Fixed practice hack memory not being preserved with TinyStates
 * [2.4.2.17] Options to reload the last preset or load a random preset from the menu

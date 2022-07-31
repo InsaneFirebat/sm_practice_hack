@@ -578,6 +578,7 @@ endif
 !ram_spark_icon = !CUSTOM_WRAM+$20
 !ram_lag_counter = !CUSTOM_WRAM+$22
 !ram_lag_counter_HUD = !CUSTOM_WRAM+$24
+!ram_activated_shine_duration = !CUSTOM_WRAM+$26
 
 ; FREE SPACE ^
 
