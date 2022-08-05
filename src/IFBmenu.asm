@@ -745,7 +745,11 @@ ifb_factory_reset_delete_presets:
 -   STA !PRESET_SLOTS,X ; overwrite "5AFE" words
     ; inc and multiply Y by $200 for next slot index
     INY : TYA : ASL : XBA : TAX
+if !FEATURE_TINYSTATES
+    CPY #$0007 : BNE -
+else
     CPY #$0020 : BNE -
+endif
     ; continue into action_factory_reset
 
 action_factory_reset:

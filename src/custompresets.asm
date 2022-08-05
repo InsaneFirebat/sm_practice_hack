@@ -592,11 +592,11 @@ LoadRandomPreset:
     JSL MenuRNG : STA $12
 
   .seedpicked
-    LDA.l #preset_category_banks>>16 : STA $18 ; bank of category list in $18
+    LDA.w #preset_category_banks>>16 : STA $18 ; bank of category list in $18
     LDA !sram_preset_category : ASL : TAY      ; selected category index in Y
-    LDA.l #preset_category_submenus : STA $16  ; pointer to category list in $16
+    LDA.w #preset_category_submenus : STA $16  ; pointer to category list in $16
     LDA [$16],Y : TAX                          ; pointer to submenu table in X
-    LDA.l #preset_category_banks : STA $16     ; bank of submenu table in $16
+    LDA.w #preset_category_banks : STA $16     ; bank of submenu table in $16
     LDA [$16],Y : STA $18                      ; pointer to category grouping table in $18
 
     STX $16 : LDY #$0000                       ; pointer to submenu table in $16, reset Y
@@ -609,7 +609,7 @@ LoadRandomPreset:
     %a8()
     STY $4206                                  ; by number of preset groups
     %a16()
-    PEA $0000 : PLA : PEA $0000 : PLA
+    PEA $0000 : PLA
     LDA $4216 : ASL : TAY                      ; random preset group index in Y
     LDA [$16],Y : STA $16                      ; random preset group macro pointer in $16
     LDY #$0004 : LDA [$16],Y : STA $16         ; preset group table pointer in $16
@@ -624,7 +624,7 @@ LoadRandomPreset:
     %a8()
     STY $14 : STY $4206                        ; divide bottom half of random number by Y
     %a16()
-    PEA $0000 : PLA : PEA $0000 : PLA
+    PEA $0000 : PLA
     LDA $4216 : STA $12                        ; randomly selected preset
 
     ASL : TAY
