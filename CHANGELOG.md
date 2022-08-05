@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.21] Ridley AI room strat falls back on enemy HP or grab attempts
 * [2.4.2.20] Added a room strat to display current Ridley's AI routine
 * [2.4.2.19] Automatically display the remaining spark timer when shinespark crashes
 * [2.4.2.19] Optimized timers when updated outside of door transitions
