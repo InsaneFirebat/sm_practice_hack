@@ -1672,6 +1672,7 @@ RoomStratMenu:
     dw ihstrat_kraidradar
     dw ihstrat_zebskip
     dw ihstrat_pitdoor
+    dw ihstrat_ridleyai
     dw #$0000
     %cm_header("INFOHUD ROOM STRAT")
     %cm_footer("ROOM STRAT MUST BE ACTIVE")
@@ -1725,6 +1726,9 @@ ihstrat_zebskip:
 ihstrat_pitdoor:
     %cm_jsl("Pit Room Right Door", #action_select_room_strat, #$000F)
 
+ihstrat_ridleyai:
+    %cm_jsl("Ridley's AI Tracker", #action_select_room_strat, #$0010)
+
 action_select_room_strat:
 {
     TYA : STA !sram_room_strat
@@ -1755,6 +1759,7 @@ ih_room_strat:
     db #$28, "KRAID RADAR", #$FF
     db #$28, "   ZEB SKIP", #$FF
     db #$28, "PIT DOOR TC", #$FF
+    db #$28, "  RIDLEY AI", #$FF
     db #$FF
   .routine
     LDA #$0001 : STA !sram_display_mode
