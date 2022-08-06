@@ -59,7 +59,7 @@ status_dboost:
 
   .printfailed
     LDX #$008C : LDA !ram_dboost_counter : JSR Draw2
-    LDA !IH_LETTER_L : STA $7EC68A
+    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8A
 
   .giveUp
     LDA #$0001 : STA !ram_dboost_state
@@ -101,7 +101,7 @@ status_dboost:
     LDA #$0001 : STA !ram_dboost_state
     LDA !SAMUS_KNOCKBACK_TIMER : STA !ram_dboost_kb
     SEC : LDA !ram_dboost_kbmax : SBC !ram_dboost_kb
-    LDX #$008C : JSR Draw2 : LDA !IH_LETTER_Y : STA $7EC68A
+    LDX #$008C : JSR Draw2 : LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8A
 
     RTS
 }
@@ -191,12 +191,12 @@ topHUD_chargetimer:
     LDA !ram_HUD_top_counter : CMP #$0024 : BPL .reset
     INC : STA !ram_HUD_top_counter
     ASL : TAX
-    LDA NumberGFXTable,X : STA $7EC614
+    LDA NumberGFXTable,X : STA !HUD_TILEMAP+$14
     RTS
 
   .reset
-    LDA !IH_BLANK : STA $7EC614 : STA $7EC616
-    LDA NumberGFXTable+122 : STA $7EC618
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$14 : STA !HUD_TILEMAP+$16
+    LDA NumberGFXTable+122 : STA !HUD_TILEMAP+$18
     RTS
 
   .pressedShot
@@ -209,8 +209,8 @@ topHUD_chargetimer:
 
   .drawCharge
     ASL : TAX
-    LDA NumberGFXTable,X : STA $7EC618
-    LDA !IH_BLANK : STA $7EC616
+    LDA NumberGFXTable,X : STA !HUD_TILEMAP+$18
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$16
 
   .done
     RTS
@@ -225,12 +225,12 @@ middleHUD_chargetimer:
     LDA !ram_HUD_middle_counter : CMP #$0024 : BPL .reset
     INC : STA !ram_HUD_middle_counter
     ASL : TAX
-    LDA NumberGFXTable,X : STA $7EC654
+    LDA NumberGFXTable,X : STA !HUD_TILEMAP+$54
     RTS
 
   .reset
-    LDA !IH_BLANK : STA $7EC654 : STA $7EC656
-    LDA NumberGFXTable+122 : STA $7EC658
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$54 : STA !HUD_TILEMAP+$56
+    LDA NumberGFXTable+122 : STA !HUD_TILEMAP+$58
     RTS
 
   .pressedShot
@@ -243,8 +243,8 @@ middleHUD_chargetimer:
 
   .drawCharge
     ASL : TAX
-    LDA NumberGFXTable,X : STA $7EC658
-    LDA !IH_BLANK : STA $7EC656
+    LDA NumberGFXTable,X : STA !HUD_TILEMAP+$58
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$56
 
   .done
     RTS
@@ -314,7 +314,7 @@ topHUD_dashcounter:
 {
     LDA !SAMUS_DASH_COUNTER : AND #$00FF : CMP !ram_dash_counter : BEQ .done
     STA !ram_dash_counter : ASL : TAX
-    LDA HexGFXTable,X : STA $7EC618
+    LDA HexGFXTable,X : STA !HUD_TILEMAP+$18
 
   .done
     RTS
@@ -324,7 +324,7 @@ middleHUD_dashcounter:
 {
     LDA !SAMUS_DASH_COUNTER : AND #$00FF : CMP !ram_dash_counter : BEQ .done
     STA !ram_dash_counter : ASL : TAX
-    LDA HexGFXTable,X : STA $7EC658
+    LDA HexGFXTable,X : STA !HUD_TILEMAP+$58
 
   .done
     RTS
@@ -374,7 +374,7 @@ topHUD_cpuusage:
     %a8() : LDA #$E1 : STA $4206 : %a16()
     PHA : PLA : PHA : PLA : LDA $4214
     LDX #$0014 : JSR Draw2
-    LDA !IH_PERCENT : STA $7EC618
+    LDA !IH_PERCENT : STA !HUD_TILEMAP+$18
 
     RTS
 }
@@ -387,7 +387,7 @@ middleHUD_cpuusage:
     %a8() : LDA #$E1 : STA $4206 : %a16()
     PHA : PLA : PHA : PLA : LDA $4214
     LDX #$0054 : JSR Draw2
-    LDA !IH_PERCENT : STA $7EC658
+    LDA !IH_PERCENT : STA !HUD_TILEMAP+$58
 
     RTS
 }
@@ -425,47 +425,47 @@ status_kihuntermanip:
     JMP .roomMusketeers
 ; Kihunter Stairs
   .roomStairs
-    LDA !IH_BLANK : STA $7EC68C : STA $7EC68E       ; draw blank spaces
-    STA $7EC690 : STA $7EC692 : STA $7EC694
-    STA $7EC696 : STA $7EC698 : STA $7EC614
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E       ; draw blank spaces
+    STA !HUD_TILEMAP+$90 : STA !HUD_TILEMAP+$92 : STA !HUD_TILEMAP+$94
+    STA !HUD_TILEMAP+$96 : STA !HUD_TILEMAP+$98 : STA !HUD_TILEMAP+$14
 ; top kihunter
     LDX #$0000                                      ; start with top kihunter, enemy0
     
     ; Y position
     LDA !ENEMY_Y,X : CMP #$01F4 : BPL .topYSuccess     ; check if below (greater than) Y = 500d
-    LDA !IH_LETTER_N : STA $7EC688 : STA $7EC68A    ; draw N's and return
-    STA $7EC68E : BRA .movementEnemy0
+    LDA !IH_LETTER_N : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A    ; draw N's and return
+    STA !HUD_TILEMAP+$8E : BRA .movementEnemy0
   .topYSuccess
-    LDA !IH_LETTER_Y : STA $7EC688                  ; draw Y
-    LDA !IH_LETTER_N : STA $7EC68A                  ; draw N and continue to Xpos
+    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88                  ; draw Y
+    LDA !IH_LETTER_N : STA !HUD_TILEMAP+$8A                  ; draw N and continue to Xpos
     
     ; X position
     LDA !ENEMY_X,X : CMP #$00A8 : BMI .topXSuccess     ; check if left of (less than) X = 168d
-    LDA !IH_LETTER_N : STA $7EC68A : BRA .movementEnemy0  ; draw N and return
+    LDA !IH_LETTER_N : STA !HUD_TILEMAP+$8A : BRA .movementEnemy0  ; draw N and return
     
   .topXSuccess
-    LDA !IH_LETTER_Y : STA $7EC68A                  ; draw Y
+    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8A                  ; draw Y
     ; movement arrows
   .movementEnemy0
     ; X position
     LDA !ENEMY_X,X : CMP !ram_enemy0_last_xpos         ; check enemy xpos
     BEQ .FinishX0 : BMI .LeftX0                     ; next enemy if no change, left if xpos decreased
-    LDA #$0C62 : STA $7EC616                        ; draw right arrow
+    LDA #$0C62 : STA !HUD_TILEMAP+$16                        ; draw right arrow
     BRA .FinishX0
 
   .LeftX0
-    LDA #$0C60 : STA $7EC616                        ; draw left arrow
+    LDA #$0C60 : STA !HUD_TILEMAP+$16                        ; draw left arrow
   .FinishX0
     LDA !ENEMY_X,X : STA !ram_enemy0_last_xpos         ; store last_xpos for next frame
     
     ; Y position
     LDA !ENEMY_Y,X : CMP !ram_enemy0_last_ypos         ; check enemy ypos
     BEQ .FinishY0 : BMI .UpY0                       ; next enemy if no change, left if ypos decreased
-    LDA #$0C63 : STA $7EC618                        ; draw down arrow
+    LDA #$0C63 : STA !HUD_TILEMAP+$18                        ; draw down arrow
     BRA .FinishY0
 
   .UpY0
-    LDA !IH_ARROW_UP : STA $7EC618                  ; draw up arrow
+    LDA !IH_ARROW_UP : STA !HUD_TILEMAP+$18                  ; draw up arrow
 
   .FinishY0
     LDA !ENEMY_Y,X : STA !ram_enemy0_last_ypos         ; store last_ypos for next frame
@@ -475,21 +475,21 @@ status_kihuntermanip:
     
     ; Y position
     LDA !ENEMY_Y,X : CMP #$0316 : BPL .botYSuccess     ; check if below (greater than) Y = 790d
-    LDA !IH_LETTER_N : STA $7EC68E : BRA .movementEnemy4  ; draw N and return
+    LDA !IH_LETTER_N : STA !HUD_TILEMAP+$8E : BRA .movementEnemy4  ; draw N and return
     
   .botYSuccess
-    LDA !IH_LETTER_Y : STA $7EC68E                  ; draw Y
+    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8E                  ; draw Y
     ; movement arrows
 
   .movementEnemy4
     ; X position
     LDA !ENEMY_X,X : CMP !ram_enemy4_last_xpos         ; check enemy xpos
     BEQ .FinishX4 : BMI .LeftX4                     ; next enemy if no change, left if xpos decreased
-    LDA #$0C62 : STA $7EC656                        ; draw right arrow
+    LDA #$0C62 : STA !HUD_TILEMAP+$56                        ; draw right arrow
     BRA .FinishX4
 
   .LeftX4
-    LDA #$0C60 : STA $7EC656                        ; draw left arrow
+    LDA #$0C60 : STA !HUD_TILEMAP+$56                        ; draw left arrow
 
   .FinishX4
     LDA !ENEMY_X,X : STA !ram_enemy4_last_xpos         ; store last_xpos for next frame
@@ -497,11 +497,11 @@ status_kihuntermanip:
     ; Y position
     LDA !ENEMY_Y,X : CMP !ram_enemy4_last_ypos         ; check enemy xpos
     BEQ .FinishY4 : BMI .UpY4                       ; next enemy if no change, left if xpos decreased
-    LDA #$0C63 : STA $7EC658                        ; draw down arrow
+    LDA #$0C63 : STA !HUD_TILEMAP+$58                        ; draw down arrow
     BRA .FinishY4
 
   .UpY4
-    LDA !IH_ARROW_UP : STA $7EC658                  ; draw up arrow
+    LDA !IH_ARROW_UP : STA !HUD_TILEMAP+$58                  ; draw up arrow
 
   .FinishY4
     LDA !ENEMY_Y,X : STA !ram_enemy4_last_ypos         ; store last_ypos for next frame
@@ -510,44 +510,44 @@ status_kihuntermanip:
 ; Three Musketeers
   .roomMusketeers
     LDA !SAMUS_HP : STA !ram_last_hp                    ; prevent SamusHP from overwriting our work later
-    LDA !IH_BLANK : STA $7EC68C : STA $7EC68E       ; draw blank spaces
-    STA $7EC690 : STA $7EC692 : STA $7EC694
-    STA $7EC696 : STA $7EC698 : STA $7EC614
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E       ; draw blank spaces
+    STA !HUD_TILEMAP+$90 : STA !HUD_TILEMAP+$92 : STA !HUD_TILEMAP+$94
+    STA !HUD_TILEMAP+$96 : STA !HUD_TILEMAP+$98 : STA !HUD_TILEMAP+$14
 
 ; top kihunter
     LDX #$0200                                      ; start with top kihunter (enemy8)
     LDA !ENEMY_X,X : CMP #$018C : BPL .success2Top     ; branch if right of (greater than) X = 396d
     CMP #$0157 : BPL .successTop                    ; branch if right of (greater than) X = 343d
-    LDA !IH_LETTER_N : STA $7EC616 : STA $7EC618    ; draw N in both slots
+    LDA !IH_LETTER_N : STA !HUD_TILEMAP+$16 : STA !HUD_TILEMAP+$18    ; draw N in both slots
     BRA .movementTop
 
   .success2Top
-    LDA !IH_LETTER_Y : STA $7EC616 : STA $7EC618    ; draw Y in both slots
+    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$16 : STA !HUD_TILEMAP+$18    ; draw Y in both slots
     BRA .movementTop
     
   .successTop
-    LDA !IH_LETTER_Y : STA $7EC616                  ; draw Y in first slot
-    LDA !IH_LETTER_N : STA $7EC618                  ; draw N in second slot
+    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$16                  ; draw Y in first slot
+    LDA !IH_LETTER_N : STA !HUD_TILEMAP+$18                  ; draw N in second slot
 
   .movementTop
     LDA !ENEMY_X,X : CMP !ram_enemy8_last_xpos         ; check xpos again
     BMI .X8Left                                     ; next enemy if no change, left if xpos decreased
-    LDA #$0C62 : STA $7EC656                        ; draw right arrow
+    LDA #$0C62 : STA !HUD_TILEMAP+$56                        ; draw right arrow
     BRA .X8Finish
 
   .X8Left
-    LDA #$0C60 : STA $7EC656                        ; draw left arrow
+    LDA #$0C60 : STA !HUD_TILEMAP+$56                        ; draw left arrow
 
   .X8Finish
     LDA !ENEMY_X,X : STA !ram_enemy8_last_xpos         ; store last_xpos for next frame
     ; Y position
     LDA !ENEMY_Y,X : CMP !ram_enemy8_last_ypos         ; check enemy xpos
     BEQ .Y8Finish : BMI .Y8Up                       ; next enemy if no change, left if xpos decreased
-    LDA #$0C63 : STA $7EC658                        ; draw down arrow
+    LDA #$0C63 : STA !HUD_TILEMAP+$58                        ; draw down arrow
     BRA .Y8Finish
 
   .Y8Up
-    LDA !IH_ARROW_UP : STA $7EC658                  ; draw up arrow
+    LDA !IH_ARROW_UP : STA !HUD_TILEMAP+$58                  ; draw up arrow
 
   .Y8Finish
     LDA !ENEMY_Y,X : STA !ram_enemy8_last_ypos         ; store last_ypos for next frame
@@ -555,19 +555,19 @@ status_kihuntermanip:
 ; middle kihunter
     LDX #$0180                                      ; change to middle kihunter (enemy6)
     LDA !ENEMY_X,X : CMP #$0157 : BMI .successMiddle   ; check if left of (less than) X = 343d
-    LDA !IH_LETTER_N : STA $7EC688 : BRA .movementMiddle  ; draw N and return
+    LDA !IH_LETTER_N : STA !HUD_TILEMAP+$88 : BRA .movementMiddle  ; draw N and return
     
   .successMiddle
-    LDA !IH_LETTER_Y : STA $7EC688                  ; draw Y
+    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88                  ; draw Y
     
   .movementMiddle
     LDA !ENEMY_X,X : CMP !ram_enemy6_last_xpos         ; check xpos again
     BMI .X6Left                                     ; next enemy if no change, left if xpos decreased
-    LDA #$0C62 : STA $7EC68C                        ; draw right arrow
+    LDA #$0C62 : STA !HUD_TILEMAP+$8C                        ; draw right arrow
     BRA .X6Finish
 
   .X6Left
-    LDA #$0C60 : STA $7EC68C                        ; draw left arrow
+    LDA #$0C60 : STA !HUD_TILEMAP+$8C                        ; draw left arrow
 
   .X6Finish
     LDA !ENEMY_X,X : STA !ram_enemy6_last_xpos         ; store last_xpos for next frame
@@ -575,11 +575,11 @@ status_kihuntermanip:
     ; Y position
     LDA !ENEMY_Y,X : CMP !ram_enemy6_last_ypos         ; check enemy xpos
     BEQ .Y6Finish : BMI .Y6Up                       ; next enemy if no change, left if xpos decreased
-    LDA #$0C63 : STA $7EC68E                        ; draw down arrow
+    LDA #$0C63 : STA !HUD_TILEMAP+$8E                        ; draw down arrow
     BRA .Y6Finish
 
   .Y6Up
-    LDA #$0C61 : STA $7EC68E                        ; draw up arrow
+    LDA #$0C61 : STA !HUD_TILEMAP+$8E                        ; draw up arrow
 
   .Y6Finish
     LDA !ENEMY_Y,X : STA !ram_enemy6_last_ypos         ; store last_ypos for next frame
@@ -587,19 +587,19 @@ status_kihuntermanip:
 ; bottom kihunter
     LDX #$0100                                      ; change to bottom kihunter (enemy4)
     LDA !ENEMY_X,X : CMP #$0157 : BPL .successBottom   ; check if right of (greater than) X = 343d
-    LDA !IH_LETTER_N : STA $7EC692 : BRA .movementBottom  ; draw N and return
+    LDA !IH_LETTER_N : STA !HUD_TILEMAP+$92 : BRA .movementBottom  ; draw N and return
     
   .successBottom
-    LDA !IH_LETTER_Y : STA $7EC692                  ; draw Y
+    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$92                  ; draw Y
     
   .movementBottom
     LDA !ENEMY_X,X : CMP !ram_enemy4_last_xpos         ; check xpos again
     BMI .X4Left                                     ; next enemy if no change, left if xpos decreased
-    LDA #$0C62 : STA $7EC696                        ; draw right arrow
+    LDA #$0C62 : STA !HUD_TILEMAP+$96                        ; draw right arrow
     BRA .X4Finish
 
   .X4Left
-    LDA #$0C60 : STA $7EC696                        ; draw left arrow
+    LDA #$0C60 : STA !HUD_TILEMAP+$96                        ; draw left arrow
 
   .X4Finish
     LDA !ENEMY_X,X : STA !ram_enemy4_last_xpos         ; store last_xpos for next frame
@@ -607,11 +607,11 @@ status_kihuntermanip:
     ; Y position
     LDA !ENEMY_Y,X : CMP !ram_enemy4_last_ypos         ; check enemy xpos
     BEQ .Y4Finish : BMI .Y4Up                       ; next enemy if no change, left if xpos decreased
-    LDA #$0C63 : STA $7EC698                        ; draw down arrow
+    LDA #$0C63 : STA !HUD_TILEMAP+$98                        ; draw down arrow
     BRA .Y4Finish
 
   .Y4Up
-    LDA #$0C61 : STA $7EC698                        ; draw up arrow
+    LDA #$0C61 : STA !HUD_TILEMAP+$98                        ; draw up arrow
 
   .Y4Finish
     LDA !ENEMY_Y,X : STA !ram_enemy4_last_ypos         ; store last_ypos for next frame
@@ -630,10 +630,10 @@ status_kraidradar:
 
   .setup
     LDA !SAMUS_HP : STA !ram_last_hp                    ; suppress Samus HP
-    LDA !IH_BLANK : STA $7EC688 : STA $7EC68A       ; clear space on HUD
-    STA $7EC68C : STA $7EC68E : STA $7EC690
-    STA $7EC692 : STA $7EC694 : STA $7EC696
-    STA $7EC698
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A       ; clear space on HUD
+    STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E : STA !HUD_TILEMAP+$90
+    STA !HUD_TILEMAP+$92 : STA !HUD_TILEMAP+$94 : STA !HUD_TILEMAP+$96
+    STA !HUD_TILEMAP+$98
 
 ; Detect and draw Samus first
 
@@ -645,13 +645,13 @@ status_kraidradar:
     LDA #$10C9
 
   .checkSamusX
-    CPY #$0030 : BPL + : STA $7EC68C : BRA .checkEnemies
-+   CPY #$0040 : BPL + : STA $7EC68E : BRA .checkEnemies
-+   CPY #$0050 : BPL + : STA $7EC690 : BRA .checkEnemies
-+   CPY #$0060 : BPL + : STA $7EC692 : BRA .checkEnemies
-+   CPY #$0070 : BPL + : STA $7EC694 : BRA .checkEnemies
-+   CPY #$0080 : BPL + : STA $7EC696 : BRA .checkEnemies
-+   STA $7EC698
+    CPY #$0030 : BPL + : STA !HUD_TILEMAP+$8C : BRA .checkEnemies
++   CPY #$0040 : BPL + : STA !HUD_TILEMAP+$8E : BRA .checkEnemies
++   CPY #$0050 : BPL + : STA !HUD_TILEMAP+$90 : BRA .checkEnemies
++   CPY #$0060 : BPL + : STA !HUD_TILEMAP+$92 : BRA .checkEnemies
++   CPY #$0070 : BPL + : STA !HUD_TILEMAP+$94 : BRA .checkEnemies
++   CPY #$0080 : BPL + : STA !HUD_TILEMAP+$96 : BRA .checkEnemies
++   STA !HUD_TILEMAP+$98
 
 ; Detect stuff
 
@@ -776,13 +776,13 @@ status_kraidradar:
     CMP #$0400 : BEQ .closeDown6
     CMP #$0200 : BEQ .farUp6
 
-    LDA #$0861 : STA $7EC68A,X : BRA .drawEnemy7
+    LDA #$0861 : STA !HUD_TILEMAP+$8A,X : BRA .drawEnemy7
   .farUp6
-    LDA #$0C61 : STA $7EC68A,X : BRA .drawEnemy7
+    LDA #$0C61 : STA !HUD_TILEMAP+$8A,X : BRA .drawEnemy7
   .closeDown6
-    LDA #$0863 : STA $7EC68A,X : BRA .drawEnemy7
+    LDA #$0863 : STA !HUD_TILEMAP+$8A,X : BRA .drawEnemy7
   .farDown6
-    LDA #$0C63 : STA $7EC68A,X
+    LDA #$0C63 : STA !HUD_TILEMAP+$8A,X
 
     ; Enemy 7
   .drawEnemy7
@@ -799,25 +799,18 @@ status_kraidradar:
     
   .R2P8
     LDX #$000E : BRA +
-    
   .R2P7
     LDX #$000C : BRA +
-    
   .R2P6
     LDX #$000A : BRA +
-    
   .R2P5
     LDX #$0008 : BRA +
-    
   .R2P4
     LDX #$0006 : BRA +
-    
   .R2P3
     LDX #$0004 : BRA +
-    
   .R2P2
     LDX #$0002 : BRA +
-    
   .R2P1
     LDX #$0000
 
@@ -826,13 +819,13 @@ status_kraidradar:
     CMP #$0400 : BEQ .closeDown7
     CMP #$0200 : BEQ .farUp7
 
-    LDA #$1C61 : STA $7EC68A,X : BRA .done
+    LDA #$1C61 : STA !HUD_TILEMAP+$8A,X : BRA .done
   .farUp7
-    LDA #$1461 : STA $7EC68A,X : BRA .done
+    LDA #$1461 : STA !HUD_TILEMAP+$8A,X : BRA .done
   .closeDown7
-    LDA #$1C63 : STA $7EC68A,X : BRA .done
+    LDA #$1C63 : STA !HUD_TILEMAP+$8A,X : BRA .done
   .farDown7
-    LDA #$1463 : STA $7EC68A,X
+    LDA #$1463 : STA !HUD_TILEMAP+$8A,X
 
   .done
     RTS
@@ -856,18 +849,18 @@ status_zebskip:
 
   .firstZeb
     LDA !SAMUS_X : CMP #$0345 : BMI .stuck
-    LDA !IH_BLANK : STA $7EC68E
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$8E
     BRA .iFrames
 
   .secondZeb
     ; check if X is beyond 2nd zeb, exit if so
     LDA !SAMUS_X : CMP #$0274 : BMI .end
     CMP #$0285 : BMI .stuck
-    LDA !IH_BLANK : STA $7EC68E
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$8E
     BRA .iFrames
 
   .stuck
-    LDA #$106B : STA $7EC68E
+    LDA #$106B : STA !HUD_TILEMAP+$8E
 
   .iFrames
     LDA !SAMUS_IFRAME_TIMER : BEQ .noIframes
@@ -876,22 +869,20 @@ status_zebskip:
     RTS
 
   .noIframes
-    LDA #$2009 : STA $7EC68A
-    LDA !IH_BLANK : STA $7EC688
+    LDA #$2009 : STA !HUD_TILEMAP+$8A
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$88
     RTS
 }
 
 status_pitdoor:
-; negative = left, positive = right
-; 344 is in the first zeb
 {
     LDA !ROOM_ID : CMP #$975C : BNE .done
     LDA $7EDE64 : BNE .draw_N
-    LDA !IH_LETTER_Y : STA $7EC68E
+    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8E
     RTS
 
   .draw_N
-    LDA !IH_LETTER_N : STA $7EC68E
+    LDA !IH_LETTER_N : STA !HUD_TILEMAP+$8E
 
   .done
     RTS
