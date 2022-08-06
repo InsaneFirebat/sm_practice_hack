@@ -23,6 +23,7 @@ incsrc init.asm
 incsrc fanfare.asm
 incsrc spriteprio.asm
 incsrc spritefeat.asm
+;incsrc tilegraphics.asm
 
 ; Make sure the ROM expands to 4MB
 ;org $FFFFFF : db $FF
