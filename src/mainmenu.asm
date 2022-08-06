@@ -267,7 +267,7 @@ mm_goto_ctrlsmenu:
 ; -------------
 
 PresetsMenu:
-    dw #presets_goto_select_preset_category
+ ;   dw #presets_goto_select_preset_category
     dw #presets_current
     dw #$FFFF
     dw #presets_custom_preset_slot
