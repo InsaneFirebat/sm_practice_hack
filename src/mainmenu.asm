@@ -526,7 +526,7 @@ eq_goto_togglebeams:
     %cm_submenu("Toggle Beams", #ToggleBeamsMenu)
 
 eq_currentenergy:
-    %cm_numfield_word("Current Energy", $7E0000+!SAMUS_HP_MAX, 0, 2100, 1, 20, #0)
+    %cm_numfield_word("Current Energy", $7E0000+!SAMUS_HP, 0, 2100, 1, 20, #0)
 
 eq_setetanks:
     %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 21, 1, 1, .routine)
