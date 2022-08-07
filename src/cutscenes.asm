@@ -138,7 +138,8 @@ org $A9B1EB
     ORA #$0500
 
 
-org $A9FBC0
+;org $A9FBC0
+org $A9FC00
 print pc, " cutscenes MB start"
 
 cutscenes_mb_fake_death_fast_init:
@@ -505,4 +506,4 @@ cutscenes_mb_death_corpse_tips_over:
 }
 
 print pc, " cutscenes MB end"
-
+warnpc $A9D000

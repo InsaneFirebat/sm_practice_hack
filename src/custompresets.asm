@@ -2,7 +2,8 @@
 ; Custom Presets
 ; --------------
 
-org $83B400
+;org $83B400
+org $83C400
 print pc, " custompresets start"
 
 custom_preset_save:

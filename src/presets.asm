@@ -667,7 +667,8 @@ warnpc $80F800 ; save.asm
 ; -------------------
 
 ; Preset data/menus can be anywhere in the rom, even in separate banks
-org $FE8000
+;org $FE8000
+org $F18000
 check bankcross off
 print pc, " preset data crossbank start"
   incsrc presets/prkd_data.asm
@@ -675,7 +676,8 @@ print pc, " preset data crossbank end"
 warnpc $FEE000
 check bankcross on
 
-org $FEE000
+;org $FEE000
+org $F1E000
 print pc, " preset menu bankFE start"
   incsrc presets/prkd_menu.asm
 print pc, " preset menu bankFE end"

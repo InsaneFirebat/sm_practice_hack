@@ -47,11 +47,12 @@ org $82E488      ; write tiles to VRAM
 
 
 org $9AB200      ; graphics for HUD
-incbin ../resources/hudgfx.bin
+incbin ../resources/OR_hudgfx.bin
 
 
 ; Place minimap graphics in bank FD
-org $FDD500
+;org $FDD500
+org $F3D500
 print pc, " minimap bankFD start"
 incbin ../resources/mapgfx.bin
 
@@ -101,7 +102,7 @@ mm_write_and_clear_hud_tiles:
     LDA #$80 : STA $2115 ; word-access, incr by 1
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
     LDX #$D500 : STX $4302 ; Source offset
-    LDA #$FD : STA $4304 ; Source bank
+    LDA #$F3 : STA $4304 ; Source bank
     LDX #$2000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
@@ -123,7 +124,7 @@ mm_write_hud_tiles_during_door_transition:
 
   .minimap_vram
     JSR $E039
-    dl $FDD500
+    dl $F3D500
     dw $4000
     dw $1000
     JMP $E492  ; resume logic

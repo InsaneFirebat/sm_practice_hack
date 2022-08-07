@@ -28,7 +28,8 @@ org $8084AF
 
 
 ;org $81F000
-org $81FA00
+;org $81FA00
+org $81FB00
 print pc, " init start"
 
 init_code:

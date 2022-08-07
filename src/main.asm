@@ -26,5 +26,5 @@ incsrc spritefeat.asm
 ;incsrc tilegraphics.asm
 
 ; Make sure the ROM expands to 4MB
-org $FFFFFF : db $FF
+;org $FFFFFF : db $FF
 

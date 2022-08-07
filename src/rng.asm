@@ -100,7 +100,8 @@ org $A8B798
 ; Hooks
 ; -----
 
-org $83B000
+;org $83B000
+org $83C000
 print pc, " rng start"
 
 hook_hopper_set_rng:
@@ -350,7 +351,8 @@ hook_botwoon_rng:
 }
 
 print pc, " rng end"
-warnpc $83B400 ; custompresets.asm
+;warnpc $83B400 ; custompresets.asm
+warnpc $83C400 ; custompresets.asm
 
 
 ;org $A4F700

@@ -1756,10 +1756,12 @@ cm_divide_100:
 ; -----------
 
 pushpc
-org $B88000
+;org $B88000
+org $859700
 print pc, " mainmenu start"
 incsrc mainmenu.asm
 print pc, " mainmenu end"
+warnpc $85C000
 pullpc
 
 
