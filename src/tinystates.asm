@@ -72,21 +72,37 @@ pre_load_state:
     STZ $2181 : STZ $2183
     LDA #$0002 : STA $420B
 
+    ; large room fix
+    LDA !ROOM_ID : CMP #$A322 : BEQ .slow ; caterpillers room (red brin elev)
+    CMP #$C98E : BEQ .slow ; bowling alley
+    CMP #$CFC9 : BEQ .slow ; main street maridia
+    CMP #$D0B9 : BEQ .slow ; mt everest
+
     ; Load graphics tiles and tile tables back into RAM/WRAM
     ; before restoring the rest of the state from SRAM
     JSL preset_load_destination_state_and_tiles
     JSL preset_load_library_background
     JSL tinystates_load_level_tile_tables_scrolls_plms_and_execute_asm
     JSL tinystates_preload_bg_data
+    RTS
 
+  .slow
+    ; Decompress the original graphics
+    JSL preset_load_level_tile_tables_scrolls_plms_and_execute_asm
+    JSL $82E783 ; Load CRE tiles, tileset tiles and tileset palette
     RTS
 }
 
 post_load_state:
 {
-    JSL tinystates_mirror_bg_data
+    ; Workaround for BG2 corruption in certain large rooms
+    LDA !ROOM_ID : CMP #$A322 : BEQ + ; caterpillers room
+    CMP #$C98E : BEQ + ; bowling alley
+    CMP #$CFC9 : BEQ + ; main street maridia
+    CMP #$D0B9 : BEQ + ; mt everest
 
-    JSR post_load_music
+    JSL tinystates_mirror_bg_data
++   JSR post_load_music
 
     ; Rerandomize
     LDA !sram_save_has_set_rng : BNE .done
