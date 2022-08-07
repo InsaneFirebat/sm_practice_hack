@@ -133,7 +133,8 @@ layout_asm_ceres_ridley_room_no_timer:
 print pc, " misc bank8F end"
 
 
-org $87D000
+;org $87D000
+org $87E000
 print pc, " misc start"
 
 hook_set_music_track:
