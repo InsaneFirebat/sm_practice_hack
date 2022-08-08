@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.23] Proper fix for corrupted TinyState backgrounds by NobodyNada
 * [2.4.2.22] Added option to run an extra HUD mode upon touching doors
 * [2.4.2.22] Fixed broken Current Energy menu
 * [2.4.2.22] Workaround for rooms with corrupted backgrounds using TinyStates
