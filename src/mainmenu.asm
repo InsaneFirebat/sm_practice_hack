@@ -1477,6 +1477,7 @@ InfoHudMenu:
     dw #ih_room_strat
     dw #$FFFF
     dw #ih_superhud
+    dw #ih_door_display_mode
     dw #$FFFF
     dw #ih_room_counter
     dw #ih_lag_counter
@@ -2079,6 +2080,21 @@ action_select_superhud_top:
     RTL
 }
 print pc, " superhud menu end"
+
+ih_door_display_mode:
+    dw !ACTION_CHOICE
+    dl #!sram_door_display_mode
+    dw #$0000
+    db #$28, "Door HUD Mode", #$FF
+    db #$28, "        OFF", #$FF
+    db #$28, "HORIZ SPEED", #$FF
+    db #$28, " VERT SPEED", #$FF
+    db #$28, "     CHARGE", #$FF
+    db #$28, "SHINE TIMER", #$FF
+    db #$28, "DASHCOUNTER", #$FF
+    db #$28, " X POSITION", #$FF
+    db #$28, " Y POSITION", #$FF
+    db #$FF
 
 ih_ram_watch:
     %cm_jsl("Customize RAM Watch", #ih_prepare_ram_watch_menu, #RAMWatchMenu)

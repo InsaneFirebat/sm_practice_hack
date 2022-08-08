@@ -375,12 +375,32 @@ ih_before_room_transition:
     PLA : STA $14
     PLA : STA $12
 
+    ; Overwrite Enemy HP only
+    LDA !sram_display_mode : BNE .done
+    LDA !sram_door_display_mode : BEQ .done
+
+    ASL : TAX
+    JSR (.status_door_display_table,X)
+
+    ; Suppress Enemy HP display
+    LDA !ENEMY_HP : STA !ram_enemy_hp
+
   .done
     ; Run standard code and return
     PLY : PLX : PLA
     STA !GAMEMODE
     CLC
     RTL
+
+  .status_door_display_table
+    dw #$0000 ; dummy
+    dw status_door_hspeed
+    dw status_door_vspeed
+    dw status_chargetimer
+    dw status_shinetimer
+    dw status_dashcounter
+    dw status_door_xpos
+    dw status_door_ypos
 }
 
 ceres_start_timers:

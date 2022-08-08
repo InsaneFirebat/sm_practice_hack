@@ -1,6 +1,9 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.22] Added option to run an extra HUD mode upon touching doors
+* [2.4.2.22] Fixed broken Current Energy menu
+* [2.4.2.22] Workaround for rooms with corrupted backgrounds using TinyStates
 * [2.4.2.21] Ridley AI room strat falls back on enemy HP or grab attempts
 * [2.4.2.20] Added a room strat to display current Ridley's AI routine
 * [2.4.2.19] Automatically display the remaining spark timer when shinespark crashes

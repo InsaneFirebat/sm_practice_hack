@@ -115,6 +115,90 @@ status_dboost:
     RTS
 }
 
+status_door_hspeed:
+{
+    ; convert negative speeds to positive
+    LDA !SAMUS_Y_SPEED : BPL .positive
+    EOR #$FFFF : INC
+
+  .positive
+    ; convert to decimal form
+    STA $4204
+    %a8()
+    ; divide by 10
+    LDA #$0A : STA $4206
+    %a16()
+    PEA $0000 : PLA ; wait for CPU math
+
+    ; draw integer speed value
+    LDA $4214 : BEQ .blanktens
+    ; tens digit
+    ASL : TAX
+    LDA.l NumberGFXTable,X : STA !HUD_TILEMAP+$88
+    ; ones digit
+    LDA $4216 : ASL : TAY
+    LDA.l NumberGFXTable,X : STA !HUD_TILEMAP+$8A
+    BRA .subspeed
+
+  .blanktens
+    ; ones digit
+    LDA $4216 : ASL : TAX
+    LDA.l NumberGFXTable,X : STA !HUD_TILEMAP+$8A
+    ; tens digit
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$88
+
+  .subspeed
+    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$88
+
+    ; draw first decimal place of subspeed in hex
+    LDA !SAMUS_Y_SUBSPEED : XBA : AND #$00F0 : LSR #3 : TAY
+    LDA.l HexGFXTable,X : STA !HUD_TILEMAP+$88
+
+    RTS
+}
+
+status_door_vspeed:
+{
+    ; draw two digits of speed in decimal form
+    LDA !SAMUS_Y_SPEED : STA $4204
+    %a8()
+    ; divide by 10
+    LDA #$0A : STA $4206
+    %a16()
+    PEA $0000 : PLA ; wait for CPU math
+    LDA $4214 : BEQ .blanktens
+    ASL : TAX
+    LDA.l NumberGFXTable,X : STA !HUD_TILEMAP+$88
+
+    ; Ones digit
+    LDA $4216 : ASL : TAY
+    LDA.l NumberGFXTable,X : STA !HUD_TILEMAP+$8A
+    BRA .subspeed
+
+  .blanktens
+    LDA $4216 : ASL : TAX
+    LDA.l NumberGFXTable,X : STA !HUD_TILEMAP+$88
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$8A
+
+  .subspeed
+    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$8A
+
+    LDA !SAMUS_Y_SUBSPEED : XBA : AND #$00F0 : LSR #3 : TAY
+    LDA.l HexGFXTable,X : STA !HUD_TILEMAP+$8C
+
+    RTS
+}
+
+status_door_xpos:
+{
+    LDA !SAMUS_X : LDX #$0088 : JMP Draw4
+}
+
+status_door_ypos:
+{
+    LDA !SAMUS_Y : LDX #$0088 : JMP Draw4
+}
+
 
 ; ===========
 ; ROOM STRATS
