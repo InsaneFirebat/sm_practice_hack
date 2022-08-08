@@ -63,6 +63,10 @@ pre_load_state:
     LDA #$00 : STA $4200
     %ai16()
 
+    ; Save the old room ID
+    LDA !ROOM_ID
+    PHA
+
     ; Restore parts of LoRAM so we can load in the proper graphics etc
     ; This doesn't overwrite the stack.
     LDA #$8000 : STA $4310
@@ -82,14 +86,15 @@ pre_load_state:
     ; before restoring the rest of the state from SRAM
     JSL preset_load_destination_state_and_tiles
     JSL preset_load_library_background
-    JSL tinystates_load_level_tile_tables_scrolls_plms_and_execute_asm
-    JSL tinystates_preload_bg_data
-    RTS
 
-  .slow
-    ; Decompress the original graphics
+    ; If we're in the same room, we don't need to reload the level
+    PLA
+    CMP !ROOM_ID
+    BEQ .skip_load_level
     JSL preset_load_level_tile_tables_scrolls_plms_and_execute_asm
-    JSL $82E783 ; Load CRE tiles, tileset tiles and tileset palette
+
+  .skip_load_level:
+    JSL tinystates_preload_bg_data
     RTS
 }
 
