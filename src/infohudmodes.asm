@@ -721,11 +721,11 @@ status_hspeed:
 {
 ; converted to only use 4 tiles in the HUD, saving 202 cycles
     ; subspeed + submomentum into low byte of Hspeed
-    LDA $0B44 : CLC : ADC !SAMUS_X_SUBMOMENTUM
+    LDA !SAMUS_X_SUBRUNSPEED : CLC : ADC !SAMUS_X_SUBMOMENTUM
     AND #$FF00 : XBA : STA !ram_horizontal_speed
 
     ; speed + momentum + carry into high byte of Hspeed
-    LDA $0B42 : ADC $0B46
+    LDA !SAMUS_X_RUNSPEED : ADC !SAMUS_X_MOMENTUM
     AND #$00FF : XBA : ORA !ram_horizontal_speed
 
     ; maybe skip drawing

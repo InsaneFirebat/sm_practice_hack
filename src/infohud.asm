@@ -393,7 +393,7 @@ ih_before_room_transition:
     RTL
 
   .status_door_display_table
-    dw #$0000 ; dummy
+    dw #$0000 ; off/dummy
     dw status_door_hspeed
     dw status_door_vspeed
     dw status_chargetimer
