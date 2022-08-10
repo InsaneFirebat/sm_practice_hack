@@ -334,7 +334,8 @@ spacetime_routine_long:
 print pc, " spacetime bank8C end"
 
 ;org $90FF90
-org $90F7E0
+;org $90F7E0
+org $90F640
 print pc, " misc bank90 start"
 original_load_projectile_palette:
     JSL original_load_projectile_palette_long
@@ -343,7 +344,7 @@ original_load_projectile_palette:
 spacetime_routine:
     JSL spacetime_routine_long
     RTS
-warnpc $90F7EC
+warnpc $90F700 ; otherRotation code
 print pc, " misc bank90 end"
 
 
