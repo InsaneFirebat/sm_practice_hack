@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.26] Fixed fast load logic with TinyStates
 * [2.4.2.25] Fixed game time being reset after Ceres
 * [2.4.2.24] Fixed extra etank in KPDR 22% presets
 * [2.4.2.23] Proper fix for corrupted TinyState backgrounds by NobodyNada

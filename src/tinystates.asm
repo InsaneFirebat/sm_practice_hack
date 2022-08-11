@@ -39,7 +39,7 @@ macro sram_to_vram(vram_addr, size, sram_addr)
 endmacro
 
 
-org $80F700
+org $80F600
 print pc, " tinysave start"
 
 ; These can be modified to do game-specific things before and after saving and loading
@@ -64,7 +64,7 @@ pre_load_state:
     %ai16()
 
     ; Save the old room ID
-    LDA !ROOM_ID : STA $C1
+    LDA !ROOM_ID : STA !SRAM_TINYSTATE_ROOM
 
     ; Restore parts of LoRAM so we can load in the proper graphics etc
     ; This doesn't overwrite the stack.
@@ -75,38 +75,43 @@ pre_load_state:
     STZ $2181 : STZ $2183 ; clear HDMA
     LDA #$0002 : STA $420B ; initiate DMA
 
-    ; large room fix
-    LDA !ROOM_ID : CMP #$A322 : BEQ .slow ; caterpillers room (red brin elev)
-    CMP #$C98E : BEQ .slow ; bowling alley
-    CMP #$CFC9 : BEQ .slow ; main street maridia
-    CMP #$D0B9 : BEQ .slow ; mt everest
-
     ; Load graphics tiles and tile tables back into RAM/WRAM
     ; before restoring the rest of the state from SRAM
     JSL preset_load_destination_state_and_tiles
     JSL preset_load_library_background
 
-    ; If we're in the same room, we don't need to reload the level
-    LDA $C1 : CMP !ROOM_ID : BEQ .skip_load_level
-
-    ; Only these rooms need to be reloaded the slower way
+    ; These rooms are very large and need to have BG2 reloaded from compressed data
     LDA !ROOM_ID : CMP #$A322 : BEQ .slow ; caterpillers room (red brin elev)
     CMP #$C98E : BEQ .slow ; bowling alley
     CMP #$CFC9 : BEQ .slow ; main street maridia
-    CMP #$D0B9 : BNE .skip_load_level ; mt everest
+    CMP #$D0B9 : BEQ .slow ; mt everest
+
+    ; If we're in the same room, we don't need to reload the level
+    LDA !SRAM_TINYSTATE_ROOM : CMP !ROOM_ID : BEQ .skip_load_level
+
+    ; Load from pre-decompressed graphics to go faster
+    JSL tinystates_load_level_tile_tables_scrolls_plms_and_execute_asm
+    JSL tinystates_preload_bg_data
+    LDA #$0001 : STA !SRAM_TINYSTATE_FAST
+    RTS
 
   .slow
-    ; load from compressed graphics to avoid BG3 issues
+    ; Load from compressed graphics to avoid BG3 issues
     JSL preset_load_level_tile_tables_scrolls_plms_and_execute_asm
 
   .skip_load_level
     JSL tinystates_preload_bg_data
+    LDA #$0000 : STA !SRAM_TINYSTATE_FAST
     RTS
 }
 
 post_load_state:
 {
-    JSR post_load_music
+    ; Skip if loading from compressed graphics
+    LDA !SRAM_TINYSTATE_FAST : BEQ +
+    JSL tinystates_mirror_bg_data
+
++   JSR post_load_music
 
     ; Rerandomize
     LDA !sram_save_has_set_rng : BNE .done
@@ -471,6 +476,23 @@ print pc, " tinysave bank82 start"
 tinystates_preload_bg_data:
     JSR $82E2 ; Re-load BG3 tiles
     RTL
+
+tinystates_mirror_bg_data:
+; NOT PRESENT IN MASTER BRANCH
+{
+    PHB
+    PEA $7F00 : PLB : PLB
+    LDA $0000 : TAX
+    LSR : ADC $0000 : ADC $0000 : TAY
+    BRA .startLoop
+  .loop
+    LDA $0002,Y : STA $9602,X
+  .startLoop
+    DEY #2
+    DEX #2 : BPL .loop
+    PLB
+    RTL
+}
 
 tinystates_load_kraid:
 {
