@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.25] Fixed game time being reset after Ceres
 * [2.4.2.24] Fixed extra etank in KPDR 22% presets
 * [2.4.2.23] Proper fix for corrupted TinyState backgrounds by NobodyNada
 * [2.4.2.22] Added option to run an extra HUD mode upon touching doors
