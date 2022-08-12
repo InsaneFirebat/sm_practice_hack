@@ -661,9 +661,8 @@ endif
 
 ; FREE SPACE ^
 
-!ram_cm_rng = !CUSTOM_WRAM+$F0
-!ram_seed_X = !CUSTOM_WRAM+$F2
-!ram_seed_Y = !CUSTOM_WRAM+$F4
+!ram_seed_X = !CUSTOM_WRAM+$F0
+!ram_seed_Y = !CUSTOM_WRAM+$F2
 
 
 ; ---------
