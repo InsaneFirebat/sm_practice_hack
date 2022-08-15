@@ -167,7 +167,7 @@ cm_transfer_custom_tileset:
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
-    LDA #$80 : STA $802100 ; enable forced blanking
+    LDA #$0F : STA $0F2100 ; enable forced blanking
     PLP
     RTL
 
