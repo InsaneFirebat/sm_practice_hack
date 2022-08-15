@@ -5,8 +5,8 @@ cm_brb_loop:
 {
     ; Initial setup
     %ai16()
-    LDA $04 : PHA
-    LDA $06 : PHA
+    LDA !DP_CurrentMenu : PHA
+    LDA !DP_CurrentMenu+2 : PHA
     PHX : PHY
 
     LDA !ram_cm_brb_palette : PHA ; preserve menu palette
@@ -47,8 +47,8 @@ cm_brb_loop:
     %a16()
 
     PLY : PLX
-    PLA : STA $06
-    PLA : STA $04
+    PLA : STA !DP_CurrentMenu+2
+    PLA : STA !DP_CurrentMenu
     RTL
 
   .check_input

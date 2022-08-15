@@ -263,8 +263,8 @@ endif
 
   .randomize_rng
     JSL MenuRNG2
-    AND #$00FF : STA $05B5 ; little extra for Phantoon
-    JSL MenuRNG : STA $7E05E5
+    AND #$00FF : STA !FRAME_COUNTER_8BIT ; little extra for Phantoon
+    JSL MenuRNG : STA !RANDOM_NUMBER
     %sfxbeep()
     ; CLC to continue normal gameplay after reseeding RNG
     CLC : RTS
@@ -282,7 +282,7 @@ endif
     CLC : RTS
 
   .force_stand
-    JSL $90E2D4
+    JSL $90E2D4 ; Release Samus from Draygon
     %sfxconfirm()
     ; CLC to continue normal gameplay after forced stand
     CLC : RTS

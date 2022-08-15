@@ -16,7 +16,7 @@
 !VERSION_MINOR = 4
 !VERSION_BUILD = 2
 !VERSION_REV_1 = 2
-!VERSION_REV_2 = 5
+!VERSION_REV_2 = 7
 
 
 ; ---------
@@ -229,10 +229,22 @@
 
 !ram_cgram_cache = !WRAM_MENU_START+$D0         ; 30 bytes
 
-!ram_hex2dec_first_digit = $14
-!ram_hex2dec_second_digit = $16
-!ram_hex2dec_third_digit = $18
-!ram_hex2dec_rest = $1A
+!DP_MenuIndices = $00 ; 0x4
+!DP_CurrentMenu = $04 ; 0x4
+!DP_Address = $08 ; 0x4
+!DP_JSLTarget = $0C ; 0x4
+!DP_CtrlInput = $10 ; 0x4
+!DP_Palette = $14
+!DP_Temp = $16
+; v these repreat v
+!DP_ToggleValue = $18
+!DP_Increment = $1A
+!DP_Minimum = $1C
+!DP_Maximum = $1E
+!DP_DrawValue = $18
+!DP_FirstDigit = $1A
+!DP_SecondDigit = $1C
+!DP_ThirdDigit = $1E
 
 !ACTION_TOGGLE              = #$0000
 !ACTION_TOGGLE_BIT          = #$0002
@@ -374,6 +386,7 @@
 !OAM_STACK_POINTER = $0590
 !PB_EXPLOSION_STATUS = $0592
 !NMI_REQUEST_FLAG = $05B4
+!FRAME_COUNTER_8BIT = $05B5
 !FRAME_COUNTER = $05B6
 !DEBUG_MODE_FLAG = $05D1
 !RANDOM_NUMBER = $05E5
@@ -390,6 +403,7 @@
 !MUSIC_TRACK = $07F5
 !LAYER1_X = $0911
 !LAYER1_Y = $0915
+!CURRENT_SAVE_FILE = $0952
 !GAMEMODE = $0998
 !SAMUS_ITEMS_EQUIPPED = $09A2
 !SAMUS_ITEMS_COLLECTED = $09A4
