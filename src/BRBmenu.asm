@@ -125,13 +125,13 @@ cm_tilemap_brb:
 
   .draw_text
     ; Same bank for all of the BRB text
-    PHK : PHK : PLA : STA $06
+    PHK : PHK : PLA : STA !DP_CurrentMenu+2
 
-    LDA.l #BRB_common_1 : STA $04
+    LDA.w #BRB_common_1 : STA !DP_CurrentMenu
     LDX #$01C6
     JSR cm_draw_brb_text
 
-    LDA.l #BRB_common_2 : STA $04
+    LDA.w #BRB_common_2 : STA !DP_CurrentMenu
     LDX #$0286
     JSR cm_draw_brb_text
 
@@ -170,13 +170,13 @@ cm_tilemap_brb:
     ; Draw cycling text
     ; first cycled line
     LDA !ram_cm_brb_screen : ASL : TAX
-    LDA.l BRBTilemapAddress,X : STA $04
+    LDA.l BRBTilemapAddress,X : STA !DP_CurrentMenu
     LDX #$04C6
     JSR cm_draw_brb_text
 
     ; second cycled line
     LDA !ram_cm_brb_screen : ASL : TAX
-    LDA.l BRBTilemapAddress2,X : STA $04
+    LDA.l BRBTilemapAddress2,X : STA !DP_CurrentMenu
     LDX #$0586
     JSR cm_draw_brb_text
 
@@ -227,18 +227,18 @@ cm_transfer_brb_cgram:
 cm_draw_brb_text:
 {
     ; X = pointer to tilemap area (STA !ram_tilemap_buffer,X)
-    ; $04[0x3] = address
+    ; !DP_CurrentMenu[0x3] = address
   %a8()
     LDY #$0000
     ; terminator
-    LDA [$04],Y : INY : CMP #$FF : BEQ .end
+    LDA [!DP_CurrentMenu],Y : INY : CMP #$FF : BEQ .end
     ; ORA with palette info
-    ORA $0E : STA $0E
+    ORA !DP_Palette : STA !DP_Palette
 
   .loop
-    LDA [$04],Y : CMP #$FF : BEQ .end           ; terminator
-    STA !ram_tilemap_buffer,X : INX             ; tile
-    LDA $0E : STA !ram_tilemap_buffer,X : INX   ; palette
+    LDA [!DP_CurrentMenu],Y : CMP #$FF : BEQ .end       ; terminator
+    STA !ram_tilemap_buffer,X : INX                     ; tile
+    LDA !DP_Palette : STA !ram_tilemap_buffer,X : INX   ; palette
     INY : BRA .loop
 
   .end
@@ -253,11 +253,11 @@ cm_transfer_brb_tileset:
     ; Load custom vram to normal location
     %a8()
     LDA #$80 : STA $802100 ; enable forced blanking
-    LDA #$04 : STA $210C
+    LDA #!DP_CurrentMenu : STA $210C
     LDA #$80 : STA $2115 ; word-access, incr by 1
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
-    LDX #cm_brb_table : STX $4302 ; Source offset
-    LDA #cm_brb_table>>16 : STA $4304 ; Source bank
+    LDX.w #cm_brb_table : STX $4302 ; Source offset
+    LDA.b #cm_brb_table>>16 : STA $4304 ; Source bank
     LDX #$1000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
