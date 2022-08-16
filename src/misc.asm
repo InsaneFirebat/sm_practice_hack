@@ -345,6 +345,11 @@ else
     JSL $A09169
 endif
 
+if !FEATURE_VANILLAHUD
+    ; Vanilla HUD build doesn't need artificial lag
+    RTL
+endif
+
     ; If minimap is disabled or shown, we ignore artificial lag
     LDA $05F7 : BNE .endlag
     LDA !ram_minimap : BNE .endlag

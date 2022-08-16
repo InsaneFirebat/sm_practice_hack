@@ -120,7 +120,7 @@ MainMenu:
     dw #mm_goto_misc
     dw #mm_goto_sprites
     dw #mm_goto_layout
-    dw #mm_goto_infohud
+;    dw #mm_goto_infohud
     dw #mm_goto_gamemenu
     dw #mm_goto_rngmenu
     dw #mm_goto_ctrlsmenu
@@ -142,7 +142,7 @@ MainMenuBanks:
     dw #MiscMenu>>16
     dw #SpritesMenu>>16
     dw #LayoutMenu>>16
-    dw #InfoHudMenu>>16
+;    dw #InfoHudMenu>>16
     dw #GameMenu>>16
     dw #RngMenu>>16
     dw #CtrlMenu>>16
@@ -2197,7 +2197,10 @@ endif
     dw #game_debugprojectiles
     dw #game_debugfixscrolloffsets
     dw #$FFFF
+if !FEATURE_VANILLAHUD
+else
     dw #game_minimap
+endif
     dw #game_clear_minimap
     dw #$FFFF
     dw #game_cutscenes
@@ -2952,13 +2955,16 @@ endif
     dw #ctrl_full_equipment
     dw #ctrl_kill_enemies
     dw #ctrl_toggle_tileviewer
-    dw #ctrl_reveal_damage
     dw #ctrl_force_stand
 if !FEATURE_SD2SNES
 else
     dw #ctrl_randomize_rng
 endif
+if !FEATURE_VANILLAHUD
+else
+    dw #ctrl_reveal_damage
     dw #ctrl_update_timers
+endif
     dw #$FFFF
     dw #ctrl_clear_shortcuts
     dw #ctrl_reset_defaults

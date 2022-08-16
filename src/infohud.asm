@@ -15,6 +15,15 @@ org $828B4B      ; optional debug functions
 org $80AE29      ; fix for scroll offset misalignment
     JSR ih_fix_scroll_offsets
 
+org $82894F      ; hijack, main game loop: runs EVERY frame (used for room transition timer)
+    JSL ih_game_loop_code
+
+org $8095FC      ; hijack, end of NMI routine to update realtime frames
+    JML ih_nmi_end
+
+if !FEATURE_VANILLAHUD
+; skip the rest of the hijacks if Vanilla HUD build
+else
 org $82EE92      ; runs on START GAME
     JSL startgame_seg_timer
 
@@ -44,14 +53,8 @@ org $809B4C      ; hijack, HUD routine (game timer by Quote58)
 org $8290F6      ; hijack, HUD routine while paused
     JSL ih_hud_code_paused
 
-org $82894F      ; hijack, main game loop: runs EVERY frame (used for room transition timer)
-    JSL ih_game_loop_code
-
 org $84889F      ; hijack, runs every time an item is picked up
     JSL ih_get_item_code
-
-org $8095FC      ; hijack, end of NMI routine to update realtime frames
-    JML ih_nmi_end
 
 if !FEATURE_PAL
 org $91DA3D
@@ -163,6 +166,7 @@ endif
 
 org $90D340      ; update timers when shinespark bonk sound plays
     JSL ih_shinespark_segment
+endif
 
 ; Main bank stuff
 org $F08000
@@ -209,6 +213,8 @@ ih_nmi_end:
 {
     %ai16()
 
+if !FEATURE_VANILLAHUD
+else
     ; Room timer
     LDA !ram_realtime_room : INC : STA !ram_realtime_room
 
@@ -218,6 +224,7 @@ ih_nmi_end:
     LDA !ram_seg_rt_seconds : INC : STA !ram_seg_rt_seconds : CMP.w #60 : BNE +
     LDA #$0000 : STA !ram_seg_rt_seconds
     LDA !ram_seg_rt_minutes : INC : STA !ram_seg_rt_minutes
+endif
 
     ; Slowdown / Pause / Frame Advance on P2 Dpad
 +   LDA !ram_slowdown_mode : BNE +
@@ -412,8 +419,10 @@ ceres_start_timers:
 
     ; overwritten code
     STZ !SCREEN_FADE_DELAY : STZ !SCREEN_FADE_COUNTER
-    
+if !FEATURE_VANILLAHUD
+else   
     JML ceres_start_timers_return
+endif
 }
 
 ih_elevator_activation:
@@ -1532,8 +1541,11 @@ endif
     CMP !IH_SLOWDOWN : BEQ .toggle_slowdown
     CMP !IH_SPEEDUP : BEQ .toggle_speedup
     CMP !IH_RESET : BEQ .reset_slowdown
+if !FEATURE_VANILLAHUD
+else
     CMP !IH_STATUS_R : BEQ .inc_statusdisplay
     CMP !IH_STATUS_L : BEQ .dec_statusdisplay
+endif
 
   .done
     PLA
@@ -1602,11 +1614,17 @@ metronome:
 
   .eraseHUD
     STA !ram_metronome_counter
+if !FEATURE_VANILLAHUD
+else
     LDA !IH_BLANK : STA !HUD_TILEMAP+$62
+endif
     RTS
 
   .tick
+if !FEATURE_VANILLAHUD
+else
     LDA !IH_LETTER_X : STA !HUD_TILEMAP+$62
+endif
     LDA #$0000 : STA !ram_metronome_counter
     LDA !sram_metronome_sfx : ASL : TAX
     LDA.l MetronomeSFX,X : JSL !SFX_LIB1

@@ -102,7 +102,10 @@ cm_exit:
 {
     JSL wait_for_lag_frame_long
     JSR cm_transfer_original_tileset
+if !FEATURE_VANILLAHUD
+else
     JSL overwrite_HUD_numbers
+endif
     JSR cm_transfer_original_cgram
 
     ; Update HUD (in case we added missiles etc.)
@@ -116,8 +119,11 @@ cm_exit:
     JSL $809B44 ; Handle HUD tilemap
     JSL GameLoopExtras ; check if game_loop_extras needs to be disabled
 
+if !FEATURE_VANILLAHUD
+else
     ; I think the above subroutines erases some of infohud, so we make sure we redraw it.
     JSL ih_update_hud_code
+endif
 
     JSL restore_ppu_long ; Restore PPU
     JSL $82BE2F ; Queue Samus movement sound effects
