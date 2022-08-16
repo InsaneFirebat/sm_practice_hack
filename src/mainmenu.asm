@@ -1524,7 +1524,8 @@ DisplayModeMenu:
 DisplayModeMenu2:
     dw ihmode_countdamage
     dw ihmode_ridleygrab
-;    dw ihmode_dboost (unfinished)
+;    dw ihmode_dboost ; (unfinished)
+    dw ihmode_armpump
     dw ihmode_ramwatch
     dw ihmode_GOTO_PAGE_ONE
     dw #$0000
@@ -1587,21 +1588,25 @@ ihmode_quickdrop:
 ihmode_walljump:
     %cm_jsl("Walljump Trainer", #action_select_infohud_mode, #$0011)
 
+!IH_MODE_ARMPUMP_INDEX = $0012
+ihmode_armpump:
+    %cm_jsl("Arm Pump Trainer", #action_select_infohud_mode, #$0012)
+
 ihmode_shottimer:
-    %cm_jsl("Shot Timer", #action_select_infohud_mode, #$0012)
+    %cm_jsl("Shot Timer", #action_select_infohud_mode, #$0013)
 
 ihmode_countdamage:
-    %cm_jsl("Boss Damage Counter", #action_select_infohud_mode, #$0013)
+    %cm_jsl("Boss Damage Counter", #action_select_infohud_mode, #$0014)
 
 ihmode_ridleygrab:
-    %cm_jsl("Ridley Death Grab Attempts", #action_select_infohud_mode, #$0014)
+    %cm_jsl("Ridley Death Grab Attempts", #action_select_infohud_mode, #$0015)
 
-!IH_MODE_RAMWATCH_INDEX = #$0015
+!IH_MODE_RAMWATCH_INDEX = #$0016
 ihmode_ramwatch:
-    %cm_jsl("Custom RAM Watch", #action_select_infohud_mode, #$0015)
+    %cm_jsl("Custom RAM Watch", #action_select_infohud_mode, #$0016)
 
 ;ihmode_dboost:
-;    %cm_jsl("WIP - Damage Boost Trainer", #action_select_infohud_mode, #$0016)
+;    %cm_jsl("WIP - Damage Boost Trainer", #action_select_infohud_mode, #$0017)
 
 ihmode_GOTO_PAGE_ONE:
     %cm_jsl("GOTO PAGE TWO", ihmode_GOTO_PAGE_TWO_routine, #DisplayModeMenu)
@@ -1644,6 +1649,7 @@ ih_display_mode:
     db #$28, " VERT SPEED", #$FF
     db #$28, " QUICK DROP", #$FF
     db #$28, "  WALL JUMP", #$FF
+    db #$28, "   ARM PUMP", #$FF
     db #$28, " SHOT TIMER", #$FF
     db #$28, "DMG COUNTER", #$FF
     db #$28, "RIDLEY GRAB", #$FF

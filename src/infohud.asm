@@ -369,7 +369,7 @@ ih_before_room_transition:
     LDA $14 : PHA
 
     ; Update HUD
-    JSL ih_update_hud_code
+    JSL ih_update_hud_code_before_transition
 
     ; Restore temp variables
     PLA : STA $14
@@ -512,12 +512,30 @@ else
 endif
 }
 
+ih_update_hud_code_before_transition:
+{
+    PHX : PHY : PHP : PHB
+    ; Bank 80
+    PEA $8080 : PLB : PLB
+
+    LDA !sram_display_mode : CMP #!IH_MODE_ARMPUMP_INDEX : BNE .update_hud_code
+
+    ; Report armpump room totals
+    LDA !ram_momentum_sum : CLC : ADC !ram_momentum_count : LDX #$0088 : JSR Draw4
+    LDA !ram_fail_sum : CLC : ADC !ram_fail_count : LDX #$0092 : JSR Draw4
+    LDA #$0000 : STA !ram_momentum_count : STA !ram_fail_count
+    STA !ram_momentum_sum : STA !ram_fail_sum : STA !ram_roomstrat_counter
+
+  .update_hud_code
+    BRA ih_update_hud_code_start
+
 ih_update_hud_code:
 {
     PHX : PHY : PHP : PHB
     ; Bank 80
     PEA $8080 : PLB : PLB
 
+  .start
     LDA !ram_minimap : BNE .minimap_hud
     BRL .start_update
 
@@ -1543,7 +1561,7 @@ endif
 
   .inc_statusdisplay
     LDA !sram_display_mode : INC
-    CMP #$0012 : BNE +
+    CMP #$0016 : BNE +
     LDA #$0000
 +   STA !sram_display_mode
     BRA .update_status
@@ -1551,19 +1569,26 @@ endif
   .dec_statusdisplay
     LDA !sram_display_mode : DEC
     CMP #$FFFF : BNE +
-    LDA #$0011
+    LDA #$0015
 +   STA !sram_display_mode
     BRA .update_status
 
 
   .update_status
     LDA #$0000
-    STA !ram_HUD_check : STA !ram_armed_shine_duration
+    STA !ram_momentum_sum : STA !ram_momentum_count
+    STA !ram_HUD_check
+    STA !ram_roomstrat_counter : STA !ram_roomstrat_state
+    STA !ram_armed_shine_duration
+    STA !ram_fail_count : STA !ram_fail_sum
     INC
+    STA !ram_enemy_hp : STA !ram_mb_hp
     STA !ram_dash_counter : STA !ram_shine_counter
     STA !ram_xpos : STA !ram_ypos : STA !ram_subpixel_pos
     STA !ram_horizontal_speed : STA !ram_vertical_speed
-    STA !ram_mb_hp : STA !ram_enemy_hp
+    LDA !ram_seed_X : LSR
+    STA !ram_HUD_top : STA !ram_HUD_middle : STA !ram_HUD_bottom
+    STA !ram_HUD_top_counter : STA !ram_HUD_middle_counter
     JMP .done
 }
 
