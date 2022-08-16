@@ -8,7 +8,10 @@ print pc, " mainmenuu IFBmenu start"
 
 IFBMenu:
     dw #ifb_customizemenu
+if !FEATURE_VANILLAHUD
+else
     dw #ifb_customizehud
+endif
     dw #$FFFF
     dw #ifb_brb
     dw #ifb_soundtest

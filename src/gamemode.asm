@@ -238,7 +238,10 @@ else
 endif
     BNE + : LDA #$FFFF
 +   INC : STA !sram_custom_preset_slot
-    ASL : TAX : LDA.l NumberGFXTable,X : STA $7EC67C
+if !FEATURE_VANILLAHUD
+else
+    ASL : TAX : LDA.l NumberGFXTable,X : STA !HUD_TILEMAP+$7C
+endif
     %sfxnumber()
     ; CLC to continue normal gameplay after incrementing preset slot
     CLC : RTS
@@ -251,7 +254,10 @@ else
     LDA #$0028 ; total slots
 endif
 +   DEC : STA !sram_custom_preset_slot
-    ASL : TAX : LDA.l NumberGFXTable,X : STA $7EC67C
+if !FEATURE_VANILLAHUD
+else
+    ASL : TAX : LDA.l NumberGFXTable,X : STA !HUD_TILEMAP+$7C
+endif
     %sfxnumber()
     ; CLC to continue normal gameplay after decrementing preset slot
     CLC : RTS

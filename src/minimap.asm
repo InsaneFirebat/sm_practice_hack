@@ -2,6 +2,11 @@
 ;Patches to support the minimap
 ;=======================================================
 
+if !FEATURE_VANILLAHUD
+; Vanilla HUD build only needs this label
+org $9AB200      ; graphics for HUD
+hudgfx_bin:
+else
 org $809B51
     JMP $9BFB    ; skip drawing auto reserve icon and normal energy numbers and tanks during HUD routine
 
@@ -47,10 +52,10 @@ org $82E488      ; write tiles to VRAM
     JMP mm_write_hud_tiles_during_door_transition
 
 
-
 org $9AB200      ; graphics for HUD
 hudgfx_bin:
 incbin ../resources/hudgfx.bin
+endif
 
 
 ; Place minimap graphics in bank DF
@@ -65,6 +70,8 @@ fill 4096
 print pc, " minimap bankDF end"
 
 
+if !FEATURE_VANILLAHUD
+else
 ; The default HUD minimap should be cleared
 org $8098FF    ; row 1
     dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
@@ -78,6 +85,7 @@ org $80997F    ; row 3
 ; The default energy 0 text should be cleared
 org $80994D
     dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
+endif
 
 
 ; Placed in bank 82 so that the jumps work
