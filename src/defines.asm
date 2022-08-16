@@ -16,7 +16,7 @@
 !VERSION_MINOR = 4
 !VERSION_BUILD = 2
 !VERSION_REV_1 = 2
-!VERSION_REV_2 = 7
+!VERSION_REV_2 = 8
 
 
 ; ---------
@@ -147,6 +147,8 @@
 !ram_momentum_count = !WRAM_START+$D2
 !ram_momentum_direction = !WRAM_START+$D4
 !ram_momentum_last = !WRAM_START+$D6
+!ram_fail_sum = !WRAM_START+$D8
+!ram_fail_count = !WRAM_START+$DA
 
 ; ^ FREE SPACE ^ up to +$F4
 
