@@ -258,9 +258,16 @@ endif
     JMP .done
 
   .pause
+    LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_menu : BNE .noMenu
+    LDA !IH_PAUSE : STA !IH_CONTROLLER_SEC_NEW
+    BRA .frameAdvance
+
+  .noMenu
     LDA !ram_slowdown_frames : BNE .checkFrameAdvance
     ; remain paused, store inputs
     INC : STA !ram_slowdown_frames
+
+  .storeInputs
     LDA !IH_CONTROLLER_PRI : EOR !IH_CONTROLLER_PRI_NEW : STA !ram_slowdown_controller_1
     LDA !IH_CONTROLLER_SEC : EOR !IH_CONTROLLER_SEC_NEW : STA !ram_slowdown_controller_2
 
@@ -269,7 +276,7 @@ endif
     CMP !IH_RESET : BNE .checkFreezeOnLoad
     ; resume normal play
     LDA #$0000 : STA !ram_slowdown_mode : STA !ram_slowdown_frames
-    JMP .done
+    BRA .done
 
   .checkFreezeOnLoad
     ; option to pause on loadstate
@@ -279,11 +286,11 @@ endif
     LDA #$0000 : STA !ram_reset_segment_later
     STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds
     STA !ram_seg_rt_minutes : STA !ram_slowdown_mode : STA !ram_slowdown_frames
-    JMP .done
+    BRA .done
 
   .frozen
     %a8() : LDA #$01 : STA !NMI_REQUEST_FLAG : %a16()
-    JMP .done
+    BRA .done
 
   .frameAdvance
     ; run a new frame

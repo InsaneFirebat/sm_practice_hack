@@ -123,6 +123,7 @@ MainMenu:
 ;    dw #mm_goto_infohud
     dw #mm_goto_gamemenu
     dw #mm_goto_rngmenu
+    dw #mm_goto_timecontrol
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
     dw #$0000
@@ -145,6 +146,7 @@ MainMenuBanks:
 ;    dw #InfoHudMenu>>16
     dw #GameMenu>>16
     dw #RngMenu>>16
+    dw #SlowdownMenu>>16
     dw #CtrlMenu>>16
     dw #IFBMenu>>16
 
@@ -180,6 +182,9 @@ mm_goto_gamemenu:
 
 mm_goto_rngmenu:
     %cm_mainmenu("RNG Control", #RngMenu)
+
+mm_goto_timecontrol:
+    %cm_mainmenu("Slowdown Mode", #SlowdownMenu)
 
 mm_goto_ctrlsmenu:
     %cm_mainmenu("Controller Shortcuts", #CtrlMenu)
@@ -2932,6 +2937,31 @@ rng_kraid_rng:
     db #$28, "      LAGGY", #$FF
     db #$28, "    LAGGIER", #$FF
     db #$FF
+
+
+; -------------
+; Slowdown Mode
+; -------------
+
+SlowdownMenu:
+    dw #slowdown_mode
+    dw #slowdown_frames
+    dw #$0000
+    %cm_header("SLOWDOWN MODE")
+    %cm_footer("PAUSE IS STILL WIP")
+
+slowdown_mode:
+    dw !ACTION_CHOICE
+    dl #!ram_cm_slowdown_mode
+    dw #$0000
+    db #$28, "Slowdown Mode", #$FF
+    db #$28, "        OFF", #$FF
+    db #$28, "      PAUSE", #$FF
+    db #$28, "   SLOWDOWN", #$FF
+    db #$FF
+
+slowdown_frames:
+    %cm_numfield("Slowdown (Lag) Frames", !ram_cm_slowdown_frames, 0, 120, 1, 4, #0)
 
 
 ; ----------
