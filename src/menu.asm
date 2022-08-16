@@ -37,9 +37,8 @@ print pc, " menu start"
 
 cm_start:
 {
-    PHP : PHB
-    PHX : PHY
-    PHK : PLB
+    PHP
+    PHB : PHK : PLB
 
     ; Ensure sound is enabled when menu is open
     LDA !DISABLE_SOUNDS : PHA
@@ -62,7 +61,6 @@ cm_start:
 
     JSR cm_exit
 
-    PLY : PLX
     PLB : PLP
     RTL
 }
@@ -77,6 +75,18 @@ cm_init:
     LDA #$09 : STA $2105 ; BG Mode 1, enable BG3 priority
     LDA #$0F : STA $0F2100 ; disable forced blanking
     %a16()
+
+    ; Preserve and disable slowdown mode
+    LDA #$0000 : STA !ram_cm_slowdown_mode : STA !ram_slowdown_frames
+    LDA !ram_slowdown_mode : BMI .paused
+    STA !ram_cm_slowdown_frames
+    LDA !ram_slowdown_mode : BEQ .done_slowdown
+    LDA #$0002 : STA !ram_cm_slowdown_mode
+    BRA .done_slowdown
+  .paused
+    LDA #$0001 : STA !ram_cm_slowdown_mode
+  .done_slowdown
+    LDA #$0000 : STA !ram_slowdown_mode
 
     JSL initialize_ppu_long
     JSL cm_transfer_custom_tileset
@@ -95,6 +105,7 @@ cm_init:
 
     JSL cm_calculate_max
     JSL cm_set_etanks_and_reserve
+
     RTS
 }
 
@@ -124,6 +135,15 @@ else
     ; I think the above subroutines erases some of infohud, so we make sure we redraw it.
     JSL ih_update_hud_code
 endif
+
+    ; Restore slowdown mode
+    LDA !ram_cm_slowdown_mode : BEQ .done_slowdown
+    DEC : BEQ .paused
+    LDA !ram_cm_slowdown_frames : BRA .done_slowdown
+  .paused
+    LDA #$FFFF
+  .done_slowdown
+    STA !ram_slowdown_mode
 
     JSL restore_ppu_long ; Restore PPU
     JSL $82BE2F ; Queue Samus movement sound effects

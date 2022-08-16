@@ -198,6 +198,9 @@
 !ram_cm_ctrl_swap = !WRAM_MENU_START+$3C
 !ram_cm_botwoon_rng = !WRAM_MENU_START+$3E
 
+!ram_cm_slowdown_mode = !WRAM_MENU_START+$40
+!ram_cm_slowdown_frames = !WRAM_MENU_START+$42
+
 
 ; ------------------
 ; Reusable RAM Menu
