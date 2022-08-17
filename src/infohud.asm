@@ -228,7 +228,11 @@ endif
 
     ; Slowdown / Pause / Frame Advance on P2 Dpad
 +   LDA !ram_slowdown_mode : BNE +
-    JMP .done
+
+  .exit
+    PLY : PLX : PLA
+    PLD : PLB
+    RTI
 
 +   CMP #$FFFF : BEQ .pause
     LDA !ram_slowdown_frames : BNE .delay
@@ -239,7 +243,7 @@ endif
     LDA !ram_slowdown_controller_2 : STA !IH_CONTROLLER_SEC_PREV
 
     JSL $809459 ; Read controller input
-    JMP .done
+    BRA .exit
 
   .delay
     CMP !ram_slowdown_mode : BNE .decTimer
@@ -255,15 +259,14 @@ endif
 
     ; request a lag frame
     %a8() : LDA #$01 : STA !NMI_REQUEST_FLAG : %a16()
-    JMP .done
+    BRA .exit
 
   .pause
-    LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_menu : BNE .noMenu
-    LDA !IH_PAUSE : STA !IH_CONTROLLER_SEC_NEW
-    BRA .frameAdvance
+    ; check if we're opening or closing the menu
+    LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_menu : BEQ .frameAdvance
+    LDA !ram_slowdown_frames : BMI .frameAdvance
 
-  .noMenu
-    LDA !ram_slowdown_frames : BNE .checkFrameAdvance
+    BNE .checkFrameAdvance
     ; remain paused, store inputs
     INC : STA !ram_slowdown_frames
 

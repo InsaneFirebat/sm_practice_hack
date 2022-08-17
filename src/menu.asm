@@ -136,19 +136,19 @@ else
     JSL ih_update_hud_code
 endif
 
+    JSL restore_ppu_long ; Restore PPU
+    JSL $82BE2F ; Queue Samus movement sound effects
+    JSL play_music_long ; Play 2 lag frames of music and sound effects
+    JSL maybe_trigger_pause_long ; Maybe trigger pause screen or return save confirmation selection
+
     ; Restore slowdown mode
     LDA !ram_cm_slowdown_mode : BEQ .done_slowdown
     DEC : BEQ .paused
     LDA !ram_cm_slowdown_frames : BRA .done_slowdown
   .paused
-    LDA #$FFFF
+    LDA #$FFFF : STA !ram_slowdown_frames
   .done_slowdown
     STA !ram_slowdown_mode
-
-    JSL restore_ppu_long ; Restore PPU
-    JSL $82BE2F ; Queue Samus movement sound effects
-    JSL play_music_long ; Play 2 lag frames of music and sound effects
-    JSL maybe_trigger_pause_long ; Maybe trigger pause screen or return save confirmation selection
     RTS
 }
 
@@ -541,6 +541,25 @@ cm_tilemap_bg_interior:
 {
     JSR cm_tilemap_bg_fill_interior
     RTL
+}
+
+
+UpdateOAM:
+{
+    %i8()
+    LDX #$80 : STX $2100
+    LDA #$0400 : STA $4300 ; A->B, VRAM addr
+    LDA #$0370 : STA $4302 ; src addr
+    LDX #$00 : STA $4304 ; src bank
+    LDA #$0220 : STA $4305 ; size
+    STZ $2102 ; clear HDMA
+    LDA #$2200 : STA $4310 ; A->B, VRAM addr
+    LDA #$C000 : STA $4312 ; src addr
+    LDX #$7E : STA $4314 ; src bank
+    LDA #$0200 : STA $4315 ; size
+    LDX #$03 : STX $420B ; initiate DMA
+    %ai16()
+    RTS
 }
 
 cm_draw_action_table:
