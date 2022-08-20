@@ -93,12 +93,10 @@
 !ram_draygon_rng_right = !WRAM_START+$70
 
 !ram_game_loop_extras = !WRAM_START+$72
-!ram_game_mode_extras = !WRAM_START+$74
+;!FREE_SPACE = !WRAM_START+$7A
 !ram_sprite_features_active = !WRAM_START+$76
 !ram_fix_scroll_offsets = !WRAM_START+$78
-
 ;!FREE_SPACE = !WRAM_START+$7A
-
 !ram_pacifist = !WRAM_START+$7C
 !ram_freeze_on_load = !WRAM_START+$7E
 
@@ -501,8 +499,6 @@
 !sram_ctrl_toggle_tileviewer = !SRAM_START+$1C
 !sram_ctrl_update_timers = !SRAM_START+$1E
 
-; ^ FREE SPACE ^
-
 !sram_artificial_lag = !SRAM_START+$20
 !sram_rerandomize = !SRAM_START+$22
 !sram_fanfare_toggle = !SRAM_START+$24
@@ -526,6 +522,7 @@
 !sram_compressed_graphics = !SRAM_START+$48
 !sram_lag_counter_mode = !SRAM_START+$4A
 !sram_preset_map_tiles = !SRAM_START+$4C
+!ram_game_loop_extras = !SRAM_START+$4E
 
 ; ^ FREE SPACE ^ up to $F03000
 
