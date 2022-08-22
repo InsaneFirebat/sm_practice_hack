@@ -17,7 +17,7 @@
 !VERSION_MINOR = 4
 !VERSION_BUILD = 2
 !VERSION_REV_1 = 3
-!VERSION_REV_2 = 0
+!VERSION_REV_2 = 1
 
 
 ; ---------
@@ -678,8 +678,23 @@ endif
 
 ; FREE SPACE ^
 
-!ram_seed_X = !CUSTOM_WRAM+$F0
-!ram_seed_Y = !CUSTOM_WRAM+$F2
+!ram_cm_varia = !CUSTOM_WRAM+$E0
+!ram_cm_gravity = !CUSTOM_WRAM+$E2
+!ram_cm_morph = !CUSTOM_WRAM+$E4
+!ram_cm_bombs = !CUSTOM_WRAM+$E6
+!ram_cm_spring = !CUSTOM_WRAM+$E8
+!ram_cm_screw = !CUSTOM_WRAM+$EA
+!ram_cm_hijump = !CUSTOM_WRAM+$EC
+!ram_cm_space = !CUSTOM_WRAM+$EE
+!ram_cm_speed = !CUSTOM_WRAM+$F0
+!ram_cm_charge = !CUSTOM_WRAM+$F2
+!ram_cm_ice = !CUSTOM_WRAM+$F4
+!ram_cm_wave = !CUSTOM_WRAM+$F6
+!ram_cm_spazer = !CUSTOM_WRAM+$F8
+!ram_cm_plasma = !CUSTOM_WRAM+$FA
+
+!ram_seed_X = !CUSTOM_WRAM+$FC
+!ram_seed_Y = !CUSTOM_WRAM+$FE
 
 
 ; ---------

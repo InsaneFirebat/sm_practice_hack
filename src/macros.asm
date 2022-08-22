@@ -242,6 +242,63 @@ macro setupRGB(addr)
     RTS
 endmacro
 
+macro cm_equipment_item(name, addr, bitmask, inverse)
+    dw !ACTION_CHOICE
+    dl <addr>
+    dw #.routine
+    db #$28, "<name>", #$FF
+    db #$28, " UNOBTAINED", #$FF
+    db #$28, "         ON", #$FF
+    db #$28, "        OFF", #$FF
+    db #$FF
+  .routine
+    LDA <addr> : BEQ .unobtained
+    DEC : BEQ .equipped
+    ; unquipped
+    LDA !SAMUS_ITEMS_EQUIPPED : AND <inverse> : STA !SAMUS_ITEMS_EQUIPPED
+    LDA !SAMUS_ITEMS_COLLECTED : ORA <bitmask> : STA !SAMUS_ITEMS_COLLECTED
+    RTL
+
+  .equipped
+    LDA !SAMUS_ITEMS_EQUIPPED : ORA <bitmask> : STA !SAMUS_ITEMS_EQUIPPED
+    LDA !SAMUS_ITEMS_COLLECTED : ORA <bitmask> : STA !SAMUS_ITEMS_COLLECTED
+    RTL
+
+  .unobtained
+    LDA !SAMUS_ITEMS_EQUIPPED : AND <inverse> : STA !SAMUS_ITEMS_EQUIPPED
+    LDA !SAMUS_ITEMS_COLLECTED : AND <inverse> : STA !SAMUS_ITEMS_COLLECTED
+    RTL
+endmacro
+
+
+macro cm_equipment_beam(name, addr, bitmask, inverse, and)
+    dw !ACTION_CHOICE
+    dl <addr>
+    dw #.routine
+    db #$28, "<name>", #$FF
+    db #$28, " UNOBTAINED", #$FF
+    db #$28, "         ON", #$FF
+    db #$28, "        OFF", #$FF
+    db #$FF
+  .routine
+    LDA <addr> : BEQ .unobtained
+    DEC : BEQ .equipped
+    ; unquipped
+    LDA !SAMUS_BEAMS_EQUIPPED : AND <inverse> : STA !SAMUS_BEAMS_EQUIPPED
+    LDA !SAMUS_BEAMS_COLLECTED : ORA <bitmask> : STA !SAMUS_BEAMS_COLLECTED
+    JML action_equip_safe_beams
+
+  .equipped
+    LDA !SAMUS_BEAMS_EQUIPPED : ORA <bitmask> : AND <and> : STA !SAMUS_BEAMS_EQUIPPED
+    LDA !SAMUS_BEAMS_COLLECTED : ORA <bitmask> : STA !SAMUS_BEAMS_COLLECTED
+    JML $90AC8D ; update beam gfx
+
+  .unobtained
+    LDA !SAMUS_BEAMS_EQUIPPED : AND <inverse> : STA !SAMUS_BEAMS_EQUIPPED
+    LDA !SAMUS_BEAMS_COLLECTED : AND <inverse> : STA !SAMUS_BEAMS_COLLECTED
+    JML action_equip_safe_beams
+endmacro
+
 
 ; -------------
 ; Sound Effects
