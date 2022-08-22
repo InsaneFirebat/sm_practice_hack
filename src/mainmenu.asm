@@ -763,58 +763,31 @@ ToggleItemsMenu:
     %cm_header("TOGGLE ITEMS")
 
 ti_variasuit:
-    %cm_toggle_bit("Varia Suit", $7E0000+!SAMUS_ITEMS_COLLECTED, #$0001, #.routine)
-  .routine
-    LDA !SAMUS_ITEMS_EQUIPPED : EOR #$0001 : STA !SAMUS_ITEMS_EQUIPPED
-    RTL
+    %cm_equipment_item("Varia Suit", !ram_cm_varia, #$0001, #$FFFE)
 
 ti_gravitysuit:
-    %cm_toggle_bit("Gravity Suit", $7E0000+!SAMUS_ITEMS_COLLECTED, #$0020, #.routine)
-  .routine
-    LDA !SAMUS_ITEMS_EQUIPPED : EOR #$0020 : STA !SAMUS_ITEMS_EQUIPPED
-    RTL
+    %cm_equipment_item("Gravity Suit", !ram_cm_gravity, #$0020, #$FFDF)
 
 ti_morphball:
-    %cm_toggle_bit("Morphing Ball", $7E0000+!SAMUS_ITEMS_COLLECTED, #$0004, #.routine)
-  .routine
-    LDA !SAMUS_ITEMS_EQUIPPED : EOR #$0004 : STA !SAMUS_ITEMS_EQUIPPED
-    RTL
+    %cm_equipment_item("Morph Ball", !ram_cm_morph, #$0004, #$FFFB)
 
 ti_bomb:
-    %cm_toggle_bit("Bombs", $7E0000+!SAMUS_ITEMS_COLLECTED, #$1000, #.routine)
-  .routine
-    LDA !SAMUS_ITEMS_EQUIPPED : EOR #$1000 : STA !SAMUS_ITEMS_EQUIPPED
-    RTL
+    %cm_equipment_item("Bombs", !ram_cm_bombs, #$1000, #$EFFF)
 
 ti_springball:
-    %cm_toggle_bit("Spring Ball", $7E0000+!SAMUS_ITEMS_COLLECTED, #$0002, #.routine)
-  .routine
-    LDA !SAMUS_ITEMS_EQUIPPED : EOR #$0002 : STA !SAMUS_ITEMS_EQUIPPED
-    RTL
+    %cm_equipment_item("Spring Ball", !ram_cm_spring, #$0002, #$FFFD)
 
 ti_screwattack:
-    %cm_toggle_bit("Screw Attack", $7E0000+!SAMUS_ITEMS_COLLECTED, #$0008, #.routine)
-  .routine
-    LDA !SAMUS_ITEMS_EQUIPPED : EOR #$0008 : STA !SAMUS_ITEMS_EQUIPPED
-    RTL
+    %cm_equipment_item("Screw Attack", !ram_cm_screw, #$0008, #$FFF7)
 
 ti_hijumpboots:
-    %cm_toggle_bit("Hi Jump Boots", $7E0000+!SAMUS_ITEMS_COLLECTED, #$0100, #.routine)
-  .routine
-    LDA !SAMUS_ITEMS_EQUIPPED : EOR #$0100 : STA !SAMUS_ITEMS_EQUIPPED
-    RTL
+    %cm_equipment_item("Hi Jump Boots", !ram_cm_hijump, #$0100, #$FEFF)
 
 ti_spacejump:
-    %cm_toggle_bit("Space Jump", $7E0000+!SAMUS_ITEMS_COLLECTED, #$0200, #.routine)
-  .routine
-    LDA !SAMUS_ITEMS_EQUIPPED : EOR #$0200 : STA !SAMUS_ITEMS_EQUIPPED
-    RTL
+    %cm_equipment_item("Space Jump", !ram_cm_space, #$0200, #$FDFF)
 
 ti_speedbooster:
-    %cm_toggle_bit("Speed Booster", $7E0000+!SAMUS_ITEMS_COLLECTED, #$2000, #.routine)
-  .routine
-    LDA !SAMUS_ITEMS_EQUIPPED : EOR #$2000 : STA !SAMUS_ITEMS_EQUIPPED
-    RTL
+    %cm_equipment_item("Speed Booster", !ram_cm_speed, #$2000, #$DFFF)
 
 ti_grapple:
     %cm_toggle_bit("Grapple", $7E0000+!SAMUS_ITEMS_COLLECTED, #$4000, .routine)
@@ -847,25 +820,19 @@ ToggleBeamsMenu:
     %cm_header("TOGGLE BEAMS")
 
 tb_chargebeam:
-    %cm_toggle_bit("Charge", $7E0000+!SAMUS_BEAMS_COLLECTED, #$1000, #action_equip_safe_beams)
+    %cm_equipment_beam("Charge", !ram_cm_charge, #$1000, #$EFFF, #$100F)
 
 tb_icebeam:
-    %cm_toggle_bit("Ice", $7E0000+!SAMUS_BEAMS_COLLECTED, #$0002, #action_equip_safe_beams)
+    %cm_equipment_beam("Ice", !ram_cm_ice, #$0002, #$FFFD, #$100F)
 
 tb_wavebeam:
-    %cm_toggle_bit("Wave", $7E0000+!SAMUS_BEAMS_COLLECTED, #$0001, #action_equip_safe_beams)
+    %cm_equipment_beam("Wave", !ram_cm_wave, #$0001, #$FFFE, #$100F)
 
 tb_spazerbeam:
-    %cm_toggle_bit("Spazer", $7E0000+!SAMUS_BEAMS_COLLECTED, #$0004, #.routine)
-  .routine
-    AND #$1007 : STA !SAMUS_BEAMS_EQUIPPED
-    JML $90AC8D ; update beam gfx
+    %cm_equipment_beam("Spazer", !ram_cm_spazer, #$0004, #$FFFB, #$1007)
 
 tb_plasmabeam:
-    %cm_toggle_bit("Plasma", $7E0000+!SAMUS_BEAMS_COLLECTED, #$0008, #.routine)
-  .routine
-    AND #$100B : STA !SAMUS_BEAMS_EQUIPPED
-    JML $90AC8D ; update beam gfx
+    %cm_equipment_beam("Plasma", !ram_cm_plasma, #$0008, #$FFF7, #$100B)
 
 tb_glitchedbeams:
     %cm_submenu("Glitched Beams", #GlitchedBeamsMenu)

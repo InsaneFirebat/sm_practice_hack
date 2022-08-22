@@ -103,6 +103,8 @@ cm_init:
     LDA.w #MainMenu : STA !ram_cm_menu_stack
     LDA.w #MainMenu>>16 : STA !ram_cm_menu_bank
 
+    JSL SetupEquipmentMenus
+
     JSL cm_calculate_max
     JSL cm_set_etanks_and_reserve
 
@@ -1976,6 +1978,137 @@ cm_divide_100:
     ; 16-bit result
     LDA $4214
     RTS
+}
+
+SetupEquipmentMenus:
+{
+    LDA !SAMUS_ITEMS_COLLECTED : BIT #$0001 : BEQ .noVaria
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0001 : BNE .equipVaria
+    ; unequip
+    LDA #$0002 : STA !ram_cm_varia : BRA +
+  .equipVaria
+    LDA #$0001 : STA !ram_cm_varia : BRA +
+  .noVaria
+    LDA #$0000 : STA !ram_cm_varia
+
++   LDA !SAMUS_ITEMS_COLLECTED : BIT #$0020 : BEQ .noGravity
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0020 : BNE .equipGravity
+    ; unequip
+    LDA #$0002 : STA !ram_cm_gravity : BRA +
+  .equipGravity
+    LDA #$0001 : STA !ram_cm_gravity : BRA +
+  .noGravity
+    LDA #$0000 : STA !ram_cm_gravity
+
++   LDA !SAMUS_ITEMS_COLLECTED : BIT #$0004 : BEQ .noMorph
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0004 : BNE .equipMorph
+    ; unequip
+    LDA #$0002 : STA !ram_cm_morph : BRA +
+  .equipMorph
+    LDA #$0001 : STA !ram_cm_morph : BRA +
+  .noMorph
+    LDA #$0000 : STA !ram_cm_morph
+
++   LDA !SAMUS_ITEMS_COLLECTED : BIT #$1000 : BEQ .noBombs
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$1000 : BNE .equipBombs
+    ; unequip
+    LDA #$0002 : STA !ram_cm_bombs : BRA +
+  .equipBombs
+    LDA #$0001 : STA !ram_cm_bombs : BRA +
+  .noBombs
+    LDA #$0000 : STA !ram_cm_bombs
+
++   LDA !SAMUS_ITEMS_COLLECTED : BIT #$0002 : BEQ .noSpring
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0002 : BNE .equipSpring
+    ; unequip
+    LDA #$0002 : STA !ram_cm_spring : BRA +
+  .equipSpring
+    LDA #$0001 : STA !ram_cm_spring : BRA +
+  .noSpring
+    LDA #$0000 : STA !ram_cm_spring
+
++   LDA !SAMUS_ITEMS_COLLECTED : BIT #$0008 : BEQ .noScrew
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0008 : BNE .equipScrew
+    ; unequip
+    LDA #$0002 : STA !ram_cm_screw : BRA +
+  .equipScrew
+    LDA #$0001 : STA !ram_cm_screw : BRA +
+  .noScrew
+    LDA #$0000 : STA !ram_cm_screw
+
++   LDA !SAMUS_ITEMS_COLLECTED : BIT #$0100 : BEQ .noHiJump
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0100 : BNE .equipHiJump
+    ; unequip
+    LDA #$0002 : STA !ram_cm_hijump : BRA +
+  .equipHiJump
+    LDA #$0001 : STA !ram_cm_hijump : BRA +
+  .noHiJump
+    LDA #$0000 : STA !ram_cm_hijump
+
++   LDA !SAMUS_ITEMS_COLLECTED : BIT #$0200 : BEQ .noSpace
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0200 : BNE .equipSpace
+    ; unequip
+    LDA #$0002 : STA !ram_cm_space : BRA +
+  .equipSpace
+    LDA #$0001 : STA !ram_cm_space : BRA +
+  .noSpace
+    LDA #$0000 : STA !ram_cm_space
+
++   LDA !SAMUS_ITEMS_COLLECTED : BIT #$2000 : BEQ .noSpeed
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$2000 : BNE .equipSpeed
+    ; unequip
+    LDA #$0002 : STA !ram_cm_speed : BRA +
+  .equipSpeed
+    LDA #$0001 : STA !ram_cm_speed : BRA +
+  .noSpeed
+    LDA #$0000 : STA !ram_cm_speed
+
++   LDA !SAMUS_BEAMS_COLLECTED : BIT #$1000 : BEQ .noCharge
+    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$1000 : BNE .equipCharge
+    ; unequip
+    LDA #$0002 : STA !ram_cm_charge : BRA +
+  .equipCharge
+    LDA #$0001 : STA !ram_cm_charge : BRA +
+  .noCharge
+    LDA #$0000 : STA !ram_cm_charge
+
++   LDA !SAMUS_BEAMS_COLLECTED : BIT #$0002 : BEQ .noIce
+    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0002 : BNE .equipIce
+    ; unequip
+    LDA #$0002 : STA !ram_cm_ice : BRA +
+  .equipIce
+    LDA #$0001 : STA !ram_cm_ice : BRA +
+  .noIce
+    LDA #$0000 : STA !ram_cm_ice
+
++   LDA !SAMUS_BEAMS_COLLECTED : BIT #$0001 : BEQ .noWave
+    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0001 : BNE .equipWave
+    ; unequip
+    LDA #$0002 : STA !ram_cm_wave : BRA +
+  .equipWave
+    LDA #$0001 : STA !ram_cm_wave : BRA +
+  .noWave
+    LDA #$0000 : STA !ram_cm_wave
+
++   LDA !SAMUS_BEAMS_COLLECTED : BIT #$0004 : BEQ .noSpazer
+    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0004 : BNE .equipSpazer
+    ; unequip
+    LDA #$0002 : STA !ram_cm_spazer : BRA +
+  .equipSpazer
+    LDA #$0001 : STA !ram_cm_spazer : BRA +
+  .noSpazer
+    LDA #$0000 : STA !ram_cm_spazer
+
++   LDA !SAMUS_BEAMS_COLLECTED : BIT #$0008 : BEQ .noPlasma
+    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0008 : BNE .equipPlasma
+    ; unequip
+    LDA #$0002 : STA !ram_cm_plasma : BRA +
+  .equipPlasma
+    LDA #$0001 : STA !ram_cm_plasma : BRA +
+  .noPlasma
+    LDA #$0000 : STA !ram_cm_plasma
+
++   RTL
 }
 
 
