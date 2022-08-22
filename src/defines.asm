@@ -17,7 +17,7 @@
 !VERSION_MINOR = 4
 !VERSION_BUILD = 2
 !VERSION_REV_1 = 3
-!VERSION_REV_2 = 1
+!VERSION_REV_2 = 2
 
 
 ; ---------
@@ -522,7 +522,7 @@
 !sram_compressed_graphics = !SRAM_START+$48
 !sram_lag_counter_mode = !SRAM_START+$4A
 !sram_preset_map_tiles = !SRAM_START+$4C
-!ram_game_loop_extras = !SRAM_START+$4E
+!ram_game_mode_extras = !SRAM_START+$4E ; moved here to protect against load_state
 
 ; ^ FREE SPACE ^ up to $F03000
 

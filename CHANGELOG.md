@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.32] Fixed controller shortcuts after loading a savestate by idlechild
+* [2.4.2.32] Fixed Spazer+Plasma protection running twice
 * [2.4.2.31] Three way toggles for equipment and beams
 * [2.4.2.30] Fixed missing InfoHUD menu
 * [2.4.2.29] Added options to control slowdown mode from the menu
