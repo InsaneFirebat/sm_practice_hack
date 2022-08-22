@@ -120,7 +120,10 @@ MainMenu:
     dw #mm_goto_misc
     dw #mm_goto_sprites
     dw #mm_goto_layout
-;    dw #mm_goto_infohud
+if !FEATURE_VANILLAHUD
+else
+    dw #mm_goto_infohud
+endif
     dw #mm_goto_gamemenu
     dw #mm_goto_rngmenu
     dw #mm_goto_timecontrol
@@ -143,7 +146,10 @@ MainMenuBanks:
     dw #MiscMenu>>16
     dw #SpritesMenu>>16
     dw #LayoutMenu>>16
-;    dw #InfoHudMenu>>16
+if !FEATURE_VANILLAHUD
+else
+    dw #InfoHudMenu>>16
+endif
     dw #GameMenu>>16
     dw #RngMenu>>16
     dw #SlowdownMenu>>16

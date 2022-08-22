@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.30] Fixed missing InfoHUD menu
 * [2.4.2.29] Added options to control slowdown mode from the menu
 * [2.4.2.29] Added an option to build the practice hack with a 100% vanilla HUD
 * [2.4.2.28] Added Arm Pump Trained to InfoHUD Modes by idlechild
