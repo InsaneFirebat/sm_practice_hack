@@ -286,7 +286,7 @@ macro cm_equipment_beam(name, addr, bitmask, inverse, and)
     ; unquipped
     LDA !SAMUS_BEAMS_EQUIPPED : AND <inverse> : STA !SAMUS_BEAMS_EQUIPPED
     LDA !SAMUS_BEAMS_COLLECTED : ORA <bitmask> : STA !SAMUS_BEAMS_COLLECTED
-    JML action_equip_safe_beams
+    JML $90AC8D ; update beam gfx
 
   .equipped
     LDA !SAMUS_BEAMS_EQUIPPED : ORA <bitmask> : AND <and> : STA !SAMUS_BEAMS_EQUIPPED
@@ -296,7 +296,7 @@ macro cm_equipment_beam(name, addr, bitmask, inverse, and)
   .unobtained
     LDA !SAMUS_BEAMS_EQUIPPED : AND <inverse> : STA !SAMUS_BEAMS_EQUIPPED
     LDA !SAMUS_BEAMS_COLLECTED : AND <inverse> : STA !SAMUS_BEAMS_COLLECTED
-    JML action_equip_safe_beams
+    JML $90AC8D ; update beam gfx
 endmacro
 
 
