@@ -125,7 +125,7 @@ post_load_state:
     JSL MenuRNG ; rerandomize hack RNG
 
   .done
-    JSL init_suit_properties_ram
+    JSL init_wram_based_on_sram
 
     ; Freeze inputs if necessary
     LDA !ram_freeze_on_load : BEQ .return

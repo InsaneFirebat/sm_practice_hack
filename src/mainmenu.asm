@@ -3082,6 +3082,13 @@ ctrl_reset_defaults:
     %sfxquake()
     RTL
 
+init_wram_based_on_sram:
+{
+    JSL init_suit_properties_ram
+    JSL GameModeExtras
+    RTL
+}
+
 
 ; ----------
 ; Firebat Menu   IFBMenu:

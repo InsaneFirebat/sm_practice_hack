@@ -93,7 +93,7 @@
 !ram_draygon_rng_right = !WRAM_START+$70
 
 !ram_game_loop_extras = !WRAM_START+$72
-;!FREE_SPACE = !WRAM_START+$7A
+!ram_game_mode_extras = !WRAM_START+$74
 !ram_sprite_features_active = !WRAM_START+$76
 !ram_fix_scroll_offsets = !WRAM_START+$78
 ;!FREE_SPACE = !WRAM_START+$7A
@@ -522,7 +522,6 @@
 !sram_compressed_graphics = !SRAM_START+$48
 !sram_lag_counter_mode = !SRAM_START+$4A
 !sram_preset_map_tiles = !SRAM_START+$4C
-!ram_game_mode_extras = !SRAM_START+$4E ; moved here to protect against load_state
 
 ; ^ FREE SPACE ^ up to $F03000
 

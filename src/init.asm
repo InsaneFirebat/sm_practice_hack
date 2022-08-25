@@ -77,7 +77,7 @@ endif
 
 init_nonzero_wram:
 {
-    JSL init_suit_properties_ram
+    JSL init_wram_based_on_sram
 
     ; RAM $7E0000 fluctuates so it is not a good default value
     LDA #!ENEMY_HP : STA !ram_watch_left ; Enemy HP
@@ -98,8 +98,7 @@ init_nonzero_wram:
     LDA #$0001
     STA !ram_soundtest_lib1 : STA !ram_soundtest_lib2 : STA !ram_soundtest_lib3
 
-    ; Check if any less common controller shortcuts are configured
-    JML GameModeExtras
+    RTL
 }
 
 init_sram:
