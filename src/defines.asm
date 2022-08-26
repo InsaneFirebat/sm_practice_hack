@@ -97,7 +97,7 @@
 !ram_sprite_features_active = !WRAM_START+$76
 !ram_fix_scroll_offsets = !WRAM_START+$78
 
-;!FREE_SPACE = !WRAM_START+$7A
+!ram_space_pants_enabled = !WRAM_START+$7A
 
 !ram_pacifist = !WRAM_START+$7C
 !ram_freeze_on_load = !WRAM_START+$7E
