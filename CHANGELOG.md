@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.34] Allow non-SRAM backed settings to persist after loadstate
+* [2.4.2.34] Allow Loud Pants to be used independently by NobodyNada
 * [2.4.2.33] Fixed graphics/crashes when loading a tinystate from one boss fight to another
 * [2.4.2.32] Fixed controller shortcuts after loading a savestate by idlechild
 * [2.4.2.32] Fixed Spazer+Plasma protection running twice
