@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.4.2.33] Fixed graphics/crashes when loading a tinystate from one boss fight to another
 * [2.4.2.32] Fixed controller shortcuts after loading a savestate by idlechild
 * [2.4.2.32] Fixed Spazer+Plasma protection running twice
 * [2.4.2.31] Three way toggles for equipment and beams
