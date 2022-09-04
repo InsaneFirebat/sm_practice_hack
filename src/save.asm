@@ -151,10 +151,10 @@ register_restore_return:
 
 save_state:
 {
-    PEA $0000 : PLB : PLB
+    %a8()
+    LDA #$00 : PHA : PLB
 
     ; Store DMA registers to SRAM
-    %a8()
     LDY #$0000 : TYX
 
   .save_dma_regs
@@ -240,26 +240,24 @@ save_write_table:
 
 save_return:
 {
-    PEA $0000
-    PLB : PLB
+    PEA $0000 : PLB : PLB
 
     %ai16()
     LDA !ram_room_has_set_rng : STA !sram_save_has_set_rng
 
     LDA #$5AFE : STA !SRAM_SAVED_STATE
 
-    TSC
-    STA !SRAM_SAVED_SP
+    TSC : STA !SRAM_SAVED_SP
     JMP register_restore_return
 }
 
 load_state:
 {
     JSR pre_load_state
-    PEA $0000
-    PLB : PLB
 
     %a8()
+    LDA #$00 : PHA : PLB
+
     LDX #load_write_table
     JMP run_vm
 }
@@ -330,14 +328,12 @@ load_return:
     %ai16()
     LDA !SRAM_SAVED_SP : TCS
 
-    PEA $0000
-    PLB : PLB
-
     ; rewrite inputs so that holding load won't keep loading, as well as rewriting saving input to loading input
     LDA !SS_INPUT_CUR : EOR !sram_ctrl_save_state : ORA !sram_ctrl_load_state
     STA !SS_INPUT_CUR : STA !SS_INPUT_NEW : STA !SS_INPUT_PREV
 
     %a8()
+    LDA #$00 : PHA : PLB
     LDX #$0000 : TXY
 
   .load_dma_regs

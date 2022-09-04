@@ -243,10 +243,10 @@ register_restore_return:
 
 save_state:
 {
-    PEA $0000 : PLB : PLB
+    %a8()
+    LDA #$00 : PHA : PLB
 
     ; Store DMA registers to SRAM
-    %a8()
     LDY #$0000 : TYX
 
   .save_dma_regs
@@ -323,9 +323,9 @@ save_return:
 load_state:
 {
     JSR pre_load_state
-    PEA $0000 : PLB : PLB
 
     %a8()
+    LDA #$00 : PHA : PLB
     LDX #load_write_table
     JMP run_vm
 }
@@ -487,8 +487,7 @@ tinystates_preload_bg_data:
 tinystates_mirror_bg_data:
 ; NOT PRESENT IN MASTER BRANCH
 {
-    PHB
-    PEA $7F00 : PLB : PLB
+    PHB : PEA $7F00 : PLB : PLB
     LDA $0000 : TAX
     LSR : ADC $0000 : ADC $0000 : TAY
     BRA .startLoop
