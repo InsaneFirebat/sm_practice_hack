@@ -366,7 +366,7 @@ cm_tilemap_bg:
     ; bot right corner = $6BC
 	; Empty out !ram_tilemap_buffer
     LDX #$07FE
-    LDA #$000E
+    LDA !MENU_CLEAR
   .clearBG3
     STA !ram_tilemap_buffer,X
     DEX #2 : BPL .clearBG3
@@ -582,18 +582,10 @@ draw_toggle:
     ; Set position for ON/OFF
     TXA : CLC : ADC #$002E : TAX
 
-    %a8()
-    ; set palette
-    LDA !DP_Palette
-    STA !ram_tilemap_buffer+1,X
-    STA !ram_tilemap_buffer+3,X
-    STA !ram_tilemap_buffer+5,X
-
     ; grab the value at that memory address
     LDA [!DP_Address] : CMP !DP_ToggleValue : BEQ .checked
 
     ; Off
-    %a16()
     LDA #$244B : STA !ram_tilemap_buffer+0,X
     LDA #$244D : STA !ram_tilemap_buffer+2,X
     LDA #$244D : STA !ram_tilemap_buffer+4,X
@@ -601,7 +593,6 @@ draw_toggle:
 
   .checked
     ; On
-    %a16()
     LDA #$384B : STA !ram_tilemap_buffer+2,X
     LDA #$384C : STA !ram_tilemap_buffer+4,X
     RTS
@@ -637,7 +628,6 @@ draw_toggle_bit:
 
   .checked
     ; On
-    %a16()
     LDA #$384B : STA !ram_tilemap_buffer+2,X
     LDA #$384C : STA !ram_tilemap_buffer+4,X
     RTS
@@ -662,18 +652,10 @@ draw_toggle_inverted:
     ; Set position for ON/OFF
     TXA : CLC : ADC #$002E : TAX
 
-    %a8()
-    ; set palette
-    LDA !DP_Palette
-    STA !ram_tilemap_buffer+1,X
-    STA !ram_tilemap_buffer+3,X
-    STA !ram_tilemap_buffer+5,X
-
     ; grab the value at that memory address
     LDA [!DP_Address] : CMP !DP_ToggleValue : BNE .checked
 
     ; Off
-    %a16()
     LDA #$244B : STA !ram_tilemap_buffer+0,X
     LDA #$244D : STA !ram_tilemap_buffer+2,X
     LDA #$244D : STA !ram_tilemap_buffer+4,X
@@ -681,7 +663,6 @@ draw_toggle_inverted:
 
   .checked
     ; On
-    %a16()
     LDA #$384B : STA !ram_tilemap_buffer+2,X
     LDA #$384C : STA !ram_tilemap_buffer+4,X
     RTS
@@ -717,7 +698,6 @@ draw_toggle_bit_inverted:
 
   .checked
     ; On
-    %a16()
     LDA #$384B : STA !ram_tilemap_buffer+4,X
     LDA #$384C : STA !ram_tilemap_buffer+6,X
     RTS
@@ -1075,7 +1055,7 @@ draw_submenu:
 
 cm_draw_text:
 ; X = pointer to tilemap area (STA !ram_tilemap_buffer,X)
-  %a8()
+    %a8()
     LDY #$0000
     ; terminator
     LDA [!DP_CurrentMenu],Y : INY : CMP #$FF : BEQ .end
@@ -1984,7 +1964,7 @@ SetupEquipmentMenus:
 {
     LDA !SAMUS_ITEMS_COLLECTED : BIT #$0001 : BEQ .noVaria
     LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0001 : BNE .equipVaria
-    ; unequip
+    ; unequip Varia
     LDA #$0002 : STA !ram_cm_varia : BRA +
   .equipVaria
     LDA #$0001 : STA !ram_cm_varia : BRA +
@@ -1993,7 +1973,7 @@ SetupEquipmentMenus:
 
 +   LDA !SAMUS_ITEMS_COLLECTED : BIT #$0020 : BEQ .noGravity
     LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0020 : BNE .equipGravity
-    ; unequip
+    ; unequip Gravity
     LDA #$0002 : STA !ram_cm_gravity : BRA +
   .equipGravity
     LDA #$0001 : STA !ram_cm_gravity : BRA +
@@ -2002,7 +1982,7 @@ SetupEquipmentMenus:
 
 +   LDA !SAMUS_ITEMS_COLLECTED : BIT #$0004 : BEQ .noMorph
     LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0004 : BNE .equipMorph
-    ; unequip
+    ; unequip Morph
     LDA #$0002 : STA !ram_cm_morph : BRA +
   .equipMorph
     LDA #$0001 : STA !ram_cm_morph : BRA +
@@ -2011,7 +1991,7 @@ SetupEquipmentMenus:
 
 +   LDA !SAMUS_ITEMS_COLLECTED : BIT #$1000 : BEQ .noBombs
     LDA !SAMUS_ITEMS_EQUIPPED : BIT #$1000 : BNE .equipBombs
-    ; unequip
+    ; unequip Bombs
     LDA #$0002 : STA !ram_cm_bombs : BRA +
   .equipBombs
     LDA #$0001 : STA !ram_cm_bombs : BRA +
@@ -2020,7 +2000,7 @@ SetupEquipmentMenus:
 
 +   LDA !SAMUS_ITEMS_COLLECTED : BIT #$0002 : BEQ .noSpring
     LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0002 : BNE .equipSpring
-    ; unequip
+    ; unequip Spring
     LDA #$0002 : STA !ram_cm_spring : BRA +
   .equipSpring
     LDA #$0001 : STA !ram_cm_spring : BRA +
@@ -2029,7 +2009,7 @@ SetupEquipmentMenus:
 
 +   LDA !SAMUS_ITEMS_COLLECTED : BIT #$0008 : BEQ .noScrew
     LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0008 : BNE .equipScrew
-    ; unequip
+    ; unequip Screw
     LDA #$0002 : STA !ram_cm_screw : BRA +
   .equipScrew
     LDA #$0001 : STA !ram_cm_screw : BRA +
@@ -2038,7 +2018,7 @@ SetupEquipmentMenus:
 
 +   LDA !SAMUS_ITEMS_COLLECTED : BIT #$0100 : BEQ .noHiJump
     LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0100 : BNE .equipHiJump
-    ; unequip
+    ; unequip HiJump
     LDA #$0002 : STA !ram_cm_hijump : BRA +
   .equipHiJump
     LDA #$0001 : STA !ram_cm_hijump : BRA +
@@ -2047,7 +2027,7 @@ SetupEquipmentMenus:
 
 +   LDA !SAMUS_ITEMS_COLLECTED : BIT #$0200 : BEQ .noSpace
     LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0200 : BNE .equipSpace
-    ; unequip
+    ; unequip Space
     LDA #$0002 : STA !ram_cm_space : BRA +
   .equipSpace
     LDA #$0001 : STA !ram_cm_space : BRA +
@@ -2056,7 +2036,7 @@ SetupEquipmentMenus:
 
 +   LDA !SAMUS_ITEMS_COLLECTED : BIT #$2000 : BEQ .noSpeed
     LDA !SAMUS_ITEMS_EQUIPPED : BIT #$2000 : BNE .equipSpeed
-    ; unequip
+    ; unequip Speed
     LDA #$0002 : STA !ram_cm_speed : BRA +
   .equipSpeed
     LDA #$0001 : STA !ram_cm_speed : BRA +
@@ -2065,7 +2045,7 @@ SetupEquipmentMenus:
 
 +   LDA !SAMUS_BEAMS_COLLECTED : BIT #$1000 : BEQ .noCharge
     LDA !SAMUS_BEAMS_EQUIPPED : BIT #$1000 : BNE .equipCharge
-    ; unequip
+    ; unequip Charge
     LDA #$0002 : STA !ram_cm_charge : BRA +
   .equipCharge
     LDA #$0001 : STA !ram_cm_charge : BRA +
@@ -2074,7 +2054,7 @@ SetupEquipmentMenus:
 
 +   LDA !SAMUS_BEAMS_COLLECTED : BIT #$0002 : BEQ .noIce
     LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0002 : BNE .equipIce
-    ; unequip
+    ; unequip Ice
     LDA #$0002 : STA !ram_cm_ice : BRA +
   .equipIce
     LDA #$0001 : STA !ram_cm_ice : BRA +
@@ -2083,7 +2063,7 @@ SetupEquipmentMenus:
 
 +   LDA !SAMUS_BEAMS_COLLECTED : BIT #$0001 : BEQ .noWave
     LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0001 : BNE .equipWave
-    ; unequip
+    ; unequip Wave
     LDA #$0002 : STA !ram_cm_wave : BRA +
   .equipWave
     LDA #$0001 : STA !ram_cm_wave : BRA +
@@ -2092,7 +2072,7 @@ SetupEquipmentMenus:
 
 +   LDA !SAMUS_BEAMS_COLLECTED : BIT #$0004 : BEQ .noSpazer
     LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0004 : BNE .equipSpazer
-    ; unequip
+    ; unequip Spazer
     LDA #$0002 : STA !ram_cm_spazer : BRA +
   .equipSpazer
     LDA #$0001 : STA !ram_cm_spazer : BRA +
@@ -2101,7 +2081,7 @@ SetupEquipmentMenus:
 
 +   LDA !SAMUS_BEAMS_COLLECTED : BIT #$0008 : BEQ .noPlasma
     LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0008 : BNE .equipPlasma
-    ; unequip
+    ; unequip Plasma
     LDA #$0002 : STA !ram_cm_plasma : BRA +
   .equipPlasma
     LDA #$0001 : STA !ram_cm_plasma : BRA +

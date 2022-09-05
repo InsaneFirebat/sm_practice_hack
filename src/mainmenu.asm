@@ -344,27 +344,27 @@ presets_current:
     dl #!sram_preset_category
     dw #.routine
     db #$28, "CURRENT PRESET", #$FF
-        db #$28, "   KPDR 21%", #$FF
-        db #$28, "   KPDR 22%", #$FF
-        db #$28, "   PRKD 19%", #$FF
-        db #$28, "   PRKD 20%", #$FF
-        db #$28, "  ANY% PKRD", #$FF
-        db #$28, "     SPAZER", #$FF
-        db #$28, "   KPDR ICE", #$FF
-        db #$28, " GT CLASSIC", #$FF
-        db #$28, "    GT MAX%", #$FF
-        db #$28, " 100% EARLY", #$FF
-        db #$28, "  100% LATE", #$FF
-        db #$28, "   100% MAP", #$FF
-        db #$28, "    14% ICE", #$FF
-        db #$28, "  14% SPEED", #$FF
-        db #$28, "        RBO", #$FF
-        db #$28, " NG+ PLASMA", #$FF
-        db #$28, "  NG+ HYPER", #$FF
-        db #$28, " NIN POWER%", #$FF
-        db #$28, "  BOSS KPDR", #$FF
-        db #$28, "  BOSS PKDR", #$FF
-        db #$28, "  BOSS PRKD", #$FF
+    db #$28, "   KPDR 21%", #$FF
+    db #$28, "   KPDR 22%", #$FF
+    db #$28, "   PRKD 19%", #$FF
+    db #$28, "   PRKD 20%", #$FF
+    db #$28, "  ANY% PKRD", #$FF
+    db #$28, "     SPAZER", #$FF
+    db #$28, "   KPDR ICE", #$FF
+    db #$28, " GT CLASSIC", #$FF
+    db #$28, "    GT MAX%", #$FF
+    db #$28, " 100% EARLY", #$FF
+    db #$28, "  100% LATE", #$FF
+    db #$28, "   100% MAP", #$FF
+    db #$28, "    14% ICE", #$FF
+    db #$28, "  14% SPEED", #$FF
+    db #$28, "        RBO", #$FF
+    db #$28, " NG+ PLASMA", #$FF
+    db #$28, "  NG+ HYPER", #$FF
+    db #$28, " NIN POWER%", #$FF
+    db #$28, "  BOSS KPDR", #$FF
+    db #$28, "  BOSS PKDR", #$FF
+    db #$28, "  BOSS PRKD", #$FF
     db #$FF
   .routine
     LDA #$0000 : STA !sram_last_preset
@@ -1136,11 +1136,11 @@ misc_metronome_sfx:
     dl #!sram_metronome_sfx
     dw #$0000
     db #$28, "Metronome SFX", #$FF
-        db #$28, "    MISSILE", #$FF
-        db #$28, "      CLICK", #$FF
-        db #$28, "       BEEP", #$FF
-        db #$28, " POWER BEAM", #$FF
-        db #$28, "     SPAZER", #$FF
+    db #$28, "    MISSILE", #$FF
+    db #$28, "      CLICK", #$FF
+    db #$28, "       BEEP", #$FF
+    db #$28, " POWER BEAM", #$FF
+    db #$28, "     SPAZER", #$FF
     db #$FF
 
 misc_killenemies:
@@ -1514,7 +1514,6 @@ DisplayModeMenu:
 
 DisplayModeMenu2:
     dw ihmode_countdamage
-    dw ihmode_ridleygrab
 ;    dw ihmode_dboost ; (unfinished)
     dw ihmode_armpump
     dw ihmode_ramwatch
@@ -1589,15 +1588,12 @@ ihmode_shottimer:
 ihmode_countdamage:
     %cm_jsl("Boss Damage Counter", #action_select_infohud_mode, #$0014)
 
-ihmode_ridleygrab:
-    %cm_jsl("Ridley Death Grab Attempts", #action_select_infohud_mode, #$0015)
-
-!IH_MODE_RAMWATCH_INDEX = #$0016
+!IH_MODE_RAMWATCH_INDEX = #$0015
 ihmode_ramwatch:
-    %cm_jsl("Custom RAM Watch", #action_select_infohud_mode, #$0016)
+    %cm_jsl("Custom RAM Watch", #action_select_infohud_mode, #$0015)
 
 ;ihmode_dboost:
-;    %cm_jsl("WIP - Damage Boost Trainer", #action_select_infohud_mode, #$0017)
+;    %cm_jsl("WIP - Damage Boost Trainer", #action_select_infohud_mode, #$0016)
 
 ihmode_GOTO_PAGE_ONE:
     %cm_jsl("GOTO PAGE TWO", ihmode_GOTO_PAGE_TWO_routine, #DisplayModeMenu)
@@ -1643,7 +1639,6 @@ ih_display_mode:
     db #$28, "   ARM PUMP", #$FF
     db #$28, " SHOT TIMER", #$FF
     db #$28, "DMG COUNTER", #$FF
-    db #$28, "RIDLEY GRAB", #$FF
     db #$28, "  RAM WATCH", #$FF
 ;    db #$28, "WIP D-BOOST", #$FF
     db #$FF
@@ -1798,7 +1793,6 @@ ih_superhud_bottom_selector:
     db #$28, "  WALL JUMP", #$FF
     db #$28, " SHOT TIMER", #$FF
     db #$28, "DMG COUNTER", #$FF
-    db #$28, "RIDLEY GRAB", #$FF
     db #$28, "  RAM WATCH", #$FF
     db #$28, "   MOAT CWJ", #$FF
     db #$28, "GATE GLITCH", #$FF
@@ -1827,7 +1821,6 @@ SuperHUDBottomMenu:
     dw ih_superhud_walljump
     dw ih_superhud_shottimer
     dw ih_superhud_countdamage
-    dw ih_superhud_ridleygrab
     dw ih_superhud_ramwatch
     dw ih_superhud_moatcwj
     dw ih_superhud_gateglitch
@@ -1881,32 +1874,29 @@ ih_superhud_shottimer:
 ih_superhud_countdamage:
     %cm_jsl("Boss Damage Counter", #action_select_superhud_bottom, #$000D)
 
-ih_superhud_ridleygrab:
-    %cm_jsl("Ridley Death Grab Attempts", #action_select_superhud_bottom, #$000E)
-
 ih_superhud_ramwatch:
-    %cm_jsl("Custom RAM Watch", #action_select_superhud_bottom, #$000F)
+    %cm_jsl("Custom RAM Watch", #action_select_superhud_bottom, #$000E)
 
 ih_superhud_moatcwj:
-    %cm_jsl("Moat CWJ", #action_select_superhud_bottom, #$0010)
+    %cm_jsl("Moat CWJ", #action_select_superhud_bottom, #$000F)
 
 ih_superhud_gateglitch:
-    %cm_jsl("Gate Glitch", #action_select_superhud_bottom, #$0011)
+    %cm_jsl("Gate Glitch", #action_select_superhud_bottom, #$0010)
 
 ih_superhud_tacotank:
-    %cm_jsl("Taco Tank", #action_select_superhud_bottom, #$0012)
+    %cm_jsl("Taco Tank", #action_select_superhud_bottom, #$0011)
 
 ih_superhud_robotflush:
-    %cm_jsl("Robot Flush", #action_select_superhud_bottom, #$0013)
+    %cm_jsl("Robot Flush", #action_select_superhud_bottom, #$0012)
 
 ih_superhud_elevatorcf:
-    %cm_jsl("Elevator Crystal Flash", #action_select_superhud_bottom, #$0014)
+    %cm_jsl("Elevator Crystal Flash", #action_select_superhud_bottom, #$0013)
 
 ih_superhud_botwooncf:
-    %cm_jsl("Botwoon Crystal Flash", #action_select_superhud_bottom, #$0015)
+    %cm_jsl("Botwoon Crystal Flash", #action_select_superhud_bottom, #$0014)
 
 ih_superhud_doorskip:
-    %cm_jsl("Parlor Door Skip", #action_select_superhud_bottom, #$0016)
+    %cm_jsl("Parlor Door Skip", #action_select_superhud_bottom, #$0015)
 
 action_select_superhud_bottom:
 {
@@ -1930,7 +1920,6 @@ ih_superhud_middle_selector:
     db #$28, "     CHARGE", #$FF
     db #$28, "       DASH", #$FF
     db #$28, "   COOLDOWN", #$FF
-    db #$28, "RIDLEY GRAB", #$FF
     db #$FF
 
 ih_superhud_middle_submenu:
@@ -1947,7 +1936,6 @@ SuperHUDMiddleMenu:
     dw ih_superhud_middle_chargetimer
     dw ih_superhud_middle_dashcounter
     dw ih_superhud_middle_cooldowncounter
-    dw ih_superhud_middle_ridleygrab
     dw #$0000
     %cm_header("MIDDLE DISPLAY MODE")
 
@@ -1980,9 +1968,6 @@ ih_superhud_middle_dashcounter:
 
 ih_superhud_middle_cooldowncounter:
     %cm_jsl("Cooldown Timer", #action_select_superhud_middle, #$0009)
-
-ih_superhud_middle_ridleygrab:
-    %cm_jsl("Ridley Death Grab Attempts", #action_select_superhud_middle, #$000A)
     
 action_select_superhud_middle:
 {
@@ -2006,7 +1991,6 @@ ih_superhud_top_selector:
     db #$28, "     CHARGE", #$FF
     db #$28, "       DASH", #$FF
     db #$28, "   COOLDOWN", #$FF
-    db #$28, "RIDLEY GRAB", #$FF
     db #$FF
 
 ih_superhud_top_submenu:
@@ -2023,7 +2007,6 @@ SuperHUDTopMenu:
     dw ih_superhud_top_chargetimer
     dw ih_superhud_top_dashcounter
     dw ih_superhud_top_cooldowncounter
-    dw ih_superhud_top_ridleygrab
     dw #$0000
     %cm_header("TOP DISPLAY MODE")
 
@@ -2056,9 +2039,6 @@ ih_superhud_top_dashcounter:
 
 ih_superhud_top_cooldowncounter:
     %cm_jsl("Cooldown Timer", #action_select_superhud_top, #$0009)
-
-ih_superhud_top_ridleygrab:
-    %cm_jsl("Ridley Death Grab Attempts", #action_select_superhud_top, #$000A)
 
 ih_superhud_enable:
     %cm_jsl("Enable Super HUD", .routine, #$0001)

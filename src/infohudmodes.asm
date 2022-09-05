@@ -26,7 +26,6 @@
     dw status_armpump
     dw status_shottimer
     dw status_countdamage
-    dw status_ridleygrab
     dw status_ramwatch
 ;    dw status_dboost
 
