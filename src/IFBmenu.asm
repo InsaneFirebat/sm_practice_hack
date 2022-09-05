@@ -13,7 +13,7 @@ else
     dw #ifb_customizehud
 endif
     dw #$FFFF
-;    dw #ifb_brb
+    dw #ifb_brb
     dw #ifb_soundtest
     dw #ifb_presetrando
     dw #ifb_debugteleport
@@ -119,6 +119,7 @@ BRBMenu:
     dw #ifb_game_music_toggle
     dw #$0000
     %cm_header("BRB SCREEN MENU")
+    %cm_footer("CONTACT IFB TO CUSTOMIZE")
 
 ifb_brb_screen:
     %cm_jsl("Launch BRB Screen", .routine, #0)
@@ -134,9 +135,9 @@ ifb_brb_timer_mode:
     dl #!ram_cm_brb_timer_mode
     dw #$0000
     db #$28, "Timer Mode", #$FF
-        db #$28, "        OFF", #$FF
-        db #$28, "   COUNT UP", #$FF
-        db #$28, " COUNT DOWN", #$FF
+    db #$28, "        OFF", #$FF
+    db #$28, "   COUNT UP", #$FF
+    db #$28, " COUNT DOWN", #$FF
     db #$FF
 
 ifb_brb_timer_min:
@@ -416,9 +417,9 @@ presetrando_beampref:
     dl #!sram_presetrando_beampref
     dw #$0000
     db #$28, "Beam Preference", #$FF
-        db #$28, "     RANDOM", #$FF
-        db #$28, "     SPAZER", #$FF
-        db #$28, "     PLASMA", #$FF
+    db #$28, "     RANDOM", #$FF
+    db #$28, "     SPAZER", #$FF
+    db #$28, "     PLASMA", #$FF
     db #$FF
 
 presetrando_etanks: 

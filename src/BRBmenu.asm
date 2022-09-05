@@ -67,7 +67,7 @@ cm_brb_loop:
 
   .forceIncScreen
     LDA !ram_cm_brb_screen : INC : STA !ram_cm_brb_screen
-    CMP #$000F : BMI .loop ; total screens
+    CMP #$0007 : BMI .loop ; total screens
     LDA #$0000
     STA !ram_cm_brb_screen : STA !ram_cm_brb_timer
     JMP .loop
@@ -96,7 +96,7 @@ cm_tilemap_brb:
 
     ; Cycle screen text
     LDA !ram_cm_brb_screen : INC : STA !ram_cm_brb_screen
-    CMP #$0008 : BMI +
+    CMP #$0007 : BMI + ; total screens
     LDA #$0000 : STA !ram_cm_brb_screen
 
     ; Cycle menu palette
@@ -356,12 +356,12 @@ cm_scroll_BG3:
 ; -------------
 
 BRB_common_1:
-    table ../resources/customfont.tbl
-    db #$28, "      InsaneFirebat", #$FF
-    table ../resources/normal.tbl
+    table ../resources/header.tbl
+    db #$28, "       The Streamer", #$FF
 
 BRB_common_2:
     db #$28, "    Will Be Right Back", #$FF
+    table ../resources/normal.tbl
 
 BRBTilemapAddress:
     dw #BRB_screen_01
@@ -371,59 +371,27 @@ BRBTilemapAddress:
     dw #BRB_screen_05
     dw #BRB_screen_06
     dw #BRB_screen_07
-    dw #BRB_screen_08
-    dw #BRB_screen_09
-    dw #BRB_screen_0A
-    dw #BRB_screen_0B
-    dw #BRB_screen_0C
-    dw #BRB_screen_0D
-    dw #BRB_screen_0E
-    dw #BRB_screen_0F
 
 BRB_screen_01:
-    db #$28, "GT Classic Discord Server", #$FF
-
-BRB_screen_02:
-    db #$28, "Find the practice hack at", #$FF
-
-BRB_screen_03:
-    db #$28, "  Control Schemes for SM", #$FF
-
-BRB_screen_04:
     db #$28, "   SM Speedrunning Wiki", #$FF
 
+BRB_screen_02:
+    db #$28, "  SM Speedrunning Discord", #$FF
+
+BRB_screen_03:
+    db #$28, "Find the practice hack at", #$FF
+
+BRB_screen_04:
+    db #$28, "  Control Schemes for SM", #$FF
+
 BRB_screen_05:
-    db #$28, "    My YouTube channel", #$FF
+    db #$28, "Support FUNtoon on Patreon", #$FF
 
 BRB_screen_06:
-    db #$28, "     Find me on Steam", #$FF
-
-BRB_screen_07:
     db #$28, " Crazy chain damage clips", #$FF
 
-BRB_screen_08:
-    db #$28, "Ask me how to get a custom", #$FF
-
-BRB_screen_09:
-    db #$28, "  Speedrun any SM hacks?", #$FF
-
-BRB_screen_0A:
-    db #$28, "If you have any questions,", #$FF
-
-BRB_screen_0B:
-    db #$28, " My SRL race stats for SM", #$FF
-
-BRB_screen_0C:
-    db #$28, "  Disney's Aladdin (SNES)", #$FF
-
-BRB_screen_0D:
-    db #$28, "   The Lion King (SNES)", #$FF
-
-BRB_screen_0E:
-    db #$28, "Great Circus Mystery (WIP)", #$FF
-
-BRB_screen_0F:
-    db #$28, "Super Castlevania IV (WIP)", #$FF
+BRB_screen_07:
+    db #$28, " Customized practice hacks", #$FF
 
 BRBTilemapAddress2:
     dw #BRB_screen2_01
@@ -433,59 +401,28 @@ BRBTilemapAddress2:
     dw #BRB_screen2_05
     dw #BRB_screen2_06
     dw #BRB_screen2_07
-    dw #BRB_screen2_08
-    dw #BRB_screen2_09
-    dw #BRB_screen2_0A
-    dw #BRB_screen2_0B
-    dw #BRB_screen2_0C
-    dw #BRB_screen2_0D
-    dw #BRB_screen2_0E
-    dw #BRB_screen2_0F
 
 BRB_screen2_01:
-    db #$28, "  GTCdiscord.spazer.link", #$FF
-
-BRB_screen2_02:
-    db #$28, "  smpractice.speedga.me", #$FF
-
-BRB_screen2_03:
-    db #$28, "   controls.spazer.link", #$FF
-
-BRB_screen2_04:
     db #$28, "   wiki.supermetroid.run", #$FF
 
+BRB_screen2_02:
+    db #$28, "   SMDiscord.spazer.link", #$FF
+
+BRB_screen2_03:
+    db #$28, "  smpractice.speedga.me", #$FF
+
+BRB_screen2_04:
+    db #$28, "   controls.spazer.link", #$FF
+
 BRB_screen2_05:
-    db #$28, " YouTube.InsaneFirebat.net", #$FF
+; !funtoonpatreon
+    db #$28, "      ", #$1A, "funtoonpatreon", #$FF
 
 BRB_screen2_06:
-    db #$28, "  Steam.InsaneFirebat.net", #$FF
-
-BRB_screen2_07:
     db #$28, "    chain.spazer.link", #$FF
 
-BRB_screen2_08:
-    db #$28, "build of the practice hack", #$FF
-
-BRB_screen2_09:
-    db #$28, " I like to hack those too!", #$FF
-
-BRB_screen2_0A:
-    db #$28, " please feel free to ask!", #$FF
-
-BRB_screen2_0B:
-    db #$28, "   SRL.InsaneFirebat.net", #$FF
-
-BRB_screen2_0C:
-    db #$28, "  ALpractice.spazer.link", #$FF
-
-BRB_screen2_0D:
-    db #$28, "  LKpractice.spazer.link", #$FF
-
-BRB_screen2_0E:
-    db #$28, " GCMpractice.spazer.link", #$FF
-
-BRB_screen2_0F:
-    db #$28, " CV4practice.spazer.link", #$FF
+BRB_screen2_07:
+    db #$28, "     by InsaneFirebat", #$FF
 
 
 ; --------
