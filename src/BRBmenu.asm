@@ -97,7 +97,7 @@ cm_tilemap_brb:
 
     ; Cycle screen text
     LDA !ram_cm_brb_screen : INC : STA !ram_cm_brb_screen
-    CMP #$0008 : BMI +
+    CMP #$000F : BMI + ; total screens
     LDA #$0000 : STA !ram_cm_brb_screen
 
     ; Cycle menu palette
