@@ -15,15 +15,6 @@ status_countdamage:
     RTS
 }
 
-status_ridleygrab:
-{
-    LDA $7E800A : CMP !ram_HUD_bottom : BEQ .done : STA !ram_HUD_bottom
-    LDX #$008A : JSR Draw3
-
-  .done
-    RTS
-}
-
 status_dboost:
 {
 ; http://patrickjohnston.org/bank/91#fEDB0 comments explain knockback direction
@@ -253,7 +244,6 @@ superhud_top_table:
     dw topHUD_chargetimer
     dw topHUD_dashcounter
     dw topHUD_cooldowncounter
-    dw topHUD_ridleygrab
 
 superhud_middle_table:
     dw middleHUD_off
@@ -266,7 +256,6 @@ superhud_middle_table:
     dw middleHUD_chargetimer
     dw middleHUD_dashcounter
     dw middleHUD_cooldowncounter
-    dw middleHUD_ridleygrab
 
 topHUD_off:
 middleHUD_off:
@@ -418,24 +407,6 @@ middleHUD_dashcounter:
     LDA !SAMUS_DASH_COUNTER : AND #$00FF : CMP !ram_dash_counter : BEQ .done
     STA !ram_dash_counter : ASL : TAX
     LDA HexGFXTable,X : STA !HUD_TILEMAP+$58
-
-  .done
-    RTS
-}
-
-topHUD_ridleygrab:
-{
-    LDA $7E800A : CMP !ram_HUD_top : BEQ .done : STA !ram_HUD_top
-    LDX #$0016 : JSR Draw2
-
-  .done
-    RTS
-}
-
-middleHUD_ridleygrab:
-{
-    LDA $7E800A : CMP !ram_HUD_middle : BEQ .done : STA !ram_HUD_middle
-    LDX #$0056 : JSR Draw2
 
   .done
     RTS
@@ -994,7 +965,7 @@ status_ridleyai:
   .enemyhp
     JMP status_enemyhp
   .ridleygrab
-    JMP status_ridleygrab
+    JMP .status_ridleygrab
 
   .update_HUD
     STA !ram_HUD_check
@@ -1133,16 +1104,24 @@ status_ridleyai:
     BRA -
 
   .blank_tiles
-    CPX #$1A : BPL .done
+    CPX #$1A : BPL .left_HUD
     %a16()
 -   LDA !IH_BLANK : STA !HUD_TILEMAP+$B0,X
     INX #2 : CPX #$1A : BMI -
 
-  .done
+  .left_HUD
     %ai16()
-    LDA !ENEMY_HP : BEQ +
+    LDA !ENEMY_HP : BEQ .status_ridleygrab
     JMP status_enemyhp
-+   JMP status_ridleygrab
+
+  .status_ridleygrab
+    LDA $7E800A : CMP !ram_HUD_bottom : BEQ .done
+    STA !ram_HUD_bottom
+    LDX #$008C : JSR Draw2
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$8A
+
+  .done
+    RTS
 
 RidleyAIText:
     table ../resources/HUDfont.tbl

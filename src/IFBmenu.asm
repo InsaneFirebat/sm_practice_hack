@@ -1,6 +1,6 @@
-; ----------
-; Firebat Menu   IFBMenu:
-; ----------
+; ------------
+; Firebat Menu
+; ------------
 
 pushpc
 org $85C000

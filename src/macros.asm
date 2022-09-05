@@ -270,7 +270,6 @@ macro cm_equipment_item(name, addr, bitmask, inverse)
     RTL
 endmacro
 
-
 macro cm_equipment_beam(name, addr, bitmask, inverse, and)
     dw !ACTION_CHOICE
     dl <addr>
