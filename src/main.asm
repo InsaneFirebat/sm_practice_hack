@@ -42,3 +42,7 @@ endif
 
 ; Make sure the ROM expands to 4MB
 org $FFFFFF : db $FF
+
+if !FEATURE_DEV
+incsrc symbols.asm
+endif
