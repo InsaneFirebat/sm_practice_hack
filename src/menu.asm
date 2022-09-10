@@ -149,6 +149,7 @@ endif
     LDA !ram_cm_slowdown_frames : BRA .done_slowdown
   .paused
     LDA #$FFFF : STA !ram_slowdown_frames
+    JSL EnsureSamusIsDrawn_long
   .done_slowdown
     STA !ram_slowdown_mode
     RTS
