@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.0]    Redraw Samus when applying pause on menu exit
+* [2.4.2.35] Added generic BRB menu for streamers
 * [2.4.2.34] Allow non-SRAM backed settings to persist after loadstate
 * [2.4.2.34] Allow Loud Pants to be used independently by NobodyNada
 * [2.4.2.33] Fixed graphics/crashes when loading a tinystate from one boss fight to another
