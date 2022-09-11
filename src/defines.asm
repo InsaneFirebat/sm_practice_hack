@@ -235,7 +235,6 @@
 
 !ram_cm_phan_first_phase = !WRAM_MENU_START+$80
 !ram_cm_phan_second_phase = !WRAM_MENU_START+$82
-!ram_cm_botwoon_rng = !WRAM_MENU_START+$84
 
 ; ^ FREE SPACE ^ up to +$CE
 
@@ -506,6 +505,7 @@
 !sram_ctrl_inc_custom_preset = !SRAM_START+$18
 !sram_ctrl_dec_custom_preset = !SRAM_START+$1A
 !sram_ctrl_toggle_tileviewer = !SRAM_START+$1C
+!sram_ctrl_update_timers = !SRAM_START+$1E
 
 ; ^ FREE SPACE ^
 
@@ -729,7 +729,6 @@ endif
 !sram_ctrl_reveal_damage = !SRAM_START+$200
 !sram_ctrl_randomize_rng = !SRAM_START+$202
 !sram_ctrl_force_stand = !SRAM_START+$204
-!sram_ctrl_update_timers = !SRAM_START+$206
 
 !sram_menu_background = !SRAM_START+$210
 !sram_scroll_button = !SRAM_START+$212

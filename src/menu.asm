@@ -143,6 +143,7 @@ endif
     DEC : BEQ .paused
     LDA !ram_cm_slowdown_frames : BRA .done_slowdown
   .paused
+    JSL EnsureSamusIsDrawn_long
     LDA #$FFFF
   .done_slowdown
     STA !ram_slowdown_mode

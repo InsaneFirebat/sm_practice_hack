@@ -342,6 +342,12 @@ category_preset_data_table:
   dl preset_allbosspkdr_crateria_ceres_elevator
   dl preset_allbossprkd_crateria_ceres_elevator
 
+EnsureSamusIsDrawn_long:
+{
+    JSR $DFC7 ; Ensures Samus is drawn every frame?
+    RTL
+}
+
 print pc, " presets bank82 end"
 warnpc $82FE00
 
