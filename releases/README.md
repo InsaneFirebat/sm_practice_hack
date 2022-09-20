@@ -8,7 +8,9 @@ Always use an UNHEADERED (UH) rom for patching the practice hack.
 
 The patch file with "Savestates" in the filename is only intended for SD2SNES, FXPAK, and Super NTs (with "jailbreak" firmware). It may cause crashes or serious graphical errors if used with emulators or Everdrives.
 
-The patch with "TinyStates" in the filename is an experimental version with slower, but more widely compatible savesates. It should work on any modern PC emulator. EverDrive and SNES Classics may be supported. Please test and let me know!
+The patch with "TinyStates" in the filename is another version with slower, but more widely compatible savesates. It should work on any modern PC emulator or with EverDrive flash carts.
+
+If you experience crashes or major graphical glitches, your platform may not support built-in savestates.
 
 ## How to Patch
 
@@ -22,7 +24,7 @@ Regardless of which tool you use, the process is the same: you select the .IPS f
 
 * Super HUD InfoHUD mode to run multiple modes at once
 * InfoHUD Mode to display a damage counter that resets at Phantoon and Ridley
-* InfoHUD Mode to display Ridley's death grab attempt counter
+* InfoHUD Mode to display Ridley's AI state
 * Room Strat to track Kihunter movement in Kihunter Stairs and Three Musketeers rooms
 * Room Strat to track off-screen nails during Kraid's intro
 * HUD timers update on shinespark crash
