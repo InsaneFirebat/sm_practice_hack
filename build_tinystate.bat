@@ -1,9 +1,9 @@
 @echo off
 
-echo Building customized SM Practice Hack
+echo Building Custom SM Practice Hack
 
 cd build
 echo Building and pre-patching tinystates version
-cp sm_orig.sfc aaaa_FastBuildTest_tinystate.sfc && cd ..\src && ..\tools\asar\asar.exe --no-title-check -DFEATURE_TINYSTATES=1 main.asm ..\build\aaaa_FastBuildTest_tinystate.sfc && cd ..
+cp sm_orig.sfc Custom_InfoHUD_TinyStates_2.5.X.sfc && cd ..\src && ..\tools\asar\asar.exe --no-title-check -DFEATURE_TINYSTATES=1 main.asm ..\build\Custom_InfoHUD_TinyStates_2.5.X.sfc && cd ..
 
 PAUSE
