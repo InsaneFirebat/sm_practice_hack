@@ -934,6 +934,8 @@ status_pitdoor:
     LDA !ROOM_ID : CMP #$975C : BNE .done
     LDA $7EDE64 : BNE .draw_N
     LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8E
+    LDA !sram_display_mode_reward : BEQ .done
+    %sfxenergy()
     RTS
 
   .draw_N

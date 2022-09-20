@@ -601,6 +601,8 @@ status_spikesuit:
 
   .sparkframeperfect
     LDA !IH_LETTER_Y : STA $7EC68C : STA $7EC68E
+    LDA !sram_display_mode_reward : BEQ .endstate
+    %sfxenergy()
     BRA .endstate
 
   .sparkearly
@@ -1692,18 +1694,22 @@ status_gateglitch:
     ; Check if this should be YY or Y2
     LDA !ram_roomstrat_state : CMP #$0001 : BNE .gottwoframe
     LDA !IH_LETTER_Y : STA $7EC68C : STA $7EC68E
+    LDA !sram_display_mode_reward : BEQ .reset
+    %sfxenergy()
     BRA .reset
 
   .gottwoframe
     LDA !IH_LETTER_Y : STA $7EC68C
     LDA #$0002 : SEC : SBC !ram_shot_timer
     ASL : TAY : LDA.w NumberGFXTable,Y : STA $7EC68E
+    LDA !sram_display_mode_reward : BEQ .reset
+    %sfxenergy()
     BRA .reset
 
   .late
     LDA !ram_roomstrat_counter : ASL : TAY : LDA.w NumberGFXTable,Y : STA $7EC68E
     LDA !IH_LETTER_L : STA $7EC68C
-    BRA .reset
+    BRL .reset
 }
 
 status_moatcwj:
@@ -1812,6 +1818,8 @@ status_moatcwj:
 
   .secondgotit
     LDA !IH_LETTER_Y : STA $7EC68C
+    LDA !sram_display_mode_reward : BEQ .clear
+    %sfxenergy()
 
   .clear
     LDA #$0000 : STA !ram_roomstrat_state : STA !ram_roomstrat_counter
@@ -1988,6 +1996,8 @@ endif
 
   .frameperfect
     LDA !IH_LETTER_Y : STA $7EC68C : STA $7EC68E
+    LDA !sram_display_mode_reward : BEQ .reset
+    %sfxenergy()
     BRA .reset
 }
 
@@ -2062,6 +2072,8 @@ endif
 
   .frameperfect
     LDA !IH_LETTER_Y : STA $7EC68C : STA $7EC68E
+    LDA !sram_display_mode_reward : BEQ .reset
+    %sfxenergy()
     BRA .reset
 }
 
@@ -2172,6 +2184,10 @@ endif
 
   .expandframeperfect
     LDA !IH_LETTER_Y : STA $7EC68C : STA $7EC68E
+    LDA !sram_display_mode_reward : BEQ .skipsfx
+    %sfxenergy()
+
+  .skipsfx
     BRL .resetstate
 
   .expandearly
@@ -2246,6 +2262,10 @@ endif
 
   .printy
     LDA !IH_LETTER_Y : STA $7EC68C
+    LDA !sram_display_mode_reward : BEQ .skipsfx
+    %sfxenergy()
+
+  .skipsfx
     RTS
 
   .low

@@ -1462,6 +1462,7 @@ print pc, " mainmenu InfoHUD start"
 InfoHudMenu:
     dw #ih_goto_display_mode
     dw #ih_display_mode
+    dw #ih_display_mode_reward
     dw #$FFFF
     dw #ih_goto_room_strat
     dw #ih_room_strat
@@ -1643,6 +1644,9 @@ ih_display_mode:
     db #$28, "  RAM WATCH", #$FF
 ;    db #$28, "WIP D-BOOST", #$FF
     db #$FF
+
+ih_display_mode_reward:
+    %cm_toggle("Strat Reward SFX", !sram_display_mode_reward, #$0001, #0)
 
 ih_goto_room_strat:
     %cm_submenu("Select Room Strat", #RoomStratMenu)

@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.0.3]  Added optional sound effect to reward for successful InfoHUD modes
 * [2.5.0.2]  Added Layrus menu color profile
 * [2.5.0.1]  Fixed teleporting to a save station from an elevator ride
 * [2.5.0]    Redraw Samus when applying pause on menu exit
