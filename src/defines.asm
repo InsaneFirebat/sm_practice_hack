@@ -17,7 +17,7 @@
 !VERSION_MINOR = 5
 !VERSION_BUILD = 0
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 0
+!VERSION_REV_2 = 3
 
 
 ; ---------
@@ -751,6 +751,7 @@ endif
 !sram_superhud_middle = !SRAM_START+$246
 !sram_superhud_top = !SRAM_START+$248
 !sram_door_display_mode = !SRAM_START+$24A
+!sram_display_mode_reward = !SRAM_START+$24C
 
 ; FREE SPACE ^
 
