@@ -99,11 +99,18 @@ status_dboost:
 
 status_door_hspeed:
 {
-    ; convert negative speeds to positive
-    LDA !SAMUS_Y_SPEED : BPL .positive
-    EOR #$FFFF : INC
 
-  .positive
+    ; subspeed + submomentum into low byte of Hspeed
+    LDA !SAMUS_X_SUBRUNSPEED : CLC : ADC !SAMUS_X_SUBMOMENTUM
+    AND #$FF00 : XBA : STA !ram_horizontal_speed
+
+    ; speed + momentum + carry into high byte of Hspeed
+    LDA !SAMUS_X_RUNSPEED : ADC !SAMUS_X_MOMENTUM
+    AND #$00FF : XBA : ORA !ram_horizontal_speed
+
+    ; draw whole number in decimal
+    AND #$FF00 : XBA
+
     ; convert to decimal form
     STA $4204
     %a8()
@@ -118,7 +125,7 @@ status_door_hspeed:
     ASL : TAX
     LDA.l NumberGFXTable,X : STA !HUD_TILEMAP+$88
     ; ones digit
-    LDA $4216 : ASL : TAY
+    LDA $4216 : ASL : TAX
     LDA.l NumberGFXTable,X : STA !HUD_TILEMAP+$8A
     BRA .subspeed
 
@@ -130,12 +137,13 @@ status_door_hspeed:
     LDA !IH_BLANK : STA !HUD_TILEMAP+$88
 
   .subspeed
-    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$88
+    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$8C
 
-    ; draw first decimal place of subspeed in hex
-    LDA !SAMUS_Y_SUBSPEED : XBA : AND #$00F0 : LSR #3 : TAY
-    LDA.l HexGFXTable,X : STA !HUD_TILEMAP+$88
+    ; draw fraction in hex
+    LDA !ram_horizontal_speed : AND #$00F0 : LSR #3 : TAX
+    LDA.l HexGFXTable,X : STA !HUD_TILEMAP+$8E
 
+  .done
     RTS
 }
 
