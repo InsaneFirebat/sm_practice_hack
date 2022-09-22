@@ -731,15 +731,15 @@ status_hspeed:
     AND #$00FF : XBA : ORA !ram_horizontal_speed
 
     ; maybe skip drawing
-    CMP !ram_HUD_bottom : BEQ .done : STA !ram_HUD_bottom
+    CMP !ram_HUD_bottom : BEQ .done
+    STA !ram_HUD_bottom
 
     ; draw whole number in decimal
     AND #$FF00 : XBA : LDX #$0088 : JSR Draw2
     LDA !IH_DECIMAL : STA $7EC68C
 
     ; draw fraction in hex
-    LDA !ram_horizontal_speed
-    AND #$00F0 : LSR #3 : TAY
+    LDA !ram_horizontal_speed : AND #$00F0 : LSR #3 : TAY
     LDA.w HexGFXTable,Y : STA $7EC68E
 
   .done
