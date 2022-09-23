@@ -2,6 +2,10 @@ lorom
 
 table ../resources/normal.tbl
 
+if !FEATURE_DEV
+incsrc symbols.asm
+endif
+
 incsrc macros.asm
 incsrc defines.asm
 
