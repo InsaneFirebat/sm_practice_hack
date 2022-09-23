@@ -2,8 +2,16 @@
 ; Symbol Export
 ; ---------------
 
+
+; ----
+; WRAM
+; ----
+
+incsrc wram_symbols.asm
+
+
 ; ---------
-; Work RAM
+; Hack RAM
 ; ---------
 
 ;FREE_SPACE = $7EFD00+$00
@@ -684,4 +692,3 @@ sram_customsfx_goback = $702000+$2F8
 sram_dummy_on = $702000+$2FA
 sram_dummy_off = $702000+$2FC
 sram_dummy_num = $702000+$2FE
-
