@@ -1,16 +1,7 @@
-; ---------------
-; Compiler Flags
-; ---------------
 
-!FEATURE_SD2SNES ?= 0
-!FEATURE_TINYSTATES ?= 0
-!FEATURE_PAL ?= 0
-!FEATURE_EXTRAS ?= 0
-!FEATURE_VANILLAHUD ?= 0
-!FEATURE_DEV ?= 1 ; default on for now
-!ORIGINAL_MESSAGE_TEXT ?= 0
-!PRESERVE_WRAM_DURING_SPACETIME ?= 1
-!RAW_TILE_GRAPHICS ?= 1
+; -------------
+; Version Flags
+; -------------
 
 !VERSION_HEADER = $FB
 !VERSION_MAJOR = 2
