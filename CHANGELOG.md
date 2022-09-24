@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.0.5]  Added option to automatically savestate in the middle of the door transition
 * [2.5.0.4]  Fix Hoizontal Speed Door HUD mode
 * [2.5.0.3]  Added optional sound effect to reward for successful InfoHUD modes
 * [2.5.0.2]  Added Layrus menu color profile

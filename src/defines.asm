@@ -8,7 +8,7 @@
 !VERSION_MINOR = 5
 !VERSION_BUILD = 0
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 4
+!VERSION_REV_2 = 5
 
 
 ; ---------
@@ -157,6 +157,8 @@
 !ram_watch_edit_lock_right = !WRAM_START+$EC
 !ram_watch_left_index = !WRAM_START+$EE
 !ram_watch_right_index = !WRAM_START+$F0
+
+!ram_auto_save_state = !WRAM_START+$F2
 
 ; FREE SPACE ^ up to $FE
 
@@ -408,6 +410,7 @@
 !LAYER1_Y = $0915
 !CURRENT_SAVE_FILE = $0952
 !GAMEMODE = $0998
+!DOOR_FUNCTION_POINTER = $099C
 !SAMUS_ITEMS_EQUIPPED = $09A2
 !SAMUS_ITEMS_COLLECTED = $09A4
 !SAMUS_BEAMS_EQUIPPED = $09A6
