@@ -45,7 +45,15 @@ gamemode_start:
 
 gamemode_shortcuts:
 {
-    LDA !IH_CONTROLLER_PRI_NEW : BNE +
+if !FEATURE_SD2SNES
+    ; Check for auto-save mid-transition
+    LDA !ram_auto_save_state : BEQ +
+    LDA !DOOR_FUNCTION_POINTER : CMP #$E4A9 : BNE +
+    LDA #$0000 : STA !ram_auto_save_state
+    JMP .save_state
+endif
+
+  + LDA !IH_CONTROLLER_PRI_NEW : BNE +
 
     ; No shortcuts configured, CLC so we won't skip normal gameplay
     CLC : RTS

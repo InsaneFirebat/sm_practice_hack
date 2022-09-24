@@ -1478,6 +1478,7 @@ InfoHudMenu:
     dw #ih_spacetime_infohud
 if !FEATURE_SD2SNES
     dw #ih_freeze_on_load
+    dw #ih_auto_save_mid_transition
 endif
     dw #ih_status_icons
     dw #ih_lag
@@ -2102,6 +2103,9 @@ ih_lag_counter:
 
 ih_freeze_on_load:
     %cm_toggle("Freeze on Load State", !ram_freeze_on_load, #$0001, #0)
+
+ih_auto_save_mid_transition:
+    %cm_toggle("Auto-Save in Door", !ram_auto_save_state, #$0001, #0)
 
 ih_status_icons:
     %cm_toggle("Status Icons", !sram_status_icons, #$0001, #.routine)
