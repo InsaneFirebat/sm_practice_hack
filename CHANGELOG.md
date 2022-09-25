@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.0.7]  Moved Savestate settings to a separate menu
 * [2.5.0.6]  Fixed missing Ocean missiles in GT Max% presets
 * [2.5.0.5]  Added option to automatically savestate in the middle of the door transition
 * [2.5.0.4]  Fix Hoizontal Speed Door HUD mode

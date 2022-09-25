@@ -126,6 +126,9 @@ else
 endif
     dw #mm_goto_gamemenu
     dw #mm_goto_rngmenu
+if !FEATURE_SD2SNES
+    dw #mm_goto_savestate
+endif
     dw #mm_goto_timecontrol
     dw #mm_goto_ctrlsmenu
     dw #mm_goto_IFBmenu
@@ -152,6 +155,9 @@ else
 endif
     dw #GameMenu>>16
     dw #RngMenu>>16
+if !FEATURE_SD2SNES
+    dw #mm_goto_savestate
+endif
     dw #SlowdownMenu>>16
     dw #CtrlMenu>>16
     dw #IFBMenu>>16
@@ -184,10 +190,13 @@ mm_goto_infohud:
     %cm_mainmenu("InfoHUD", #InfoHudMenu)
 
 mm_goto_gamemenu:
-    %cm_mainmenu("Game", #GameMenu)
+    %cm_mainmenu("Game Options", #GameMenu)
 
 mm_goto_rngmenu:
     %cm_mainmenu("RNG Control", #RngMenu)
+
+mm_goto_savestate:
+    %cm_mainmenu("Savestate Settings", #SavestateMenu)
 
 mm_goto_timecontrol:
     %cm_mainmenu("Slowdown Mode", #SlowdownMenu)
@@ -1476,10 +1485,6 @@ InfoHudMenu:
     dw #ih_reset_seg_later
     dw #ih_top_HUD_mode
     dw #ih_spacetime_infohud
-if !FEATURE_SD2SNES
-    dw #ih_freeze_on_load
-    dw #ih_auto_save_mid_transition
-endif
     dw #ih_status_icons
     dw #ih_lag
     dw #$FFFF
@@ -2101,12 +2106,6 @@ ih_lag_counter:
     db #$28, "       FULL", #$FF
     db #$FF
 
-ih_freeze_on_load:
-    %cm_toggle("Freeze on Load State", !ram_freeze_on_load, #$0001, #0)
-
-ih_auto_save_mid_transition:
-    %cm_toggle("Auto-Save in Door", !ram_auto_save_state, #$0001, #0)
-
 ih_status_icons:
     %cm_toggle("Status Icons", !sram_status_icons, #$0001, #.routine)
   .routine
@@ -2632,10 +2631,6 @@ pullpc
 ; ----------
 
 RngMenu:
-if !FEATURE_SD2SNES
-    dw #rng_rerandomize
-    dw #$FFFF
-endif
     dw #rng_goto_phanmenu
     dw #$FFFF
     dw #rng_botwoon_rng
@@ -2648,9 +2643,6 @@ endif
     dw #rng_kraid_rng
     dw #$0000
     %cm_header("BOSS RNG CONTROL")
-
-rng_rerandomize:
-    %cm_toggle("Rerandomize", !sram_rerandomize, #$0001, #0)
 
 rng_goto_phanmenu:
     %cm_jsl("Phantoon Menu", ih_prepare_phantoon_menu, #PhantoonMenu)
@@ -2913,6 +2905,26 @@ rng_kraid_rng:
     db #$28, "      LAGGY", #$FF
     db #$28, "    LAGGIER", #$FF
     db #$FF
+
+
+; --------------
+; Savestate Menu
+; --------------
+
+SavestateMenu:
+    dw #save_rerandomize
+    dw #save_freeze
+    dw #save_middoorsave
+    %cm_header("SAVESTATE SETTINGS")
+
+save_rerandomize:
+    %cm_toggle("Rerandomize", !sram_rerandomize, #$0001, #0)
+
+save_freeze:
+    %cm_toggle("Freeze on Load State", !ram_freeze_on_load, #$0001, #0)
+
+save_middoorsave:
+    %cm_toggle("Auto-Save Mid-Door", !ram_auto_save_state, #$0001, #0)
 
 
 ; -------------
