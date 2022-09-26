@@ -384,8 +384,15 @@ preset_start_gameplay:
     LDA !SAMUS_X : STA $0B10 : LDA !SAMUS_X_SUBPX : STA $0B12
     LDA !SAMUS_Y : STA $0B14 : LDA !SAMUS_Y_SUBPX : STA $0B16
 
-    ; Set Samus last pose same as current pose
-    LDA !SAMUS_POSE : STA $0A20
+    ; Set Samus last pose same as current pose if not shinesparking
+    LDA !SAMUS_POSE_DIRECTION : STA !SAMUS_PREVIOUS_POSE_DIRECTION
+    LDA !SAMUS_POSE : CMP #$00C0 : BMI .store_prev_pose
+    CMP #$00C5 : BMI .store_prev_pose
+    ; Set timer type to shinespark, clear prev pose
+    LDA #$0006 : STA $0ACC
+    LDA #$0000
+  .store_prev_pose
+    STA !SAMUS_PREVIOUS_POSE
 
     ; Set loading game state for Ceres
     LDA #$001F : STA $7ED914
