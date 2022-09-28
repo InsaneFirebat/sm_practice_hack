@@ -71,6 +71,13 @@ endif
     JSL ih_elevator_activation
 
 if !FEATURE_PAL
+org $A9F053
+else             ; hijack, runs when the screen locks to start the hopper/baby cutscene
+org $A9F006
+endif
+    JSL ih_babyskip_segment
+
+if !FEATURE_PAL
 org $A98884
 else             ; update timers after MB1 fight
 org $A98874
@@ -448,6 +455,14 @@ ih_elevator_activation:
     RTL
 }
 
+ih_babyskip_segment:
+{
+    ; runs when the screen locks to start the hopper/baby cutscene
+    STA $7ECD22 ; overwritten code
+    JSL ih_update_hud_early
+    RTL
+}
+
 ih_mb1_segment:
 {
     ; runs during MB1 cutscene when you regain control of Samus, just before music change
@@ -464,7 +479,7 @@ endif
 ih_mb2_segment:
 {
     ; runs during baby spawn routine for MB2
-    STA $7E7854    ; we overwrote this instruction to get here
+    STA $7E7854 ; overwritten code
 
     JSL ih_reset_damagecounter
     JML ih_update_hud_early
