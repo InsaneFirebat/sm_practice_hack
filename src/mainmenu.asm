@@ -156,7 +156,7 @@ endif
     dw #GameMenu>>16
     dw #RngMenu>>16
 if !FEATURE_SD2SNES
-    dw #mm_goto_savestate
+    dw #SavestateMenu>>16
 endif
     dw #SlowdownMenu>>16
     dw #CtrlMenu>>16
@@ -2915,6 +2915,7 @@ SavestateMenu:
     dw #save_rerandomize
     dw #save_freeze
     dw #save_middoorsave
+    dw #$0000
     %cm_header("SAVESTATE SETTINGS")
 
 save_rerandomize:
