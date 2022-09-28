@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.0.8]  Update timers before baby skip when the screen locks in place
 * [2.5.0.7]  Fixed presets that load into a stuck shinespark
 * [2.5.0.7]  Adjusted health/ammo for Green Brin Elev preset in Hundo (late)
 * [2.5.0.7]  Moved Savestate settings to a separate menu
