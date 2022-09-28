@@ -156,7 +156,7 @@ endif
     dw #GameMenu>>16
     dw #RngMenu>>16
 if !FEATURE_SD2SNES
-    dw #mm_goto_savestate
+    dw #SavestateMenu>>16
 endif
     dw #SlowdownMenu>>16
     dw #CtrlMenu>>16
