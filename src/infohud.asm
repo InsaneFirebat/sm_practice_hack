@@ -469,7 +469,11 @@ ih_babyskip_segment:
 ih_mb1_segment:
 {
     ; runs during MB1 cutscene when you regain control of Samus, just before music change
+if !FEATURE_PAL
+    JSL $90F081 ; overwritten code
+else
     JSL $90F084 ; overwritten code
+endif
 
     JSL ih_reset_damagecounter
     JML ih_update_hud_early
