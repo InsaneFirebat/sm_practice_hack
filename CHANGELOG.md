@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.0.9]  Continue drawing Zebes escape timer after reaching the ship
 * [2.5.0.8]  Update timers before baby skip when the screen locks in place
 * [2.5.0.7]  Fixed presets that load into a stuck shinespark
 * [2.5.0.7]  Adjusted health/ammo for Green Brin Elev preset in Hundo (late)

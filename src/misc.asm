@@ -284,6 +284,15 @@ org $90D000       ; hijack, runs when a shinespark is activated
     JMP ih_shinespark_activation
 
 
+; Continue drawing escape timer after reaching ship
+org $90E908
+    JSR preserve_escape_timer
+
+; Stop drawing timer when its VRAM is overwritten
+org $A2ABFD
+    JML clear_escape_timer
+
+
 org $87D000
 print pc, " misc start"
 
@@ -666,6 +675,29 @@ ih_shinespark_activation:
     LDA #$D068 ; overwritten code
     JMP $D003 ; return
 }
+
+
+preserve_escape_timer:
+{
+    ; check if timer is active
+    LDA $0943 : BEQ .done
+    JSL $809F6C ; Draw timer
+
+  .done
+    JMP $EA7F ; overwritten code
+}
+
+clear_escape_timer:
+{
+    ; clear timer status
+    STZ $0943
+
+    ; overwritten code
+    LDA #$AC1B : STA $0FB2,X
+    STZ $0DEC
+    RTL
+}
+
 print pc, " misc bank90 end"
 
 
