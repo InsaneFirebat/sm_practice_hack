@@ -8,7 +8,7 @@
 !VERSION_MINOR = 5
 !VERSION_BUILD = 0
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 8
+!VERSION_REV_2 = 9
 
 
 ; ---------
@@ -716,7 +716,7 @@ endif
 !PRESET_ENEMIES = !CUSTOM_WRAM+$184
 
 !BRB_METROID = #$287F
-!BRB_HEART = #$2891
+!BRB_HEART = #$2899
 
 
 ; ------------------------
