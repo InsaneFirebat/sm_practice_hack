@@ -43,6 +43,8 @@ ifb_paletteprofile:
         db #$28, " TOPSYTURVE", #$FF
         db #$28, "        OST", #$FF
         db #$28, "        JRP", #$FF
+        db #$28, "     LAYRUS", #$FF
+        db #$28, "      DAYNE", #$FF
         db #$28, "       GREY", #$FF
         db #$28, "        RED", #$FF
         db #$28, "     PURPLE", #$FF
@@ -431,10 +433,12 @@ PaletteProfileTables:
     dw #TopsyTurveProfileTable    ; A
     dw #OSTProfileTable           ; B
     dw #JRPProfileTable           ; C
-    dw #GreyProfileTable          ; D
-    dw #RedProfileTable           ; E
-    dw #PurpleProfileTable        ; F
-    dw #HUDProfileTable           ; 10
+    dw #LayrusProfileTable        ; D
+    dw #DayneProfileTable         ; E
+    dw #GreyProfileTable          ; F
+    dw #RedProfileTable           ; 10
+    dw #PurpleProfileTable        ; 11
+    dw #HUDProfileTable           ; 12
     dw #$0000
 
 !PROFILE_CUSTOM       = #$0000
@@ -450,10 +454,12 @@ PaletteProfileTables:
 !PROFILE_TopsyTurvy   = #$000A
 !PROFILE_OST          = #$000B
 !PROFILE_JRP          = #$000C
-!PROFILE_Grey         = #$000D
-!PROFILE_Red          = #$000E
-!PROFILE_Purple       = #$000F
-!PROFILE_HUD          = #$0010
+!PROFILE_Layrus       = #$000D
+!PROFILE_Dayne        = #$000E
+!PROFILE_Grey         = #$000F
+!PROFILE_Red          = #$0010
+!PROFILE_Purple       = #$0011
+!PROFILE_HUD          = #$0012
 
 ; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
 CustomProfileTable: ; custom always first
@@ -494,6 +500,12 @@ OSTProfileTable:
 
 JRPProfileTable:
     dw $7976, $384B, $66D1, $484A, $E54F, $7B97, $7B7B, $6B5E, $70F0, $654F, $7B97
+
+LayrusProfileTable:
+    dw $2D5B, $3005, $1E9D, $0C00, $1C03, $059F, $2ADF, $4E5F, $4088, $6969, $77EE
+
+DayneProfileTable:
+    dw $2959, $4086, $0294, $1044, $1044, $35AD, $2B2A, $3ACE, $1C87, $20C8, $3ACE
 
 GreyProfileTable:
     dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $0012, $0C63, $1CE7, $3DEF
