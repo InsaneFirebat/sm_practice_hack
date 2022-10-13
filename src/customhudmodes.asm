@@ -979,145 +979,51 @@ status_ridleyai:
 
   .update_HUD
     STA !ram_HUD_check
-    CMP #$C000 : BMI + : JMP .dead
-+   CMP #$B2F3 : BPL + : JMP .stall
-+   BNE + : JMP .B2F3 ; liftoff
-+   CMP #$B613 : BPL .bottom_half
-    ; top half
-    CMP #$B493 : BPL .top_split
-+   CMP #$B321 : BNE + : JMP .B321 ; choose ai
-+   CMP #$B3EC : BNE + : JMP .B3EC ; move
-+   CMP #$B3F8 : BNE + : JMP .B3F8 ; move middle
-+   CMP #$B441 : BNE + : JMP .B441 ; swoop start
-    ; swoop positioning
-+   LDA.w #RidleyAIText_B455 : STA $C1
-    JMP .draw_branch
 
-  .top_split
-    BNE + : JMP .B493 ; swoop dive
-+   CMP #$B4D1 : BNE + : JMP .B4D1 ; swooping
-+   CMP #$B4D1 : BNE + : JMP .B4D1 ; climb
-+   CMP #$B516 : BNE + : JMP .B516 ; climbing
-+   CMP #$B594 : BNE + : JMP .B594 ; swoop end
-    ; hover
-+   LDA.w #RidleyAIText_B5E5 : STA $C1
-    JMP .draw_branch
+    %ai8()
+    ; use high byte of pointer to index prefix table
+    XBA : SEC : SBC #$B2 : BCC .stall
+    TAX : LDA.l RidleyAI_prefix_table,X : TAX
+    %a16()
 
-  .bottom_half
-    BNE + : JMP .B613 ; hover 2
-+   CMP #$BB8F : BPL .bottom_split
-    CMP #$B6A7 : BNE + : JMP .B6A7 ; pogo start
-+   CMP #$B6DD : BNE + : JMP .B6DD ; pogo start 2
-+   CMP #$B70E : BNE + : JMP .B70E ; pogo down
-+   CMP #$B7B9 : BNE + : JMP .B7B9 ; pogo up
-    ; lunge
-+   LDA.w #RidleyAIText_BAB7 : STA $C1
-    JMP .draw_branch
+    LDA $0FA8 ; reload AI pointer
+  .loop_pointers
+    ; search table starting from prefix offset
+    CMP.l RidleyAI_pointers,X : BEQ .found
+    INX #2
+    CPX #$34 : BCC .loop_pointers
 
-  .bottom_split
-    BNE + : JMP .BB8F ; grabbed
-+   CMP #$BBC4 : BNE + : JMP .BBC4 ; grab move
-+   CMP #$BBF1 : BNE + : JMP .BBF1 ; dropping
-+   CMP #$BC2E : BNE + : JMP .BC2E ; dropped
-+   CMP #$BC54 : BNE + : JMP .BC54 ; hover start
-    ; dodge power bomb
-+   LDA.w #RidleyAIText_BD4E : STA $C1
-    JMP .draw_branch
+    ; unknown AI pointer
+    LDA.w #RidleyAIText_DEAD
+    BRA .draw_branch
 
   .stall
-    LDA.w #RidleyAIText_WAIT : STA $C1
-    JMP .draw_branch
+    %ai16()
+    LDA.w #RidleyAIText_WAIT
+    BRA .draw_branch
 
-  .dead
-    CMP #$C538 : BNE + : JMP .C538 ; dead move
-+   CMP #$C588 : BNE + : JMP .C588 ; explode
-    ; otherwise end
-+   LDA.w #RidleyAIText_DEAD : STA $C1
-    JMP .draw_branch
-
-  .B2F3 ; liftoff
-    LDA.w #RidleyAIText_B2F3 : STA $C1
-    JMP .draw_branch
-  .B321 ; choose ai
-    LDA.w #RidleyAIText_B321 : STA $C1
-    JMP .draw_branch
-  .B3EC ; move
-    LDA.w #RidleyAIText_B3EC : STA $C1
-    JMP .draw_branch
-  .B3F8 ; move mid
-    LDA.w #RidleyAIText_B3F8 : STA $C1
-    JMP .draw_branch
-  .B441 ; swoop start
-    LDA.w #RidleyAIText_B441 : STA $C1
-    JMP .draw_branch
-  .B493 ; swoop dive
-    LDA.w #RidleyAIText_B493 : STA $C1
-    BRA .draw_branch
-  .B4D1 ; swooping
-    LDA.w #RidleyAIText_B4D1 : STA $C1
-    BRA .draw_branch
-  .B516 ; climb
-    LDA.w #RidleyAIText_B516 : STA $C1
-    BRA .draw_branch
-  .B554 ; climbing
-    LDA.w #RidleyAIText_B554 : STA $C1
-    BRA .draw_branch
-  .B594 ; swoop end
-    LDA.w #RidleyAIText_B594 : STA $C1
-    BRA .draw_branch
-  .B613 ; hover 2
-    LDA.w #RidleyAIText_B613 : STA $C1
-    BRA .draw_branch
-  .B6A7 ; pogo start
-    LDA.w #RidleyAIText_B6A7 : STA $C1
-    BRA .draw_branch
-  .B6DD ; pogo start 2
-    LDA.w #RidleyAIText_B6DD : STA $C1
-    BRA .draw_branch
-  .B70E ; pogo down
-    LDA.w #RidleyAIText_B70E : STA $C1
-    BRA .draw_branch
-  .B7B9 ; pogo up
-    LDA.w #RidleyAIText_B7B9 : STA $C1
-    BRA .draw_branch
-  .BB8F ; grabbed
-    LDA.w #RidleyAIText_BB8F : STA $C1
-    BRA .draw_branch
-  .BBC4 ; grab move
-    LDA.w #RidleyAIText_BBC4 : STA $C1
-    BRA .draw_branch
-  .BBF1 ; dropping
-    LDA.w #RidleyAIText_BBF1 : STA $C1
-    BRA .draw_branch
-  .BC2E ; dropped
-    LDA.w #RidleyAIText_BC2E : STA $C1
-    BRA .draw_branch
-  .BC54 ; hover start
-    LDA.w #RidleyAIText_BC54 : STA $C1
-    BRA .draw_branch
-  .C538 ; dead move
-    LDA.w #RidleyAIText_C538 : STA $C1
-    BRA .draw_branch
-  .C588 ; explode
-    LDA.w #RidleyAIText_C588 : STA $C1
+  .found
+    LDA.l RidleyAI_text_table,X
 
   .draw_branch
+    STA $C1 ; data address
     %ai8()
-    LDA.b #RidleyAIText>>16 : STA $C3
-    LDA #$2C : STA $C5
-    LDY #$00 : LDX #$00
--   LDA [$C1],Y : CMP #$FF : BEQ .blank_tiles
-    STA !HUD_TILEMAP+$B0,X
-    INY
-    LDA $C5 : STA !HUD_TILEMAP+$B1,X
-    INX #2
-    BRA -
+    LDA.b #RidleyAIText>>16 : STA $C3 ; data bank
+    LDY #$00 : TYX
+  .loop_text
+    LDA [$C1],Y : CMP #$FF : BEQ .blank_tiles
+    STA !HUD_TILEMAP+$B0,X ; tile ID
+    LDA #$0C : STA !HUD_TILEMAP+$B1,X ; palette
+    INY : INX #2
+    BRA .loop_text
 
   .blank_tiles
+    ; clear out any remaining tiles
     CPX #$1A : BPL .left_HUD
     %a16()
--   LDA !IH_BLANK : STA !HUD_TILEMAP+$B0,X
-    INX #2 : CPX #$1A : BMI -
+  .loop_blank
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$B0,X
+    INX #2 : CPX #$1A : BMI .loop_blank
 
   .left_HUD
     %ai16()
@@ -1125,13 +1031,65 @@ status_ridleyai:
     JMP status_enemyhp
 
   .status_ridleygrab
-    LDA $7E800A : CMP !ram_HUD_bottom : BEQ .done
-    STA !ram_HUD_bottom
+    ; display number of grab attempts
+    LDA $7E800A : CMP !ram_roomstrat_counter : BEQ .done
+    STA !ram_roomstrat_counter
     LDX #$008C : JSR Draw2
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$8A
-
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A
   .done
     RTS
+
+; this data could live anywhere in the ROM
+RidleyAI_pointers:
+    dw $B2F3                      ; [0+2] B2
+    dw $B321, $B3EC, $B3F8        ; [2+6] B3
+    dw $B441, $B455, $B493, $B4D1 ; [8+8] B4
+    dw $B516, $B554, $B594, $B5E5 ; [$10+8] B5
+    dw $B613, $B6A7, $B6DD        ; [$18+6] B6
+    dw $B70E, $B7B9               ; [$1E+4] B7
+                                  ; B8, B9 -> END
+    dw $BAB7                      ; [$22+2] BA
+    dw $BB8F, $BBC4, $BBF1        ; [$24+6] BB
+    dw $BC2E, $BC54               ; [$2A+4] BC
+    dw $BD4E                      ; [$2E+2] BD
+                                  ; BE, BF, C0, C1, C2, C3, C4 -> END
+    dw $C538, $C588               ; [$30+4] C5
+
+RidleyAI_prefix_table:
+; Table to skip ahead to the correct entries based on the high byte
+; Unused entries are filled with $32 (the last element in the table) to finish the search faster
+    ;   B2   B3   B4   B5   B6   B7             BA   BB   BC   BD
+    db $00, $02, $08, $10, $18, $1E, $32, $32, $22, $24, $2A, $2E, $32, $32, $32, $32
+    ;                  C5
+    db $32, $32, $32, $30, $32, $32, $32, $32, $32, $32, $32, $32, $32, $32, $32, $32
+
+RidleyAI_text_table:
+    dw #RidleyAIText_B2F3 ; liftoff
+    dw #RidleyAIText_B321 ; choose ai
+    dw #RidleyAIText_B3EC ; move
+    dw #RidleyAIText_B3F8 ; move mid
+    dw #RidleyAIText_B441 ; swoop start
+    dw #RidleyAIText_B455 ; swoop positioning
+    dw #RidleyAIText_B493 ; swoop dive
+    dw #RidleyAIText_B4D1 ; swooping
+    dw #RidleyAIText_B516 ; climb
+    dw #RidleyAIText_B554 ; climbing
+    dw #RidleyAIText_B594 ; swoop end
+    dw #RidleyAIText_B5E5 ; hover
+    dw #RidleyAIText_B613 ; hover 2
+    dw #RidleyAIText_B6A7 ; pogo start
+    dw #RidleyAIText_B6DD ; pogo start 2
+    dw #RidleyAIText_B70E ; pogo down
+    dw #RidleyAIText_B7B9 ; pogo up
+    dw #RidleyAIText_BAB7 ; lunge
+    dw #RidleyAIText_BB8F ; grabbed
+    dw #RidleyAIText_BBC4 ; grab move
+    dw #RidleyAIText_BBF1 ; dropping
+    dw #RidleyAIText_BC2E ; dropped
+    dw #RidleyAIText_BC54 ; hover start
+    dw #RidleyAIText_BD4E ; dodge power bomb
+    dw #RidleyAIText_C538 ; dead move
+    dw #RidleyAIText_C588 ; explode
 
 RidleyAIText:
     table ../resources/HUDfont.tbl
