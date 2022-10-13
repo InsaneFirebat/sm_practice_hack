@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.0.11] Optimizations for Ridley AI room strat by Yuriks
 * [2.5.0.10] Added Dayne menu color profile
 * [2.5.0.9]  Continue drawing Zebes escape timer after reaching the ship
 * [2.5.0.8]  Update timers before baby skip when the screen locks in place
