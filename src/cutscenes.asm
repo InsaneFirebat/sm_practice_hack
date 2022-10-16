@@ -6,9 +6,28 @@ org $82EEE0
 org $8BB240
 ;    JSR cutscenes_load_ceres_arrival
 
+if !FEATURE_PAL
+org $8B92B5
+else
+org $8B930C
+endif
+    JSL cutscenes_nintendo_splash
+    NOP : NOP
 
 org $8BF800
 print pc, " cutscenes start"
+
+cutscenes_nintendo_splash:
+{
+    LDX #$0078
+    LDA !sram_cutscenes
+    AND !CUTSCENE_SKIP_SPLASH
+    BEQ .done
+    LDX #$0001
+  .done
+    STX $0DE2
+    RTL
+}
 
 cutscenes_load_intro:
 {
@@ -47,6 +66,7 @@ cutscenes_load_ceres_arrival:
 }
 
 print pc, " cutscenes end"
+warnpc $8BFA00 ; misc.asm
 
 
 org $A987FC

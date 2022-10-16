@@ -102,8 +102,8 @@ mm_write_and_clear_hud_tiles:
     ; Load in normal vram
     LDA #$80 : STA $2115 ; word-access, incr by 1
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
-    LDX #$B200 : STX $4302 ; Source offset
-    LDA #$9A : STA $4304 ; Source bank
+    LDX.w #hudgfx_bin : STX $4302 ; Source offset
+    LDA.b #hudgfx_bin>>16 : STA $4304 ; Source bank
     LDX #$2000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
@@ -114,8 +114,8 @@ mm_write_and_clear_hud_tiles:
   .minimap_vram
     LDA #$80 : STA $2115 ; word-access, incr by 1
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
-    LDX #$D000 : STX $4302 ; Source offset
-    LDA #$FF : STA $4304 ; Source bank
+    LDX.w #mapgfx_bin : STX $4302 ; Source offset
+    LDA.b #mapgfx_bin>>16 : STA $4304 ; Source bank
     LDX #$2000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
@@ -131,14 +131,14 @@ mm_write_hud_tiles_during_door_transition:
 
     ; Load in normal vram
     JSR $E039
-    dl $9AB200
+    dl hudgfx_bin
     dw $4000
     dw $1000
     JMP $E492  ; resume logic
 
   .minimap_vram
     JSR $E039
-    dl $FDE000
+    dl mapgfx_bin
     dw $4000
     dw $1000
     JMP $E492  ; resume logic
@@ -165,7 +165,6 @@ mm_initialize_minimap:
     ; If we just left Ceres, increment segment timer
     LDA !GAMEMODE : AND #$00FF : CMP #$0006 : BNE .init_minimap
     LDA #$0000 : STA $12 : STA $14 : STA !ram_room_has_set_rng
-    STA $09DA : STA $09DC : STA $09DE : STA $09E0
     STA !ram_realtime_room : STA !ram_last_realtime_room
     STA !ram_gametime_room : STA !ram_last_gametime_room
     STA !ram_last_room_lag : STA !ram_last_door_lag_frames : STA !ram_transition_counter

@@ -1,4 +1,3 @@
-!SRAM_VERSION = $000D
 
 
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values
@@ -58,8 +57,7 @@ init_nonzero_wram:
     LDA #$0F8C : STA !ram_watch_left        ; Enemy HP
     LDA #$09C2 : STA !ram_watch_right       ; Samus HP
 
-    ; Check if any less common controller shortcuts are configured
-    JML GameModeExtras
+    RTL
 }
 
 init_sram:

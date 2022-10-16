@@ -60,32 +60,32 @@ org $A98874      ; update timers after MB1 fight
 org $A9BE23      ; update timers when baby spawns (off-screen) in MB2 fight
     JSL ih_mb2_segment
 
-org $A0B9AE      ; update timers when Ridley drops spawn
-    JSL ih_drops_segment
+org $A0B9D4      ; update timers when Ridley drops spawn
+    JML ih_drops_segment
 
-org $A0B9E1      ; update timers when Crocomire drops spawn
-    JSL ih_drops_segment
+org $A0BA07      ; update timers when Crocomire drops spawn
+    JML ih_drops_segment
 
-org $A0BA14      ; update timers when Phantoon drops spawn
-    JSL ih_drops_segment
+org $A0BA3A      ; update timers when Phantoon drops spawn
+    JML ih_drops_segment
 
-org $A0BA47      ; update timers when Botwoon drops spawn
-    JSL ih_drops_segment
+org $A0BA6D      ; update timers when Botwoon drops spawn
+    JML ih_drops_segment
 
-org $A0BA7A      ; update timers when Kraid drops spawn
-    JSL ih_drops_segment
+org $A0BAA0      ; update timers when Kraid drops spawn
+    JML ih_drops_segment
 
-org $A0BAAD      ; update timers when Bomb Torizo drops spawn
-    JSL ih_drops_segment
+org $A0BAD3      ; update timers when Bomb Torizo drops spawn
+    JML ih_drops_segment
 
-org $A0BAE0      ; update timers when Golden Torizo drops spawn
-    JSL ih_drops_segment
+org $A0BB04      ; update timers when Golden Torizo drops spawn
+    JML ih_drops_segment
 
-org $A0BB13      ; update timers when Spore Spawn drops spawn
-    JSL ih_drops_segment
+org $A0BB39      ; update timers when Spore Spawn drops spawn
+    JML ih_drops_segment
 
-org $A0BB46      ; update timers when Draygon drops spawn
-    JSL ih_drops_segment
+org $A0BB6C      ; update timers when Draygon drops spawn
+    JML ih_drops_segment
 
 org $AAE582      ; update timers when statue grabs Samus
     JSL ih_chozo_segment
@@ -394,7 +394,9 @@ ih_drops_segment:
 {
     ; runs when boss drops spawn
     JSL ih_update_hud_early
-    JML $808111 ; overwritten code
+    ; overwritten code
+    PLP : PLY : PLX
+    RTL
 }
 
 ih_chozo_segment:
@@ -405,8 +407,8 @@ ih_chozo_segment:
 
 ih_ceres_elevator_segment:
 {
-    JSL ih_update_hud_early
-    JML $90F084 ; overwritten code
+    JSL $90F084 ; overwritten code
+    JML ih_update_hud_early
 }
 
 ih_ship_elevator_segment:
@@ -606,10 +608,6 @@ ih_update_hud_code:
 
 ih_update_hud_early:
 {
-    PHA
-    PHX
-    PHY
-
     ; calculate lag frames
     LDA !ram_realtime_room : SEC : SBC !ram_transition_counter : STA !ram_last_room_lag
 
@@ -621,9 +619,6 @@ ih_update_hud_early:
     JSL ih_update_hud_code
     PLA : STA $14 : PLA : STA $12
 
-    PLY
-    PLX
-    PLA
     RTL
 }
 
@@ -1144,9 +1139,11 @@ ih_game_loop_code:
     LDA !ram_metronome : BEQ +
     JSR metronome
 
-+   LDA !ram_magic_pants_enabled : AND #$0003 : BEQ .springpants
-    CMP #$0001 : BEQ .magicpants
-    CMP #$0002 : BEQ .spacepants
++   LDA !ram_magic_pants_enabled : XBA : ORA !ram_space_pants_enabled
+    BEQ .handleinputs
+
+    BIT #$00FF : BEQ .magicpants    ; if spacepants are disabled, handle magicpants
+    BIT #$FF00 : BEQ .spacepants    ; if magicpants are disabled, handle spacepants
 
     ; both are enabled, check Samus movement type to decide
     LDA $0A1F : AND #$00FF : CMP #$0001 : BEQ .magicpants    ; check if running
@@ -1267,31 +1264,48 @@ magic_pants:
 {
     LDA $0A96 : CMP #$0009 : BEQ .check
     LDA !ram_magic_pants_state : BEQ +
+    LDA #$0000 : STA !ram_magic_pants_state
+
+    LDA !ram_magic_pants_enabled : AND #$0001 : BEQ +
     LDA !ram_magic_pants_pal1 : STA $7EC194
     LDA !ram_magic_pants_pal2 : STA $7EC196
     LDA !ram_magic_pants_pal3 : STA $7EC19E
-    LDA #$0000 : STA !ram_magic_pants_state
 +   RTS
 
   .check
-    LDA $0A1C : CMP #$0009 : BEQ .flash
-    CMP #$000A : BEQ .flash
-    RTS
+    ; Enable magic pants in the following states:
+    ; 9: Moving right - not aiming
+    ; Ah: Moving left  - not aiming
+    ; Bh: Moving right - gun extended
+    ; Ch: Moving left  - gun extended
+    ; Dh: Moving right - aiming up (unused)
+    ; Eh: Moving left  - aiming up (unused)
+    ; Fh: Moving right - aiming up-right
+    ; 10h: Moving left  - aiming up-left
+    ; 11h: Moving right - aiming down-right
+    ; 12h: Moving left  - aiming down-left
+    LDA $0A1C : CMP #$0009 : BCC .done
+    CMP #$0013 : BCS .done
 
-  .flash
-    LDA !ram_magic_pants_state : BNE ++
+    LDA !ram_magic_pants_state : BNE +
 
     ; if loudpants are enabled, click
-    LDA !ram_magic_pants_enabled : AND #$0004 : BEQ +
+    LDA !ram_magic_pants_enabled : AND #$0002 : BEQ +
     LDA !sram_metronome_sfx : ASL : TAX
     LDA.l MetronomeSFX,X : JSL !SFX_LIB1
 
-+   LDA $7EC194 : STA !ram_magic_pants_pal1
+    ; if flashpants are enabled, flash
++   LDA !ram_magic_pants_enabled : AND #$0001 : BEQ .done
+    LDA !ram_magic_pants_state : BNE ++
+
+    LDA $7EC194 : STA !ram_magic_pants_pal1
     LDA $7EC196 : STA !ram_magic_pants_pal2
     LDA $7EC19E : STA !ram_magic_pants_pal3
 ++  LDA #$FFFF
     STA $7EC194 : STA $7EC196 : STA $7EC19E
-    STA !ram_magic_pants_state
+
+  .done
+    LDA #$FFFF : STA !ram_magic_pants_state
     RTS
 }
 
@@ -1304,10 +1318,12 @@ space_pants:
   .reset
     ; restore palettes if needed
     LDA !ram_magic_pants_state : BEQ .done
+    LDA #$0000 : STA !ram_magic_pants_state
+
+    LDA !ram_space_pants_enabled : AND #$0001 : BEQ .done
     LDA !ram_magic_pants_pal1 : STA $7EC194
     LDA !ram_magic_pants_pal2 : STA $7EC196
     LDA !ram_magic_pants_pal3 : STA $7EC198
-    LDA #$0000 : STA !ram_magic_pants_state
   .done
     RTS
 
@@ -1321,7 +1337,7 @@ space_pants:
     LDA $0B2D : CMP $909E97 : BPL +       ; check against min SJ vspeed for air
     BRA .reset
 +   CMP $909E99 : BPL .reset              ; check against max SJ vspeed for air
-    BRA .flash
+    BRA .go
 
   .SJliquid
     LDA $0B2D : CMP $909E9B : BPL +       ; check against min SJ vspeed for liquids
@@ -1329,22 +1345,25 @@ space_pants:
 +   CMP $909E9D : BPL .reset              ; check against max SJ vspeed for liquids
 
     ; Screw Attack seems to write new palette data every frame, which overwrites the flash
-  .flash
+  .go
     LDA !ram_magic_pants_state : BNE .done
 
     ; if loudpants are enabled, click
-    LDA !ram_magic_pants_enabled : AND #$0004 : BEQ +
+    LDA !ram_space_pants_enabled : AND #$0002 : BEQ +
     LDA !sram_metronome_sfx : ASL : TAX
     LDA.l MetronomeSFX,X : JSL !SFX_LIB1
 
+    ; if flashpants are enabled, flash
++   LDA !ram_space_pants_enabled : AND #$0001 : BEQ ++
     ; preserve palettes first
-+   LDA $7EC194 : STA !ram_magic_pants_pal1
+    LDA $7EC194 : STA !ram_magic_pants_pal1
     LDA $7EC196 : STA !ram_magic_pants_pal2
     LDA $7EC198 : STA !ram_magic_pants_pal3
     ; then flash
     LDA #$FFFF
     STA $7EC194 : STA $7EC196 : STA $7EC198
-    STA !ram_magic_pants_state
+
+++  LDA #$FFFF : STA !ram_magic_pants_state
     RTS
 }
 

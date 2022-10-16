@@ -20,8 +20,8 @@ pre_load_state:
     ; Rerandomize
     LDA !sram_save_has_set_rng : BNE .done
     LDA !sram_rerandomize : AND #$00FF : BEQ .done
-    LDA $05E5 : STA $770080
-    LDA $05B6 : STA $770082
+    LDA !CACHED_RANDOM_NUMBER : STA !SRAM_SAVED_RNG
+    LDA !FRAME_COUNTER : STA !SRAM_SAVED_FRAME_COUNTER
 
   .done
     RTS
@@ -116,8 +116,8 @@ post_load_state:
     ; Rerandomize
     LDA !sram_save_has_set_rng : BNE .done
     LDA !sram_rerandomize : AND #$00FF : BEQ .done
-    LDA $770080 : STA $05E5
-    LDA $770082 : STA $05B6
+    LDA !SRAM_SAVED_RNG : STA !CACHED_RANDOM_NUMBER
+    LDA !SRAM_SAVED_FRAME_COUNTER : STA !FRAME_COUNTER
 
   .done
     JSL init_nonzero_wram
@@ -193,10 +193,11 @@ save_write_table:
     dw $0000|$2181, $0000  ; WRAM addr = $xx0000
     dw $1000|$2183, $00    ; WRAM addr = $7Exxxx  (bank is relative to $7E)
     dw $1000|$420B, $02    ; Trigger DMA on channel 1
-    ; Copy WRAM 7E8000-7EFFFF to SRAM 720000-727FFF.
+    ; Copy WRAM 7E8000-7EFCFF to SRAM 720000-727CFF.
     dw $0000|$4312, $0000  ; A addr = $xx0000
     dw $0000|$4314, $0072  ; A addr = $72xxxx, size = $xx00
-    dw $0000|$4316, $0080  ; size = $80xx ($8000), unused bank reg = $00.
+    dw $0000|$4314, ((!WRAM_PERSIST_START-$7E8000<<8)&$FF00)|$0072  ; A addr = $72xxxx, size = $xx1C
+    dw $0000|$4316, (!WRAM_PERSIST_START-$7E8000)>>8                ; size = $7Dxx ($7D1C), unused bank reg = $00.
     dw $0000|$2181, $8000  ; WRAM addr = $xx8000
     dw $1000|$2183, $00    ; WRAM addr = $7Exxxx  (bank is relative to $7E)
     dw $1000|$420B, $02    ; Trigger DMA on channel 1
@@ -250,6 +251,8 @@ save_return:
     %ai16()
     LDA !ram_room_has_set_rng : STA !sram_save_has_set_rng
 
+    LDA #$5AFE : STA !SRAM_SAVED_STATE
+
     TSC
     STA !SRAM_SAVED_SP
     JMP register_restore_return
@@ -282,10 +285,10 @@ load_write_table:
     dw $0000|$2181, $0000  ; WRAM addr = $xx0000
     dw $1000|$2183, $00    ; WRAM addr = $7Exxxx  (bank is relative to $7E)
     dw $1000|$420B, $02    ; Trigger DMA on channel 1
-    ; Copy SRAM 720000-727FFF to WRAM 7E8000-7EFFFF.
+    ; Copy SRAM 720000-727CFF to WRAM 7E8000-7EFCFF.
     dw $0000|$4312, $0000  ; A addr = $xx0000
-    dw $0000|$4314, $0072  ; A addr = $72xxxx, size = $xx00
-    dw $0000|$4316, $0080  ; size = $80xx ($8000), unused bank reg = $00.
+    dw $0000|$4314, ((!WRAM_PERSIST_START-$7E8000<<8)&$FF00)|$0072  ; A addr = $72xxxx, size = $xx1C
+    dw $0000|$4316, (!WRAM_PERSIST_START-$7E8000)>>8                ; size = $7Dxx ($7D1C), unused bank reg = $00.
     dw $0000|$2181, $8000  ; WRAM addr = $xx8000
     dw $1000|$2183, $00    ; WRAM addr = $7Exxxx  (bank is relative to $7E)
     dw $1000|$420B, $02    ; Trigger DMA on channel 1
