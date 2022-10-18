@@ -126,17 +126,30 @@ post_load_state:
 
 +   JSR post_load_music
 
+    ; Reload BG3 GFX if minimap setting changed
+    LDA !ram_minimap : CMP !SRAM_SAVED_MINIMAP : BEQ .rng
+    JSL cm_transfer_original_tileset
+    LDA !ram_minimap : BEQ .disableMinimap
+    ; Enabled minimap, clear stale tiles
+    LDA #$2C0F ; blank
+    STA !HUD_TILEMAP+$3A : STA !HUD_TILEMAP+$7A : STA !HUD_TILEMAP+$BA
+    LDA #$2C1E ; minimap border
+    STA !HUD_TILEMAP+$46 : STA !HUD_TILEMAP+$86 : STA !HUD_TILEMAP+$C6
+    BRA .rng
+  .disableMinimap
+    LDA #$2C0F : STA !HUD_TILEMAP+$7C : STA !HUD_TILEMAP+$7E
+
+  .rng
     ; Rerandomize
-    LDA !sram_save_has_set_rng : BNE .done
-    LDA !sram_rerandomize : AND #$00FF : BEQ .done
+    LDA !sram_save_has_set_rng : BNE +
+    LDA !sram_rerandomize : AND #$00FF : BEQ +
     LDA !SRAM_SAVED_RNG : STA !RANDOM_NUMBER
     LDA !SRAM_SAVED_FRAME_COUNTER : STA !FRAME_COUNTER
     LDA !sram_seed_X : STA !ram_seed_X
     LDA !sram_seed_Y : STA !ram_seed_Y
     JSL MenuRNG ; rerandomize hack RNG
 
-  .done
-    JSL init_wram_based_on_sram
++   JSL init_wram_based_on_sram
 
     ; Freeze inputs if necessary
     LDA !ram_freeze_on_load : BEQ .return
@@ -324,6 +337,7 @@ save_return:
 
     %ai16()
     LDA !ram_room_has_set_rng : STA !sram_save_has_set_rng
+    LDA !ram_minimap : STA !SRAM_SAVED_MINIMAP
 
     LDA #$5AFE : STA !SRAM_SAVED_STATE
 
