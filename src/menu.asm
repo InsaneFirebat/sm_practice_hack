@@ -114,7 +114,7 @@ cm_init:
 cm_exit:
 {
     JSL wait_for_lag_frame_long
-    JSR cm_transfer_original_tileset
+    JSL cm_transfer_original_tileset
 if !FEATURE_VANILLAHUD
 else
     JSL overwrite_HUD_numbers
@@ -239,7 +239,7 @@ cm_transfer_original_tileset:
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
     LDA #$0F : STA $0F2100 ; disable forced blanking
     PLP
-    RTS
+    RTL
 
   .kraid_vram
     ; Load in normal vram to kraid location
@@ -256,7 +256,7 @@ cm_transfer_original_tileset:
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
     LDA #$0F : STA $0F2100 ; disable forced blanking
     PLP
-    RTS
+    RTL
 
   .minimap_vram
     ; Load in minimap vram to normal location
@@ -272,7 +272,7 @@ cm_transfer_original_tileset:
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
     LDA #$0F : STA $0F2100 ; disable forced blanking
     PLP
-    RTS
+    RTL
 }
 
 cm_transfer_custom_cgram:
