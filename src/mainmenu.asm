@@ -226,6 +226,7 @@ PresetsMenu:
     dw #presets_open_doors
     dw #presets_enemies
     dw #presets_map_tiles
+    dw #presets_auto_segment
 ;    dw #presets_ship_landing
 if !RAW_TILE_GRAPHICS
     dw #$FFFF
@@ -291,6 +292,9 @@ presets_load_custom_preset:
 
 presets_open_doors:
     %cm_toggle("Auto-Open Blue Doors", !sram_preset_open_doors, #$0001, #0)
+
+presets_auto_segment:
+    %cm_toggle("Auto Segment Reset", !sram_preset_auto_segment, #$0001, #0)
 
 presets_enemies:
     %cm_toggle("Load with Enemies", !sram_preset_enemies, #$0001, #0)

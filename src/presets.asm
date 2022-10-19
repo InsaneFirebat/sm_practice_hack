@@ -219,10 +219,13 @@ preset_load_preset:
     STZ $09D2 ; Current selected weapon
     STZ $0A04 ; Auto-cancel item
     LDA #$5AFE : STA $0917 ; Load garbage into Layer 2 X position
+
+    ; check if segment timer should be reset now or later
+    LDA !sram_preset_auto_segment : BEQ +
     LDA #$FFFF : STA !ram_reset_segment_later
 
     ; check if custom preset is being loaded
-    LDA !ram_custom_preset : BEQ .category_preset
++   LDA !ram_custom_preset : BEQ .category_preset
     JSL custom_preset_load
     PLB
     RTL
