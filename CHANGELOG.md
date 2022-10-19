@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.0.13] Made the segment timer reset after a preset door optional
+* [2.5.0.12] Reload HUD graphics after loading state in case minimap setting changed
 * [2.5.0.11] Optimizations for Ridley AI room strat by Yuriks
 * [2.5.0.10] Added Dayne menu color profile
 * [2.5.0.9]  Continue drawing Zebes escape timer after reaching the ship

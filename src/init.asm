@@ -1,7 +1,7 @@
 ; increment least significant bits when
 ; allocating to SRAM on the master branch
 ; decrement most significant bits for custom branches
-!SRAM_VERSION = #$C00D
+!SRAM_VERSION = #$B00D
 
 
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values
@@ -171,6 +171,7 @@ init_sram:
     LDA #$0001 : STA !sram_preset_ship_landing ; 1 - on until ship presets are fixed
     LDA #$0000 : STA !sram_preset_enemies
     LDA #$0001 : STA !sram_preset_map_tiles
+    LDA #$0001 : STA !sram_preset_auto_segment
     LDA #$0000 : STA !sram_countdamage
     LDA #$0001 : STA !sram_menu_background
     LDA #$000A : STA !sram_metronome_tickrate
