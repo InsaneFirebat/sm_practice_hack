@@ -3096,6 +3096,8 @@ ctrl_reset_defaults:
     LDA #$0000 : STA !sram_ctrl_toggle_tileviewer
     LDA #$0000 : STA !sram_ctrl_force_stand
     LDA #$0000 : STA !sram_ctrl_update_timers
+
+    JSL validate_sram_for_savestates
     %sfxquake()
     RTL
 
@@ -3103,6 +3105,38 @@ init_wram_based_on_sram:
 {
     JSL init_suit_properties_ram
     JSL GameModeExtras
+    JSL validate_sram_for_savestates
+    RTL
+}
+
+validate_sram_for_savestates:
+{
+    ; check if required SRAM range is valid
+    ; writes to SRAM will mirror in other banks if not valid
+if !FEATURE_TINYSTATES
+    LDA $737FFE : INC : STA $707FFE
+    CMP $737FFE : BEQ .double_check
+else
+    LDA $777FFE : INC : STA $707FFE
+    CMP $777FFE : BEQ .double_check
+endif
+    RTL
+
+  .double_check
+    ; double check
+if !FEATURE_TINYSTATES
+    LDA $732FFE : INC : STA $702FFE
+    CMP $732FFE : BEQ .fail
+else
+    LDA $772FFE : INC : STA $702FFE
+    CMP $772FFE : BEQ .fail
+endif
+    RTL
+
+  .fail
+    ; disable savestate controls
+    LDA #$0000
+    STA !sram_ctrl_save_state : STA !sram_ctrl_load_state
     RTL
 }
 

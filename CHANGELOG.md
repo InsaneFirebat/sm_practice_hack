@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.0.14] Attempt to prevent crashes from savestates on unsupported platforms
 * [2.5.0.14] Fixed broken drops at Golden Torizo
 * [2.5.0.13] Made the segment timer reset after a preset door optional
 * [2.5.0.12] Reload HUD graphics after loading state in case minimap setting changed
