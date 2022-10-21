@@ -1242,6 +1242,7 @@ cm_ctrl_mode:
     ; Store controller input to SRAM
     LDA !IH_CONTROLLER_PRI : STA [!DP_CtrlInput]
     JSL GameModeExtras
+    JSL validate_sram_for_savestates
     %sfxstatue()
     BRA .exit
 
