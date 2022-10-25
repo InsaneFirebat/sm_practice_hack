@@ -139,7 +139,14 @@ else
 endif
 
     JSL restore_ppu_long ; Restore PPU
+
+    ; skip sound effects if not gameplay ($7-13 allowed)
+    %ai16()
+    LDA !GAMEMODE : CMP #$0006 : BMI .skipSFX
+    CMP #$0014 : BPL .skipSFX
     JSL $82BE2F ; Queue Samus movement sound effects
+
+  .skipSFX
     JSL play_music_long ; Play 2 lag frames of music and sound effects
     JSL maybe_trigger_pause_long ; Maybe trigger pause screen or return save confirmation selection
 
