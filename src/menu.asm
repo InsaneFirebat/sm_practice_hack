@@ -138,6 +138,18 @@ else
     JSL ih_update_hud_code
 endif
 
+    JSL restore_ppu_long ; Restore PPU
+
+    ; skip sound effects if not gameplay ($7-13 allowed)
+    %ai16()
+    LDA !GAMEMODE : CMP #$0006 : BMI .skipSFX
+    CMP #$0014 : BPL .skipSFX
+    JSL $82BE2F ; Queue Samus movement sound effects
+
+  .skipSFX
+    JSL play_music_long ; Play 2 lag frames of music and sound effects
+    JSL maybe_trigger_pause_long ; Maybe trigger pause screen or return save confirmation selection
+
     ; Restore slowdown mode
     LDA !ram_cm_slowdown_mode : BEQ .done_slowdown
     DEC : BEQ .paused
@@ -147,11 +159,6 @@ endif
     LDA #$FFFF
   .done_slowdown
     STA !ram_slowdown_mode
-
-    JSL restore_ppu_long ; Restore PPU
-    JSL $82BE2F ; Queue Samus movement sound effects
-    JSL play_music_long ; Play 2 lag frames of music and sound effects
-    JSL maybe_trigger_pause_long ; Maybe trigger pause screen or return save confirmation selection
     RTS
 }
 
