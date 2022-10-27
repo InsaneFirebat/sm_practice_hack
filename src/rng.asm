@@ -141,6 +141,12 @@ endif
     JSL hook_beetom_set_rng
     NOP #2
 
+org $8FDCDB
+    dw #layout_asm_baby_rng
+
+org $8FDC8F
+    dw #layout_asm_baby_rng
+
 
 ; -----
 ; Hooks

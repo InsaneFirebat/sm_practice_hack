@@ -853,5 +853,11 @@ layout_asm_earlysupers:
     RTS
 }
 
+layout_asm_baby_rng:
+{
+    LDA #$0001 : STA !ram_room_has_set_rng
+    RTS
+}
+
 print pc, " layout end"
 

@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.0.16] Disable rerandomize on loadstate for Baby and Dustin Torizo rooms
 * [2.5.0.15] Fixed unwanted sound effects after closing the practice menu
 * [2.5.0.14] Update timers when unpausing
 * [2.5.0.14] Attempt to prevent crashes from savestates on unsupported platforms
