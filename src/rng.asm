@@ -107,6 +107,18 @@ endif
     JMP kraid_intro_skip : kraid_intro_skip_return:
 
 
+; -----------
+; Baby hijack
+; -----------
+
+if !FEATURE_PAL
+org $A9F21B
+else    ; Baby skip rng
+org $A9F1CE
+endif
+    JMP hook_baby_skip_rng
+
+
 ; -----------------
 ; "Set rng" hijacks
 ; -----------------
@@ -664,4 +676,23 @@ endif
     JMP kraid_intro_skip_return
 
 print pc, " kraid rng end"
+
+
+org $A9FFE0
+print pc, " baby rng start"
+hook_baby_skip_rng:
+{
+    LDA !ram_baby_rng : BEQ .no_manip
+    DEC : BEQ .rng_set
+    ; lunge
+    LDA #$0020 : STA $7E7802,X
+
+  .rng_set
+    JMP $F1E0
+
+  .no_manip
+    LDA $05E5 ; overwritten code
+    JMP $F1D1
+}
+print pc, " baby rng end"
 

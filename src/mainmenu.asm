@@ -2645,6 +2645,8 @@ RngMenu:
     dw #rng_crocomire_rng
     dw #$FFFF
     dw #rng_kraid_rng
+    dw #$FFFF
+    dw #rng_baby_rng
     dw #$0000
     %cm_header("BOSS RNG CONTROL")
 
@@ -2908,6 +2910,16 @@ rng_kraid_rng:
     db #$28, "     RANDOM", #$FF
     db #$28, "      LAGGY", #$FF
     db #$28, "    LAGGIER", #$FF
+    db #$FF
+
+rng_baby_rng:
+    dw !ACTION_CHOICE
+    dl #!ram_baby_rng
+    dw #$0000
+    db #$28, "Baby Skip RNG", #$FF
+    db #$28, "     RANDOM", #$FF
+    db #$28, "   NO LUNGE", #$FF
+    db #$28, "      LUNGE", #$FF
     db #$FF
 
 

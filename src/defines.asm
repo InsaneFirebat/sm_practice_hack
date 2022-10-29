@@ -8,7 +8,7 @@
 !VERSION_MINOR = 5
 !VERSION_BUILD = 0
 !VERSION_REV_1 = 1
-!VERSION_REV_2 = 6
+!VERSION_REV_2 = 7
 
 
 ; ---------
@@ -160,6 +160,7 @@
 
 !ram_auto_save_state = !WRAM_START+$F2
 
+!ram_baby_rng = !WRAM_START+$F4
 ; FREE SPACE ^ up to $FE
 
 !ram_slowdown_mode = $7EFFFE ; Bank $7E required
