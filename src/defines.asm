@@ -531,6 +531,7 @@
 !sram_lag_counter_mode = !SRAM_START+$4A
 !sram_preset_map_tiles = !SRAM_START+$4C
 !sram_preset_auto_segment = !SRAM_START+$4E
+!sram_suppress_flashing = !SRAM_START+$50
 
 ; ^ FREE SPACE ^ up to $F03000
 

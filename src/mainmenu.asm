@@ -1517,6 +1517,7 @@ DisplayModeMenu:
     dw ihmode_vspeed
     dw ihmode_quickdrop
     dw ihmode_walljump
+    dw ihmode_armpump
     dw ihmode_shottimer
     dw ihmode_ramwatch
     dw #$FFFF
@@ -1673,7 +1674,6 @@ RoomStratMenu:
     dw ihstrat_botwooncf
     dw ihstrat_doorskip
     dw ihstrat_snailclip
-    dw ihstrat_threejumpskip
     dw ihstrat_kihuntermanip
     dw ihstrat_kraidradar
     dw ihstrat_zebskip
@@ -1717,9 +1717,6 @@ ihstrat_doorskip:
 ihstrat_snailclip:
     %cm_jsl("Aqueduct Snail Clip", #action_select_room_strat, #$000A)
 
-ihstrat_threejumpskip:
-    %cm_jsl("Three Jump Baby Skip", #action_select_room_strat, #$000B)
-
 ihstrat_kihuntermanip:
     %cm_jsl("Kihunter Manipulation", #action_select_room_strat, #$000C)
 
@@ -1760,7 +1757,6 @@ ih_room_strat:
     db #$28, " BOTWOON CF", #$FF
     db #$28, "  DOOR SKIP", #$FF
     db #$28, " SNAIL CLIP", #$FF
-    db #$28, "3J BABYSKIP", #$FF
     db #$28, "   KIHUNTER", #$FF
     db #$28, "KRAID RADAR", #$FF
     db #$28, "   ZEB SKIP", #$FF
@@ -2304,6 +2300,12 @@ CutscenesMenu:
     dw #$FFFF
     dw #cutscenes_g4_skip
     dw #cutscenes_fast_mb
+    dw #$FFFF
+    dw #cutscenes_suppress_crateria_lightning
+    dw #cutscenes_suppress_escape_flashing
+    dw #cutscenes_suppress_power_bomb_flash
+    dw #cutscenes_suppress_mb1_flashing
+    dw #cutscenes_suppress_boss_damage_flash
     dw #$0000
     %cm_header("CUTSCENES")
 
@@ -2331,6 +2333,26 @@ cutscenes_g4_skip:
 !CUTSCENE_FAST_MB = #$0100
 cutscenes_fast_mb:
     %cm_toggle_bit("Fast Mother Brain", !sram_cutscenes, !CUTSCENE_FAST_MB, #0)
+
+!SUPPRESS_CRATERIA_LIGHTNING = #$0001
+cutscenes_suppress_crateria_lightning:
+    %cm_toggle_bit_inverted("Crateria Lightning", !sram_suppress_flashing, !SUPPRESS_CRATERIA_LIGHTNING, #0)
+
+!SUPPRESS_ESCAPE_FLASHING = #$0002
+cutscenes_suppress_escape_flashing:
+    %cm_toggle_bit_inverted("Escape Flashing", !sram_suppress_flashing, !SUPPRESS_ESCAPE_FLASHING, #0)
+
+!SUPPRESS_POWER_BOMB_FLASH = #$0004
+cutscenes_suppress_power_bomb_flash:
+    %cm_toggle_bit_inverted("Power Bomb Flash", !sram_suppress_flashing, !SUPPRESS_POWER_BOMB_FLASH, #0)
+
+!SUPPRESS_MB1_FLASHING = #$0008
+cutscenes_suppress_mb1_flashing:
+    %cm_toggle_bit_inverted("MB1 Flashing", !sram_suppress_flashing, !SUPPRESS_MB1_FLASHING, #0)
+
+!SUPPRESS_BOSS_DAMAGE_FLASH = #$0010
+cutscenes_suppress_boss_damage_flash:
+    %cm_toggle_bit_inverted("Boss Damage Flash", !sram_suppress_flashing, !SUPPRESS_BOSS_DAMAGE_FLASH, #0)
 
 
 ; -------------------

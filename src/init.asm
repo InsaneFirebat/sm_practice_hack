@@ -164,6 +164,7 @@ init_sram:
     LDA #$0000 : STA !sram_compressed_graphics
     LDA #$0000 : STA !sram_lag_counter_mode
     LDA #$0000 : STA !sram_fast_nintendo_logo
+    LDA #$0000 : STA !sram_suppress_flashing
 
     LDA #$0000 : STA !sram_phantoon_intro
     LDA #$0000 : STA !sram_kraid_intro
