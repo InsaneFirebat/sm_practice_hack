@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.0.17] Port karafruit's no flashing patch by idlechild
 * [2.5.0.17] Added Baby Skip RNG controls
 * [2.5.0.16] Disable rerandomize on loadstate for Baby and Dustin Torizo rooms
 * [2.5.0.15] Fixed unwanted sound effects after closing the practice menu
