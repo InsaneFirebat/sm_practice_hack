@@ -316,7 +316,7 @@ CrashDump:
     ; -- Draw header --
     LDA.l #CrashTextHeader : STA !ram_crash_text
     LDA.l #CrashTextHeader>>16 : STA !ram_crash_text_bank
-    LDX #$0086 : JSR crash_draw_text
+    LDX #$0088 : JSR crash_draw_text
 
     ; -- Draw footer message --
     LDA.l #CrashTextFooter1 : STA !ram_crash_text
@@ -989,9 +989,16 @@ crash_read_inputs:
 
 CrashTextHeader:
     table ../resources/header.tbl
-    db "SM SHOT ITSELF IN THE FOOT", #$FF
+if !VERSION_REV_1
+    db "CRASH HANDLER v", "!VERSION_MAJOR", ".", "!VERSION_MINOR", ".", "!VERSION_BUILD", ".", "!VERSION_REV_1", "!VERSION_REV_2", #$FF
+else
+if !VERSION_REV_2
+    db "CRASH HANDLER v", "!VERSION_MAJOR", ".", "!VERSION_MINOR", ".", "!VERSION_BUILD", ".", "!VERSION_REV_2", #$FF
+else
+    db "CRASH HANDLER v", "!VERSION_MAJOR", ".", "!VERSION_MINOR", ".", "!VERSION_BUILD", #$FF
+endif
+endif
     table ../resources/normal.tbl
-;    table ../resources/thinfont.tbl
 
 CrashTextFooter1:
 ; Navigate pages with A or B
