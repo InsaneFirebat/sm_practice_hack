@@ -1,7 +1,7 @@
 ; increment least significant bits when
 ; allocating to SRAM on the master branch
 ; decrement most significant bits for custom branches
-!SRAM_VERSION = #$B00D
+!SRAM_VERSION = #$000F
 
 
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values
