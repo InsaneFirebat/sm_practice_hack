@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.1.1]  Fixed a crash from loading an empty savestate in a door transition
 * [2.5.1]    Version bump with the master branch
 * [2.5.0.18] Print version string in crash handler header
 * [2.5.0.17] Port VARIA's patch to disable earthquake effects by idlechild
