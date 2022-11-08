@@ -182,7 +182,7 @@ init_sram:
     LDA #$0000 : STA !sram_superhud_bottom
     LDA #$0006 : STA !sram_superhud_middle
     LDA #$0008 : STA !sram_superhud_top
-    LDA #$0000 : STA !sram_door_display_mode
+    LDA #$0001 : STA !sram_door_display_mode ; 1 - status_door_hspeed
     LDA #$0000 : STA !sram_display_mode_reward
 
     LDA !PROFILE_Firebat : STA !sram_custompalette_profile
