@@ -1,7 +1,7 @@
 *.srm
 *.s[mf]c
 build/*
+!build/.gitkeep
 build/HACK/*
-!build/Firebat_InfoHUD.sym
 tools/asar.exe
 tools/dll/*
