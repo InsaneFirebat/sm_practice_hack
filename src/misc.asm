@@ -268,8 +268,11 @@ org $808F24
 org $808F65
     JML hook_set_music_data
 
-
+if !FEATURE_PAL
+org $82F067
+else
 org $82F071
+endif
     JSL IconCancelMenu
     NOP
 

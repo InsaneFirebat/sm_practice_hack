@@ -800,11 +800,19 @@ hook_baby_skip_rng:
     LDA #$0020 : STA $7E7802,X
 
   .rng_set
+if !FEATURE_PAL
+    JMP $F22D
+else
     JMP $F1E0
+endif
 
   .no_manip
     LDA $05E5 ; overwritten code
+if !FEATURE_PAL
+    JMP $F21E
+else
     JMP $F1D1
+endif
 }
 print pc, " baby rng end"
 
