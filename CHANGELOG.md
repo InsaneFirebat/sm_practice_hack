@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.1.4]  Added DreamCowboy menu color profile
 * [2.5.1.3]  Fixed crashes in PAL builds at baby skip and special options menu
 * [2.5.1.2]  Fixed crash handler hiding gameplay backgrounds
 * [2.5.1.1]  Fixed incorrect A/B HUD tiles when minimap is active

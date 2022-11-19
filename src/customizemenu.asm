@@ -45,6 +45,7 @@ ifb_paletteprofile:
         db #$28, "        JRP", #$FF
         db #$28, "     LAYRUS", #$FF
         db #$28, "      DAYNE", #$FF
+        db #$28, "DREAMCOWBOY", #$FF
         db #$28, "       GREY", #$FF
         db #$28, "        RED", #$FF
         db #$28, "     PURPLE", #$FF
@@ -435,6 +436,7 @@ PaletteProfileTables:
     dw #JRPProfileTable           ; C
     dw #LayrusProfileTable        ; D
     dw #DayneProfileTable         ; E
+    dw #DreamCowboyProfileTable   ; E
     dw #GreyProfileTable          ; F
     dw #RedProfileTable           ; 10
     dw #PurpleProfileTable        ; 11
@@ -456,6 +458,7 @@ PaletteProfileTables:
 !PROFILE_JRP          = #$000C
 !PROFILE_Layrus       = #$000D
 !PROFILE_Dayne        = #$000E
+!PROFILE_DreamCowboy  = #$000E
 !PROFILE_Grey         = #$000F
 !PROFILE_Red          = #$0010
 !PROFILE_Purple       = #$0011
@@ -506,6 +509,9 @@ LayrusProfileTable:
 
 DayneProfileTable:
     dw $2959, $4086, $0294, $1044, $1044, $35AD, $2B2A, $3ACE, $1C87, $20C8, $3ACE
+
+DreamCowboyProfileTable:
+    dw $35B2, $35B2, $6B5A, $7FFF, $35B2, $7FFF, $35B2, $35B2, $7FFF, $35B2, $6B5A
 
 GreyProfileTable:
     dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $0012, $0C63, $1CE7, $3DEF
