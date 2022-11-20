@@ -458,11 +458,11 @@ PaletteProfileTables:
 !PROFILE_JRP          = #$000C
 !PROFILE_Layrus       = #$000D
 !PROFILE_Dayne        = #$000E
-!PROFILE_DreamCowboy  = #$000E
-!PROFILE_Grey         = #$000F
-!PROFILE_Red          = #$0010
-!PROFILE_Purple       = #$0011
-!PROFILE_HUD          = #$0012
+!PROFILE_DreamCowboy  = #$000F
+!PROFILE_Grey         = #$0010
+!PROFILE_Red          = #$0011
+!PROFILE_Purple       = #$0012
+!PROFILE_HUD          = #$0013
 
 ; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
 CustomProfileTable: ; custom always first
