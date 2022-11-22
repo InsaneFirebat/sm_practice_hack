@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.1.5]  Removed anti-flash/shake features due to issues with PAL builds
 * [2.5.1.4]  Added DreamCowboy menu color profile
 * [2.5.1.3]  Fixed crashes in PAL builds at baby skip and special options menu
 * [2.5.1.2]  Fixed crash handler hiding gameplay backgrounds

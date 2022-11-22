@@ -36,13 +36,6 @@ endif
     JSL hook_phantoon_flame_pattern
 
 if !FEATURE_PAL
-org $A7DDB3
-else
-org $A7DD7F
-endif
-    JMP phantoon_damage_palette
-
-if !FEATURE_PAL
     org $A7D4DD
 else    ; Phantoon Intro
     org $A7D4A9
@@ -82,24 +75,10 @@ org $A5899D
 endif
     JSR hook_draygon_rng_right
 
-if !FEATURE_PAL
-org $A5956B
-else
-org $A5955B
-endif
-    JSR hook_draygon_damage
 
-if !FEATURE_PAL
-org $A595BA
-else
-org $A595AA
-endif
-    JSR hook_draygon_damage
-
-
-; -----------------
-; Crocomire hijacks
-; -----------------
+; ----------------
+; Crocomire hijack
+; ----------------
 
 if !FEATURE_PAL
 org $A48763
@@ -107,13 +86,6 @@ else
 org $A48753
 endif
     JSR hook_crocomire_rng
-
-if !FEATURE_PAL
-org $A48CED
-else
-org $A48CDD
-endif
-    JMP hook_crocomire_damage
 
 
 ; -------------
@@ -132,24 +104,7 @@ org $A7AA7F
 else    ; Kraid intro
 org $A7AA69
 endif
-    JMP kraid_intro_skip
-kraid_intro_skip_return:
-
-if !FEATURE_PAL
-org $A7B381
-else
-org $A7B36B
-    ; Combined two methods, so overwrite JSR
-endif
-    PLY : PLX : RTS
-
-if !FEATURE_PAL
-org $A7B3A9
-else
-org $A7B393
-endif
-    JMP kraid_palette_handling
-    TAY
+    JMP kraid_intro_skip : kraid_intro_skip_return:
 
 
 ; -----------
@@ -530,21 +485,6 @@ hook_crocomire_rng:
     RTS
 }
 
-hook_crocomire_damage:
-{
-    LDA !sram_suppress_flashing : BIT !SUPPRESS_BOSS_DAMAGE_FLASH : BNE .suppress
-    LDA #$7FFF : LDX #$000E
-  .vanillaloop
-    STA $7EC0E0,X : DEX : DEX : BPL .vanillaloop
-    RTS
-
-  .suppress
-    LDA #$0814 : LDX #$000E
-  .suppressloop
-    STA $7EC0E0,X : DEX : DEX : BPL .suppressloop
-    RTS
-}
-
 print pc, " crocomire rng end"
 
 
@@ -570,17 +510,6 @@ hook_draygon_rng_right:
 
   .no_manip
     LDA !RANDOM_NUMBER   ; return with random number (overwritten code)
-    RTS
-}
-
-hook_draygon_damage:
-{
-    LDA !sram_suppress_flashing : BIT !SUPPRESS_BOSS_DAMAGE_FLASH : BNE .suppress
-    LDY #$A297
-    RTS
-
-  .suppress
-    LDY #$A257
     RTS
 }
 
@@ -722,45 +651,6 @@ print pc, " ridley rng end"
 
 org $A7FFB6
 print pc, " kraid rng start"
-
-phantoon_damage_palette:
-{
-    LDA !sram_suppress_flashing : BIT !SUPPRESS_BOSS_DAMAGE_FLASH : BNE .suppress
-    LDA #$7FFF
-if !FEATURE_PAL
-    JMP $DDB6
-else
-    JMP $DD82
-endif
-
-  .suppress
-    LDA #$092B
-if !FEATURE_PAL
-    JMP $DDB6
-else
-    JMP $DD82
-endif
-}
-
-kraid_palette_handling:
-{
-    LDA !sram_suppress_flashing : BIT !SUPPRESS_BOSS_DAMAGE_FLASH : BNE .suppress
-    TDC
-if !FEATURE_PAL
-    JMP $B3AC
-else
-    JMP $B396
-endif
-
-  .suppress
-    LDA #$0020
-if !FEATURE_PAL
-    JMP $B3AC
-else
-    JMP $B396
-endif
-}
-
 hook_kraid_rng:
 {
     LDA !ram_kraid_rng : BEQ .no_manip
@@ -773,9 +663,8 @@ hook_kraid_rng:
 }
 
 kraid_intro_skip:
-{
     LDA !sram_kraid_intro : BEQ .noSkip
-    TDC : INC
+    LDA #$0001
     JMP kraid_intro_skip_return
 
   .noSkip
@@ -785,7 +674,6 @@ else
     LDA #$012C
 endif
     JMP kraid_intro_skip_return
-}
 
 print pc, " kraid rng end"
 
