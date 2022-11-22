@@ -2300,13 +2300,6 @@ CutscenesMenu:
     dw #$FFFF
     dw #cutscenes_g4_skip
     dw #cutscenes_fast_mb
-    dw #$FFFF
-    dw #cutscenes_suppress_crateria_lightning
-    dw #cutscenes_suppress_escape_flashing
-    dw #cutscenes_suppress_power_bomb_flash
-    dw #cutscenes_suppress_mb1_flashing
-    dw #cutscenes_suppress_boss_damage_flash
-    dw #cutscenes_suppress_earthquake
     dw #$0000
     %cm_header("CUTSCENES")
 
@@ -2334,30 +2327,6 @@ cutscenes_g4_skip:
 !CUTSCENE_FAST_MB = #$0100
 cutscenes_fast_mb:
     %cm_toggle_bit("Fast Mother Brain", !sram_cutscenes, !CUTSCENE_FAST_MB, #0)
-
-!SUPPRESS_CRATERIA_LIGHTNING = #$0001
-cutscenes_suppress_crateria_lightning:
-    %cm_toggle_bit_inverted("Crateria Lightning", !sram_suppress_flashing, !SUPPRESS_CRATERIA_LIGHTNING, #0)
-
-!SUPPRESS_ESCAPE_FLASHING = #$0002
-cutscenes_suppress_escape_flashing:
-    %cm_toggle_bit_inverted("Escape Flashing", !sram_suppress_flashing, !SUPPRESS_ESCAPE_FLASHING, #0)
-
-!SUPPRESS_POWER_BOMB_FLASH = #$0004
-cutscenes_suppress_power_bomb_flash:
-    %cm_toggle_bit_inverted("Power Bomb Flash", !sram_suppress_flashing, !SUPPRESS_POWER_BOMB_FLASH, #0)
-
-!SUPPRESS_MB1_FLASHING = #$0008
-cutscenes_suppress_mb1_flashing:
-    %cm_toggle_bit_inverted("MB1 Flashing", !sram_suppress_flashing, !SUPPRESS_MB1_FLASHING, #0)
-
-!SUPPRESS_BOSS_DAMAGE_FLASH = #$0010
-cutscenes_suppress_boss_damage_flash:
-    %cm_toggle_bit_inverted("Boss Damage Flash", !sram_suppress_flashing, !SUPPRESS_BOSS_DAMAGE_FLASH, #0)
-
-!SUPPRESS_EARTHQUAKE = #$0020
-cutscenes_suppress_earthquake:
-    %cm_toggle_bit_inverted("Vanilla Earthquake", !sram_suppress_flashing, !SUPPRESS_EARTHQUAKE, #0)
 
 
 ; -------------------
