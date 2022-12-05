@@ -262,6 +262,8 @@ if !FEATURE_SD2SNES
     ; check for load state shortcut
 +   LDA !ram_crash_input : CMP !sram_ctrl_load_state : BNE +
     AND !ram_crash_input_new : BEQ +
+    ; check if saved state exists
+    LDA !SRAM_SAVED_STATE : CMP #$5AFE : BNE +
     ; prepare to jump to load_state
     %a8()
     LDA #gamemode_start>>16 : PHA : PLB
