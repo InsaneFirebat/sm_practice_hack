@@ -2180,7 +2180,6 @@ preset_kpdr22_backtracking_terminator_revisit:
     dw $0A1E, $0304 ; More position/state
     dw $0AF6, $0101 ; Samus X
     dw $0AFA, $0086 ; Samus Y
-    dw $0B3F, $0104 ; Blue suit
     dw !PRESET_DOORS, $0000 ; doors opened
     dw #$FFFF
 
@@ -2198,7 +2197,6 @@ preset_kpdr22_backtracking_green_pirate_shaft_revisit:
     dw $0A1E, $0004 ; More position/state
     dw $0AF6, $0073 ; Samus X
     dw $0AFA, $029B ; Samus Y
-    dw $0B3F, $0000 ; Blue suit
     dw #$FFFF
 
 preset_kpdr22_tourian_metroids_1:
