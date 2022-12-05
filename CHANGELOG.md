@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.1.7]  Fixed drawing enemy hitboxes after the enemy is deleted
 * [2.5.1.6]  Fixed crashes when activating the ship on PAL
 * [2.5.1.5]  Removed anti-flash/shake features due to issues with PAL builds
 * [2.5.1.4]  Added DreamCowboy menu color profile
