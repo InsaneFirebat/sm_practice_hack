@@ -29,6 +29,11 @@ post_load_state:
 {
     JSR post_load_music
 
+    ; Reload OOB tile viewer if enabled
+    LDA !ram_oob_watch_active : BEQ .minimap
+    JSL upload_sprite_oob_tiles
+
+  .minimap
     ; Reload BG3 GFX if minimap setting changed
     LDA !ram_minimap : CMP !SRAM_SAVED_MINIMAP : BEQ .rng
     JSL cm_transfer_original_tileset
