@@ -1,9 +1,8 @@
 *.srm
 *.bst
 *.s[mf]c
-build/*.ips
-build/*.smc
-build/*.sfc
+build/*
+!build/.gitkeep
 build/HACK/*
 !build/HACK/.gitkeep
 *.sw[op]
