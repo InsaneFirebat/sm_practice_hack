@@ -1,8 +1,10 @@
+
 ; ---------------
 ; Compiler Flags
 ; ---------------
 
 !FEATURE_SD2SNES ?= 1
+!FEATURE_TINYSTATES ?= 0
 !ORIGINAL_MESSAGE_TEXT ?= 0
 !PRESERVE_WRAM_DURING_SPACETIME ?= 1
 !FEATURE_MORPHLOCK ?= 0
@@ -10,8 +12,8 @@
 !RAW_TILE_GRAPHICS ?= 0
 
 !VERSION_MAJOR = 2
-!VERSION_MINOR = 4
-!VERSION_BUILD = 2
+!VERSION_MINOR = 5
+!VERSION_BUILD = 1
 !VERSION_REV_1 = 0
 !VERSION_REV_2 = 2
 
@@ -105,10 +107,11 @@
 !ram_horizontal_speed               = !WRAM_START+$76
 !ram_vertical_speed                 = !WRAM_START+$78
 !ram_quickdrop_counter              = !WRAM_START+$7A
-!ram_freeze_on_load                 = !WRAM_START+$7C
-!ram_walljump_counter               = !WRAM_START+$7E
+!ram_walljump_counter               = !WRAM_START+$7C
+!ram_fail_sum                       = !WRAM_START+$7E
+!ram_fail_count                     = !WRAM_START+$80
 
-!WRAM_PERSIST_START = !ram_walljump_counter+$02
+!WRAM_PERSIST_START = !ram_fail_count+$02
 ; ----------------------------------------------------------
 ; Variables below this point are PERSISTENT -- they maintain
 ; their value across savestates. Use this section for
@@ -165,7 +168,7 @@
 !ram_game_mode_extras               = !WRAM_PERSIST_START+$52
 !ram_sprite_features_active         = !WRAM_PERSIST_START+$54
 
-; ^ FREE SPACE ^ up to +$FC
+; ^ FREE SPACE ^ up to +$7A
 
 ; -----------------------
 ; RAM (Bank 7E required)
@@ -232,6 +235,21 @@
 !ram_cm_phan_first_phase = !WRAM_MENU_START+$80
 !ram_cm_phan_second_phase = !WRAM_MENU_START+$82
 
+!ram_cm_varia = !WRAM_MENU_START+$80
+!ram_cm_gravity = !WRAM_MENU_START+$82
+!ram_cm_morph = !WRAM_MENU_START+$84
+!ram_cm_bombs = !WRAM_MENU_START+$86
+!ram_cm_spring = !WRAM_MENU_START+$88
+!ram_cm_screw = !WRAM_MENU_START+$8A
+!ram_cm_hijump = !WRAM_MENU_START+$8C
+!ram_cm_space = !WRAM_MENU_START+$8E
+!ram_cm_speed = !WRAM_MENU_START+$90
+!ram_cm_charge = !WRAM_MENU_START+$92
+!ram_cm_ice = !WRAM_MENU_START+$94
+!ram_cm_wave = !WRAM_MENU_START+$96
+!ram_cm_spazer = !WRAM_MENU_START+$98
+!ram_cm_plasma = !WRAM_MENU_START+$9A
+
 ; ^ FREE SPACE ^ up to +$CE
 
 ; Reserve 48 bytes for CGRAM cache
@@ -240,10 +258,22 @@
 
 !CRASHDUMP = $7EFF00
 
-!ram_hex2dec_first_digit = $14
-!ram_hex2dec_second_digit = $16
-!ram_hex2dec_third_digit = $18
-!ram_hex2dec_rest = $1A
+!DP_MenuIndices = $00 ; 0x4
+!DP_CurrentMenu = $04 ; 0x4
+!DP_Address = $08 ; 0x4
+!DP_JSLTarget = $0C ; 0x4
+!DP_CtrlInput = $10 ; 0x4
+!DP_Palette = $14
+!DP_Temp = $16
+; v these repreat v
+!DP_ToggleValue = $18
+!DP_Increment = $1A
+!DP_Minimum = $1C
+!DP_Maximum = $1E
+!DP_DrawValue = $18
+!DP_FirstDigit = $1A
+!DP_SecondDigit = $1C
+!DP_ThirdDigit = $1E
 
 !ACTION_TOGGLE              = #$0000
 !ACTION_TOGGLE_BIT          = #$0002
@@ -361,6 +391,8 @@ endif
 
 !OAM_STACK_POINTER = $0590
 !PB_EXPLOSION_STATUS = $0592
+!NMI_REQUEST_FLAG = $05B4
+!FRAME_COUNTER_8BIT = $05B5
 !FRAME_COUNTER = $05B6
 !CACHED_RANDOM_NUMBER = $05E5
 !DISABLE_SOUNDS = $05F5
@@ -373,6 +405,11 @@ endif
 !MUSIC_TRACK = $07F5
 !LAYER1_X = $0911
 !LAYER1_Y = $0915
+!LAYER2_X = $0917
+!LAYER2_Y = $0919
+!BG2_X_SCROLL = $0921
+!BG2_Y_SCROLL = $0923
+!CURRENT_SAVE_FILE = $0952
 !GAMEMODE = $0998
 !SAMUS_ITEMS_EQUIPPED = $09A2
 !SAMUS_ITEMS_COLLECTED = $09A4
@@ -387,8 +424,14 @@ endif
 !SAMUS_SUPERS_MAX = $09CC
 !SAMUS_PBS = $09CE
 !SAMUS_PBS_MAX = $09D0
+!SAMUS_ITEM_SELECTED = $09D2
 !SAMUS_RESERVE_MAX = $09D4
 !SAMUS_RESERVE_ENERGY = $09D6
+!IGT_FRAMES = $09DA
+!IGT_SECONDS = $09DC
+!IGT_MINUTES = $09DE
+!IGT_HOURS = $09E0
+!SAMUS_AUTO_CANCEL = $0A04
 !SAMUS_LAST_HP = $0A06
 !SAMUS_POSE = $0A1C
 !SAMUS_POSE_DIRECTION = $0A1E
@@ -396,6 +439,7 @@ endif
 !SAMUS_PREVIOUS_POSE = $0A20
 !SAMUS_PREVIOUS_POSE_DIRECTION = $0A22
 !SAMUS_PREVIOUS_MOVEMENT_TYPE = $0A23
+!SAMUS_SHINE_TIMER = $0A68
 !SAMUS_HEALTH_WARNING = $0A6A
 !SAMUS_X = $0AF6
 !SAMUS_X_SUBPX = $0AF8
@@ -433,13 +477,15 @@ endif
 !ENEMY_PROJ_Y = $1A93
 !ENEMY_PROJ_RADIUS = $1BB3
 
+!HUD_TILEMAP = $7EC600
+
 
 ; -----
 ; SRAM
 ; -----
 
 !PRESET_SLOTS = $703000
-!SRAM_VERSION = $000E
+!SRAM_VERSION = $000F
 
 !SRAM_START = $F02200
 
@@ -484,6 +530,7 @@ endif
 !sram_preset_options = !SRAM_START+$48
 !sram_lag_counter_mode = !SRAM_START+$4A
 !sram_fast_doors = !SRAM_START+$4C
+!sram_suppress_flashing = !SRAM_START+$4E
 
 ; ^ FREE SPACE ^ up to +$0FCE
 
@@ -508,11 +555,21 @@ endif
 !CUTSCENE_FAST_KRAID = #$0400
 !CUTSCENE_SKIP_SPLASH = #$0800
 
+!SUPPRESS_CRATERIA_LIGHTNING = #$0001
+!SUPPRESS_ESCAPE_FLASHING = #$0002
+!SUPPRESS_POWER_BOMB_FLASH = #$0004
+!SUPPRESS_MB1_FLASHING = #$0008
+!SUPPRESS_BOSS_DAMAGE_FLASH = #$0010
+!SUPPRESS_EARTHQUAKE = #$0020
+
 !PRESETS_COMPRESSED_GRAPHICS = #$0001
 !PRESETS_COMPRESSED_PALETTES = #$0002
 !PRESETS_COMPRESSED_PALETTES_8BIT = #$02
 !PRESETS_COMPRESSED_TABLES = #$0004
 !PRESETS_CLOSE_BLUE_DOORS = #$0008
+!PRESETS_PRESERVE_ENEMIES = #$0010
+!PRESETS_CLEAR_MAP_TILES = #$0020
+!PRESETS_AUTO_SEGMENT_OFF = #$0040
 
 
 ; ----------
@@ -530,10 +587,12 @@ if !FEATURE_TINYSTATES
 !SRAM_SAVED_STATE = $737F02
 !SRAM_SAVED_RNG = $737F80
 !SRAM_SAVED_FRAME_COUNTER = $737F82
+!SRAM_SAVED_MINIMAP = $737F84
 else
 !SRAM_DMA_BANK = $770000
 !SRAM_SAVED_RNG = $770080
 !SRAM_SAVED_FRAME_COUNTER = $770082
 !SRAM_SAVED_SP = $774004
 !SRAM_SAVED_STATE = $774006
+!SRAM_SAVED_MINIMAP = $774008
 endif
