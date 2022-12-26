@@ -39,6 +39,9 @@ org $809B4C      ; hijack, HUD routine (game timer by Quote58)
 org $8290F6      ; hijack, HUD routine while paused
     JSL ih_hud_code_paused
 
+org $80A16B      ; hijack, adjust room times and update HUD when unpausing
+    JSL ih_unpause
+
 org $82894F      ; hijack, main game loop: runs EVERY frame (used for room transition timer)
     JSL ih_game_loop_code
 
@@ -53,6 +56,9 @@ org $91DAD8      ; hijack, runs after a shinespark has been charged
 
 org $90F1E4      ; hijack, runs when an elevator is activated
     JSL ih_elevator_activation
+
+org $A9F006      ; hijack, runs when the screen locks to start the hopper/baby cutscene
+    JSL ih_babyskip_segment
 
 org $A98874      ; update timers after MB1 fight
     JSL ih_mb1_segment
@@ -78,7 +84,7 @@ org $A0BAA0      ; update timers when Kraid drops spawn
 org $A0BAD3      ; update timers when Bomb Torizo drops spawn
     JML ih_drops_segment
 
-org $A0BB04      ; update timers when Golden Torizo drops spawn
+org $A0BB06      ; update timers when Golden Torizo drops spawn
     JML ih_drops_segment
 
 org $A0BB39      ; update timers when Spore Spawn drops spawn
@@ -302,7 +308,7 @@ ih_before_room_transition:
     LDA $14 : PHA
 
     ; Update HUD
-    JSL ih_update_hud_code
+    JSL ih_update_hud_code_before_transition
 
     ; Restore temp variables
     PLA : STA $14
@@ -331,6 +337,30 @@ ceres_start_timers:
     JML ceres_start_timers_return
 }
 
+ih_unpause:
+; Adds frames when unpausing (nmi is turned off during vram transfers)
+{
+    ; RT room
+    LDA !ram_realtime_room : CLC : ADC.w #41 : STA !ram_realtime_room
+
+    ; RT seg
+    LDA !ram_seg_rt_frames : CLC : ADC.w #41 : STA !ram_seg_rt_frames
+    CMP.w #60 : BCC .updateHUD
+    SEC : SBC.w #60 : STA !ram_seg_rt_frames
+
+    LDA !ram_seg_rt_seconds : INC : STA !ram_seg_rt_seconds
+    CMP.w #60 : BCC .updateHUD
+    LDA #$0000 : STA !ram_seg_rt_seconds
+
+    LDA !ram_seg_rt_minutes : INC : STA !ram_seg_rt_minutes
+
+  .updateHUD
+    JSL ih_update_hud_early
+
+    ; Replace overwritten logic to enable NMI
+    JML $80834B
+}
+
 ih_elevator_activation:
 {
     PHA
@@ -344,6 +374,14 @@ ih_elevator_activation:
     PLA
     STZ $0A56
     SEC
+    RTL
+}
+
+ih_babyskip_segment:
+{
+    ; runs when the screen locks to start the hopper/baby cutscene
+    STA $7ECD22 ; overwritten code
+    JSL ih_update_hud_early
     RTL
 }
 
@@ -390,6 +428,27 @@ ih_ship_elevator_segment:
     JML $91E3F6 ; overwritten code
 }
 
+ih_update_hud_code_before_transition:
+{
+    PHX
+    PHY
+    PHP
+    PHB
+    ; Bank 80
+    PEA $8080 : PLB : PLB
+
+    LDA !sram_display_mode : CMP #!IH_MODE_ARMPUMP_INDEX : BNE .update_hud_code
+
+    ; Report armpump room totals
+    LDA !ram_momentum_sum : CLC : ADC !ram_momentum_count : LDX #$0088 : JSR Draw4
+    LDA !ram_fail_sum : CLC : ADC !ram_fail_count : LDX #$0092 : JSR Draw4
+    LDA #$0000 : STA !ram_momentum_count : STA !ram_fail_count
+    STA !ram_momentum_sum : STA !ram_fail_sum : STA !ram_roomstrat_counter
+
+  .update_hud_code
+    BRA ih_update_hud_code_start
+}
+
 ih_update_hud_code:
 {
     PHX
@@ -399,6 +458,7 @@ ih_update_hud_code:
     ; Bank 80
     PEA $8080 : PLB : PLB
 
+  .start
     LDA !ram_minimap : BNE .minimap_hud
     BRL .start_update
 
@@ -429,10 +489,10 @@ ih_update_hud_code:
     %a16()
     LDA $4216 : STA $C1
     LDA $4214 : LDX #$00B0 : JSR Draw2
-    LDA !IH_DECIMAL : STA $7EC6B4
+    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$B4
     LDA $C1 : ASL : TAX
-    LDA HexToNumberGFX1,X : STA $7EC6B6
-    LDA HexToNumberGFX2,X : STA $7EC6B8
+    LDA HexToNumberGFX1,X : STA !HUD_TILEMAP+$B6
+    LDA HexToNumberGFX2,X : STA !HUD_TILEMAP+$B8
 
   .pick_minimap_transition_time
     LDA !sram_lag_counter_mode : BNE .minimap_transition_time_full
@@ -469,10 +529,10 @@ ih_update_hud_code:
     %a16()
     LDA $4216 : STA $C1
     LDA $4214 : JSR Draw3 : TXY
-    LDA !IH_DECIMAL : STA $7EC600,X
+    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$00,X
     LDA $C1 : ASL : TAX
-    LDA HexToNumberGFX1,X : PHX : TYX : STA $7EC602,X
-    PLX : LDA HexToNumberGFX2,X : TYX : STA $7EC604,X
+    LDA HexToNumberGFX1,X : PHX : TYX : STA !HUD_TILEMAP+$02,X
+    PLX : LDA HexToNumberGFX2,X : TYX : STA !HUD_TILEMAP+$04,X
 
     ; 3 tiles between input display and missile icon
     ; skip item% if display mode = vspeed
@@ -496,7 +556,7 @@ ih_update_hud_code:
 
     ; Percent counter -> decimal form and drawn on HUD
     LDX #$0012 : JSR Draw3
-    LDA !IH_PERCENT : STA $7EC618
+    LDA !IH_PERCENT : STA !HUD_TILEMAP+$18
 
   .skipToLag
     LDA !sram_top_display_mode : CMP !TOP_DISPLAY_VANILLA : BEQ .vanilla_infohud_draw_lag_and_reserves
@@ -529,8 +589,8 @@ ih_update_hud_code:
     LDY #$998B : LDA !SAMUS_RESERVE_ENERGY : BNE .vanilla_draw_reserve_icon
     LDY #$9997
   .vanilla_draw_reserve_icon
-    LDA $0000,Y : STA $7EC618 : LDA $0002,Y : STA $7EC61A
-    LDA $0004,Y : STA $7EC658 : LDA $0006,Y : STA $7EC65A
+    LDA $0000,Y : STA !HUD_TILEMAP+$18 : LDA $0002,Y : STA !HUD_TILEMAP+$1A
+    LDA $0004,Y : STA !HUD_TILEMAP+$58 : LDA $0006,Y : STA !HUD_TILEMAP+$5A
 
   .vanilla_infohud_draw_lag
     LDA !ram_last_room_lag : LDX #$007E : JSR Draw4
@@ -561,20 +621,20 @@ ih_update_hud_code:
   .draw_segment_timer
     ; Frames
     LDA [$00] : INC $00 : INC $00 : ASL : TAX
-    LDA HexToNumberGFX1,X : STA $7EC6BC
-    LDA HexToNumberGFX2,X : STA $7EC6BE
+    LDA HexToNumberGFX1,X : STA !HUD_TILEMAP+$BC
+    LDA HexToNumberGFX2,X : STA !HUD_TILEMAP+$BE
 
     ; Seconds
     LDA [$00] : INC $00 : INC $00 : ASL : TAX
-    LDA HexToNumberGFX1,X : STA $7EC6B6
-    LDA HexToNumberGFX2,X : STA $7EC6B8
+    LDA HexToNumberGFX1,X : STA !HUD_TILEMAP+$B6
+    LDA HexToNumberGFX2,X : STA !HUD_TILEMAP+$B8
 
     ; Minutes
     LDA [$00] : LDX #$00AE : JSR Draw3
 
     ; Draw decimal seperators
-    LDA !IH_DECIMAL : STA $7EC6B4 : STA $7EC6BA
-    LDA !IH_BLANK : STA $7EC6C0
+    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$B4 : STA !HUD_TILEMAP+$BA
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$C0
     BRL .end
 }
 
@@ -617,25 +677,25 @@ ih_hud_vanilla_health:
     LDA $14 : BEQ .vanilla_draw_tank_health
     DEC $14 : LDX #$2831
   .vanilla_draw_tank_health
-    TXA : LDX $9CCE,Y : STA $7EC608,X
+    TXA : LDX $9CCE,Y : STA !HUD_TILEMAP+$08,X
     INY : INY : CPY #$001C : BMI .vanilla_loop_tanks
     BRA .vanilla_subtank_health
 
   .vanilla_draw_empty_tanks
      LDA !IH_BLANK
   .vanilla_loop_empty_tanks
-     LDX $9CCE,Y : STA $7EC608,X
+     LDX $9CCE,Y : STA !HUD_TILEMAP+$08,X
      INY : INY : CPY #$001C : BMI .vanilla_loop_empty_tanks
 
   .vanilla_subtank_health
     LDA $12 : LDX #$0094 : JSR Draw2
     LDA $16 : BNE .vanilla_subtank_whitespace
     ; Draw the leading zero
-    LDA.w NumberGFXTable : STA $7EC694
+    LDA.w NumberGFXTable : STA !HUD_TILEMAP+$94
 
   .vanilla_subtank_whitespace
-    LDA !IH_BLANK : STA $7EC692 : STA $7EC698 : STA $7EC69A
-    STA $7EC608 : STA $7EC648 : STA $7EC688
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$92 : STA !HUD_TILEMAP+$98 : STA !HUD_TILEMAP+$9A
+    STA !HUD_TILEMAP+$08 : STA !HUD_TILEMAP+$48 : STA !HUD_TILEMAP+$88
 
     LDA !SAMUS_RESERVE_MODE : CMP #$0001 : BNE .vanilla_no_reserves
 
@@ -643,12 +703,12 @@ ih_hud_vanilla_health:
     LDY #$998B : LDA !SAMUS_RESERVE_ENERGY : BNE .vanilla_draw_reserve_icon
     LDY #$9997
   .vanilla_draw_reserve_icon
-    LDA $0000,Y : STA $7EC618 : LDA $0002,Y : STA $7EC61A
-    LDA $0004,Y : STA $7EC658 : LDA $0006,Y : STA $7EC65A
+    LDA $0000,Y : STA !HUD_TILEMAP+$18 : LDA $0002,Y : STA !HUD_TILEMAP+$1A
+    LDA $0004,Y : STA !HUD_TILEMAP+$58 : LDA $0006,Y : STA !HUD_TILEMAP+$5A
     RTS
 
   .vanilla_no_reserves
-    LDA !IH_BLANK : STA $7EC618 : STA $7EC61A : STA $7EC658 : STA $7EC65A
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$18 : STA !HUD_TILEMAP+$1A : STA !HUD_TILEMAP+$58 : STA !HUD_TILEMAP+$5A
     RTS
 }
 
@@ -680,7 +740,7 @@ ih_hud_code:
   .controller_row_1_blank
     LDA !IH_BLANK
   .controller_row_1_draw
-    STA $7EC608,X
+    STA !HUD_TILEMAP+$08,X
     INX : INX : CPX #$000C : BNE .controller_row_1_loop
 
     LDX #$0000
@@ -692,7 +752,7 @@ ih_hud_code:
   .controller_row_2_blank
     LDA !IH_BLANK
   .controller_row_2_draw
-    STA $7EC648,X
+    STA !HUD_TILEMAP+$48,X
     INX : INX : CPX #$000C : BNE .controller_row_2_loop
 
     TYA : STA !ram_ih_controller
@@ -700,10 +760,10 @@ ih_hud_code:
 
   .vanilla_infohud
     ; Shift infohud status left by one
-    LDA $7EC68A : STA $7EC688
-    LDA $7EC68C : STA $7EC68A
-    LDA $7EC68E : STA $7EC68C
-    LDA $7EC690 : STA $7EC68E
+    LDA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$88
+    LDA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8A
+    LDA !HUD_TILEMAP+$8E : STA !HUD_TILEMAP+$8C
+    LDA !HUD_TILEMAP+$90 : STA !HUD_TILEMAP+$8E
 
   .status_display
     LDA !sram_display_mode : ASL : TAX
@@ -713,7 +773,7 @@ ih_hud_code:
     LDA !SAMUS_HP : CMP !ram_last_hp : BEQ .reserves : STA !ram_last_hp
     LDA !sram_top_display_mode : CMP !TOP_DISPLAY_VANILLA : BEQ .vanilla_draw_health
     LDA !SAMUS_HP : LDX #$0092 : JSR Draw4
-    LDA !IH_BLANK : STA $7EC690 : STA $7EC69A
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$90 : STA !HUD_TILEMAP+$9A
     BRA .reserves
 
   .vanilla_check_health
@@ -722,11 +782,11 @@ ih_hud_code:
     JSR ih_hud_vanilla_health
   .vanilla_health_end
     ; Shift infohud status right by one
-    LDA $7EC68E : STA $7EC690
-    LDA $7EC68C : STA $7EC68E
-    LDA $7EC68A : STA $7EC68C
-    LDA $7EC688 : STA $7EC68A
-    LDA !IH_BLANK : STA $7EC688
+    LDA !HUD_TILEMAP+$8E : STA !HUD_TILEMAP+$90
+    LDA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E
+    LDA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$8C
+    LDA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$88
     BRL .end
 
     ; Reserve energy counter
@@ -740,17 +800,17 @@ ih_hud_code:
 
   .checkAuto
     LDA !SAMUS_RESERVE_MODE : CMP #$0001 : BEQ .autoOn
-    LDA !IH_BLANK : STA $7EC61A : BRA .statusIcons
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$1A : BRA .statusIcons
 
   .autoOn
     LDA !SAMUS_RESERVE_ENERGY : BEQ .autoEmpty
-    LDA !IH_RESERVE_AUTO : STA $7EC61A : BRA .statusIcons
+    LDA !IH_RESERVE_AUTO : STA !HUD_TILEMAP+$1A : BRA .statusIcons
 
   .autoEmpty
-    LDA !IH_RESERVE_EMPTY : STA $7EC61A : BRA .statusIcons
+    LDA !IH_RESERVE_EMPTY : STA !HUD_TILEMAP+$1A : BRA .statusIcons
 
   .noReserves
-    LDA !IH_BLANK : STA $7EC614 : STA $7EC616 : STA $7EC618 : STA $7EC61A
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$14 : STA !HUD_TILEMAP+$16 : STA !HUD_TILEMAP+$18 : STA !HUD_TILEMAP+$1A
 
     ; Status Icons
   .statusIcons
@@ -761,33 +821,33 @@ ih_hud_code:
   .check_healthbomb
     LDA $0E1A : BEQ .clear_healthbomb
     LDA !SAMUS_HP : CMP #$0032 : BMI .pink
-    LDA !IH_LETTER_E : STA $7EC654
+    LDA !IH_LETTER_E : STA !HUD_TILEMAP+$54
     BRA .check_elevator
 
   .pink
-    LDA !IH_HEALTHBOMB : STA $7EC654
+    LDA !IH_HEALTHBOMB : STA !HUD_TILEMAP+$54
     BRA .check_elevator
 
   .clear_healthbomb
-    LDA !IH_BLANK : STA $7EC654
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$54
 
     ; Elevator
   .check_elevator
     LDA $0E16 : BEQ .clear_elevator
-    LDA !IH_ELEVATOR : STA $7EC656
+    LDA !IH_ELEVATOR : STA !HUD_TILEMAP+$56
     BRA .check_shinetimer
 
   .clear_elevator
-    LDA !IH_BLANK : STA $7EC656
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$56
 
     ; Shine timer
   .check_shinetimer
     LDA $0A68 : BEQ .clear_shinetimer
-    LDA !IH_SHINETIMER : STA $7EC658
+    LDA !IH_SHINETIMER : STA !HUD_TILEMAP+$58
     BRA .check_reserves
 
   .clear_shinetimer
-    LDA !IH_BLANK : STA $7EC658
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$58
 
     ; reserve tank
   .check_reserves
@@ -796,16 +856,16 @@ ih_hud_code:
     LDA !SAMUS_RESERVE_ENERGY : BEQ .empty
     LDA !SAMUS_RESERVE_MAX : BEQ .clearReserve
 
-    LDA !IH_RESERVE_AUTO : STA $7EC61A
-    BRA .check_morphlock
+    LDA !IH_RESERVE_AUTO : STA !HUD_TILEMAP+$1A
+    BRA .end
 
   .empty
     LDA !SAMUS_RESERVE_MAX : BEQ .clearReserve
-    LDA !IH_RESERVE_EMPTY : STA $7EC61A
-    BRA .check_morphlock
+    LDA !IH_RESERVE_EMPTY : STA !HUD_TILEMAP+$1A
+    BRA .end
 
   .clearReserve
-    LDA !IH_BLANK : STA $7EC61A
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$1A
 
     ; Morph Lock
   .check_morphlock
@@ -837,17 +897,17 @@ Draw2:
     LDA $4214 : STA $16
 
     ; Ones digit
-    LDA $4216 : ASL : TAY : LDA.w NumberGFXTable,Y : STA $7EC602,X
+    LDA $4216 : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$02,X
 
     ; Tens digit
-    LDA $16 : BEQ .blanktens : ASL : TAY : LDA.w NumberGFXTable,Y : STA $7EC600,X
+    LDA $16 : BEQ .blanktens : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$00,X
 
   .done
     INX #4
     RTS
 
   .blanktens
-    LDA !IH_BLANK : STA $7EC600,X
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$00,X
     BRA .done
 }
 
@@ -861,7 +921,7 @@ Draw3:
     LDA $4214 : STA $16
 
     ; Ones digit
-    LDA $4216 : ASL : TAY : LDA.w NumberGFXTable,Y : STA $7EC604,X
+    LDA $4216 : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$04,X
 
     LDA $16 : BEQ .blanktens
     STA $4204
@@ -872,21 +932,21 @@ Draw3:
     LDA $4214 : STA $14
 
     ; Tens digit
-    LDA $4216 : ASL : TAY : LDA.w NumberGFXTable,Y : STA $7EC602,X
+    LDA $4216 : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$02,X
 
     ; Hundreds digit
-    LDA $14 : BEQ .blankhundreds : ASL : TAY : LDA.w NumberGFXTable,Y : STA $7EC600,X
+    LDA $14 : BEQ .blankhundreds : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$00,X
 
   .done
     INX #6
     RTS
 
   .blanktens
-    LDA !IH_BLANK : STA $7EC600,X : STA $7EC602,X
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$00,X : STA !HUD_TILEMAP+$02,X
     BRA .done
 
   .blankhundreds
-    LDA !IH_BLANK : STA $7EC600,X
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$00,X
     BRA .done
 }
 
@@ -900,7 +960,7 @@ Draw4:
     LDA $4214 : STA $16
 
     ; Ones digit
-    LDA $4216 : ASL : TAY : LDA.w NumberGFXTable,Y : STA $7EC606,X
+    LDA $4216 : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$06,X
 
     LDA $16 : BEQ .blanktens
     STA $4204
@@ -911,7 +971,7 @@ Draw4:
     LDA $4214 : STA $14
 
     ; Tens digit
-    LDA $4216 : ASL : TAY : LDA.w NumberGFXTable,Y : STA $7EC604,X
+    LDA $4216 : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$04,X
 
     LDA $14 : BEQ .blankhundreds
     STA $4204
@@ -922,25 +982,25 @@ Draw4:
     LDA $4214 : STA $12
 
     ; Hundreds digit
-    LDA $4216 : ASL : TAY : LDA.w NumberGFXTable,Y : STA $7EC602,X
+    LDA $4216 : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$02,X
 
     ; Thousands digit
-    LDA $12 : BEQ .blankthousands : ASL : TAY : LDA.w NumberGFXTable,Y : STA $7EC600,X
+    LDA $12 : BEQ .blankthousands : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$00,X
 
   .done
     INX #8
     RTS
 
   .blanktens
-    LDA !IH_BLANK : STA $7EC600,X : STA $7EC602,X : STA $7EC604,X
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$00,X : STA !HUD_TILEMAP+$02,X : STA !HUD_TILEMAP+$04,X
     BRA .done
 
   .blankhundreds
-    LDA !IH_BLANK : STA $7EC600,X : STA $7EC602,X
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$00,X : STA !HUD_TILEMAP+$02,X
     BRA .done
 
   .blankthousands
-    LDA !IH_BLANK : STA $7EC600,X
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$00,X
     BRA .done
 }
 
@@ -952,22 +1012,22 @@ DrawHealthPaused:
     LDA !SAMUS_RESERVE_MAX : BEQ .noReserves
     LDA !SAMUS_RESERVE_ENERGY : STA !ram_reserves_last : LDX #$0014 : JSR Draw3
     LDA !SAMUS_RESERVE_MODE : CMP #$0001 : BEQ .autoOn
-    LDA !IH_BLANK : STA $7EC61A : BRA .draw_health
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$1A : BRA .draw_health
 
   .autoOn
     LDA !SAMUS_RESERVE_ENERGY : BEQ .autoEmpty
-    LDA !IH_RESERVE_AUTO : STA $7EC61A : BRA .draw_health
+    LDA !IH_RESERVE_AUTO : STA !HUD_TILEMAP+$1A : BRA .draw_health
 
   .autoEmpty
-    LDA !IH_RESERVE_EMPTY : STA $7EC61A : BRA .draw_health
+    LDA !IH_RESERVE_EMPTY : STA !HUD_TILEMAP+$1A : BRA .draw_health
 
   .noReserves
-    LDA !IH_BLANK : STA $7EC614 : STA $7EC616 : STA $7EC618 : STA $7EC61A
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$14 : STA !HUD_TILEMAP+$16 : STA !HUD_TILEMAP+$18 : STA !HUD_TILEMAP+$1A
     LDA !SAMUS_RESERVE_ENERGY : STA !ram_reserves_last
 
   .draw_health
     LDA !SAMUS_HP : LDX #$0092 : JSR Draw4
-    LDA !IH_BLANK : STA $7EC690 : STA $7EC69A
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$90 : STA !HUD_TILEMAP+$9A
     RTL
 
   .vanilla_draw_health
@@ -980,20 +1040,20 @@ Draw4Hex:
     STA $12 : AND #$F000              ; get first digit (X000)
     XBA : LSR #3                      ; move it to last digit (000X) and shift left one
     TAY : LDA.w HexGFXTable,Y         ; load tilemap address with 2x digit as index
-    STA $7EC600,X                     ; draw digit to HUD
+    STA !HUD_TILEMAP+$00,X                     ; draw digit to HUD
 
     LDA $12 : AND #$0F00              ; (0X00)
     XBA : ASL
     TAY : LDA.w HexGFXTable,Y
-    STA $7EC602,X
+    STA !HUD_TILEMAP+$02,X
 
     LDA $12 : AND #$00F0              ; (00X0)
     LSR #3 : TAY : LDA.w HexGFXTable,Y
-    STA $7EC604,X
+    STA !HUD_TILEMAP+$04,X
 
     LDA $12 : AND #$000F              ; (000X)
     ASL : TAY : LDA.w HexGFXTable,Y
-    STA $7EC606,X
+    STA !HUD_TILEMAP+$06,X
     RTS
 }
 
@@ -1015,7 +1075,7 @@ Draw4Hundredths:
     LDA $4214 : STA $14
 
     ; Tens digit
-    LDA $4216 : ASL : TAY : LDA.w NumberGFXTable,Y : STA $7EC606,X
+    LDA $4216 : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$06,X
 
     LDA $14 : BEQ .zerohundreds
     STA $4204
@@ -1026,22 +1086,22 @@ Draw4Hundredths:
     LDA $4214 : STA $12
 
     ; Hundreds digit
-    LDA $4216 : ASL : TAY : LDA.w NumberGFXTable,Y : STA $7EC604,X
+    LDA $4216 : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$04,X
 
     ; Thousands digit
-    LDA $12 : ASL : TAY : LDA.w NumberGFXTable,Y : STA $7EC600,X
+    LDA $12 : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$00,X
 
   .done
-    LDA !IH_DECIMAL : STA $7EC602,X
+    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$02,X
     INX #8
     RTS
 
   .zerotens
-    LDA #$0C09 : STA $7EC600,X : STA $7EC604,X : STA $7EC606,X
+    LDA #$0C09 : STA !HUD_TILEMAP+$00,X : STA !HUD_TILEMAP+$04,X : STA !HUD_TILEMAP+$06,X
     BRA .done
 
   .zerohundreds
-    LDA #$0C09 : STA $7EC600,X : STA $7EC604,X
+    LDA #$0C09 : STA !HUD_TILEMAP+$00,X : STA !HUD_TILEMAP+$04,X
     BRA .done
 }
 
@@ -1150,55 +1210,49 @@ ih_game_loop_code:
     RTL
 
   .toggle_pause
-    LDA #$FFFF
-    STA !ram_slowdown_mode
-    LDA #$0000
-    STA !ram_slowdown_frames
+    TDC : STA !ram_slowdown_frames
+    DEC : STA !ram_slowdown_mode
     JMP .done
 
   .toggle_slowdown
     LDA !ram_slowdown_mode
-    INC A
-    STA !ram_slowdown_mode
+    INC : STA !ram_slowdown_mode
     JMP .done
 
   .toggle_speedup
-    LDA !ram_slowdown_mode
-    BEQ +
-    DEC A
-    STA !ram_slowdown_mode
+    LDA !ram_slowdown_mode : BEQ +
+    DEC : STA !ram_slowdown_mode
 +   JMP .done
 
   .reset_slowdown
-    LDA #$0000
+    TDC
     STA !ram_slowdown_mode
     STA !ram_slowdown_frames
     JMP .done
 
   .inc_statusdisplay
-    LDA !sram_display_mode
-    INC A
-    CMP #$0012
-    BNE +
-    LDA #$0000
-+   STA !sram_display_mode
-    JMP .update_status
+    LDA !sram_display_mode : INC
+    CMP #$0014 : BNE +
+    TDC : STA !sram_display_mode
+    BRA .update_status
 
   .dec_statusdisplay
-    LDA !sram_display_mode
-    DEC A
-    CMP #$FFFF
-    BNE +
-    LDA #$0011
+    LDA !sram_display_mode : DEC
+    CMP #$FFFF : BNE +
+    LDA #$0013
 +   STA !sram_display_mode
-    JMP .update_status
-
 
   .update_status
-    LDA #$0000
+    TDC
+    STA !ram_momentum_sum
+    STA !ram_momentum_count
     STA !ram_HUD_check
+    STA !ram_roomstrat_counter
+    STA !ram_roomstrat_state
     STA !ram_armed_shine_duration
-    INC A
+    STA !ram_fail_count
+    STA !ram_fail_sum
+    INC
     STA !ram_dash_counter
     STA !ram_xpos
     STA !ram_ypos
@@ -1221,11 +1275,11 @@ metronome:
 
   .eraseHUD
     STA !ram_metronome_counter
-    LDA !IH_BLANK : STA $7EC662
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$62
     RTS
 
   .tick
-    LDA !IH_LETTER_X : STA $7EC662
+    LDA !IH_LETTER_X : STA !HUD_TILEMAP+$62
     LDA #$0000 : STA !ram_metronome_counter
     LDA !sram_metronome_sfx : ASL : TAX
     LDA.l MetronomeSFX,X : JSL !SFX_LIB1
@@ -1240,7 +1294,7 @@ magic_pants:
 {
     LDA $0A96 : CMP #$0009 : BEQ .check
     LDA !ram_magic_pants_state : BEQ +
-    LDA #$0000 : STA !ram_magic_pants_state
+    TDC : STA !ram_magic_pants_state
 
     LDA !ram_magic_pants_enabled : AND #$0001 : BEQ +
     LDA !ram_magic_pants_pal1 : STA $7EC194
@@ -1294,7 +1348,7 @@ space_pants:
   .reset
     ; restore palettes if needed
     LDA !ram_magic_pants_state : BEQ .done
-    LDA #$0000 : STA !ram_magic_pants_state
+    TDC : STA !ram_magic_pants_state
 
     LDA !ram_space_pants_enabled : AND #$0001 : BEQ .done
     LDA !ram_magic_pants_pal1 : STA $7EC194
@@ -1310,15 +1364,13 @@ space_pants:
     LDA $0AD2 : BNE .SJliquid             ; check if air
 
   .SJair
-    LDA $0B2D : CMP $909E97 : BPL +       ; check against min SJ vspeed for air
-    BRA .reset
-+   CMP $909E99 : BPL .reset              ; check against max SJ vspeed for air
+    LDA $0B2D : CMP $909E97 : BMI .reset  ; check against min SJ vspeed for air
+    CMP $909E99 : BPL .reset              ; check against max SJ vspeed for air
     BRA .go
 
   .SJliquid
-    LDA $0B2D : CMP $909E9B : BPL +       ; check against min SJ vspeed for liquids
-    BRA .reset
-+   CMP $909E9D : BPL .reset              ; check against max SJ vspeed for liquids
+    LDA $0B2D : CMP $909E9B : BMI .reset  ; check against min SJ vspeed for liquids
+    CMP $909E9D : BPL .reset              ; check against max SJ vspeed for liquids
 
     ; Screw Attack seems to write new palette data every frame, which overwrites the flash
   .go

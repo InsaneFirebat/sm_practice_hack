@@ -50,12 +50,6 @@ org $90E877
     BRA $18
 
 
-; Adds frames when unpausing (nmi is turned off during vram transfers)
-; $80:A16B 22 4B 83 80 JSL $80834B[$80:834B]
-org $80A16B
-    JSL hook_unpause
-
-
 ; $82:8BB3 22 69 91 A0 JSL $A09169[$A0:9169]  ; Handles Samus getting hurt?
 org $828BB3
     JSL gamemode_end
@@ -105,6 +99,15 @@ org $8FE0C0
 ; Ceres Ridley room setup asm when timer is not running
 org $8FE0DF
     dw layout_asm_ceres_ridley_room_no_timer
+
+
+; Continue drawing escape timer after reaching ship
+org $90E908
+    JSR preserve_escape_timer
+
+; Stop drawing timer when its VRAM is overwritten
+org $A2ABFD
+    JML clear_escape_timer
 
 
 ;org $8FEA00 ; free space for door asm
@@ -161,28 +164,6 @@ hook_set_music_data:
 
   .fast_no_music
     JML $808F89
-}
-
-hook_unpause:
-{
-    ; RT room
-    LDA !ram_realtime_room : CLC : ADC.w #41 : STA !ram_realtime_room
-
-    ; RT seg
-    LDA !ram_seg_rt_frames : CLC : ADC.w #41 : STA !ram_seg_rt_frames
-    CMP.w #60 : BCC .done
-    SEC : SBC.w #60 : STA !ram_seg_rt_frames
-
-    LDA !ram_seg_rt_seconds : INC : STA !ram_seg_rt_seconds
-    CMP.w #60 : BCC .done
-    LDA #$0000 : STA !ram_seg_rt_seconds
-
-    LDA !ram_seg_rt_minutes : INC : STA !ram_seg_rt_minutes
-
-  .done
-    ; Replace overwritten logic to enable NMI
-    JSL $80834B
-    RTL
 }
 
 gamemode_end:
@@ -298,7 +279,6 @@ org $80CD90
     RTS
 endif
 
-
 ; general damage hijack
 org $A0A862
     JSR EnemyDamage
@@ -346,6 +326,34 @@ EnemyDamagePowerBomb:
     JMP $A63C
 
 print pc, " misc bankA0 end"
+
+
+org $908E75
+print pc, " misc bank90 start"
+
+preserve_escape_timer:
+{
+    ; check if timer is active
+    LDA $0943 : AND #$0006 : BEQ .done
+    JSL $809F6C ; Draw timer
+
+  .done
+    JMP $EA7F ; overwritten code
+}
+
+clear_escape_timer:
+{
+    ; clear timer status
+    STZ $0943
+
+    ; overwritten code
+    LDA #$AC1B : STA $0FB2,X
+    STZ $0DEC
+    RTL
+}
+
+warnpc $908EA9 ; overwrites unused vanilla routine
+print pc, " misc bank90 end"
 
 
 org $8BFA00
