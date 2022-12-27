@@ -28,7 +28,8 @@ org $8084AF
 
 
 ;org $81F000
-org $81FA00
+;org $81FA00
+org $81F200
 print pc, " init start"
 
 init_code:
@@ -121,4 +122,4 @@ init_sram:
 }
 
 print pc, " init end"
-warnpc $81FF00 ;;; $FF00: Thanks Genji! ;;;
+warnpc $81F800 ; Darkholme code

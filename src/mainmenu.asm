@@ -709,10 +709,10 @@ eq_goto_togglebeams:
     %cm_jsl("Toggle Beams", #eq_prepare_beams_menu, #ToggleBeamsMenu)
 
 eq_currentenergy:
-    %cm_numfield_word("Current Energy", $7E09C2, 0, 2100, 1, 20, #0)
+    %cm_numfield_word("Current Health", $7E09C2, 0, 2100, 1, 20, #0)
 
 eq_setetanks:
-    %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 21, 1, 1, .routine)
+    %cm_numfield("Medical Packs", !ram_cm_etanks, 0, 21, 1, 1, .routine)
   .routine
     TAX : BEQ .zero
     LDA #$0000
@@ -729,10 +729,10 @@ eq_setetanks:
     RTL
 
 eq_currentreserves:
-    %cm_numfield_word("Current Reserves", $7E09D6, 0, 700, 1, 20, #0)
+    %cm_numfield_word("Rescue Health", $7E09D6, 0, 700, 1, 20, #0)
 
 eq_setreserves:
-    %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 7, 1, 1, .routine)
+    %cm_numfield("Rescue Packs", !ram_cm_reserve, 0, 7, 1, 1, .routine)
   .routine
     TAX : BEQ .zero
     LDA #$0000
@@ -771,19 +771,19 @@ eq_setmissiles:
         RTL
 
 eq_currentsupers:
-    %cm_numfield("Current Super Missiles", $7E09CA, 0, 65, 1, 5, #0)
+    %cm_numfield("Current Rockets", $7E09CA, 0, 65, 1, 5, #0)
 
 eq_setsupers:
-    %cm_numfield("Super Missiles", $7E09CC, 0, 65, 5, 5, .routine)
+    %cm_numfield("Rockets", $7E09CC, 0, 65, 5, 5, .routine)
     .routine
         LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS ; supers
         RTL
 
 eq_currentpbs:
-    %cm_numfield("Current Power Bombs", $7E09CE, 0, 70, 1, 5, #0)
+    %cm_numfield("Current Explosives", $7E09CE, 0, 70, 1, 5, #0)
 
 eq_setpbs:
-    %cm_numfield("Power Bombs", $7E09D0, 0, 70, 5, 5, .routine)
+    %cm_numfield("Explosives", $7E09D0, 0, 70, 5, 5, .routine)
     .routine
         LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS ; pbs
         RTL
@@ -995,13 +995,13 @@ ti_gravitysuit:
     %cm_equipment_item("Gravity Suit", !ram_cm_gravity, #$0020, #$FFDF)
 
 ti_morphball:
-    %cm_equipment_item("Morph Ball", !ram_cm_morph, #$0004, #$FFFB)
+    %cm_equipment_item("Dynamic Ball", !ram_cm_morph, #$0004, #$FFFB)
 
 ti_bomb:
-    %cm_equipment_item("Bombs", !ram_cm_bombs, #$1000, #$EFFF)
+    %cm_equipment_item("Blast Ball", !ram_cm_bombs, #$1000, #$EFFF)
 
 ti_springball:
-    %cm_equipment_item("Spring Ball", !ram_cm_spring, #$0002, #$FFFD)
+    %cm_equipment_item("Jump Ball", !ram_cm_spring, #$0002, #$FFFD)
 
 ti_screwattack:
     %cm_equipment_item("Screw Attack", !ram_cm_screw, #$0008, #$FFF7)
@@ -1013,7 +1013,7 @@ ti_spacejump:
     %cm_equipment_item("Space Jump", !ram_cm_space, #$0200, #$FDFF)
 
 ti_speedbooster:
-    %cm_equipment_item("Speed Booster", !ram_cm_speed, #$2000, #$DFFF)
+    %cm_equipment_item("Velocity", !ram_cm_speed, #$2000, #$DFFF)
 
 ti_grapple:
     %cm_toggle_bit("Grapple", $7E0000+!SAMUS_ITEMS_COLLECTED, #$4000, .routine)
@@ -1086,21 +1086,21 @@ eq_prepare_beams_menu:
 ToggleBeamsMenu:
     dw tb_chargebeam
     dw tb_icebeam
-    dw tb_wavebeam
-    dw tb_spazerbeam
+;    dw tb_wavebeam
+;    dw tb_spazerbeam
     dw tb_plasmabeam
     dw #$FFFF
     dw misc_hyperbeam
-    dw #$FFFF
-    dw tb_glitchedbeams
+;    dw #$FFFF
+;    dw tb_glitchedbeams
     dw #$0000
     %cm_header("TOGGLE BEAMS")
 
 tb_chargebeam:
-    %cm_equipment_beam("Charge", !ram_cm_charge, #$1000, #$EFFF, #$100F)
+    %cm_equipment_beam("Impulse", !ram_cm_charge, #$1000, #$EFFF, #$100F)
 
 tb_icebeam:
-    %cm_equipment_beam("Ice", !ram_cm_ice, #$0002, #$FFFD, #$100F)
+    %cm_equipment_beam("Machine", !ram_cm_ice, #$0002, #$FFFD, #$100F)
 
 tb_wavebeam:
     %cm_equipment_beam("Wave", !ram_cm_wave, #$0001, #$FFFE, #$100F)
@@ -1109,7 +1109,7 @@ tb_spazerbeam:
     %cm_equipment_beam("Spazer", !ram_cm_spazer, #$0004, #$FFFB, #$1007)
 
 tb_plasmabeam:
-    %cm_equipment_beam("Plasma", !ram_cm_plasma, #$0008, #$FFF7, #$100B)
+    %cm_equipment_beam("SZ-91", !ram_cm_plasma, #$0008, #$FFF7, #$100B)
 
 tb_glitchedbeams:
     %cm_submenu("Glitched Beams", #GlitchedBeamsMenu)

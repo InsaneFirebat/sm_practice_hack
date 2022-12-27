@@ -520,7 +520,8 @@ tinystates_load_paused:
 print pc, " tinysave end"
 warnpc $80FD00 ; infohud.asm
 
-org $82FE00
+;org $82FE00
+org $82F800
 print pc, " tinysave bank82 start"
 
 tinystates_preload_bg_data:
@@ -604,5 +605,5 @@ tinystates_load_kraid:
     PHP : SEP #$20
     JML $A7C255
 }
-
+warnpc $82FA00 ; presets.asm
 print pc, " tinysave bank82 end"

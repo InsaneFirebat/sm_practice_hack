@@ -18,29 +18,30 @@ endif
 ; Skip intro
 ; $82:EEDF A9 95 A3    LDA #$A395
 org $82EEDF
-    LDA #$C100
+;    LDA #$C100
+;    LDA #$B72F ; didn't work, skips restoring controller bindings?
 
 
 ; Enable version display
-org $8B8697
-    NOP
-
-org $8BF754
-    db #$20, #($30+!VERSION_MAJOR)
-    db #$2E, #($30+!VERSION_MINOR)
-    db #$2E, #($30+!VERSION_BUILD)
-if !VERSION_REV_1
-    db #$2E, #($30+!VERSION_REV_1)
-    db #($30+!VERSION_REV_2)
-    db #$20, #$20
-else
-if !VERSION_REV_2
-    db #$2E, #($30+!VERSION_REV_2)
-    db #$20, #$20, #$20
-else
-    db #$20, #$20, #$20, #$20, #$20
-endif
-endif
+;org $8B8697
+;    NOP
+;
+;org $8BF754
+;    db #$20, #($30+!VERSION_MAJOR)
+;    db #$2E, #($30+!VERSION_MINOR)
+;    db #$2E, #($30+!VERSION_BUILD)
+;if !VERSION_REV_1
+;    db #$2E, #($30+!VERSION_REV_1)
+;    db #($30+!VERSION_REV_2)
+;    db #$20, #$20
+;else
+;if !VERSION_REV_2
+;    db #$2E, #($30+!VERSION_REV_2)
+;    db #$20, #$20, #$20
+;else
+;    db #$20, #$20, #$20, #$20, #$20
+;endif
+;endif
 
 
 ; Skips the waiting time after teleporting
@@ -356,8 +357,8 @@ warnpc $908EA9 ; overwrites unused vanilla routine
 print pc, " misc bank90 end"
 
 
-org $8BFA00
-print pc, " misc bank8B start"
+org $80D000
+print pc, " misc bank80 start"
 ; Decompression optimization adapted from Kejardon
 ; Compression format: One byte (XXX YYYYY) or two byte (111 XXX YY-YYYYYYYY) headers
 ; XXX = instruction, YYYYYYYYYY = counter
@@ -523,5 +524,5 @@ decompression_increment_bank:
     PLA
     RTS
 }
-print pc, " misc bank8B end"
+print pc, " misc bank80 end"
 

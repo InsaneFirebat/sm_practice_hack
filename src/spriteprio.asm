@@ -15,7 +15,8 @@ org $908643
 ; keeping the change in timing down as much as possible.
 
 ;org $81EF20
-org $81F700
+;org $81F700
+org $81F000
 print pc, " spriteprio start"
 oam_add_samus_sprite_with_prio:
     PHB
@@ -92,4 +93,4 @@ oam_add_samus_sprite_with_prio:
     RTL
 
 print pc, " spriteprio end"
-warnpc $81FA00 ; init.asm
+warnpc $81F100 ; init.asm

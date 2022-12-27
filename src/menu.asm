@@ -1782,7 +1782,8 @@ cm_divide_100:
 ; -----------
 
 pushpc
-org $B88000
+;org $B88000
+org $B88800
 print pc, " mainmenu start"
 incsrc mainmenu.asm
 print pc, " mainmenu end"

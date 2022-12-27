@@ -317,7 +317,7 @@ category_preset_data_table:
     dl preset_prkd_crateria_ceres_elevator
 
 print pc, " presets bank82 end"
-warnpc $82FE00
+warnpc $82FE14 ; Darkholme data
 
 org $82E8D9
     JSL preset_room_setup_asm_fixes
