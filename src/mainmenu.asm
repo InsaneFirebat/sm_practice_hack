@@ -2701,6 +2701,7 @@ phan_first_phase:
     db #$28, "       SLOW", #$FF
     db #$28, "       LEFT", #$FF
     db #$28, "      RIGHT", #$FF
+    db #$28, "   NO SLOWS", #$FF
     db #$28, "     CUSTOM", #$FF
     db #$FF
   .routine
@@ -2725,11 +2726,12 @@ phan_second_phase:
     db #$28, "       SLOW", #$FF
     db #$28, "       LEFT", #$FF
     db #$28, "      RIGHT", #$FF
+    db #$28, "   NO SLOWS", #$FF
     db #$28, "     CUSTOM", #$FF
     db #$FF
   .routine
     ASL : TAX
-    LDA.l PhantoonPhaseTable,X : STA !ram_phantoon_rng_round_2 : BEQ +
+    LDA.l PhantoonPhaseTable2,X : STA !ram_phantoon_rng_round_2 : BEQ +
     TXA : BEQ +
     LDA #$0002
 +   STA !ram_phantoon_rng_inverted
@@ -2737,7 +2739,11 @@ phan_second_phase:
 
 PhantoonPhaseTable:
     dw #$003F, #$0020, #$0008, #$0002, #$0010, #$0004, #$0001
-    dw #$0030, #$000C, #$0003, #$002A, #$0015, #$0000 ; 0 = Term
+    dw #$0030, #$000C, #$0003, #$002A, #$0015, #$003C, #$0000 ; 0 = Term
+
+PhantoonPhaseTable2:
+    dw #$003F, #$0020, #$0008, #$0002, #$0010, #$0004, #$0001
+    dw #$0030, #$000C, #$0003, #$002A, #$0015, #$0024, #$0000 ; 0 = Term
 
 phan_set_phan_first_phase:
 {
