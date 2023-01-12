@@ -730,6 +730,7 @@ endif
 !sram_ctrl_reveal_damage = !SRAM_START+$200
 !sram_ctrl_randomize_rng = !SRAM_START+$202
 !sram_ctrl_force_stand = !SRAM_START+$204
+!sram_ctrl_auto_save_state = !SRAM_START+$206
 
 !sram_menu_background = !SRAM_START+$210
 !sram_scroll_button = !SRAM_START+$212

@@ -66,6 +66,10 @@ if !FEATURE_SD2SNES
   + LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_load_state : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .load_state
+
+  + LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_auto_save_state : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .auto_save_state
 endif
 
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
@@ -167,6 +171,11 @@ endif
   .save_fail
     ; CLC to continue normal gameplay
     CLC : JMP skip_pause
+
+  .auto_save_state
+    LDA #$0001 : STA !ram_auto_save_state
+    ; CLC to continue normal gameplay after setting savestate flag
+    CLC : RTS
 endif
 
   .kill_enemies

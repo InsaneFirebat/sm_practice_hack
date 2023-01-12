@@ -2980,6 +2980,7 @@ CtrlMenu:
 if !FEATURE_SD2SNES
     dw #ctrl_save_state
     dw #ctrl_load_state
+    dw #ctrl_auto_save_state
 endif
     dw #ctrl_load_last_preset
     dw #ctrl_random_preset
@@ -3020,6 +3021,9 @@ ctrl_save_state:
 
 ctrl_load_state:
     %cm_ctrl_shortcut("Load State", !sram_ctrl_load_state)
+
+ctrl_auto_save_state:
+    %cm_ctrl_shortcut("Auto Save State", !sram_ctrl_auto_save_state)
 
 ctrl_reset_segment_timer:
     %cm_ctrl_shortcut("Reset Seg Timer", !sram_ctrl_reset_segment_timer)
@@ -3070,6 +3074,7 @@ ctrl_clear_shortcuts:
     STA !ram_game_mode_extras
     STA !sram_ctrl_save_state
     STA !sram_ctrl_load_state
+    STA !sram_ctrl_auto_save_state
     STA !sram_ctrl_load_last_preset
     STA !sram_ctrl_full_equipment
     STA !sram_ctrl_kill_enemies
@@ -3096,6 +3101,7 @@ ctrl_reset_defaults:
     LDA #$3000 : STA !sram_ctrl_menu                   ; Start + Select
     LDA #$6010 : STA !sram_ctrl_save_state             ; Select + Y + R
     LDA #$6020 : STA !sram_ctrl_load_state             ; Select + Y + L
+    LDA #$E0F0 : STA !sram_ctrl_auto_save_state        ; Select + A + B + X + Y + L + R
     LDA #$06F0 : STA !sram_ctrl_load_last_preset       ; Down + Left + L + R + A + X
     LDA #$0000 : STA !sram_ctrl_full_equipment
     LDA #$0000 : STA !sram_ctrl_kill_enemies

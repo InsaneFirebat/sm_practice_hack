@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.1.8]  Added controller shortcut to set auto-savestate flag for the next door
 * [2.5.1.8]  Added "No Slows" option for Phantoon RNG which also excludes rare patterns
 * [2.5.1.7]  Fixed corrupted hitbox viewer after loading a savestate
 * [2.5.1.7]  Fixed drawing enemy hitboxes after the enemy is deleted
@@ -57,7 +58,7 @@
 * [2.4.2.22] Fixed broken Current Energy menu
 * [2.4.2.22] Workaround for rooms with corrupted backgrounds using TinyStates
 * [2.4.2.21] Ridley AI room strat falls back on enemy HP or grab attempts
-* [2.4.2.20] Added a room strat to display current Ridley's AI routine
+* [2.4.2.20] Added a room strat to display Ridley's current AI routine
 * [2.4.2.19] Automatically display the remaining spark timer when shinespark crashes
 * [2.4.2.19] Optimized timers when updated outside of door transitions
 * [2.4.2.18] Fixed practice hack memory not being preserved with TinyStates
