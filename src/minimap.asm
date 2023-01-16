@@ -48,14 +48,14 @@ org $82E488      ; write tiles to VRAM
 
 org $9AB200      ; graphics for HUD
 hudgfx_bin:
-incbin ../resources/hudgfx.bin
+incbin ../resources/Eris_hudgfx.bin
 
 
 ; Place minimap graphics in bank FD
 org $FDD500
 print pc, " minimap bankFD start"
 mapgfx_bin:
-incbin ../resources/mapgfx.bin
+incbin ../resources/Eris_hudgfx.bin
 
 ; Next block needs to be all zeros to clear a tilemap
 fillbyte $00
@@ -79,7 +79,8 @@ org $80994D
 
 
 ; Placed in bank 82 so that the jumps work
-org $82F70F
+;org $82F70F
+org $82F800
 print pc, " minimap bank82 start"
 
 mm_write_and_clear_hud_tiles:
@@ -138,11 +139,11 @@ mm_refresh_reserves:
 }
 
 print pc, " minimap bank82 end"
-warnpc $82F800 ; layout.asm
 
 
 ; Placed in bank 90 so that the jumps work
-org $90F640
+;org $90F640
+org $90F666
 print pc, " minimap bank90 start"
 
 mm_initialize_minimap:

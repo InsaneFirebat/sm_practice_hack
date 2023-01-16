@@ -14,7 +14,8 @@ endif
     JSL cutscenes_nintendo_splash
     NOP : NOP
 
-org $8BF800
+;org $8BF800
+org $8BFE00
 print pc, " cutscenes start"
 
 cutscenes_nintendo_splash:
@@ -66,7 +67,6 @@ cutscenes_load_ceres_arrival:
 }
 
 print pc, " cutscenes end"
-warnpc $8BFA00 ; misc.asm
 
 
 org $A987FC

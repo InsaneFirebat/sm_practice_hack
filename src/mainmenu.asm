@@ -1202,6 +1202,15 @@ tel_goto_debug:
 TeleportCrateriaMenu:
     dw #tel_crateriaship
     dw #tel_crateriaparlor
+    dw #tel_crateria02
+    dw #tel_crateria03
+    dw #tel_crateria04
+    dw #tel_crateria05
+    dw #tel_crateria06
+    dw #tel_crateria07
+    dw #tel_crateria08
+    dw #tel_crateria09
+    dw #tel_crateria0A
     dw #$0000
     %cm_header("CRATERIA SAVE STATIONS")
 
@@ -1211,79 +1220,126 @@ tel_crateriaship:
 tel_crateriaparlor:
     %cm_jsl("Crateria Parlor", #action_teleport, #$0001)
 
+tel_crateria02:
+    %cm_jsl("Crateria 02", #action_teleport, #$0002)
+
+tel_crateria03:
+    %cm_jsl("Crateria 03", #action_teleport, #$0003)
+
+tel_crateria04:
+    %cm_jsl("Crateria 04", #action_teleport, #$0004)
+
+tel_crateria05:
+    %cm_jsl("Crateria 05", #action_teleport, #$0005)
+
+tel_crateria06:
+    %cm_jsl("Crateria 06", #action_teleport, #$0006)
+
+tel_crateria07:
+    %cm_jsl("Crateria 07", #action_teleport, #$0007)
+
+tel_crateria08:
+    %cm_jsl("Crateria DEBUG 08", #action_teleport, #$0008)
+
+tel_crateria09:
+    %cm_jsl("Crateria DEBUG 09", #action_teleport, #$0009)
+
+tel_crateria0A:
+    %cm_jsl("Crateria DEBUG 0A", #action_teleport, #$000A)
+
 TeleportBrinstarMenu:
-    dw #tel_brinstarpink
-    dw #tel_brinstargreenshaft
     dw #tel_brinstargreenetecoons
     dw #tel_brinstarkraid
-    dw #tel_brinstarredtower
+    dw #tel_brinstar0A
+    dw #tel_brinstar0B
+    dw #tel_brinstar12
     dw #$0000
     %cm_header("BRINSTAR SAVE STATIONS")
-
-tel_brinstarpink:
-    %cm_jsl("Brinstar Pink Spospo", #action_teleport, #$0100)
-
-tel_brinstargreenshaft:
-    %cm_jsl("Brinstar Green Shaft", #action_teleport, #$0101)
 
 tel_brinstargreenetecoons:
     %cm_jsl("Brinstar Green Etecoons", #action_teleport, #$0102)
 
 tel_brinstarkraid:
-    %cm_jsl("Brinstar Kraid", #action_teleport, #$0103)
+    %cm_jsl("Brinstar DEBUG 03", #action_teleport, #$0103)
 
-tel_brinstarredtower:
-    %cm_jsl("Brinstar Red Tower", #action_teleport, #$0104)
+tel_brinstar0A:
+    %cm_jsl("Brinstar DEBUG 0A", #action_teleport, #$010A)
+
+tel_brinstar0B:
+    %cm_jsl("Brinstar DEBUG 0B", #action_teleport, #$010B)
+
+tel_brinstar12:
+    %cm_jsl("Brinstar DEBUG 12", #action_teleport, #$0112)
 
 TeleportNorfairMenu:
-    dw #tel_norfairgrapple
     dw #tel_norfairbubble
-    dw #tel_norfairtunnel
     dw #tel_norfaircrocomire
     dw #tel_norfairlnelevator
     dw #tel_norfairridley
+    dw #tel_norfair08
+    dw #tel_norfair09
+    dw #tel_norfair0A
+    dw #tel_norfair13
+    dw #tel_norfair16
     dw #$0000
     %cm_header("NORFAIR SAVE STATIONS")
-
-tel_norfairgrapple:
-    %cm_jsl("Norfair Grapple", #action_teleport, #$0200)
 
 tel_norfairbubble:
     %cm_jsl("Norfair Bubble Mountain", #action_teleport, #$0201)
 
-tel_norfairtunnel:
-    %cm_jsl("Norfair Tunnel", #action_teleport, #$0202)
-
 tel_norfaircrocomire:
-    %cm_jsl("Norfair Crocomire", #action_teleport, #$0203)
+    %cm_jsl("Norfair DEBUG 03", #action_teleport, #$0203)
 
 tel_norfairlnelevator:
-    %cm_jsl("Norfair LN Elevator", #action_teleport, #$0204)
+    %cm_jsl("Norfair DEBUG 04", #action_teleport, #$0204)
 
 tel_norfairridley:
-    %cm_jsl("Norfair Ridley", #action_teleport, #$0205)
+    %cm_jsl("Norfair DEBUG 05", #action_teleport, #$0205)
+
+tel_norfair08:
+    %cm_jsl("Norfair DEBUG 08", #action_teleport, #$0208)
+
+tel_norfair09:
+    %cm_jsl("Norfair DEBUG 09", #action_teleport, #$0209)
+
+tel_norfair0A:
+    %cm_jsl("Norfair DEBUG 0A", #action_teleport, #$020A)
+
+tel_norfair13:
+    %cm_jsl("Norfair DEBUG 13", #action_teleport, #$0213)
+
+tel_norfair16:
+    %cm_jsl("Norfair DEBUG 16", #action_teleport, #$0216)
 
 TeleportWreckedShipMenu:
-    dw #tel_wreckedship
+    dw #tel_wreckedship01
+    dw #tel_wreckedship10
     dw #$0000
     %cm_header("WRECKED SHIP SAVE STATIONS")
 
-tel_wreckedship:
-    %cm_jsl("Wrecked Ship", #action_teleport, #$0300)
+tel_wreckedship01:
+    %cm_jsl("Wrecked Ship DEBUG 01", #action_teleport, #$0301)
+
+tel_wreckedship10:
+    %cm_jsl("Wrecked Ship DEBUG 10", #action_teleport, #$0310)
 
 TeleportMaridiaMenu:
     dw #tel_maridiatube
     dw #tel_maridiaelevator
     dw #tel_maridiaaqueduct
     dw #tel_maridiadraygon
+    dw #tel_maridia04
+    dw #tel_maridia08
+    dw #tel_maridia11
+    dw #tel_maridia13
     dw #$0000
     %cm_header("MARIDIA SAVE STATIONS")
 
 tel_maridiatube:
-    %cm_jsl("Maridia Tube", #action_teleport, #$0400)
+    %cm_jsl("Maridia DEBUG 00", #action_teleport, #$0400)
 
 tel_maridiaelevator:
-    %cm_jsl("Maridia Elevator", #action_teleport, #$0401)
+    %cm_jsl("Maridia DEBUG 01", #action_teleport, #$0401)
 
 tel_maridiaaqueduct:
     %cm_jsl("Maridia Aqueduct", #action_teleport, #$0402)
@@ -1291,17 +1347,33 @@ tel_maridiaaqueduct:
 tel_maridiadraygon:
     %cm_jsl("Maridia Draygon", #action_teleport, #$0403)
 
+tel_maridia04:
+    %cm_jsl("Maridia 04", #action_teleport, #$0404)
+
+tel_maridia08:
+    %cm_jsl("Maridia 08", #action_teleport, #$0408)
+
+tel_maridia11:
+    %cm_jsl("Maridia 11", #action_teleport, #$0411)
+
+tel_maridia13:
+    %cm_jsl("Maridia 13", #action_teleport, #$0413)
+
 TeleportTourianMenu:
-    dw #tel_tourianentrance
     dw #tel_tourianmb
+    dw #tel_tourian08
+    dw #tel_tourian11
     dw #$0000
     %cm_header("TOURIAN SAVE STATIONS")
 
-tel_tourianentrance:
-    %cm_jsl("Tourian Entrance", #action_teleport, #$0501)
-
 tel_tourianmb:
-    %cm_jsl("Tourian MB", #action_teleport, #$0500)
+    %cm_jsl("Tourian DEBUG 00", #action_teleport, #$0500)
+
+tel_tourian08:
+    %cm_jsl("Tourian DEBUG 08 (Wave)", #action_teleport, #$0508)
+
+tel_tourian11:
+    %cm_jsl("Tourian DEBUG 11", #action_teleport, #$0511)
 
 DebugTeleportMenu:
     dw #tel_debug_area
@@ -1351,7 +1423,7 @@ action_teleport:
 
     LDA #$0001 : STA !ram_cm_leave
 
-    RTS
+    RTL
 }
 
 action_debug_teleport:
@@ -2034,7 +2106,7 @@ ih_ram_watch:
 incsrc ramwatchmenu.asm
 
 print pc, " mainmenu InfoHUD end"
-warnpc $B3F000 ; mainmenu.asm
+warnpc $85F000 ; Eris code/data
 pullpc
 
 
@@ -2043,7 +2115,8 @@ pullpc
 ; ----------
 
 pushpc
-org $B3F000
+;org $B3F000
+org $B3F400
 print pc, " mainmenu GameMenu start"
 
 GameMenu:

@@ -138,6 +138,7 @@ layout_asm_ceres_ridley_room_no_timer:
 }
 
 print pc, " misc bank8F end"
+warnpc $8FFFA0 ; Eris data
 
 
 org $87D000
@@ -291,7 +292,8 @@ org $A0A54C
 org $A0A62B
     JSR EnemyDamagePowerBomb
 
-org $A0FFD0
+;org $A0FFD0
+org $A0F900
 print pc, " misc bankA0 start"
 EnemyDamage:
 {
@@ -326,6 +328,7 @@ EnemyDamagePowerBomb:
     JMP $A63C
 
 print pc, " misc bankA0 end"
+warnpc $A0FF00 ; Eris data/code
 
 
 org $908E75
@@ -524,4 +527,5 @@ decompression_increment_bank:
     RTS
 }
 print pc, " misc bank8B end"
+warnpc $8BFE00 ; cutscenes.asm
 
