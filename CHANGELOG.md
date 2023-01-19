@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.1.9]  Added LN Elevator (before taking elevator) to prkd15 presets
 * [2.5.1.8]  Added controller shortcut to set auto-savestate flag for the next door
 * [2.5.1.8]  Added "No Slows" option for Phantoon RNG which also excludes rare patterns
 * [2.5.1.7]  Fixed corrupted hitbox viewer after loading a savestate
