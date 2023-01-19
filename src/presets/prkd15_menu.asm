@@ -139,6 +139,7 @@ presets_submenu_prkd15_upper_norfair:
     dw #presets_prkd15_upper_norfair_volcano_room
     dw #presets_prkd15_upper_norfair_kronic_boost
     dw #presets_prkd15_upper_norfair_lava_spark
+    dw #presets_prkd15_upper_norfair_ln_elevator
     dw #$0000
     %cm_header("UPPER NORFAIR")
 
@@ -493,6 +494,9 @@ presets_prkd15_upper_norfair_kronic_boost:
 
 presets_prkd15_upper_norfair_lava_spark:
     %cm_preset("Lava Spark", #preset_prkd15_upper_norfair_lava_spark)
+
+presets_prkd15_upper_norfair_ln_elevator:
+    %cm_preset("LN Elevator", #preset_prkd15_upper_norfair_ln_elevator)
 
 
 ; Lower Norfair
