@@ -451,8 +451,7 @@ action_select_preset_category:
     TYA : STA !sram_preset_category
     ; clear stale preset
     LDA #$0000 : STA !sram_last_preset
-    JSL cm_previous_menu
-    RTL
+    JML cm_previous_menu
 }
 
 action_save_custom_preset:
@@ -543,10 +542,10 @@ eq_toggle_category:
     %cm_submenu("Category Loadouts", #ToggleCategoryMenu)
 
 eq_goto_toggleitems:
-    %cm_submenu("Toggle Items", #ToggleItemsMenu)
+    %cm_jsl("Toggle Items", #eq_prepare_items_menu, #ToggleItemsMenu)
 
 eq_goto_togglebeams:
-    %cm_submenu("Toggle Beams", #ToggleBeamsMenu)
+    %cm_jsl("Toggle Beams", #eq_prepare_beams_menu, #ToggleBeamsMenu)
 
 eq_currentenergy:
     %cm_numfield_word("Current Energy", $7E0000+!SAMUS_HP, 0, 2100, 1, 20, #0)
@@ -610,27 +609,27 @@ eq_currentmissiles:
 
 eq_setmissiles:
     %cm_numfield_word("Missiles", $7E09C8, 0, 325, 5, 20, .routine)
-    .routine
-        LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES ; missiles
-        RTL
+  .routine
+    LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES ; missiles
+    RTL
 
 eq_currentsupers:
     %cm_numfield("Current Super Missiles", $7E09CA, 0, 65, 1, 5, #0)
 
 eq_setsupers:
     %cm_numfield("Super Missiles", $7E09CC, 0, 65, 5, 5, .routine)
-    .routine
-        LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS ; supers
-        RTL
+  .routine
+    LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS ; supers
+    RTL
 
 eq_currentpbs:
     %cm_numfield("Current Power Bombs", $7E09CE, 0, 70, 1, 5, #0)
 
 eq_setpbs:
     %cm_numfield("Power Bombs", $7E09D0, 0, 70, 5, 5, .routine)
-    .routine
-        LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS ; pbs
-        RTL
+  .routine
+    LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS ; pbs
+    RTL
 
 
 ; ---------------------
@@ -757,6 +756,94 @@ endif
 ; Toggle Items menu
 ; ------------------
 
+eq_prepare_items_menu:
+{
+    LDA !SAMUS_ITEMS_COLLECTED : BIT #$0001 : BEQ .noVaria
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0001 : BNE .equipVaria
+    ; unequip
+    LDA #$0002 : STA !ram_cm_varia : BRA +
+  .equipVaria
+    LDA #$0001 : STA !ram_cm_varia : BRA +
+  .noVaria
+    LDA #$0000 : STA !ram_cm_varia
+
++   LDA !SAMUS_ITEMS_COLLECTED : BIT #$0020 : BEQ .noGravity
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0020 : BNE .equipGravity
+    ; unequip
+    LDA #$0002 : STA !ram_cm_gravity : BRA +
+  .equipGravity
+    LDA #$0001 : STA !ram_cm_gravity : BRA +
+  .noGravity
+    LDA #$0000 : STA !ram_cm_gravity
+
++   LDA !SAMUS_ITEMS_COLLECTED : BIT #$0004 : BEQ .noMorph
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0004 : BNE .equipMorph
+    ; unequip
+    LDA #$0002 : STA !ram_cm_morph : BRA +
+  .equipMorph
+    LDA #$0001 : STA !ram_cm_morph : BRA +
+  .noMorph
+    LDA #$0000 : STA !ram_cm_morph
+
++   LDA !SAMUS_ITEMS_COLLECTED : BIT #$1000 : BEQ .noBombs
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$1000 : BNE .equipBombs
+    ; unequip
+    LDA #$0002 : STA !ram_cm_bombs : BRA +
+  .equipBombs
+    LDA #$0001 : STA !ram_cm_bombs : BRA +
+  .noBombs
+    LDA #$0000 : STA !ram_cm_bombs
+
++   LDA !SAMUS_ITEMS_COLLECTED : BIT #$0002 : BEQ .noSpring
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0002 : BNE .equipSpring
+    ; unequip
+    LDA #$0002 : STA !ram_cm_spring : BRA +
+  .equipSpring
+    LDA #$0001 : STA !ram_cm_spring : BRA +
+  .noSpring
+    LDA #$0000 : STA !ram_cm_spring
+
++   LDA !SAMUS_ITEMS_COLLECTED : BIT #$0008 : BEQ .noScrew
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0008 : BNE .equipScrew
+    ; unequip
+    LDA #$0002 : STA !ram_cm_screw : BRA +
+  .equipScrew
+    LDA #$0001 : STA !ram_cm_screw : BRA +
+  .noScrew
+    LDA #$0000 : STA !ram_cm_screw
+
++   LDA !SAMUS_ITEMS_COLLECTED : BIT #$0100 : BEQ .noHiJump
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0100 : BNE .equipHiJump
+    ; unequip
+    LDA #$0002 : STA !ram_cm_hijump : BRA +
+  .equipHiJump
+    LDA #$0001 : STA !ram_cm_hijump : BRA +
+  .noHiJump
+    LDA #$0000 : STA !ram_cm_hijump
+
++   LDA !SAMUS_ITEMS_COLLECTED : BIT #$0200 : BEQ .noSpace
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0200 : BNE .equipSpace
+    ; unequip
+    LDA #$0002 : STA !ram_cm_space : BRA +
+  .equipSpace
+    LDA #$0001 : STA !ram_cm_space : BRA +
+  .noSpace
+    LDA #$0000 : STA !ram_cm_space
+
++   LDA !SAMUS_ITEMS_COLLECTED : BIT #$2000 : BEQ .noSpeed
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$2000 : BNE .equipSpeed
+    ; unequip
+    LDA #$0002 : STA !ram_cm_speed : BRA +
+  .equipSpeed
+    LDA #$0001 : STA !ram_cm_speed : BRA +
+  .noSpeed
+    LDA #$0000 : STA !ram_cm_speed
+
++   PHK : PHK : PLA
+    STA !ram_cm_menu_bank
+    JML action_submenu
+}
+
 ToggleItemsMenu:
     dw #ti_variasuit
     dw #ti_gravitysuit
@@ -840,6 +927,58 @@ equipment_toggle_items:
 ; -----------------
 ; Toggle Beams menu
 ; -----------------
+
+eq_prepare_beams_menu:
+{
++   LDA !SAMUS_BEAMS_COLLECTED : BIT #$1000 : BEQ .noCharge
+    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$1000 : BNE .equipCharge
+    ; unequip Charge
+    LDA #$0002 : STA !ram_cm_charge : BRA +
+  .equipCharge
+    LDA #$0001 : STA !ram_cm_charge : BRA +
+  .noCharge
+    LDA #$0000 : STA !ram_cm_charge
+
++   LDA !SAMUS_BEAMS_COLLECTED : BIT #$0002 : BEQ .noIce
+    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0002 : BNE .equipIce
+    ; unequip Ice
+    LDA #$0002 : STA !ram_cm_ice : BRA +
+  .equipIce
+    LDA #$0001 : STA !ram_cm_ice : BRA +
+  .noIce
+    LDA #$0000 : STA !ram_cm_ice
+
++   LDA !SAMUS_BEAMS_COLLECTED : BIT #$0001 : BEQ .noWave
+    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0001 : BNE .equipWave
+    ; unequip Wave
+    LDA #$0002 : STA !ram_cm_wave : BRA +
+  .equipWave
+    LDA #$0001 : STA !ram_cm_wave : BRA +
+  .noWave
+    LDA #$0000 : STA !ram_cm_wave
+
++   LDA !SAMUS_BEAMS_COLLECTED : BIT #$0004 : BEQ .noSpazer
+    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0004 : BNE .equipSpazer
+    ; unequip Spazer
+    LDA #$0002 : STA !ram_cm_spazer : BRA +
+  .equipSpazer
+    LDA #$0001 : STA !ram_cm_spazer : BRA +
+  .noSpazer
+    LDA #$0000 : STA !ram_cm_spazer
+
++   LDA !SAMUS_BEAMS_COLLECTED : BIT #$0008 : BEQ .noPlasma
+    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0008 : BNE .equipPlasma
+    ; unequip Plasma
+    LDA #$0002 : STA !ram_cm_plasma : BRA +
+  .equipPlasma
+    LDA #$0001 : STA !ram_cm_plasma : BRA +
+  .noPlasma
+    LDA #$0000 : STA !ram_cm_plasma
+
++   PHK : PHK : PLA
+    STA !ram_cm_menu_bank
+    JML action_submenu
+}
 
 ToggleBeamsMenu:
     dw tb_chargebeam
@@ -1090,11 +1229,10 @@ misc_hyperbeam:
     AND #$8000 : BEQ .off
     LDA #$0003 ; jump table index
 if !FEATURE_PAL
-    JSL $91E412 ; setup Samus for Hyper Beam
+    JML $91E412 ; setup Samus for Hyper Beam
 else
-    JSL $91E4AD ; setup Samus for Hyper Beam
+    JML $91E4AD ; setup Samus for Hyper Beam
 endif
-    RTL
 
   .off
     ; check for Spazer+Plasma
@@ -1283,8 +1421,7 @@ sprites_oob_viewer:
   .routine
     LDA !ram_oob_watch_active : BEQ action_sprite_features
     STA !ram_sprite_features_active
-    JSL upload_sprite_oob_tiles
-    RTL
+    JML upload_sprite_oob_tiles
 
 action_sprite_features:
 {
@@ -1666,8 +1803,7 @@ ihmode_GOTO_PAGE_TWO:
 action_select_infohud_mode:
 {
     TYA : STA !sram_display_mode
-    JSL cm_previous_menu
-    RTL
+    JML cm_previous_menu
 }
 
 ih_display_mode:
@@ -1781,8 +1917,7 @@ action_select_room_strat:
     TYA : STA !sram_room_strat
     ; enable ROOM STRAT mode
     LDA !IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
-    JSL cm_previous_menu
-    RTL
+    JML cm_previous_menu
 }
 
 ih_room_strat:
@@ -1956,8 +2091,7 @@ ih_superhud_doorskip:
 action_select_superhud_bottom:
 {
     TYA : STA !sram_superhud_bottom
-    JSL cm_previous_menu
-    RTL
+    JML cm_previous_menu
 }
 
 ih_superhud_middle_selector:
@@ -2027,8 +2161,7 @@ ih_superhud_middle_cooldowncounter:
 action_select_superhud_middle:
 {
     TYA : STA !sram_superhud_middle
-    JSL cm_previous_menu
-    RTL
+    JML cm_previous_menu
 }
 
 ih_superhud_top_selector:
@@ -2106,8 +2239,7 @@ ih_superhud_enable:
 action_select_superhud_top:
 {
     TYA : STA !sram_superhud_top
-    JSL cm_previous_menu
-    RTL
+    JML cm_previous_menu
 }
 print pc, " superhud menu end"
 
@@ -2270,8 +2402,7 @@ game_music_toggle:
 
   .resume_music
     LDA !MUSIC_DATA : CLC : ADC #$FF00 : STZ !MUSIC_DATA : JSL !MUSIC_ROUTINE
-    LDA !MUSIC_TRACK : STZ !MUSIC_TRACK : JSL !MUSIC_ROUTINE
-    RTL
+    LDA !MUSIC_TRACK : STZ !MUSIC_TRACK : JML !MUSIC_ROUTINE
 
 game_healthalarm:
     dw !ACTION_CHOICE
@@ -2499,8 +2630,7 @@ action_assign_input:
   .undetected
     %sfxgoback()
 
-+   JSL cm_previous_menu
-    RTL
++   JML cm_previous_menu
 }
 
 check_duplicate_inputs:
@@ -2661,8 +2791,7 @@ action_set_common_controls:
     LDA.l ControllerLayoutTable+10,X : STA !IH_INPUT_ANGLE_UP
     LDA.l ControllerLayoutTable+12,X : STA !IH_INPUT_ANGLE_DOWN
     %sfxconfirm()
-    JSL cm_previous_menu
-    RTL
+    JML cm_previous_menu
 }
 
 print pc, " mainmenu GameMenu start"
@@ -3169,8 +3298,7 @@ init_wram_based_on_sram:
 {
     JSL init_suit_properties_ram
     JSL GameModeExtras
-    JSL validate_sram_for_savestates
-    RTL
+    JML validate_sram_for_savestates
 }
 
 validate_sram_for_savestates:
