@@ -814,6 +814,28 @@ ti_xray:
     LDA !SAMUS_ITEMS_EQUIPPED : EOR #$8000 : STA !SAMUS_ITEMS_EQUIPPED
     RTL
 
+equipment_toggle_items:
+{
+; DP values are passed in from the cm_equipment_item macro that calls this routine
+; Address is a 24-bit pointer to !ram_cm_<item>, Increment is the inverse, ToggleValue is the bitmask
+    LDA [!DP_Address] : BEQ .unobtained
+    DEC : BEQ .equipped
+    ; unquipped
+    LDA !SAMUS_ITEMS_EQUIPPED : AND !DP_Increment : STA !SAMUS_ITEMS_EQUIPPED
+    LDA !SAMUS_ITEMS_COLLECTED : ORA !DP_ToggleValue : STA !SAMUS_ITEMS_COLLECTED
+    RTL
+
+  .equipped
+    LDA !SAMUS_ITEMS_EQUIPPED : ORA !DP_ToggleValue : STA !SAMUS_ITEMS_EQUIPPED
+    LDA !SAMUS_ITEMS_COLLECTED : ORA !DP_ToggleValue : STA !SAMUS_ITEMS_COLLECTED
+    RTL
+
+  .unobtained
+    LDA !SAMUS_ITEMS_EQUIPPED : AND !DP_Increment : STA !SAMUS_ITEMS_EQUIPPED
+    LDA !SAMUS_ITEMS_COLLECTED : AND !DP_Increment : STA !SAMUS_ITEMS_COLLECTED
+    RTL
+}
+
 
 ; -----------------
 ; Toggle Beams menu
@@ -850,14 +872,27 @@ tb_plasmabeam:
 tb_glitchedbeams:
     %cm_submenu("Glitched Beams", #GlitchedBeamsMenu)
 
-action_equip_safe_beams:
+equipment_toggle_beams:
 {
-    AND #$000C : CMP #$000C : BEQ .disableMurder
-    LDA !SAMUS_BEAMS_COLLECTED : STA !SAMUS_BEAMS_EQUIPPED
-    JML $90AC8D ; update beam gfx
+; DP values are passed in from the cm_equipment_beam macro that calls this routine
+; Address is a 24-bit pointer to !ram_cm_<beam>, Increment is the inverse, ToggleValue is the bitmask, Temp is the AND for Spazer+Plasma safety
+    LDA [!DP_Address] : BEQ .unobtained
+    DEC : BEQ .equipped
+    ; unquipped
+    LDA !SAMUS_BEAMS_EQUIPPED : AND !DP_Increment : STA !SAMUS_BEAMS_EQUIPPED
+    LDA !SAMUS_BEAMS_COLLECTED : ORA !DP_ToggleValue : STA !SAMUS_BEAMS_COLLECTED
+    BRA .done
 
-  .disableMurder
-    LDA !SAMUS_BEAMS_COLLECTED : AND #$000B : STA !SAMUS_BEAMS_EQUIPPED
+  .equipped
+    LDA !SAMUS_BEAMS_EQUIPPED : ORA !DP_ToggleValue : AND !DP_Temp : STA !SAMUS_BEAMS_EQUIPPED
+    LDA !SAMUS_BEAMS_COLLECTED : ORA !DP_ToggleValue : STA !SAMUS_BEAMS_COLLECTED
+    BRA .done
+
+  .unobtained
+    LDA !SAMUS_BEAMS_EQUIPPED : AND !DP_Increment : STA !SAMUS_BEAMS_EQUIPPED
+    LDA !SAMUS_BEAMS_COLLECTED : AND !DP_Increment : STA !SAMUS_BEAMS_COLLECTED
+
+  .done
     JML $90AC8D ; update beam gfx
 }
 
@@ -1062,7 +1097,16 @@ endif
     RTL
 
   .off
-    LDA !SAMUS_BEAMS_COLLECTED : JSL action_equip_safe_beams
+    ; check for Spazer+Plasma
+    LDA !SAMUS_BEAMS_COLLECTED : AND #$000C : CMP #$000C : BEQ .disableMurder
+    LDA !SAMUS_BEAMS_COLLECTED : STA !SAMUS_BEAMS_EQUIPPED
+    BRA .FXobjects
+
+  .disableMurder
+    LDA !SAMUS_BEAMS_COLLECTED : AND #$000B : STA !SAMUS_BEAMS_EQUIPPED
+
+  .FXobjects
+    LDX #$000E
 
     LDX #$000E
   .loopFXobjects
