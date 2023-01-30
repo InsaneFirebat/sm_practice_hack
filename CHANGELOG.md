@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.2.2]  Added reward SFX to Taco Tank room strat
 * [2.5.2.1]  Fixed type in previous equipment menu fix
 * [2.5.2]    Fixed equipment menu desync after setting a pre-made loadout
 * [2.5.1.9]  Added LN Elevator (before taking elevator) to prkd15 presets
