@@ -1302,6 +1302,10 @@ endif
     INC : SEC : SBC !ram_xpos
     ASL : TAY : LDA.w NumberGFXTable,Y : STA $7EC698
     LDA !IH_LETTER_Y : STA $7EC696
+    LDA !sram_display_mode_reward : BEQ .skipsfx
+    %sfxenergy()
+
+  .skipsfx
     BRL .returnstart
 
   .expandearly
