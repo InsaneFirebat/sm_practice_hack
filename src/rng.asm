@@ -97,7 +97,7 @@ org $A7BDF3
 else    ; Kraid rng
 org $A7BDBF
 endif
-    JSR hook_kraid_rng
+    JSR hook_kraid_claw_rng
 
 if !FEATURE_PAL
 org $A7AA7F
@@ -105,6 +105,30 @@ else    ; Kraid intro
 org $A7AA69
 endif
     JMP kraid_intro_skip : kraid_intro_skip_return:
+
+if !FEATURE_PAL
+org $A7AE23
+else
+org $A7AE0D
+endif
+    LDA !ram_kraid_wait_rng : BNE kraid_wait_load_delay
+    LDA !RANDOM_NUMBER : AND #$0007
+kraid_wait_load_delay:
+    ASL : TAX : LDA.w KraidWaitTable,X
+if !FEATURE_PAL
+warnpc $A7AE34
+else
+warnpc $A7AE1E
+endif
+
+if !FEATURE_PAL
+org $A786B7
+else
+org $A786A7
+endif
+    ; Overwrite unused palette
+KraidWaitTable:
+    dw #$0080, #$0040, #$0080, #$00C0, #$0100, #$0140, #$0180, #$01C0
 
 
 ; -----------
@@ -651,9 +675,9 @@ print pc, " ridley rng end"
 
 org $A7FFB6
 print pc, " kraid rng start"
-hook_kraid_rng:
+hook_kraid_claw_rng:
 {
-    LDA !ram_kraid_rng : BEQ .no_manip
+    LDA !ram_kraid_claw_rng : BEQ .no_manip
     DEC #2 ; return -1 (laggy) or 0 (laggier)
     RTS
 

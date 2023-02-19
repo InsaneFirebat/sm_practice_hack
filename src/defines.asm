@@ -8,7 +8,7 @@
 !VERSION_MINOR = 5
 !VERSION_BUILD = 2
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 2
+!VERSION_REV_2 = 3
 
 
 ; ---------
@@ -126,7 +126,7 @@
 !ram_freeze_on_load = !WRAM_START+$B4
 !ram_spacetime_infohud = !WRAM_START+$B6
 
-!ram_kraid_rng = !WRAM_START+$B8
+!ram_kraid_claw_rng = !WRAM_START+$B8
 !ram_crocomire_rng = !WRAM_START+$BA
 !ram_phantoon_rng_round_1 = !WRAM_START+$BC
 !ram_phantoon_rng_round_2 = !WRAM_START+$BE
@@ -161,6 +161,7 @@
 !ram_auto_save_state = !WRAM_START+$F2
 
 !ram_baby_rng = !WRAM_START+$F4
+!ram_kraid_wait_rng = !WRAM_START+$F6
 ; FREE SPACE ^ up to $FE
 
 !ram_slowdown_mode = $7EFFFE ; Bank $7E required
