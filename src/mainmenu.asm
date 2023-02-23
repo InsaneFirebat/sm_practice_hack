@@ -859,7 +859,7 @@ MiscMenu:
     dw #misc_music_toggle
     dw #misc_invincibility
     dw #misc_killenemies
-    dw #misc_suit_properties
+;    dw #misc_suit_properties
     dw #misc_forcestand
     dw #$0000
     %cm_header("MISC")

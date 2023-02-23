@@ -53,15 +53,15 @@ org $8C9607
 
 
 ; Suit periodic damage
-org $8DE37C
-    ; Replaced the check and also take one additional byte
-    ; Thus the following logic is the same but shifted down
-    AND !ram_suits_periodic_damage_check : BNE $29
-    LDA $0A4E : CLC : ADC #$4000 : STA $0A4E
-    ; We don't have enough space to add the carry bit inline,
-    ; so we need to jump to freespace, but only do that if the carry bit is set
-    BCC $06
-    JMP increment_periodic_damage
+;org $8DE37C
+;    ; Replaced the check and also take one additional byte
+;    ; Thus the following logic is the same but shifted down
+;    AND !ram_suits_periodic_damage_check : BNE $29
+;    LDA $0A4E : CLC : ADC #$4000 : STA $0A4E
+;    ; We don't have enough space to add the carry bit inline,
+;    ; so we need to jump to freespace, but only do that if the carry bit is set
+;    BCC $06
+;    JMP increment_periodic_damage
 
 
 org $8DFFF1
@@ -111,27 +111,27 @@ org $90EA7E
 
 
 ; Suit enemy damage
-org $A0A463
-    BIT #$0020 : BEQ .checksuit
-    LSR $12
-  .checksuit
-    AND !ram_suits_enemy_damage_check : BEQ .return
-    LSR $12
-  .return
-    LDA $12
-    RTL
+;org $A0A463
+;    BIT #$0020 : BEQ .checksuit
+;    LSR $12
+;  .checksuit
+;    AND !ram_suits_enemy_damage_check : BEQ .return
+;    LSR $12
+;  .return
+;    LDA $12
+;    RTL
 
 
 ; Suit metroid damage
-org $A3EED8
-    LDA #$C000 : STA $12
-    LDA $09A2 : AND !ram_suits_enemy_damage_check : BEQ .metroidcheckgravity
-    LSR $12
-  .metroidcheckgravity
-    LDA $09A2 : BIT #$0020 : BEQ .metroidnogravity
-    LSR $12
-  .metroidnogravity
-    ; Continue vanilla routine
+;org $A3EED8
+;    LDA #$C000 : STA $12
+;    LDA $09A2 : AND !ram_suits_enemy_damage_check : BEQ .metroidcheckgravity
+;    LSR $12
+;  .metroidcheckgravity
+;    LDA $09A2 : BIT #$0020 : BEQ .metroidnogravity
+;    LSR $12
+;  .metroidnogravity
+;    ; Continue vanilla routine
 
 
 if !PRESERVE_WRAM_DURING_SPACETIME

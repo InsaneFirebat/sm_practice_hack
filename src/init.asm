@@ -66,7 +66,7 @@ endif
 
 init_nonzero_wram:
 {
-    JSL misc_init_suits_ram
+;    JSL misc_init_suits_ram
 
     ; RAM $7E0000 fluctuates so it is not a good default value
     LDA #$FFFE : STA !ram_watch_left : STA !ram_watch_right
