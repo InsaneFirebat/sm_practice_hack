@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.2.4]  Minor fixes for glitched beam menu
 * [2.5.2.3]  Added Kraid's waiting time to RNG controls by idlechild
 * [2.5.2.2]  Added reward SFX to Taco Tank room strat
 * [2.5.2.1]  Fixed type in previous equipment menu fix
