@@ -10,26 +10,26 @@ preset_nghyper_ceres_station_ceres_elevator:
     dw $0913, $0000 ; Screen subpixel Y position
     dw $0915, $0000 ; Screen Y position in pixels
     dw $093F, $0000 ; Ceres escape flag
-    dw $09A2, $0000 ; Equipped Items
-    dw $09A4, $0000 ; Collected Items
-    dw $09A6, $0000 ; Beams
-    dw $09A8, $0000 ; Beams
-    dw $09C0, $0000 ; Manual/Auto reserve tank
-    dw $09C2, $0063 ; Health
-    dw $09C4, $0063 ; Max health
-    dw $09C6, $0000 ; Missiles
-    dw $09C8, $0000 ; Max missiles
-    dw $09CA, $0000 ; Supers
-    dw $09CC, $0000 ; Max supers
-    dw $09CE, $0000 ; Pbs
-    dw $09D0, $0000 ; Max pbs
+    dw $09A2, $F32F ; Equipped Items
+    dw $09A4, $F32F ; Collected Items
+    dw $09A6, $100B ; Beams
+    dw $09A8, $100F ; Beams
+    dw $09C0, $0001 ; Manual/Auto reserve tank
+    dw $09C2, $002C ; Health
+    dw $09C4, $05DB ; Max health
+    dw $09C6, $00E6 ; Missiles
+    dw $09C8, $00E6 ; Max missiles
+    dw $09CA, $0032 ; Supers
+    dw $09CC, $0032 ; Max supers
+    dw $09CE, $0032 ; Pbs
+    dw $09D0, $0032 ; Max pbs
     dw $09D2, $0000 ; Currently selected item
-    dw $09D4, $0000 ; Max reserves
-    dw $09D6, $0000 ; Reserves
+    dw $09D4, $0190 ; Max reserves
+    dw $09D6, $0190 ; Reserves
     dw $0A1C, $0000 ; Samus position/state
     dw $0A1E, $0000 ; More position/state
     dw $0A68, $0000 ; Flash suit
-    dw $0A76, $0000 ; Hyper beam
+    dw $0A76, $0001 ; Hyper beam
     dw $0AF6, $0080 ; Samus X
     dw $0AFA, $0048 ; Samus Y
     dw $0B3F, $0000 ; Blue suit

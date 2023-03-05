@@ -178,6 +178,7 @@ org $90D340      ; update timers when shinespark bonk sound plays
     JSL ih_shinespark_segment
 endif
 
+
 ; Main bank stuff
 org $F08000
 print pc, " infohud start"
