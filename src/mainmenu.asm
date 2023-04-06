@@ -68,6 +68,7 @@ preset_category_submenus:
     dw #PresetsMenu14ice
     dw #PresetsMenu14speed
     dw #PresetsMenuRbo
+    dw #PresetsMenuSuitless
     dw #PresetsMenuNgplasma
     dw #PresetsMenuNghyper
     dw #PresetsMenuNintendopower
@@ -94,6 +95,7 @@ preset_category_banks:
     dw #PresetsMenu14ice>>16
     dw #PresetsMenu14speed>>16
     dw #PresetsMenuRbo>>16
+    dw #PresetsMenuSuitless>>16
     dw #PresetsMenuNgplasma>>16
     dw #PresetsMenuNghyper>>16
     dw #PresetsMenuNintendopower>>16
@@ -343,6 +345,7 @@ SelectPresetCategoryMenu:
     dw #precat_hundo
     dw #precat_100map
     dw #precat_rbo
+    dw #precat_suitless
     dw #precat_ngplasma
     dw #precat_nghyper
     dw #precat_nintendopower
@@ -372,6 +375,7 @@ presets_current:
     db #$28, "    14% ICE", #$FF
     db #$28, "  14% SPEED", #$FF
     db #$28, "        RBO", #$FF
+    db #$28, " 98SUITLESS", #$FF
     db #$28, " NG+ PLASMA", #$FF
     db #$28, "  NG+ HYPER", #$FF
     db #$28, " NIN POWER%", #$FF
@@ -428,23 +432,26 @@ precat_14speed:
 precat_rbo:
     %cm_jsl("Reverse Boss Order", #action_select_preset_category, #$000E)
 
+precat_suitless:
+    %cm_jsl("Max% Suitless", #action_select_preset_category, #$000F)
+
 precat_ngplasma:
-    %cm_jsl("NewGamePlus Plasma", #action_select_preset_category, #$000F)
+    %cm_jsl("NewGame+ Plasma", #action_select_preset_category, #$0010)
 
 precat_nghyper:
-    %cm_jsl("NewGamePlus Hyper", #action_select_preset_category, #$0010)
+    %cm_jsl("NewGame+ Hyper", #action_select_preset_category, #$0011)
 
 precat_nintendopower:
-    %cm_jsl("Nintendo Power%", #action_select_preset_category, #$0011)
+    %cm_jsl("Nintendo Power%", #action_select_preset_category, #$0012)
 
 precat_allbosskpdr:
-    %cm_jsl("All Bosses KPDR", #action_select_preset_category, #$0012)
+    %cm_jsl("All Bosses KPDR", #action_select_preset_category, #$0013)
 
 precat_allbosspkdr:
-    %cm_jsl("All Bosses PKDR", #action_select_preset_category, #$0013)
+    %cm_jsl("All Bosses PKDR", #action_select_preset_category, #$0014)
 
 precat_allbossprkd:
-    %cm_jsl("All Bosses PRKD", #action_select_preset_category, #$0014)
+    %cm_jsl("All Bosses PRKD", #action_select_preset_category, #$0015)
 
 action_select_preset_category:
 {

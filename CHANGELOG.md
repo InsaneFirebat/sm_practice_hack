@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.3.2]  Added Max% Suitless presets by mm2nescartridge
 * [2.5.3.1]  Added Psuedo G-Mode toggle to disable PLM processing
 * [2.5.3]    Fixed missing equipment in NewGame+ presets
 * [2.5.2.4]  Minor fixes for glitched beam menu
