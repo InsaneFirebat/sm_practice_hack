@@ -2200,7 +2200,7 @@ status_snailclip:
 {
     !snailclip_ypos_hi = $014B
 if !FEATURE_PAL
-    !snailclip_ypos_lo = $014E
+    !snailclip_ypos_lo = $014F
 else
     !snailclip_ypos_lo = $014D
 endif
@@ -2232,45 +2232,47 @@ endif
   .checkpos
     ; Increment counter so we don't check again
     INC : STA !ram_roomstrat_counter
-    LDA !ram_xpos : CMP #$0478 : BMI .ignore : CMP #$0489 : BPL .ignore
+    LDA !ram_xpos : CMP #$0528 : BEQ .checky
+    CMP #$0478 : BMI .ignore : CMP #$0489 : BPL .ignore
+  .checky
     LDA !ram_ypos : CMP #$0120 : BMI .ignore : CMP #$0165 : BPL .ignore
 
     ; Snail is in range
-    LDA !IH_BLANK : STA $7EC688 : STA $7EC68A
-
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A
     ; Check the height
     LDA !ram_ypos : CMP #!snailclip_ypos_hi : BEQ .yeshigh : BMI .high
     CMP #!snailclip_ypos_lo : BEQ .yeslow : BPL .low
+if !FEATURE_PAL
+    CMP #!snailclip_ypos_lo-1 : BEQ .yeslow
+endif
 
     ; Height is good and centered
-    LDA !IH_BLANK : STA $7EC68E
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$8E
     BRA .printy
 
   .yeshigh
-    LDA !IH_LETTER_H : STA $7EC68E
-    BRA .printy
+    LDA !IH_LETTER_H : STA !HUD_TILEMAP+$8E
+
+  .printy
+    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8C
+    RTS
 
   .high
     LDA #!snailclip_ypos_hi : SEC : SBC !ram_ypos
-    ASL : TAY : LDA.w NumberGFXTable,Y : STA $7EC68E
-    LDA !IH_LETTER_H : STA $7EC68C
+    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
+    LDA !IH_LETTER_H : STA !HUD_TILEMAP+$8C
     RTS
 
   .yeslow
-    LDA !IH_LETTER_L : STA $7EC68E
-
-  .printy
-    LDA !IH_LETTER_Y : STA $7EC68C
-    LDA !sram_display_mode_reward : BEQ .skipsfx
-    %sfxenergy()
-
-  .skipsfx
-    RTS
+    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8E
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0100 : BNE .printy
+    TDC : BRA .lowzero
 
   .low
     LDA !ram_ypos : SEC : SBC #!snailclip_ypos_lo
-    ASL : TAY : LDA.w NumberGFXTable,Y : STA $7EC68E
-    LDA !IH_LETTER_L : STA $7EC68C
+  .lowzero
+    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
+    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8C
     RTS
 }
 
