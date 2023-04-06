@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.3.3]  Snail clip now accounts for hi-jump boots by idlechild
 * [2.5.3.2]  Added Max% Suitless presets by mm2nescartridge
 * [2.5.3.1]  Added Psuedo G-Mode toggle to disable PLM processing
 * [2.5.3]    Fixed missing equipment in NewGame+ presets
