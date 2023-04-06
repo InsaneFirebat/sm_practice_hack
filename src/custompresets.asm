@@ -216,6 +216,9 @@ preset_scroll_fixes:
   .big_pink
     BRL .specialized_big_pink
 
+  .big_pink_pbs
+    BRL .specialized_big_pink_pbs
+
   .taco_tank_room
     BRL .specialized_taco_tank_room
 
@@ -249,6 +252,7 @@ preset_scroll_fixes:
     CPX #$92FD : BEQ .parlor
     CPX #$9CB3 : BEQ .dachora
     CPX #$9D19 : BEQ .big_pink
+    CPX #$9E11 : BEQ .big_pink_pbs
     CPX #$9F64 : BEQ .taco_tank_room
     CPX #$A011 : BEQ .etecoons_etank
     CPX #$A253 : BEQ .red_tower
@@ -267,6 +271,12 @@ preset_scroll_fixes:
     ; ---------------------------------------------
     ; Upper Norfair Scroll Fixes (Category Presets)
     ; ---------------------------------------------
+  .ice_beam_gates
+    ; skip if Ypos < 720
+    LDY !SAMUS_Y : CPY #$02D0 : BMI .norfairdone
+    STA $CD38
+    BRA .norfairdone
+
   .ice_snake_room
     LDY !SAMUS_X : CPY #$0100    ; fix varies depending on X position
     BPL .ice_snake_room_hidden
@@ -292,6 +302,7 @@ preset_scroll_fixes:
     BRA .norfairdone
 
   .norfair
+    CPX #$A815 : BEQ .ice_beam_gates
     CPX #$A8B9 : BEQ .ice_snake_room
     CPX #$A9E5 : BEQ .hjb_room
     CPX #$AC83 : BEQ .green_bubble_missiles
@@ -477,7 +488,7 @@ preset_scroll_fixes:
     ; -----------------------------------------------
   .specialized_parlor
     ; no fix if Ypos > 208
-    LDY !SAMUS_Y : CPY #$00D0 : BPL .specialdone
+    LDY !SAMUS_Y : CPY #$00D0 : BPL .BRLspecialdone
     ; no fix if Xpos > 373
     LDY !SAMUS_X : CPY #$0175 : BPL .specialdone
     %a16()
@@ -488,9 +499,13 @@ preset_scroll_fixes:
     BEQ .specialdone
     STA $7F0520 : STA $7F0522
     STA $7F0480 : STA $7F0482
+
+  .BRLspecialdone
     BRA .specialdone
 
   .specialized_big_pink
+    ; spore spawn skip if Xpos > 1040
+    LDY !SAMUS_X : CPY #$0410 : BPL .spore_spawn_skip
     ; no fix if Ypos < 704
     LDY !SAMUS_Y : CPY #$02C0 : BMI .specialdone
     ; no fix if Ypos > 969
@@ -511,6 +526,17 @@ preset_scroll_fixes:
     PLB
     PLP
     RTL
+
+  .spore_spawn_skip
+    STA $CD3C : STA $CD3D
+    BRA .specialdone
+
+  .specialized_big_pink_pbs
+    ; no fix if Ypos > 310
+    LDY !SAMUS_Y : CPY #$0136 : BMI .specialdone
+    STZ $CD21
+    STA $CD22 : STA $CD23
+    BRA .specialdone
 
   .specialized_taco_tank_room
     ; no fix if Xpos < 555
@@ -538,7 +564,7 @@ preset_scroll_fixes:
     LDA #$00FF
     STA $7F036E : STA $7F0370 : STA $7F0374 : STA $7F0376
     STA $7F03D4 : STA $7F0610 : STA $7F0612
-    BRA .specialdone
+    BRL .specialdone
 }
 
 preset_special_fixes:

@@ -338,6 +338,7 @@ category_preset_data_table:
   dl preset_14ice_crateria_ceres_elevator
   dl preset_14speed_crateria_ceres_elevator
   dl preset_rbo_bombs_ceres_elevator
+  dl preset_suitless_bombs_ceres_elevator
   dl preset_ngplasma_ceres_station_ceres_elevator
   dl preset_nghyper_ceres_station_ceres_elevator
   dl preset_nintendopower_crateria_ceres_elevator
@@ -794,6 +795,7 @@ incsrc presets/allbosspkdr_menu.asm   ; 9B0h bytes
 incsrc presets/allbossprkd_menu.asm   ; 9BEh bytes
 incsrc presets/ngplasma_menu.asm   ; 85Ch bytes
 incsrc presets/nghyper_menu.asm   ; 864h bytes
+incsrc presets/suitless_menu.asm   ; ????h bytes
 print pc, " preset_menu.asm bankF3 end"
 
 
@@ -820,6 +822,7 @@ incsrc presets/allbosspkdr_data.asm ; 12F4h bytes
 incsrc presets/allbossprkd_data.asm ; 136Ch bytes
 incsrc presets/nghyper_data.asm ; E88h bytes
 incsrc presets/ngplasma_data.asm ; EA4h bytes
+incsrc presets/suitless_data.asm ; ????h bytes
 warnpc $F08000
 check bankcross on
 print pc, " crossbank preset_data.asm end"
