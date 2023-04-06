@@ -791,13 +791,13 @@ incsrc presets/rbo_menu.asm   ; D97h bytes
 incsrc presets/nintendopower_menu.asm   ; 70Ch bytes
 print pc, " preset_menu.asm bankF2 end"
 
-org $F38000    ; 2D83h bytes used / 527Dh bytes free
+org $F38000    ; 48FFh bytes used / 3701h bytes free
 incsrc presets/allbosskpdr_menu.asm   ; 942h bytes
 incsrc presets/allbosspkdr_menu.asm   ; 9B0h bytes
 incsrc presets/allbossprkd_menu.asm   ; 9BEh bytes
 incsrc presets/ngplasma_menu.asm   ; 85Ch bytes
 incsrc presets/nghyper_menu.asm   ; 864h bytes
-incsrc presets/suitless_menu.asm   ; ????h bytes
+incsrc presets/suitless_menu.asm   ; 1B43h bytes
 print pc, " preset_menu.asm bankF3 end"
 
 
@@ -824,7 +824,7 @@ incsrc presets/pkrd_data.asm ; 1A14h bytes
 incsrc presets/100map_data.asm ; 31FCh bytes
 incsrc presets/nghyper_data.asm ; E88h bytes
 incsrc presets/ngplasma_data.asm ; EA4h bytes
-incsrc presets/suitless_data.asm ; ????h bytes
+incsrc presets/suitless_data.asm ; 3DF0h bytes
 warnpc $F08000
 check bankcross on
 print pc, " crossbank preset_data.asm end"
