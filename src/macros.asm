@@ -40,6 +40,7 @@ endmacro
 
 macro cm_header(title)
 ; outlined text to be drawn above the menu items
+  .dm_header
     table ../resources/header.tbl
     db #$28, "<title>", #$FF
     table ../resources/normal.tbl
@@ -47,6 +48,7 @@ endmacro
 
 macro cm_footer(title)
 ; optional outlined text below the menu items
+  .dm_footer
     table ../resources/header.tbl
     dw #$F007 : db #$28, "<title>", #$FF
     table ../resources/normal.tbl
@@ -54,6 +56,7 @@ endmacro
 
 macro cm_version_header(title, major, minor, build, rev_1, rev_2)
 ; header text with automatic version number appended
+  .dm_verHeader
     table ../resources/header.tbl
 if !VERSION_REV_1
     db #$28, "<title> v<major>.<minor>.<build>.<rev_1><rev_2>", #$FF
@@ -69,110 +72,170 @@ endmacro
 
 macro cm_numfield(title, addr, start, end, increment, heldincrement, jsltarget)
 ; Allows editing an 8-bit value at the specified address
+  .dm_actionIndex
     dw !ACTION_NUMFIELD
+  .dm_addr
     dl <addr> ; 24bit RAM address to display/manipulate
+  .dm_minMax
     db <start>, <end> ; minimum and maximum values allowed
+  .dm_inc
     db <increment> ; inc/dec amount when pressed
 ;    db <heldincrement> ; inc/dec amount when direction is held (scroll faster)
+  .dm_jsl
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+  .dm_text
     db #$28, "<title>", #$FF
 endmacro
 
 macro cm_numfield_word(title, addr, start, end, increment, heldincrement, jsltarget)
 ; Allows editing a 16-bit value at the specified address
+  .dm_actionIndex
     dw !ACTION_NUMFIELD_WORD
+  .dm_addr
     dl <addr> ; 24bit RAM address to display/manipulate
+  .dm_minMax
     dw <start>, <end> ; minimum and maximum values allowed
+  .dm_inc
     dw <increment> ; inc/dec amount when pressed
 ;    dw <heldincrement> ; inc/dec amount when direction is held (scroll faster)
+  .dm_jsl
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+  .dm_text
     db #$28, "<title>", #$FF
 endmacro
 
 macro cm_numfield_hex(title, addr, start, end, increment, heldincrement, jsltarget)
 ; Allows editing an 8-bit value displayed in hexadecimal
+  .dm_actionIndex
     dw !ACTION_NUMFIELD_HEX
+  .dm_addr
     dl <addr> ; 24bit RAM address to display/manipulate
+  .dm_minMax
     db <start>, <end> ; minimum and maximum values allowed
+  .dm_inc
     db <increment> ; inc/dec amount when pressed
 ;    db <heldincrement> ; inc/dec amount when direction is held (scroll faster)
+  .dm_jsl
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+  .dm_text
     db #$28, "<title>", #$FF
 endmacro
 
 macro cm_numfield_hex_word(title, addr)
+; Displays a 16-bit value in hexadecimal
+  .dm_actionIndex
     dw !ACTION_NUMFIELD_HEX_WORD
+  .dm_addr
     dl <addr> ; 24bit RAM address to display/manipulate
+  .dm_text
     db #$28, "<title>", #$FF
 endmacro
 
 macro cm_numfield_color(title, addr, jsltarget)
 ; Allows editing an 8-bit value in increments consistent with SNES color values
+  .dm_actionIndex
     dw !ACTION_NUMFIELD_COLOR
+  .dm_addr
     dl <addr> ; 24bit RAM address to display/manipulate
+  .dm_jsl
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+  .dm_text
     db #$28, "<title>", #$FF
 endmacro
 
 macro cm_numfield_sound(title, addr, start, end, increment, jsltarget)
 ; Allows editing an 8-bit value and playing a sound when pressing Y
+  .dm_actionIndex
     dw !ACTION_NUMFIELD_SOUND
+  .dm_addr
     dl <addr> ; 24bit RAM address to display/manipulate
+  .dm_minMax
     db <start>, <end> ; minimum and maximum values allowed
+  .dm_inc
     db <increment> ; inc/dec amount when pressed
+  .dm_jsl
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+  .dm_text
     db #$28, "<title>", #$FF
 endmacro
 
 macro cm_toggle(title, addr, value, jsltarget)
 ; toggle between zero (OFF) and value (ON)
+  .dm_actionIndex
     dw !ACTION_TOGGLE
+  .dm_addr
     dl <addr> ; 24bit RAM address to display/manipulate
+  .dm_value
     db <value> ; value to write when toggled on
+  .dm_jsl
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+  .dm_text
     db #$28, "<title>", #$FF
 endmacro
 
 macro cm_toggle_inverted(title, addr, value, jsltarget)
 ; for toggles where zero = ON
+  .dm_actionIndex
     dw !ACTION_TOGGLE_INVERTED
+  .dm_addr
     dl <addr> ; 24bit RAM address to display/manipulate
+  .dm_value
     db <value> ; value to write when toggled off
+  .dm_jsl
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+  .dm_text
     db #$28, "<title>", #$FF
 endmacro
 
 macro cm_toggle_bit(title, addr, mask, jsltarget)
 ; toggle specific bits, draw OFF if bits cleared
+  .dm_actionIndex
     dw !ACTION_TOGGLE_BIT
+  .dm_addr
     dl <addr> ; 24bit RAM address to display/manipulate
+  .dm_bitmask
     dw <mask> ; which bits to flip
+  .dm_jsl
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+  .dm_text
     db #$28, "<title>", #$FF
 endmacro
 
 macro cm_toggle_bit_inverted(title, addr, mask, jsltarget)
 ; toggle specific bits, draw ON if bits cleared
+  .dm_actionIndex
     dw !ACTION_TOGGLE_BIT_INVERTED
+  .dm_addr
     dl <addr> ; 24bit RAM address to display/manipulate
+  .dm_bitmask
     dw <mask> ; which bits to flip
+  .dm_jsl
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+  .dm_text
     db #$28, "<title>", #$FF
 endmacro
 
 macro cm_jsl(title, routine, argument)
 ; run code when menu item executed
+  .dm_actionIndex
     dw !ACTION_JSL
+  .dm_jsl
     dw <routine> ; 16bit address to code in the same bank as current menu/submenu
+  .dm_arg
     dw <argument> ; value passed to routine in Y
+  .dm_text
     db #$28, "<title>", #$FF
 endmacro
 
 macro cm_jsl_submenu(title, routine, argument)
 ; only used within submenu and mainmenu macros
+  .dm_actionIndex
     dw !ACTION_JSL_SUBMENU
+  .dm_jsl
     dw <routine> ; 16bit address to code in the same bank as current menu/submenu
+  .dm_arg
     dw <argument> ; value passed to routine in Y
+  .dm_text
     db #$28, "<title>", #$FF
 endmacro
 
@@ -194,20 +257,30 @@ endmacro
 
 macro cm_ctrl_shortcut(title, addr)
 ; configure controller shortcuts
+  .dm_actionIndex
     dw !ACTION_CTRL_SHORTCUT
+  .dm_addr
     dl <addr> ; 24bit RAM address to display/manipulate
+  .dm_text
     db #$28, "<title>", #$FF
 endmacro
 
 macro cm_ctrl_input(title, addr, routine, argument)
+; configure vanilla controller bindings
+  .dm_actionIndex
     dw !ACTION_CTRL_INPUT
+  .dm_addr
     dl <addr> ; 24bit RAM address to display/manipulate
+  .dm_jsl
     dw <routine> ; 16bit address to code in the same bank as current menu/submenu
+  .dm_arg
     dw <argument> ; value passed to routine in Y
+  .dm_text
     db #$28, "<title>", #$FF
 endmacro
 
 macro examplemenu()
+; inserts blank lines and dummy menu objects
     dw #$FFFF
     dw #$FFFF
     dw #$FFFF
@@ -221,6 +294,7 @@ macro examplemenu()
 endmacro
 
 macro palettemenu(title, pointer, addr)
+; menu pointers for customizing menu color palettes
     %cm_submenu("<title>", <pointer>)
 
 <pointer>:
@@ -270,13 +344,19 @@ endmacro
 
 macro cm_equipment_item(name, addr, bitmask, inverse)
 ; Allows three-way toggling of items:  ON/OFF/UNOBTAINED
+  .dm_actionIndex
     dw !ACTION_CHOICE
+  .dm_addr
     dl <addr>
+  .dm_jsl
     dw #.routine
+  .dm_text
     db #$28, "<name>", #$FF
+  .dm_choices
     db #$28, " UNOBTAINED", #$FF
     db #$28, "         ON", #$FF
     db #$28, "        OFF", #$FF
+  .dm_term
     db #$FF
   .routine
     LDA.w #<addr> : STA !DP_Address
@@ -288,13 +368,19 @@ endmacro
 
 macro cm_equipment_beam(name, addr, bitmask, inverse, and)
 ; Allows three-way toggling of beams:  ON/OFF/UNOBTAINED
+  .dm_actionIndex
     dw !ACTION_CHOICE
+  .dm_addr
     dl <addr>
+  .dm_jsl
     dw #.routine
+  .dm_text
     db #$28, "<name>", #$FF
+  .dm_choices
     db #$28, " UNOBTAINED", #$FF
     db #$28, "         ON", #$FF
     db #$28, "        OFF", #$FF
+  .dm_term
     db #$FF
   .routine
     LDA.w #<addr> : STA !DP_Address
