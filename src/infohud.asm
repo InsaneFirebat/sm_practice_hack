@@ -297,9 +297,10 @@ endif
     LDA !ram_freeze_on_load : BEQ .frozen
     LDA !IH_CONTROLLER_PRI_NEW : BEQ .frozen
     ; unfreeze
-    LDA #$0000 : STA !ram_reset_segment_later
-    STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds
-    STA !ram_seg_rt_minutes : STA !ram_slowdown_mode : STA !ram_slowdown_frames
+    LDA #$0000 : STA !ram_slowdown_mode : STA !ram_slowdown_frames
+    LDA !SRAM_SEG_TIMER_F : STA !ram_seg_rt_frames
+    LDA !SRAM_SEG_TIMER_S : STA !ram_seg_rt_seconds
+    LDA !SRAM_SEG_TIMER_M : STA !ram_seg_rt_minutes
     BRA .done
 
   .frozen

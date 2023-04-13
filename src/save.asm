@@ -66,6 +66,10 @@ post_load_state:
     LDA #$FFFF : STA !ram_slowdown_mode
     INC : STA !ram_slowdown_controller_1 : STA !ram_slowdown_controller_2
     INC : STA !ram_slowdown_frames
+    ; Preserve segment timer during freeze
+    LDA !ram_seg_rt_frames : STA !SRAM_SEG_TIMER_F
+    LDA !ram_seg_rt_seconds : STA !SRAM_SEG_TIMER_S
+    LDA !ram_seg_rt_minutes : STA !SRAM_SEG_TIMER_M
 
   .return
     RTS
