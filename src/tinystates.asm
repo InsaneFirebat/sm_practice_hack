@@ -127,12 +127,11 @@ post_load_state:
 +   JSR post_load_music
 
     ; Reload OOB tile viewer if enabled
-    LDA !ram_oob_watch_active : BEQ .minimap
+    LDA !ram_oob_watch_active : BEQ +
     JSL upload_sprite_oob_tiles
 
-  .minimap
     ; Reload BG3 GFX if minimap setting changed
-    LDA !ram_minimap : CMP !SRAM_SAVED_MINIMAP : BEQ .rng
++   LDA !ram_minimap : CMP !SRAM_SAVED_MINIMAP : BEQ +
     JSL cm_transfer_original_tileset
     LDA !ram_minimap : BEQ .disableMinimap
     ; Enabled minimap, clear stale tiles
@@ -140,13 +139,15 @@ post_load_state:
     STA !HUD_TILEMAP+$3A : STA !HUD_TILEMAP+$7A : STA !HUD_TILEMAP+$BA
     LDA #$2C1E ; minimap border
     STA !HUD_TILEMAP+$46 : STA !HUD_TILEMAP+$86 : STA !HUD_TILEMAP+$C6
-    BRA .rng
+    BRA +
   .disableMinimap
     LDA #$2C0F : STA !HUD_TILEMAP+$7C : STA !HUD_TILEMAP+$7E
 
-  .rng
+    ; Reload custom HUD number GFX
++   JSL overwrite_HUD_numbers
+
     ; Rerandomize
-    LDA !sram_save_has_set_rng : BNE +
++   LDA !sram_save_has_set_rng : BNE +
     LDA !sram_rerandomize : AND #$00FF : BEQ +
     LDA !SRAM_SAVED_RNG : STA !RANDOM_NUMBER
     LDA !SRAM_SAVED_FRAME_COUNTER : STA !FRAME_COUNTER
