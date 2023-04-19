@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.3.6]  Changed lag counter to use a 3 digit draw every time
 * [2.5.3.5]  Preserve segment timer during loadstate freeze, instead of resetting it
 * [2.5.3.5]  Fixed custom HUD number graphics after loading a savestate
 * [2.5.3.4]  Added Samus I-Frames to common RAM Watch addresses

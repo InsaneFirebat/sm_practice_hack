@@ -712,7 +712,7 @@ endif
 
   .skipToLag
     LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_infohud_draw_lag_and_reserves
-    LDA !ram_last_room_lag : LDX #$0080 : JSR Draw4
+    LDA !ram_last_room_lag : LDX #$0082 : JSR Draw3
 
     ; Skip door lag and segment timer when shinetune enabled
     LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BEQ .end
@@ -908,7 +908,7 @@ endif
 
     ; Lag counter
     LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_infohud_draw_lag_and_reserves
-    LDA !ram_last_room_lag : LDX #$0080 : JSR Draw4
+    LDA !ram_last_room_lag : LDX #$0082 : JSR Draw3
 
     ; Skip door lag and segment timer when shinetune enabled
     LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BEQ .end
