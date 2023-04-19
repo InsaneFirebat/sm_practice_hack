@@ -48,6 +48,8 @@ init_code:
     JSR init_sram
 
   .sram_initialized
+    JSL validate_sram_for_savestates
+
 if !PRESERVE_WRAM_DURING_SPACETIME
     ; WRAM located in bank 7E, clear it later
 else
