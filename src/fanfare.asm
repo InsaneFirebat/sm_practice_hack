@@ -171,12 +171,40 @@ endif
 hook_message_box_wait:
 {
     LDA !sram_fanfare_toggle : BNE .fanfareloop
-    LDX #$0020       ; shorten message box length
+    ; shorten message box length
+    LDX #$0020
 
-  .nofanfareloop     ; skipping fanfare, so no need to mess with sound
+  .nofanfareloop
+    ; skipping fanfare, so no need to mess with sound
     JSR hook_message_box_wait_for_lag_frame
     DEX
     BNE .nofanfareloop
+
+if !FEATURE_VANILLAHUD
+else
+    ; option to add missing fanfare time to InfoHUD timers
+    LDA !sram_fanfare_timer_adjust : BEQ .done
+    %a16()
+    LDA !ram_realtime_room : CLC : ADC #$0148 : STA !ram_realtime_room
+
+    ; adding 5:28 to seg timer
+    STZ $12 : STZ $14
+    LDA !ram_seg_rt_frames : CLC : ADC #$001C : STA !ram_seg_rt_frames
+    CMP #$003C : BMI .add_seconds
+    SEC : SBC #$003C : STA !ram_seg_rt_frames : INC $12
+
+  .add_seconds
+    LDA !ram_seg_rt_seconds : CLC : ADC #$0005 : ADC $12 : STA !ram_seg_rt_seconds
+    CMP #$003C : BMI .add_minutes
+    SEC : SBC #$003C : STA !ram_seg_rt_seconds : INC $14
+
+  .add_minutes
+    LDA $14 : BEQ .done
+    CLC : ADC !ram_seg_rt_minutes : STA !ram_seg_rt_minutes
+
+  .done
+    %a8()
+endif
     RTS
 
   .fanfareloop       ; original logic
