@@ -1,7 +1,8 @@
 
 ## Changelog since v2.2.7
 
-* [2.5.3.7]  Fixed bad Ceres tile room RNG when loading from a preset
+* [2.5.3.6]  Fixed Mini-Kraid crying
+* [2.5.3.6]  Fixed bad Ceres tile room RNG when loading from a preset
 * [2.5.3.6]  Recheck for SRAM compatibility at each boot
 * [2.5.3.6]  Changed lag counter to use a 3 digit draw every time
 * [2.5.3.5]  Preserve segment timer during loadstate freeze, instead of resetting it
