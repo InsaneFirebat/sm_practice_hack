@@ -1682,6 +1682,7 @@ InfoHudMenu:
     dw #ih_room_counter
     dw #ih_lag_counter
     dw #ih_reset_seg_later
+    dw #ih_fanfare_timer_adjust
     dw #ih_top_HUD_mode
     dw #ih_spacetime_infohud
     dw #ih_status_icons
@@ -2312,6 +2313,9 @@ ih_reset_seg_later:
     TYA : STA !ram_reset_segment_later
     %sfxquake()
     RTL
+
+ih_fanfare_timer_adjust:
+    %cm_toggle("Adjust Fanfare Timers", !sram_fanfare_timer_adjust, #$0001, #0)
 
 ih_top_HUD_mode:
     dw !ACTION_CHOICE

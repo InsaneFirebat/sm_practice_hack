@@ -749,6 +749,7 @@ endif
 !sram_preset_ship_landing = !SRAM_START+$228
 !sram_preset_enemies = !SRAM_START+$22A
 !sram_fast_nintendo_logo = !SRAM_START+$22C
+!sram_fanfare_timer_adjust = !SRAM_START+$22E
 
 ; FREE SPACE ^
 
