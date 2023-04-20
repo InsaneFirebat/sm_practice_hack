@@ -265,7 +265,7 @@
 !DP_CtrlInput = $10 ; 0x4
 !DP_Palette = $14
 !DP_Temp = $16
-; v these repreat v
+; v these repeat v
 !DP_ToggleValue = $18
 !DP_Increment = $1A
 !DP_Minimum = $1C
@@ -467,6 +467,7 @@ endif
 !ENEMY_Y = $0F7E
 !ENEMY_X_RADIUS = $0F82
 !ENEMY_Y_RADIUS = $0F84
+!ENEMY_PROPERTIES = $0F86
 !ENEMY_PROPERTIES_2 = $0F88
 !ENEMY_HP = $0F8C
 !ENEMY_SPRITEMAP = $0F8E
@@ -485,7 +486,7 @@ endif
 ; -----
 
 !PRESET_SLOTS = $703000
-!SRAM_VERSION = $000F
+!SRAM_VERSION = $0010
 
 !SRAM_START = $F02200
 
@@ -529,8 +530,6 @@ endif
 !sram_cutscenes = !SRAM_START+$46
 !sram_preset_options = !SRAM_START+$48
 !sram_lag_counter_mode = !SRAM_START+$4A
-!sram_fast_doors = !SRAM_START+$4C
-!sram_suppress_flashing = !SRAM_START+$4E
 
 ; ^ FREE SPACE ^ up to +$0FCE
 
