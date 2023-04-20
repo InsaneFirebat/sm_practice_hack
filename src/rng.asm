@@ -58,13 +58,26 @@ org $A48753
 ; -------------
 ; Kraid hijacks
 ; -------------
-
-org $A7BDBF
-    JSR hook_kraid_rng
+{
+org $A786A7
+KraidWaitTable:
+    ; Overwrite unused palette
+    dw #$0080, #$0040, #$0080, #$00C0, #$0100, #$0140, #$0180, #$01C0
 
 org $A7AA69
     JMP kraid_intro_skip
 kraid_intro_skip_return:
+
+org $A7AE0D
+    LDA !ram_kraid_wait_rng : BNE kraid_wait_load_delay
+    LDA !CACHED_RANDOM_NUMBER : AND #$0007
+kraid_wait_load_delay:
+    ASL : TAX : LDA.w KraidWaitTable,X
+warnpc $A7AE1E
+
+org $A7BDBF
+    JSR hook_kraid_claw_rng
+}
 
 
 ; -----------------
@@ -558,9 +571,9 @@ endif
 org $A7FFB6
 print pc, " kraid rng start"
 
-hook_kraid_rng:
+hook_kraid_claw_rng:
 {
-    LDA !ram_kraid_rng : BEQ .no_manip
+    LDA !ram_kraid_claw_rng : BEQ .no_manip
     DEC : DEC     ; return -1 (laggy) or 0 (laggier)
     RTS
 
