@@ -15,7 +15,7 @@ org $908643
 ; keeping the change in timing down as much as possible.
 
 ;org $81EF20
-org $81F700
+org !ORG_SPRITEPRIO
 print pc, " spriteprio start"
 oam_add_samus_sprite_with_prio:
     PHB

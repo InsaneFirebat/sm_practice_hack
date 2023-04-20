@@ -2,7 +2,7 @@
 ; Custom Presets
 ; --------------
 
-org $83B400
+org !ORG_PRESETS_CUSTOM
 print pc, " custompresets start"
 
 if !FEATURE_TINYSTATES

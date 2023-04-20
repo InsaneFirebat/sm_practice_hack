@@ -112,7 +112,7 @@ org $A8B798
 ; Hooks
 ; -----
 
-org $83B000
+org !ORG_RNG_BANK83
 print pc, " rng start"
 
 hook_hopper_set_rng:
@@ -366,7 +366,7 @@ warnpc $83B400 ; custompresets.asm
 
 
 ;org $A4F700
-org $A4FFA0
+org !ORG_RNG_BANKA4
 print pc, " crocomire rng start"
 
 hook_crocomire_rng:
@@ -388,7 +388,7 @@ print pc, " crocomire rng end"
 
 
 ;org $A5FA00
-org $A5FD50
+org !ORG_RNG_BANKA5
 print pc, " draygon rng start"
 
 hook_draygon_rng_left:
@@ -439,7 +439,7 @@ org $A6F66A
     LDA $7ED82E
 
 
-org $A6FEC0
+!ORG_RNG_BANKA6 = $A6FF00 ; $6B, bank $A6
 print pc, " ridley rng start"
 
 ridley_init_hook:
@@ -496,7 +496,7 @@ ridley_ceres_door_escape_instructions:
 print pc, " ridley rng end"
 
 
-org $A7FFB6
+org !ORG_RNG_BANKA7
 print pc, " kraid rng start"
 
 hook_kraid_claw_rng:

@@ -14,7 +14,8 @@ endif
     JSL cutscenes_nintendo_splash
     NOP : NOP
 
-org $8BF800
+
+org !ORG_CUTSCENES
 print pc, " cutscenes start"
 
 cutscenes_nintendo_splash:
@@ -158,7 +159,7 @@ org $A9B1EB
     ORA #$0500
 
 
-org $A9FBC0
+org !ORG_CUTSCENES_MB
 print pc, " cutscenes MB start"
 
 cutscenes_mb_fake_death_fast_init:

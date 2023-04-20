@@ -14,7 +14,7 @@ org $82E526
 endif
 
 
-org $85F800
+org !ORG_GAMEMODE
 print pc, " gamemode start"
 
 gamemode_start:
