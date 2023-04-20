@@ -1,7 +1,7 @@
 
 
 ;org $84EFD9
-org $84FF6D
+org !ORG_FANFARE_BANK84
 print pc, " fanfare restore start"
   .prepareloop
     PHX              ; start of logic that was overwritten
@@ -48,7 +48,7 @@ org $82E126
     BRA $08
 
 
-org $85FF00
+org !ORG_FANFARE_BANK85
 print pc, " fanfare start"
 hook_message_box_wait:
     LDA !sram_fanfare_toggle : BNE .fanfareloop

@@ -104,7 +104,7 @@ org $A2AA20      ; update timers when Samus enters ship
 
 
 ; Main bank stuff
-org $F08000
+org !ORG_INFOHUD
 print pc, " infohud start"
 
 ; List this first since it affects bank $84 where we are trying to minimize change
@@ -1408,7 +1408,7 @@ warnpc $F0E000 ; spritefeat.asm
 
 
 ; Stuff that needs to be placed in bank 80
-org $80FD00
+org !ORG_INFOHUD_BANK80
 print pc, " infohud bank80 start"
 
 ih_fix_scroll_offsets:

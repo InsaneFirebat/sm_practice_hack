@@ -112,8 +112,7 @@ org $A8B798
 ; Hooks
 ; -----
 
-;org $83B000
-org $83C300
+org !ORG_RNG_BANK83
 print pc, " rng start"
 
 hook_hopper_set_rng:
@@ -367,7 +366,7 @@ warnpc $83C700 ; custompresets.asm
 
 
 ;org $A4F700
-org $A4FFA0
+org !ORG_RNG_BANKA4
 print pc, " crocomire rng start"
 
 hook_crocomire_rng:
@@ -389,7 +388,7 @@ print pc, " crocomire rng end"
 
 
 ;org $A5FA00
-org $A5FD50
+org !ORG_RNG_BANKA5
 print pc, " draygon rng start"
 
 hook_draygon_rng_left:
@@ -418,7 +417,7 @@ print pc, " draygon rng end"
 
 ; This is actually for preset support instead of RNG
 ; Keep Ceres Ridley enemy alive even if the main boss flag is set
-org $A6A0FC
+org !ORG_RNG_BANKA6
     LSR : BCC $0F
     CPX #$0006 : BEQ $0A
     LDA $0F86
@@ -497,7 +496,7 @@ ridley_ceres_door_escape_instructions:
 print pc, " ridley rng end"
 
 
-org $A7FFB6
+org !ORG_RNG_BANKA7
 print pc, " kraid rng start"
 
 hook_kraid_claw_rng:

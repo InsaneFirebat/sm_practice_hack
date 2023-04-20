@@ -1,4 +1,5 @@
-org $82FA00
+
+org !ORG_PRESETS_BANK82
 print pc, " presets bank82 start"
 
 preset_load:
@@ -325,7 +326,7 @@ org $82E8D9
     JSL preset_room_setup_asm_fixes
 
 
-org $80F000
+org !ORG_PRESETS_BANK80
 print pc, " presets bank80 start"
 
 ; This method is very similar to $80A07B (start gameplay)
@@ -681,11 +682,10 @@ warnpc $80F600 ; save.asm
 ; -------------------
 
 ; Preset data/menus can be anywhere in the rom, even in separate banks
-org $EE8000
+org !ORG_PRESETS_DATA
 print pc, " preset menu/data start"
-dw #$5AFE
-
-incsrc presets/szm101_menu.asm
 incsrc presets/szm101_data.asm
+;org !ORG_PRESETS_MENU
+incsrc presets/szm101_menu.asm
 print pc, " preset menu/data end"
 

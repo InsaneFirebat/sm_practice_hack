@@ -2,7 +2,7 @@
 ; Custom Presets
 ; --------------
 
-org $83C700
+org !ORG_PRESETS_CUSTOM
 print pc, " custompresets start"
 
 custom_preset_save:

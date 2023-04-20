@@ -236,8 +236,9 @@ if !FEATURE_MORPHLOCK
 ; Morph Lock
 ; ----------
 
+print pc, " misc morphlock start"
 ; rewrite morph lock code to allow controller shortcuts and menu navigation
-org $80CD90
+org !ORG_MORPHLOCK
     ; check for menu
     LDA !ram_cm_menu_active : BEQ +
     LDA $4218
@@ -277,6 +278,7 @@ org $80CD90
   .noSpringball
     AND #$F7FF ; removes up input
     RTS
+print pc, " misc morphlock end"
 endif
 
 ; general damage hijack
@@ -291,7 +293,7 @@ org $A0A54C
 org $A0A62B
     JSR EnemyDamagePowerBomb
 
-org $A0FFD0
+org !ORG_MISC_BANKA0
 print pc, " misc bankA0 start"
 EnemyDamage:
 {
@@ -328,7 +330,7 @@ EnemyDamagePowerBomb:
 print pc, " misc bankA0 end"
 
 
-org $908E75
+org !ORG_MISC_BANK90
 print pc, " misc bank90 start"
 
 preserve_escape_timer:
@@ -356,7 +358,8 @@ warnpc $908EA9 ; overwrites unused vanilla routine
 print pc, " misc bank90 end"
 
 
-org $8BFA00
+if !RAW_TILE_GRAPHICS
+org !ORG_MISC_BANK8B
 print pc, " misc bank8B start"
 ; Decompression optimization adapted from Kejardon
 ; Compression format: One byte (XXX YYYYY) or two byte (111 XXX YY-YYYYYYYY) headers
@@ -524,4 +527,5 @@ decompression_increment_bank:
     RTS
 }
 print pc, " misc bank8B end"
+endif
 

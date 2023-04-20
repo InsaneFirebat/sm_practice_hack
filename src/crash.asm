@@ -59,7 +59,7 @@ org $00FFE6
 org $00FFFE
     dw BRKHandler
 
-org $80E000
+org !ORG_CRASH
 print pc, " crash handler bank80 start"
 
 ; This routine (or a bridge to it) must live in bank $80

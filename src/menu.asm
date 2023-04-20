@@ -1,5 +1,5 @@
 
-org $85FD00
+org !ORG_MENU_BANK85
 print pc, " menu bank85 start"
 
 wait_for_lag_frame_long:
@@ -31,8 +31,8 @@ maybe_trigger_pause_long:
 print pc, " menu bank85 end"
 warnpc $85FE00 ; fanfare.asm
 
-;org $B88000
-org $B88330
+
+org !ORG_MENU_BANK89
 print pc, " menu start"
 
 cm_start:
@@ -1784,7 +1784,7 @@ cm_divide_100:
 ; -----------
 
 ;pushpc
-;org $B88000
+;org !ORG_MAINMENU
 print pc, " mainmenu start"
 incsrc mainmenu.asm
 print pc, " mainmenu end"
