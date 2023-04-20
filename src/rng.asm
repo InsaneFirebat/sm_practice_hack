@@ -417,7 +417,7 @@ print pc, " draygon rng end"
 
 ; This is actually for preset support instead of RNG
 ; Keep Ceres Ridley enemy alive even if the main boss flag is set
-org !ORG_RNG_BANKA6
+org $A6A0FC
     LSR : BCC $0F
     CPX #$0006 : BEQ $0A
     LDA $0F86
@@ -439,7 +439,7 @@ org $A6F66A
     LDA $7ED82E
 
 
-org $A6FEC0
+org !ORG_RNG_BANKA6
 print pc, " ridley rng start"
 
 ridley_init_hook:

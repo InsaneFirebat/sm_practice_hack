@@ -1,6 +1,6 @@
 # HACK
 
-Normal v2.3: https://metroidconstruction.com/hack.php?id=19
+Normal v2.3 and Hard v2.4: https://metroidconstruction.com/hack.php?id=19
 
 ## Special Thanks
 
