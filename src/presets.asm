@@ -1,5 +1,5 @@
-;org $82FA00
-org $81F4D0
+
+org !ORG_PRESETS_BANK82
 print pc, " presets bank81 start"
 
 preset_load:
@@ -310,7 +310,7 @@ warnpc $81F780 ; Axeil/Redesign code?
 print pc, " presets bank81 end"
 
 
-org $82FD80
+org !ORG_PRESETS_BANK82
 print pc, " presets bank82 start"
 preset_load_bank82:
 {
@@ -337,8 +337,7 @@ org $82E8D9
     JSL preset_room_setup_asm_fixes
 
 
-;org $80F000
-org $80F62E
+org !ORG_PRESETS_BANK80
 print pc, " presets bank80 start"
 
 ; This method is very similar to $80A07B (start gameplay)
@@ -680,27 +679,16 @@ warnpc $80FB00 ; save.asm
 
 ; Preset data/menus can be anywhere in the rom, even in separate banks
 
-if !FEATURE_REDESIGN
-org $FC8000
-print pc, " Redesign any% menu start"
-incsrc presets/redesign_menu.asm
-print pc, " Redesign any% menu end"
-
-print pc, " Redesign any% data start"
-incsrc presets/redesign_data.asm
-print pc, " Redesign any% data end"
-else
 ; Using Redesign Presets as the new placeholder
 ; Most of them will still work to some degree
-org $FD99D0
+org !ORG_PRESETS_DATA
 print pc, " Redesign any% data start"
 incsrc presets/redesign_data.asm
 print pc, " Redesign any% data end"
 
-org $F4C7F2
+org !ORG_PRESETS_MENU
 print pc, " Redesign any% menu start"
 incsrc presets/redesign_menu.asm
 print pc, " Redesign any% menu end"
 warnpc $F4EFFF
-endif
 

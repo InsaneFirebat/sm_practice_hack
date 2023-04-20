@@ -29,7 +29,7 @@ org $8FE0DF
 
 
 ;org $8FEA00
-org $8FFF00
+org !ORG_LAYOUT
 print pc, " layout start"
 
 layout_asm_mbhp:

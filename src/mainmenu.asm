@@ -1998,7 +1998,7 @@ boss_mb:
 ; --------------
 
 pushpc
-org $85C000
+org !ORG_MAINMENU_INFOHUD
 print pc, " mainmenu InfoHUD start"
 
 InfoHudMenu:
@@ -2300,7 +2300,7 @@ pullpc
 ; ----------
 
 pushpc
-org $B3F000
+org !ORG_MAINMENU_GAME
 print pc, " mainmenu GameMenu start"
 
 GameMenu:

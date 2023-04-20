@@ -52,9 +52,9 @@ incbin ../resources/Redesign_hudgfx.bin
 
 
 ; Place minimap graphics in bank FF
-org $FFD000
+org !ORG_MINIMAP_BANKFD
 print pc, " minimap bankFF start"
-;incbin ../resources/mapgfx.bin
+mapgfx_bin:
 if !FEATURE_REDESIGN
 incbin ../resources/RedesignMapGFX.bin
 else
@@ -84,8 +84,7 @@ org $80994D
 
 ; Placed in bank 82 so that the jumps work
 ; Using helper functions cause bank 82 is full of Axeil code
-;org $FDE000
-org $82FED0
+org !ORG_MINIMAP_BANK82
 print pc, " minimap bank82 start"
 mm_write_and_clear_hud_tiles_helper:
 {
@@ -156,9 +155,8 @@ print pc, " minimap bank82 end"
 
 
 ; Placed in bank 90 so that the jumps work
-;org $90F640
-org $90FF6B
-print pc, " minimap bank90-pt1 start"
+org !ORG_MINIMAP_BANK90
+print pc, " minimap bank90 start"
 
 mm_initialize_minimap:
 {

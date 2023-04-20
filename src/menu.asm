@@ -1,6 +1,5 @@
 
-;org $85FD00
-org $85FE9C
+org !ORG_MENU_BANK85
 print pc, " menu bank85 start"
 
 wait_for_lag_frame_long:
@@ -32,8 +31,8 @@ maybe_trigger_pause_long:
 print pc, " menu bank85 end"
 warnpc $85FF00 ; misc.asm
 
-;org $B8A2E5
-org $B8C470
+
+org !ORG_MENU_BANK89
 print pc, " menu start"
 
 cm_start:
@@ -1799,7 +1798,7 @@ print pc, " menu end"
 ; -----------
 
 pushpc
-org $B88000
+org !ORG_MAINMENU
 print pc, " mainmenu start"
 incsrc mainmenu.asm
 print pc, " mainmenu end"

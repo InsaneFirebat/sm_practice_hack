@@ -26,8 +26,7 @@ org $8084AF
   .end_clear_bank
 
 
-;org $81F000
-org $81F0D0
+org !ORG_INIT
 print pc, " init start"
 
 init_code:
