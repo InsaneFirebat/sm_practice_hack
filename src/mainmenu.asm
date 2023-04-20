@@ -167,8 +167,8 @@ macro cm_equipment_item(name, addr, bitmask, inverse)
     db #$28, "        OFF", #$FF
     db #$FF
   .routine
-    LDA.w <addr> : STA !DP_Address
-    LDA.w <addr>>>16 : STA !DP_Address+2
+    LDA.w #<addr> : STA !DP_Address
+    LDA.w #<addr>>>16 : STA !DP_Address+2
     LDA <bitmask> : STA !DP_ToggleValue
     LDA <inverse> : STA !DP_Increment
     JMP equipment_toggle_items
@@ -963,7 +963,14 @@ equipment_toggle_items:
 
 eq_prepare_beams_menu:
 {
-+   LDA !SAMUS_BEAMS_COLLECTED : BIT #$1000 : BEQ .noCharge
+    JSL setup_beams_ram
+    %setmenubank()
+    JML action_submenu
+}
+
+setup_beams_ram:
+{
+    LDA !SAMUS_BEAMS_COLLECTED : BIT #$1000 : BEQ .noCharge
     LDA !SAMUS_BEAMS_EQUIPPED : BIT #$1000 : BNE .equipCharge
     ; unequip Charge
     LDA #$0002 : STA !ram_cm_charge : BRA +
@@ -1008,8 +1015,7 @@ eq_prepare_beams_menu:
   .noPlasma
     LDA #$0000 : STA !ram_cm_plasma
 
-+   %setmenubank()
-    JML action_submenu
++   RTL
 }
 
 ToggleBeamsMenu:
@@ -1052,16 +1058,37 @@ equipment_toggle_beams:
     ; unquipped
     LDA !SAMUS_BEAMS_EQUIPPED : AND !DP_Increment : STA !SAMUS_BEAMS_EQUIPPED
     LDA !SAMUS_BEAMS_COLLECTED : ORA !DP_ToggleValue : STA !SAMUS_BEAMS_COLLECTED
-    BRA .done
+    BRA .checkSpazer
 
   .equipped
     LDA !SAMUS_BEAMS_EQUIPPED : ORA !DP_ToggleValue : AND !DP_Temp : STA !SAMUS_BEAMS_EQUIPPED
     LDA !SAMUS_BEAMS_COLLECTED : ORA !DP_ToggleValue : STA !SAMUS_BEAMS_COLLECTED
-    BRA .done
+    BRA .checkSpazer
 
   .unobtained
     LDA !SAMUS_BEAMS_EQUIPPED : AND !DP_Increment : STA !SAMUS_BEAMS_EQUIPPED
     LDA !SAMUS_BEAMS_COLLECTED : AND !DP_Increment : STA !SAMUS_BEAMS_COLLECTED
+
+  .checkSpazer
+    ; Reinitialize Spazer and Plasma since they affect each other
+    LDA !SAMUS_BEAMS_COLLECTED : BIT #$0004 : BEQ .noSpazer
+    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0004 : BNE .equipSpazer
+    ; unequip Spazer
+    LDA #$0002 : STA !ram_cm_spazer : BRA .checkPlasma
+  .equipSpazer
+    LDA #$0001 : STA !ram_cm_spazer : BRA .checkPlasma
+  .noSpazer
+    LDA #$0000 : STA !ram_cm_spazer
+
+  .checkPlasma
+    LDA !SAMUS_BEAMS_COLLECTED : BIT #$0008 : BEQ .noPlasma
+    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0008 : BNE .equipPlasma
+    ; unequip Plasma
+    LDA #$0002 : STA !ram_cm_plasma : BRA .done
+  .equipPlasma
+    LDA #$0001 : STA !ram_cm_plasma : BRA .done
+  .noPlasma
+    LDA #$0000 : STA !ram_cm_plasma
 
   .done
     JML $90AC8D ; update beam gfx
@@ -1095,8 +1122,9 @@ gb_unnamed:
 
 action_glitched_beam:
 {
-    TYA
-    STA !SAMUS_BEAMS_EQUIPPED : STA !SAMUS_BEAMS_COLLECTED
+    TYA : STA !SAMUS_BEAMS_EQUIPPED
+    LDA !SAMUS_BEAMS_COLLECTED : ORA !SAMUS_BEAMS_EQUIPPED : STA !SAMUS_BEAMS_COLLECTED
+    JSL setup_beams_ram
     LDA #$0042 : JSL !SFX_LIB1 ; unlabled, song dependent sound
     JSL $90AC8D ; update beam gfx
     RTL
@@ -1239,9 +1267,9 @@ MiscMenu:
     dw #misc_metronome_tickrate
     dw #misc_metronome_sfx
     dw #$FFFF
-    dw #misc_clearliquid
     dw #misc_killenemies
     dw #misc_forcestand
+    dw #misc_clearliquid
     dw #$0000
     %cm_header("MISC")
 
@@ -1348,9 +1376,10 @@ misc_killenemies:
     %cm_jsl("Kill Enemies", .kill_loop, #0)
   .kill_loop
     ; 8000 = solid to Samus, 0400 = Ignore Samus projectiles
-    TAX : LDA $0F86,X : BIT #$8400 : BNE +
+    TAX : LDA $0F86,X : BIT #$8400 : BNE .next_enemy
     ORA #$0200 : STA $0F86,X
-+   TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
+  .next_enemy
+    TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
     LDA #$0009 : JSL !SFX_LIB2 ; enemy killed
     RTL
 
@@ -2390,7 +2419,8 @@ RngMenu:
     dw #$FFFF
     dw #rng_crocomire_rng
     dw #$FFFF
-    dw #rng_kraid_rng
+    dw #rng_kraid_claw_rng
+    dw #rng_kraid_wait_rng
     dw #$0000
     %cm_header("BOSS RNG CONTROL")
 
@@ -2447,14 +2477,29 @@ rng_crocomire_rng:
     db #$28, "      SWIPE", #$FF
     db #$FF
 
-rng_kraid_rng:
+rng_kraid_claw_rng:
     dw !ACTION_CHOICE
-    dl #!ram_kraid_rng
+    dl #!ram_kraid_claw_rng
     dw #$0000
     db #$28, "Kraid Claw RNG", #$FF
     db #$28, "     RANDOM", #$FF
     db #$28, "      LAGGY", #$FF
     db #$28, "    LAGGIER", #$FF
+    db #$FF
+
+rng_kraid_wait_rng:
+    dw !ACTION_CHOICE
+    dl #!ram_kraid_wait_rng
+    dw #$0000
+    db #$28, "Kraid Wait RNG", #$FF
+    db #$28, "     RANDOM", #$FF
+    db #$28, "         64", #$FF
+    db #$28, "        128", #$FF
+    db #$28, "        192", #$FF
+    db #$28, "        256", #$FF
+    db #$28, "        320", #$FF
+    db #$28, "        384", #$FF
+    db #$28, "        448", #$FF
     db #$FF
 
 

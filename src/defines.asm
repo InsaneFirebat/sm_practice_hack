@@ -13,7 +13,7 @@
 
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 5
-!VERSION_BUILD = 1
+!VERSION_BUILD = 3
 !VERSION_REV_1 = 0
 !VERSION_REV_2 = 2
 
@@ -68,7 +68,6 @@
 !ram_map_counter                    = !WRAM_START+$34
 !ram_vcounter_data                  = !WRAM_START+$36
 !ram_custom_preset                  = !WRAM_START+$38
-
 
 !ram_magic_pants_state              = !WRAM_START+$3A
 !ram_magic_pants_pal1               = !WRAM_START+$3C
@@ -133,7 +132,7 @@
 
 !ram_magic_pants_enabled            = !WRAM_PERSIST_START+$16
 !ram_space_pants_enabled            = !WRAM_PERSIST_START+$18
-!ram_kraid_rng                      = !WRAM_PERSIST_START+$1A
+!ram_kraid_claw_rng                 = !WRAM_PERSIST_START+$1A
 !ram_crocomire_rng                  = !WRAM_PERSIST_START+$1C
 !ram_phantoon_rng_round_1           = !WRAM_PERSIST_START+$1E
 !ram_phantoon_rng_round_2           = !WRAM_PERSIST_START+$20
@@ -145,8 +144,6 @@
 !ram_draygon_rng_left               = !WRAM_PERSIST_START+$2C
 !ram_draygon_rng_right              = !WRAM_PERSIST_START+$2E
 
-!ram_suits_enemy_damage_check       = !WRAM_PERSIST_START+$30
-!ram_suits_periodic_damage_check    = !WRAM_PERSIST_START+$32
 !ram_pacifist                       = !WRAM_PERSIST_START+$34
 !ram_freeze_on_load                 = !WRAM_PERSIST_START+$36
 
@@ -167,6 +164,7 @@
 !ram_game_loop_extras               = !WRAM_PERSIST_START+$50
 !ram_game_mode_extras               = !WRAM_PERSIST_START+$52
 !ram_sprite_features_active         = !WRAM_PERSIST_START+$54
+!ram_kraid_wait_rng                 = !WRAM_PERSIST_START+$56
 
 ; ^ FREE SPACE ^ up to +$7A
 
@@ -443,12 +441,14 @@ endif
 !SAMUS_PREVIOUS_MOVEMENT_TYPE = $0A23
 !SAMUS_SHINE_TIMER = $0A68
 !SAMUS_HEALTH_WARNING = $0A6A
+!SAMUS_ANIMATION_FRAME = $0A96
 !SAMUS_X = $0AF6
 !SAMUS_X_SUBPX = $0AF8
 !SAMUS_Y = $0AFA
 !SAMUS_Y_SUBPX = $0AFC
 !SAMUS_X_RADIUS = $0AFE
 !SAMUS_Y_RADIUS = $0B00
+!SAMUS_COLLISION_DIRECTION = $0B02
 !SAMUS_SPRITEMAP_X = $0B04
 !SAMUS_Y_SUBSPEED = $0B2C
 !SAMUS_Y_SPEEDCOMBINED = $0B2D
@@ -465,6 +465,8 @@ endif
 !SAMUS_PROJ_RADIUS_Y = $0BC8
 !SAMUS_COOLDOWN = $0CCC
 !SAMUS_CHARGE_TIMER = $0CD0
+!ENEMY_INDEX = $0E54
+!ENEMY_ID = $0F78
 !ENEMY_X = $0F7A
 !ENEMY_Y = $0F7E
 !ENEMY_X_RADIUS = $0F82
@@ -488,7 +490,7 @@ endif
 ; -----
 
 !PRESET_SLOTS = $703000
-!SRAM_VERSION = $0010
+!SRAM_VERSION = $0011
 
 !SRAM_START = $F02200
 
@@ -545,8 +547,6 @@ endif
 !TOP_DISPLAY_VANILLA = #$0002
 
 !ROOM_LAYOUT_MAGNET_STAIRS = #$0001
-!ROOM_LAYOUT_AREA_RANDO = #$0002
-!ROOM_LAYOUT_ANTISOFTLOCK = #$0004
 
 !CUTSCENE_SKIP_INTRO = #$0001
 !CUTSCENE_SKIP_CERES_ARRIVAL = #$0002
