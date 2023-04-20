@@ -76,6 +76,12 @@ cm_init:
     LDA #$0F : STA $0F2100 ; disable forced blanking
     %a16()
 
+    ; Preserve timers while menu is active
+    LDA !ram_realtime_room : STA !ram_cm_preserved_timers
+    LDA !ram_seg_rt_frames : STA !ram_cm_preserved_timers+2
+    LDA !ram_seg_rt_seconds : STA !ram_cm_preserved_timers+4
+    LDA !ram_seg_rt_minutes : STA !ram_cm_preserved_timers+6
+
     ; Preserve and disable slowdown mode
     LDA #$0000 : STA !ram_cm_slowdown_mode : STA !ram_slowdown_frames
     LDA !ram_slowdown_mode : BMI .paused
@@ -147,6 +153,12 @@ endif
   .skipSFX
     JSL play_music_long ; Play 2 lag frames of music and sound effects
     JSL maybe_trigger_pause_long ; Maybe trigger pause screen or return save confirmation selection
+
+    ; Restore timers and subtract for skipping a frame of gameplay
+    LDA !ram_cm_preserved_timers : STA !ram_realtime_room
+    LDA !ram_cm_preserved_timers+2 : STA !ram_seg_rt_frames
+    LDA !ram_cm_preserved_timers+4 : STA !ram_seg_rt_seconds
+    LDA !ram_cm_preserved_timers+6 : STA !ram_seg_rt_minutes
 
     ; Restore slowdown mode
     LDA !ram_cm_slowdown_mode : BEQ .done_slowdown

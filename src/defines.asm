@@ -8,7 +8,7 @@
 !VERSION_MINOR = 5
 !VERSION_BUILD = 3
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 6
+!VERSION_REV_2 = 8
 
 
 ; ---------
@@ -202,6 +202,9 @@
 !ram_cm_slowdown_mode = !WRAM_MENU_START+$40
 !ram_cm_slowdown_frames = !WRAM_MENU_START+$42
 
+; ^ FREE SPACE ^ up to +$76
+
+!ram_cm_preserved_timers = !WRAM_MENU_START+$78 ; 8 bytes
 
 ; ------------------
 ; Reusable RAM Menu
