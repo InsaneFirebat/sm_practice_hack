@@ -18,8 +18,8 @@ org $828B4B      ; disable debug functions
 org $82EE92      ; runs on START GAME
     JSL startgame_seg_timer
 
-org $828B34      ; reset room timers for first room of Ceres
-    JML ceres_start_timers : NOP #2 : ceres_start_timers_return:
+;org $828B34      ; reset room timers for first room of Ceres
+;    JML ceres_start_timers : NOP #2 : ceres_start_timers_return:
         
 org $90E6AA      ; hijack, runs on gamestate = 08 (main gameplay), handles most updating HUD information
     JSL ih_gamemode_frame : NOP : NOP
@@ -96,8 +96,8 @@ org $A0BB6C      ; update timers when Draygon drops spawn
 org $AAE582      ; update timers when statue grabs Samus
     JSL ih_chozo_segment
 
-org $89AD0A      ; update timers when Samus escapes Ceres
-    JSL ih_ceres_elevator_segment
+;org $89AD0A      ; update timers when Samus escapes Ceres
+;    JSL ih_ceres_elevator_segment
 
 org $A2AA20      ; update timers when Samus enters ship
     JSL ih_ship_elevator_segment
@@ -324,18 +324,18 @@ ih_before_room_transition:
     RTL
 }
 
-ceres_start_timers:
-{
-    LDA #$0000
-    STA !ram_realtime_room : STA !ram_last_realtime_room
-    STA !ram_gametime_room : STA !ram_last_gametime_room
-    STA !ram_last_room_lag : STA !ram_last_door_lag_frames : STA !ram_transition_counter
-
-    STZ $0723 ; overwritten code
-    STZ $0725
-    
-    JML ceres_start_timers_return
-}
+;ceres_start_timers:
+;{
+;    LDA #$0000
+;    STA !ram_realtime_room : STA !ram_last_realtime_room
+;    STA !ram_gametime_room : STA !ram_last_gametime_room
+;    STA !ram_last_room_lag : STA !ram_last_door_lag_frames : STA !ram_transition_counter
+;
+;    STZ $0723 ; overwritten code
+;    STZ $0725
+;    
+;    JML ceres_start_timers_return
+;}
 
 ih_unpause:
 ; Adds frames when unpausing (nmi is turned off during vram transfers)

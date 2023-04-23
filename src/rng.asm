@@ -361,8 +361,34 @@ hook_botwoon_rng:
     RTL
 }
 
+ridley_init_freespace:
+{
+    LDA $079B : CMP #$E0B5 : BNE .continue
+    LDA $7ED82E : BIT #$0001 : BEQ .continue
+
+    ; Ceres Ridley is already dead, so skip to the escape
+    ; We do need to mark Ceres Ridley alive
+    ; to keep the door locked until the timer starts
+    AND #$FFFE : STA $7ED82E
+
+    ; Clear out the room main asm so it doesn't also trigger the escape
+    STZ $07DF
+
+    ; Set up the escape timer routine
+    LDA #$0001 : STA $093F
+    LDA #$E0E6 : STA $0A5A
+
+    ; Jump to the escape
+    LDA #$AB37
+    JML ridley_init_hook_return
+
+  .continue
+    LDA #$A377
+    JML ridley_init_hook_return
+}
+
 print pc, " rng end"
-warnpc $83B400 ; custompresets.asm
+;warnpc $83B400 ; custompresets.asm
 
 
 ;org $A4F700
@@ -442,30 +468,39 @@ org $A6F66A
 !ORG_RNG_BANKA6 = $A6FF00 ; $6B, bank $A6
 print pc, " ridley rng start"
 
+;ridley_init_hook:
+;{
+;    LDA $079B : CMP #$E0B5 : BNE .continue
+;    LDA $7ED82E : BIT #$0001 : BEQ .continue
+;
+;    ; Ceres Ridley is already dead, so skip to the escape
+;    ; We do need to mark Ceres Ridley alive
+;    ; to keep the door locked until the timer starts
+;    AND #$FFFE : STA $7ED82E
+;
+;    ; Clear out the room main asm so it doesn't also trigger the escape
+;    STZ $07DF
+;
+;    ; Set up the escape timer routine
+;    LDA #$0001 : STA $093F
+;    LDA #$E0E6 : STA $0A5A
+;
+;    ; Jump to the escape
+;    LDA #$AB37
+;    STA $0FA8
+;    JMP ($0FA8)
+;
+;  .continue
+;    LDA #$A377
+;    STA $0FA8
+;    JMP ($0FA8)
+;}
+
 ridley_init_hook:
 {
-    LDA $079B : CMP #$E0B5 : BNE .continue
-    LDA $7ED82E : BIT #$0001 : BEQ .continue
+    JML ridley_init_freespace
 
-    ; Ceres Ridley is already dead, so skip to the escape
-    ; We do need to mark Ceres Ridley alive
-    ; to keep the door locked until the timer starts
-    AND #$FFFE : STA $7ED82E
-
-    ; Clear out the room main asm so it doesn't also trigger the escape
-    STZ $07DF
-
-    ; Set up the escape timer routine
-    LDA #$0001 : STA $093F
-    LDA #$E0E6 : STA $0A5A
-
-    ; Jump to the escape
-    LDA #$AB37
-    STA $0FA8
-    JMP ($0FA8)
-
-  .continue
-    LDA #$A377
+  .return
     STA $0FA8
     JMP ($0FA8)
 }

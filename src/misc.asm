@@ -17,8 +17,8 @@ endif
 
 ; Skip intro
 ; $82:EEDF A9 95 A3    LDA #$A395
-org $82EEDF
-    LDA #$C100
+;org $82EEDF
+;    LDA #$C100
 
 
 ; Enable version display
