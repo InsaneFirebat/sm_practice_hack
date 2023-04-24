@@ -102,7 +102,7 @@ cm_init:
     %a16()
 
     JSL initialize_ppu_long   ; Initialise PPU for message boxes
-    JSR cm_transfer_custom_tileset
+    JSL cm_transfer_custom_tileset
     JSR cm_transfer_custom_cgram
 
     ; Set up menu state
@@ -154,7 +154,7 @@ cm_transfer_custom_tileset:
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
     LDA #$0F : STA $0F2100 ; disable forced blanking
     PLP
-    RTS
+    RTL
 
   .kraid_vram
     ; Load custom vram to kraid BG3 location
@@ -171,7 +171,7 @@ cm_transfer_custom_tileset:
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
     LDA #$0F : STA $0F2100 ; disable forced blanking
     PLP
-    RTS
+    RTL
 }
 
 cm_transfer_original_tileset:
@@ -1783,12 +1783,12 @@ cm_divide_100:
 ; Main menu
 ; -----------
 
-pushpc
-org !ORG_MAINMENU
+;pushpc
+;org !ORG_MAINMENU
 print pc, " mainmenu start"
 incsrc mainmenu.asm
 print pc, " mainmenu end"
-pullpc
+;pullpc
 
 
 ; ----------
@@ -1808,4 +1808,7 @@ print pc, " menu end"
 ; Crash handler
 ; -------------
 
+pushpc
+org $80D000
 incsrc crash.asm
+pullpc

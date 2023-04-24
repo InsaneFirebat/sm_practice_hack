@@ -866,16 +866,16 @@ crash_draw4:
     PHP : %a16()
     ; (X000)
     LDA !ram_crash_draw_value : AND #$F000 : XBA : LSR #3 : TAY
-    LDA.w HexMenuGFXTable,Y : STA !CRASHDUMP_TILEMAP_BUFFER,X
+    LDA.w HexCrashGFXTable,Y : STA !CRASHDUMP_TILEMAP_BUFFER,X
     ; (0X00)
     LDA !ram_crash_draw_value : AND #$0F00 : XBA : ASL : TAY
-    LDA.w HexMenuGFXTable,Y : STA !CRASHDUMP_TILEMAP_BUFFER+2,X
+    LDA.w HexCrashGFXTable,Y : STA !CRASHDUMP_TILEMAP_BUFFER+2,X
     ; (00X0)
     LDA !ram_crash_draw_value : AND #$00F0 : LSR #3 : TAY
-    LDA.w HexMenuGFXTable,Y : STA !CRASHDUMP_TILEMAP_BUFFER+4,X
+    LDA.w HexCrashGFXTable,Y : STA !CRASHDUMP_TILEMAP_BUFFER+4,X
     ; (000X)
     LDA !ram_crash_draw_value : AND #$000F : ASL : TAY
-    LDA.w HexMenuGFXTable,Y : STA !CRASHDUMP_TILEMAP_BUFFER+6,X
+    LDA.w HexCrashGFXTable,Y : STA !CRASHDUMP_TILEMAP_BUFFER+6,X
     PLP
     RTS
 }
@@ -885,10 +885,10 @@ crash_draw2:
     PHP : %a16()
     ; (00X0)
     LDA !ram_crash_draw_value : AND #$00F0 : LSR #3 : TAY
-    LDA.w HexMenuGFXTable,Y : STA !CRASHDUMP_TILEMAP_BUFFER,X
+    LDA.w HexCrashGFXTable,Y : STA !CRASHDUMP_TILEMAP_BUFFER,X
     ; (000X)
     LDA !ram_crash_draw_value : AND #$000F : ASL : TAY
-    LDA.w HexMenuGFXTable,Y : STA !CRASHDUMP_TILEMAP_BUFFER+2,X
+    LDA.w HexCrashGFXTable,Y : STA !CRASHDUMP_TILEMAP_BUFFER+2,X
     PLP
     RTS
 }
@@ -1114,6 +1114,9 @@ endif
 CrashTextInfo11:
 ; Press LRSlSt to soft reset
     db "Press ", #$8D, #$8C, #$85, #$84, " to soft reset", #$FF
+
+HexCrashGFXTable:
+    dw $2C70, $2C71, $2C72, $2C73, $2C74, $2C75, $2C76, $2C77, $2C78, $2C79, $2C50, $2C51, $2C52, $2C53, $2C54, $2C55
 
 print pc, " crash handler bank89 end"
 
