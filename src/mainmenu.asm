@@ -432,22 +432,6 @@ endif
 SelectPresetCategoryMenu:
     dw #presets_current
     dw #$FFFF
-    dw #precat_prkd
-    dw #precat_kpdr21
-    dw #precat_hundo
-    dw #precat_100early
-    dw #precat_rbo
-    dw #precat_pkrd
-    dw #precat_kpdr25
-    dw #precat_gtclassic
-    dw #precat_gtmax
-    dw #precat_14ice
-    dw #precat_14speed
-    dw #precat_100map
-    dw #precat_nintendopower
-    dw #precat_allbosskpdr
-    dw #precat_allbosspkdr
-    dw #precat_allbossprkd
     dw #precat_anykpdrcroc
     dw #$0000
     %cm_header("SELECT PRESET CATEGORY")
@@ -457,75 +441,11 @@ presets_current:
     dl #!sram_preset_category
     dw #.routine
     db #$28, "CURRENT PRESET", #$FF
-        db #$28, "       PRKD", #$FF
-        db #$28, "       KPDR", #$FF
-        db #$28, "  100% LATE", #$FF
-        db #$28, " 100% EARLY", #$FF
-        db #$28, "        RBO", #$FF
-        db #$28, "       PKRD", #$FF
-        db #$28, "     KPDR25", #$FF
-        db #$28, " GT CLASSIC", #$FF
-        db #$28, "    GT MAX%", #$FF
-        db #$28, "    14% ICE", #$FF
-        db #$28, "  14% SPEED", #$FF
-        db #$28, "   100% MAP", #$FF
-        db #$28, "  NIN POWER", #$FF
-        db #$28, "   ALL KPDR", #$FF
-        db #$28, "   ALL PKDR", #$FF
-        db #$28, "   ALL PRKD", #$FF
         db #$28, "KPDR - CROC", #$FF
     db #$FF
   .routine
     LDA #$0000 : STA !sram_last_preset
     RTL
-
-precat_prkd:
-    %cm_jsl("Any% PRKD", #action_select_preset_category, #$0000)
-
-precat_kpdr21:
-    %cm_jsl("Any% KPDR", #action_select_preset_category, #$0001)
-
-precat_hundo:
-    %cm_jsl("100% Late Crocomire", #action_select_preset_category, #$0002)
-
-precat_100early:
-    %cm_jsl("100% Early Crocomire", #action_select_preset_category, #$0003)
-
-precat_rbo:
-    %cm_jsl("Reverse Boss Order", #action_select_preset_category, #$0004)
-
-precat_pkrd:
-    %cm_jsl("Any% PKRD", #action_select_preset_category, #$0005)
-
-precat_kpdr25:
-    %cm_jsl("Any% KPDR Early Ice", #action_select_preset_category, #$0006)
-
-precat_gtclassic:
-    %cm_jsl("GT Classic", #action_select_preset_category, #$0007)
-
-precat_gtmax:
-    %cm_jsl("GT Max%", #action_select_preset_category, #$0008)
-
-precat_14ice:
-    %cm_jsl("Low% Ice", #action_select_preset_category, #$0009)
-
-precat_14speed:
-    %cm_jsl("Low% Speed", #action_select_preset_category, #$000A)
-
-precat_100map:
-    %cm_jsl("100% Map Completion", #action_select_preset_category, #$000B)
-
-precat_nintendopower:
-    %cm_jsl("Nintendo Power", #action_select_preset_category, #$000C)
-
-precat_allbosskpdr:
-    %cm_jsl("All Bosses KPDR", #action_select_preset_category, #$000D)
-
-precat_allbosspkdr:
-    %cm_jsl("All Bosses PKDR", #action_select_preset_category, #$000E)
-
-precat_allbossprkd:
-    %cm_jsl("All Bosses PRKD", #action_select_preset_category, #$000F)
 
 precat_anykpdrcroc:
     %cm_jsl("Any% KPDR - Croc", #action_select_preset_category, #$0010)
