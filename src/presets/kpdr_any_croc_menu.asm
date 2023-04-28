@@ -15,7 +15,8 @@ PresetsMenuKpdr:
     dw #presets_goto_kpdr_tourian
     dw #presets_goto_kpdr_mother_brain
     dw #$0000
-    %cm_header("PRESETS FOR KPDR")
+    %cm_header("ANY% KPDR CROC")
+    %cm_header("PRESETS BY CHEESYBOATRIDE")
 
 presets_goto_kpdr_bombs:
     %cm_submenu("Bombs", #presets_submenu_kpdr_bombs)
