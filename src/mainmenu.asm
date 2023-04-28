@@ -254,13 +254,13 @@ action_submenu_jump:
 
 preset_category_submenus:
 {
-    dw #PresetsMenuPrkd
+    dw #PresetsMenuKpdr
     dw #$0000
 }
 
 preset_category_banks:
 {
-    dw #PresetsMenuPrkd>>16
+    dw #PresetsMenuKpdr>>16
     dw #$0000
 }
 
@@ -448,6 +448,7 @@ SelectPresetCategoryMenu:
     dw #precat_allbosskpdr
     dw #precat_allbosspkdr
     dw #precat_allbossprkd
+    dw #precat_anykpdrcroc
     dw #$0000
     %cm_header("SELECT PRESET CATEGORY")
 
@@ -472,6 +473,7 @@ presets_current:
         db #$28, "   ALL KPDR", #$FF
         db #$28, "   ALL PKDR", #$FF
         db #$28, "   ALL PRKD", #$FF
+        db #$28, "KPDR - CROC", #$FF
     db #$FF
   .routine
     LDA #$0000 : STA !sram_last_preset
@@ -524,6 +526,9 @@ precat_allbosspkdr:
 
 precat_allbossprkd:
     %cm_jsl("All Bosses PRKD", #action_select_preset_category, #$000F)
+
+precat_anykpdrcroc:
+    %cm_jsl("Any% KPDR - Croc", #action_select_preset_category, #$0010)
 
 action_select_preset_category:
 {
