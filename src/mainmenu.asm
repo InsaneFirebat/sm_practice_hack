@@ -448,7 +448,7 @@ presets_current:
     RTL
 
 precat_anykpdrcroc:
-    %cm_jsl("Any% KPDR - Croc", #action_select_preset_category, #$0010)
+    %cm_jsl("Any% KPDR - Croc", #action_select_preset_category, #$0000)
 
 action_select_preset_category:
 {
