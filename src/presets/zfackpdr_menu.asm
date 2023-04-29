@@ -286,9 +286,9 @@ presets_submenu_zfackpdr_mother_brain:
     dw #presets_zfackpdr_mother_brain_sandy_elevator
     dw #presets_zfackpdr_mother_brain_ball_maze_2
     dw #presets_zfackpdr_mother_brain_mother_brain_2
-    dw #presets_zfackpdr_mother_brain_mother_brain_2_2
-    dw #presets_zfackpdr_mother_brain_mother_brain_3
-    dw #presets_zfackpdr_mother_brain_escape
+;    dw #presets_zfackpdr_mother_brain_mother_brain_2_2
+;    dw #presets_zfackpdr_mother_brain_mother_brain_3
+;    dw #presets_zfackpdr_mother_brain_escape
     dw #presets_zfackpdr_mother_brain_ball_maze_revisit
     dw #presets_zfackpdr_mother_brain_tourian_elevator_spark
     dw #presets_zfackpdr_mother_brain_pirate_frenzy
