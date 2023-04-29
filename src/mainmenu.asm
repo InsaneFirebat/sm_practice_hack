@@ -254,13 +254,13 @@ action_submenu_jump:
 
 preset_category_submenus:
 {
-    dw #PresetsMenuKpdr
+    dw #PresetsMenuZfackpdr
     dw #$0000
 }
 
 preset_category_banks:
 {
-    dw #PresetsMenuKpdr>>16
+    dw #PresetsMenuZfackpdr>>16
     dw #$0000
 }
 

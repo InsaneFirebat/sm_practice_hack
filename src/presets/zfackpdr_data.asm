@@ -1,5 +1,5 @@
 
-preset_kpdr_bombs_ship:
+preset_zfackpdr_bombs_ship:
     dw #$0000
     dw $078D, $80F0  ; DDB
     dw $079B, $81F2  ; MDB
@@ -69,8 +69,8 @@ preset_kpdr_bombs_ship:
     dw $D90C, $0000  ; Map Stations
     dw #$FFFF
 
-preset_kpdr_bombs_sleepy_tunnel:
-    dw #preset_kpdr_bombs_ship ; Bombs: Ship
+preset_zfackpdr_bombs_sleepy_tunnel:
+    dw #preset_zfackpdr_bombs_ship ; Bombs: Ship
     dw $078D, $812C  ; DDB
     dw $090F, $0C00  ; Screen subpixel X position
     dw $0911, $0600  ; Screen X position in pixels
@@ -85,8 +85,8 @@ preset_kpdr_bombs_sleepy_tunnel:
     dw $0AFC, $FFFF  ; Samus subpixel Y
     dw #$FFFF
 
-preset_kpdr_bombs_kihunter_babies:
-    dw #preset_kpdr_bombs_sleepy_tunnel ; Bombs: Sleepy Tunnel
+preset_zfackpdr_bombs_kihunter_babies:
+    dw #preset_zfackpdr_bombs_sleepy_tunnel ; Bombs: Sleepy Tunnel
     dw $078D, $8138  ; DDB
     dw $079B, $8619  ; MDB
     dw $090F, $1000  ; Screen subpixel X position
@@ -102,8 +102,8 @@ preset_kpdr_bombs_kihunter_babies:
     dw $0AFA, $018B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_bombs_climb_down:
-    dw #preset_kpdr_bombs_kihunter_babies ; Bombs: Kihunter Babies
+preset_zfackpdr_bombs_climb_down:
+    dw #preset_zfackpdr_bombs_kihunter_babies ; Bombs: Kihunter Babies
     dw $078D, $83D8  ; DDB
     dw $079B, $86D2  ; MDB
     dw $090F, $9000  ; Screen subpixel X position
@@ -120,8 +120,8 @@ preset_kpdr_bombs_climb_down:
     dw $0AFC, $CBFF  ; Samus subpixel Y
     dw #$FFFF
 
-preset_kpdr_bombs_elevator_to_morph:
-    dw #preset_kpdr_bombs_climb_down ; Bombs: Climb Down
+preset_zfackpdr_bombs_elevator_to_morph:
+    dw #preset_zfackpdr_bombs_climb_down ; Bombs: Climb Down
     dw $078D, $83E4  ; DDB
     dw $079B, $87AE  ; MDB
     dw $090F, $4000  ; Screen subpixel X position
@@ -138,8 +138,8 @@ preset_kpdr_bombs_elevator_to_morph:
     dw $0AFC, $FFFF  ; Samus subpixel Y
     dw #$FFFF
 
-preset_kpdr_bombs_empty_chozo_down:
-    dw #preset_kpdr_bombs_elevator_to_morph ; Bombs: Elevator to Morph
+preset_zfackpdr_bombs_empty_chozo_down:
+    dw #preset_zfackpdr_bombs_elevator_to_morph ; Bombs: Elevator to Morph
     dw $078D, $8048  ; DDB
     dw $079B, $8C17  ; MDB
     dw $07F5, $0007  ; Music Track
@@ -154,8 +154,8 @@ preset_kpdr_bombs_empty_chozo_down:
     dw $0AF6, $04BE  ; Samus X
     dw #$FFFF
 
-preset_kpdr_bombs_morph:
-    dw #preset_kpdr_bombs_empty_chozo_down ; Bombs: Empty Chozo Down
+preset_zfackpdr_bombs_morph:
+    dw #preset_zfackpdr_bombs_empty_chozo_down ; Bombs: Empty Chozo Down
     dw $078D, $85D0  ; DDB
     dw $090F, $3000  ; Screen subpixel X position
     dw $0911, $0000  ; Screen X position in pixels
@@ -170,8 +170,8 @@ preset_kpdr_bombs_morph:
     dw $0AFA, $038B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_bombs_morph_escape:
-    dw #preset_kpdr_bombs_morph ; Bombs: Morph
+preset_zfackpdr_bombs_morph_escape:
+    dw #preset_zfackpdr_bombs_morph ; Bombs: Morph
     dw $078D, $8618  ; DDB
     dw $079B, $8CB9  ; MDB
     dw $090F, $0000  ; Screen subpixel X position
@@ -190,8 +190,8 @@ preset_kpdr_bombs_morph_escape:
     dw $D872, $000C  ; Items
     dw #$FFFF
 
-preset_kpdr_bombs_elevator_bottom:
-    dw #preset_kpdr_bombs_morph_escape ; Bombs: Morph Escape
+preset_zfackpdr_bombs_elevator_bottom:
+    dw #preset_zfackpdr_bombs_morph_escape ; Bombs: Morph Escape
     dw $078D, $85AC  ; DDB
     dw $079B, $8C6B  ; MDB
     dw $090F, $A000  ; Screen subpixel X position
@@ -207,8 +207,8 @@ preset_kpdr_bombs_elevator_bottom:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_bombs_pirate_mushrooms:
-    dw #preset_kpdr_bombs_elevator_bottom ; Bombs: Elevator Bottom
+preset_zfackpdr_bombs_pirate_mushrooms:
+    dw #preset_zfackpdr_bombs_elevator_bottom ; Bombs: Elevator Bottom
     dw $078D, $8570  ; DDB
     dw $079B, $8116  ; MDB
     dw $07F3, $0009  ; Music Bank
@@ -228,8 +228,8 @@ preset_kpdr_bombs_pirate_mushrooms:
     dw $D872, $000E  ; Items
     dw #$FFFF
 
-preset_kpdr_bombs_kihunter_revival:
-    dw #preset_kpdr_bombs_pirate_mushrooms ; Bombs: Pirate Mushrooms
+preset_zfackpdr_bombs_kihunter_revival:
+    dw #preset_zfackpdr_bombs_pirate_mushrooms ; Bombs: Pirate Mushrooms
     dw $078D, $83FC  ; DDB
     dw $079B, $8741  ; MDB
     dw $07F5, $0005  ; Music Track
@@ -247,8 +247,8 @@ preset_kpdr_bombs_kihunter_revival:
     dw $D8B2, $0002  ; Doors
     dw #$FFFF
 
-preset_kpdr_bombs_purple_stairs:
-    dw #preset_kpdr_bombs_kihunter_revival ; Bombs: Kihunter Revival
+preset_zfackpdr_bombs_purple_stairs:
+    dw #preset_zfackpdr_bombs_kihunter_revival ; Bombs: Kihunter Revival
     dw $078D, $8384  ; DDB
     dw $079B, $86D2  ; MDB
     dw $090F, $D000  ; Screen subpixel X position
@@ -265,8 +265,8 @@ preset_kpdr_bombs_purple_stairs:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_bombs_ship_revisit:
-    dw #preset_kpdr_bombs_purple_stairs ; Bombs: Purple Stairs
+preset_zfackpdr_bombs_ship_revisit:
+    dw #preset_zfackpdr_bombs_purple_stairs ; Bombs: Purple Stairs
     dw $078D, $836C  ; DDB
     dw $079B, $82F5  ; MDB
     dw $090F, $B000  ; Screen subpixel X position
@@ -282,8 +282,8 @@ preset_kpdr_bombs_ship_revisit:
     dw $0AF8, $6780  ; Samus subpixel X
     dw #$FFFF
 
-preset_kpdr_bombs_rip_n_dive:
-    dw #preset_kpdr_bombs_ship_revisit ; Bombs: Ship Revisit
+preset_zfackpdr_bombs_rip_n_dive:
+    dw #preset_zfackpdr_bombs_ship_revisit ; Bombs: Ship Revisit
     dw $078D, $812C  ; DDB
     dw $079B, $81F2  ; MDB
     dw $07F3, $0006  ; Music Bank
@@ -301,8 +301,8 @@ preset_kpdr_bombs_rip_n_dive:
     dw $D8B0, $0020  ; Doors
     dw #$FFFF
 
-preset_kpdr_bombs_old_mb_tricks:
-    dw #preset_kpdr_bombs_rip_n_dive ; Bombs: Rip n Dive
+preset_zfackpdr_bombs_old_mb_tricks:
+    dw #preset_zfackpdr_bombs_rip_n_dive ; Bombs: Rip n Dive
     dw $078D, $8120  ; DDB
     dw $079B, $8420  ; MDB
     dw $07F3, $0009  ; Music Bank
@@ -320,8 +320,8 @@ preset_kpdr_bombs_old_mb_tricks:
     dw $0AFA, $006B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_bombs_bomb_torizo:
-    dw #preset_kpdr_bombs_old_mb_tricks ; Bombs: Old MB Tricks
+preset_zfackpdr_bombs_bomb_torizo:
+    dw #preset_zfackpdr_bombs_old_mb_tricks ; Bombs: Old MB Tricks
     dw $078D, $81F8  ; DDB
     dw $079B, $8362  ; MDB
     dw $090F, $C000  ; Screen subpixel X position
@@ -341,8 +341,8 @@ preset_kpdr_bombs_bomb_torizo:
     dw $D870, $0020  ; Items
     dw #$FFFF
 
-preset_kpdr_varia_and_supers_bt_escape:
-    dw #preset_kpdr_bombs_bomb_torizo ; Bombs: Bomb Torizo
+preset_zfackpdr_varia_and_supers_bt_escape:
+    dw #preset_zfackpdr_bombs_bomb_torizo ; Bombs: Bomb Torizo
     dw $078D, $8168  ; DDB
     dw $079B, $80AD  ; MDB
     dw $07F3, $0024  ; Music Bank
@@ -367,8 +367,8 @@ preset_kpdr_varia_and_supers_bt_escape:
     dw $D8B0, $0022  ; Doors
     dw #$FFFF
 
-preset_kpdr_varia_and_supers_kihunter_revisit:
-    dw #preset_kpdr_varia_and_supers_bt_escape ; Varia and Supers: BT Escape
+preset_zfackpdr_varia_and_supers_kihunter_revisit:
+    dw #preset_zfackpdr_varia_and_supers_bt_escape ; Varia and Supers: BT Escape
     dw $078D, $8030  ; DDB
     dw $079B, $8870  ; MDB
     dw $07F3, $0009  ; Music Bank
@@ -384,8 +384,8 @@ preset_kpdr_varia_and_supers_kihunter_revisit:
     dw $0AFA, $029B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_varia_and_supers_purple_stairs_revisit:
-    dw #preset_kpdr_varia_and_supers_kihunter_revisit ; Varia and Supers: Kihunter Revisit
+preset_zfackpdr_varia_and_supers_purple_stairs_revisit:
+    dw #preset_zfackpdr_varia_and_supers_kihunter_revisit ; Varia and Supers: Kihunter Revisit
     dw $078D, $842C  ; DDB
     dw $079B, $86D2  ; MDB
     dw $090F, $1000  ; Screen subpixel X position
@@ -398,8 +398,8 @@ preset_kpdr_varia_and_supers_purple_stairs_revisit:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_varia_and_supers_ship_revisit_revisit:
-    dw #preset_kpdr_varia_and_supers_purple_stairs_revisit ; Varia and Supers: Purple Stairs Revisit
+preset_zfackpdr_varia_and_supers_ship_revisit_revisit:
+    dw #preset_zfackpdr_varia_and_supers_purple_stairs_revisit ; Varia and Supers: Purple Stairs Revisit
     dw $078D, $80E4  ; DDB
     dw $079B, $82F5  ; MDB
     dw $090F, $A000  ; Screen subpixel X position
@@ -415,8 +415,8 @@ preset_kpdr_varia_and_supers_ship_revisit_revisit:
     dw $0AF8, $6000  ; Samus subpixel X
     dw #$FFFF
 
-preset_kpdr_varia_and_supers_rip_n_dive_revisit:
-    dw #preset_kpdr_varia_and_supers_ship_revisit_revisit ; Varia and Supers: Ship Revisit Revisit
+preset_zfackpdr_varia_and_supers_rip_n_dive_revisit:
+    dw #preset_zfackpdr_varia_and_supers_ship_revisit_revisit ; Varia and Supers: Ship Revisit Revisit
     dw $078D, $812C  ; DDB
     dw $079B, $81F2  ; MDB
     dw $07F3, $0006  ; Music Bank
@@ -434,8 +434,8 @@ preset_kpdr_varia_and_supers_rip_n_dive_revisit:
     dw $0AFA, $048B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_varia_and_supers_gate_scam_one:
-    dw #preset_kpdr_varia_and_supers_rip_n_dive_revisit ; Varia and Supers: Rip n Dive Revisit
+preset_zfackpdr_varia_and_supers_gate_scam_one:
+    dw #preset_zfackpdr_varia_and_supers_rip_n_dive_revisit ; Varia and Supers: Rip n Dive Revisit
     dw $078D, $8120  ; DDB
     dw $079B, $8420  ; MDB
     dw $07F3, $0009  ; Music Bank
@@ -450,8 +450,8 @@ preset_kpdr_varia_and_supers_gate_scam_one:
     dw $0AFA, $006B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_varia_and_supers_cannonball:
-    dw #preset_kpdr_varia_and_supers_gate_scam_one ; Varia and Supers: Gate Scam One
+preset_zfackpdr_varia_and_supers_cannonball:
+    dw #preset_zfackpdr_varia_and_supers_gate_scam_one ; Varia and Supers: Gate Scam One
     dw $078D, $8204  ; DDB
     dw $079B, $844F  ; MDB
     dw $090F, $0E00  ; Screen subpixel X position
@@ -466,8 +466,8 @@ preset_kpdr_varia_and_supers_cannonball:
     dw $0AFC, $5BFF  ; Samus subpixel Y
     dw #$FFFF
 
-preset_kpdr_varia_and_supers_red_brin_elevator:
-    dw #preset_kpdr_varia_and_supers_cannonball ; Varia and Supers: Cannonball
+preset_zfackpdr_varia_and_supers_red_brin_elevator:
+    dw #preset_zfackpdr_varia_and_supers_cannonball ; Varia and Supers: Cannonball
     dw $078D, $8234  ; DDB
     dw $079B, $84AB  ; MDB
     dw $090F, $5960  ; Screen subpixel X position
@@ -485,8 +485,8 @@ preset_kpdr_varia_and_supers_red_brin_elevator:
     dw $D870, $0122  ; Items
     dw #$FFFF
 
-preset_kpdr_varia_and_supers_varia:
-    dw #preset_kpdr_varia_and_supers_red_brin_elevator ; Varia and Supers: Red Brin Elevator
+preset_zfackpdr_varia_and_supers_varia:
+    dw #preset_zfackpdr_varia_and_supers_red_brin_elevator ; Varia and Supers: Red Brin Elevator
     dw $078D, $890C  ; DDB
     dw $079B, $8B81  ; MDB
     dw $07F3, $0015  ; Music Bank
@@ -508,8 +508,8 @@ preset_kpdr_varia_and_supers_varia:
     dw $D8B2, $0042  ; Doors
     dw #$FFFF
 
-preset_kpdr_varia_and_supers_gate_scam_two:
-    dw #preset_kpdr_varia_and_supers_varia ; Varia and Supers: Varia
+preset_zfackpdr_varia_and_supers_gate_scam_two:
+    dw #preset_zfackpdr_varia_and_supers_varia ; Varia and Supers: Varia
     dw $078D, $854C  ; DDB
     dw $079B, $9143  ; MDB
     dw $07F3, $0012  ; Music Bank
@@ -529,8 +529,8 @@ preset_kpdr_varia_and_supers_gate_scam_two:
     dw $D870, $4122  ; Items
     dw #$FFFF
 
-preset_kpdr_varia_and_supers_lava_pit_death_room:
-    dw #preset_kpdr_varia_and_supers_gate_scam_two ; Varia and Supers: Gate Scam Two
+preset_zfackpdr_varia_and_supers_lava_pit_death_room:
+    dw #preset_zfackpdr_varia_and_supers_gate_scam_two ; Varia and Supers: Gate Scam Two
     dw $090F, $C000  ; Screen subpixel X position
     dw $0911, $0000  ; Screen X position in pixels
     dw $0913, $3000  ; Screen subpixel Y position
@@ -544,8 +544,8 @@ preset_kpdr_varia_and_supers_lava_pit_death_room:
     dw $0AFA, $018B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_varia_and_supers_bug_pipe_secret:
-    dw #preset_kpdr_varia_and_supers_lava_pit_death_room ; Varia and Supers: Lava Pit Death Room
+preset_zfackpdr_varia_and_supers_bug_pipe_secret:
+    dw #preset_zfackpdr_varia_and_supers_lava_pit_death_room ; Varia and Supers: Lava Pit Death Room
     dw $078D, $9314  ; DDB
     dw $079B, $9E2A  ; MDB
     dw $07F3, $0015  ; Music Bank
@@ -563,8 +563,8 @@ preset_kpdr_varia_and_supers_bug_pipe_secret:
     dw $0AFA, $0290  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_varia_and_supers_bubble_mountain:
-    dw #preset_kpdr_varia_and_supers_bug_pipe_secret ; Varia and Supers: Bug Pipe Secret
+preset_zfackpdr_varia_and_supers_bubble_mountain:
+    dw #preset_zfackpdr_varia_and_supers_bug_pipe_secret ; Varia and Supers: Bug Pipe Secret
     dw $078D, $929C  ; DDB
     dw $079B, $9EBD  ; MDB
     dw $090F, $9000  ; Screen subpixel X position
@@ -582,8 +582,8 @@ preset_kpdr_varia_and_supers_bubble_mountain:
     dw $0AFA, $018B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_varia_and_supers_early_supers:
-    dw #preset_kpdr_varia_and_supers_bubble_mountain ; Varia and Supers: Bubble Mountain
+preset_zfackpdr_varia_and_supers_early_supers:
+    dw #preset_zfackpdr_varia_and_supers_bubble_mountain ; Varia and Supers: Bubble Mountain
     dw $078D, $92CC  ; DDB
     dw $079B, $A0B6  ; MDB
     dw $090F, $C000  ; Screen subpixel X position
@@ -598,8 +598,8 @@ preset_kpdr_varia_and_supers_early_supers:
     dw $0AF8, $7FFF  ; Samus subpixel X
     dw #$FFFF
 
-preset_kpdr_wave_and_ice_bubbly_troubly_:
-    dw #preset_kpdr_varia_and_supers_early_supers ; Varia and Supers: Early Supers
+preset_zfackpdr_wave_and_ice_bubbly_troubly_:
+    dw #preset_zfackpdr_varia_and_supers_early_supers ; Varia and Supers: Early Supers
     dw $078D, $9494  ; DDB
     dw $090F, $0000  ; Screen subpixel X position
     dw $0911, $0000  ; Screen X position in pixels
@@ -618,8 +618,8 @@ preset_kpdr_wave_and_ice_bubbly_troubly_:
     dw $D878, $0004  ; Items
     dw #$FFFF
 
-preset_kpdr_wave_and_ice_hopper_statue_room:
-    dw #preset_kpdr_wave_and_ice_bubbly_troubly_ ; Wave and Ice: Bubbly Troubly 
+preset_zfackpdr_wave_and_ice_hopper_statue_room:
+    dw #preset_zfackpdr_wave_and_ice_bubbly_troubly_ ; Wave and Ice: Bubbly Troubly 
     dw $078D, $94E8  ; DDB
     dw $079B, $A228  ; MDB
     dw $090F, $F000  ; Screen subpixel X position
@@ -633,8 +633,8 @@ preset_kpdr_wave_and_ice_hopper_statue_room:
     dw $0AFC, $8C00  ; Samus subpixel Y
     dw #$FFFF
 
-preset_kpdr_wave_and_ice_gate_scam_three:
-    dw #preset_kpdr_wave_and_ice_hopper_statue_room ; Wave and Ice: Hopper Statue Room
+preset_zfackpdr_wave_and_ice_gate_scam_three:
+    dw #preset_zfackpdr_wave_and_ice_hopper_statue_room ; Wave and Ice: Hopper Statue Room
     dw $078D, $9500  ; DDB
     dw $079B, $A282  ; MDB
     dw $090F, $4000  ; Screen subpixel X position
@@ -648,8 +648,8 @@ preset_kpdr_wave_and_ice_gate_scam_three:
     dw $D8B8, $0200  ; Doors
     dw #$FFFF
 
-preset_kpdr_wave_and_ice_bubble_lava_room:
-    dw #preset_kpdr_wave_and_ice_gate_scam_three ; Wave and Ice: Gate Scam Three
+preset_zfackpdr_wave_and_ice_bubble_lava_room:
+    dw #preset_zfackpdr_wave_and_ice_gate_scam_three ; Wave and Ice: Gate Scam Three
     dw $078D, $9548  ; DDB
     dw $079B, $A2B5  ; MDB
     dw $090F, $5000  ; Screen subpixel X position
@@ -669,8 +669,8 @@ preset_kpdr_wave_and_ice_bubble_lava_room:
     dw $D878, $0044  ; Items
     dw #$FFFF
 
-preset_kpdr_wave_and_ice_freeze_booger_room:
-    dw #preset_kpdr_wave_and_ice_bubble_lava_room ; Wave and Ice: Bubble Lava Room
+preset_zfackpdr_wave_and_ice_freeze_booger_room:
+    dw #preset_zfackpdr_wave_and_ice_bubble_lava_room ; Wave and Ice: Bubble Lava Room
     dw $078D, $9698  ; DDB
     dw $079B, $A4E3  ; MDB
     dw $090F, $8001  ; Screen subpixel X position
@@ -686,8 +686,8 @@ preset_kpdr_wave_and_ice_freeze_booger_room:
     dw $0AFA, $01BB  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_wave_and_ice_wave_bugs_down:
-    dw #preset_kpdr_wave_and_ice_freeze_booger_room ; Wave and Ice: Freeze Booger Room
+preset_zfackpdr_wave_and_ice_wave_bugs_down:
+    dw #preset_zfackpdr_wave_and_ice_freeze_booger_room ; Wave and Ice: Freeze Booger Room
     dw $078D, $96BC  ; DDB
     dw $079B, $A514  ; MDB
     dw $07F5, $0003  ; Music Track
@@ -704,8 +704,8 @@ preset_kpdr_wave_and_ice_wave_bugs_down:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_wave_and_ice_wave_escape:
-    dw #preset_kpdr_wave_and_ice_wave_bugs_down ; Wave and Ice: Wave Bugs Down
+preset_zfackpdr_wave_and_ice_wave_escape:
+    dw #preset_zfackpdr_wave_and_ice_wave_bugs_down ; Wave and Ice: Wave Bugs Down
     dw $078D, $9758  ; DDB
     dw $079B, $A547  ; MDB
     dw $090F, $9000  ; Screen subpixel X position
@@ -727,8 +727,8 @@ preset_kpdr_wave_and_ice_wave_escape:
     dw $D8B8, $1200  ; Doors
     dw #$FFFF
 
-preset_kpdr_wave_and_ice_bubble_lava_room_revisit:
-    dw #preset_kpdr_wave_and_ice_wave_escape ; Wave and Ice: Wave Escape
+preset_zfackpdr_wave_and_ice_bubble_lava_room_revisit:
+    dw #preset_zfackpdr_wave_and_ice_wave_escape ; Wave and Ice: Wave Escape
     dw $078D, $9740  ; DDB
     dw $079B, $A4E3  ; MDB
     dw $07F5, $0005  ; Music Track
@@ -740,8 +740,8 @@ preset_kpdr_wave_and_ice_bubble_lava_room_revisit:
     dw $0AF8, $8000  ; Samus subpixel X
     dw #$FFFF
 
-preset_kpdr_wave_and_ice_spiky_nova_room:
-    dw #preset_kpdr_wave_and_ice_bubble_lava_room_revisit ; Wave and Ice: Bubble Lava Room Revisit
+preset_zfackpdr_wave_and_ice_spiky_nova_room:
+    dw #preset_zfackpdr_wave_and_ice_bubble_lava_room_revisit ; Wave and Ice: Bubble Lava Room Revisit
     dw $078D, $968C  ; DDB
     dw $079B, $A2B5  ; MDB
     dw $090F, $2000  ; Screen subpixel X position
@@ -759,8 +759,8 @@ preset_kpdr_wave_and_ice_spiky_nova_room:
     dw $0AFA, $018B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_wave_and_ice_rising_lava_platforms:
-    dw #preset_kpdr_wave_and_ice_spiky_nova_room ; Wave and Ice: Spiky Nova Room
+preset_zfackpdr_wave_and_ice_rising_lava_platforms:
+    dw #preset_zfackpdr_wave_and_ice_spiky_nova_room ; Wave and Ice: Spiky Nova Room
     dw $078D, $9608  ; DDB
     dw $079B, $A31B  ; MDB
     dw $090F, $6000  ; Screen subpixel X position
@@ -774,8 +774,8 @@ preset_kpdr_wave_and_ice_rising_lava_platforms:
     dw $0AF8, $DA7F  ; Samus subpixel X
     dw #$FFFF
 
-preset_kpdr_wave_and_ice_ice_pirate_tower:
-    dw #preset_kpdr_wave_and_ice_rising_lava_platforms ; Wave and Ice: Rising Lava Platforms
+preset_zfackpdr_wave_and_ice_ice_pirate_tower:
+    dw #preset_zfackpdr_wave_and_ice_rising_lava_platforms ; Wave and Ice: Rising Lava Platforms
     dw $078D, $9614  ; DDB
     dw $079B, $A377  ; MDB
     dw $090F, $2C00  ; Screen subpixel X position
@@ -794,50 +794,46 @@ preset_kpdr_wave_and_ice_ice_pirate_tower:
     dw $D878, $0944  ; Items
     dw #$FFFF
 
-preset_kpdr_wave_and_ice_ice_escape:
-    dw #preset_kpdr_wave_and_ice_ice_pirate_tower ; Wave and Ice: Ice Pirate Tower
+preset_zfackpdr_wave_and_ice_ice_escape:
+    dw #preset_zfackpdr_wave_and_ice_ice_pirate_tower ; Wave and Ice: Ice Pirate Tower
     dw $078D, $9668  ; DDB
     dw $079B, $A3A4  ; MDB
-    dw $090F, $C000  ; Screen subpixel X position
+    dw $090F, $1000  ; Screen subpixel X position
     dw $0911, $0000  ; Screen X position in pixels
-    dw $0913, $0000  ; Screen subpixel Y position
+    dw $0913, $E400  ; Screen subpixel Y position
     dw $0915, $0162  ; Screen Y position in pixels
     dw $0917, $0000  ; Layer 2 X position
     dw $0919, $0109  ; Layer 2 Y position
     dw $09A6, $0003  ; Beams
     dw $09A8, $0003  ; Beams
     dw $09C6, $0009  ; Missiles
-    dw $0A1C, $0051  ; Samus position/state
-    dw $0A1E, $0208  ; More position/state
-    dw $0AF6, $0052  ; Samus X
-    dw $0AF8, $4000  ; Samus subpixel X
-    dw $0AFA, $0202  ; Samus Y
-    dw $0AFC, $EFFF  ; Samus subpixel Y
+    dw $0AF6, $0072  ; Samus X
+    dw $0AF8, $8000  ; Samus subpixel X
+    dw $0AFA, $01FB  ; Samus Y
+    dw $0AFC, $FFFF  ; Samus subpixel Y
     dw $D878, $0B44  ; Items
     dw $D8B8, $1600  ; Doors
     dw #$FFFF
 
-preset_kpdr_power_bombs_boot_bug_bonanza:
-    dw #preset_kpdr_wave_and_ice_ice_escape ; Wave and Ice: Ice Escape
+preset_zfackpdr_power_bombs_boot_bug_bonanza:
+    dw #preset_zfackpdr_wave_and_ice_ice_escape ; Wave and Ice: Ice Escape
     dw $078D, $9680  ; DDB
     dw $079B, $9DC2  ; MDB
     dw $090F, $7400  ; Screen subpixel X position
     dw $0911, $0300  ; Screen X position in pixels
+    dw $0913, $0000  ; Screen subpixel Y position
     dw $0915, $031C  ; Screen Y position in pixels
     dw $0917, $0240  ; Layer 2 X position
     dw $0919, $0255  ; Layer 2 Y position
     dw $09C2, $00C7  ; Health
     dw $09CA, $0002  ; Supers
-    dw $0A1C, $0001  ; Samus position/state
-    dw $0A1E, $0008  ; More position/state
     dw $0AF6, $03BB  ; Samus X
     dw $0AF8, $6FFF  ; Samus subpixel X
     dw $0AFA, $038B  ; Samus Y
-    dw $0AFC, $FFFF  ; Samus subpixel Y
     dw #$FFFF
 
-preset_kpdr_power_bombs_norfair_lobby:
-    dw #preset_kpdr_power_bombs_boot_bug_bonanza ; Power Bombs: Boot Bug Bonanza
+preset_zfackpdr_power_bombs_norfair_lobby:
+    dw #preset_zfackpdr_power_bombs_boot_bug_bonanza ; Power Bombs: Boot Bug Bonanza
     dw $078D, $91E8  ; DDB
     dw $079B, $A027  ; MDB
     dw $090F, $6700  ; Screen subpixel X position
@@ -856,8 +852,8 @@ preset_kpdr_power_bombs_norfair_lobby:
     dw $D876, $8000  ; Items
     dw #$FFFF
 
-preset_kpdr_power_bombs_map_tower_up:
-    dw #preset_kpdr_power_bombs_norfair_lobby ; Power Bombs: Norfair Lobby
+preset_zfackpdr_power_bombs_map_tower_up:
+    dw #preset_zfackpdr_power_bombs_norfair_lobby ; Power Bombs: Norfair Lobby
     dw $078D, $91AC  ; DDB
     dw $079B, $9FA0  ; MDB
     dw $090F, $9D81  ; Screen subpixel X position
@@ -869,8 +865,8 @@ preset_kpdr_power_bombs_map_tower_up:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_power_bombs_cac_attack_revisit:
-    dw #preset_kpdr_power_bombs_map_tower_up ; Power Bombs: Map Tower Up
+preset_zfackpdr_power_bombs_cac_attack_revisit:
+    dw #preset_zfackpdr_power_bombs_map_tower_up ; Power Bombs: Map Tower Up
     dw $078D, $9338  ; DDB
     dw $079B, $9DF7  ; MDB
     dw $090F, $8000  ; Screen subpixel X position
@@ -884,8 +880,8 @@ preset_kpdr_power_bombs_cac_attack_revisit:
     dw $D8B8, $1610  ; Doors
     dw #$FFFF
 
-preset_kpdr_power_bombs_ceiling_missiles:
-    dw #preset_kpdr_power_bombs_cac_attack_revisit ; Power Bombs: Cac Attack Revisit
+preset_zfackpdr_power_bombs_ceiling_missiles:
+    dw #preset_zfackpdr_power_bombs_cac_attack_revisit ; Power Bombs: Cac Attack Revisit
     dw $078D, $926C  ; DDB
     dw $079B, $9E8C  ; MDB
     dw $090F, $6000  ; Screen subpixel X position
@@ -899,8 +895,8 @@ preset_kpdr_power_bombs_ceiling_missiles:
     dw $0AFA, $028B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_power_bombs_gate_scam_four:
-    dw #preset_kpdr_power_bombs_ceiling_missiles ; Power Bombs: Ceiling Missiles
+preset_zfackpdr_power_bombs_gate_scam_four:
+    dw #preset_zfackpdr_power_bombs_ceiling_missiles ; Power Bombs: Ceiling Missiles
     dw $078D, $9404  ; DDB
     dw $079B, $9EBD  ; MDB
     dw $090F, $3FFF  ; Screen subpixel X position
@@ -915,8 +911,8 @@ preset_kpdr_power_bombs_gate_scam_four:
     dw $D876, $8400  ; Items
     dw #$FFFF
 
-preset_kpdr_power_bombs_face_climb:
-    dw #preset_kpdr_power_bombs_gate_scam_four ; Power Bombs: Gate Scam Four
+preset_zfackpdr_power_bombs_face_climb:
+    dw #preset_zfackpdr_power_bombs_gate_scam_four ; Power Bombs: Gate Scam Four
     dw $078D, $92CC  ; DDB
     dw $079B, $A0B6  ; MDB
     dw $090F, $6001  ; Screen subpixel X position
@@ -929,8 +925,8 @@ preset_kpdr_power_bombs_face_climb:
     dw $0AFA, $03AB  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_power_bombs_hidden_hoppers:
-    dw #preset_kpdr_power_bombs_face_climb ; Power Bombs: Face Climb
+preset_zfackpdr_power_bombs_hidden_hoppers:
+    dw #preset_zfackpdr_power_bombs_face_climb ; Power Bombs: Face Climb
     dw $078D, $9428  ; DDB
     dw $079B, $A4B4  ; MDB
     dw $090F, $E000  ; Screen subpixel X position
@@ -945,8 +941,8 @@ preset_kpdr_power_bombs_hidden_hoppers:
     dw $D8B8, $1E10  ; Doors
     dw #$FFFF
 
-preset_kpdr_power_bombs_spiky_platform_tower:
-    dw #preset_kpdr_power_bombs_hidden_hoppers ; Power Bombs: Hidden Hoppers
+preset_zfackpdr_power_bombs_spiky_platform_tower:
+    dw #preset_zfackpdr_power_bombs_hidden_hoppers ; Power Bombs: Hidden Hoppers
     dw $078D, $96EC  ; DDB
     dw $079B, $A174  ; MDB
     dw $090F, $0000  ; Screen subpixel X position
@@ -966,8 +962,8 @@ preset_kpdr_power_bombs_spiky_platform_tower:
     dw $D878, $0B4C  ; Items
     dw #$FFFF
 
-preset_kpdr_power_bombs_waveless_softlock:
-    dw #preset_kpdr_power_bombs_spiky_platform_tower ; Power Bombs: Spiky Platform Tower
+preset_zfackpdr_power_bombs_waveless_softlock:
+    dw #preset_zfackpdr_power_bombs_spiky_platform_tower ; Power Bombs: Spiky Platform Tower
     dw $078D, $94AC  ; DDB
     dw $079B, $A1A1  ; MDB
     dw $090F, $4FFF  ; Screen subpixel X position
@@ -980,8 +976,8 @@ preset_kpdr_power_bombs_waveless_softlock:
     dw $0AF8, $3FFF  ; Samus subpixel X
     dw #$FFFF
 
-preset_kpdr_power_bombs_croc:
-    dw #preset_kpdr_power_bombs_waveless_softlock ; Power Bombs: Waveless Softlock
+preset_zfackpdr_power_bombs_croc:
+    dw #preset_zfackpdr_power_bombs_waveless_softlock ; Power Bombs: Waveless Softlock
     dw $078D, $9308  ; DDB
     dw $079B, $9EEA  ; MDB
     dw $090F, $7000  ; Screen subpixel X position
@@ -1000,8 +996,8 @@ preset_kpdr_power_bombs_croc:
     dw $D8B8, $1E1C  ; Doors
     dw #$FFFF
 
-preset_kpdr_power_bombs_power_bombs_2:
-    dw #preset_kpdr_power_bombs_croc ; Power Bombs: Croc
+preset_zfackpdr_power_bombs_power_bombs_2:
+    dw #preset_zfackpdr_power_bombs_croc ; Power Bombs: Croc
     dw $078D, $92D8  ; DDB
     dw $079B, $981D  ; MDB
     dw $07F3, $0027  ; Music Bank
@@ -1023,8 +1019,8 @@ preset_kpdr_power_bombs_power_bombs_2:
     dw $D8B6, $0001  ; Doors
     dw #$FFFF
 
-preset_kpdr_chozo_orbs_lava_death_revisit:
-    dw #preset_kpdr_power_bombs_power_bombs_2 ; Power Bombs: Power Bombs
+preset_zfackpdr_chozo_orbs_lava_death_revisit:
+    dw #preset_zfackpdr_power_bombs_power_bombs_2 ; Power Bombs: Power Bombs
     dw $078D, $92B4  ; DDB
     dw $079B, $9E2A  ; MDB
     dw $07F3, $0015  ; Music Bank
@@ -1045,8 +1041,8 @@ preset_kpdr_chozo_orbs_lava_death_revisit:
     dw $D8B6, $4001  ; Doors
     dw #$FFFF
 
-preset_kpdr_chozo_orbs_red_tower:
-    dw #preset_kpdr_chozo_orbs_lava_death_revisit ; Chozo Orbs: Lava Death Revisit
+preset_zfackpdr_chozo_orbs_red_tower:
+    dw #preset_zfackpdr_chozo_orbs_lava_death_revisit ; Chozo Orbs: Lava Death Revisit
     dw $078D, $893C  ; DDB
     dw $079B, $9110  ; MDB
     dw $07F3, $0012  ; Music Bank
@@ -1064,8 +1060,8 @@ preset_kpdr_chozo_orbs_red_tower:
     dw $0AFA, $00A9  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_chozo_orbs_jungle_boost:
-    dw #preset_kpdr_chozo_orbs_red_tower ; Chozo Orbs: Red Tower
+preset_zfackpdr_chozo_orbs_jungle_boost:
+    dw #preset_zfackpdr_chozo_orbs_red_tower ; Chozo Orbs: Red Tower
     dw $078D, $88A0  ; DDB
     dw $079B, $907D  ; MDB
     dw $0911, $0300  ; Screen X position in pixels
@@ -1079,8 +1075,8 @@ preset_kpdr_chozo_orbs_jungle_boost:
     dw $0AFA, $018B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_chozo_orbs_green_tunnel_tower:
-    dw #preset_kpdr_chozo_orbs_jungle_boost ; Chozo Orbs: Jungle Boost
+preset_zfackpdr_chozo_orbs_green_tunnel_tower:
+    dw #preset_zfackpdr_chozo_orbs_jungle_boost ; Chozo Orbs: Jungle Boost
     dw $078D, $884C  ; DDB
     dw $079B, $9263  ; MDB
     dw $07F3, $000F  ; Music Bank
@@ -1095,8 +1091,8 @@ preset_kpdr_chozo_orbs_green_tunnel_tower:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_chozo_orbs_charge_beam:
-    dw #preset_kpdr_chozo_orbs_green_tunnel_tower ; Chozo Orbs: Green Tunnel Tower
+preset_zfackpdr_chozo_orbs_charge_beam:
+    dw #preset_zfackpdr_chozo_orbs_green_tunnel_tower ; Chozo Orbs: Green Tunnel Tower
     dw $078D, $89B4  ; DDB
     dw $079B, $8E1C  ; MDB
     dw $090F, $B000  ; Screen subpixel X position
@@ -1109,8 +1105,8 @@ preset_kpdr_chozo_orbs_charge_beam:
     dw $0AF8, $4FFF  ; Samus subpixel X
     dw #$FFFF
 
-preset_kpdr_chozo_orbs_pink_elevator:
-    dw #preset_kpdr_chozo_orbs_charge_beam ; Chozo Orbs: Charge Beam
+preset_zfackpdr_chozo_orbs_pink_elevator:
+    dw #preset_zfackpdr_chozo_orbs_charge_beam ; Chozo Orbs: Charge Beam
     dw $078D, $8AD4  ; DDB
     dw $079B, $92EE  ; MDB
     dw $090F, $C000  ; Screen subpixel X position
@@ -1129,8 +1125,8 @@ preset_kpdr_chozo_orbs_pink_elevator:
     dw $D8B4, $0040  ; Doors
     dw #$FFFF
 
-preset_kpdr_chozo_orbs_noob_bridge:
-    dw #preset_kpdr_chozo_orbs_pink_elevator ; Chozo Orbs: Pink Elevator
+preset_zfackpdr_chozo_orbs_noob_bridge:
+    dw #preset_zfackpdr_chozo_orbs_pink_elevator ; Chozo Orbs: Pink Elevator
     dw $078D, $8C18  ; DDB
     dw $079B, $931D  ; MDB
     dw $090F, $2000  ; Screen subpixel X position
@@ -1145,8 +1141,8 @@ preset_kpdr_chozo_orbs_noob_bridge:
     dw $0AFA, $028B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_chozo_orbs_save_station:
-    dw #preset_kpdr_chozo_orbs_noob_bridge ; Chozo Orbs: Noob Bridge
+preset_zfackpdr_chozo_orbs_save_station:
+    dw #preset_zfackpdr_chozo_orbs_noob_bridge ; Chozo Orbs: Noob Bridge
     dw $078D, $8C0C  ; DDB
     dw $079B, $94DC  ; MDB
     dw $090F, $7000  ; Screen subpixel X position
@@ -1167,8 +1163,8 @@ preset_kpdr_chozo_orbs_save_station:
     dw $D8B4, $0440  ; Doors
     dw #$FFFF
 
-preset_kpdr_chozo_orbs_pain_lake:
-    dw #preset_kpdr_chozo_orbs_save_station ; Chozo Orbs: Save Station
+preset_zfackpdr_chozo_orbs_pain_lake:
+    dw #preset_zfackpdr_chozo_orbs_save_station ; Chozo Orbs: Save Station
     dw $078D, $8D38  ; DDB
     dw $079B, $93B6  ; MDB
     dw $090F, $A000  ; Screen subpixel X position
@@ -1185,8 +1181,8 @@ preset_kpdr_chozo_orbs_pain_lake:
     dw $D874, $4900  ; Items
     dw #$FFFF
 
-preset_kpdr_chozo_orbs_chozo_orbs_2:
-    dw #preset_kpdr_chozo_orbs_pain_lake ; Chozo Orbs: Pain Lake
+preset_zfackpdr_chozo_orbs_chozo_orbs_2:
+    dw #preset_zfackpdr_chozo_orbs_pain_lake ; Chozo Orbs: Pain Lake
     dw $078D, $8B7C  ; DDB
     dw $079B, $9420  ; MDB
     dw $090F, $1000  ; Screen subpixel X position
@@ -1204,8 +1200,8 @@ preset_kpdr_chozo_orbs_chozo_orbs_2:
     dw $D8B4, $0640  ; Doors
     dw #$FFFF
 
-preset_kpdr_speed_booster_tunnel_lake:
-    dw #preset_kpdr_chozo_orbs_chozo_orbs_2 ; Chozo Orbs: Chozo Orbs
+preset_zfackpdr_speed_booster_tunnel_lake:
+    dw #preset_zfackpdr_chozo_orbs_chozo_orbs_2 ; Chozo Orbs: Chozo Orbs
     dw $078D, $8BD0  ; DDB
     dw $079B, $8B35  ; MDB
     dw $07F3, $0024  ; Music Bank
@@ -1226,8 +1222,8 @@ preset_kpdr_speed_booster_tunnel_lake:
     dw $D8B2, $0062  ; Doors
     dw #$FFFF
 
-preset_kpdr_speed_booster_mini_kraid_hall:
-    dw #preset_kpdr_speed_booster_tunnel_lake ; Speed Booster: Tunnel Lake
+preset_zfackpdr_speed_booster_mini_kraid_hall:
+    dw #preset_zfackpdr_speed_booster_tunnel_lake ; Speed Booster: Tunnel Lake
     dw $078D, $8540  ; DDB
     dw $079B, $92BD  ; MDB
     dw $07F3, $000F  ; Music Bank
@@ -1249,8 +1245,8 @@ preset_kpdr_speed_booster_mini_kraid_hall:
     dw $0AFA, $018B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_speed_booster_hopper_madness:
-    dw #preset_kpdr_speed_booster_mini_kraid_hall ; Speed Booster: Mini Kraid Hall
+preset_zfackpdr_speed_booster_hopper_madness:
+    dw #preset_zfackpdr_speed_booster_mini_kraid_hall ; Speed Booster: Mini Kraid Hall
     dw $078D, $8744  ; DDB
     dw $079B, $8DA3  ; MDB
     dw $07F3, $0027  ; Music Bank
@@ -1269,8 +1265,8 @@ preset_kpdr_speed_booster_hopper_madness:
     dw $D8B2, $2262  ; Doors
     dw #$FFFF
 
-preset_kpdr_speed_booster_enter_maridia:
-    dw #preset_kpdr_speed_booster_hopper_madness ; Speed Booster: Hopper Madness
+preset_zfackpdr_speed_booster_enter_maridia:
+    dw #preset_zfackpdr_speed_booster_hopper_madness ; Speed Booster: Hopper Madness
     dw $078D, $8654  ; DDB
     dw $079B, $8F07  ; MDB
     dw $07F3, $0012  ; Music Bank
@@ -1287,8 +1283,8 @@ preset_kpdr_speed_booster_enter_maridia:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_speed_booster_sand_tower_down:
-    dw #preset_kpdr_speed_booster_enter_maridia ; Speed Booster: Enter Maridia
+preset_zfackpdr_speed_booster_sand_tower_down:
+    dw #preset_zfackpdr_speed_booster_enter_maridia ; Speed Booster: Enter Maridia
     dw $078D, $9CF8  ; DDB
     dw $079B, $B1BF  ; MDB
     dw $07F3, $001B  ; Music Bank
@@ -1302,8 +1298,8 @@ preset_kpdr_speed_booster_sand_tower_down:
     dw $D820, $0801  ; Events
     dw #$FFFF
 
-preset_kpdr_speed_booster_sand_hall:
-    dw #preset_kpdr_speed_booster_sand_tower_down ; Speed Booster: Sand Tower Down
+preset_zfackpdr_speed_booster_sand_hall:
+    dw #preset_zfackpdr_speed_booster_sand_tower_down ; Speed Booster: Sand Tower Down
     dw $078D, $9E24  ; DDB
     dw $079B, $B2A8  ; MDB
     dw $090F, $D000  ; Screen subpixel X position
@@ -1322,8 +1318,8 @@ preset_kpdr_speed_booster_sand_hall:
     dw $0AFA, $018B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_speed_booster_platform_climb:
-    dw #preset_kpdr_speed_booster_sand_hall ; Speed Booster: Sand Hall
+preset_zfackpdr_speed_booster_platform_climb:
+    dw #preset_zfackpdr_speed_booster_sand_hall ; Speed Booster: Sand Hall
     dw $078D, $9DC4  ; DDB
     dw $079B, $B3B6  ; MDB
     dw $090F, $9301  ; Screen subpixel X position
@@ -1340,8 +1336,8 @@ preset_kpdr_speed_booster_platform_climb:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_speed_booster_speed_escape:
-    dw #preset_kpdr_speed_booster_platform_climb ; Speed Booster: Platform Climb
+preset_zfackpdr_speed_booster_speed_escape:
+    dw #preset_zfackpdr_speed_booster_platform_climb ; Speed Booster: Platform Climb
     dw $078D, $9E84  ; DDB
     dw $079B, $B3E3  ; MDB
     dw $090F, $0000  ; Screen subpixel X position
@@ -1366,8 +1362,8 @@ preset_kpdr_speed_booster_speed_escape:
     dw $D8BC, $0002  ; Doors
     dw #$FFFF
 
-preset_kpdr_speed_booster_sand_tower_up:
-    dw #preset_kpdr_speed_booster_speed_escape ; Speed Booster: Speed Escape
+preset_zfackpdr_speed_booster_sand_tower_up:
+    dw #preset_zfackpdr_speed_booster_speed_escape ; Speed Booster: Speed Escape
     dw $078D, $9E30  ; DDB
     dw $079B, $B45B  ; MDB
     dw $090F, $3800  ; Screen subpixel X position
@@ -1381,8 +1377,8 @@ preset_kpdr_speed_booster_sand_tower_up:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_speed_booster_shaktool:
-    dw #preset_kpdr_speed_booster_sand_tower_up ; Speed Booster: Sand Tower Up
+preset_zfackpdr_speed_booster_shaktool:
+    dw #preset_zfackpdr_speed_booster_sand_tower_up ; Speed Booster: Sand Tower Up
     dw $078D, $9D7C  ; DDB
     dw $079B, $B1BF  ; MDB
     dw $090F, $2400  ; Screen subpixel X position
@@ -1399,8 +1395,8 @@ preset_kpdr_speed_booster_shaktool:
     dw $0AFA, $018B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_kraid_and_grapple_kraids_lair:
-    dw #preset_kpdr_speed_booster_shaktool ; Speed Booster: Shaktool
+preset_zfackpdr_kraid_and_grapple_kraids_lair:
+    dw #preset_zfackpdr_speed_booster_shaktool ; Speed Booster: Shaktool
     dw $078D, $9CA4  ; DDB
     dw $079B, $B10B  ; MDB
     dw $090F, $AC00  ; Screen subpixel X position
@@ -1418,8 +1414,8 @@ preset_kpdr_kraid_and_grapple_kraids_lair:
     dw $D87A, $0A00  ; Items
     dw #$FFFF
 
-preset_kpdr_kraid_and_grapple_hopper_madness_two:
-    dw #preset_kpdr_kraid_and_grapple_kraids_lair ; Kraid and Grapple: Kraid's Lair
+preset_zfackpdr_kraid_and_grapple_hopper_madness_two:
+    dw #preset_zfackpdr_kraid_and_grapple_kraids_lair ; Kraid and Grapple: Kraid's Lair
     dw $078D, $8744  ; DDB
     dw $079B, $8DA3  ; MDB
     dw $07F3, $0027  ; Music Bank
@@ -1437,8 +1433,8 @@ preset_kpdr_kraid_and_grapple_hopper_madness_two:
     dw $0AFA, $017B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_kraid_and_grapple_spazer:
-    dw #preset_kpdr_kraid_and_grapple_hopper_madness_two ; Kraid and Grapple: Hopper Madness Two
+preset_zfackpdr_kraid_and_grapple_spazer:
+    dw #preset_zfackpdr_kraid_and_grapple_hopper_madness_two ; Kraid and Grapple: Hopper Madness Two
     dw $078D, $A7C0  ; DDB
     dw $079B, $B138  ; MDB
     dw $07F3, $0012  ; Music Bank
@@ -1455,8 +1451,8 @@ preset_kpdr_kraid_and_grapple_spazer:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_kraid_and_grapple_spike_tunnel:
-    dw #preset_kpdr_kraid_and_grapple_spazer ; Kraid and Grapple: Spazer
+preset_zfackpdr_kraid_and_grapple_spike_tunnel:
+    dw #preset_zfackpdr_kraid_and_grapple_spazer ; Kraid and Grapple: Spazer
     dw $078D, $9CE0  ; DDB
     dw $079B, $8E4D  ; MDB
     dw $090F, $C000  ; Screen subpixel X position
@@ -1476,8 +1472,8 @@ preset_kpdr_kraid_and_grapple_spike_tunnel:
     dw $D8B2, $2662  ; Doors
     dw #$FFFF
 
-preset_kpdr_kraid_and_grapple_kraid_entrance_:
-    dw #preset_kpdr_kraid_and_grapple_spike_tunnel ; Kraid and Grapple: Spike Tunnel
+preset_zfackpdr_kraid_and_grapple_kraid_entrance_:
+    dw #preset_zfackpdr_kraid_and_grapple_spike_tunnel ; Kraid and Grapple: Spike Tunnel
     dw $078D, $86F0  ; DDB
     dw $079B, $8ED6  ; MDB
     dw $090F, $0000  ; Screen subpixel X position
@@ -1495,8 +1491,8 @@ preset_kpdr_kraid_and_grapple_kraid_entrance_:
     dw $D8B2, $2E62  ; Doors
     dw #$FFFF
 
-preset_kpdr_kraid_and_grapple_kraid:
-    dw #preset_kpdr_kraid_and_grapple_kraid_entrance_ ; Kraid and Grapple: Kraid Entrance 
+preset_zfackpdr_kraid_and_grapple_kraid:
+    dw #preset_zfackpdr_kraid_and_grapple_kraid_entrance_ ; Kraid and Grapple: Kraid Entrance 
     dw $078D, $86FC  ; DDB
     dw $079B, $8D57  ; MDB
     dw $07F3, $0027  ; Music Bank
@@ -1513,8 +1509,8 @@ preset_kpdr_kraid_and_grapple_kraid:
     dw $D8B2, $2F62  ; Doors
     dw #$FFFF
 
-preset_kpdr_kraid_and_grapple_kraid_escape:
-    dw #preset_kpdr_kraid_and_grapple_kraid ; Kraid and Grapple: Kraid
+preset_zfackpdr_kraid_and_grapple_kraid_escape:
+    dw #preset_zfackpdr_kraid_and_grapple_kraid ; Kraid and Grapple: Kraid
     dw $078D, $87EC  ; DDB
     dw $079B, $8A9D  ; MDB
     dw $07F5, $0003  ; Music Track
@@ -1538,8 +1534,8 @@ preset_kpdr_kraid_and_grapple_kraid_escape:
     dw $D8B2, $2F6A  ; Doors
     dw #$FFFF
 
-preset_kpdr_kraid_and_grapple_spazer_revisit:
-    dw #preset_kpdr_kraid_and_grapple_kraid_escape ; Kraid and Grapple: Kraid Escape
+preset_zfackpdr_kraid_and_grapple_spazer_revisit:
+    dw #preset_zfackpdr_kraid_and_grapple_kraid_escape ; Kraid and Grapple: Kraid Escape
     dw $078D, $86E4  ; DDB
     dw $079B, $8E7A  ; MDB
     dw $07F3, $0012  ; Music Bank
@@ -1559,8 +1555,8 @@ preset_kpdr_kraid_and_grapple_spazer_revisit:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_kraid_and_grapple_more_hopper_pain:
-    dw #preset_kpdr_kraid_and_grapple_spazer_revisit ; Kraid and Grapple: Spazer Revisit
+preset_zfackpdr_kraid_and_grapple_more_hopper_pain:
+    dw #preset_zfackpdr_kraid_and_grapple_spazer_revisit ; Kraid and Grapple: Spazer Revisit
     dw $078D, $A7CC  ; DDB
     dw $079B, $B138  ; MDB
     dw $090F, $7000  ; Screen subpixel X position
@@ -1575,8 +1571,8 @@ preset_kpdr_kraid_and_grapple_more_hopper_pain:
     dw $0AF8, $AFFF  ; Samus subpixel X
     dw #$FFFF
 
-preset_kpdr_kraid_and_grapple_grapple_bugs:
-    dw #preset_kpdr_kraid_and_grapple_more_hopper_pain ; Kraid and Grapple: More Hopper Pain
+preset_zfackpdr_kraid_and_grapple_grapple_bugs:
+    dw #preset_zfackpdr_kraid_and_grapple_more_hopper_pain ; Kraid and Grapple: More Hopper Pain
     dw $078D, $8648  ; DDB
     dw $079B, $8F34  ; MDB
     dw $090F, $4FFF  ; Screen subpixel X position
@@ -1593,8 +1589,8 @@ preset_kpdr_kraid_and_grapple_grapple_bugs:
     dw $D8B2, $6F6A  ; Doors
     dw #$FFFF
 
-preset_kpdr_kraid_and_grapple_grapple_lake:
-    dw #preset_kpdr_kraid_and_grapple_grapple_bugs ; Kraid and Grapple: Grapple Bugs
+preset_zfackpdr_kraid_and_grapple_grapple_lake:
+    dw #preset_zfackpdr_kraid_and_grapple_grapple_bugs ; Kraid and Grapple: Grapple Bugs
     dw $078D, $8750  ; DDB
     dw $079B, $8FF0  ; MDB
     dw $090F, $0000  ; Screen subpixel X position
@@ -1615,8 +1611,8 @@ preset_kpdr_kraid_and_grapple_grapple_lake:
     dw $D8B2, $EF6A  ; Doors
     dw #$FFFF
 
-preset_kpdr_wrecked_ship_entry_kihunter_climb:
-    dw #preset_kpdr_kraid_and_grapple_grapple_lake ; Kraid and Grapple: Grapple Lake
+preset_zfackpdr_wrecked_ship_entry_kihunter_climb:
+    dw #preset_zfackpdr_kraid_and_grapple_grapple_lake ; Kraid and Grapple: Grapple Lake
     dw $078D, $87E0  ; DDB
     dw $079B, $901F  ; MDB
     dw $090F, $0B58  ; Screen subpixel X position
@@ -1631,8 +1627,8 @@ preset_kpdr_wrecked_ship_entry_kihunter_climb:
     dw $0AFA, $009B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_wrecked_ship_entry_red_tower_climb:
-    dw #preset_kpdr_wrecked_ship_entry_kihunter_climb ; Wrecked Ship Entry: Kihunter Climb
+preset_zfackpdr_wrecked_ship_entry_red_tower_climb:
+    dw #preset_zfackpdr_wrecked_ship_entry_kihunter_climb ; Wrecked Ship Entry: Kihunter Climb
     dw $078D, $84F8  ; DDB
     dw $079B, $904E  ; MDB
     dw $090F, $8800  ; Screen subpixel X position
@@ -1645,8 +1641,8 @@ preset_kpdr_wrecked_ship_entry_red_tower_climb:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_wrecked_ship_entry_red_brin_escape:
-    dw #preset_kpdr_wrecked_ship_entry_red_tower_climb ; Wrecked Ship Entry: Red Tower Climb
+preset_zfackpdr_wrecked_ship_entry_red_brin_escape:
+    dw #preset_zfackpdr_wrecked_ship_entry_red_tower_climb ; Wrecked Ship Entry: Red Tower Climb
     dw $078D, $8864  ; DDB
     dw $079B, $90AE  ; MDB
     dw $090F, $6C00  ; Screen subpixel X position
@@ -1662,8 +1658,8 @@ preset_kpdr_wrecked_ship_entry_red_brin_escape:
     dw $D872, $590E  ; Items
     dw #$FFFF
 
-preset_kpdr_wrecked_ship_entry_crateria_grapple_climb:
-    dw #preset_kpdr_wrecked_ship_entry_red_brin_escape ; Wrecked Ship Entry: Red Brin Escape
+preset_zfackpdr_wrecked_ship_entry_crateria_grapple_climb:
+    dw #preset_zfackpdr_wrecked_ship_entry_red_brin_escape ; Wrecked Ship Entry: Red Brin Escape
     dw $078D, $824C  ; DDB
     dw $079B, $8194  ; MDB
     dw $07F3, $0009  ; Music Bank
@@ -1684,8 +1680,8 @@ preset_kpdr_wrecked_ship_entry_crateria_grapple_climb:
     dw $0AFC, $FFFF  ; Samus subpixel Y
     dw #$FFFF
 
-preset_kpdr_wrecked_ship_entry_ship_entrance_lake:
-    dw #preset_kpdr_wrecked_ship_entry_crateria_grapple_climb ; Wrecked Ship Entry: Crateria Grapple Climb
+preset_zfackpdr_wrecked_ship_entry_ship_entrance_lake:
+    dw #preset_zfackpdr_wrecked_ship_entry_crateria_grapple_climb ; Wrecked Ship Entry: Crateria Grapple Climb
     dw $078D, $8258  ; DDB
     dw $079B, $84DA  ; MDB
     dw $07F3, $000C  ; Music Bank
@@ -1703,8 +1699,8 @@ preset_kpdr_wrecked_ship_entry_ship_entrance_lake:
     dw $0AFA, $017B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_wrecked_ship_entry_enter_ship:
-    dw #preset_kpdr_wrecked_ship_entry_ship_entrance_lake ; Wrecked Ship Entry: Ship Entrance Lake
+preset_zfackpdr_wrecked_ship_entry_enter_ship:
+    dw #preset_zfackpdr_wrecked_ship_entry_ship_entrance_lake ; Wrecked Ship Entry: Ship Entrance Lake
     dw $078D, $8330  ; DDB
     dw $079B, $8509  ; MDB
     dw $090F, $C000  ; Screen subpixel X position
@@ -1721,8 +1717,8 @@ preset_kpdr_wrecked_ship_entry_enter_ship:
     dw $D8B0, $0822  ; Doors
     dw #$FFFF
 
-preset_kpdr_wrecked_ship_entry_spiky_tower_climb:
-    dw #preset_kpdr_wrecked_ship_entry_enter_ship ; Wrecked Ship Entry: Enter Ship
+preset_zfackpdr_wrecked_ship_entry_spiky_tower_climb:
+    dw #preset_zfackpdr_wrecked_ship_entry_enter_ship ; Wrecked Ship Entry: Enter Ship
     dw $078D, $9BA8  ; DDB
     dw $079B, $AEA4  ; MDB
     dw $07F3, $0030  ; Music Bank
@@ -1736,8 +1732,8 @@ preset_kpdr_wrecked_ship_entry_spiky_tower_climb:
     dw $0AF8, $D000  ; Samus subpixel X
     dw #$FFFF
 
-preset_kpdr_wrecked_ship_entry_platforms_n_bots:
-    dw #preset_kpdr_wrecked_ship_entry_spiky_tower_climb ; Wrecked Ship Entry: Spiky Tower Climb
+preset_zfackpdr_wrecked_ship_entry_platforms_n_bots:
+    dw #preset_zfackpdr_wrecked_ship_entry_spiky_tower_climb ; Wrecked Ship Entry: Spiky Tower Climb
     dw $078D, $9AC4  ; DDB
     dw $079B, $AC86  ; MDB
     dw $090F, $0800  ; Screen subpixel X position
@@ -1753,8 +1749,8 @@ preset_kpdr_wrecked_ship_entry_platforms_n_bots:
     dw $0AFA, $02A6  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_wrecked_ship_entry_antenna_climb:
-    dw #preset_kpdr_wrecked_ship_entry_platforms_n_bots ; Wrecked Ship Entry: Platforms n Bots
+preset_zfackpdr_wrecked_ship_entry_antenna_climb:
+    dw #preset_zfackpdr_wrecked_ship_entry_platforms_n_bots ; Wrecked Ship Entry: Platforms n Bots
     dw $078D, $99B0  ; DDB
     dw $079B, $A933  ; MDB
     dw $090F, $8000  ; Screen subpixel X position
@@ -1772,8 +1768,8 @@ preset_kpdr_wrecked_ship_entry_antenna_climb:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_wrecked_ship_entry_phantoon:
-    dw #preset_kpdr_wrecked_ship_entry_antenna_climb ; Wrecked Ship Entry: Antenna Climb
+preset_zfackpdr_wrecked_ship_entry_phantoon:
+    dw #preset_zfackpdr_wrecked_ship_entry_antenna_climb ; Wrecked Ship Entry: Antenna Climb
     dw $078D, $9878  ; DDB
     dw $079B, $A7FB  ; MDB
     dw $090F, $7001  ; Screen subpixel X position
@@ -1791,8 +1787,8 @@ preset_kpdr_wrecked_ship_entry_phantoon:
     dw $D8B8, $9E1C  ; Doors
     dw #$FFFF
 
-preset_kpdr_gravity_phantoon_escape:
-    dw #preset_kpdr_wrecked_ship_entry_phantoon ; Wrecked Ship Entry: Phantoon
+preset_zfackpdr_gravity_phantoon_escape:
+    dw #preset_zfackpdr_wrecked_ship_entry_phantoon ; Wrecked Ship Entry: Phantoon
     dw $078D, $9848  ; DDB
     dw $079B, $A6CB  ; MDB
     dw $07F3, $0027  ; Music Bank
@@ -1815,8 +1811,8 @@ preset_kpdr_gravity_phantoon_escape:
     dw $D8B8, $BE1C  ; Doors
     dw #$FFFF
 
-preset_kpdr_gravity_empty_hand:
-    dw #preset_kpdr_gravity_phantoon_escape ; Gravity: Phantoon Escape
+preset_zfackpdr_gravity_empty_hand:
+    dw #preset_zfackpdr_gravity_phantoon_escape ; Gravity: Phantoon Escape
     dw $078D, $986C  ; DDB
     dw $079B, $A9FE  ; MDB
     dw $07F3, $0030  ; Music Bank
@@ -1835,8 +1831,8 @@ preset_kpdr_gravity_empty_hand:
     dw $0AFC, $3BFF  ; Samus subpixel Y
     dw #$FFFF
 
-preset_kpdr_gravity_lake_shortcut_supers:
-    dw #preset_kpdr_gravity_empty_hand ; Gravity: Empty Hand
+preset_zfackpdr_gravity_lake_shortcut_supers:
+    dw #preset_zfackpdr_gravity_empty_hand ; Gravity: Empty Hand
     dw $078D, $99D4  ; DDB
     dw $079B, $85EC  ; MDB
     dw $07F3, $000C  ; Music Bank
@@ -1854,8 +1850,8 @@ preset_kpdr_gravity_lake_shortcut_supers:
     dw $0AFC, $8BFF  ; Samus subpixel Y
     dw #$FFFF
 
-preset_kpdr_gravity_grapple_lake_2:
-    dw #preset_kpdr_gravity_lake_shortcut_supers ; Gravity: Lake Shortcut Supers
+preset_zfackpdr_gravity_grapple_lake_2:
+    dw #preset_zfackpdr_gravity_lake_shortcut_supers ; Gravity: Lake Shortcut Supers
     dw $078D, $980C  ; DDB
     dw $079B, $AAAC  ; MDB
     dw $07F3, $0030  ; Music Bank
@@ -1875,8 +1871,8 @@ preset_kpdr_gravity_grapple_lake_2:
     dw $D878, $2B4C  ; Items
     dw #$FFFF
 
-preset_kpdr_gravity_robot_boxing:
-    dw #preset_kpdr_gravity_grapple_lake_2 ; Gravity: Grapple Lake
+preset_zfackpdr_gravity_robot_boxing:
+    dw #preset_zfackpdr_gravity_grapple_lake_2 ; Gravity: Grapple Lake
     dw $078D, $9818  ; DDB
     dw $090F, $1400  ; Screen subpixel X position
     dw $0913, $0000  ; Screen subpixel Y position
@@ -1890,8 +1886,8 @@ preset_kpdr_gravity_robot_boxing:
     dw $D8B0, $1822  ; Doors
     dw #$FFFF
 
-preset_kpdr_gravity_gravity_2:
-    dw #preset_kpdr_gravity_robot_boxing ; Gravity: Robot Boxing
+preset_zfackpdr_gravity_gravity_2:
+    dw #preset_zfackpdr_gravity_robot_boxing ; Gravity: Robot Boxing
     dw $078D, $9A34  ; DDB
     dw $079B, $A69E  ; MDB
     dw $090F, $4000  ; Screen subpixel X position
@@ -1906,8 +1902,8 @@ preset_kpdr_gravity_gravity_2:
     dw $D878, $3B4C  ; Items
     dw #$FFFF
 
-preset_kpdr_gravity_red_brin_revisit:
-    dw #preset_kpdr_gravity_gravity_2 ; Gravity: Gravity
+preset_zfackpdr_gravity_red_brin_revisit:
+    dw #preset_zfackpdr_gravity_gravity_2 ; Gravity: Gravity
     dw $078D, $827C  ; DDB
     dw $079B, $84AB  ; MDB
     dw $07F3, $0009  ; Music Bank
@@ -1927,8 +1923,8 @@ preset_kpdr_gravity_red_brin_revisit:
     dw $0AFC, $B3FF  ; Samus subpixel Y
     dw #$FFFF
 
-preset_kpdr_gravity_cac_hallway:
-    dw #preset_kpdr_gravity_red_brin_revisit ; Gravity: Red Brin Revisit
+preset_zfackpdr_gravity_cac_hallway:
+    dw #preset_zfackpdr_gravity_red_brin_revisit ; Gravity: Red Brin Revisit
     dw $078D, $88E8  ; DDB
     dw $079B, $90AE  ; MDB
     dw $07F3, $0012  ; Music Bank
@@ -1949,8 +1945,8 @@ preset_kpdr_gravity_cac_hallway:
     dw $0AFC, $FFFF  ; Samus subpixel Y
     dw #$FFFF
 
-preset_kpdr_gravity_red_tower_down_again:
-    dw #preset_kpdr_gravity_cac_hallway ; Gravity: Cac Hallway
+preset_zfackpdr_gravity_red_tower_down_again:
+    dw #preset_zfackpdr_gravity_cac_hallway ; Gravity: Cac Hallway
     dw $078D, $887C  ; DDB
     dw $079B, $9110  ; MDB
     dw $090F, $F000  ; Screen subpixel X position
@@ -1971,8 +1967,8 @@ preset_kpdr_gravity_red_tower_down_again:
     dw $D874, $4906  ; Items
     dw #$FFFF
 
-preset_kpdr_gravity_kihunter_club:
-    dw #preset_kpdr_gravity_red_tower_down_again ; Gravity: Red Tower Down Again
+preset_zfackpdr_gravity_kihunter_club:
+    dw #preset_zfackpdr_gravity_red_tower_down_again ; Gravity: Red Tower Down Again
     dw $078D, $8894  ; DDB
     dw $079B, $907D  ; MDB
     dw $090F, $7000  ; Screen subpixel X position
@@ -1989,8 +1985,8 @@ preset_kpdr_gravity_kihunter_club:
     dw $D8B4, $0642  ; Doors
     dw #$FFFF
 
-preset_kpdr_gravity_kraid_tower_revisit:
-    dw #preset_kpdr_gravity_kihunter_club ; Gravity: Kihunter Club
+preset_zfackpdr_gravity_kraid_tower_revisit:
+    dw #preset_zfackpdr_gravity_kihunter_club ; Gravity: Kihunter Club
     dw $078D, $8804  ; DDB
     dw $079B, $8FF0  ; MDB
     dw $090F, $F000  ; Screen subpixel X position
@@ -2005,8 +2001,8 @@ preset_kpdr_gravity_kraid_tower_revisit:
     dw $0AFA, $03AB  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_gravity_hopper_madness_three:
-    dw #preset_kpdr_gravity_kraid_tower_revisit ; Gravity: Kraid Tower Revisit
+preset_zfackpdr_gravity_hopper_madness_three:
+    dw #preset_zfackpdr_gravity_kraid_tower_revisit ; Gravity: Kraid Tower Revisit
     dw $078D, $8744  ; DDB
     dw $079B, $8DA3  ; MDB
     dw $0911, $01D5  ; Screen X position in pixels
@@ -2019,8 +2015,8 @@ preset_kpdr_gravity_hopper_madness_three:
     dw $0AFA, $017B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_space_jump_maridia_reentry:
-    dw #preset_kpdr_gravity_hopper_madness_three ; Gravity: Hopper Madness Three
+preset_zfackpdr_space_jump_maridia_reentry:
+    dw #preset_zfackpdr_gravity_hopper_madness_three ; Gravity: Hopper Madness Three
     dw $078D, $8738  ; DDB
     dw $079B, $B138  ; MDB
     dw $090F, $3000  ; Screen subpixel X position
@@ -2035,8 +2031,8 @@ preset_kpdr_space_jump_maridia_reentry:
     dw $0AFA, $009B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_space_jump_crumble_spark_setup:
-    dw #preset_kpdr_space_jump_maridia_reentry ; Space Jump: Maridia Reentry
+preset_zfackpdr_space_jump_crumble_spark_setup:
+    dw #preset_zfackpdr_space_jump_maridia_reentry ; Space Jump: Maridia Reentry
     dw $078D, $9D04  ; DDB
     dw $079B, $B1EC  ; MDB
     dw $07F3, $001B  ; Music Bank
@@ -2053,8 +2049,8 @@ preset_kpdr_space_jump_crumble_spark_setup:
     dw $D8BA, $4000  ; Doors
     dw #$FFFF
 
-preset_kpdr_space_jump_hidden_fish_tunnel:
-    dw #preset_kpdr_space_jump_crumble_spark_setup ; Space Jump: Crumble Spark Setup
+preset_zfackpdr_space_jump_hidden_fish_tunnel:
+    dw #preset_zfackpdr_space_jump_crumble_spark_setup ; Space Jump: Crumble Spark Setup
     dw $078D, $9D40  ; DDB
     dw $079B, $B7D4  ; MDB
     dw $090F, $9880  ; Screen subpixel X position
@@ -2069,8 +2065,8 @@ preset_kpdr_space_jump_hidden_fish_tunnel:
     dw $0AFA, $048B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_space_jump_crumble_gap_scam:
-    dw #preset_kpdr_space_jump_hidden_fish_tunnel ; Space Jump: Hidden Fish Tunnel
+preset_zfackpdr_space_jump_crumble_gap_scam:
+    dw #preset_zfackpdr_space_jump_hidden_fish_tunnel ; Space Jump: Hidden Fish Tunnel
     dw $078D, $A124  ; DDB
     dw $079B, $B7A1  ; MDB
     dw $090F, $5800  ; Screen subpixel X position
@@ -2087,8 +2083,8 @@ preset_kpdr_space_jump_crumble_gap_scam:
     dw $0AFA, $00C0  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_space_jump_toilet_up:
-    dw #preset_kpdr_space_jump_crumble_gap_scam ; Space Jump: Crumble Gap Scam
+preset_zfackpdr_space_jump_toilet_up:
+    dw #preset_zfackpdr_space_jump_crumble_gap_scam ; Space Jump: Crumble Gap Scam
     dw $078D, $A460  ; DDB
     dw $079B, $BC46  ; MDB
     dw $090F, $4000  ; Screen subpixel X position
@@ -2104,8 +2100,8 @@ preset_kpdr_space_jump_toilet_up:
     dw $D8BC, $2002  ; Doors
     dw #$FFFF
 
-preset_kpdr_space_jump_fortress:
-    dw #preset_kpdr_space_jump_toilet_up ; Space Jump: Toilet Up
+preset_zfackpdr_space_jump_fortress:
+    dw #preset_zfackpdr_space_jump_toilet_up ; Space Jump: Toilet Up
     dw $078D, $A2EC  ; DDB
     dw $079B, $BA68  ; MDB
     dw $090F, $0000  ; Screen subpixel X position
@@ -2119,8 +2115,8 @@ preset_kpdr_space_jump_fortress:
     dw $0AFA, $028B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_space_jump_toilet_down:
-    dw #preset_kpdr_space_jump_fortress ; Space Jump: Fortress
+preset_zfackpdr_space_jump_toilet_down:
+    dw #preset_zfackpdr_space_jump_fortress ; Space Jump: Fortress
     dw $078D, $A2E0  ; DDB
     dw $079B, $B53E  ; MDB
     dw $0911, $0017  ; Screen X position in pixels
@@ -2138,8 +2134,8 @@ preset_kpdr_space_jump_toilet_down:
     dw $D8BC, $220A  ; Doors
     dw #$FFFF
 
-preset_kpdr_space_jump_mocktroid_sand_hall:
-    dw #preset_kpdr_space_jump_toilet_down ; Space Jump: Toilet Down
+preset_zfackpdr_space_jump_mocktroid_sand_hall:
+    dw #preset_zfackpdr_space_jump_toilet_down ; Space Jump: Toilet Down
     dw $078D, $A508  ; DDB
     dw $079B, $BC73  ; MDB
     dw $07F5, $0005  ; Music Track
@@ -2154,8 +2150,8 @@ preset_kpdr_space_jump_mocktroid_sand_hall:
     dw $0AFA, $028B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_space_jump_botwoon:
-    dw #preset_kpdr_space_jump_mocktroid_sand_hall ; Space Jump: Mocktroid Sand Hall
+preset_zfackpdr_space_jump_botwoon:
+    dw #preset_zfackpdr_space_jump_mocktroid_sand_hall ; Space Jump: Mocktroid Sand Hall
     dw $078D, $A4F0  ; DDB
     dw $079B, $BCA6  ; MDB
     dw $090F, $AFFF  ; Screen subpixel X position
@@ -2175,8 +2171,8 @@ preset_kpdr_space_jump_botwoon:
     dw $D8BC, $A20A  ; Doors
     dw #$FFFF
 
-preset_kpdr_space_jump_tube_maze:
-    dw #preset_kpdr_space_jump_botwoon ; Space Jump: Botwoon
+preset_zfackpdr_space_jump_tube_maze:
+    dw #preset_zfackpdr_space_jump_botwoon ; Space Jump: Botwoon
     dw $078D, $9C8C  ; DDB
     dw $079B, $BCD5  ; MDB
     dw $090F, $B000  ; Screen subpixel X position
@@ -2195,8 +2191,8 @@ preset_kpdr_space_jump_tube_maze:
     dw $D8BA, $6000  ; Doors
     dw #$FFFF
 
-preset_kpdr_space_jump_gate_scam_five:
-    dw #preset_kpdr_space_jump_tube_maze ; Space Jump: Tube Maze
+preset_zfackpdr_space_jump_gate_scam_five:
+    dw #preset_zfackpdr_space_jump_tube_maze ; Space Jump: Tube Maze
     dw $078D, $A55C  ; DDB
     dw $079B, $BD33  ; MDB
     dw $090F, $D17F  ; Screen subpixel X position
@@ -2217,8 +2213,8 @@ preset_kpdr_space_jump_gate_scam_five:
     dw $D87C, $1000  ; Items
     dw #$FFFF
 
-preset_kpdr_space_jump_draygon:
-    dw #preset_kpdr_space_jump_gate_scam_five ; Space Jump: Gate Scam Five
+preset_zfackpdr_space_jump_draygon:
+    dw #preset_zfackpdr_space_jump_gate_scam_five ; Space Jump: Gate Scam Five
     dw $078D, $A5B0  ; DDB
     dw $079B, $BD91  ; MDB
     dw $090F, $C000  ; Screen subpixel X position
@@ -2237,8 +2233,8 @@ preset_kpdr_space_jump_draygon:
     dw $D8BE, $0004  ; Doors
     dw #$FFFF
 
-preset_kpdr_maridia_escape_draygon_escape:
-    dw #preset_kpdr_space_jump_draygon ; Space Jump: Draygon
+preset_zfackpdr_maridia_escape_draygon_escape:
+    dw #preset_zfackpdr_space_jump_draygon ; Space Jump: Draygon
     dw $078D, $9C74  ; DDB
     dw $079B, $BDBE  ; MDB
     dw $07F3, $0024  ; Music Bank
@@ -2258,8 +2254,8 @@ preset_kpdr_maridia_escape_draygon_escape:
     dw $D8BA, $7000  ; Doors
     dw #$FFFF
 
-preset_kpdr_maridia_escape_spikey_chozo:
-    dw #preset_kpdr_maridia_escape_draygon_escape ; Maridia Escape: Draygon Escape
+preset_zfackpdr_maridia_escape_spikey_chozo:
+    dw #preset_zfackpdr_maridia_escape_draygon_escape ; Maridia Escape: Draygon Escape
     dw $078D, $A568  ; DDB
     dw $079B, $BDEB  ; MDB
     dw $07F3, $001B  ; Music Bank
@@ -2274,8 +2270,8 @@ preset_kpdr_maridia_escape_spikey_chozo:
     dw $D8BE, $0005  ; Doors
     dw #$FFFF
 
-preset_kpdr_maridia_escape_grassy_tower:
-    dw #preset_kpdr_maridia_escape_spikey_chozo ; Maridia Escape: Spikey Chozo
+preset_zfackpdr_maridia_escape_grassy_tower:
+    dw #preset_zfackpdr_maridia_escape_spikey_chozo ; Maridia Escape: Spikey Chozo
     dw $078D, $A634  ; DDB
     dw $079B, $BE76  ; MDB
     dw $090F, $3000  ; Screen subpixel X position
@@ -2292,8 +2288,8 @@ preset_kpdr_maridia_escape_grassy_tower:
     dw $0AFA, $018B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_maridia_escape_plasma:
-    dw #preset_kpdr_maridia_escape_grassy_tower ; Maridia Escape: Grassy Tower
+preset_zfackpdr_maridia_escape_plasma:
+    dw #preset_zfackpdr_maridia_escape_grassy_tower ; Maridia Escape: Grassy Tower
     dw $078D, $A694  ; DDB
     dw $079B, $BED6  ; MDB
     dw $090F, $D001  ; Screen subpixel X position
@@ -2311,8 +2307,8 @@ preset_kpdr_maridia_escape_plasma:
     dw $0AFA, $007B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_maridia_escape_toilet_down_2:
-    dw #preset_kpdr_maridia_escape_plasma ; Maridia Escape: Plasma
+preset_zfackpdr_maridia_escape_toilet_down_2:
+    dw #preset_zfackpdr_maridia_escape_plasma ; Maridia Escape: Plasma
     dw $078D, $A6C4  ; DDB
     dw $079B, $BF05  ; MDB
     dw $090F, $8B00  ; Screen subpixel X position
@@ -2334,8 +2330,8 @@ preset_kpdr_maridia_escape_toilet_down_2:
     dw $D8BE, $00C5  ; Doors
     dw #$FFFF
 
-preset_kpdr_maridia_escape_hot_air_baloons:
-    dw #preset_kpdr_maridia_escape_toilet_down_2 ; Maridia Escape: Toilet Down
+preset_zfackpdr_maridia_escape_hot_air_baloons:
+    dw #preset_zfackpdr_maridia_escape_toilet_down_2 ; Maridia Escape: Toilet Down
     dw $078D, $A01C  ; DDB
     dw $079B, $B4B5  ; MDB
     dw $090F, $4000  ; Screen subpixel X position
@@ -2354,8 +2350,8 @@ preset_kpdr_maridia_escape_hot_air_baloons:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_maridia_escape_crab_hall:
-    dw #preset_kpdr_maridia_escape_hot_air_baloons ; Maridia Escape: Hot Air Baloons
+preset_zfackpdr_maridia_escape_crab_hall:
+    dw #preset_zfackpdr_maridia_escape_hot_air_baloons ; Maridia Escape: Hot Air Baloons
     dw $078D, $A100  ; DDB
     dw $079B, $B770  ; MDB
     dw $07F5, $0006  ; Music Track
@@ -2374,8 +2370,8 @@ preset_kpdr_maridia_escape_crab_hall:
     dw $D8BC, $A20E  ; Doors
     dw #$FFFF
 
-preset_kpdr_maridia_escape_shaktool_revisit:
-    dw #preset_kpdr_maridia_escape_crab_hall ; Maridia Escape: Crab Hall
+preset_zfackpdr_maridia_escape_shaktool_revisit:
+    dw #preset_zfackpdr_maridia_escape_crab_hall ; Maridia Escape: Crab Hall
     dw $078D, $9D7C  ; DDB
     dw $079B, $B1BF  ; MDB
     dw $07F5, $0005  ; Music Track
@@ -2389,8 +2385,8 @@ preset_kpdr_maridia_escape_shaktool_revisit:
     dw $0AF8, $2FFF  ; Samus subpixel X
     dw #$FFFF
 
-preset_kpdr_maridia_escape_brinstar_reentry:
-    dw #preset_kpdr_maridia_escape_shaktool_revisit ; Maridia Escape: Shaktool Revisit
+preset_zfackpdr_maridia_escape_brinstar_reentry:
+    dw #preset_zfackpdr_maridia_escape_shaktool_revisit ; Maridia Escape: Shaktool Revisit
     dw $078D, $9CA4  ; DDB
     dw $079B, $B10B  ; MDB
     dw $090F, $1C00  ; Screen subpixel X position
@@ -2404,8 +2400,8 @@ preset_kpdr_maridia_escape_brinstar_reentry:
     dw $0AF8, $2F7F  ; Samus subpixel X
     dw #$FFFF
 
-preset_kpdr_maridia_escape_grapple_lake_3:
-    dw #preset_kpdr_maridia_escape_brinstar_reentry ; Maridia Escape: Brinstar Reentry
+preset_zfackpdr_maridia_escape_grapple_lake_3:
+    dw #preset_zfackpdr_maridia_escape_brinstar_reentry ; Maridia Escape: Brinstar Reentry
     dw $078D, $8750  ; DDB
     dw $079B, $8FF0  ; MDB
     dw $07F3, $0012  ; Music Bank
@@ -2422,8 +2418,8 @@ preset_kpdr_maridia_escape_grapple_lake_3:
     dw $0AFA, $010B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_maridia_escape_red_tower_passthrough:
-    dw #preset_kpdr_maridia_escape_grapple_lake_3 ; Maridia Escape: Grapple Lake
+preset_zfackpdr_maridia_escape_red_tower_passthrough:
+    dw #preset_zfackpdr_maridia_escape_grapple_lake_3 ; Maridia Escape: Grapple Lake
     dw $078D, $84F8  ; DDB
     dw $079B, $904E  ; MDB
     dw $090F, $9000  ; Screen subpixel X position
@@ -2439,8 +2435,8 @@ preset_kpdr_maridia_escape_red_tower_passthrough:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_maridia_escape_enter_norfair:
-    dw #preset_kpdr_maridia_escape_red_tower_passthrough ; Maridia Escape: Red Tower Passthrough
+preset_zfackpdr_maridia_escape_enter_norfair:
+    dw #preset_zfackpdr_maridia_escape_red_tower_passthrough ; Maridia Escape: Red Tower Passthrough
     dw $078D, $8870  ; DDB
     dw $079B, $90E3  ; MDB
     dw $090F, $B000  ; Screen subpixel X position
@@ -2452,8 +2448,8 @@ preset_kpdr_maridia_escape_enter_norfair:
     dw $0AFA, $006B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_maridia_escape_lava_dive:
-    dw #preset_kpdr_maridia_escape_enter_norfair ; Maridia Escape: Enter Norfair
+preset_zfackpdr_maridia_escape_lava_dive:
+    dw #preset_zfackpdr_maridia_escape_enter_norfair ; Maridia Escape: Enter Norfair
     dw $078D, $935C  ; DDB
     dw $079B, $9DC2  ; MDB
     dw $07F3, $0015  ; Music Bank
@@ -2473,8 +2469,8 @@ preset_kpdr_maridia_escape_lava_dive:
     dw $D8B4, $2642  ; Doors
     dw #$FFFF
 
-preset_kpdr_lower_norfair_ln_main_hall:
-    dw #preset_kpdr_maridia_escape_lava_dive ; Maridia Escape: Lava Dive
+preset_zfackpdr_lower_norfair_ln_main_hall:
+    dw #preset_zfackpdr_maridia_escape_lava_dive ; Maridia Escape: Lava Dive
     dw $078D, $9158  ; DDB
     dw $079B, $989A  ; MDB
     dw $07F3, $0018  ; Music Bank
@@ -2494,8 +2490,8 @@ preset_kpdr_lower_norfair_ln_main_hall:
     dw $0AFC, $0000  ; Samus subpixel Y
     dw #$FFFF
 
-preset_kpdr_lower_norfair_bubble_hopper_madness:
-    dw #preset_kpdr_lower_norfair_ln_main_hall ; Lower Norfair: LN Main Hall
+preset_zfackpdr_lower_norfair_bubble_hopper_madness:
+    dw #preset_zfackpdr_lower_norfair_ln_main_hall ; Lower Norfair: LN Main Hall
     dw $078D, $8EAC  ; DDB
     dw $090F, $9401  ; Screen subpixel X position
     dw $0911, $0300  ; Screen X position in pixels
@@ -2516,8 +2512,8 @@ preset_kpdr_lower_norfair_bubble_hopper_madness:
     dw $D8B6, $4003  ; Doors
     dw #$FFFF
 
-preset_kpdr_lower_norfair_rising_kihunters:
-    dw #preset_kpdr_lower_norfair_bubble_hopper_madness ; Lower Norfair: Bubble Hopper Madness
+preset_zfackpdr_lower_norfair_rising_kihunters:
+    dw #preset_zfackpdr_lower_norfair_bubble_hopper_madness ; Lower Norfair: Bubble Hopper Madness
     dw $078D, $8E94  ; DDB
     dw $079B, $9869  ; MDB
     dw $090F, $4000  ; Screen subpixel X position
@@ -2536,8 +2532,8 @@ preset_kpdr_lower_norfair_rising_kihunters:
     dw $0AFC, $FFFF  ; Samus subpixel Y
     dw #$FFFF
 
-preset_kpdr_lower_norfair_ball_maze:
-    dw #preset_kpdr_lower_norfair_rising_kihunters ; Lower Norfair: Rising Kihunters
+preset_zfackpdr_lower_norfair_ball_maze:
+    dw #preset_zfackpdr_lower_norfair_rising_kihunters ; Lower Norfair: Rising Kihunters
     dw $078D, $8E58  ; DDB
     dw $079B, $9ABB  ; MDB
     dw $090F, $A000  ; Screen subpixel X position
@@ -2554,8 +2550,8 @@ preset_kpdr_lower_norfair_ball_maze:
     dw $D8B6, $4023  ; Doors
     dw #$FFFF
 
-preset_kpdr_lower_norfair_dragon_ruins:
-    dw #preset_kpdr_lower_norfair_ball_maze ; Lower Norfair: Ball Maze
+preset_zfackpdr_lower_norfair_dragon_ruins:
+    dw #preset_zfackpdr_lower_norfair_ball_maze ; Lower Norfair: Ball Maze
     dw $078D, $8F9C  ; DDB
     dw $079B, $9BF6  ; MDB
     dw $090F, $F800  ; Screen subpixel X position
@@ -2573,8 +2569,8 @@ preset_kpdr_lower_norfair_dragon_ruins:
     dw $0AFA, $028B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_lower_norfair_monkey_bars:
-    dw #preset_kpdr_lower_norfair_dragon_ruins ; Lower Norfair: Dragon Ruins
+preset_zfackpdr_lower_norfair_monkey_bars:
+    dw #preset_zfackpdr_lower_norfair_dragon_ruins ; Lower Norfair: Dragon Ruins
     dw $078D, $90B0  ; DDB
     dw $079B, $9C52  ; MDB
     dw $090F, $5000  ; Screen subpixel X position
@@ -2595,8 +2591,8 @@ preset_kpdr_lower_norfair_monkey_bars:
     dw $D8B6, $4223  ; Doors
     dw #$FFFF
 
-preset_kpdr_lower_norfair_crumble_lobby:
-    dw #preset_kpdr_lower_norfair_monkey_bars ; Lower Norfair: Monkey Bars
+preset_zfackpdr_lower_norfair_crumble_lobby:
+    dw #preset_zfackpdr_lower_norfair_monkey_bars ; Lower Norfair: Monkey Bars
     dw $078D, $9050  ; DDB
     dw $079B, $9B96  ; MDB
     dw $090F, $6000  ; Screen subpixel X position
@@ -2613,8 +2609,8 @@ preset_kpdr_lower_norfair_crumble_lobby:
     dw $0AFC, $FFFF  ; Samus subpixel Y
     dw #$FFFF
 
-preset_kpdr_lower_norfair_metal_ninja_pirates:
-    dw #preset_kpdr_lower_norfair_crumble_lobby ; Lower Norfair: Crumble Lobby
+preset_zfackpdr_lower_norfair_metal_ninja_pirates:
+    dw #preset_zfackpdr_lower_norfair_crumble_lobby ; Lower Norfair: Crumble Lobby
     dw $078D, $9038  ; DDB
     dw $079B, $9B65  ; MDB
     dw $090F, $5000  ; Screen subpixel X position
@@ -2631,8 +2627,8 @@ preset_kpdr_lower_norfair_metal_ninja_pirates:
     dw $D8B6, $42A3  ; Doors
     dw #$FFFF
 
-preset_kpdr_lower_norfair_ridley_entrance:
-    dw #preset_kpdr_lower_norfair_metal_ninja_pirates ; Lower Norfair: Metal Ninja Pirates
+preset_zfackpdr_lower_norfair_ridley_entrance:
+    dw #preset_zfackpdr_lower_norfair_metal_ninja_pirates ; Lower Norfair: Metal Ninja Pirates
     dw $078D, $9020  ; DDB
     dw $079B, $9C83  ; MDB
     dw $090F, $CFFF  ; Screen subpixel X position
@@ -2648,8 +2644,8 @@ preset_kpdr_lower_norfair_ridley_entrance:
     dw $D8B6, $4AA3  ; Doors
     dw #$FFFF
 
-preset_kpdr_lower_norfair_ridley:
-    dw #preset_kpdr_lower_norfair_ridley_entrance ; Lower Norfair: Ridley Entrance
+preset_zfackpdr_lower_norfair_ridley:
+    dw #preset_zfackpdr_lower_norfair_ridley_entrance ; Lower Norfair: Ridley Entrance
     dw $078D, $9104  ; DDB
     dw $079B, $9CDD  ; MDB
     dw $07F5, $0004  ; Music Track
@@ -2665,8 +2661,8 @@ preset_kpdr_lower_norfair_ridley:
     dw $0AF8, $C000  ; Samus subpixel X
     dw #$FFFF
 
-preset_kpdr_ln_escape_ridley_escape:
-    dw #preset_kpdr_lower_norfair_ridley ; Lower Norfair: Ridley
+preset_zfackpdr_ln_escape_ridley_escape:
+    dw #preset_zfackpdr_lower_norfair_ridley ; Lower Norfair: Ridley
     dw $078D, $8E10  ; DDB
     dw $079B, $9BC3  ; MDB
     dw $07F3, $0024  ; Music Bank
@@ -2689,8 +2685,8 @@ preset_kpdr_ln_escape_ridley_escape:
     dw $D8B4, $A642  ; Doors
     dw #$FFFF
 
-preset_kpdr_ln_escape_crumble_lobby_revisit:
-    dw #preset_kpdr_ln_escape_ridley_escape ; LN Escape: Ridley Escape
+preset_zfackpdr_ln_escape_crumble_lobby_revisit:
+    dw #preset_zfackpdr_ln_escape_ridley_escape ; LN Escape: Ridley Escape
     dw $078D, $8FFC  ; DDB
     dw $079B, $9B96  ; MDB
     dw $07F3, $0018  ; Music Bank
@@ -2708,8 +2704,8 @@ preset_kpdr_ln_escape_crumble_lobby_revisit:
     dw $0AFA, $038B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_ln_escape_ln_main_hall_revisit:
-    dw #preset_kpdr_ln_escape_crumble_lobby_revisit ; LN Escape: Crumble Lobby Revisit
+preset_zfackpdr_ln_escape_ln_main_hall_revisit:
+    dw #preset_zfackpdr_ln_escape_crumble_lobby_revisit ; LN Escape: Crumble Lobby Revisit
     dw $078D, $9014  ; DDB
     dw $079B, $9B38  ; MDB
     dw $090F, $8000  ; Screen subpixel X position
@@ -2722,8 +2718,8 @@ preset_kpdr_ln_escape_ln_main_hall_revisit:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_ln_escape_lava_dive_revisit:
-    dw #preset_kpdr_ln_escape_ln_main_hall_revisit ; LN Escape: LN Main Hall Revisit
+preset_zfackpdr_ln_escape_lava_dive_revisit:
+    dw #preset_zfackpdr_ln_escape_ln_main_hall_revisit ; LN Escape: LN Main Hall Revisit
     dw $078D, $8E7C  ; DDB
     dw $079B, $9D37  ; MDB
     dw $07F5, $0003  ; Music Track
@@ -2739,8 +2735,8 @@ preset_kpdr_ln_escape_lava_dive_revisit:
     dw $0AFA, $018B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_ln_escape_norfair_lobby_revisit:
-    dw #preset_kpdr_ln_escape_lava_dive_revisit ; LN Escape: Lava Dive Revisit
+preset_zfackpdr_ln_escape_norfair_lobby_revisit:
+    dw #preset_zfackpdr_ln_escape_lava_dive_revisit ; LN Escape: Lava Dive Revisit
     dw $078D, $9170  ; DDB
     dw $079B, $9D93  ; MDB
     dw $07F3, $0015  ; Music Bank
@@ -2757,8 +2753,8 @@ preset_kpdr_ln_escape_norfair_lobby_revisit:
     dw $0AFA, $028B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_ln_escape_red_tower_revisit:
-    dw #preset_kpdr_ln_escape_norfair_lobby_revisit ; LN Escape: Norfair Lobby Revisit
+preset_zfackpdr_ln_escape_red_tower_revisit:
+    dw #preset_zfackpdr_ln_escape_norfair_lobby_revisit ; LN Escape: Norfair Lobby Revisit
     dw $078D, $8D80  ; DDB
     dw $079B, $9FCF  ; MDB
     dw $090F, $7000  ; Screen subpixel X position
@@ -2771,8 +2767,8 @@ preset_kpdr_ln_escape_red_tower_revisit:
     dw $0AFA, $016B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_ln_escape_red_brin_elevator_2:
-    dw #preset_kpdr_ln_escape_red_tower_revisit ; LN Escape: Red Tower Revisit
+preset_zfackpdr_ln_escape_red_brin_elevator_2:
+    dw #preset_zfackpdr_ln_escape_red_tower_revisit ; LN Escape: Red Tower Revisit
     dw $078D, $8888  ; DDB
     dw $079B, $9110  ; MDB
     dw $07F3, $0012  ; Music Bank
@@ -2790,8 +2786,8 @@ preset_kpdr_ln_escape_red_brin_elevator_2:
     dw $0AFA, $00AB  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_ln_escape_canonball_revisit:
-    dw #preset_kpdr_ln_escape_red_brin_elevator_2 ; LN Escape: Red Brin Elevator
+preset_zfackpdr_ln_escape_canonball_revisit:
+    dw #preset_zfackpdr_ln_escape_red_brin_elevator_2 ; LN Escape: Red Brin Elevator
     dw $078D, $8930  ; DDB
     dw $079B, $8194  ; MDB
     dw $07F5, $0003  ; Music Track
@@ -2811,8 +2807,8 @@ preset_kpdr_ln_escape_canonball_revisit:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_ln_escape_old_mb_revisit:
-    dw #preset_kpdr_ln_escape_canonball_revisit ; LN Escape: Canonball Revisit
+preset_zfackpdr_ln_escape_old_mb_revisit:
+    dw #preset_zfackpdr_ln_escape_canonball_revisit ; LN Escape: Canonball Revisit
     dw $078D, $821C  ; DDB
     dw $079B, $8420  ; MDB
     dw $07F3, $0009  ; Music Bank
@@ -2828,8 +2824,8 @@ preset_kpdr_ln_escape_old_mb_revisit:
     dw $0AFA, $006B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_ln_escape_g4:
-    dw #preset_kpdr_ln_escape_old_mb_revisit ; LN Escape: Old MB Revisit
+preset_zfackpdr_ln_escape_g4:
+    dw #preset_zfackpdr_ln_escape_old_mb_revisit ; LN Escape: Old MB Revisit
     dw $078D, $8168  ; DDB
     dw $079B, $80AD  ; MDB
     dw $07F5, $0003  ; Music Track
@@ -2844,8 +2840,8 @@ preset_kpdr_ln_escape_g4:
     dw $0AFA, $00BB  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_tourian_enter_tourian:
-    dw #preset_kpdr_ln_escape_g4 ; LN Escape: G4
+preset_zfackpdr_tourian_enter_tourian:
+    dw #preset_zfackpdr_ln_escape_g4 ; LN Escape: G4
     dw $078D, $8444  ; DDB
     dw $079B, $81C3  ; MDB
     dw $07F5, $0006  ; Music Track
@@ -2865,8 +2861,8 @@ preset_kpdr_tourian_enter_tourian:
     dw $D8B2, $EF6E  ; Doors
     dw #$FFFF
 
-preset_kpdr_tourian_acid_spark:
-    dw #preset_kpdr_tourian_enter_tourian ; Tourian: Enter Tourian
+preset_zfackpdr_tourian_acid_spark:
+    dw #preset_zfackpdr_tourian_enter_tourian ; Tourian: Enter Tourian
     dw $078D, $A9C4  ; DDB
     dw $079B, $C521  ; MDB
     dw $07F3, $001E  ; Music Bank
@@ -2884,8 +2880,8 @@ preset_kpdr_tourian_acid_spark:
     dw $0AFA, $00DB  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_tourian_pirate_debocle_:
-    dw #preset_kpdr_tourian_acid_spark ; Tourian: Acid Spark
+preset_zfackpdr_tourian_pirate_debocle_:
+    dw #preset_zfackpdr_tourian_acid_spark ; Tourian: Acid Spark
     dw $078D, $A9B8  ; DDB
     dw $079B, $C4D3  ; MDB
     dw $090F, $9000  ; Screen subpixel X position
@@ -2900,8 +2896,8 @@ preset_kpdr_tourian_pirate_debocle_:
     dw $0AFA, $00C9  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_tourian_false_lava:
-    dw #preset_kpdr_tourian_pirate_debocle_ ; Tourian: Pirate Debocle 
+preset_zfackpdr_tourian_false_lava:
+    dw #preset_zfackpdr_tourian_pirate_debocle_ ; Tourian: Pirate Debocle 
     dw $078D, $A97C  ; DDB
     dw $079B, $C464  ; MDB
     dw $090F, $5100  ; Screen subpixel X position
@@ -2916,8 +2912,8 @@ preset_kpdr_tourian_false_lava:
     dw $0AFA, $029B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_tourian_generator:
-    dw #preset_kpdr_tourian_false_lava ; Tourian: False Lava
+preset_zfackpdr_tourian_generator:
+    dw #preset_zfackpdr_tourian_false_lava ; Tourian: False Lava
     dw $078D, $A934  ; DDB
     dw $079B, $C3D6  ; MDB
     dw $090F, $8400  ; Screen subpixel X position
@@ -2932,8 +2928,8 @@ preset_kpdr_tourian_generator:
     dw $0AFA, $04BB  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_tourian_enter_night:
-    dw #preset_kpdr_tourian_generator ; Tourian: Generator
+preset_zfackpdr_tourian_enter_night:
+    dw #preset_zfackpdr_tourian_generator ; Tourian: Generator
     dw $078D, $AA60  ; DDB
     dw $079B, $C223  ; MDB
     dw $07F5, $0004  ; Music Track
@@ -2953,8 +2949,8 @@ preset_kpdr_tourian_enter_night:
     dw $D82C, $0403  ; Bosses
     dw #$FFFF
 
-preset_kpdr_tourian_first_metroid:
-    dw #preset_kpdr_tourian_enter_night ; Tourian: Enter Night
+preset_zfackpdr_tourian_first_metroid:
+    dw #preset_zfackpdr_tourian_enter_night ; Tourian: Enter Night
     dw $078D, $A874  ; DDB
     dw $079B, $C24E  ; MDB
     dw $07F3, $0045  ; Music Bank
@@ -2970,8 +2966,8 @@ preset_kpdr_tourian_first_metroid:
     dw $0AFA, $028B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_tourian_metroid_platforms:
-    dw #preset_kpdr_tourian_first_metroid ; Tourian: First Metroid
+preset_zfackpdr_tourian_metroid_platforms:
+    dw #preset_zfackpdr_tourian_first_metroid ; Tourian: First Metroid
     dw $078D, $A880  ; DDB
     dw $079B, $C279  ; MDB
     dw $090F, $A000  ; Screen subpixel X position
@@ -2989,8 +2985,8 @@ preset_kpdr_tourian_metroid_platforms:
     dw $D8BE, $08C5  ; Doors
     dw #$FFFF
 
-preset_kpdr_tourian_metroid_platforms_loop:
-    dw #preset_kpdr_tourian_metroid_platforms ; Tourian: Metroid Platforms
+preset_zfackpdr_tourian_metroid_platforms_loop:
+    dw #preset_zfackpdr_tourian_metroid_platforms ; Tourian: Metroid Platforms
     dw $078D, $A8B0  ; DDB
     dw $079B, $C2D3  ; MDB
     dw $090F, $C000  ; Screen subpixel X position
@@ -3007,8 +3003,8 @@ preset_kpdr_tourian_metroid_platforms_loop:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_tourian_metroid_hall_and_tower:
-    dw #preset_kpdr_tourian_metroid_platforms_loop ; Tourian: Metroid Platforms Loop
+preset_zfackpdr_tourian_metroid_hall_and_tower:
+    dw #preset_zfackpdr_tourian_metroid_platforms_loop ; Tourian: Metroid Platforms Loop
     dw $078D, $A898  ; DDB
     dw $079B, $C300  ; MDB
     dw $0911, $0000  ; Screen X position in pixels
@@ -3025,8 +3021,8 @@ preset_kpdr_tourian_metroid_hall_and_tower:
     dw $D8BE, $58C5  ; Doors
     dw #$FFFF
 
-preset_kpdr_tourian_metroid_toilet:
-    dw #preset_kpdr_tourian_metroid_hall_and_tower ; Tourian: Metroid Hall and Tower
+preset_zfackpdr_tourian_metroid_toilet:
+    dw #preset_zfackpdr_tourian_metroid_hall_and_tower ; Tourian: Metroid Hall and Tower
     dw $078D, $A8F8  ; DDB
     dw $079B, $C3D6  ; MDB
     dw $090F, $0000  ; Screen subpixel X position
@@ -3044,8 +3040,8 @@ preset_kpdr_tourian_metroid_toilet:
     dw $D8C0, $0002  ; Doors
     dw #$FFFF
 
-preset_kpdr_mother_brain_baby_skip:
-    dw #preset_kpdr_tourian_metroid_toilet ; Tourian: Metroid Toilet
+preset_zfackpdr_mother_brain_baby_skip:
+    dw #preset_zfackpdr_tourian_metroid_toilet ; Tourian: Metroid Toilet
     dw $078D, $AA30  ; DDB
     dw $079B, $C6E2  ; MDB
     dw $07F5, $0006  ; Music Track
@@ -3062,8 +3058,8 @@ preset_kpdr_mother_brain_baby_skip:
     dw $D8C0, $00A2  ; Doors
     dw #$FFFF
 
-preset_kpdr_mother_brain_sandy_elevator:
-    dw #preset_kpdr_mother_brain_baby_skip ; Mother Brain: Baby Skip
+preset_zfackpdr_mother_brain_sandy_elevator:
+    dw #preset_zfackpdr_mother_brain_baby_skip ; Mother Brain: Baby Skip
     dw $078D, $AAD8  ; DDB
     dw $079B, $C784  ; MDB
     dw $07F3, $001E  ; Music Bank
@@ -3078,8 +3074,8 @@ preset_kpdr_mother_brain_sandy_elevator:
     dw $0AFA, $005B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_mother_brain_ball_maze_2:
-    dw #preset_kpdr_mother_brain_sandy_elevator ; Mother Brain: Sandy Elevator
+preset_zfackpdr_mother_brain_ball_maze_2:
+    dw #preset_zfackpdr_mother_brain_sandy_elevator ; Mother Brain: Sandy Elevator
     dw $078D, $AAE4  ; DDB
     dw $079B, $C80F  ; MDB
     dw $090F, $3000  ; Screen subpixel X position
@@ -3093,8 +3089,8 @@ preset_kpdr_mother_brain_ball_maze_2:
     dw $0AFA, $00B9  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_mother_brain_mother_brain_2:
-    dw #preset_kpdr_mother_brain_ball_maze_2 ; Mother Brain: Ball Maze
+preset_zfackpdr_mother_brain_mother_brain_2:
+    dw #preset_zfackpdr_mother_brain_ball_maze_2 ; Mother Brain: Ball Maze
     dw $078D, $AA00  ; DDB
     dw $079B, $C19A  ; MDB
     dw $090F, $F400  ; Screen subpixel X position
@@ -3111,31 +3107,58 @@ preset_kpdr_mother_brain_mother_brain_2:
     dw $D8BE, $D9C5  ; Doors
     dw #$FFFF
 
-preset_kpdr_mother_brain_escape:
-    dw #preset_kpdr_mother_brain_mother_brain_2 ; Mother Brain: Mother Brain
+preset_zfackpdr_mother_brain_mother_brain_2_2:
+    dw #preset_zfackpdr_mother_brain_mother_brain_2 ; Mother Brain: Mother Brain
     dw $078D, $A820  ; DDB
     dw $079B, $C1CB  ; MDB
+    dw $07F3, $0021  ; Music Bank
+    dw $07F5, $0000  ; Music Track
+    dw $090F, $C000  ; Screen subpixel X position
+    dw $0913, $D000  ; Screen subpixel Y position
+    dw $0915, $0000  ; Screen Y position in pixels
+    dw $0919, $0000  ; Layer 2 Y position
+    dw $09C2, $01C9  ; Health
+    dw $09C6, $0019  ; Missiles
+    dw $09CA, $0009  ; Supers
+    dw $0AF6, $00E9  ; Samus X
+    dw $0AF8, $BFFF  ; Samus subpixel X
+    dw $0AFA, $00C3  ; Samus Y
+    dw $D820, $3FC5  ; Events
+    dw #$FFFF
+
+preset_zfackpdr_mother_brain_mother_brain_3:
+    dw #preset_zfackpdr_mother_brain_mother_brain_2_2 ; Mother Brain: Mother Brain 2
+    dw $07F3, $0048  ; Music Bank
+    dw $07F5, $0005  ; Music Track
+    dw $090F, $F000  ; Screen subpixel X position
+    dw $0913, $8C00  ; Screen subpixel Y position
+    dw $09A6, $1009  ; Beams
+    dw $09C2, $0257  ; Health
+    dw $09C6, $0000  ; Missiles
+    dw $09CA, $0000  ; Supers
+    dw $09CE, $0000  ; Pbs
+    dw $0A1C, $0006  ; Samus position/state
+    dw $0A76, $8000  ; Hyper beam
+    dw $0AF6, $00CD  ; Samus X
+    dw $0AF8, $A600  ; Samus subpixel X
+    dw #$FFFF
+
+preset_zfackpdr_mother_brain_escape:
+    dw #preset_zfackpdr_mother_brain_mother_brain_3 ; Mother Brain: Mother Brain 3
     dw $07F3, $0024  ; Music Bank
     dw $07F5, $0007  ; Music Track
     dw $090F, $E000  ; Screen subpixel X position
     dw $0913, $9C00  ; Screen subpixel Y position
-    dw $0915, $0000  ; Screen Y position in pixels
-    dw $0919, $0000  ; Layer 2 Y position
-    dw $09A6, $1009  ; Beams
     dw $09C2, $021B  ; Health
-    dw $09C6, $0000  ; Missiles
-    dw $09CA, $0000  ; Supers
-    dw $09CE, $0000  ; Pbs
-    dw $0A76, $8000  ; Hyper beam
+    dw $0A1C, $0002  ; Samus position/state
     dw $0AF6, $0031  ; Samus X
     dw $0AF8, $4000  ; Samus subpixel X
-    dw $0AFA, $00C3  ; Samus Y
     dw $D820, $7FC5  ; Events
     dw $D82C, $0603  ; Bosses
     dw #$FFFF
 
-preset_kpdr_mother_brain_ball_maze_revisit:
-    dw #preset_kpdr_mother_brain_escape ; Mother Brain: Escape
+preset_zfackpdr_mother_brain_ball_maze_revisit:
+    dw #preset_zfackpdr_mother_brain_escape ; Mother Brain: Escape
     dw $078D, $A868  ; DDB
     dw $079B, $C613  ; MDB
     dw $090F, $9000  ; Screen subpixel X position
@@ -3149,8 +3172,8 @@ preset_kpdr_mother_brain_ball_maze_revisit:
     dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_mother_brain_tourian_elevator_spark:
-    dw #preset_kpdr_mother_brain_ball_maze_revisit ; Mother Brain: Ball Maze Revisit
+preset_zfackpdr_mother_brain_tourian_elevator_spark:
+    dw #preset_zfackpdr_mother_brain_ball_maze_revisit ; Mother Brain: Ball Maze Revisit
     dw $078D, $A8E0  ; DDB
     dw $079B, $C83E  ; MDB
     dw $090F, $4000  ; Screen subpixel X position
@@ -3165,8 +3188,8 @@ preset_kpdr_mother_brain_tourian_elevator_spark:
     dw $0AFA, $00AB  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_mother_brain_pirate_frenzy:
-    dw #preset_kpdr_mother_brain_tourian_elevator_spark ; Mother Brain: Tourian Elevator Spark
+preset_zfackpdr_mother_brain_pirate_frenzy:
+    dw #preset_zfackpdr_mother_brain_tourian_elevator_spark ; Mother Brain: Tourian Elevator Spark
     dw $078D, $83F0  ; DDB
     dw $079B, $87F9  ; MDB
     dw $090F, $8000  ; Screen subpixel X position
@@ -3183,8 +3206,8 @@ preset_kpdr_mother_brain_pirate_frenzy:
     dw $0AFA, $009B  ; Samus Y
     dw #$FFFF
 
-preset_kpdr_mother_brain_purple_stairs_revisit_2:
-    dw #preset_kpdr_mother_brain_pirate_frenzy ; Mother Brain: Pirate Frenzy
+preset_zfackpdr_mother_brain_purple_stairs_revisit_2:
+    dw #preset_zfackpdr_mother_brain_pirate_frenzy ; Mother Brain: Pirate Frenzy
     dw $078D, $8390  ; DDB
     dw $079B, $86D2  ; MDB
     dw $090F, $1000  ; Screen subpixel X position

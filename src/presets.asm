@@ -118,7 +118,7 @@ clear_all_enemies:
     TAX : LDA $0F86,X : BIT #$8400 : BNE .done_clearing
     ORA #$0200 : STA $0F86,X
   .done_clearing
-    TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .loop
+    TXA : CLC : ADC #$0040 : CMP #$0800 : BNE .loop
     STZ $0E52 ; unlock grey doors that require killing enemies
     RTS
 }
@@ -315,7 +315,7 @@ category_preset_load:
 }
 
 category_preset_data_table:
-    dl preset_kpdr_bombs_ship
+    dl preset_zfackpdr_bombs_ship
 
 print pc, " presets bank82 end"
 warnpc $82FE00
@@ -680,13 +680,13 @@ warnpc $80F600 ; save.asm
 ; -------------------
 
 ; Preset data/menus can be anywhere in the rom, even in separate banks
-org !ORG_PRESETS_DATA
-print pc, " preset data start"
-  incsrc presets/kpdr_any_croc_data.asm
-print pc, " preset data end"
-
 org !ORG_PRESETS_MENU
 print pc, " preset menu start"
-  incsrc presets/kpdr_any_croc_menu.asm
+  incsrc presets/zfackpdr_menu.asm
 print pc, " preset menu end"
+
+org !ORG_PRESETS_DATA
+print pc, " preset data start"
+  incsrc presets/zfackpdr_data.asm
+print pc, " preset data end"
 
