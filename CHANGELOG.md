@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.3.9]  Cover all enemy slots when killing enemies
 * [2.5.3.8]  Preserve HUD timers while menu is opened (one frame still added)
 * [2.5.3.7]  Added an option to adjust InfoHUD timers when fanfares disabled
 * [2.5.3.6]  Fixed Mini-Kraid crying
