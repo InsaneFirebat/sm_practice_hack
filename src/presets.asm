@@ -121,7 +121,7 @@ clear_all_enemies:
     TAX : LDA $0F86,X : BIT #$8400 : BNE .done_clearing
     ORA #$0200 : STA $0F86,X
   .done_clearing
-    TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .loop
+    TXA : CLC : ADC #$0040 : CMP #$0800 : BNE .loop
     STZ $0E52 ; unlock grey doors that require killing enemies
     RTS
 }
