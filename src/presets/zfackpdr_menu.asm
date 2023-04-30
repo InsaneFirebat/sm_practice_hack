@@ -15,7 +15,8 @@ PresetsMenuZfackpdr:
     dw #presets_goto_zfackpdr_tourian
     dw #presets_goto_zfackpdr_mother_brain
     dw #$0000
-    %cm_header("PRESETS FOR ZFACKPDR")
+    %cm_header("ANY% KPDR CROC")
+    %cm_header("PRESETS BY CHEESYBOATRIDE")
 
 presets_goto_zfackpdr_bombs:
     %cm_submenu("Bombs", #presets_submenu_zfackpdr_bombs)
