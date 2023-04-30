@@ -352,7 +352,7 @@ mm_goto_ctrlsmenu:
 ; -------------------
 
 PresetsMenu:
- ;   dw #presets_goto_select_preset_category
+;    dw #presets_goto_select_preset_category
     dw #presets_current
     dw #$FFFF
     dw #presets_custom_preset_slot
@@ -466,11 +466,11 @@ endif
 
 if !FEATURE_REDESIGN
 precat_redesign:
-    %cm_jsr("Redesign Any%", #action_select_preset_category, #$0000)
+    %cm_jsl("Redesign Any%", #action_select_preset_category, #$0000)
 else
 ; let it be for now, decent placeholder
 precat_redesign:
-    %cm_jsr("Redesign Any%", #action_select_preset_category, #$0000)
+    %cm_jsl("Redesign Any%", #action_select_preset_category, #$0000)
 endif
 
 action_select_preset_category:
