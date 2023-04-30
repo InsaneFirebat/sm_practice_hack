@@ -343,7 +343,7 @@ mm_goto_ctrlsmenu:
 ; -------------------
 
 PresetsMenu:
- ;   dw #presets_goto_select_preset_category
+;    dw #presets_goto_select_preset_category
     dw #presets_current
     dw #$FFFF
     dw #presets_custom_preset_slot
@@ -1476,7 +1476,7 @@ misc_killenemies:
     TAX : LDA $0F86,X : BIT #$8400 : BNE .next_enemy
     ORA #$0200 : STA $0F86,X
   .next_enemy
-    TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
+    TXA : CLC : ADC #$0040 : CMP #$0800 : BNE .kill_loop
     LDA #$0009 : JSL !SFX_LIB2 ; enemy killed
     RTL
 
