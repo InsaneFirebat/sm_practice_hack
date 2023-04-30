@@ -2078,9 +2078,9 @@ preset_zfackpdr_space_jump_crumble_gap_scam:
     dw $09CE, $0004  ; Pbs
     dw $0A1C, $0028  ; Samus position/state
     dw $0A1E, $0504  ; More position/state
-    dw $0AF6, $0062  ; Samus X
+    dw $0AF6, $0051  ; Samus X
     dw $0AF8, $5800  ; Samus subpixel X
-    dw $0AFA, $00C0  ; Samus Y
+    dw $0AFA, $008B  ; Samus Y
     dw #$FFFF
 
 preset_zfackpdr_space_jump_toilet_up:
