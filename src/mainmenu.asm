@@ -438,7 +438,7 @@ presets_current:
     dl #!sram_preset_category
     dw #.routine
     db #$28, "CURRENT PRESET", #$FF
-        db #$28, "       ANY%", #$FF
+    db #$28, "       ANY%", #$FF
     db #$FF
   .routine
     LDA #$0000 : STA !sram_last_preset
@@ -1379,7 +1379,7 @@ misc_killenemies:
     TAX : LDA $0F86,X : BIT #$8400 : BNE .next_enemy
     ORA #$0200 : STA $0F86,X
   .next_enemy
-    TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
+    TXA : CLC : ADC #$0040 : CMP #$0800 : BNE .kill_loop
     LDA #$0009 : JSL !SFX_LIB2 ; enemy killed
     RTL
 
