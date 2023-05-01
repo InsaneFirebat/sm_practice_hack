@@ -2829,6 +2829,8 @@ RngMenu:
     dw #rng_goto_phanmenu
     dw #$FFFF
     dw #rng_botwoon_rng
+    dw #rng_botwoon_rng_2
+    dw #rng_botwoon_spit
     dw #$FFFF
     dw #rng_draygon_rng_right
     dw #rng_draygon_rng_left
@@ -3068,6 +3070,38 @@ rng_botwoon_rng:
     ; possible values are $01, $09, $11, $19
     DEC : ASL #3 : INC
 +   STA !ram_botwoon_rng
+    RTL
+
+rng_botwoon_rng_2:
+    dw !ACTION_CHOICE
+    dl #!ram_cm_botwoon_rng_2
+    dw #.routine
+    db #$28, "Botwoon 2nd+", #$FF
+    db #$28, "     RANDOM", #$FF
+    db #$28, "       LEFT", #$FF
+    db #$28, "       DOWN", #$FF
+    db #$28, "      RIGHT", #$FF
+    db #$28, "       LEFT", #$FF
+    db #$FF
+  .routine
+    LDA !ram_cm_botwoon_rng_2 : BEQ +
+    ; possible values are $01, $09, $11, $19
+    DEC : ASL #3 : INC
++   STA !ram_botwoon_rng_2
+    RTL
+
+rng_botwoon_spit:
+    dw !ACTION_CHOICE
+    dl #!ram_cm_botwoon_spit
+    dw #.routine
+    db #$28, "Botwoon Spit", #$FF
+    db #$28, "     RANDOM", #$FF
+    db #$28, " NEVER SPIT", #$FF
+    db #$28, "ALWAYS SPIT", #$FF
+    db #$FF
+  .routine
+    ; 0-4 = no spit, 6-E = spit
+    LDA !ram_cm_botwoon_spit : ASL #2 : STA !ram_botwoon_spit
     RTL
 
 rng_draygon_rng_right:
