@@ -3081,7 +3081,7 @@ rng_botwoon_rng_2:
     db #$28, "       LEFT", #$FF
     db #$28, "       DOWN", #$FF
     db #$28, "      RIGHT", #$FF
-    db #$28, "       LEFT", #$FF
+    db #$28, "         UP", #$FF
     db #$FF
   .routine
     LDA !ram_cm_botwoon_rng_2 : BEQ +
