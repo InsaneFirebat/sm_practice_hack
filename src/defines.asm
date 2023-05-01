@@ -7,8 +7,8 @@
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 5
 !VERSION_BUILD = 3
-!VERSION_REV_1 = 0
-!VERSION_REV_2 = 9
+!VERSION_REV_1 = 1
+!VERSION_REV_2 = 0
 
 
 ; ---------
@@ -162,9 +162,10 @@
 
 !ram_baby_rng = !WRAM_START+$F4
 !ram_kraid_wait_rng = !WRAM_START+$F6
-!ram_botwoon_rng_2 = !WRAM_START+$F8
-!ram_botwoon_spit = !WRAM_START+$FA
-; FREE SPACE ^ up to $FE
+!ram_botwoon_first = !WRAM_START+$F8
+!ram_botwoon_hidden = !WRAM_START+$FA
+!ram_botwoon_second = !WRAM_START+$FC
+!ram_botwoon_spit = !WRAM_START+$FE
 
 !ram_slowdown_mode = $7EFFFE ; Bank $7E required
 
@@ -199,13 +200,15 @@
 !ram_cm_ctrl_last_input = !WRAM_MENU_START+$38
 !ram_cm_ctrl_assign = !WRAM_MENU_START+$3A
 !ram_cm_ctrl_swap = !WRAM_MENU_START+$3C
-!ram_cm_botwoon_rng = !WRAM_MENU_START+$3E
 
-!ram_cm_slowdown_mode = !WRAM_MENU_START+$40
-!ram_cm_slowdown_frames = !WRAM_MENU_START+$42
+!ram_cm_slowdown_mode = !WRAM_MENU_START+$3E
+!ram_cm_slowdown_frames = !WRAM_MENU_START+$40
 
-!ram_cm_botwoon_rng_2 = !WRAM_MENU_START+$44
-!ram_cm_botwoon_spit = !WRAM_MENU_START+$46
+!ram_cm_botwoon_rng = !WRAM_MENU_START+$42
+!ram_cm_botwoon_first = !WRAM_MENU_START+$44
+!ram_cm_botwoon_hidden = !WRAM_MENU_START+$46
+!ram_cm_botwoon_second = !WRAM_MENU_START+$48
+!ram_cm_botwoon_spit = !WRAM_MENU_START+$4A
 
 ; ^ FREE SPACE ^ up to +$76
 

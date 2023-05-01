@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.3.10] Add RNG controls for Botwoon's hidden movements
 * [2.5.3.9]  Add RNG controls for Botwoon's second+ rounds and spit decision
 * [2.5.3.9]  Cover all enemy slots when killing enemies
 * [2.5.3.8]  Preserve HUD timers while menu is opened (one frame still added)

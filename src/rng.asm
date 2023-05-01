@@ -57,7 +57,7 @@ endif
     JSL hook_botwoon_move
 
 if !FEATURE_PAL
-org $B398C1
+org $B398D1
 else
 org $B398C1
 endif
@@ -485,14 +485,14 @@ hook_botwoon_move:
 {
     LDA !ram_botwoon_rng : BEQ .no_manip
     ; 0 = head visible, 1 = behind wall
-    LDA $7E8026 : BNE .no_manip
+    LDA $7E8026 : BNE .hidden
     ; check if first round, $7E8022 unused by Botwoon
     LDA $7E8022 : BEQ .first_round
 
     ; preserve number of RNG calls in the frame
     JSL $808111
     ; return chosen pattern
-    LDA !ram_botwoon_rng_2
+    LDA !ram_botwoon_second
     RTL
 
   .first_round
@@ -501,7 +501,15 @@ hook_botwoon_move:
     ; mark first round complete
     LDA #$0001 : STA $7E8022
     ; return chosen pattern
-    LDA !ram_botwoon_rng
+    LDA !ram_botwoon_first
+    RTL
+
+  .hidden
+    LDA !ram_botwoon_hidden : BEQ .no_manip
+    ; preserve number of RNG calls in the frame
+    JSL $808111
+    ; return chosen pattern
+    LDA !ram_botwoon_hidden
     RTL
 
   .no_manip
