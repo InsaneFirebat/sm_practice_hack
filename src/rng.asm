@@ -54,7 +54,14 @@ else
 org $B39943
 endif
     ; $B3:9943 22 11 81 80 JSL $808111[$80:8111]
-    JSL hook_botwoon_rng
+    JSL hook_botwoon_move
+
+if !FEATURE_PAL
+org $B398C1
+else
+org $B398C1
+endif
+    JSL hook_botwoon_spit
 
 
 ; ---------------
@@ -474,16 +481,46 @@ hook_phantoon_flame_pattern:
 }
 
 
-hook_botwoon_rng:
+hook_botwoon_move:
 {
-    JSL $808111 ; Trying to preserve the number of RNG calls being done in the frame
-
     LDA !ram_botwoon_rng : BEQ .no_manip
+    ; 0 = head visible, 1 = behind wall
+    LDA $7E8026 : BNE .no_manip
+    ; check if first round, $7E8022 unused by Botwoon
+    LDA $7E8022 : BEQ .first_round
+
+    ; preserve number of RNG calls in the frame
+    JSL $808111
+    ; return chosen pattern
+    LDA !ram_botwoon_rng_2
+    RTL
+
+  .first_round
+    ; preserve number of RNG calls in the frame
+    JSL $808111
+    ; mark first round complete
+    LDA #$0001 : STA $7E8022
+    ; return chosen pattern
+    LDA !ram_botwoon_rng
     RTL
 
   .no_manip
-    LDA !RANDOM_NUMBER
+    ; return random pattern
+    JML $808111
+}
+
+hook_botwoon_spit:
+{
+    LDA !ram_botwoon_spit : BEQ .no_manip
+    ; preserve number of RNG calls in the frame
+    JSL $808111
+    ; return chosen pattern
+    LDA !ram_botwoon_spit
     RTL
+
+  .no_manip
+    ; return random pattern
+    JML $808111
 }
 
 print pc, " rng end"

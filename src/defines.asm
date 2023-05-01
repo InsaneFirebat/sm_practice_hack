@@ -162,6 +162,8 @@
 
 !ram_baby_rng = !WRAM_START+$F4
 !ram_kraid_wait_rng = !WRAM_START+$F6
+!ram_botwoon_rng_2 = !WRAM_START+$F8
+!ram_botwoon_spit = !WRAM_START+$FA
 ; FREE SPACE ^ up to $FE
 
 !ram_slowdown_mode = $7EFFFE ; Bank $7E required
@@ -201,6 +203,9 @@
 
 !ram_cm_slowdown_mode = !WRAM_MENU_START+$40
 !ram_cm_slowdown_frames = !WRAM_MENU_START+$42
+
+!ram_cm_botwoon_rng_2 = !WRAM_MENU_START+$44
+!ram_cm_botwoon_spit = !WRAM_MENU_START+$46
 
 ; ^ FREE SPACE ^ up to +$76
 
