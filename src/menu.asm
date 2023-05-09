@@ -1788,6 +1788,7 @@ org !ORG_MAINMENU
 print pc, " mainmenu start"
 incsrc mainmenu.asm
 print pc, " mainmenu end"
+warnpc $B8E000 ; Hydellius data
 pullpc
 
 

@@ -48,14 +48,14 @@ org $82E488      ; write tiles to VRAM
 
 org $9AB200      ; graphics for HUD
 hudgfx_bin:
-incbin ../resources/hudgfx.bin
+incbin ../resources/Hydellius_hudgfx.bin
 
 
 ; Place minimap graphics in bank FD
 org !ORG_MINIMAP_BANKFD
 print pc, " minimap bankFD start"
 mapgfx_bin:
-incbin ../resources/mapgfx.bin
+incbin ../resources/Hydellius_mapgfx.bin
 
 ; Next block needs to be all zeros to clear a tilemap
 fillbyte $00
@@ -217,6 +217,4 @@ mm_clear_boss_room_tiles:
 }
 
 print pc, " minimap bank90 end"
-warnpc $90F7F0 ; not sure what the old one was yet
-warnpc $90F800 ; misc.asm
 

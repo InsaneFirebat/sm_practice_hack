@@ -900,10 +900,10 @@ ToggleItemsMenu:
     %cm_header("TOGGLE ITEMS")
 
 ti_variasuit:
-    %cm_equipment_item("Varia Suit", !ram_cm_varia, #$0001, #$FFFE)
+    %cm_equipment_item("Wasp Armor", !ram_cm_varia, #$0001, #$FFFE)
 
 ti_gravitysuit:
-    %cm_equipment_item("Gravity Suit", !ram_cm_gravity, #$0020, #$FFDF)
+    %cm_equipment_item("Shark Armor", !ram_cm_gravity, #$0020, #$FFDF)
 
 ti_morphball:
     %cm_equipment_item("Morph Ball", !ram_cm_morph, #$0004, #$FFFB)
@@ -912,7 +912,7 @@ ti_bomb:
     %cm_equipment_item("Bombs", !ram_cm_bombs, #$1000, #$EFFF)
 
 ti_springball:
-    %cm_equipment_item("Spring Ball", !ram_cm_spring, #$0002, #$FFFD)
+    %cm_equipment_item("Boost Ball", !ram_cm_spring, #$0002, #$FFFD)
 
 ti_screwattack:
     %cm_equipment_item("Screw Attack", !ram_cm_screw, #$0008, #$FFF7)
@@ -1042,13 +1042,13 @@ tb_icebeam:
     %cm_equipment_beam("Ice", !ram_cm_ice, #$0002, #$FFFD, #$100F)
 
 tb_wavebeam:
-    %cm_equipment_beam("Wave", !ram_cm_wave, #$0001, #$FFFE, #$100F)
+    %cm_equipment_beam("Sinus", !ram_cm_wave, #$0001, #$FFFE, #$100F)
 
 tb_spazerbeam:
-    %cm_equipment_beam("Spazer", !ram_cm_spazer, #$0004, #$FFFB, #$1007)
+    %cm_equipment_beam("Trius", !ram_cm_spazer, #$0004, #$FFFB, #$1007)
 
 tb_plasmabeam:
-    %cm_equipment_beam("Plasma", !ram_cm_plasma, #$0008, #$FFF7, #$100B)
+    %cm_equipment_beam("Magnus", !ram_cm_plasma, #$0008, #$FFF7, #$100B)
 
 tb_glitchedbeams:
     %cm_submenu("Glitched Beams", #GlitchedBeamsMenu)

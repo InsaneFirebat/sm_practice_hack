@@ -1,4 +1,4 @@
-# Super Metroid Practice Hack
+# Super Metroid Hydellius Practice Hack
 
 This page hosts the source material for the Super Metroid Practice Hack, adapted to work with this romhack. You should know that the person adapting this work has not played this romhack outside of basic testing. Some features may not be updated from their vanilla counterparts. If you have suggestions, requests, or bugs to report, please contact InsaneFirebat on Discord or open an issue here on GitHub.
 
