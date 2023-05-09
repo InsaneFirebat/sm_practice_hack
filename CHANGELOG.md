@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.4]    Updated Wall Jump and Botwoon CF trainers (by idlechild)
+* [2.5.4]    Updated stutter momentum for Shine Tune (by idlechild)
 * [2.5.3.12] Fixed visible but intangible fire jet enemy in LN Main Hall presets
 * [2.5.3.11] Fix foreground corruption when loading a preset into Phantoon's room
 * [2.5.3.10] Add RNG controls for Botwoon's hidden movements

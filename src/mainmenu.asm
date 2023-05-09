@@ -1916,19 +1916,19 @@ ihstrat_snailclip:
     %cm_jsl("Aqueduct Snail Clip", #action_select_room_strat, #$000A)
 
 ihstrat_kihuntermanip:
-    %cm_jsl("Kihunter Manipulation", #action_select_room_strat, #$000C)
+    %cm_jsl("Kihunter Manipulation", #action_select_room_strat, #$000B)
 
 ihstrat_kraidradar:
-    %cm_jsl("Kraid Nail Radar", #action_select_room_strat, #$000D)
+    %cm_jsl("Kraid Nail Radar", #action_select_room_strat, #$000C)
 
 ihstrat_zebskip:
-    %cm_jsl("Zeb Skip Indicator", #action_select_room_strat, #$000E)
+    %cm_jsl("Zeb Skip Indicator", #action_select_room_strat, #$000D)
 
 ihstrat_pitdoor:
-    %cm_jsl("Pit Room Right Door", #action_select_room_strat, #$000F)
+    %cm_jsl("Pit Room Right Door", #action_select_room_strat, #$000E)
 
 ihstrat_ridleyai:
-    %cm_jsl("Ridley's AI Tracker", #action_select_room_strat, #$0010)
+    %cm_jsl("Ridley's AI Tracker", #action_select_room_strat, #$000F)
 
 action_select_room_strat:
 {
