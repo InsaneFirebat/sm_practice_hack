@@ -116,10 +116,10 @@ preset_load:
 
 clear_all_enemies:
 {
-    ; Clear enemies (8000 = solid to Samus, 0400 = Ignore Samus projectiles)
+    ; Clear enemies (8000 = solid to Samus, 0400 = Ignore Samus projectiles, 0100 = Invisible)
     LDA #$0000
   .loop
-    TAX : LDA $0F86,X : BIT #$8400 : BNE .done_clearing
+    TAX : LDA $0F86,X : BIT #$8500 : BNE .done_clearing
     ORA #$0200 : STA $0F86,X
   .done_clearing
     TXA : CLC : ADC #$0040 : CMP #$0800 : BNE .loop
@@ -368,6 +368,8 @@ preset_start_gameplay:
 
     ; Set loading game state for Ceres
     LDA #$001F : STA $7ED914
+    ; Set delay for first falling tile in Ceres
+    LDA #$0022 : STA $07E1
     LDA !AREA_ID : CMP #$0006 : BEQ .end_load_game_state
     ; Set loading game state for Zebes
     LDA #$0005 : STA $7ED914
