@@ -1684,7 +1684,9 @@ InfoHudMenu:
     dw #ih_reset_seg_later
     dw #ih_fanfare_timer_adjust
     dw #ih_top_HUD_mode
+if !PRESERVE_WRAM_DURING_SPACETIME
     dw #ih_spacetime_infohud
+endif
     dw #ih_status_icons
     dw #ih_lag
     dw #$FFFF
