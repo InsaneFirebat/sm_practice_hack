@@ -34,7 +34,10 @@ org $A7CFD6
 {
 org $B39943
     ; $B3:9943 22 11 81 80 JSL $808111[$80:8111]
-    JSL hook_botwoon_rng
+    JSL hook_botwoon_move
+
+org $B398C1
+    JSL hook_botwoon_spit
 }
 
 
@@ -349,16 +352,55 @@ hook_phantoon_flame_pattern:
     RTL
 }
 
-hook_botwoon_rng:
-{
-    JSL $808111 ; Trying to preserve the number of RNG calls being done in the frame
 
+hook_botwoon_move:
+{
     LDA !ram_botwoon_rng : BEQ .no_manip
+    ; 0 = head visible, 1 = behind wall
+    LDA $7E8026 : BNE .hidden
+    ; check if first round, $7E8022 unused by Botwoon
+    LDA $7E8022 : BEQ .first_round
+
+    ; preserve number of RNG calls in the frame
+    JSL $808111
+    ; return chosen pattern
+    LDA !ram_botwoon_second
+    RTL
+
+  .first_round
+    ; preserve number of RNG calls in the frame
+    JSL $808111
+    ; mark first round complete
+    LDA #$0001 : STA $7E8022
+    ; return chosen pattern
+    LDA !ram_botwoon_first
+    RTL
+
+  .hidden
+    LDA !ram_botwoon_hidden : BEQ .no_manip
+    ; preserve number of RNG calls in the frame
+    JSL $808111
+    ; return chosen pattern
+    LDA !ram_botwoon_hidden
     RTL
 
   .no_manip
-    LDA !CACHED_RANDOM_NUMBER
+    ; return random pattern
+    JML $808111
+}
+
+hook_botwoon_spit:
+{
+    LDA !ram_botwoon_spit : BEQ .no_manip
+    ; preserve number of RNG calls in the frame
+    JSL $808111
+    ; return chosen pattern
+    LDA !ram_botwoon_spit
     RTL
+
+  .no_manip
+    ; return random pattern
+    JML $808111
 }
 
 print pc, " rng end"
