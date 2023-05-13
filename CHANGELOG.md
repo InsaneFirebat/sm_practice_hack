@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.4.2]  Fixed mismatched '2' in Ridley AI's HUD font
 * [2.5.4.1]  Moved Menu Customization to the main menu
 * [2.5.4]    Updated Wall Jump and Botwoon CF trainers (by idlechild)
 * [2.5.4]    Updated stutter momentum for Shine Tune (by idlechild)
