@@ -336,9 +336,8 @@ macro palettemenu(title, pointer, addr)
 endmacro
 
 macro setupRGB(addr)
-    LDA.w #<addr>>>16 : STA $C3
-    LDA.w #<addr> : STA $C1
-    JSL cm_setup_RGB
+    LDA.b #<addr>>>16
+    LDX.w #<addr>
     RTS
 endmacro
 

@@ -7,7 +7,6 @@ org $85C000
 print pc, " mainmenuu IFBmenu start"
 
 IFBMenu:
-    dw #ifb_customizemenu
 if !FEATURE_VANILLAHUD
 else
     dw #ifb_customizehud
@@ -33,9 +32,6 @@ endif
     dw #$0000
     %cm_header("CUSTOM ROMS ONLY")
     %cm_footer("MODIFIED BY INSANEFIREBAT")
-
-ifb_customizemenu:
-    %cm_submenu("Customize Practice Menu", #CustomizeMenu)
 
 ifb_customizehud:
     %cm_numfield("HUD Number Font", !sram_number_gfx_choice, 0, 22, 1, 2, #0)
@@ -87,15 +83,6 @@ ifb_emu_test:
     LDY #$DEAD
     BRK #$9F
 endif
-
-
-; -------------------
-; Custom Menu Palette
-; -------------------
-
-print pc, " customizemenu start"
-incsrc customizemenu.asm
-print pc, " customizemenu end"
 
 
 ; --------
