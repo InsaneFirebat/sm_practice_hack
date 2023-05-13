@@ -123,7 +123,7 @@ if !FEATURE_VANILLAHUD
 else
     JSL overwrite_HUD_numbers
 endif
-    JSR cm_transfer_original_cgram
+    JSL cm_transfer_original_cgram
 
     ; Update HUD (in case we added missiles etc.)
     LDA !ram_gametime_room : STA $C1
@@ -355,13 +355,6 @@ cm_transfer_original_cgram:
 
     JSL transfer_cgram_long
     PLP
-    RTS
-}
-
-cm_refresh_cgram_long:
-{
-    JSR cm_transfer_original_cgram
-    JSL cm_transfer_custom_cgram
     RTL
 }
 
@@ -385,9 +378,9 @@ cm_tilemap_bg:
 	; Empty out !ram_tilemap_buffer
     LDX #$07FE
     LDA !MENU_CLEAR
-  .clearBG3
+  .loopClearBG3
     STA !ram_tilemap_buffer,X
-    DEX #2 : BPL .clearBG3
+    DEX #2 : BPL .loopClearBG3
 
     ; Vertical edges
     LDX #$0000
@@ -411,15 +404,15 @@ cm_tilemap_bg:
     ; background is optional
     LDA !sram_menu_background : BNE .fill_interior
 
-    ; fill if paused
+    ; fill if paused, $C-11
     LDA !GAMEMODE : CMP #$000C : BMI .check_ceres : BEQ .fill_interior
     CMP #$0012 : BMI .fill_interior
 
     ; fill if game over
     CMP #$001A : BEQ .fill_interior
 
-    ; fill if Ceres
   .check_ceres
+    ; fill if Ceres
     LDA !AREA_ID : CMP #$0006 : BMI .done
 
   .fill_interior
@@ -927,7 +920,6 @@ draw_numfield_hex_word:
     STA !ram_tilemap_buffer+5,X : STA !ram_tilemap_buffer+7,X
     %a16()
 
-  .done
     RTS
 }
 
@@ -995,7 +987,7 @@ draw_choice:
 
     ; find the correct text that should be drawn (the selected choice)
     ; skipping the first text that we already drew
-    INY #2 ; uh, ..
+    INY #2
 
   .loop_choices
     DEY : BEQ .found
@@ -1511,7 +1503,11 @@ execute_toggle_bit:
 
 execute_numfield:
 execute_numfield_hex:
+execute_numfield_sound:
 {
+    ; preserve action index to check for sfx later
+    PHX
+
     ; grab the memory address (long)
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : STA !DP_Address
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : STA !DP_Address+2
@@ -1523,8 +1519,11 @@ execute_numfield_hex:
     ; grab normal increment
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : AND #$00FF : STA !DP_Increment
 
+    ; check for only Y pressed to skip inc/dec for sfx menu
+    LDA !ram_cm_controller : CMP !CTRL_Y : BEQ .skip_inc
+
     ; check if fast scroll button is held
-    LDA !IH_CONTROLLER_PRI : AND !sram_cm_scroll_button : BEQ .load_jsl_target
+    LDA !IH_CONTROLLER_PRI : AND !sram_cm_scroll_button : BEQ .determine_direction
     ; 4x scroll speed if held
     LDA !DP_Increment : ASL #2 : STA !DP_Increment
 
@@ -1533,21 +1532,24 @@ execute_numfield_hex:
 ;    LDA !ram_cm_controller : BIT !IH_INPUT_HELD : BNE .input_held
 ;    ; grab normal increment and skip past both
 ;    LDA [$00] : INC $00 : INC $00; : AND #$00FF : STA $0C
-;    BRA .load_jsl_target
+;    BRA .determine_direction
 
 ;  .input_held
 ;    ; grab faster increment and skip past both
 ;    INC $00 : LDA [$00] : INC $00 : AND #$00FF : STA $0C
 
-  .load_jsl_target
-    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : STA !DP_JSLTarget
-
-    ; determine dpad direction
+  .determine_direction
     LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
     ; pressed right, inc
     LDA [!DP_Address] : CLC : ADC !DP_Increment
     CMP !DP_Maximum : BCS .set_to_min
     %a8() : STA [!DP_Address] : BRA .jsl
+
+  .skip_inc
+; unneeded while heldincrement is omitted
+;    ; skipping inc/dec and just playing sfx
+;    INC !DP_CurrentMenu : INC !DP_CurrentMenu
+    BRA .jsl
 
   .pressed_left ; dec
     LDA [!DP_Address] : SEC : SBC !DP_Increment : BMI .set_to_max
@@ -1562,6 +1564,9 @@ execute_numfield_hex:
 
   .jsl
     %a16()
+    ; grab JSL pointer
+    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : STA !DP_JSLTarget
+
     ; skip if JSL target is zero
     LDA !DP_JSLTarget : BEQ .end
 
@@ -1575,8 +1580,10 @@ execute_numfield_hex:
 
   .end
     %ai16()
+    ; pull action index and skip if sfx menu item
+    PLX : CPX !ACTION_NUMFIELD_SOUND : BEQ +
     %sfxnumber()
-    RTS
++   RTS
 }
 
 execute_numfield_word:
@@ -1700,67 +1707,6 @@ execute_numfield_color:
   .end
     %ai16()
     %sfxnumber()
-    RTS
-}
-
-execute_numfield_sound:
-{
-    ; grab the memory address (long)
-    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : STA !DP_Address
-    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : STA !DP_Address+2
-
-    ; grab minimum (!DP_Minimum) and maximum (!DP_Maximum) values
-    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : AND #$00FF : STA !DP_Minimum
-    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : AND #$00FF : INC : STA !DP_Maximum ; INC for convenience
-
-    ; grab normal increment
-    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : AND #$00FF : STA !DP_Increment
-
-    ; check if fast scroll button is held
-    LDA !IH_CONTROLLER_PRI : AND !sram_cm_scroll_button : BEQ .load_jsl_target
-    ; 4x scroll speed if held
-    LDA !DP_Increment : ASL #2 : STA !DP_Increment
-
-  .load_jsl_target
-    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : STA !DP_JSLTarget
-
-    ; check for Y pressed
-    LDA !ram_cm_controller : BIT #$4000 : BNE .jsl
-
-    ; determine dpad direction
-    LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
-    ; pressed right, inc
-    LDA [!DP_Address] : CLC : ADC !DP_Increment
-    CMP !DP_Maximum : BCS .set_to_min
-    %a8() : STA [!DP_Address] : BRA .jsl
-
-  .pressed_left ; dec
-    LDA [!DP_Address] : SEC : SBC !DP_Increment
-    CMP !DP_Minimum : BMI .set_to_max
-    CMP !DP_Maximum : BCS .set_to_max
-    %a8() : STA [!DP_Address] : BRA .jsl
-
-  .set_to_min
-    LDA !DP_Minimum : STA [!DP_Address] : BRA .end
-
-  .set_to_max
-    LDA !DP_Maximum : DEC : STA [!DP_Address] : BRA .end
-
-  .jsl
-    %ai16()
-    ; skip if JSL target is zero
-    LDA !DP_JSLTarget : BEQ .end
-
-    ; Set return address for indirect JSL
-    LDA !ram_cm_menu_bank : STA !DP_JSLTarget+2
-    PHK : PEA .end-1
-
-    ; addr in A
-    LDA [!DP_Address] : LDX #$0000
-    JML.w [!DP_JSLTarget]
-
-  .end
-    %ai16()
     RTS
 }
 

@@ -110,41 +110,6 @@ init_sram:
 -   STA $F02100,X
     DEX #2 : BPL -
 
-    ; Controllers
-    LDA #$3000 : STA !sram_ctrl_menu                   ; Start + Select
-    LDA #$6010 : STA !sram_ctrl_save_state             ; Select + Y + R
-    LDA #$6020 : STA !sram_ctrl_load_state             ; Select + Y + L
-    LDA #$E0F0 : STA !sram_ctrl_auto_save_state        ; Select + A + B + X + Y + L + R
-    LDA #$06F0 : STA !sram_ctrl_load_last_preset       ; Down + Left + L + R + A + X
-    LDA #$0000 : STA !sram_ctrl_full_equipment
-    LDA #$0000 : STA !sram_ctrl_kill_enemies
-    LDA #$0000 : STA !sram_ctrl_reset_segment_timer
-    LDA #$0000 : STA !sram_ctrl_reset_segment_later
-    LDA #$0000 : STA !sram_ctrl_reveal_damage
-    LDA #$C930 : STA !sram_ctrl_random_preset          ; Up + Right + L + R + Y + B
-    LDA #$0000 : STA !sram_ctrl_randomize_rng
-    LDA #$0000 : STA !sram_ctrl_save_custom_preset
-    LDA #$0000 : STA !sram_ctrl_load_custom_preset
-    LDA #$0000 : STA !sram_ctrl_inc_custom_preset
-    LDA #$0000 : STA !sram_ctrl_dec_custom_preset
-    LDA #$0000 : STA !sram_ctrl_toggle_tileviewer
-    LDA #$0000 : STA !sram_ctrl_force_stand
-    LDA #$0000 : STA !sram_ctrl_update_timers
-
-    ; Input Cheat Sheet  ($4218)
-    ; $8000 = B
-    ; $4000 = Y
-    ; $2000 = Select
-    ; $1000 = Start
-    ; $0800 = Up
-    ; $0400 = Down
-    ; $0200 = Left
-    ; $0100 = Right
-    ; $0080 = A
-    ; $0040 = X
-    ; $0020 = L
-    ; $0010 = R
-
     ; Features
     LDA #$0015 : STA !sram_artificial_lag ; 21 / 15h
     LDA #$0001 : STA !sram_rerandomize
@@ -230,6 +195,41 @@ init_sram:
     LDA #$0001 : STA !sram_dummy_on
     LDA #$0000 : STA !sram_dummy_off
     LDA #$00FF : STA !sram_dummy_num
+
+  .controller_shortcuts
+    LDA #$3000 : STA !sram_ctrl_menu                   ; Start + Select
+    LDA #$6010 : STA !sram_ctrl_save_state             ; Select + Y + R
+    LDA #$6020 : STA !sram_ctrl_load_state             ; Select + Y + L
+    LDA #$E0F0 : STA !sram_ctrl_auto_save_state        ; Select + A + B + X + Y + L + R
+    LDA #$06F0 : STA !sram_ctrl_load_last_preset       ; Down + Left + L + R + A + X
+    LDA #$0000 : STA !sram_ctrl_full_equipment
+    LDA #$0000 : STA !sram_ctrl_kill_enemies
+    LDA #$0000 : STA !sram_ctrl_reset_segment_timer
+    LDA #$0000 : STA !sram_ctrl_reset_segment_later
+    LDA #$0000 : STA !sram_ctrl_reveal_damage
+    LDA #$C930 : STA !sram_ctrl_random_preset          ; Up + Right + L + R + Y + B
+    LDA #$0000 : STA !sram_ctrl_randomize_rng
+    LDA #$0000 : STA !sram_ctrl_save_custom_preset
+    LDA #$0000 : STA !sram_ctrl_load_custom_preset
+    LDA #$0000 : STA !sram_ctrl_inc_custom_preset
+    LDA #$0000 : STA !sram_ctrl_dec_custom_preset
+    LDA #$0000 : STA !sram_ctrl_toggle_tileviewer
+    LDA #$0000 : STA !sram_ctrl_force_stand
+    LDA #$0000 : STA !sram_ctrl_update_timers
+
+    ; Input Cheat Sheet  ($4218)
+    ; $8000 = B
+    ; $4000 = Y
+    ; $2000 = Select
+    ; $1000 = Start
+    ; $0800 = Up
+    ; $0400 = Down
+    ; $0200 = Left
+    ; $0100 = Right
+    ; $0080 = A
+    ; $0040 = X
+    ; $0020 = L
+    ; $0010 = R
 
     LDA !SRAM_VERSION : STA !sram_initialized
 

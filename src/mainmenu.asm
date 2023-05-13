@@ -133,6 +133,7 @@ if !FEATURE_SD2SNES
 endif
     dw #mm_goto_timecontrol
     dw #mm_goto_ctrlsmenu
+    dw #mm_goto_customize
     dw #mm_goto_IFBmenu
     dw #$0000
 if !FEATURE_PAL
@@ -162,6 +163,7 @@ if !FEATURE_SD2SNES
 endif
     dw #SlowdownMenu>>16
     dw #CtrlMenu>>16
+    dw #CustomizeMenu>>16
     dw #IFBMenu>>16
 
 mm_goto_equipment:
@@ -205,6 +207,9 @@ mm_goto_timecontrol:
 
 mm_goto_ctrlsmenu:
     %cm_mainmenu("Controller Shortcuts", #CtrlMenu)
+
+mm_goto_customize:
+    %cm_mainmenu("Customize Practice Menu", #CustomizeMenu)
 
 mm_goto_IFBmenu:
     %cm_mainmenu("Firebat Menu", #IFBMenu)
@@ -282,9 +287,13 @@ presets_load_custom_preset:
   .routine
     ; check if slot is populated first
     LDA !sram_custom_preset_slot
-    ASL : XBA : TAX
+if !FEATURE_TINYSTATES
+    XBA : TAX                    ; multiply by 100h (slot offset)
+else
+    ASL : XBA : TAX              ; multiply by 200h (slot offset)
+endif
     LDA !PRESET_SLOTS,X : CMP #$5AFE : BEQ .safe
-    %sfxgoback()
+    %sfxfail()
     RTL
 
   .safe
@@ -460,40 +469,6 @@ action_select_preset_category:
     ; clear stale preset
     LDA #$0000 : STA !sram_last_preset
     JML cm_previous_menu
-}
-
-action_save_custom_preset:
-{
-    ; check gamestate first
-    LDA !GAMEMODE : CMP #$0008 : BEQ .safe
-    ; disallow while paused
-    CMP #$000C : BMI .not_safe
-    CMP #$0013 : BPL .not_safe
-
-  .safe
-    JSL custom_preset_save
-    LDA #$0001 : STA !ram_cm_leave
-    %sfxmove()
-    RTL
-
-  .not_safe
-    %sfxfail()
-    RTL
-}
-
-action_load_custom_preset:
-{
-    ; check if slot is populated first
-    LDA !sram_custom_preset_slot
-    ASL : XBA : TAX
-    LDA !PRESET_SLOTS,X : CMP #$5AFE : BEQ .safe
-    %sfxfail()
-    RTL
-
-  .safe
-    STA !ram_custom_preset
-    LDA #$0001 : STA !ram_cm_leave
-    RTL
 }
 
 action_load_preset:
@@ -3384,29 +3359,9 @@ ctrl_clear_shortcuts:
 ctrl_reset_defaults:
     %cm_jsl("Reset to Defaults", .routine, #$0000)
   .routine
-    LDA #$3000 : STA !sram_ctrl_menu                   ; Start + Select
-    LDA #$6010 : STA !sram_ctrl_save_state             ; Select + Y + R
-    LDA #$6020 : STA !sram_ctrl_load_state             ; Select + Y + L
-    LDA #$E0F0 : STA !sram_ctrl_auto_save_state        ; Select + A + B + X + Y + L + R
-    LDA #$06F0 : STA !sram_ctrl_load_last_preset       ; Down + Left + L + R + A + X
-    LDA #$0000 : STA !sram_ctrl_full_equipment
-    LDA #$0000 : STA !sram_ctrl_kill_enemies
-    LDA #$0000 : STA !sram_ctrl_reset_segment_timer
-    LDA #$0000 : STA !sram_ctrl_reset_segment_later
-    LDA #$0000 : STA !sram_ctrl_reveal_damage
-    LDA #$C930 : STA !sram_ctrl_random_preset          ; Up + Right + L + R + Y + B
-    LDA #$0000 : STA !sram_ctrl_randomize_rng
-    LDA #$0000 : STA !sram_ctrl_save_custom_preset
-    LDA #$0000 : STA !sram_ctrl_load_custom_preset
-    LDA #$0000 : STA !sram_ctrl_inc_custom_preset
-    LDA #$0000 : STA !sram_ctrl_dec_custom_preset
-    LDA #$0000 : STA !sram_ctrl_toggle_tileviewer
-    LDA #$0000 : STA !sram_ctrl_force_stand
-    LDA #$0000 : STA !sram_ctrl_update_timers
-
-    JSL validate_sram_for_savestates
     %sfxquake()
-    RTL
+    JSL init_sram_controller_shortcuts
+    JML validate_sram_for_savestates
 
 init_wram_based_on_sram:
 {
@@ -3445,6 +3400,14 @@ endif
     STA !sram_ctrl_save_state : STA !sram_ctrl_load_state
     RTL
 }
+
+
+; ------------------
+; Menu Customization
+; ------------------
+
+incsrc customizemenu.asm
+
 
 
 ; ----------
