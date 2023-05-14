@@ -8,7 +8,7 @@
 !VERSION_MINOR = 5
 !VERSION_BUILD = 4
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 2
+!VERSION_REV_2 = 3
 
 
 ; ---------
@@ -137,15 +137,17 @@
 !ram_botwoon_rng = !WRAM_START+$C8
 !ram_draygon_rng_left = !WRAM_START+$CA
 !ram_draygon_rng_right = !WRAM_START+$CC
+!ram_baby_rng = !WRAM_START+$CE
+!ram_kraid_wait_rng = !WRAM_START+$D0
+!ram_botwoon_first = !WRAM_START+$D2
+!ram_botwoon_hidden = !WRAM_START+$D4
+!ram_botwoon_second = !WRAM_START+$D6
+!ram_botwoon_spit = !WRAM_START+$D8
 
-!ram_sprite_features_active = !WRAM_START+$CE
-!ram_sprite_samus_hitbox_active = !WRAM_START+$D0
-!ram_sprite_enemy_hitbox_active = !WRAM_START+$D2
-!ram_sprite_extended_hitbox_active = !WRAM_START+$D4
-!ram_oob_watch_active = !WRAM_START+$D6
-!ram_sprite_samusproj_hitbox_active = !WRAM_START+$D8
-!ram_sprite_enemyproj_hitbox_active = !WRAM_START+$DA
-!ram_sprite_custom_hitbox_active = !WRAM_START+$DC
+!ram_sprite_feature_flags = !WRAM_START+$DA
+
+
+; ^ FREE SPACE @ $D0-$DC
 
 !ram_watch_bank = !WRAM_START+$DE
 !ram_watch_write_mode = !WRAM_START+$E0
@@ -159,14 +161,6 @@
 !ram_watch_right_index = !WRAM_START+$F0
 
 !ram_auto_save_state = !WRAM_START+$F2
-
-!ram_baby_rng = !WRAM_START+$F4
-!ram_kraid_wait_rng = !WRAM_START+$F6
-!ram_botwoon_first = !WRAM_START+$F8
-!ram_botwoon_hidden = !WRAM_START+$FA
-!ram_botwoon_second = !WRAM_START+$FC
-!ram_botwoon_spit = !WRAM_START+$FE
-!ram_sprite_proj_32x32hitbox_active = !WRAM_PERSIST_START+$62
 
 !ram_slowdown_mode = $7EFFFE ; Bank $7E required
 
@@ -565,6 +559,24 @@ else
 !PRESET_SLOTS_SUPERS = $703000+$34
 !PRESET_SLOTS_PBS = $703000+$38
 endif
+
+!SPRITE_SAMUS_HITBOX = #$0001
+!SPRITE_ENEMY_HITBOX = #$0002
+!SPRITE_EXTENDED_HITBOX = #$0004
+!SPRITE_BOSS_HITBOX = #$0008
+!SPRITE_ENEMY_PROJ = #$0020
+!SPRITE_SAMUS_PROJ = #$0010
+!SPRITE_32x32_PROJ = #$0040
+!SPRITE_OOB_WATCH = #$0080
+
+!SPRITE_SAMUS_HITBOX = #$0001
+!SPRITE_ENEMY_HITBOX = #$0002
+!SPRITE_EXTENDED_HITBOX = #$0004
+!SPRITE_BOSS_HITBOX = #$0008
+!SPRITE_SAMUS_PROJ = #$0010
+!SPRITE_ENEMY_PROJ = #$0020
+!SPRITE_32x32_PROJ = #$0040
+!SPRITE_OOB_WATCH = #$0080
 
 
 ; ----------
