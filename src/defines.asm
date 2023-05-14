@@ -166,6 +166,7 @@
 !ram_botwoon_hidden = !WRAM_START+$FA
 !ram_botwoon_second = !WRAM_START+$FC
 !ram_botwoon_spit = !WRAM_START+$FE
+!ram_sprite_proj_32x32hitbox_active = !WRAM_PERSIST_START+$62
 
 !ram_slowdown_mode = $7EFFFE ; Bank $7E required
 
