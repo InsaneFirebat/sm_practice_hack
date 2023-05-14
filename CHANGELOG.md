@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.4.3]  Added hitbox viewer for projectile vs projectile collisions (by idlechild)
 * [2.5.4.2]  Added a menu to inspect custom presets
 * [2.5.4.2]  Fixed mismatched '2' in Ridley AI's HUD font
 * [2.5.4.1]  Moved Menu Customization to the main menu
