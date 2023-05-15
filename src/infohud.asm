@@ -1822,13 +1822,6 @@ ih_shinespark_code:
     RTL
 }
 
-print pc, " infohud end"
-warnpc $F0E000 ; spritefeat.asm
-
-
-org $FFE000
-print pc, " HUD number GFX bankFF start"
-
 NumberGFXChoice:
 incbin ../resources/num_gfx_choice.bin
 
@@ -1889,7 +1882,9 @@ overwrite_HUD_numbers:
     PLB : PLP
     RTL
 }
-print pc, " HUD number GFX bankFF end"
+
+print pc, " infohud end"
+warnpc $F0E000 ; spritefeat.asm
 
 
 ; Stuff that needs to be placed in bank 80
