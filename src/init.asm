@@ -45,7 +45,7 @@ init_code:
 
     ; Check if we should initialize SRAM
     LDA !sram_initialized : CMP !SRAM_VERSION : BEQ .sram_initialized
-    JSR init_sram
+    JSL init_sram
 
   .sram_initialized
     JSL validate_sram_for_savestates
@@ -232,7 +232,7 @@ init_sram:
 
     LDA !SRAM_VERSION : STA !sram_initialized
 
-    RTS
+    RTL
 }
 
 init_sram_long:
