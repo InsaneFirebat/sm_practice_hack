@@ -1,27 +1,3 @@
-TEMP_00 = $00
-TEMP_02 = $02
-TEMP_04 = $04
-TEMP_06 = $06
-TEMP_08 = $08
-TEMP_0A = $0A
-TEMP_0C = $0C
-TEMP_0E = $0E
-TEMP_10 = $10
-TEMP_12 = $12
-TEMP_14 = $14
-TEMP_16 = $16
-TEMP_18 = $18
-TEMP_1A = $1A
-TEMP_1C = $1C
-TEMP_1E = $1E
-TEMP_20 = $20
-TEMP_22 = $22
-TEMP_24 = $24
-TEMP_16Bit_Mult_A = $26
-TEMP_16Bit_Mult_B = $28
-TEMP_32Bit_Product_A = $2A
-TEMP_32Bit_Product_B = $2C
-TEMP_2E = $2E
 
 DP36_UpdateTiles_80A9DE = $36
 
@@ -197,7 +173,7 @@ Enemy_Hitboxes_Remaining = $060D
 Projectiles_Checks_Remaining = $060F
 
 Uploading_to_APU_Flag = $0617
-MusicQueue_List = $0619
+MusicQueue_EntriesList = $0619
 MusicQueue_Timers = $0629
 MusicQueue_NextIndex = $0639
 MusicQueue_StartIndex = $063B
@@ -227,6 +203,8 @@ SoundQueue_Lib1 = $0656
 SoundQueue_Lib2 = $0666
 SoundQueue_Lib3 = $0676
 Sound_Handler_Downtime = $0686
+
+CrocomireRelated_0688_071B = $0688
 
 SamusTop_Transfer_Flag = $071D
 SamusBottom_Transfer_Flag = $071E
@@ -759,6 +737,9 @@ Samus_Grapple_Eject_Left = $0E04
 Samus_Grapple_Eject_Right = $0E06
 Samus_Grapple_Eject_Up = $0E08
 Samus_Grapple_Eject_Down = $0E0A
+
+EndingSequence_0E0C_0E1B = $0E0C
+
 Debug_Disable_Sprite_Interactions = $0E12
 Elevator_Properties = $0E16
 Elevator_Status = $0E18
@@ -871,7 +852,9 @@ Fireflea_Flashing_Timer = $1778
 Fireflea_Flashing_Inxex = $177A
 Fireflea_Flashing_Darkness = $177E
 Enemy_AI_Pointer = $1784
+Enemy_AI_Pointer_Bank = $1786
 Enemy_AI_Pointer_Backup = $1788
+Enemy_AI_Pointer_Bank_Backup = $178A
 Enemy_GFX_Drawn_Hook = $178C
 Enemy_GFX_Drawn_1794 = $1794
 Enemy_GFX_Drawn_1795 = $1795
