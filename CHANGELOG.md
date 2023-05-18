@@ -1,6 +1,9 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.4.5]  Fixed crash when resetting controller shortcuts to default
+* [2.5.4.5]  Select power bombs for any% attic presets
+* [2.5.4.4]  Fixed conflicts with room names overwriting preset data
 * [2.5.4.3]  Added option to display Samus data or room names in custom presets menu
 * [2.5.4.3]  Added hitbox viewer for projectile vs projectile collisions (by idlechild)
 * [2.5.4.2]  Added a menu to inspect custom presets
