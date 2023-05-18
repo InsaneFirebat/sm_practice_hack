@@ -1120,6 +1120,7 @@ preset_kpdr22_wrecked_ship_attic:
     dw $0911, $0400 ; Screen X position in pixels
     dw $0913, $B000 ; Screen subpixel Y position
     dw $0917, $0300 ; Layer 2 X position
+    dw $09D2, $0003 ; Currently selected item
     dw $0AF6, $0445 ; Samus X
     dw $0AFA, $006B ; Samus Y
     dw #$FFFF
@@ -1136,6 +1137,7 @@ preset_kpdr22_wrecked_ship_upper_west_ocean:
     dw $0919, $001E ; Layer 2 Y position
     dw $09C2, $0152 ; Health
     dw $09CA, $0009 ; Supers
+    dw $09D2, $0000 ; Currently selected item
     dw $0A1C, $0002 ; Samus position/state
     dw $0A1E, $0004 ; More position/state
     dw $0AF6, $003B ; Samus X
