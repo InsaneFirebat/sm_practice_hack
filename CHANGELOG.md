@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.4.5]  Added Zeni menu palette profile
 * [2.5.4.5]  Fixed crash when resetting controller shortcuts to default
 * [2.5.4.5]  Select power bombs for any% attic presets
 * [2.5.4.4]  Fixed conflicts with room names overwriting preset data
