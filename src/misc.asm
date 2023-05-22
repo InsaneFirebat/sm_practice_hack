@@ -238,7 +238,11 @@ endif
 
 ; $82:8BB3 22 69 91 A0 JSL $A09169[$A0:9169]  ; Handles Samus getting hurt?
 org $828BB3
+if !FEATURE_VANILLAHUD
+    ; Vanilla HUD build doesn't need artificial lag
+else
     JSL gamemode_end
+endif
 
 
 ; Replace unnecessary logic checking controller input to toggle debug CPU brightness
@@ -337,11 +341,6 @@ else
     JSL $A09169
 endif
 
-if !FEATURE_VANILLAHUD
-    ; Vanilla HUD build doesn't need artificial lag
-    RTL
-endif
-
     ; If minimap is disabled or shown, we ignore artificial lag
     LDA $05F7 : BNE .endlag
     LDA !ram_minimap : BNE .endlag
@@ -360,7 +359,10 @@ endif
     LDA !sram_artificial_lag
 
     ASL #4
+if !FEATURE_SD2SNES
+else
     NOP #2 ; Add 4 more clock cycles
+endif
     TAX
 
   .lagloop
@@ -375,7 +377,11 @@ endif
     DEC : BEQ .endlag   ; Remove 76 clock cycles
     DEC : BEQ .endlag   ; Remove 76 clock cycles
     ASL #2 : INC ; Add 4 loops (22 clock cycles including the INC)
+if !FEATURE_SD2SNES
+    ASL #2
+else
     ASL #2 : INC ; Add 1 loop (7 clock cycles including the INC)
+endif
     TAX
 
   .vanilla_lagloop
