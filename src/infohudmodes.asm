@@ -672,8 +672,8 @@ status_spikesuit:
 
 status_lagcounter:
 {
-    LDA $05A0 : BEQ .done ; unused RAM
-    CLC : ADC !ram_lag_counter : STA !ram_lag_counter : STZ $05A0
+    LDA !REALTIME_LAG_COUNTER : BEQ .done ; unused RAM
+    CLC : ADC !ram_lag_counter : STA !ram_lag_counter : STZ !REALTIME_LAG_COUNTER
     CMP !ram_lag_counter_HUD : BEQ .done : STA !ram_lag_counter_HUD
     LDX #$0082 : JSR Draw3
 

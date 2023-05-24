@@ -3,8 +3,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-org $809606      ; inc lag counter
-    STX $05BA : INC $05A0
+org $809609      ; inc counter if NMI lag branch
+    INC !REALTIME_LAG_COUNTER
 
 if !FEATURE_PAL
 org $A6A18C
@@ -60,9 +60,9 @@ if !FEATURE_EXTRAS
 SteamCollision:
 {
     LDA !ram_steamcollision : BEQ .originalcode
-    PLA : LDA $0F86,x : JMP $F13B
+    PLA : LDA $0F86,X : JMP $F13B
   .originalcode
-    LDA $0F86,x : RTS
+    LDA $0F86,X : RTS
 }
 endif
 print pc, " misc bankA6 end"
