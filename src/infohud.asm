@@ -338,7 +338,7 @@ ih_after_room_transition:
 
     ; clear transition variables
     LDA #$0000 : STA !ram_transition_flag : STA !ram_lag_counter
-    STA $05A0 ; wtf is this?
+    STA !REALTIME_LAG_COUNTER ; for lagcounter HUD mode
 
     ; Check if MBHP needs to be disabled
     LDA !sram_display_mode : CMP !IH_MODE_ROOMSTRAT_INDEX : BNE .check_reset_segment_timer
