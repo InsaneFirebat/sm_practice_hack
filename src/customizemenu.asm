@@ -61,13 +61,12 @@ ifb_palette2custom:
     %cm_jsl("Copy Palette to Custom", .routine, #$0000)
   .routine
     LDA !sram_custompalette_profile : BEQ .custom_selected
-    PHP : %i8()
-    PHB
+    PHB : %i8()
     LDX.b #PaletteProfileTables>>16 : PHX : PLB
     ASL : TAX
     LDA.l PaletteProfileTables,X : STA $16
 
-    ; copy table to SRAM, Y is already zero from JSL menu macro
+    ; copy table to SRAM
     LDY #$00 : LDA ($16),Y : STA !sram_palette_border
     LDY #$02 : LDA ($16),Y : STA !sram_palette_headeroutline
     LDY #$04 : LDA ($16),Y : STA !sram_palette_text
@@ -80,16 +79,24 @@ ifb_palette2custom:
     LDY #$12 : LDA ($16),Y : STA !sram_palette_numseloutline
     LDY #$14 : LDA ($16),Y : STA !sram_palette_numsel
 
-    ; play a happy sound and refresh current profile
+    ; play sfx and refresh current profile
     JSL refresh_custom_palettes
     %sfxbubble()
-    PLB : PLP
-    RTL
+    PLB : %i16()
+    BRA .go_back
 
   .custom_selected
     ; make the animals cry cause we couldn't do anything
     %sfxdachora()
-    RTL
+
+  .go_back
+    ; go back to CustomizeMenu manually to avoid %sfxgoback
+    LDX !ram_cm_stack_index
+    LDA #$0000 : STA !ram_cm_cursor_stack,X
+    LDA !ram_cm_stack_index : SEC : SBC #$0004 : STA !ram_cm_stack_index
+    JSL cm_calculate_max
+    LDY.w #CustomizeMenu
+    JML action_submenu
 
 ifb_paletterando:
     %cm_submenu("Randomize Custom Palette", #PaletteRandoConfirm)
