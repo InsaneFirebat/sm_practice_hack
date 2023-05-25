@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.4.8]  Fixed clearing custom presets with Factory Reset option on TinyStates builds
 * [2.5.4.8]  Update beam graphics when selecting an equipment category
 * [2.5.4.7]  Fixed background when loading presets into Draygon's room
 * [2.5.4.7]  Prevent crash viewer from immediately jumping to the next page when loading

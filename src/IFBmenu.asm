@@ -732,15 +732,16 @@ ifb_factory_reset_keep_presets:
 ifb_factory_reset_delete_presets:
     %cm_jsl("No, mark them as empty", .routine, #$0000)
   .routine
-    TYX : TXA ; clear registers
+    TYX : TXA ; LDA/X/Y #$0000
 -   STA !PRESET_SLOTS,X ; overwrite "5AFE" words
+if !FEATURE_TINYSTATES
+    ; inc and multiply Y by $100 for next slot index
+    INY : TYA : XBA : TAX
+else
     ; inc and multiply Y by $200 for next slot index
     INY : TYA : ASL : XBA : TAX
-if !FEATURE_TINYSTATES
-    CPY #$0007 : BNE -
-else
-    CPY #$0020 : BNE -
 endif
+    CPY !TOTAL_PRESET_SLOTS : BNE -
     ; continue into action_factory_reset
 
 action_factory_reset:
