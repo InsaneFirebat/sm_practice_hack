@@ -2998,6 +2998,7 @@ PhantoonMenu:
     dw #$FFFF
     dw #phan_flamepattern
     dw #phan_next_flamepattern
+    dw #phan_flame_direction
     dw #$0000
     %cm_header("PHANTOON RNG CONTROL")
 
@@ -3170,6 +3171,16 @@ phan_next_flamepattern:
     db #$28, "        111", #$FF
     db #$28, "    3333333", #$FF
     db #$28, "    1424212", #$FF
+    db #$FF
+
+phan_flame_direction:
+    dw !ACTION_CHOICE
+    dl #!ram_phantoon_flame_direction
+    dw #$0000
+    db #$28, "Flame Direction", #$FF
+    db #$28, "     RANDOM", #$FF
+    db #$28, "       LEFT", #$FF
+    db #$28, "      RIGHT", #$FF
     db #$FF
 
 rng_botwoon_first:

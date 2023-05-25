@@ -161,6 +161,7 @@
 !ram_watch_right_index = !WRAM_START+$F0
 
 !ram_auto_save_state = !WRAM_START+$F2
+!ram_phantoon_flame_direction = !WRAM_PERSIST_START+$F4
 
 !ram_slowdown_mode = $7EFFFE ; Bank $7E required
 
