@@ -263,11 +263,7 @@ presets_random:
     JML LoadRandomPreset
 
 presets_custom_preset_slot:
-if !FEATURE_TINYSTATES
-    %cm_numfield("Custom Preset Slot", !sram_custom_preset_slot, 0, 15, 1, 2, #.routine) ; update total slots in gamemode.asm
-else
-    %cm_numfield("Custom Preset Slot", !sram_custom_preset_slot, 0, 39, 1, 2, #.routine) ; update total slots in gamemode.asm
-endif
+    %cm_numfield("Custom Preset Slot", !sram_custom_preset_slot, 0, !TOTAL_PRESET_SLOTS, 1, 2, #.routine)
   .routine
     ; ignore if not A, X, or Y
     LDA !IH_CONTROLLER_PRI_NEW : BIT #$40C0 : BNE .submenu
