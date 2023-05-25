@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.4.7]  Fixed background when loading presets into Draygon's room
 * [2.5.4.7]  Prevent crash viewer from immediately jumping to the next page up loading
 * [2.5.4.7]  Added an option to skip the game over screen
 * [2.5.4.6]  Added a confirmation screen when overwriting custom menu palettes
