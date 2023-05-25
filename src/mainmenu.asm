@@ -2614,6 +2614,7 @@ CutscenesMenu:
     dw #cutscenes_fast_nintendo_logo
     dw #cutscenes_skip_intro
     dw #cutscenes_skip_ceres_arrival
+    dw #cutscenes_skip_game_over
     dw #$FFFF
     dw #kraid_skip_intro
     dw #phan_skip_intro
@@ -2626,11 +2627,9 @@ CutscenesMenu:
 cutscenes_fast_nintendo_logo:
     %cm_toggle("Fast Nintendo Logo", !sram_fast_nintendo_logo, #$0001, #0)
 
-!CUTSCENE_SKIP_INTRO = #$0001
 cutscenes_skip_intro:
     %cm_toggle_bit("Skip Intro", !sram_cutscenes, !CUTSCENE_SKIP_INTRO, #0)
 
-!CUTSCENE_SKIP_CERES_ARRIVAL = #$0002
 cutscenes_skip_ceres_arrival:
     %cm_toggle_bit("Skip Ceres Arrival", !sram_cutscenes, !CUTSCENE_SKIP_CERES_ARRIVAL, #0)
 
@@ -2640,13 +2639,14 @@ kraid_skip_intro:
 phan_skip_intro:
     %cm_toggle_bit("Skip Phantoon Intro", !sram_phantoon_intro, #$0001, 0)
 
-!CUTSCENE_SKIP_G4 = #$0080
 cutscenes_g4_skip:
     %cm_toggle_bit("Skip G4", !sram_cutscenes, !CUTSCENE_SKIP_G4, #0)
 
-!CUTSCENE_FAST_MB = #$0100
 cutscenes_fast_mb:
     %cm_toggle_bit("Fast Mother Brain", !sram_cutscenes, !CUTSCENE_FAST_MB, #0)
+
+cutscenes_skip_game_over:
+    %cm_toggle_bit("Skip Game Over", !sram_cutscenes, !CUTSCENE_SKIP_GAMEOVER, #0)
 
 
 ; -------------------
