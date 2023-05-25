@@ -864,9 +864,8 @@ action_category:
     LDA.l EquipmentTable,X : STA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY : INX #2
 
     JSL cm_set_etanks_and_reserve
-
     %sfxmissile()
-    RTL
+    JML $90AC8D ; update beam gfx
 }
 
 EquipmentTable:
