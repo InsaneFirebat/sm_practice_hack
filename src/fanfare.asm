@@ -1,7 +1,7 @@
 
 
 ;org $84EFD9
-org $84FF6D
+org !ORG_FANFARE_BANK84
 print pc, " fanfare restore start"
   .prepareloop
     PHX              ; start of logic that was overwritten
@@ -48,7 +48,7 @@ org $82E126
     BRA $08
 
 
-org $85FF00
+org !ORG_FANFARE_BANK85
 print pc, " fanfare start"
 hook_message_box_wait:
     LDA !sram_fanfare_toggle : BNE .fanfareloop
@@ -82,6 +82,7 @@ if !FEATURE_SD2SNES
     %a16()
     LDA $4218 : BEQ .wait_for_lag_frame
     CMP !sram_ctrl_load_state : BNE .wait_for_lag_frame
+    LDA !SRAM_SAVED_STATE : CMP #$5AFE : BNE .wait_for_lag_frame
     PHB : PHK : PLB
     JML load_state
 
@@ -95,7 +96,7 @@ hook_resume_room_music:
     LDA !sram_fanfare_toggle : BNE .resume
 
     ; This method is also used when starting game at Ceres
-    LDA $7ED914 : CMP #$001F : BEQ .resume
+    LDA !AREA_ID : CMP #$0006 : BEQ .resume
     RTL
 
   .resume

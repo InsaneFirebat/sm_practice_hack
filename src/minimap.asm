@@ -6,10 +6,10 @@ org $809B51
     JMP $9BFB    ; skip drawing auto reserve icon and normal energy numbers and tanks during HUD routine
 
 org $82AED9      ; routine to draw auto reserve icon on HUD from equip screen
-    NOP : NOP : NOP
+    JSR mm_refresh_reserves
 
 org $82AEAF      ; routine to remove auto reserve icon on HUD from equip screen
-    NOP : NOP : NOP
+    JSR mm_refresh_reserves
 
 org $809AF3
     JSL mm_initialize_minimap
@@ -47,12 +47,14 @@ org $82E488      ; write tiles to VRAM
 
 
 org $9AB200      ; graphics for HUD
+hudgfx_bin:
 incbin ../resources/Oxide_hudgfx.bin
 
 
 ; Place minimap graphics in bank FD
-org $FDD500
+org !ORG_MINIMAP_BANKFD
 print pc, " minimap bankFD start"
+mapgfx_bin:
 incbin ../resources/Oxide_mapgfx.bin
 
 ; Next block needs to be all zeros to clear a tilemap
@@ -77,8 +79,7 @@ org $80994D
 
 
 ; Placed in bank 82 so that the jumps work
-;org $82F70F
-org $82F800
+org !ORG_MINIMAP_BANK82
 print pc, " minimap bank82 start"
 
 mm_write_and_clear_hud_tiles:
@@ -89,8 +90,8 @@ mm_write_and_clear_hud_tiles:
     ; Load in normal vram
     LDA #$80 : STA $2115 ; word-access, incr by 1
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
-    LDX #$B200 : STX $4302 ; Source offset
-    LDA #$9A : STA $4304 ; Source bank
+    LDX.w #hudgfx_bin : STX $4302 ; Source offset
+    LDA.b #hudgfx_bin>>16 : STA $4304 ; Source bank
     LDX #$2000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
@@ -101,8 +102,8 @@ mm_write_and_clear_hud_tiles:
   .minimap_vram
     LDA #$80 : STA $2115 ; word-access, incr by 1
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
-    LDX #$D500 : STX $4302 ; Source offset
-    LDA #$FD : STA $4304 ; Source bank
+    LDX.w #mapgfx_bin : STX $4302 ; Source offset
+    LDA.b #mapgfx_bin>>16 : STA $4304 ; Source bank
     LDX #$2000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
@@ -117,25 +118,31 @@ mm_write_hud_tiles_during_door_transition:
 
     ; Load in normal vram
     JSR $E039
-    dl $9AB200
+    dl hudgfx_bin
     dw $4000
     dw $1000
     JMP $E492  ; resume logic
 
   .minimap_vram
     JSR $E039
-    dl $FDD500
+    dl mapgfx_bin
     dw $4000
     dw $1000
     JMP $E492  ; resume logic
 }
 
+mm_refresh_reserves:
+{
+    LDA #$FFFF : STA !ram_reserves_last
+    RTS
+}
+
 print pc, " minimap bank82 end"
-warnpc $82FA00
+;warnpc $82F800 ; layout.asm
 
 
 ; Placed in bank 90 so that the jumps work
-org $90F640
+org !ORG_MINIMAP_BANK90
 print pc, " minimap bank90 start"
 
 mm_initialize_minimap:
@@ -143,7 +150,6 @@ mm_initialize_minimap:
     ; If we just left Ceres, increment segment timer
     LDA !GAMEMODE : AND #$00FF : CMP #$0006 : BNE .init_minimap
     LDA #$0000 : STA $12 : STA $14 : STA !ram_room_has_set_rng
-    STA $09DA : STA $09DC : STA $09DE : STA $09E0
     STA !ram_realtime_room : STA !ram_last_realtime_room
     STA !ram_gametime_room : STA !ram_last_gametime_room
     STA !ram_last_room_lag : STA !ram_last_door_lag_frames : STA !ram_transition_counter
@@ -203,13 +209,12 @@ mm_clear_boss_room_tiles:
     LDA #$2C1F
     LDX #$0000
   .loop
-    STA $7EC63C,X
-    STA $7EC67C,X
-    STA $7EC6BC,X
+    STA !HUD_TILEMAP+$3C,X
+    STA !HUD_TILEMAP+$7C,X
+    STA !HUD_TILEMAP+$BC,X
     INX : INX : CPX #$000A : BMI .loop
     JMP $A80A
 }
 
 print pc, " minimap bank90 end"
-warnpc $90F7F0
 

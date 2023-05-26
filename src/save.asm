@@ -2,7 +2,7 @@
 ; by acmlm, total, Myria
 ;
 
-org $80F800
+org !ORG_SAVE
 print pc, " save start"
 
 ; These can be modified to do game-specific things before and after saving and loading
@@ -19,8 +19,8 @@ pre_load_state:
     ; Rerandomize
     LDA !sram_save_has_set_rng : BNE .done
     LDA !sram_rerandomize : AND #$00FF : BEQ .done
-    LDA $05E5 : STA $770080
-    LDA $05B6 : STA $770082
+    LDA !CACHED_RANDOM_NUMBER : STA !SRAM_SAVED_RNG
+    LDA !FRAME_COUNTER : STA !SRAM_SAVED_FRAME_COUNTER
 
   .done
     RTS
@@ -43,7 +43,7 @@ post_load_state:
     TXA : CMP $063B : BNE .music_queue_data_search
 
   .no_music_data
-    LDA !sram_music_toggle : CMP #$0001 : BNE .music_off
+    LDA !sram_music_toggle : CMP #$0002 : BPL .music_fast_off_preset_off
 
     ; No data found in queue, check if we need to insert it
     LDA !SRAM_MUSIC_DATA : CMP !MUSIC_DATA : BEQ .music_queue_increase_timer
@@ -54,22 +54,23 @@ post_load_state:
     LDA #$0008 : STA $0629,X
 
   .queued_music_data
-    LDA !sram_music_toggle : CMP #$0001 : BEQ .queued_music_data_clear_track
+    LDA !sram_music_toggle : CMP #$0002 : BMI .queued_music_data_clear_track
 
     ; There is music data in the queue, assume it was loaded
     LDA $0619,X : STA !MUSIC_DATA
-    BRA .music_off
+    BRA .music_fast_off_preset_off
 
   .music_queue_empty
-    LDA !sram_music_toggle : CMP #$0001 : BNE .music_off
-    LDA !SRAM_MUSIC_DATA : CMP !MUSIC_DATA : BEQ .music_check_track
+    LDA !sram_music_toggle : CMP #$0002 : BPL .music_fast_off_preset_off
+    LDA !SRAM_MUSIC_DATA : CMP !MUSIC_DATA : BNE .music_clear_track_load_data
+    BRL .music_check_track
 
-    ; Clear track and load data
+  .music_clear_track_load_data
     LDA #$0000 : JSL !MUSIC_ROUTINE
     LDA #$FF00 : CLC : ADC !MUSIC_DATA : JSL !MUSIC_ROUTINE
     BRA .music_load_track
 
-  .music_off
+  .music_fast_off_preset_off
     ; Treat music as already loaded
     STZ $0629 : STZ $062B : STZ $062D : STZ $062F
     STZ $0631 : STZ $0633 : STZ $0635 : STZ $0637
@@ -86,7 +87,15 @@ post_load_state:
   .queued_music_data_clear_track
     ; Insert clear track before queued music data and start queue there
     DEX : DEX : TXA : AND #$000E : STA $063B : TAX
-    LDA #$0000 : STA $0619,X : STA $063D
+    STZ $0619,X : STZ $063D
+
+    ; Clear all timers before this point
+  .music_clear_timer_loop
+    TXA : DEC : DEC : AND #$000E : TAX
+    STZ $0629,X : CPX $0639 : BNE .music_clear_timer_loop
+
+    ; Set timer on the clear track command
+    LDX $063B
 
   .queued_music_prepare_set_timer
     LDA !SRAM_SOUND_TIMER : BNE .queued_music_set_timer
@@ -103,14 +112,40 @@ post_load_state:
     LDA !MUSIC_TRACK : JSL !MUSIC_ROUTINE
 
   .music_done
+    ; Reload OOB tile viewer if enabled
+    LDA !ram_oob_watch_active : BEQ .tileviewer_done
+    JSL upload_sprite_oob_tiles
+  .tileviewer_done
+    ; Reload BG3 GFX if minimap setting changed
+    LDA !ram_minimap : CMP !SRAM_SAVED_MINIMAP : BEQ .rng
+    JSL cm_transfer_original_tileset
+    LDA !ram_minimap : BEQ .disableMinimap
+    ; Enabled minimap, clear stale tiles
+    LDA #$2C0F ; blank
+    STA !HUD_TILEMAP+$3A : STA !HUD_TILEMAP+$7A : STA !HUD_TILEMAP+$BA
+    LDA #$2C1E ; minimap border
+    STA !HUD_TILEMAP+$46 : STA !HUD_TILEMAP+$86 : STA !HUD_TILEMAP+$C6
+    BRA .rng
+  .disableMinimap
+    LDA #$2C0F : STA !HUD_TILEMAP+$7C : STA !HUD_TILEMAP+$7E
+
+  .rng
     ; Rerandomize
     LDA !sram_save_has_set_rng : BNE .done
     LDA !sram_rerandomize : AND #$00FF : BEQ .done
-    LDA $770080 : STA $05E5
-    LDA $770082 : STA $05B6
+    LDA !SRAM_SAVED_RNG : STA !CACHED_RANDOM_NUMBER
+    LDA !SRAM_SAVED_FRAME_COUNTER : STA !FRAME_COUNTER
 
   .done
     JSL init_nonzero_wram
+
+    ; Freeze inputs if necessary
+    LDA !ram_freeze_on_load : BEQ .return
+    LDA #$FFFF : STA !ram_slowdown_mode
+    INC : STA !ram_slowdown_controller_1 : STA !ram_slowdown_controller_2
+    INC : STA !ram_slowdown_frames
+
+  .return
     RTS
 }
 
@@ -175,10 +210,11 @@ save_write_table:
     dw $0000|$2181, $0000  ; WRAM addr = $xx0000
     dw $1000|$2183, $00    ; WRAM addr = $7Exxxx  (bank is relative to $7E)
     dw $1000|$420B, $02    ; Trigger DMA on channel 1
-    ; Copy WRAM 7E8000-7EFFFF to SRAM 720000-727FFF.
+    ; Copy WRAM 7E8000-7EFCFF to SRAM 720000-727CFF.
     dw $0000|$4312, $0000  ; A addr = $xx0000
     dw $0000|$4314, $0072  ; A addr = $72xxxx, size = $xx00
-    dw $0000|$4316, $0080  ; size = $80xx ($8000), unused bank reg = $00.
+    dw $0000|$4314, ((!WRAM_PERSIST_START-$7E8000<<8)&$FF00)|$0072  ; A addr = $72xxxx, size = $xx1C
+    dw $0000|$4316, (!WRAM_PERSIST_START-$7E8000)>>8                ; size = $7Dxx ($7D1C), unused bank reg = $00.
     dw $0000|$2181, $8000  ; WRAM addr = $xx8000
     dw $1000|$2183, $00    ; WRAM addr = $7Exxxx  (bank is relative to $7E)
     dw $1000|$420B, $02    ; Trigger DMA on channel 1
@@ -231,6 +267,9 @@ save_return:
 
     %ai16()
     LDA !ram_room_has_set_rng : STA !sram_save_has_set_rng
+    LDA !ram_minimap : STA !SRAM_SAVED_MINIMAP
+
+    LDA #$5AFE : STA !SRAM_SAVED_STATE
 
     TSC
     STA !SRAM_SAVED_SP
@@ -264,10 +303,10 @@ load_write_table:
     dw $0000|$2181, $0000  ; WRAM addr = $xx0000
     dw $1000|$2183, $00    ; WRAM addr = $7Exxxx  (bank is relative to $7E)
     dw $1000|$420B, $02    ; Trigger DMA on channel 1
-    ; Copy SRAM 720000-727FFF to WRAM 7E8000-7EFFFF.
+    ; Copy SRAM 720000-727CFF to WRAM 7E8000-7EFCFF.
     dw $0000|$4312, $0000  ; A addr = $xx0000
-    dw $0000|$4314, $0072  ; A addr = $72xxxx, size = $xx00
-    dw $0000|$4316, $0080  ; size = $80xx ($8000), unused bank reg = $00.
+    dw $0000|$4314, ((!WRAM_PERSIST_START-$7E8000<<8)&$FF00)|$0072  ; A addr = $72xxxx, size = $xx1C
+    dw $0000|$4316, (!WRAM_PERSIST_START-$7E8000)>>8                ; size = $7Dxx ($7D1C), unused bank reg = $00.
     dw $0000|$2181, $8000  ; WRAM addr = $xx8000
     dw $1000|$2183, $00    ; WRAM addr = $7Exxxx  (bank is relative to $7E)
     dw $1000|$420B, $02    ; Trigger DMA on channel 1
@@ -397,4 +436,4 @@ vm:
 }
 
 print pc, " save end"
-warnpc $80FC00
+warnpc $80FD00 ; infohud.asm
