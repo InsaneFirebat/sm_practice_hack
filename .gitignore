@@ -5,3 +5,4 @@ build/*
 build/HACK/*
 tools/asar.exe
 tools/dll/*
+/names/custom_names.txt

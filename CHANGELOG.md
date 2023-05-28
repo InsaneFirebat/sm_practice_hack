@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.5]    Optimizations for projectile hitbox viewers by idlechild
 * [2.5.4.8]  Added RNG control for Phantoon's flame bounce direction
 * [2.5.4.8]  Fixed clearing custom presets with Factory Reset option on TinyStates builds
 * [2.5.4.8]  Update beam graphics when selecting an equipment category
