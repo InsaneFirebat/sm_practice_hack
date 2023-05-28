@@ -25,6 +25,11 @@ org $A7D064
     ; Phantoon flame pattern
 org $A7CFD6
     JSL hook_phantoon_flame_pattern
+
+    ; Phantoon flame direction
+org $8699EB
+    JSL hook_phantoon_flame_direction
+    BRA $05
 }
 
 
@@ -352,6 +357,19 @@ hook_phantoon_flame_pattern:
     RTL
 }
 
+hook_phantoon_flame_direction:
+{
+    LDA !ram_phantoon_flame_direction : BEQ .no_manip
+    DEC : BEQ +
+    LDA #$0080 : RTL ; right
++   LDA #$FF80 : RTL ; left
+
+  .no_manip
+    LDA $05B6 : BIT #$0001 : BNE +
+    LDA #$0080 : RTL ; right
++   LDA #$FF80 : RTL ; left
+}
+
 
 hook_botwoon_move:
 {
@@ -507,7 +525,7 @@ org $A6F66A
     LDA $7ED82E
 
 
-!ORG_RNG_BANKA6 = $A6FF00 ; $6B, bank $A6
+org !ORG_RNG_BANKA6
 print pc, " ridley rng start"
 
 ;ridley_init_hook:

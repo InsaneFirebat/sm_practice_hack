@@ -217,6 +217,4 @@ mm_clear_boss_room_tiles:
 }
 
 print pc, " minimap bank90 end"
-warnpc $90F7F0 ; not sure what the old one was yet
-warnpc $90F800 ; misc.asm
 
