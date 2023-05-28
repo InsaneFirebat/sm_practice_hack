@@ -26,6 +26,12 @@ org $A7D064
 org $A7CFD6
     JSL hook_phantoon_flame_pattern
 
+    ; Phantoon flame direction
+org $8699EB
+    JSL hook_phantoon_flame_direction
+    BRA $05
+}
+
 
 ; --------------
 ; Botwoon hijack
@@ -346,6 +352,19 @@ hook_phantoon_flame_pattern:
   .no_manip
     LDA !CACHED_RANDOM_NUMBER
     RTL
+}
+
+hook_phantoon_flame_direction:
+{
+    LDA !ram_phantoon_flame_direction : BEQ .no_manip
+    DEC : BEQ +
+    LDA #$0080 : RTL ; right
++   LDA #$FF80 : RTL ; left
+
+  .no_manip
+    LDA $05B6 : BIT #$0001 : BNE +
+    LDA #$0080 : RTL ; right
++   LDA #$FF80 : RTL ; left
 }
 
 
