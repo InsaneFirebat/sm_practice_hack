@@ -41,7 +41,7 @@ init_code:
 
     ; Check if we should initialize SRAM
     LDA !sram_initialized : CMP #!SRAM_VERSION : BEQ .sram_initialized
-    JSR init_sram
+    JSL init_sram
 
   .sram_initialized
     ; WRAM located in bank 7E, clear it later
@@ -55,46 +55,23 @@ init_code:
 init_nonzero_wram:
 {
     ; RAM $7E0000 fluctuates so it is not a good default value
-    LDA #$0F8C : STA !ram_watch_left        ; Enemy HP
-    LDA #$09C2 : STA !ram_watch_right       ; Samus HP
+    LDA #!ENEMY_HP : STA !ram_watch_left
+    LDA #!SAMUS_HP : STA !ram_watch_right
+
+    LDA !sram_seed_X : STA !ram_seed_X
+    LDA !sram_seed_Y : STA !ram_seed_Y
+
+    LDA #$0001 : STA !ram_cm_dummy_on
 
     RTL
 }
 
 init_sram:
 {
-    ; Controllers
-    LDA #$3000 : STA !sram_ctrl_menu                  ; Start + Select
-    LDA #$6010 : STA !sram_ctrl_save_state            ; Select + Y + R
-    LDA #$6020 : STA !sram_ctrl_load_state            ; Select + Y + L
-    LDA #$5020 : STA !sram_ctrl_load_last_preset      ; Start + Y + L
-    LDA #$0000 : STA !sram_ctrl_full_equipment
-    LDA #$0000 : STA !sram_ctrl_kill_enemies
-    LDA #$0000 : STA !sram_ctrl_reset_segment_timer
-    LDA #$0000 : STA !sram_ctrl_reset_segment_later
-    LDA #$0000 : STA !sram_ctrl_random_preset
-    LDA #$0000 : STA !sram_ctrl_save_custom_preset
-    LDA #$0000 : STA !sram_ctrl_load_custom_preset
-    LDA #$0000 : STA !sram_ctrl_inc_custom_preset
-    LDA #$0000 : STA !sram_ctrl_dec_custom_preset
-    LDA #$0000 : STA !sram_ctrl_toggle_tileviewer
-    LDA #$0000 : STA !sram_ctrl_update_timers
+    ; chosen seeds will automatically change over time, and will never be zero
+    LDA.w #init_wram_based_on_sram : STA !sram_seed_X
+    LDA.w #!SRAM_VERSION : STA !sram_seed_Y
 
-    ; Input Cheat Sheet  ($4218)
-    ; $8000 = B
-    ; $4000 = Y
-    ; $2000 = Select
-    ; $1000 = Start
-    ; $0800 = Up
-    ; $0400 = Down
-    ; $0200 = Left
-    ; $0100 = Right
-    ; $0080 = A
-    ; $0040 = X
-    ; $0020 = L
-    ; $0010 = R
-
-    ; Features
     LDA #$0015 : STA !sram_artificial_lag
     LDA #$0001 : STA !sram_rerandomize
     LDA #$0000 : STA !sram_fanfare_toggle
@@ -112,13 +89,63 @@ init_sram:
     LDA #$0001 : STA !sram_healthalarm
     LDA #$0000 : STA !sram_lag_counter_mode
     LDA #$0000 : STA !sram_preset_options
-
     LDA #$000A : STA !sram_metronome_tickrate
     LDA #$0002 : STA !sram_metronome_sfx
+    LDA #$0000 : STA !sram_ctrl_auto_save_state
+
+    JSL init_menu_customization
+
+  .controller_shortcuts
+    ; branch called by ctrl_reset_defaults in mainmenu.asm
+    LDA #$3000 : STA !sram_ctrl_menu                  ; Start + Select
+    LDA #$6010 : STA !sram_ctrl_save_state            ; Select + Y + R
+    LDA #$6020 : STA !sram_ctrl_load_state            ; Select + Y + L
+    LDA #$5020 : STA !sram_ctrl_load_last_preset      ; Start + Y + L
+    LDA #$0000 : STA !sram_ctrl_full_equipment
+    LDA #$0000 : STA !sram_ctrl_kill_enemies
+    LDA #$0000 : STA !sram_ctrl_reset_segment_timer
+    LDA #$0000 : STA !sram_ctrl_reset_segment_later
+    LDA #$0000 : STA !sram_ctrl_random_preset
+    LDA #$0000 : STA !sram_ctrl_save_custom_preset
+    LDA #$0000 : STA !sram_ctrl_load_custom_preset
+    LDA #$0000 : STA !sram_ctrl_inc_custom_preset
+    LDA #$0000 : STA !sram_ctrl_dec_custom_preset
+    ; duplicates for reset defaults routine
+    LDA #$0000 : STA !sram_ctrl_toggle_tileviewer
+    LDA #$0000 : STA !sram_ctrl_update_timers
+    LDA #$0000 : STA !sram_ctrl_auto_save_state
 
     LDA #!SRAM_VERSION : STA !sram_initialized
-    RTS
+    RTL
 }
+
+init_menu_customization:
+{
+    LDA #$0002 : STA !sram_custompalette_profile
+    LDA #$7277 : STA !sram_palette_border
+    LDA #$48F3 : STA !sram_palette_headeroutline
+    LDA #$7FFF : STA !sram_palette_text
+    LDA #$0000 : STA !sram_palette_numoutline
+    LDA #$7FFF : STA !sram_palette_numfill
+    LDA #$4376 : STA !sram_palette_toggleon
+    LDA #$761F : STA !sram_palette_seltext
+    LDA #$0000 : STA !sram_palette_seltextbg
+    LDA #$0000 : STA !sram_palette_background
+    LDA #$0000 : STA !sram_palette_numseloutline
+    LDA #$761F : STA !sram_palette_numsel
+    LDA #$0001 : STA !sram_menu_background
+    LDA #$0002 : STA !sram_cm_scroll_delay
+
+  .soundFX
+    ; branch called by sfx_reset in customizemenu.asm
+    LDA #$0037 : STA !sram_customsfx_move
+    LDA #$002A : STA !sram_customsfx_toggle
+    LDA #$0038 : STA !sram_customsfx_number
+    LDA #$0028 : STA !sram_customsfx_confirm
+    LDA #$0007 : STA !sram_customsfx_goback
+    RTL
+}
+
 
 print pc, " init end"
 warnpc $81FF00 ;;; $FF00: Thanks Genji! ;;;
