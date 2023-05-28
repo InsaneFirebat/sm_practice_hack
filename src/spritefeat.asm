@@ -51,13 +51,13 @@ update_sprite_features:
 +   LDA !ram_sprite_feature_flags : BIT !SPRITE_BOSS_HITBOX : BEQ +
     JSR custom_sprite_hitbox
 
-    ; Draw enemy projectile hitboxes if activated
-+   LDA !ram_sprite_feature_flags : BIT !SPRITE_SAMUS_PROJ : BEQ +
-    JSR update_enemyproj_sprite_hitbox
-
     ; Draw Samus projectile hitboxes if activated
-+   LDA !ram_sprite_feature_flags : BIT !SPRITE_ENEMY_PROJ : BEQ +
++   LDA !ram_sprite_feature_flags : BIT !SPRITE_SAMUS_PROJ : BEQ +
     JSR update_samusproj_sprite_hitbox
+
+    ; Draw enemy projectile hitboxes if activated
++   LDA !ram_sprite_feature_flags : BIT !SPRITE_ENEMY_PROJ : BEQ +
+    JSR update_enemyproj_sprite_hitbox
 
 +   PLP : PLY : PLX : PLA
 
@@ -355,8 +355,8 @@ update_enemy_sprite_hitbox:
     RTS
 
   .drawHitbox
-    LDA !ENEMY_Y,X : SEC : SBC !LAYER1_Y : PHA ; top edge
-    LDA !ENEMY_X,X : SEC : SBC !LAYER1_X : PHA ; left edge
+    LDA !ENEMY_Y,X : SEC : SBC !LAYER1_Y : PHA ; Y coord
+    LDA !ENEMY_X,X : SEC : SBC !LAYER1_X : PHA ; X coord
 
     %a8()
     ; X coord
@@ -526,8 +526,11 @@ update_extended_spritemap_hitbox:
 
 update_enemyproj_sprite_hitbox:
 ; draw hitboxes around enemy projectiles
+; min proj radius to draw all 4 corners
+; 5 would be ideal, but 7 works better with MB ketchup beam
+!min_four_corners_radius = #$0007
 {
-    LDX #$FFFE ; X = projectile index (starts at zero)
+    LDX #$FFFE : STX $12 : STX $14 ; X = projectile index
     LDY !OAM_STACK_POINTER ; Y = OAM stack pointer
 
   .nextProjectile
@@ -558,14 +561,47 @@ update_enemyproj_sprite_hitbox:
     CPX #$0024 : BNE .nextProjectile : RTS ; max 18 projectiles
 
   .drawHitbox
-    LDA !ENEMY_PROJ_Y,X : SEC : SBC !LAYER1_Y : PHA ; top edge
-    LDA !ENEMY_PROJ_X,X : SEC : SBC !LAYER1_X : PHA ; left edge
+    LDA !ENEMY_PROJ_Y,X : SEC : SBC !LAYER1_Y : PHA ; Y coord
+    LDA !ENEMY_PROJ_X,X : SEC : SBC !LAYER1_X : PHA ; X coord
+    LDA $12 : CMP !min_four_corners_radius : BPL .drawFullHitbox
+    LDA $14 : CMP !min_four_corners_radius : BPL .drawFullHitbox
 
+    ; For small projectiles only draw two corners
     %a8()
-    ; X coord
-    PLA : SEC : SBC $12
-    STA $0370,Y : STA $0378,Y ; X pos
-    CLC : ADC $12 : ADC $12 : SEC : SBC #$08
+    PLA ; X coord
+    SEC : SBC $12
+    STA $0370,Y
+    CLC : ADC $12 : ADC $12
+    SEC : SBC #$08
+    STA $0374,Y
+
+    PLA : PLA : DEC ; Y coord
+    SEC : SBC $14
+    STA $0371,Y
+    CLC : ADC $14 : ADC $14
+    SEC : SBC #$08
+    STA $0375,Y
+    PLA
+
+    %ai16()
+    LDA #$3A47 : STA $0372,Y ; %00111010 top-left
+    LDA #$FA47 : STA $0376,Y ; %11111010 bottom-right
+
+    ; inc OAM stack
+    ; vanilla routines use AND #$01FF to wrap the stack after 1FCh
+    ; our routines start at zero so we exit when OAM is full
+    TYA : CLC : ADC #$0008
+    CMP #$0200 : BPL .fullStack
+    STA !OAM_STACK_POINTER : TAY
+    JMP .skipProjectile
+
+  .drawFullHitbox
+    %a8()
+    PLA ; X coord
+    SEC : SBC $12
+    STA $0370,Y : STA $0378,Y
+    CLC : ADC $12 : ADC $12
+    SEC : SBC #$08
     STA $0374,Y : STA $037C,Y
     PLA ; discard high byte
 
@@ -590,7 +626,7 @@ update_enemyproj_sprite_hitbox:
     ; vanilla routines use AND #$01FF to wrap the stack after 1FCh
     ; our routines start at zero so we exit when OAM is full
     TYA : CLC : ADC #$0010
-    CMP #$01FC : BPL .fullStack
+    CMP #$0200 : BPL .fullStack
     STA !OAM_STACK_POINTER : TAY
     JMP .skipProjectile
 
@@ -601,23 +637,36 @@ update_enemyproj_sprite_hitbox:
     JMP .skipProjectile
 
   .check32x32
-    LDA !ENEMY_PROJ_X : CMP !LAYER1_X : BMI .skipProjectile32x32
+    LDA !ENEMY_PROJ_PROPERTIES,X : AND #$A000 : CMP #$8000 : BNE .skipProjectile32x32
+    LDA !ENEMY_PROJ_X,X : CMP !LAYER1_X : BMI .skipProjectile32x32
     LDA !LAYER1_X : CLC : ADC #$0100 : CMP !ENEMY_PROJ_X,X : BMI .skipProjectile32x32
-    LDA !ENEMY_PROJ_Y : CMP !LAYER1_Y : BMI .skipProjectile32x32
+    LDA !ENEMY_PROJ_Y,X : CMP !LAYER1_Y : BMI .skipProjectile32x32
     LDA !LAYER1_Y : CLC : ADC #$0100 : CMP !ENEMY_PROJ_Y,X : BMI .skipProjectile32x32
 
-    LDA !ENEMY_PROJ_Y,X : AND #$FFE0 : SEC : SBC !LAYER1_Y : PHA ; top edge
-    LDA !ENEMY_PROJ_X,X : AND #$FFE0 : SEC : SBC !LAYER1_X : PHA ; left edge
+    LDA !ENEMY_PROJ_Y,X : AND #$FFE0 : CMP $14 : BNE .storeYandDraw32x32
+    LDA !ENEMY_PROJ_X,X : AND #$FFE0 : CMP $12 : BNE .storeXandDraw32x32
+    JMP .skipProjectile
+
+  .storeXandDraw32x32
+    STA $12 : LDA $14 : SEC : SBC !LAYER1_Y : PHA ; top edge
+    LDA $12 : BRA .draw32x32
+
+  .storeYandDraw32x32
+    STA $14 : SEC : SBC !LAYER1_Y : PHA ; top edge
+    LDA !ENEMY_PROJ_X,X : AND #$FFE0 : STA $12
+
+  .draw32x32
+    SEC : SBC !LAYER1_X : PHA ; left edge
 
     %a8()
-    PLA ; X coord
-    STA $0370,Y : STA $0378,Y ; X pos
-    CLC : ADC #$17
+    PLA ; left edge
+    STA $0370,Y : STA $0378,Y
+    CLC : ADC #$18
     STA $0374,Y : STA $037C,Y
 
-    PLA : PLA ; Y coord
+    PLA : PLA ; top edge
     STA $0371,Y : STA $0375,Y
-    CLC : ADC #$17
+    CLC : ADC #$18
     STA $0379,Y : STA $037D,Y
     PLA
 
@@ -705,14 +754,14 @@ update_samusproj_sprite_hitbox:
     LDA !SAMUS_PROJ_X,X : AND #$FFE0 : SEC : SBC !LAYER1_X : PHA ; left edge
 
     %a8()
-    PLA ; X coord
-    STA $0370,Y : STA $0378,Y ; X pos
-    CLC : ADC #$17
+    PLA ; left edge
+    STA $0370,Y : STA $0378,Y
+    CLC : ADC #$18
     STA $0374,Y : STA $037C,Y
 
-    PLA : PLA ; Y coord
+    PLA : PLA ; top edge
     STA $0371,Y : STA $0375,Y
-    CLC : ADC #$17
+    CLC : ADC #$18
     STA $0379,Y : STA $037D,Y
     PLA
 
@@ -849,7 +898,6 @@ custom_sprite_hitbox:
 
     ; inc oam stack
     TYA : CLC : ADC #$0010 : STA !OAM_STACK_POINTER
-
     RTS
 }
 

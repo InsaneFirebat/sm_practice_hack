@@ -6,9 +6,9 @@
 !VERSION_HEADER = $FB
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 5
-!VERSION_BUILD = 4
+!VERSION_BUILD = 5
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 8
+!VERSION_REV_2 = 0
 
 
 ; ---------
@@ -143,25 +143,23 @@
 !ram_botwoon_hidden = !WRAM_START+$D4
 !ram_botwoon_second = !WRAM_START+$D6
 !ram_botwoon_spit = !WRAM_START+$D8
+!ram_phantoon_flame_direction = !WRAM_START+$DA
 
-!ram_sprite_feature_flags = !WRAM_START+$DA
+!ram_sprite_feature_flags = !WRAM_START+$DC
+!ram_auto_save_state = !WRAM_START+$DE
 
+; FREE SPACE ^ up to +$E8
 
-; ^ FREE SPACE @ $D0-$DC
-
-!ram_watch_bank = !WRAM_START+$DE
-!ram_watch_write_mode = !WRAM_START+$E0
-!ram_watch_left = !WRAM_START+$E2
-!ram_watch_right = !WRAM_START+$E4
-!ram_watch_edit_left = !WRAM_START+$E6
-!ram_watch_edit_right = !WRAM_START+$E8
-!ram_watch_edit_lock_left = !WRAM_START+$EA
-!ram_watch_edit_lock_right = !WRAM_START+$EC
-!ram_watch_left_index = !WRAM_START+$EE
-!ram_watch_right_index = !WRAM_START+$F0
-
-!ram_auto_save_state = !WRAM_START+$F2
-!ram_phantoon_flame_direction = !WRAM_PERSIST_START+$F4
+!ram_watch_bank = !WRAM_START+$EA
+!ram_watch_write_mode = !WRAM_START+$EC
+!ram_watch_left = !WRAM_START+$EE
+!ram_watch_right = !WRAM_START+$F0
+!ram_watch_edit_left = !WRAM_START+$F2
+!ram_watch_edit_right = !WRAM_START+$F4
+!ram_watch_edit_lock_left = !WRAM_START+$F6
+!ram_watch_edit_lock_right = !WRAM_START+$F8
+!ram_watch_left_index = !WRAM_START+$FA
+!ram_watch_right_index = !WRAM_START+$FC
 
 !ram_slowdown_mode = $7EFFFE ; Bank $7E required
 
@@ -416,8 +414,8 @@ endif
 !SPRITE_ENEMY_HITBOX = #$0002
 !SPRITE_EXTENDED_HITBOX = #$0004
 !SPRITE_BOSS_HITBOX = #$0008
-!SPRITE_ENEMY_PROJ = #$0020
 !SPRITE_SAMUS_PROJ = #$0010
+!SPRITE_ENEMY_PROJ = #$0020
 !SPRITE_32x32_PROJ = #$0040
 !SPRITE_OOB_WATCH = #$0080
 
@@ -527,6 +525,7 @@ endif
 !ENEMY_PROJ_X = $1A4B
 !ENEMY_PROJ_Y = $1A93
 !ENEMY_PROJ_RADIUS = $1BB3
+!ENEMY_PROJ_PROPERTIES = $1BD7
 
 !HUD_TILEMAP = $7EC600
 
