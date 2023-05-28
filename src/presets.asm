@@ -18,8 +18,10 @@ preset_load:
 
     JSL preset_start_gameplay  ; Start gameplay
 
-    ; Fix Phantoon's room
-    LDA !ROOM_ID : CMP #$CD13 : BNE +
+    ; Fix Phantoon and Draygon rooms
+    LDA !ROOM_ID : CMP #$CD13 : BEQ .fixBG2
+    CMP #$D9AA : BNE +
+  .fixBG2
     JSL preset_clear_BG2_tilemap
  
 +   JSL $809A79  ; HUD routine when game is loading
@@ -75,12 +77,7 @@ preset_load:
     JSL $91DEBA
 
     ; Re-upload OOB viewer tiles if needed
-    LDA !ram_oob_watch_active : BEQ +
-      JSL upload_sprite_oob_tiles
-    +
-
-    ; Re-upload OOB viewer tiles if needed
-    LDA !ram_oob_watch_active : BEQ .done_upload_sprite_oob_tiles
+    LDA !ram_sprite_feature_flags : BIT !SPRITE_OOB_WATCH : BEQ .done_upload_sprite_oob_tiles
     JSL upload_sprite_oob_tiles
 
   .done_upload_sprite_oob_tiles
@@ -672,9 +669,10 @@ endif
 transfer_cgram_long:
 {
     PHP
-    %a16()
-    %i8()
+    %a16() : %i8()
+    LDX #$80 : STX $2100 ; forced blanking
     JSR $933A
+    LDX #$0F : STX $2100
     PLP
     RTL
 }
