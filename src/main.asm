@@ -12,12 +12,11 @@ lorom
 
 table ../resources/normal.tbl
 
+incsrc macros.asm
+incsrc defines.asm
 if !FEATURE_DEV
 incsrc symbols.asm
 endif
-
-incsrc macros.asm
-incsrc defines.asm
 
 incsrc printdebug.asm
 
