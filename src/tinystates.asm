@@ -163,6 +163,7 @@ post_load_state:
 
     ; Freeze inputs if necessary
     LDA !ram_freeze_on_load : BEQ .return
+    LDA !ram_slowdown_mode : BNE .return
     LDA #$FFFF : STA !ram_slowdown_mode
     INC : STA !ram_slowdown_controller_1 : STA !ram_slowdown_controller_2
     INC : STA !ram_slowdown_frames
