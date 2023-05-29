@@ -205,6 +205,9 @@
 !ram_cm_botwoon_spit = !WRAM_MENU_START+$4A
 !ram_cm_custom_preset_labels = !WRAM_MENU_START+$4C
 
+!ram_seed_X = !WRAM_MENU_START+$4E
+!ram_seed_Y = !WRAM_MENU_START+$50
+
 ; ^ FREE SPACE ^ up to +$76
 
 !ram_cm_preserved_timers = !WRAM_MENU_START+$78 ; 8 bytes
@@ -577,9 +580,39 @@ endif
 !sram_cutscenes = !SRAM_START+$46
 !sram_compressed_graphics = !SRAM_START+$48
 !sram_lag_counter_mode = !SRAM_START+$4A
-!sram_preset_map_tiles = !SRAM_START+$4C
-!sram_preset_auto_segment = !SRAM_START+$4E
-!sram_suppress_flashing = !SRAM_START+$50
+
+!sram_fast_doors = !SRAM_START+$4C
+!sram_suppress_flashing = !SRAM_START+$4E
+!sram_fast_elevators = !SRAM_START+$50
+!sram_custom_damage = !SRAM_START+$52
+!sram_custom_charge_damage = !SRAM_START+$54
+!sram_custom_uncharge_damage = !SRAM_START+$56
+!sram_water_physics = !SRAM_START+$58
+!sram_double_jump = !SRAM_START+$5A
+
+; do not change order without updating custom palette profiles in customizemenu.asm
+!sram_palette_border = !SRAM_START+$5C
+!sram_palette_headeroutline = !SRAM_START+$5E
+!sram_palette_text = !SRAM_START+$60
+!sram_palette_numoutline = !SRAM_START+$62
+!sram_palette_numfill = !SRAM_START+$64
+!sram_palette_toggleon = !SRAM_START+$66
+!sram_palette_seltext = !SRAM_START+$68
+!sram_palette_seltextbg = !SRAM_START+$6A
+!sram_palette_background = !SRAM_START+$6C
+!sram_palette_numseloutline = !SRAM_START+$6E
+!sram_palette_numsel = !SRAM_START+$70
+!sram_custompalette_profile = !SRAM_START+$72
+!sram_menu_background = !SRAM_START+$74
+!sram_cm_scroll_delay = !SRAM_START+$76
+!sram_customsfx_move = !SRAM_START+$78
+!sram_customsfx_toggle = !SRAM_START+$7A
+!sram_customsfx_number = !SRAM_START+$7C
+!sram_customsfx_confirm = !SRAM_START+$7E
+!sram_customsfx_goback = !SRAM_START+$80
+
+!sram_seed_X = !SRAM_START+$82
+!sram_seed_Y = !SRAM_START+$84
 
 ; ^ FREE SPACE ^ up to $F03000
 
@@ -753,9 +786,6 @@ endif
 !ram_cm_spazer = !CUSTOM_WRAM+$F8
 !ram_cm_plasma = !CUSTOM_WRAM+$FA
 
-!ram_seed_X = !CUSTOM_WRAM+$FC
-!ram_seed_Y = !CUSTOM_WRAM+$FE
-
 
 ; ---------
 ; Pointers
@@ -783,7 +813,9 @@ endif
 !sram_menu_background = !SRAM_START+$210
 !sram_scroll_button = !SRAM_START+$212
 !sram_cm_scroll_button = !SRAM_START+$214
-!sram_cm_scroll_delay = !SRAM_START+$216
+
+; FREE SPACE ^
+
 !sram_cm_font = !SRAM_START+$218
 !sram_number_gfx_choice = !SRAM_START+$21A
 
@@ -795,6 +827,8 @@ endif
 !sram_preset_enemies = !SRAM_START+$22A
 !sram_fast_nintendo_logo = !SRAM_START+$22C
 !sram_fanfare_timer_adjust = !SRAM_START+$22E
+!sram_preset_map_tiles = !SRAM_START+$230
+!sram_preset_auto_segment = !SRAM_START+$232
 
 ; FREE SPACE ^
 
@@ -807,9 +841,6 @@ endif
 !sram_display_mode_reward = !SRAM_START+$24C
 
 ; FREE SPACE ^
-
-!sram_seed_X = !SRAM_START+$28C
-!sram_seed_Y = !SRAM_START+$28E
 
 !sram_presetrando = !SRAM_START+$290
 !sram_presetrando_morph = !SRAM_START+$292
@@ -828,28 +859,6 @@ endif
 !sram_custompalette_lo = !SRAM_START+$2AA
 
 ; FREE SPACE ^
-
-; do not change order without updating custom palette profiles in menu.asm
-!sram_palette_border = !SRAM_START+$2B0
-!sram_palette_headeroutline = !SRAM_START+$2B2
-!sram_palette_text = !SRAM_START+$2B4
-!sram_palette_numoutline = !SRAM_START+$2B6
-!sram_palette_numfill = !SRAM_START+$2B8
-!sram_palette_toggleon = !SRAM_START+$2BA
-!sram_palette_seltext = !SRAM_START+$2BC
-!sram_palette_seltextbg = !SRAM_START+$2BE
-!sram_palette_background = !SRAM_START+$2C0
-!sram_palette_numseloutline = !SRAM_START+$2C2
-!sram_palette_numsel = !SRAM_START+$2C4
-!sram_custompalette_profile = !SRAM_START+$2C6
-
-; FREE SPACE ^
-
-!sram_customsfx_move = !SRAM_START+$2F0
-!sram_customsfx_toggle = !SRAM_START+$2F2
-!sram_customsfx_number = !SRAM_START+$2F4
-!sram_customsfx_confirm = !SRAM_START+$2F6
-!sram_customsfx_goback = !SRAM_START+$2F8
 
 !sram_dummy_on = !SRAM_START+$2FA
 !sram_dummy_off = !SRAM_START+$2FC
