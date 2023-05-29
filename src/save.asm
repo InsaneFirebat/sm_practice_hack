@@ -13,6 +13,8 @@ pre_load_state:
     LDA !MUSIC_TRACK : STA !SRAM_MUSIC_TRACK
     LDA !SOUND_TIMER : STA !SRAM_SOUND_TIMER
 
+    LDA !ram_slowdown_mode : STA !SRAM_SLOWDOWN_MODE
+
     ; Rerandomize
     LDA !sram_save_has_set_rng : BNE .done
     LDA !sram_rerandomize : AND #$00FF : BEQ .done
@@ -49,8 +51,10 @@ post_load_state:
     ; Reload custom HUD number GFX
 +   JSL overwrite_HUD_numbers
 
+    LDA !SRAM_SLOWDOWN_MODE : STA !ram_slowdown_mode
+
     ; Rerandomize
-+   LDA !sram_save_has_set_rng : BNE .done
+    LDA !sram_save_has_set_rng : BNE .done
     LDA !sram_rerandomize : AND #$00FF : BEQ .done
     LDA !SRAM_SAVED_RNG : STA !RANDOM_NUMBER
     LDA !SRAM_SAVED_FRAME_COUNTER : STA !FRAME_COUNTER
