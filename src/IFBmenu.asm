@@ -733,13 +733,8 @@ ifb_factory_reset_delete_presets:
   .routine
     TYX : TXA ; LDA/X/Y #$0000
 -   STA !PRESET_SLOTS,X ; overwrite "5AFE" words
-if !FEATURE_TINYSTATES
-    ; inc and multiply Y by $100 for next slot index
-    INY : TYA : XBA : TAX
-else
-    ; inc and multiply Y by $200 for next slot index
-    INY : TYA : ASL : XBA : TAX
-endif
+    ; inc and multiply Y by $200/$100 for next slot index
+    INY : TYA : %presetslotsize()
     CPY !TOTAL_PRESET_SLOTS : BNE -
     ; continue into action_factory_reset
 
