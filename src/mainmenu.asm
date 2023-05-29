@@ -273,11 +273,7 @@ presets_custom_preset_slot:
     LDA !sram_custom_preset_slot : BEQ .zero
     DEC : BRA +
   .zero
-if !FEATURE_TINYSTATES
-    LDA #$000F
-else
-    LDA #$0027
-endif
+    LDA !TOTAL_PRESET_SLOTS
 +   STA !sram_custom_preset_slot
     ; determine which page to load
     CMP #$0010 : BPL .page2
@@ -305,11 +301,7 @@ presets_load_custom_preset:
   .routine
     ; check if slot is populated first
     LDA !sram_custom_preset_slot
-if !FEATURE_TINYSTATES
-    XBA : TAX                    ; multiply by 100h (slot offset)
-else
-    ASL : XBA : TAX              ; multiply by 200h (slot offset)
-endif
+    %presetslotsize()
     LDA !PRESET_SLOTS,X : CMP #$5AFE : BEQ .safe
     %sfxfail()
     RTL

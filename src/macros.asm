@@ -27,6 +27,14 @@ macro ai16() ; A + X/Y = 16-bit
     REP #$30
 endmacro
 
+macro presetslotsize()
+if !FEATURE_TINYSTATES
+    XBA : TAX       ; multiply by $100
+else
+    ASL : XBA : TAX ; multiply by $200
+endif
+endmacro
+
 
 ; -------------
 ; Practice Menu
