@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.5.3]  Skip freeze on loadstate if slowdown mode enabled
 * [2.5.5.2]  Allow savestate persistence with slowdown mode
 * [2.5.5.1]  Don't draw 32x32 projectile boxes for bombs or power bombs
 * [2.5.5]    Optimizations for projectile hitbox viewers by idlechild
