@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.5.2]  Allow savestate persistence with slowdown mode
 * [2.5.5.1]  Don't draw 32x32 projectile boxes for bombs or power bombs
 * [2.5.5]    Optimizations for projectile hitbox viewers by idlechild
 * [2.5.4.8]  Added RNG control for Phantoon's flame bounce direction
