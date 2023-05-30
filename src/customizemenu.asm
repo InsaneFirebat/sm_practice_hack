@@ -256,37 +256,37 @@ CustomPalettesDisplayMenu:
     %cm_footer("SEND A SCREENSHOT TO IFB")
 
 custompalettes_text_display:
-    %cm_numfield_hex_word("Text", !sram_palette_text)
+    %cm_numfield_hex_word("Text", !sram_palette_text, #$7FFF, #0)
 
 custompalettes_seltext_display:
-    %cm_numfield_hex_word("Selected Text", !sram_palette_seltext)
+    %cm_numfield_hex_word("Selected Text", !sram_palette_seltext, #$7FFF, #0)
 
 custompalettes_seltextbg_display:
-    %cm_numfield_hex_word("Selected Text BG", !sram_palette_seltextbg)
+    %cm_numfield_hex_word("Selected Text BG", !sram_palette_seltextbg, #$7FFF, #0)
 
 custompalettes_border_display:
-    %cm_numfield_hex_word("Toggle OFF + Border", !sram_palette_border)
+    %cm_numfield_hex_word("Toggle OFF + Border", !sram_palette_border, #$7FFF, #0)
 
 custompalettes_headeroutline_display:
-    %cm_numfield_hex_word("Header Text Outline", !sram_palette_headeroutline)
+    %cm_numfield_hex_word("Header Text Outline", !sram_palette_headeroutline, #$7FFF, #0)
 
 custompalettes_numfill_display:
-    %cm_numfield_hex_word("NumField Text", !sram_palette_numfill)
+    %cm_numfield_hex_word("NumField Text", !sram_palette_numfill, #$7FFF, #0)
 
 custompalettes_numoutline_display:
-    %cm_numfield_hex_word("NumField Outline", !sram_palette_numoutline)
+    %cm_numfield_hex_word("NumField Outline", !sram_palette_numoutline, #$7FFF, #0)
 
 custompalettes_numsel_display:
-    %cm_numfield_hex_word("Selected NumField", !sram_palette_numsel)
+    %cm_numfield_hex_word("Selected NumField", !sram_palette_numsel, #$7FFF, #0)
 
 custompalettes_numseloutline_display:
-    %cm_numfield_hex_word("Selected NumField OL", !sram_palette_numseloutline)
+    %cm_numfield_hex_word("Selected NumField OL", !sram_palette_numseloutline, #$7FFF, #0)
 
 custompalettes_toggleon_display:
-    %cm_numfield_hex_word("Toggle ON", !sram_palette_toggleon)
+    %cm_numfield_hex_word("Toggle ON", !sram_palette_toggleon, #$7FFF, #0)
 
 custompalettes_background_display:
-    %cm_numfield_hex_word("Background", !sram_palette_background)
+    %cm_numfield_hex_word("Background", !sram_palette_background, #$7FFF, #0)
 
 
 ; ---------------
@@ -554,10 +554,8 @@ MixRGB:
     LDA !sram_custompalette_red : ORA $16
     STA [$12]
 
-    ; split BGR value into high and low bytes
-    %a8()
-    STA !sram_custompalette_lo : XBA : STA !sram_custompalette_hi
-    %a16()
+    ; store BGR value
+    STA !sram_custompalette
 
     JSL refresh_custom_palettes
     RTL
@@ -599,10 +597,8 @@ cm_colors:
     LDA [$C1] : AND #$03E0 : LSR #5 : STA !sram_custompalette_green
     LDA [$C1] : AND #$001F : STA !sram_custompalette_red
 
-    ; split BGR value into high and low bytes
-    LDA [$C1] : AND #$7FFF
-    %a8()
-    STA !sram_custompalette_lo : XBA : STA !sram_custompalette_hi
+    ; store BGR value
+    LDA [$C1] : AND #$7FFF : STA !sram_custompalette
 
   .done
     PLB : PLP
