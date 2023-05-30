@@ -137,6 +137,27 @@ ram_slowdown_mode = $7EFFFE ; Bank $7E required!ram_slowdown_mode = !$7EFFFE ; B
 
 ram_tilemap_buffer = $7E5800
 
+!DP_MenuIndices = $00 ; 0x4
+!DP_CurrentMenu = $04 ; 0x4
+!DP_Address = $08 ; 0x4
+!DP_JSLTarget = $0C ; 0x4
+!DP_CtrlInput = $10 ; 0x4
+!DP_Palette = $14
+!DP_Temp = $16
+; v these repreat v
+!DP_ToggleValue = $18
+!DP_Increment = $1A
+!DP_Minimum = $1C
+!DP_Maximum = $1E
+!DP_DrawValue = $18
+!DP_FirstDigit = $1A
+!DP_SecondDigit = $1C
+!DP_ThirdDigit = $1E
+; v single digit editing v
+!DP_DigitAddress = $20 ; 0x4
+!DP_DigitMaximum = $24
+!DP_DigitValue = $26
+
 ram_cm_stack_index = $05D5
 ram_cm_menu_stack = !ram_cm_menu_stack ; +$WRAM_MENU_START+$00         ; 16 bytes
 ram_cm_cursor_stack = !ram_cm_cursor_stack ; +$WRAM_MENU_START+$10       ; 16 bytes
@@ -145,7 +166,7 @@ ram_cm_cursor_max = !ram_cm_cursor_max ; +$WRAM_MENU_START+$20
 ram_cm_input_timer = !ram_cm_input_timer ; +$WRAM_MENU_START+$22
 ram_cm_controller = !ram_cm_controller ; +$WRAM_MENU_START+$24
 ram_cm_menu_bank = !ram_cm_menu_bank ; +$WRAM_MENU_START+$26
-
+ram_cm_horizontal_cursor = !ram_cm_horizontal_cursor ; +$WRAM_MENU_START+$28
 ram_cm_etanks = !ram_cm_etanks ; +$WRAM_MENU_START+$2A
 ram_cm_reserve = !ram_cm_reserve ; +$WRAM_MENU_START+$2C
 ram_cm_leave = !ram_cm_leave ; +$WRAM_MENU_START+$2E
@@ -173,23 +194,10 @@ ram_seed_Y = !ram_seed_Y ; +$WRAM_MENU_START+$50
 
 ram_cm_preserved_timers = !ram_cm_preserved_timers ; +$WRAM_MENU_START+$78 ; 8 bytes
 
-ram_cm_watch_left_hi = !ram_cm_watch_left_hi ; +$WRAM_MENU_START+$80
-ram_cm_watch_left_lo = !ram_cm_watch_left_lo ; +$WRAM_MENU_START+$82
-ram_cm_watch_left_index_lo = !ram_cm_watch_left_index_lo ; +$WRAM_MENU_START+$84
-ram_cm_watch_left_index_hi = !ram_cm_watch_left_index_hi ; +$WRAM_MENU_START+$86
-ram_cm_watch_enemy_property = !ram_cm_watch_enemy_property ; +$WRAM_MENU_START+$88
-ram_cm_watch_enemy_index = !ram_cm_watch_enemy_index ; +$WRAM_MENU_START+$8A
-ram_cm_watch_right_hi = !ram_cm_watch_right_hi ; +$WRAM_MENU_START+$8C
-ram_cm_watch_right_lo = !ram_cm_watch_right_lo ; +$WRAM_MENU_START+$8E
-ram_cm_watch_right_index_lo = !ram_cm_watch_right_index_lo ; +$WRAM_MENU_START+$90
-ram_cm_watch_right_index_hi = !ram_cm_watch_right_index_hi ; +$WRAM_MENU_START+$92
-ram_cm_watch_edit_left_hi = !ram_cm_watch_edit_left_hi ; +$WRAM_MENU_START+$94
-ram_cm_watch_edit_left_lo = !ram_cm_watch_edit_left_lo ; +$WRAM_MENU_START+$96
-ram_cm_watch_edit_right_hi = !ram_cm_watch_edit_right_hi ; +$WRAM_MENU_START+$98
-ram_cm_watch_edit_right_lo = !ram_cm_watch_edit_right_lo ; +$WRAM_MENU_START+$9A
-ram_cm_watch_enemy_side = !ram_cm_watch_enemy_side ; +$WRAM_MENU_START+$9C
-ram_cm_watch_bank = !ram_cm_watch_bank ; +$WRAM_MENU_START+$9E
-ram_cm_watch_common_address = !ram_cm_watch_common_address ; +$WRAM_MENU_START+$A0
+ram_cm_watch_enemy_property = !ram_cm_watch_enemy_property ; +$WRAM_MENU_START+$80
+ram_cm_watch_enemy_index = !ram_cm_watch_enemy_index ; +$WRAM_MENU_START+$82
+ram_cm_watch_enemy_side = !ram_cm_watch_enemy_side ; +$WRAM_MENU_START+$84
+ram_cm_watch_common_address = !ram_cm_watch_common_address ; +$WRAM_MENU_START+$86
 
 ram_cm_phan_first_phase = !ram_cm_phan_first_phase ; +$WRAM_MENU_START+$80
 ram_cm_phan_second_phase = !ram_cm_phan_second_phase ; +$WRAM_MENU_START+$82
@@ -451,12 +459,9 @@ sram_presetrando_beampref = !sram_presetrando_beampref ; +$SRAM_START+$2A0
 sram_custompalette_blue = !sram_custompalette_blue ; +$SRAM_START+$2A2
 sram_custompalette_green = !sram_custompalette_green ; +$SRAM_START+$2A4
 sram_custompalette_red = !sram_custompalette_red ; +$SRAM_START+$2A6
-sram_custompalette_hi = !sram_custompalette_hi ; +$SRAM_START+$2A8
-sram_custompalette_lo = !sram_custompalette_lo ; +$SRAM_START+$2AA
+sram_custompalette = !sram_custompalette ; +$SRAM_START+$2A8
 
 sram_dummy_on = !sram_dummy_on ; +$SRAM_START+$2FA
 sram_dummy_off = !sram_dummy_off ; +$SRAM_START+$2FC
 sram_dummy_num = !sram_dummy_num ; +$SRAM_START+$2FE
-
-
 
