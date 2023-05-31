@@ -1919,6 +1919,8 @@ execute_toggle_bit:
 }
 
 execute_numfield_sound:
+execute_numfield_hex:
+execute_numfield:
 {
     ; preserve action index to check for sfx later
     PHX
@@ -1968,7 +1970,7 @@ execute_numfield_sound:
 
   .pressed_left ; dec
     LDA [!DP_Address] : SEC : SBC !DP_Increment : BMI .set_to_max
-    CMP !DP_Maximum : BCS .set_to_max
+    CMP !DP_Minimum : BCC .set_to_max
     %a8() : STA [!DP_Address] : BRA .jsl
 
   .set_to_min
