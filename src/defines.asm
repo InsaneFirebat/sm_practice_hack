@@ -8,7 +8,7 @@
 !VERSION_MINOR = 5
 !VERSION_BUILD = 5
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 4
+!VERSION_REV_2 = 5
 
 
 ; ---------
@@ -268,6 +268,7 @@
 !ACTION_JSL                 = #$001A
 !ACTION_JSL_SUBMENU         = #$001C
 !ACTION_CUSTOM_PRESET       = #$001E
+!ACTION_RAM_WATCH           = #$0020
 
 ; using macros instead of these in custom builds
 !SOUND_MENU_MOVE = $0039

@@ -84,13 +84,13 @@ init_nonzero_wram:
     ; RAM $7E0000 fluctuates so it is not a good default value
     LDA #!ENEMY_HP : STA !ram_watch_left ; Enemy HP
     LDA #!SAMUS_HP : STA !ram_watch_right ; Samus HP
-    LDA !WRAM_BANK : STA !ram_watch_bank
+    LDA #$007E : STA !ram_watch_bank
     LDA !sram_seed_X : STA !ram_seed_X
     LDA !sram_seed_Y : STA !ram_seed_Y
 
     LDA #$0000
-    STA !ram_watch_bank : STA !ram_cm_watch_enemy_side
     STA !ram_watch_left_index : STA !ram_watch_right_index
+    STA !ram_cm_watch_enemy_side
     STA !ram_cm_watch_enemy_property : STA !ram_cm_watch_enemy_index
 
     LDA #$000A : STA !ram_cm_brb_set_cycle

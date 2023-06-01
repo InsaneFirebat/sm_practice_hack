@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.5.5]  Added a display for RAM Watch values in the menu
 * [2.5.5.4]  Allow editing large numbers one digit at a time
 * [2.5.5.3]  Skip freeze on loadstate if slowdown mode enabled
 * [2.5.5.2]  Allow savestate persistence with slowdown mode
