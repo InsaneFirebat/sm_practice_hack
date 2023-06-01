@@ -24,7 +24,6 @@ Regardless of which tool you use, the process is the same: you select the .IPS f
 
 * Super HUD InfoHUD mode to run multiple modes at once
 * InfoHUD Mode to display a damage counter that resets at Phantoon and Ridley
-* InfoHUD Mode to display Ridley's AI state
 * Room Strat to track Kihunter movement in Kihunter Stairs and Three Musketeers rooms
 * Room Strat to track off-screen nails during Kraid's intro
 * HUD timers update on shinespark crash
@@ -35,14 +34,8 @@ Regardless of which tool you use, the process is the same: you select the .IPS f
 * Option to clear the elevator flag for OoB travel
 * No tile marker when applying Magnet Stairs fix
 * Additional preset categories for NewGame+
-* Option to load presets with enemies
 * Convenience improvements for many presets
-* Options to customize the color palette of the practice menu
-* Pre-made practice menu palettes by the community
-* Option to skip drawing the practice menu background
-* Options to customize menu sound effects
 * Hold Y or X (customizable) to scroll number fields at 4x speed
-* Option to set the scroll speed when holding up or down
 * Sound Test menu with options to play music and sound effects
 * Options to randomize your equipment when loading presets
 * Access to developer/debug load points
