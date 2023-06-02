@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.5.7]  Fixed tiles being drawn upside down on BRB screen
+* [2.5.5.7]  Fixed a crash relating to spacetime and slowdown mode
 * [2.5.5.6]  Added a Room Strat HUD mode to monitor Ceres Ridley hits
 * [2.5.5.5]  Added a display for RAM Watch values in the menu
 * [2.5.5.4]  Allow editing large numbers one digit at a time
