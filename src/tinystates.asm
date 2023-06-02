@@ -148,10 +148,11 @@ post_load_state:
     ; Reload custom HUD number GFX
 +   JSL overwrite_HUD_numbers
 
-    LDA !SRAM_SLOWDOWN_MODE : STA !ram_slowdown_mode
+    LDA !SRAM_SLOWDOWN_MODE : CMP #$FFFF : BEQ +
+    AND #$00FF : STA !ram_slowdown_mode
 
     ; Rerandomize
-    LDA !sram_save_has_set_rng : BNE +
++   LDA !sram_save_has_set_rng : BNE +
     LDA !sram_rerandomize : AND #$00FF : BEQ +
     LDA !SRAM_SAVED_RNG : STA !RANDOM_NUMBER
     LDA !SRAM_SAVED_FRAME_COUNTER : STA !FRAME_COUNTER
