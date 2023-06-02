@@ -61,6 +61,7 @@ status_roomstrat:
     dw status_zebskip
     dw status_pitdoor
     dw status_ridleyai
+    dw status_ceresridley
 }
 
 status_chargetimer:
@@ -2604,6 +2605,17 @@ RidleyAIText:
   .C588 : db "EXPLODE"      : db $FF
   .DEAD : db "END"          : db $FF
     table ../resources/normal.tbl
+}
+
+status_ceresridley:
+{
+    ; displays number of shots until Ridley "dies"
+    LDA $7E781A : CMP !ram_HUD_check : BEQ .done
+    STA !ram_HUD_check
+    LDX #$0088 : JSR Draw4
+
+  .done
+    RTS
 }
 
 incsrc customhudmodes.asm
