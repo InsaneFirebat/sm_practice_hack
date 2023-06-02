@@ -374,18 +374,18 @@ PrepMenuPalette:
     %i8()
     LDY.b #PaletteProfileTables>>16 : PHY : PLB ; set bank of tables
     ASL : TAX
-    LDA.w PaletteProfileTables,X : STA $14
-    LDY #$00 : LDA ($14),Y : STA !ram_palette_border
-    LDY #$02 : LDA ($14),Y : STA !ram_palette_headeroutline
-    LDY #$04 : LDA ($14),Y : STA !ram_palette_text
-    LDY #$06 : LDA ($14),Y : STA !ram_palette_background
-    LDY #$08 : LDA ($14),Y : STA !ram_palette_numoutline
-    LDY #$0A : LDA ($14),Y : STA !ram_palette_numfill
-    LDY #$0C : LDA ($14),Y : STA !ram_palette_toggleon
-    LDY #$0E : LDA ($14),Y : STA !ram_palette_seltext
-    LDY #$10 : LDA ($14),Y : STA !ram_palette_seltextbg
-    LDY #$12 : LDA ($14),Y : STA !ram_palette_numseloutline
-    LDY #$14 : LDA ($14),Y : STA !ram_palette_numsel
+    LDA.w PaletteProfileTables,X : STA $C1
+    LDY #$00 : LDA ($C1),Y : STA !ram_palette_border
+    LDY #$02 : LDA ($C1),Y : STA !ram_palette_headeroutline
+    LDY #$04 : LDA ($C1),Y : STA !ram_palette_text
+    LDY #$06 : LDA ($C1),Y : STA !ram_palette_background
+    LDY #$08 : LDA ($C1),Y : STA !ram_palette_numoutline
+    LDY #$0A : LDA ($C1),Y : STA !ram_palette_numfill
+    LDY #$0C : LDA ($C1),Y : STA !ram_palette_toggleon
+    LDY #$0E : LDA ($C1),Y : STA !ram_palette_seltext
+    LDY #$10 : LDA ($C1),Y : STA !ram_palette_seltextbg
+    LDY #$12 : LDA ($C1),Y : STA !ram_palette_numseloutline
+    LDY #$14 : LDA ($C1),Y : STA !ram_palette_numsel
     PLB : PLP
     RTL
 
@@ -545,14 +545,14 @@ MixRGB:
     LDA !ram_cm_cursor_stack,X : TAX
 
     ; store indirect address
-    LDA.l .MenuPaletteTable,X : STA $12
-    LDA.w #!sram_palette_text>>16 : STA $14
+    LDA.l .MenuPaletteTable,X : STA $C1
+    LDA.w #!sram_palette_text>>16 : STA $C3
 
     ; mix 5-bit RGB values into 15-bit BGR format
-    LDA !sram_custompalette_blue : XBA : ASL #2 : STA $16
-    LDA !sram_custompalette_green : ASL #5 : ORA $16 : STA $16
-    LDA !sram_custompalette_red : ORA $16
-    STA [$12]
+    LDA !sram_custompalette_blue : XBA : ASL #2 : STA $C5
+    LDA !sram_custompalette_green : ASL #5 : ORA $C5 : STA $C5
+    LDA !sram_custompalette_red : ORA $C5
+    STA [$C1]
 
     ; store BGR value
     STA !sram_custompalette
