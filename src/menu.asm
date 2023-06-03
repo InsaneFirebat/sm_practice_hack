@@ -304,17 +304,19 @@ cm_transfer_custom_cgram:
     %a16()
     ; backup gameplay palettes
     LDA $7EC00A : STA !ram_cgram_cache
-    LDA $7EC00E : STA !ram_cgram_cache+2
-    LDA $7EC012 : STA !ram_cgram_cache+4
-    LDA $7EC014 : STA !ram_cgram_cache+6
-    LDA $7EC016 : STA !ram_cgram_cache+8
-    LDA $7EC01A : STA !ram_cgram_cache+10
-    LDA $7EC01C : STA !ram_cgram_cache+12
-    LDA $7EC032 : STA !ram_cgram_cache+14
-    LDA $7EC034 : STA !ram_cgram_cache+16
-    LDA $7EC036 : STA !ram_cgram_cache+18
-    LDA $7EC03A : STA !ram_cgram_cache+20
-    LDA $7EC03C : STA !ram_cgram_cache+22
+    LDA $7EC00E : STA !ram_cgram_cache+$02
+    LDA $7EC012 : STA !ram_cgram_cache+$04
+    LDA $7EC014 : STA !ram_cgram_cache+$06
+    LDA $7EC016 : STA !ram_cgram_cache+$08
+    LDA $7EC01A : STA !ram_cgram_cache+$0A
+    LDA $7EC01C : STA !ram_cgram_cache+$0C
+    LDA $7EC01E : STA !ram_cgram_cache+$0E
+    LDA $7EC032 : STA !ram_cgram_cache+$10
+    LDA $7EC034 : STA !ram_cgram_cache+$12
+    LDA $7EC036 : STA !ram_cgram_cache+$14
+    LDA $7EC03A : STA !ram_cgram_cache+$16
+    LDA $7EC03C : STA !ram_cgram_cache+$18
+    LDA $7EC03E : STA !ram_cgram_cache+$1A
 
     JSL PrepMenuPalette
 
@@ -323,12 +325,12 @@ cm_transfer_custom_cgram:
     LDA !ram_palette_border : STA $7EC00A
     LDA !ram_palette_headeroutline : STA $7EC012
     LDA !ram_palette_text : STA $7EC014
-    LDA !ram_palette_background : STA $7EC016 : STA $7EC00E
+    LDA !ram_palette_background : STA $7EC016 : STA $7EC00E : STA $7EC01E
     LDA !ram_palette_numoutline : STA $7EC01A
     LDA !ram_palette_numfill : STA $7EC01C
     LDA !ram_palette_toggleon : STA $7EC032
     LDA !ram_palette_seltext : STA $7EC034
-    LDA !ram_palette_seltextbg : STA $7EC036
+    LDA !ram_palette_seltextbg : STA $7EC036 : STA $7EC03E
     LDA !ram_palette_numseloutline : STA $7EC03A
     LDA !ram_palette_numsel : STA $7EC03C
 
@@ -342,17 +344,19 @@ cm_transfer_original_cgram:
     PHP : %a16()
     ; restore gameplay palettes
     LDA !ram_cgram_cache : STA $7EC00A
-    LDA !ram_cgram_cache+2 : STA $7EC00E
-    LDA !ram_cgram_cache+4 : STA $7EC012
-    LDA !ram_cgram_cache+6 : STA $7EC014
-    LDA !ram_cgram_cache+8 : STA $7EC016
-    LDA !ram_cgram_cache+10 : STA $7EC01A
-    LDA !ram_cgram_cache+12 : STA $7EC01C
-    LDA !ram_cgram_cache+14 : STA $7EC032
-    LDA !ram_cgram_cache+16 : STA $7EC034
-    LDA !ram_cgram_cache+18 : STA $7EC036
-    LDA !ram_cgram_cache+20 : STA $7EC03A
-    LDA !ram_cgram_cache+22 : STA $7EC03C
+    LDA !ram_cgram_cache+$02 : STA $7EC00E
+    LDA !ram_cgram_cache+$04 : STA $7EC012
+    LDA !ram_cgram_cache+$06 : STA $7EC014
+    LDA !ram_cgram_cache+$08 : STA $7EC016
+    LDA !ram_cgram_cache+$0A : STA $7EC01A
+    LDA !ram_cgram_cache+$0C : STA $7EC01C
+    LDA !ram_cgram_cache+$0E : STA $7EC01E
+    LDA !ram_cgram_cache+$10 : STA $7EC032
+    LDA !ram_cgram_cache+$12 : STA $7EC034
+    LDA !ram_cgram_cache+$14 : STA $7EC036
+    LDA !ram_cgram_cache+$16 : STA $7EC03A
+    LDA !ram_cgram_cache+$18 : STA $7EC03C
+    LDA !ram_cgram_cache+$1A : STA $7EC03E
 
     JSL transfer_cgram_long
     PLP
