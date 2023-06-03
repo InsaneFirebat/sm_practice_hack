@@ -398,24 +398,28 @@ endmacro
 
 macro SDE_add(label, value, mask, inverse)
 cm_SDE_add_<label>:
+; subroutine to add to a specific hex digit, used in cm_edit_digits
     AND <mask> : CMP <mask> : BEQ .inc2zero
     CLC : ADC <value> : BRA .store
   .inc2zero
     LDA #$0000
   .store
     STA !DP_DigitValue
+    ; return original value with edited digit masked away
     LDA [!DP_DigitAddress] : AND <inverse>
     RTS
 endmacro
 
 macro SDE_sub(label, value, mask, inverse)
 cm_SDE_sub_<label>:
+; subroutine to subtract from a specific hex digit, used in cm_edit_digits
     AND <mask> : BEQ .set2max
     SEC : SBC <value> : BRA .store
   .set2max
-    LDA <mask> : STA !DP_DigitValue
+    LDA <mask>
   .store
     STA !DP_DigitValue
+    ; return original value with edited digit masked away
     LDA [!DP_DigitAddress] : AND <inverse>
     RTS
 endmacro

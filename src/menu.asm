@@ -1250,6 +1250,7 @@ draw_ram_watch:
     %item_index_to_vram_index()
     JSR cm_draw_text
 
+    ; Draw $ signs in the appropriate places
     LDX #$2C4E
     LDA !ram_watch_write_mode : BNE .both_8bit
     TXA : STA !ram_tilemap_buffer+$5D0 : STA !ram_tilemap_buffer+$5E6
@@ -1621,7 +1622,7 @@ cm_edit_digits:
     BIT !IH_INPUT_UPDOWN : BNE .editing
     BIT #$8080 : BEQ .redraw
 
-    ; exit ctrl mode
+    ; exit if A or B pressed
     ; skip if JSL target is zero
     LDA !DP_JSLTarget : BEQ .end
     ; Set return address for indirect JSL
@@ -1633,7 +1634,6 @@ cm_edit_digits:
 
   .end
     %ai16()
-    %sfxnumber()
     LDA #$0000 : STA !ram_cm_ctrl_mode
     %sfxconfirm()
     JSL cm_draw
@@ -1670,6 +1670,7 @@ cm_edit_digits:
     ; returns full value with selected digit cleared
     ; combine with modified digit and cap with bitmask in !DP_DigitMaximum
     ORA !DP_DigitValue : AND !DP_DigitMaximum : STA [!DP_DigitAddress]
+    %sfxnumber()
 
     ; redraw numbers
     LDX !ram_cm_stack_index : LDA !ram_cm_cursor_stack,X : TAY
@@ -1749,22 +1750,8 @@ cm_edit_decimal_digits:
     BIT !IH_INPUT_UPDOWN : BNE .editing
     BIT #$8080 : BEQ .redraw
 
-    ; exit ctrl mode
-    ; skip if JSL target is zero
-    LDA !DP_JSLTarget : BEQ .end
-    ; Set return address for indirect JSL
-    LDA !ram_cm_menu_bank : STA !DP_JSLTarget+2
-    PHK : PEA .end-1
-    ; addr in A
-    LDA [!DP_DigitAddress]
-    JML.w [!DP_JSLTarget]
-
-  .end
-    %ai16()
-    %sfxconfirm()
-    LDA #$0000 : STA !ram_cm_ctrl_mode
-    JSL cm_draw
-    RTS
+    ; exit if A or B pressed
+    BRL .exit
 
   .selecting
     ; determine which direction was pressed
@@ -2176,14 +2163,11 @@ execute_numfield:
 
 execute_numfield_word:
 {
-    ; check for A, B, Y, Left, or Right
-    LDA !IH_CONTROLLER_PRI_NEW : BIT #$43C0 : BEQ .done
-
     ; grab the memory address (long)
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : STA !DP_DigitAddress
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : STA !DP_DigitAddress+2
 
-    ; grab minimum (!DP_Minimum) and maximum (!DP_Maximum) values
+    ; grab minimum (!DP_DigitMinimum) and maximum (!DP_DigitMaximum) values
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : STA !DP_DigitMinimum
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : INC : STA !DP_DigitMaximum ; INC for convenience
 
@@ -2197,7 +2181,6 @@ execute_numfield_word:
     LDA #$8001 : STA !ram_cm_ctrl_mode
     %sfxnumber()
 
-  .done
     RTS
 }
 
@@ -2206,9 +2189,6 @@ execute_numfield_hex_word:
     ; disallow editing if "Screenshot To Share Colors" menu
     LDA !ram_cm_stack_index : TAX
     LDA !ram_cm_menu_stack,X : CMP #CustomPalettesDisplayMenu : BEQ .done
-
-    ; check for A, B, Y, Left, or Right
-    LDA !IH_CONTROLLER_PRI_NEW : BIT #$43C0 : BEQ .done
 
     ; grab the memory address (long)
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : STA !DP_DigitAddress
