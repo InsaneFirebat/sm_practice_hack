@@ -95,7 +95,7 @@ macro cm_numfield(title, addr, start, end, increment, heldincrement, jsltarget)
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_numfield_word(title, addr, start, end, increment, heldincrement, jsltarget)
+macro cm_numfield_word(title, addr, start, end, jsltarget)
 ; Allows editing a 16-bit value at the specified address
   .dm_actionIndex
     dw !ACTION_NUMFIELD_WORD
