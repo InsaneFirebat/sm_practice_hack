@@ -147,6 +147,7 @@
 
 !ram_sprite_feature_flags = !WRAM_START+$DC
 !ram_auto_save_state = !WRAM_START+$DE
+!ram_timers_autoupdate = !WRAM_START+$E0
 
 ; FREE SPACE ^ up to +$E8
 
