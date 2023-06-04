@@ -1788,6 +1788,7 @@ InfoHudMenu:
     dw #$FFFF
     dw #ih_room_counter
     dw #ih_lag_counter
+    dw #ih_auto_update_timers
     dw #ih_reset_seg_later
     dw #ih_fanfare_timer_adjust
     dw #ih_top_HUD_mode
@@ -1924,6 +1925,8 @@ ihmode_GOTO_PAGE_TWO:
     ; set bank for manual submenu jump
     PHK : PHK : PLA : STA !ram_cm_menu_bank
     JML action_submenu
+
+
 
 action_select_infohud_mode:
 {
@@ -2392,6 +2395,9 @@ ih_ram_watch:
     %cm_jsl("Customize RAM Watch", #ih_prepare_ram_watch_menu, #RAMWatchMenu)
 
 incsrc ramwatchmenu.asm
+
+ih_auto_update_timers:
+    %cm_toggle_inverted("Auto update timers", !ram_timers_autoupdate, #$0001, #0)
 
 ih_room_counter:
     dw !ACTION_CHOICE
