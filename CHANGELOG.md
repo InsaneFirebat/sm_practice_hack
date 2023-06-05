@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.5.9]  Fixed unintentional spikesuit from presets that load into a shinespark
 * [2.5.5.9]  Fixed a palette issue when the menu was opened during a cutscene
 * [2.5.5.8]  Fixed cycle timer max value on BRB screen
 * [2.5.5.7]  Fixed tiles being drawn upside down on BRB screen
