@@ -56,8 +56,23 @@ ifb_paletteprofile:
     db #$28, "     PURPLE", #$FF
     db #$28, "        HUD", #$FF
     db #$FF
-
 ifb_palette2custom:
+    %cm_submenu("Copy Palette to Custom", #Palette2CustomConfirm)
+
+Palette2CustomConfirm:
+    dw #palette2custom_abort
+    dw #$FFFF
+    dw #palette2custom_confirm
+    dw #$0000
+    %cm_header("OVERWRITE CUSTOM PALETTES")
+    %cm_footer("YOU WILL LOSE SAVED COLORS")
+
+palette2custom_abort:
+    %cm_jsl("ABORT", #.routine, #$0000)
+  .routine
+    JML cm_previous_menu
+
+palette2custom_confirm:
     %cm_jsl("Copy Palette to Custom", .routine, #$0000)
   .routine
     LDA !sram_custompalette_profile : BEQ .custom_selected

@@ -1915,7 +1915,7 @@ ihmode_ramwatch:
 ;    %cm_jsl("WIP - Damage Boost Trainer", #action_select_infohud_mode, #$0016)
 
 ihmode_GOTO_PAGE_ONE:
-    %cm_jsl("GOTO PAGE TWO", ihmode_GOTO_PAGE_TWO_routine, #DisplayModeMenu)
+    %cm_jsl("GOTO PAGE ONE", ihmode_GOTO_PAGE_TWO_routine, #DisplayModeMenu)
 
 ihmode_GOTO_PAGE_TWO:
     %cm_jsl("GOTO PAGE TWO", .routine, #DisplayModeMenu2)

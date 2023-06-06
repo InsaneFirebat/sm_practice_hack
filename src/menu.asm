@@ -2234,22 +2234,16 @@ execute_numfield_color:
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : STA !DP_Address
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : STA !DP_Address+2
 
-    ; grab normal increment
+    ; grab JSL target
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : STA !DP_JSLTarget
 
     ; determine dpad direction
     LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
     ; pressed right, inc
     LDA [!DP_Address] : INC : CMP #$0020 : BCS .set_to_min
-    STA [!DP_Address] : LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BEQ .jsl
-
-    LDA [!DP_Address] : INC : CMP #$0020 : BCS .set_to_min
     STA [!DP_Address] : BRA .jsl
 
   .pressed_left ; dec
-    LDA [!DP_Address] : DEC : BMI .set_to_max
-    STA [!DP_Address] : LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BEQ .jsl
-
     LDA [!DP_Address] : DEC : BMI .set_to_max
     STA [!DP_Address] : BRA .jsl
 
