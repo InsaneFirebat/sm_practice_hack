@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.5.10] Fixed double decrementing of color number fields
+* [2.5.5.10] Fixed a crash with Copy Palette to Custom option
 * [2.5.5.9]  Fixed unintentional spikesuit from presets that load into a shinespark
 * [2.5.5.9]  Fixed a palette issue when the menu was opened during a cutscene
 * [2.5.5.8]  Fixed cycle timer max value on BRB screen
