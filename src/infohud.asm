@@ -1,6 +1,6 @@
-;=======================================================
-;InfoHUD timers and stuff
-;=======================================================
+; =======================================================
+; InfoHUD timers and stuff
+; =======================================================
 
 org $809490
     JMP $9497    ; skip resetting player 2 inputs
@@ -1807,17 +1807,6 @@ infinite_ammo:
     RTS
 }
 
-if !FEATURE_EXTRAS
-; dead code
-space_pants_helper:
-{
-    LDA !ram_magic_pants_state : BEQ +
-    STA $7EC194 : STA $7EC196 : STA $7EC198
-    STA $7EC19A : STA $7EC19C : STA $7EC19E
-+   RTL
-}
-endif
-
 ih_shinespark_code:
 {
     DEC
@@ -1840,14 +1829,14 @@ overwrite_HUD_numbers:
 
   .custom_HUD_numbers
     ; multiply by 100h and add to addr
-    XBA : CLC : ADC.l #NumberGFXChoice : TAY
+    XBA : CLC : ADC.w #NumberGFXChoice : TAY
     %a8()
 
     ; DMA tiles 1-9, 0
     LDA #$80 : STA $2115 ; word access, inc by 1
     LDX #$4000 : STX $2116 ; VRAM addr ($4000 x 2 = $8000)
     STY $4302 ; src addr
-    LDA #NumberGFXChoice>>16 : STA $4304 ; src bank
+    LDA.b #NumberGFXChoice>>16 : STA $4304 ; src bank
     LDX #$00A0 : STX $4305 ; size
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
@@ -1861,7 +1850,7 @@ overwrite_HUD_numbers:
     ; DMA tiles A-B
     LDX #$43B0 : STX $2116 ; VRAM addr ($43B0 x 2 = $8760)
     STY $4302 ; src addr
-    LDA #NumberGFXChoice>>16 : STA $4304 ; src bank
+    LDA.b #NumberGFXChoice>>16 : STA $4304 ; src bank
     LDX #$0020 : STX $4305 ; size
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
@@ -1875,7 +1864,7 @@ overwrite_HUD_numbers:
     ; DMA tiles C-F
     LDX #$42C0 : STX $2116 ; VRAM addr ($42C0 x 2 = $8580)
     STY $4302 ; src addr
-    LDA #NumberGFXChoice>>16 : STA $4304 ; src bank
+    LDA.b #NumberGFXChoice>>16 : STA $4304 ; src bank
     LDX #$0040 : STX $4305 ; size
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)

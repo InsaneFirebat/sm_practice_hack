@@ -307,10 +307,10 @@ macro examplemenu()
     dw #$FFFF
     dw #$FFFF
     dw #$FFFF
-    dw #ifb_dummy_on
-    dw #ifb_dummy_off
-    dw #ifb_dummy_hexnum
-    dw #ifb_dummy_num
+    dw #mc_dummy_on
+    dw #mc_dummy_off
+    dw #mc_dummy_hexnum
+    dw #mc_dummy_num
 endmacro
 
 macro palettemenu(title, pointer, addr)

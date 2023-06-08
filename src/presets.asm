@@ -460,13 +460,15 @@ endif
 ;    LDA !PRESET_SPECIAL : BEQ +
 ;    JSL preset_special_fixes
 
+;    ; separate sram allocation in custom builds
 ;    LDA !sram_preset_options : BIT !PRESETS_CLOSE_BLUE_DOORS : BNE +
 +   LDA !sram_preset_open_doors : BEQ +
-    LDA !PRESET_DOORS : CMP #$FFFF : BEQ ++
+    LDA !PRESET_DOORS : CMP #$FFFF : BEQ .open_doors
     LDA !SAMUS_POSE : BEQ + : CMP #$009B : BEQ +
     LDA !PRESET_DOORS : CMP #$0001 : BEQ +
     LDA $7ED914 : CMP #$0005 : BNE +
-++  JSR preset_open_all_blue_doors
+  .open_doors
+    JSR preset_open_all_blue_doors
 
 +   JSL $89AB82  ; Load FX
 if !RAW_TILE_GRAPHICS
