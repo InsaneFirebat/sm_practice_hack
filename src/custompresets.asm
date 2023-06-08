@@ -896,108 +896,108 @@ Randomize_Preset_Equipment:
     LDA !SAMUS_BEAMS_EQUIPPED : ORA #$1000 : STA !SAMUS_BEAMS_EQUIPPED
 
     ; reserves
-+   LDA !sram_presetrando_max_reserves : BEQ .no_reserves              ; check if max = 0
-    LDA !ram_seed_Y : AND #$F000 : LSR #4 : XBA                        ; reuse random number
-    CMP !sram_presetrando_max_reserves : BPL .cap_reserves             ; check if capped
-    ASL : TAX : LDA.l PresetRandoReserveTable,X                       ; load value from table
-    STA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY                                      ; store reserves
++   LDA !sram_presetrando_max_reserves : BEQ .no_reserves   ; check if max = 0
+    LDA !ram_seed_Y : AND #$F000 : LSR #4 : XBA             ; reuse random number
+    CMP !sram_presetrando_max_reserves : BPL .cap_reserves  ; check if capped
+    ASL : TAX : LDA.l PresetRandoReserveTable,X             ; load value from table
+    STA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY      ; store reserves
     BRA +
 
   .cap_reserves
-    BEQ .reserves_done                                                 ; check for 0 condition (value is equal to max)
-    SEC : SBC !sram_presetrando_max_reserves                           ; subtract max from random number
-    CMP !sram_presetrando_max_reserves : BPL .cap_reserves             ; check if capped again (loop)
+    BEQ .reserves_done                                      ; check for 0 condition (value is equal to max)
+    SEC : SBC !sram_presetrando_max_reserves                ; subtract max from random number
+    CMP !sram_presetrando_max_reserves : BPL .cap_reserves  ; check if capped again (loop)
 
   .reserves_done
-    ASL : TAX : LDA.l PresetRandoReserveTable,X                       ; load a proper value from table
-    STA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY                                              ; store capped reserves
+    ASL : TAX : LDA.l PresetRandoReserveTable,X             ; load a proper value from table
+    STA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY      ; store capped reserves
     BRA +
 
   .no_reserves
-    STZ !SAMUS_RESERVE_MAX : STZ !SAMUS_RESERVE_ENERGY                                              ; capped at zero
+    STZ !SAMUS_RESERVE_MAX : STZ !SAMUS_RESERVE_ENERGY      ; capped at zero
 
     ; missiles
-+   LDA !sram_presetrando_max_missiles : BEQ .no_missiles              ; check if max = 0
-    LDA !ram_seed_X : AND #$0FF0 : LSR #4                              ; reuse random number
-    CMP !sram_presetrando_max_missiles : BPL .cap_missiles             ; check if capped
-    ASL : TAX : LDA.l PresetRandoAmmoTable,X                       ; load a proper value from table
-    STA !SAMUS_MISSILES : STA !SAMUS_MISSILES_MAX                                      ; store random missiles
++   LDA !sram_presetrando_max_missiles : BEQ .no_missiles   ; check if max = 0
+    LDA !ram_seed_X : AND #$0FF0 : LSR #4                   ; reuse random number
+    CMP !sram_presetrando_max_missiles : BPL .cap_missiles  ; check if capped
+    ASL : TAX : LDA.l PresetRandoAmmoTable,X                ; load a proper value from table
+    STA !SAMUS_MISSILES : STA !SAMUS_MISSILES_MAX           ; store random missiles
     BRA +
 
   .cap_missiles
-    BEQ .missiles_done                                                 ; check for 0 condition (value is equal to max)
+    BEQ .missiles_done                                      ; check for 0 condition (value is equal to max)
     SEC : SBC !sram_presetrando_max_missiles
     CMP !sram_presetrando_max_missiles : BPL .cap_missiles
 
   .missiles_done
     ASL : TAX : LDA.l PresetRandoAmmoTable,X
-    STA !SAMUS_MISSILES : STA !SAMUS_MISSILES_MAX                                              ; store capped missiles
+    STA !SAMUS_MISSILES : STA !SAMUS_MISSILES_MAX           ; store capped missiles
     BRA +
 
   .no_missiles
-    STZ !SAMUS_MISSILES : STZ !SAMUS_MISSILES_MAX                                              ; capped at zero
+    STZ !SAMUS_MISSILES : STZ !SAMUS_MISSILES_MAX           ; capped at zero
 
     ; supers
-+   LDA !sram_presetrando_max_supers : BEQ .no_supers                  ; check if max = 0
-    JSL MenuRNG : AND #$00FF                                           ; get new random number
-    CMP !sram_presetrando_max_supers : BPL .cap_supers                 ; check if capped
++   LDA !sram_presetrando_max_supers : BEQ .no_supers       ; check if max = 0
+    JSL MenuRNG : AND #$00FF                                ; get new random number
+    CMP !sram_presetrando_max_supers : BPL .cap_supers      ; check if capped
     ASL : TAX : LDA.l PresetRandoAmmoTable,X
-    STA !SAMUS_SUPERS : STA !SAMUS_SUPERS_MAX                                      ; store random supers
+    STA !SAMUS_SUPERS : STA !SAMUS_SUPERS_MAX               ; store random supers
     BRA +
 
   .cap_supers
-    BEQ .supers_done                                                   ; check for 0 condition (value is equal to max)
+    BEQ .supers_done                                        ; check for 0 condition (value is equal to max)
     SEC : SBC !sram_presetrando_max_supers
     CMP !sram_presetrando_max_supers : BPL .cap_supers
 
   .supers_done
     ASL : TAX : LDA.l PresetRandoAmmoTable,X
-    STA !SAMUS_SUPERS : STA !SAMUS_SUPERS_MAX                                              ; store capped supers
+    STA !SAMUS_SUPERS : STA !SAMUS_SUPERS_MAX               ; store capped supers
     BRA +
 
   .no_supers
-    STZ !SAMUS_SUPERS : STZ !SAMUS_SUPERS_MAX                                              ; capped at zero
+    STZ !SAMUS_SUPERS : STZ !SAMUS_SUPERS_MAX               ; capped at zero
 
     ; pbs
-+   LDA !sram_presetrando_max_pbs : BEQ .no_pbs                        ; check if max = 0
-    LDA !ram_seed_Y : XBA : AND #$00FF                                 ; get new random number
-    CMP !sram_presetrando_max_pbs : BPL .cap_pbs                       ; check if capped
++   LDA !sram_presetrando_max_pbs : BEQ .no_pbs             ; check if max = 0
+    LDA !ram_seed_Y : XBA : AND #$00FF                      ; get new random number
+    CMP !sram_presetrando_max_pbs : BPL .cap_pbs            ; check if capped
     ASL : TAX : LDA.l PresetRandoAmmoTable,X
-    STA !SAMUS_PBS : STA !SAMUS_PBS_MAX                                      ; store random pbs
+    STA !SAMUS_PBS : STA !SAMUS_PBS_MAX                     ; store random pbs
     BRA +
 
   .cap_pbs
-    BEQ .pbs_done                                                      ; check for 0 condition (value is equal to max)
+    BEQ .pbs_done                                           ; check for 0 condition (value is equal to max)
     SEC : SBC !sram_presetrando_max_pbs
     CMP !sram_presetrando_max_pbs : BPL .cap_pbs
 
   .pbs_done
     ASL : TAX : LDA.l PresetRandoAmmoTable,X
-    STA !SAMUS_PBS : STA !SAMUS_PBS_MAX                                              ; store capped pbs
+    STA !SAMUS_PBS : STA !SAMUS_PBS_MAX                     ; store capped pbs
     BRA +
 
   .no_pbs
-    STZ !SAMUS_PBS : STZ !SAMUS_PBS_MAX                                              ; capped at zero
+    STZ !SAMUS_PBS : STZ !SAMUS_PBS_MAX                     ; capped at zero
 
     ; etanks
-+   LDA !sram_presetrando_max_etanks : BEQ .no_etanks                  ; check if max = 0
-    JSL MenuRNG2 : AND #$000F                                          ; get new random number
-    CMP !sram_presetrando_max_etanks : BPL .cap_etanks                 ; check if capped
-    ASL : TAX : LDA.l PresetRandoETankTable,X                         ; load value from table
-    STA !SAMUS_HP : STA !SAMUS_HP_MAX : BRA .done                                  ; store energy
++   LDA !sram_presetrando_max_etanks : BEQ .no_etanks       ; check if max = 0
+    JSL MenuRNG2 : AND #$000F                               ; get new random number
+    CMP !sram_presetrando_max_etanks : BPL .cap_etanks      ; check if capped
+    ASL : TAX : LDA.l PresetRandoETankTable,X               ; load value from table
+    STA !SAMUS_HP : STA !SAMUS_HP_MAX : BRA .done           ; store energy
 
   .cap_etanks
-    BEQ .etanks_done                                                   ; check for 0 condition (value is equal to max)
+    BEQ .etanks_done                                        ; check for 0 condition (value is equal to max)
     SEC : SBC !sram_presetrando_max_etanks
     CMP !sram_presetrando_max_etanks : BPL .cap_etanks
 
   .etanks_done
-    ASL : TAX : LDA.l PresetRandoETankTable,X                         ; load value from table
-    STA !SAMUS_HP : STA !SAMUS_HP_MAX                                              ; store energy
+    ASL : TAX : LDA.l PresetRandoETankTable,X               ; load value from table
+    STA !SAMUS_HP : STA !SAMUS_HP_MAX                       ; store energy
     BRA .done
 
   .no_etanks
-    LDA #$0063 : STA !SAMUS_HP : STA !SAMUS_HP_MAX                                 ; capped at zero (99)
+    LDA #$0063 : STA !SAMUS_HP : STA !SAMUS_HP_MAX          ; capped at zero (99)
 
   .done
     PLX

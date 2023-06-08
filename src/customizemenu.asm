@@ -8,28 +8,28 @@ print pc, " menu customization bankAF start"
 ; -----------------------
 
 CustomizeMenu:
-    dw #ifb_menubackground
-    dw #ifb_custompalettes_menu
-    dw #ifb_paletteprofile
-    dw #ifb_palette2custom
-    dw #ifb_paletterando
+    dw #mc_menubackground
+    dw #mc_custompalettes_menu
+    dw #mc_paletteprofile
+    dw #mc_palette2custom
+    dw #mc_paletterando
     dw #$FFFF
-    dw #ifb_customsfx
+    dw #mc_customsfx
     dw #$FFFF
-    dw #ifb_customfont
+    dw #mc_customfont
     dw #$FFFF
-    dw #ifb_menuscroll_button
-    dw #ifb_menuscroll_delay
+    dw #mc_menuscroll_button
+    dw #mc_menuscroll_delay
     dw #$0000
     %cm_header("CUSTOMIZE PRACTICE MENU")
 
-ifb_menubackground:
+mc_menubackground:
     %cm_toggle("Menu Background", !sram_menu_background, #$0001, #0)
 
-ifb_custompalettes_menu:
+mc_custompalettes_menu:
     %cm_submenu("Customize Menu Palette", #CustomPalettesMenu)
 
-ifb_paletteprofile:
+mc_paletteprofile:
     dw !ACTION_CHOICE
     dl #!sram_custompalette_profile
     dw cm_refresh_cgram_long
@@ -56,7 +56,7 @@ ifb_paletteprofile:
     db #$28, "     PURPLE", #$FF
     db #$28, "        HUD", #$FF
     db #$FF
-ifb_palette2custom:
+mc_palette2custom:
     %cm_submenu("Copy Palette to Custom", #Palette2CustomConfirm)
 
 Palette2CustomConfirm:
@@ -79,20 +79,20 @@ palette2custom_confirm:
     PHB : %i8()
     LDX.b #PaletteProfileTables>>16 : PHX : PLB
     ASL : TAX
-    LDA.l PaletteProfileTables,X : STA $16
+    LDA.l PaletteProfileTables,X : STA $C1
 
     ; copy table to SRAM
-    LDY #$00 : LDA ($16),Y : STA !sram_palette_border
-    LDY #$02 : LDA ($16),Y : STA !sram_palette_headeroutline
-    LDY #$04 : LDA ($16),Y : STA !sram_palette_text
-    LDY #$06 : LDA ($16),Y : STA !sram_palette_background
-    LDY #$08 : LDA ($16),Y : STA !sram_palette_numoutline
-    LDY #$0A : LDA ($16),Y : STA !sram_palette_numfill
-    LDY #$0C : LDA ($16),Y : STA !sram_palette_toggleon
-    LDY #$0E : LDA ($16),Y : STA !sram_palette_seltext
-    LDY #$10 : LDA ($16),Y : STA !sram_palette_seltextbg
-    LDY #$12 : LDA ($16),Y : STA !sram_palette_numseloutline
-    LDY #$14 : LDA ($16),Y : STA !sram_palette_numsel
+    LDY #$00 : LDA ($C1),Y : STA !sram_palette_border
+    LDY #$02 : LDA ($C1),Y : STA !sram_palette_headeroutline
+    LDY #$04 : LDA ($C1),Y : STA !sram_palette_text
+    LDY #$06 : LDA ($C1),Y : STA !sram_palette_background
+    LDY #$08 : LDA ($C1),Y : STA !sram_palette_numoutline
+    LDY #$0A : LDA ($C1),Y : STA !sram_palette_numfill
+    LDY #$0C : LDA ($C1),Y : STA !sram_palette_toggleon
+    LDY #$0E : LDA ($C1),Y : STA !sram_palette_seltext
+    LDY #$10 : LDA ($C1),Y : STA !sram_palette_seltextbg
+    LDY #$12 : LDA ($C1),Y : STA !sram_palette_numseloutline
+    LDY #$14 : LDA ($C1),Y : STA !sram_palette_numsel
 
     ; play sfx and refresh current profile
     JSL refresh_custom_palettes
@@ -113,7 +113,7 @@ palette2custom_confirm:
     LDY.w #CustomizeMenu
     JML action_submenu
 
-ifb_paletterando:
+mc_paletterando:
     %cm_submenu("Randomize Custom Palette", #PaletteRandoConfirm)
 
 PaletteRandoConfirm:
@@ -161,10 +161,10 @@ paletterando_confirm:
     %sfxbubble()
     RTL
 
-ifb_customsfx:
+mc_customsfx:
     %cm_submenu("Customize Menu Sounds", #CustomMenuSFXMenu)
 
-ifb_customfont:
+mc_customfont:
     %cm_numfield("Select Font", !sram_cm_font, 0, 1, 1, 1, .routine)
   .routine
     JML cm_transfer_custom_tileset
@@ -182,7 +182,7 @@ CustomPalettesMenu:
     dw #custompalettes_border
     dw #custompalettes_background
     %examplemenu()
-    dw #ifb_custompalettes_display_menu
+    dw #mc_custompalettes_display_menu
     dw #$0000
     %cm_header("CUSTOMIZE MENU PALETTE")
 
@@ -237,20 +237,20 @@ custompalettes_dec_green:
 custompalettes_dec_blue:
     %cm_numfield("Decimal Blue", !sram_custompalette_blue, 0, 31, 1, 2, #MixRGB)
 
-ifb_dummy_on:
+mc_dummy_on:
     %cm_toggle("Example Toggle ON", !sram_dummy_on, #$0001, #0)
 
-ifb_dummy_off:
+mc_dummy_off:
     %cm_toggle("Example Toggle OFF", !sram_dummy_off, #$0001, #0)
 
-ifb_dummy_hexnum:
+mc_dummy_hexnum:
     %cm_numfield_hex("Example Hex Number", !sram_dummy_num, 0, 255, 1, 8, #0)
 
-ifb_dummy_num:
+mc_dummy_num:
     %cm_numfield("Example Number", !sram_dummy_num, 0, 255, 1, 8, #0)
 
 
-ifb_custompalettes_display_menu:
+mc_custompalettes_display_menu:
     %cm_submenu("Screenshot To Share Colors", #CustomPalettesDisplayMenu)
 
 CustomPalettesDisplayMenu:
@@ -309,33 +309,33 @@ custompalettes_background_display:
 ; ---------------
 
 CustomMenuSFXMenu:
-    dw #ifb_sfx_move
-    dw #ifb_sfx_toggle
-    dw #ifb_sfx_number
-    dw #ifb_sfx_confirm
-    dw #ifb_sfx_goback
+    dw #mc_sfx_move
+    dw #mc_sfx_toggle
+    dw #mc_sfx_number
+    dw #mc_sfx_confirm
+    dw #mc_sfx_goback
     dw #$FFFF
-    dw #ifb_sfx_reset
+    dw #mc_sfx_reset
     dw #$0000
     %cm_header("CUSTOMIZE MENU SOUND FX")
     %cm_footer("PRESS Y TO PLAY SOUNDS")
 
-ifb_sfx_move:
+mc_sfx_move:
     %cm_numfield_sound("Move Cursor", !sram_customsfx_move, 1, 63, 1, #action_test_sfx)
 
-ifb_sfx_toggle:
+mc_sfx_toggle:
     %cm_numfield_sound("Toggle", !sram_customsfx_toggle, 1, 63, 1, #action_test_sfx)
 
-ifb_sfx_number:
+mc_sfx_number:
     %cm_numfield_sound("Number Select", !sram_customsfx_number, 1, 63, 1, #action_test_sfx)
 
-ifb_sfx_goback:
+mc_sfx_goback:
     %cm_numfield_sound("Go Back", !sram_customsfx_goback, 1, 63, 1, #action_test_sfx)
 
-ifb_sfx_confirm:
+mc_sfx_confirm:
     %cm_numfield_sound("Confirm Selection", !sram_customsfx_confirm, 1, 63, 1, #action_test_sfx)
 
-ifb_sfx_reset:
+mc_sfx_reset:
     %cm_jsl("Reset to Defaults", .routine, #$0000)
   .routine
     LDA #$0037 : STA !sram_customsfx_move    ; these are customized
@@ -357,7 +357,7 @@ action_test_sfx:
 ; Menu Config
 ; -----------
 
-ifb_menuscroll_button:
+mc_menuscroll_button:
     dw !ACTION_CHOICE
     dl #!sram_scroll_button
     dw .routine
@@ -372,7 +372,7 @@ ifb_menuscroll_button:
 +   LDA !CTRL_X : STA !sram_cm_scroll_button
     RTL
 
-ifb_menuscroll_delay:
+mc_menuscroll_delay:
     %cm_numfield("Menu Scroll Delay", !sram_cm_scroll_delay, 1, 10, 1, 2, #0)
 
 
