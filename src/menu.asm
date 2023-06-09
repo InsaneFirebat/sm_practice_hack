@@ -1598,7 +1598,9 @@ cm_edit_digits:
     ; hex or decimal
     LDA !ram_cm_ctrl_mode : CMP #$8001 : BEQ .decimal_mode
 
-    JSR cm_get_inputs : BEQ .redraw
+    ; check for A, B, and D-pad
+    JSR cm_get_inputs : STA !ram_cm_controller
+    AND #$8F80 : BEQ .redraw
     BIT !IH_INPUT_LEFTRIGHT : BNE .selecting
     BIT !IH_INPUT_UPDOWN : BNE .editing
     BIT #$8080 : BEQ .redraw
@@ -1624,8 +1626,9 @@ cm_edit_digits:
     JMP cm_edit_decimal_digits
 
   .selecting
+    %sfxmove()
     ; determine which direction was pressed
-    BIT !IH_INPUT_LEFT : BNE .left
+    LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BNE .left
     ; inc/dec horizontal cursor index
     LDA !ram_cm_horizontal_cursor : DEC : AND #$0003 : STA !ram_cm_horizontal_cursor
     BRA .redraw
@@ -1726,7 +1729,9 @@ cm_SingleDigitEdit:
 
 cm_edit_decimal_digits:
 {
-    JSR cm_get_inputs : BEQ .redraw
+    ; check for A, B, and D-pad
+    JSR cm_get_inputs : STA !ram_cm_controller
+    AND #$8F80 : BEQ .redraw
     BIT !IH_INPUT_LEFTRIGHT : BNE .selecting
     BIT !IH_INPUT_UPDOWN : BNE .editing
     BIT #$8080 : BEQ .redraw
@@ -1735,8 +1740,9 @@ cm_edit_decimal_digits:
     BRL .exit
 
   .selecting
+    %sfxmove()
     ; determine which direction was pressed
-    BIT !IH_INPUT_LEFT : BNE .left
+    LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BNE .left
     ; inc/dec horizontal cursor index
     LDA !ram_cm_horizontal_cursor : DEC : AND #$0003 : STA !ram_cm_horizontal_cursor
     CMP #$0003 : BNE .redraw
@@ -1744,7 +1750,7 @@ cm_edit_decimal_digits:
     LDA !DP_DigitMaximum : CMP #1000 : BPL .redraw
     ; limit cursor to 3 positions (0-2)
     LDA #$0002 : STA !ram_cm_horizontal_cursor
-    BRA .redraw
+    BRL .draw
   .left
     LDA !ram_cm_horizontal_cursor : INC : AND #$0003 : STA !ram_cm_horizontal_cursor
     CMP #$0003 : BNE .redraw
@@ -1757,25 +1763,32 @@ cm_edit_decimal_digits:
     BRL .draw
 
   .editing
+    ; convert value to decimal
+    LDA !DP_DigitValue : JSR cm_hex2dec
+
     ; determine which digit to edit
     LDA !ram_cm_horizontal_cursor : BEQ .ones
     DEC : BEQ .tens
     DEC : BEQ .hundreds
 
-    %SDE_dec(thousands, #1000)
-    BRA .draw
+    %SDE_dec(thousands, !DP_Temp)
+    BRA .dec2hex
   .hundreds
-    %SDE_dec(hundreds, #100)
-    BRA .draw
+    %SDE_dec(hundreds, !DP_FirstDigit)
+    BRA .dec2hex
   .tens
-    %SDE_dec(tens, #10)
-    BRA .draw
+    %SDE_dec(tens, !DP_SecondDigit)
+    BRA .dec2hex
   .ones
-    %SDE_dec(ones, #1)
+    %SDE_dec(ones, !DP_ThirdDigit)
+
+  .dec2hex
+    %sfxnumber()
+    JSR cm_reverse_hex2dec
 
   .draw
     ; convert value to decimal
-    LDA [!DP_DigitAddress] : JSR cm_hex2dec
+    LDA !DP_DigitValue : JSR cm_hex2dec
 
     ; get tilemap address
     LDX !ram_cm_stack_index : LDA !ram_cm_cursor_stack,X : TAY
@@ -1831,6 +1844,31 @@ cm_edit_decimal_digits:
   .done
     %a16()
     JSR cm_tilemap_transfer
+    RTS
+
+  .exit
+    ; check if value is inbounds
+    LDA !DP_DigitValue : CMP !DP_DigitMaximum : BMI .check_minimum
+    LDA !DP_DigitMaximum : DEC : BRA + ; was max+1 for convenience
+  .check_minimum
+    CMP !DP_DigitMinimum : BPL +
+    LDA !DP_DigitMinimum
++   STA [!DP_DigitAddress]
+
+    ; skip if JSL target is zero
+    LDA !DP_JSLTarget : BEQ .end
+    ; Set return address for indirect JSL
+    LDA !ram_cm_menu_bank : STA !DP_JSLTarget+2
+    PHK : PEA .end-1
+    ; addr in A
+    LDA [!DP_DigitAddress]
+    JML.w [!DP_JSLTarget]
+
+  .end
+    %ai16()
+    %sfxconfirm()
+    LDA #$0000 : STA !ram_cm_ctrl_mode
+    JSL cm_draw
     RTS
 }
 
@@ -2157,8 +2195,10 @@ execute_numfield_word:
     LDA !ram_cm_horizontal_cursor : CMP #$0003 : BNE +
     LDA #$0002 : STA !ram_cm_horizontal_cursor
 
+    ; grab JSL address
 +   LDA [!DP_CurrentMenu] : STA !DP_JSLTarget
 
+    LDA [!DP_DigitAddress] : STA !DP_DigitValue
     LDA #$8001 : STA !ram_cm_ctrl_mode
     %sfxnumber()
 
@@ -2473,8 +2513,8 @@ cm_hex2dec:
     PEA $0000 : PLA ; wait for math
 
     ; store result and remainder, divide the rest
-    LDA $4214 : STA !DP_SecondDigit
-    LDA $4216 : STA !DP_ThirdDigit
+    LDA $4214 : STA !DP_SecondDigit ; tens
+    LDA $4216 : STA !DP_ThirdDigit ; ones
     LDA !DP_Temp : STA $4204
 
     %a8()
@@ -2485,9 +2525,31 @@ cm_hex2dec:
     PEA $0000 : PLA ; wait for math
 
     ; store result and remainder
-    LDA $4214 : STA !DP_Temp
-    LDA $4216 : STA !DP_FirstDigit
+    LDA $4214 : STA !DP_Temp ; thousands
+    LDA $4216 : STA !DP_FirstDigit ; hundreds
 
+    RTS
+}
+
+cm_reverse_hex2dec:
+{
+; Reconstructs a 16bit decimal number from individual digit values
+    LDA !DP_Temp
+    %ai8()
+    STA $211B : XBA : STA $211B ; Thousands
+    LDY #$0A : STY $211C ; multiply by 10
+    %a16()
+    LDA $2134 : CLC : ADC !DP_FirstDigit ; add Hundreds
+    %a8()
+    STA $211B : XBA : STA $211B
+    STY $211C ; multiply by 10
+    %a16()
+    LDA $2134 : CLC : ADC !DP_SecondDigit ; add Tens
+    %a8()
+    STA $211B : XBA : STA $211B 
+    STY $211C ; multiply by 10
+    %ai16()
+    LDA $2134 : CLC : ADC !DP_ThirdDigit : STA !DP_DigitValue ; add Ones
     RTS
 }
 
