@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.5.12] Fixed rollover bug when single-digit editing decimal numbers
 * [2.5.5.11] Fixed crash when loading an empty savestate from the crash handler
 * [2.5.5.10] Fixed double decrementing of color number fields
 * [2.5.5.10] Fixed a crash with Copy Palette to Custom option
