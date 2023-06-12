@@ -1171,7 +1171,7 @@ tel_crateria0C:
 
 TeleportBrinstarMenu:
     dw #tel_brinstarpink
-    dw #tel_brinstargreenshaft
+;    dw #tel_brinstargreenshaft ; duplicate of Maridia > Draygon
     dw #tel_brinstargreenetecoons
     dw #tel_brinstarkraid
     dw #tel_brinstarredtower
