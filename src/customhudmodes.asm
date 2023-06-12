@@ -721,13 +721,13 @@ status_kraidradar:
     ; Enemy 6
   .checkEnemies
     LDX #$0180
-    LDA $7E0F7E,X : CMP #$0270 : BCC .Enemy6X         ; check if Y <270h
+    LDA !ENEMY_Y,X : CMP #$0270 : BCC .Enemy6X        ; check if Y <270h
     LDA #$F000 : STA !ram_radar1 : BRL .skipEnemy6    ; set skip flag
 
     ; X Position
   .Enemy6X
     ; check X position, set position bit on radar
-    LDA $7E0F7A,X
+    LDA !ENEMY_X,X
     CMP #$0020 : BPL + : LDA #$0080 : STA !ram_radar1 : BRA .Enemy6Y
 +   CMP #$0030 : BPL + : LDA #$0040 : STA !ram_radar1 : BRA .Enemy6Y
 +   CMP #$0040 : BPL + : LDA #$0020 : STA !ram_radar1 : BRA .Enemy6Y
@@ -739,31 +739,33 @@ status_kraidradar:
 
   .Enemy6Y
     ; Y Position
-    LDA $7E0F7E,X : CMP !ram_enemy6_last_ypos : BCC .upEnemy6
+    LDA !ENEMY_Y,X : CMP !ram_enemy6_last_ypos : BCC .upEnemy6
     STA !ram_enemy6_last_ypos
     CMP #$0252 : BCC +
-    LDA !ram_radar1 : AND #$00FF : ORA #$0800 : BRA ++
+    LDA !ram_radar1 : AND #$00FF : ORA #$0800 : BRA .Enemy6Y_store
 +   LDA !ram_radar1 : AND #$00FF : ORA #$0400
-++  STA !ram_radar1 : BRA .checkEnemy7
+  .Enemy6Y_store
+    STA !ram_radar1 : BRA .checkEnemy7
 
   .upEnemy6
     STA !ram_enemy6_last_ypos
     CMP #$0252 : BCC +
-    LDA !ram_radar1 : AND #$00FF : ORA #$0200 : BRA ++
+    LDA !ram_radar1 : AND #$00FF : ORA #$0200 : BRA .upEnemy6_store
 +   LDA !ram_radar1 : AND #$00FF : ORA #$0100
-++  STA !ram_radar1 : BRA .checkEnemy7
+  .upEnemy6_store
+    STA !ram_radar1 : BRA .checkEnemy7
 
   .skipEnemy6
     LDA #$FFFF : STA !ram_radar1
 
   .checkEnemy7
     LDX #$01C0
-    LDA $7E0F7E,X : CMP #$0270 : BCC .Enemy7X      ; check if Y <270h
+    LDA !ENEMY_Y,X : CMP #$0270 : BCC .Enemy7X      ; check if Y <270h
     LDA #$FFFF : STA !ram_radar2 : BRL .drawEnemy6
 
     ; X Position
   .Enemy7X
-    LDA $7E0F7A,X
+    LDA !ENEMY_X,X
 +   CMP #$0020 : BPL + : LDA #$0080 : STA !ram_radar2 : BRA .Enemy7Y
 +   CMP #$0030 : BPL + : LDA #$0040 : STA !ram_radar2 : BRA .Enemy7Y
 +   CMP #$0040 : BPL + : LDA #$0020 : STA !ram_radar2 : BRA .Enemy7Y
@@ -775,19 +777,21 @@ status_kraidradar:
 
   .Enemy7Y
     ; Y Position
-    LDA $7E0F7E,X : CMP !ram_enemy7_last_ypos : BCC .upEnemy7
+    LDA !ENEMY_Y,X : CMP !ram_enemy7_last_ypos : BCC .upEnemy7
     STA !ram_enemy7_last_ypos
     CMP #$0252 : BCC +
-    LDA !ram_radar2 : AND #$00FF : ORA #$0800 : BRA ++
+    LDA !ram_radar2 : AND #$00FF : ORA #$0800 : BRA .Enemy7Y_store
 +   LDA !ram_radar2 : AND #$00FF : ORA #$0400
-++  STA !ram_radar2 : BRA .drawEnemy6
+  .Enemy7Y_store
+    STA !ram_radar2 : BRA .drawEnemy6
 
   .upEnemy7
     STA !ram_enemy7_last_ypos
     CMP #$0252 : BCC +
-    LDA !ram_radar2 : AND #$00FF : ORA #$0200 : BRA ++
+    LDA !ram_radar2 : AND #$00FF : ORA #$0200 : BRA .upEnemy7_store
 +   LDA !ram_radar2 : AND #$00FF : ORA #$0100
-++  STA !ram_radar2
+  .upEnemy7_store
+    STA !ram_radar2
 
 
 ; Draw stuff
@@ -812,25 +816,18 @@ status_kraidradar:
     
   .R1P8
     LDX #$000E : BRA +
-    
   .R1P7
     LDX #$000C : BRA +
-    
   .R1P6
     LDX #$000A : BRA +
-    
   .R1P5
     LDX #$0008 : BRA +
-    
   .R1P4
     LDX #$0006 : BRA +
-    
   .R1P3
     LDX #$0004 : BRA +
-    
   .R1P2
     LDX #$0002 : BRA +
-    
   .R1P1
     LDX #$0000
 
