@@ -24,6 +24,9 @@ org $8095FC      ; hijack, end of NMI routine to update realtime frames
 if !FEATURE_VANILLAHUD
 ; skip the rest of the hijacks if Vanilla HUD build
 else
+org $809609      ; inc counter if NMI lag branch
+    INC !REALTIME_LAG_COUNTER
+
 org $82EE92      ; runs on START GAME
     JSL startgame_seg_timer
 
@@ -658,10 +661,12 @@ endif
   .pick_roomtimer
     STZ $4205
     LDA !sram_frame_counter_mode : BNE .ingame_roomtimer
+    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$42
     LDA !ram_last_realtime_room
     BRA .calculate_roomtimer
 
   .ingame_roomtimer
+    LDA !IH_HYPHEN : STA !HUD_TILEMAP+$42
     LDA !ram_last_gametime_room
 
   .calculate_roomtimer
@@ -678,7 +683,6 @@ endif
     PEA $0000 : PLA ; wait for CPU math
     LDA $4216 : STA $C1
     LDA $4214 : JSR Draw3 : TXY
-    LDA !IH_DECIMAL : STA !HUD_TILEMAP,X
     LDA $C1 : ASL : TAX
     LDA HexToNumberGFX1,X : PHX : TYX : STA !HUD_TILEMAP+2,X
     PLX : LDA HexToNumberGFX2,X : TYX : STA !HUD_TILEMAP+4,X
@@ -831,10 +835,12 @@ ih_update_timers:
   .minimap_roomtimer
     STZ $4205
     LDA !sram_frame_counter_mode : BNE .minimap_ingame_roomtimer
+    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$B4
     LDA !ram_last_realtime_room
     BRA .minimap_calculate_roomtimer
 
   .minimap_ingame_roomtimer
+    LDA !IH_HYPHEN : STA !HUD_TILEMAP+$B4
     LDA !ram_last_gametime_room
 
   .minimap_calculate_roomtimer
@@ -851,7 +857,6 @@ endif
     PEA $0000 : PLA ; wait for CPU math
     LDA $4216 : STA $C1
     LDA $4214 : LDX #$00B0 : JSR Draw2
-    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$B4
     LDA $C1 : ASL : TAX
     LDA.w HexToNumberGFX1,X : STA !HUD_TILEMAP+$B6
     LDA.w HexToNumberGFX2,X : STA !HUD_TILEMAP+$B8
@@ -954,11 +959,13 @@ endif
 
   .pick_segment_timer
     LDA !sram_frame_counter_mode : BNE .ingame_segment_timer
+    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$B4 : STA !HUD_TILEMAP+$BA
     LDA.w #!ram_seg_rt_frames : STA $00
     LDA !WRAM_BANK : STA $02
     BRA .draw_segment_timer
 
   .ingame_segment_timer
+    LDA !IH_HYPHEN : STA !HUD_TILEMAP+$B4 : STA !HUD_TILEMAP+$BA
     LDA #$09DA : STA $00
     LDA #$007E : STA $02
     BRA .draw_segment_timer
@@ -977,8 +984,6 @@ endif
     ; Minutes
     LDA [$00] : LDX #$00AE : JSR Draw3
 
-    ; Draw decimal seperators
-    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$B4 : STA !HUD_TILEMAP+$BA
     LDA !IH_BLANK : STA !HUD_TILEMAP+$C0
     BRL .end
 }
@@ -1000,7 +1005,8 @@ ih_hud_vanilla_health:
     LDY #$0000 : LDA $4214
     INC : STA $16
 
-  .vanilla_loop_tanks    DEC $16 : BEQ .vanilla_draw_empty_tanks
+  .vanilla_loop_tanks
+    DEC $16 : BEQ .vanilla_draw_empty_tanks
     LDX #$3430
     LDA $14 : BEQ .vanilla_draw_tank_health
     DEC $14 : LDX #$2831

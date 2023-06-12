@@ -3,9 +3,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-org $809609      ; inc counter if NMI lag branch
-    INC !REALTIME_LAG_COUNTER
-
 if !FEATURE_PAL
 org $A6A18C
 else             ; Ridley AI init, reset !ram_countdamage
