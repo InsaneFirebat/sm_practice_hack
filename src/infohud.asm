@@ -1070,17 +1070,19 @@ ih_hud_code:
     ; -- read input
     TAY : LDX #$0000
 
--   TYA : AND ControllerTable1,X : BEQ +
-    LDA ControllerGfx1,X : BRA ++
-+   LDA !IH_BLANK
-++  STA !HUD_TILEMAP+$08,X
+-   TYA : AND ControllerTable1,X : BEQ .ctrl_1_blank
+    LDA ControllerGfx1,X : BRA +
+  .ctrl_1_blank
+    LDA !IH_BLANK
++   STA !HUD_TILEMAP+$08,X
     INX #2 : CPX #$000C : BNE -
 
     LDX #$0000
--   TYA : AND ControllerTable2,X : BEQ +
-    LDA ControllerGfx2,X : BRA ++
-+   LDA !IH_BLANK
-++  STA !HUD_TILEMAP+$48,X
+-   TYA : AND ControllerTable2,X : BEQ .ctrl_2_blank
+    LDA ControllerGfx2,X : BRA +
+  .ctrl_2_blank
+    LDA !IH_BLANK
++   STA !HUD_TILEMAP+$48,X
     INX #2 : CPX #$000C : BNE -
 
     TYA : STA !ram_ih_controller
@@ -1722,12 +1724,12 @@ magic_pants:
 
     ; if flashpants are enabled, flash
 +   LDA !ram_magic_pants_enabled : AND #$0001 : BEQ .done
-    LDA !ram_magic_pants_state : BNE ++
+    LDA !ram_magic_pants_state : BNE +
 
     LDA $7EC194 : STA !ram_magic_pants_pal1
     LDA $7EC196 : STA !ram_magic_pants_pal2
     LDA $7EC19E : STA !ram_magic_pants_pal3
-++  LDA #$FFFF
++   LDA #$FFFF
     STA $7EC194 : STA $7EC196 : STA $7EC19E
 
   .done
@@ -1802,14 +1804,14 @@ infinite_ammo:
     LDA !ram_infiniteammo_check : BNE + ; 0 if first time it's been run
     INC : STA !ram_infiniteammo_check
     ; preserve ammo counts
-    LDA $7E09C6 : STA !ram_ammo_missiles
-    LDA $7E09CA : STA !ram_ammo_supers
-    LDA $7E09CE : STA !ram_ammo_powerbombs
+    LDA !SAMUS_MISSILES : STA !ram_ammo_missiles
+    LDA !SAMUS_SUPERS : STA !ram_ammo_supers
+    LDA !SAMUS_PBS : STA !ram_ammo_powerbombs
 
     ; lock ammo to specific values
-+   LDA #$03E7 : STA $7E09C6  ; 999 missiles
-    LDA #$0063 : STA $7E09CA  ; 99 supers
-    LDA #$0063 : STA $7E09CE  ; 99 pbs
++   LDA #$03E7 : STA !SAMUS_MISSILES  ; 999 missiles
+    LDA #$0063 : STA !SAMUS_SUPERS  ; 99 supers
+    LDA #$0063 : STA !SAMUS_PBS  ; 99 pbs
     RTS
 }
 
@@ -1910,12 +1912,12 @@ ih_hud_code_paused:
     %a8() : STZ $02 : %ai16()
 
     ; Update Samus' HP and reserves
-    LDA $7E09C2 : CMP !ram_last_hp : BEQ .check_reserves
+    LDA !SAMUS_HP : CMP !ram_last_hp : BEQ .check_reserves
     STA !ram_last_hp
     BRA .draw_health
 
   .check_reserves
-    LDA $7E09D6 : CMP !ram_reserves_last : BEQ .end
+    LDA !SAMUS_RESERVE_ENERGY : CMP !ram_reserves_last : BEQ .end
 
   .draw_health
     PHY : PHX
@@ -1923,7 +1925,7 @@ ih_hud_code_paused:
     PLX : PLY
 
   .end
-    LDA $7E09C0 ; overwritten code
+    LDA !SAMUS_RESERVE_MODE ; overwritten code
     JMP $9B51
 }
 
