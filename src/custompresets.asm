@@ -262,7 +262,8 @@ custom_preset_save:
 
     LDA $0AF8 : STA $7031EA,X    ; Samus subpixel X
     LDA $0AFC : STA $7031EC,X    ; Samus subpixel Y
-    ; next available byte is $7031EE
+    LDA !SAMUS_ACCEL_CHARGE : STA $7031EE,X
+    ; next available byte is $7031F0
 
     RTL
 }
@@ -342,11 +343,12 @@ custom_preset_load:
     LDA $703002,X : CMP #$01EC : BMI .done_with_scrolls
     LDA $7031EA,X : STA $0AF8    ; Samus subpixel X
     LDA $7031EC,X : STA $0AFC    ; Samus subpixel Y
+    LDA $7031EE,X : STA !SAMUS_ACCEL_CHARGE
 
   .done_with_scrolls
     RTL
 
-    ; next available byte is $7031EE
+    ; next available byte is $7031F0
 
   .done_no_scrolls
     LDA #$0000 : STA !ram_custom_preset

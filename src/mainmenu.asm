@@ -553,7 +553,8 @@ print pc, " mainmenu equipment start"
 
 EquipmentMenu:
     dw #eq_refill
-    dw #eq_toggle_category
+;    dw #eq_toggle_category
+    dw #cat_100
     dw #eq_goto_toggleitems
     dw #eq_goto_togglebeams
     dw #$FFFF
@@ -571,6 +572,7 @@ EquipmentMenu:
     dw #eq_togglesupers
     dw #eq_togglepbs
     dw #eq_damage
+    dw #eq_accelcharge
 ;    dw #eq_currentsupers
 ;    dw #eq_setsupers
 ;    dw #$FFFF
@@ -590,8 +592,8 @@ eq_refill:
     LDA #$0002 : JSL !SFX_LIB2 ; big energy pickup
     RTL
 
-eq_toggle_category:
-    %cm_submenu("Category Loadouts", #ToggleCategoryMenu)
+;eq_toggle_category:
+;    %cm_submenu("Category Loadouts", #ToggleCategoryMenu)
 
 eq_goto_toggleitems:
     %cm_jsl("Toggle Items", #eq_prepare_items_menu, #ToggleItemsMenu)
@@ -673,6 +675,9 @@ eq_togglepbs:
 eq_damage:
     %cm_numfield("Damage", !SAMUS_DAMAGE, 0, 6, 1, 2, #0)
 
+eq_accelcharge:
+    %cm_numfield("Accel Charge", !SAMUS_ACCEL_CHARGE, 0, 6, 1, 2, #0)
+
 ;eq_currentsupers:
 ;    %cm_numfield("Current Super Missiles", $7E09CA, 0, 65, 1, 5, #0)
 ;
@@ -695,94 +700,106 @@ eq_damage:
 ; Toggle Category menu
 ; ---------------------
 
-ToggleCategoryMenu:
-    dw #cat_100
-    dw #cat_any_new
-    dw #cat_any_old
-    dw #cat_14ice
-    dw #cat_14speed
-    dw #cat_gt_code
-    dw #cat_gt_max
-    dw #cat_rbo
-    dw #cat_any_glitched
-    dw #cat_inf_cf
-    dw #cat_nothing
-    dw #$0000
-    %cm_header("TOGGLE CATEGORY")
+;ToggleCategoryMenu:
+;    dw #cat_100
+;    dw #cat_any_new
+;    dw #cat_any_old
+;    dw #cat_14ice
+;    dw #cat_14speed
+;    dw #cat_gt_code
+;    dw #cat_gt_max
+;    dw #cat_rbo
+;    dw #cat_any_glitched
+;    dw #cat_inf_cf
+;    dw #cat_nothing
+;    dw #$0000
+;    %cm_header("TOGGLE CATEGORY")
 
 cat_100:
-    %cm_jsl("100%", action_category, #$0000)
-
-cat_any_new:
-    %cm_jsl("Any% PRKD", action_category, #$0001)
-
-cat_any_old:
-    %cm_jsl("Any% KPDR", action_category, #$0002)
-
-cat_14ice:
-    %cm_jsl("14% Ice", action_category, #$0003)
-
-cat_14speed:
-    %cm_jsl("14% Speed", action_category, #$0004)
-
-cat_gt_code:
-    %cm_jsl("GT Code", action_category, #$0005)
-
-cat_gt_max:
-    %cm_jsl("GT Max%", action_category, #$0006)
-
-cat_rbo:
-    %cm_jsl("RBO", action_category, #$0007)
-
-cat_any_glitched:
-    %cm_jsl("Any% Glitched", action_category, #$0008)
-
-cat_inf_cf:
-    %cm_jsl("Infinite Crystal Flashes", action_category, #$0009)
-
-cat_nothing:
-    %cm_jsl("Nothing", action_category, #$000A)
-
-
-action_category:
-{
-    TYA : ASL #4 : TAX
-
-    LDA.l .table,X : STA !SAMUS_ITEMS_COLLECTED : STA !SAMUS_ITEMS_EQUIPPED : INX #2
-
-    LDA.l .table,X : STA !SAMUS_BEAMS_COLLECTED : TAY
-    AND #$000C : CMP #$000C : BEQ .murderBeam
-    TYA : STA !SAMUS_BEAMS_EQUIPPED : INX #2 : BRA +
-
-  .murderBeam
-    TYA : AND #$100B : STA !SAMUS_BEAMS_EQUIPPED : INX #2
-
-+   LDA.l .table,X : STA !SAMUS_HP : STA !SAMUS_HP_MAX : INX #2
-    LDA.l .table,X : STA !SAMUS_AMMO : STA !SAMUS_AMMO_MAX : INX #2
-    LDA.l .table,X : STA !SAMUS_MISSILES_MAX : INX #2
-    LDA.l .table,X : STA !SAMUS_SUPERS_MAX : INX #2
-    LDA.l .table,X : STA !SAMUS_PBS_MAX : INX #2
-    LDA.l .table,X : STA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY : INX #2
-
+    %cm_jsl("100% Items", .routine, #$0000)
+  .routine
+    LDA #$05DB : STA !SAMUS_HP : STA !SAMUS_HP_MAX
+    LDA #$F73F : STA !SAMUS_ITEMS_EQUIPPED
+    LDA #$FF3F : STA !SAMUS_ITEMS_COLLECTED
+    LDA #$300B : STA !SAMUS_BEAMS_EQUIPPED
+    LDA #$300F : STA !SAMUS_BEAMS_COLLECTED
+    LDA #$0190 : STA !SAMUS_AMMO : STA !SAMUS_AMMO_MAX
+    LDA #$0001 : STA !SAMUS_MISSILES_MAX : STA !SAMUS_SUPERS_MAX : STA !SAMUS_PBS_MAX
+    LDA #$0006 : STA !SAMUS_DAMAGE : STA !SAMUS_ACCEL_CHARGE
+    LDA #$0008 : STA !SAMUS_SPACEJUMP_MAX
+    LDA #$0002 : JSL !SFX_LIB2 ; big energy
     JSL cm_set_etanks_and_reserve
-    %sfxconfirm()
     JML $90AC8D ; update beam gfx
-}
 
-  .table
-    ;  Items,  Beams,  Health, Ammo,   Miss,   Supers, PBs,    Reserves
-    dw #$F73F, #$300F, #$05DB, #$0190, #$0001, #$0001, #$0001, #$0190        ; 100%
-    dw #$3125, #$1007, #$018F, #$000F, #$000A, #$000A, #$0005, #$0000        ; any% new
-    dw #$3325, #$100B, #$018F, #$000F, #$000A, #$000A, #$0005, #$0000        ; any% old
-    dw #$1025, #$1002, #$018F, #$000A, #$000A, #$000A, #$0005, #$0000        ; 14% ice
-    dw #$3025, #$1000, #$018F, #$000A, #$000A, #$000A, #$0005, #$0000        ; 14% speed
-    dw #$F33F, #$100F, #$02BC, #$0064, #$0014, #$0014, #$0014, #$012C        ; gt code
-    dw #$F33F, #$100F, #$0834, #$0145, #$0041, #$0041, #$0041, #$02BC        ; 135%
-    dw #$710C, #$1001, #$031F, #$001E, #$0019, #$0019, #$0014, #$0064        ; rbo
-    dw #$9004, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0005, #$0000        ; any% glitched
-    dw #$F32F, #$100F, #$0031, #$01A4, #$005A, #$005A, #$0063, #$0000        ; crystal flash
-    dw #$0000, #$0000, #$0063, #$0000, #$0000, #$0000, #$0000, #$0000        ; nothing
-}
+;cat_any_new:
+;    %cm_jsl("Any% PRKD", action_category, #$0001)
+;
+;cat_any_old:
+;    %cm_jsl("Any% KPDR", action_category, #$0002)
+;
+;cat_14ice:
+;    %cm_jsl("14% Ice", action_category, #$0003)
+;
+;cat_14speed:
+;    %cm_jsl("14% Speed", action_category, #$0004)
+;
+;cat_gt_code:
+;    %cm_jsl("GT Code", action_category, #$0005)
+;
+;cat_gt_max:
+;    %cm_jsl("GT Max%", action_category, #$0006)
+;
+;cat_rbo:
+;    %cm_jsl("RBO", action_category, #$0007)
+;
+;cat_any_glitched:
+;    %cm_jsl("Any% Glitched", action_category, #$0008)
+;
+;cat_inf_cf:
+;    %cm_jsl("Infinite Crystal Flashes", action_category, #$0009)
+;
+;cat_nothing:
+;    %cm_jsl("Nothing", action_category, #$000A)
+;
+;action_category:
+;{
+;    TYA : ASL #4 : TAX
+;
+;    LDA.l .table,X : STA !SAMUS_ITEMS_COLLECTED : STA !SAMUS_ITEMS_EQUIPPED : INX #2
+;
+;    LDA.l .table,X : STA !SAMUS_BEAMS_COLLECTED : TAY
+;    AND #$000C : CMP #$000C : BEQ .murderBeam
+;    TYA : STA !SAMUS_BEAMS_EQUIPPED : INX #2 : BRA +
+;
+;  .murderBeam
+;    TYA : AND #$100B : STA !SAMUS_BEAMS_EQUIPPED : INX #2
+;
+;+   LDA.l .table,X : STA !SAMUS_HP : STA !SAMUS_HP_MAX : INX #2
+;    LDA.l .table,X : STA !SAMUS_AMMO : STA !SAMUS_AMMO_MAX : INX #2
+;    LDA.l .table,X : STA !SAMUS_MISSILES_MAX : INX #2
+;    LDA.l .table,X : STA !SAMUS_SUPERS_MAX : INX #2
+;    LDA.l .table,X : STA !SAMUS_PBS_MAX : INX #2
+;    LDA.l .table,X : STA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY : INX #2
+;
+;    JSL cm_set_etanks_and_reserve
+;    %sfxconfirm()
+;    JML $90AC8D ; update beam gfx
+;}
+;
+;  .table
+;    ;  Items,  Beams,  Health, Ammo,   Miss,   Supers, PBs,    Reserves
+;    dw #$F73F, #$300F, #$05DB, #$0190, #$0001, #$0001, #$0001, #$0190        ; 100%
+;    dw #$3125, #$1007, #$018F, #$000F, #$000A, #$000A, #$0005, #$0000        ; any% new
+;    dw #$3325, #$100B, #$018F, #$000F, #$000A, #$000A, #$0005, #$0000        ; any% old
+;    dw #$1025, #$1002, #$018F, #$000A, #$000A, #$000A, #$0005, #$0000        ; 14% ice
+;    dw #$3025, #$1000, #$018F, #$000A, #$000A, #$000A, #$0005, #$0000        ; 14% speed
+;    dw #$F33F, #$100F, #$02BC, #$0064, #$0014, #$0014, #$0014, #$012C        ; gt code
+;    dw #$F33F, #$100F, #$0834, #$0145, #$0041, #$0041, #$0041, #$02BC        ; 135%
+;    dw #$710C, #$1001, #$031F, #$001E, #$0019, #$0019, #$0014, #$0064        ; rbo
+;    dw #$9004, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0005, #$0000        ; any% glitched
+;    dw #$F32F, #$100F, #$0031, #$01A4, #$005A, #$005A, #$0063, #$0000        ; crystal flash
+;    dw #$0000, #$0000, #$0063, #$0000, #$0000, #$0000, #$0000, #$0000        ; nothing
+;}
 
 
 ; ------------------

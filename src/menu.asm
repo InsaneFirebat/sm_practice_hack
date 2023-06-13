@@ -127,7 +127,7 @@ cm_init:
 cm_set_etanks_and_reserve:
 {
     LDA !SAMUS_HP_MAX : JSR cm_divide_100 : STA !ram_cm_etanks
-    LDA !SAMUS_RESERVE_MAX : JSR cm_divide_100 : STA !ram_cm_reserve
+;    LDA !SAMUS_RESERVE_MAX : JSR cm_divide_100 : STA !ram_cm_reserve
     RTL
 }
 

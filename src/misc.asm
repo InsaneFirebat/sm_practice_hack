@@ -15,10 +15,36 @@ else
 endif
 
 
-;; Skip intro
-;; $82:EEDF A9 95 A3    LDA #$A395
-;org $82EEDF
-;    LDA #$C100
+; Skip intro
+; $82:EEDF A9 95 A3    LDA #$A395
+org $82EEDF
+    LDA.w #Subversion_Intro_Skip
+
+org !ORG_MISC_BANK8B
+print pc, " misc bank8B start"
+
+Subversion_8BF800_long:
+{
+    JSR $F800
+    RTL
+}
+
+Subversion_Intro_Skip:
+{
+    %a8()
+    LDA #$80 : STA $51
+    %a16()
+    LDX #$0290
+-   STZ $198D,X
+    DEX #2 : BPL -
+
+    JSL Subversion_8BF800_long
+    LDA #$0006 : STA !GAMEMODE
+    LDA !SAMUS_HP_MAX : STA !SAMUS_HP
+    RTS
+}
+warnpc $8BF800
+print pc, " misc bank8B end"
 
 
 ; Enable version display
