@@ -2,7 +2,8 @@
 ;Patches to support the minimap
 ;=======================================================
 
-org $809B51
+;org $809B51
+org $809B52
     JMP $9BFB    ; skip drawing auto reserve icon and normal energy numbers and tanks during HUD routine
 
 org $82AED9      ; routine to draw auto reserve icon on HUD from equip screen
@@ -48,14 +49,15 @@ org $82E488      ; write tiles to VRAM
 
 org $9AB200      ; graphics for HUD
 hudgfx_bin:
-incbin ../resources/hudgfx.bin
+incbin ../resources/Subversion_hudgfx.bin
 
 
 ; Place minimap graphics in bank FD
 org !ORG_MINIMAP_BANKFD
 print pc, " minimap bankFD start"
 mapgfx_bin:
-incbin ../resources/mapgfx.bin
+incbin ../resources/Subversion_hudgfx.bin
+;incbin ../resources/mapgfx.bin
 
 ; Next block needs to be all zeros to clear a tilemap
 fillbyte $00
@@ -138,13 +140,10 @@ mm_refresh_reserves:
 }
 
 print pc, " minimap bank82 end"
-warnpc $82F800 ; layout.asm
+;warnpc $82F800 ; layout.asm
 
-
-; Placed in bank 90 so that the jumps work
-org !ORG_MINIMAP_BANK90
-print pc, " minimap bank90 start"
-
+org !ORG_MINIMAP_BANK88
+print pc, " minimap bank88 start"
 mm_initialize_minimap:
 {
     ; If we just left Ceres, increment segment timer
@@ -168,6 +167,17 @@ mm_initialize_minimap:
     LDA $14 : BEQ .init_minimap : CLC : ADC !ram_seg_rt_minutes : STA !ram_seg_rt_minutes
 
   .init_minimap
+    JML mm_initialize_minimap_bank90
+}
+print pc, " minimap bank88 end"
+
+
+; Placed in bank 90 so that the jumps work
+org !ORG_MINIMAP_BANK90
+print pc, " minimap bank90 start"
+
+mm_initialize_minimap_bank90:
+{
     LDA !ram_minimap : BEQ .skip_minimap
     JMP $A8EF  ; resume original logic
 

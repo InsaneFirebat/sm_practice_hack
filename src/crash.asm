@@ -228,9 +228,9 @@ COPHandler:
 }
 
 print pc, " crash handler bank80 end"
-warnpc $80F000 ; presets.asm
+;warnpc $80F000 ; presets.asm
 
-pullpc
+;pullpc
 print pc, " crash handler bank89 start"
 
 CrashViewer:
@@ -1119,4 +1119,4 @@ CrashTextInfo11:
     db "Press ", #$8D, #$8C, #$85, #$84, " to soft reset", #$FF
 
 print pc, " crash handler bank89 end"
-
+pullpc

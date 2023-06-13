@@ -94,13 +94,13 @@ if !FEATURE_SD2SNES
     JMP .auto_save_state
 endif
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
-    AND !IH_CONTROLLER_PRI_NEW : BEQ +
-    JMP .load_last_preset
-
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
-    AND !IH_CONTROLLER_PRI_NEW : BEQ +
-    JMP .random_preset
+;  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
+;    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+;    JMP .load_last_preset
+;
+;  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
+;    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+;    JMP .random_preset
 
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_save_custom_preset : CMP !sram_ctrl_save_custom_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
@@ -197,11 +197,11 @@ endif
     ; CLC to continue normal gameplay after killing enemies
     CLC : JMP skip_pause
 
-  .load_last_preset
-    ; Choose a random preset if zero
-    LDA !sram_last_preset : BEQ .random_preset : STA !ram_load_preset
-    ; SEC to skip normal gameplay for one frame after loading preset
-    SEC : RTS
+;  .load_last_preset
+;    ; Choose a random preset if zero
+;    LDA !sram_last_preset : BEQ .random_preset : STA !ram_load_preset
+;    ; SEC to skip normal gameplay for one frame after loading preset
+;    SEC : RTS
 
   .reset_segment_timer
     LDA #$0000 : STA !ram_seg_rt_frames
@@ -235,10 +235,10 @@ endif
     ; CLC to continue normal gameplay after enabling OOB Tile Viewer
     CLC : JMP skip_pause
 
-  .random_preset
-    JSL LoadRandomPreset
-    ; SEC to skip normal gameplay for one frame after loading preset
-    SEC : RTS
+;  .random_preset
+;    JSL LoadRandomPreset
+;    ; SEC to skip normal gameplay for one frame after loading preset
+;    SEC : RTS
 
   .save_custom_preset
     ; check gamestate first

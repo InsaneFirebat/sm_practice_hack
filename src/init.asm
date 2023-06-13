@@ -18,6 +18,7 @@ org $808490
     DEX : DEX
     BPL .clear_bank_loop
     JSL init_nonzero_wram
+    JSL init_bank7F
     PLA
     BRA .end_clear_bank
 
@@ -65,6 +66,22 @@ init_nonzero_wram:
 
     RTL
 }
+
+init_bank7F:
+{
+    PHB : PEA $7F7F : PLB : PLB
+    LDX #$007E
+  .clear_7F_loop
+    STZ $FB00,X
+    STZ $FB80,X
+    STZ $FC00,X
+    STZ $FC80,X
+    DEX : DEX
+    BPL .clear_7F_loop
+    PLB
+    RTL
+}
+
 
 init_sram:
 {

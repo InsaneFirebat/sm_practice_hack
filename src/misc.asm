@@ -15,32 +15,32 @@ else
 endif
 
 
-; Skip intro
-; $82:EEDF A9 95 A3    LDA #$A395
-org $82EEDF
-    LDA #$C100
+;; Skip intro
+;; $82:EEDF A9 95 A3    LDA #$A395
+;org $82EEDF
+;    LDA #$C100
 
 
 ; Enable version display
-org $8B8697
-    NOP
-
-org $8BF754
-    db #$20, #($30+!VERSION_MAJOR)
-    db #$2E, #($30+!VERSION_MINOR)
-    db #$2E, #($30+!VERSION_BUILD)
-if !VERSION_REV_1
-    db #$2E, #($30+!VERSION_REV_1)
-    db #($30+!VERSION_REV_2)
-    db #$20, #$20
-else
-if !VERSION_REV_2
-    db #$2E, #($30+!VERSION_REV_2)
-    db #$20, #$20, #$20
-else
-    db #$20, #$20, #$20, #$20, #$20
-endif
-endif
+;org $8B8697
+;    NOP
+;
+;org $8BF754
+;    db #$20, #($30+!VERSION_MAJOR)
+;    db #$2E, #($30+!VERSION_MINOR)
+;    db #$2E, #($30+!VERSION_BUILD)
+;if !VERSION_REV_1
+;    db #$2E, #($30+!VERSION_REV_1)
+;    db #($30+!VERSION_REV_2)
+;    db #$20, #$20
+;else
+;if !VERSION_REV_2
+;    db #$2E, #($30+!VERSION_REV_2)
+;    db #$20, #$20, #$20
+;else
+;    db #$20, #$20, #$20, #$20, #$20
+;endif
+;endif
 
 
 ; Skips the waiting time after teleporting
@@ -92,52 +92,52 @@ org $808F65
 ;    dw #MotherBrainHP
 
 
-; Ceres Ridley modified state check to support presets
-org $8FE0C0
-    dw layout_asm_ceres_ridley_room_state_check
-
-; Ceres Ridley room setup asm when timer is not running
-org $8FE0DF
-    dw layout_asm_ceres_ridley_room_no_timer
-
-
-; Continue drawing escape timer after reaching ship
-org $90E908
-    JSR preserve_escape_timer
-
-; Stop drawing timer when its VRAM is overwritten
-org $A2ABFD
-    JML clear_escape_timer
-
-
-;org $8FEA00 ; free space for door asm
-org $8FFE00
-print pc, " misc bank8F start"
-
-layout_asm_ceres_ridley_room_state_check:
-{
-    LDA $0943 : BEQ .no_timer
-    LDA $0001,X : TAX
-    JMP $E5E6
-  .no_timer
-    STZ $093F
-    INX : INX : INX
-    RTS
-}
-
-layout_asm_ceres_ridley_room_no_timer:
-{
-    ; Same as original setup asm, except force blue background
-    PHP
-    SEP #$20
-    LDA #$66 : STA $5D
-    PLP
-    JSL $88DDD0
-    LDA #$0009 : STA $07EB
-    RTS
-}
-
-print pc, " misc bank8F end"
+;; Ceres Ridley modified state check to support presets
+;org $8FE0C0
+;    dw layout_asm_ceres_ridley_room_state_check
+;
+;; Ceres Ridley room setup asm when timer is not running
+;org $8FE0DF
+;    dw layout_asm_ceres_ridley_room_no_timer
+;
+;
+;; Continue drawing escape timer after reaching ship
+;org $90E908
+;    JSR preserve_escape_timer
+;
+;; Stop drawing timer when its VRAM is overwritten
+;org $A2ABFD
+;    JML clear_escape_timer
+;
+;
+;;org $8FEA00 ; free space for door asm
+;org $8FFE00
+;print pc, " misc bank8F start"
+;
+;layout_asm_ceres_ridley_room_state_check:
+;{
+;    LDA $0943 : BEQ .no_timer
+;    LDA $0001,X : TAX
+;    JMP $E5E6
+;  .no_timer
+;    STZ $093F
+;    INX : INX : INX
+;    RTS
+;}
+;
+;layout_asm_ceres_ridley_room_no_timer:
+;{
+;    ; Same as original setup asm, except force blue background
+;    PHP
+;    SEP #$20
+;    LDA #$66 : STA $5D
+;    PLP
+;    JSL $88DDD0
+;    LDA #$0009 : STA $07EB
+;    RTS
+;}
+;
+;print pc, " misc bank8F end"
 
 
 org !ORG_MISC_BANK87
@@ -337,31 +337,31 @@ EnemyDamagePowerBomb:
 print pc, " misc bankA0 end"
 
 
-org !ORG_MISC_BANK90
-print pc, " misc bank90 start"
+;org !ORG_MISC_BANK90
+;print pc, " misc bank90 start"
+;
+;preserve_escape_timer:
+;{
+;    ; check if timer is active
+;    LDA $0943 : AND #$0006 : BEQ .done
+;    JSL $809F6C ; Draw timer
+;
+;  .done
+;    JMP $EA7F ; overwritten code
+;}
+;
+;clear_escape_timer:
+;{
+;    ; clear timer status
+;    STZ $0943
+;
+;    ; overwritten code
+;    LDA #$AC1B : STA $0FB2,X
+;    STZ $0DEC
+;    RTL
+;}
 
-preserve_escape_timer:
-{
-    ; check if timer is active
-    LDA $0943 : AND #$0006 : BEQ .done
-    JSL $809F6C ; Draw timer
-
-  .done
-    JMP $EA7F ; overwritten code
-}
-
-clear_escape_timer:
-{
-    ; clear timer status
-    STZ $0943
-
-    ; overwritten code
-    LDA #$AC1B : STA $0FB2,X
-    STZ $0DEC
-    RTL
-}
-
-warnpc $908EA9 ; overwrites unused vanilla routine
+;warnpc $908EA9 ; overwrites unused vanilla routine
 print pc, " misc bank90 end"
 
 

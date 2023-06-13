@@ -1,8 +1,8 @@
-# HACK
+# Subversion
 
 ## Notes
 
-Always use the UNHEADERED (UH) version of the hack for the practice rom.
+Always use the UNHEADERED (UH) version of Subversion for the practice rom.
 
 ## Which Download?
 

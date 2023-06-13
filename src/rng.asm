@@ -422,7 +422,7 @@ hook_botwoon_spit:
 }
 
 print pc, " rng end"
-warnpc $83B400 ; custompresets.asm
+;warnpc $83B400 ; custompresets.asm
 
 
 ;org $A4F700
@@ -475,85 +475,85 @@ hook_draygon_rng_right:
 print pc, " draygon rng end"
 
 
-; This is actually for preset support instead of RNG
-; Keep Ceres Ridley enemy alive even if the main boss flag is set
-org $A6A0FC
-    LSR : BCC $0F
-    CPX #$0006 : BEQ $0A
-    LDA $0F86
-
-org $A6A2F2
-    JMP ceres_ridley_draw_metroid
-
-org $A6A361
-    dw ridley_init_hook
-
-; Fix ceres ridley door instruction list to keep door visible when skipping ridley fight
-org $A6F55C
-    dw $F678, ridley_ceres_door_original_instructions
-    dw $80ED, ridley_ceres_door_escape_instructions
-
-; Lock ceres ridley door if timer not started or if boss not dead
-org $A6F66A
-    LDA $0943 : BEQ $F6
-    LDA $7ED82E
-
-
-org !ORG_RNG_BANKA6
-print pc, " ridley rng start"
-
-ridley_init_hook:
-{
-    LDA $079B : CMP #$E0B5 : BNE .continue
-    LDA $7ED82E : BIT #$0001 : BEQ .continue
-
-    ; Ceres Ridley is already dead, so skip to the escape
-    ; We do need to mark Ceres Ridley alive
-    ; to keep the door locked until the timer starts
-    AND #$FFFE : STA $7ED82E
-
-    ; Clear out the room main asm so it doesn't also trigger the escape
-    STZ $07DF
-
-    ; Set up the escape timer routine
-    LDA #$0001 : STA $093F
-    LDA #$E0E6 : STA $0A5A
-
-    ; Jump to the escape
-    LDA #$AB37
-    STA $0FA8
-    JMP ($0FA8)
-
-  .continue
-    LDA #$A377
-    STA $0FA8
-    JMP ($0FA8)
-}
-
-ceres_ridley_draw_metroid:
-{
-    LDA $7ED82E : BIT #$0001 : BNE .end
-    LDA $093F : BNE .end
-    JSR $BF1A
-
-  .end
-    JMP $A2FA
-}
-
-ridley_ceres_door_original_instructions:
-    dw $F6A6
-    dw #$0002, $FA13
-    dw $F66A, $F55C
-    dw $F6B0
-    dw $80ED, $F598
-
-ridley_ceres_door_escape_instructions:
-    dw $F6B0
-    dw #$0002, $FA13
-    dw $F66A, $F55C
-    dw $80ED, $F598
-
-print pc, " ridley rng end"
+;; This is actually for preset support instead of RNG
+;; Keep Ceres Ridley enemy alive even if the main boss flag is set
+;org $A6A0FC
+;    LSR : BCC $0F
+;    CPX #$0006 : BEQ $0A
+;    LDA $0F86
+;
+;org $A6A2F2
+;    JMP ceres_ridley_draw_metroid
+;
+;org $A6A361
+;    dw ridley_init_hook
+;
+;; Fix ceres ridley door instruction list to keep door visible when skipping ridley fight
+;org $A6F55C
+;    dw $F678, ridley_ceres_door_original_instructions
+;    dw $80ED, ridley_ceres_door_escape_instructions
+;
+;; Lock ceres ridley door if timer not started or if boss not dead
+;org $A6F66A
+;    LDA $0943 : BEQ $F6
+;    LDA $7ED82E
+;
+;
+;org !ORG_RNG_BANKA6
+;print pc, " ridley rng start"
+;
+;ridley_init_hook:
+;{
+;    LDA $079B : CMP #$E0B5 : BNE .continue
+;    LDA $7ED82E : BIT #$0001 : BEQ .continue
+;
+;    ; Ceres Ridley is already dead, so skip to the escape
+;    ; We do need to mark Ceres Ridley alive
+;    ; to keep the door locked until the timer starts
+;    AND #$FFFE : STA $7ED82E
+;
+;    ; Clear out the room main asm so it doesn't also trigger the escape
+;    STZ $07DF
+;
+;    ; Set up the escape timer routine
+;    LDA #$0001 : STA $093F
+;    LDA #$E0E6 : STA $0A5A
+;
+;    ; Jump to the escape
+;    LDA #$AB37
+;    STA $0FA8
+;    JMP ($0FA8)
+;
+;  .continue
+;    LDA #$A377
+;    STA $0FA8
+;    JMP ($0FA8)
+;}
+;
+;ceres_ridley_draw_metroid:
+;{
+;    LDA $7ED82E : BIT #$0001 : BNE .end
+;    LDA $093F : BNE .end
+;    JSR $BF1A
+;
+;  .end
+;    JMP $A2FA
+;}
+;
+;ridley_ceres_door_original_instructions:
+;    dw $F6A6
+;    dw #$0002, $FA13
+;    dw $F66A, $F55C
+;    dw $F6B0
+;    dw $80ED, $F598
+;
+;ridley_ceres_door_escape_instructions:
+;    dw $F6B0
+;    dw #$0002, $FA13
+;    dw $F66A, $F55C
+;    dw $80ED, $F598
+;
+;print pc, " ridley rng end"
 
 
 org !ORG_RNG_BANKA7

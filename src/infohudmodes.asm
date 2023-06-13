@@ -48,9 +48,9 @@ status_roomstrat:
     dw status_gateglitch
     dw status_moatcwj
     dw status_robotflush
-    dw status_shinetopb
-    dw status_elevatorcf
-    dw status_botwooncf
+;    dw status_shinetopb
+;    dw status_elevatorcf
+;    dw status_botwooncf
     dw status_snailclip
     dw status_mbhp
     dw status_ridleyai
@@ -1995,214 +1995,214 @@ status_robotflush:
     RTS
 }
 
-status_shinetopb:
-{
-    ; Suppress Samus HP display
-    LDA !SAMUS_HP : STA !ram_last_hp
+;status_shinetopb:
+;{
+;    ; Suppress Samus HP display
+;    LDA !SAMUS_HP : STA !ram_last_hp
+;
+;    LDA !ram_armed_shine_duration : CMP !ram_shine_counter : BEQ .clearcounter
+;    STA !ram_shine_counter : BNE .charge : LDA #$00B4
+;
+;  .charge
+;    LDX #$0088 : JSR Draw4
+;
+;    ; If we just charged the spark, time to start checking for the power bomb
+;    LDA !ram_roomstrat_counter : CMP #$FFFF : BEQ .clearpb
+;
+;    ; If we're here, PB count was initialized, now check if the count has changed
+;    CMP !SAMUS_PBS : BNE .drawpb
+;
+;  .done
+;    RTS
+;
+;  .clearcounter
+;    CMP #$00B4 : BNE .done
+;    LDA #$FFFF : STA !ram_roomstrat_counter
+;    RTS
+;
+;  .clearpb
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$90 : STA !HUD_TILEMAP+$92 : STA !HUD_TILEMAP+$94 : STA !HUD_TILEMAP+$96 : STA !HUD_TILEMAP+$98
+;    BRA .setcounter
+;
+;  .drawpb
+;    LDA !ram_armed_shine_duration : LDX #$0092 : JSR Draw4
+;
+;  .setcounter
+;    LDA !SAMUS_PBS : STA !ram_roomstrat_counter
+;    RTS
+;}
 
-    LDA !ram_armed_shine_duration : CMP !ram_shine_counter : BEQ .clearcounter
-    STA !ram_shine_counter : BNE .charge : LDA #$00B4
-
-  .charge
-    LDX #$0088 : JSR Draw4
-
-    ; If we just charged the spark, time to start checking for the power bomb
-    LDA !ram_roomstrat_counter : CMP #$FFFF : BEQ .clearpb
-
-    ; If we're here, PB count was initialized, now check if the count has changed
-    CMP !SAMUS_PBS : BNE .drawpb
-
-  .done
-    RTS
-
-  .clearcounter
-    CMP #$00B4 : BNE .done
-    LDA #$FFFF : STA !ram_roomstrat_counter
-    RTS
-
-  .clearpb
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$90 : STA !HUD_TILEMAP+$92 : STA !HUD_TILEMAP+$94 : STA !HUD_TILEMAP+$96 : STA !HUD_TILEMAP+$98
-    BRA .setcounter
-
-  .drawpb
-    LDA !ram_armed_shine_duration : LDX #$0092 : JSR Draw4
-
-  .setcounter
-    LDA !SAMUS_PBS : STA !ram_roomstrat_counter
-    RTS
-}
-
-status_elevatorcf:
-{
-    !elevatorcf_frame = $009A
-
-    ; Counter used to check if a power bomb has been laid
-    LDA !ram_roomstrat_counter : CMP !SAMUS_PBS : BNE .roomcheck
-    LDA !ram_roomstrat_state : CMP #$0000 : BEQ .setxy
-
-    ; Check if we have returned to PB location with zero vertical speed
-    ; (we assume horizontal speed is also zero)
-    ; Arbitrary wait of 90 frames before checking
-    CMP #$005A : BMI .inc
-    LDA !SAMUS_X : CMP !ram_xpos : BNE .downcheck
-    LDA !SAMUS_Y : CMP !ram_ypos : BNE .downcheck
-    LDA !SAMUS_Y_SPEED : CMP #$0000 : BNE .downcheck
-    LDA !SAMUS_Y_SUBSPEED : CMP #$0000 : BNE .downcheck
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8A
-
-  .downcheck
-    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_DOWN : BEQ .inc
-    BRL .timecheck
-
-  .setxy
-    LDA !SAMUS_X : STA !ram_xpos
-    LDA !SAMUS_Y : STA !ram_ypos
-    RTS
-
-  .roomcheck
-    LDA !ROOM_ID : CMP #$94CC : BEQ .forgotten : CMP #$962A : BEQ .redbrin
-    CMP #$97B5 : BEQ .morph : CMP #$9938 : BEQ .greenbrin : CMP #$9CB3 : BEQ .dachora
-    CMP #$AF3F : BEQ .lowernorfair : CMP #$A6A1 : BEQ .warehouse
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$88
-    BRL .setpb
-
-  .inc
-    ; Arbitrary give up waiting after 192 frames
-    LDA !ram_roomstrat_state : CMP #$00C0 : BPL .reset
-    INC : STA !ram_roomstrat_state
-    RTS
-
-  .forgotten
-  .redbrin
-    LDA #$0080 : CMP !ram_xpos : BEQ .questionpb
-    LDA #$00AB : CMP !ram_ypos : BEQ .goodpb
-    BRA .badpb
-
-  .morph
-  .greenbrin
-  .lowernorfair
-  .warehouse
-    LDA #$0080 : CMP !ram_xpos : BEQ .questionpb
-    LDA #$008B : CMP !ram_ypos : BEQ .goodpb
-    BRA .badpb
-
-  .dachora
-    LDA #$00AA : CMP !ram_ypos : BEQ .goodpb
-    BRA .badpb
-
-  .questionpb
-    ; Draw a percent character (laying the PB dead-center on the elevator is questionable)
-    LDA !IH_PERCENT : STA !HUD_TILEMAP+$88
-    BRA .setpb
-
-  .timecheck
-    ; Need to activate the elevator 154 frames after laying the power bomb
-    LDA !ram_roomstrat_state : CMP #!elevatorcf_frame : BEQ .frameperfect : BMI .early
-
-    ; Late
-    SEC : SBC #!elevatorcf_frame
-    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
-    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8C
-
-  .reset
-    LDA #$0000 : STA !ram_roomstrat_state
-    RTS
-
-  .badpb
-    LDA !IH_LETTER_X : STA !HUD_TILEMAP+$88
-    BRA .setpb
-
-  .goodpb
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88
-
-  .setpb
-    LDA !SAMUS_PBS : STA !ram_roomstrat_counter
-    LDA #$0001 : STA !ram_roomstrat_state
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E : STA !HUD_TILEMAP+$90
-    RTS
-
-  .early
-    LDA #!elevatorcf_frame : SEC : SBC !ram_roomstrat_state
-    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
-    LDA !IH_LETTER_E : STA !HUD_TILEMAP+$8C
-    BRA .reset
-
-  .frameperfect
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E
-    BRA .reset
-}
-
-status_botwooncf:
-{
-    !botwooncf_frame = $0099
-
-    ; Counter used to check if a power bomb has been laid
-    LDA !ram_roomstrat_counter : CMP !SAMUS_PBS : BNE .pbcheck
-    LDA !ram_roomstrat_state : BEQ .setxy
-
-    ; Check if we have returned to PB location with zero vertical speed
-    ; (we assume horizontal speed is also zero)
-    ; Note by only checking the lower byte of Y position,
-    ; the same check now works for the shaktool CF clip
-    ; Arbitrary wait of 90 frames before checking
-    CMP #$005A : BMI .inc
-    LDA !SAMUS_X : CMP !ram_xpos : BNE .inc
-    LDA !SAMUS_Y : AND #$00FF : CMP #$00B7 : BNE .inc
-    LDA !SAMUS_Y_SPEED : CMP #$0000 : BNE .inc
-    LDA !SAMUS_Y_SUBSPEED : CMP #$0000 : BNE .inc
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8A
-    BRA .timecheck
-
-  .pbcheck
-    ; Height check specific for botwoon hallway
-    LDA !ram_ypos : AND #$00FF : CMP #$00B7 : BEQ .startpb
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$88
-    BRA .setpb
-
-  .startpb
-    LDA #$0001 : STA !ram_roomstrat_state
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88
-
-  .setpb
-    LDA !SAMUS_PBS : STA !ram_roomstrat_counter
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E : STA !HUD_TILEMAP+$90
-    RTS
-
-  .setxy
-    LDA !SAMUS_X : STA !ram_xpos
-    LDA !SAMUS_Y : STA !ram_ypos
-    RTS
-
-  .inc
-    ; Arbitrary give up waiting after 192 frames
-    LDA !ram_roomstrat_state : CMP #$00C0 : BPL .reset
-    INC : STA !ram_roomstrat_state
-    RTS
-
-  .timecheck
-    ; Need to be in position 153 frames after laying the power bomb
-    LDA !ram_roomstrat_state : CMP #!botwooncf_frame : BEQ .frameperfect : BMI .early
-
-    ; Late
-    SEC : SBC #!botwooncf_frame
-    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
-    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8C
-
-  .reset
-    LDA #$0000 : STA !ram_roomstrat_state
-    RTS
-
-  .early
-    LDA #!botwooncf_frame : SEC : SBC !ram_roomstrat_state
-    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
-    LDA !IH_LETTER_E : STA !HUD_TILEMAP+$8C
-    ; Keep waiting if we are early
-    BRA .inc
-
-  .frameperfect
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E
-    BRA .reset
-}
+;status_elevatorcf:
+;{
+;    !elevatorcf_frame = $009A
+;
+;    ; Counter used to check if a power bomb has been laid
+;    LDA !ram_roomstrat_counter : CMP !SAMUS_PBS : BNE .roomcheck
+;    LDA !ram_roomstrat_state : CMP #$0000 : BEQ .setxy
+;
+;    ; Check if we have returned to PB location with zero vertical speed
+;    ; (we assume horizontal speed is also zero)
+;    ; Arbitrary wait of 90 frames before checking
+;    CMP #$005A : BMI .inc
+;    LDA !SAMUS_X : CMP !ram_xpos : BNE .downcheck
+;    LDA !SAMUS_Y : CMP !ram_ypos : BNE .downcheck
+;    LDA !SAMUS_Y_SPEED : CMP #$0000 : BNE .downcheck
+;    LDA !SAMUS_Y_SUBSPEED : CMP #$0000 : BNE .downcheck
+;    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8A
+;
+;  .downcheck
+;    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_DOWN : BEQ .inc
+;    BRL .timecheck
+;
+;  .setxy
+;    LDA !SAMUS_X : STA !ram_xpos
+;    LDA !SAMUS_Y : STA !ram_ypos
+;    RTS
+;
+;  .roomcheck
+;    LDA !ROOM_ID : CMP #$94CC : BEQ .forgotten : CMP #$962A : BEQ .redbrin
+;    CMP #$97B5 : BEQ .morph : CMP #$9938 : BEQ .greenbrin : CMP #$9CB3 : BEQ .dachora
+;    CMP #$AF3F : BEQ .lowernorfair : CMP #$A6A1 : BEQ .warehouse
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$88
+;    BRL .setpb
+;
+;  .inc
+;    ; Arbitrary give up waiting after 192 frames
+;    LDA !ram_roomstrat_state : CMP #$00C0 : BPL .reset
+;    INC : STA !ram_roomstrat_state
+;    RTS
+;
+;  .forgotten
+;  .redbrin
+;    LDA #$0080 : CMP !ram_xpos : BEQ .questionpb
+;    LDA #$00AB : CMP !ram_ypos : BEQ .goodpb
+;    BRA .badpb
+;
+;  .morph
+;  .greenbrin
+;  .lowernorfair
+;  .warehouse
+;    LDA #$0080 : CMP !ram_xpos : BEQ .questionpb
+;    LDA #$008B : CMP !ram_ypos : BEQ .goodpb
+;    BRA .badpb
+;
+;  .dachora
+;    LDA #$00AA : CMP !ram_ypos : BEQ .goodpb
+;    BRA .badpb
+;
+;  .questionpb
+;    ; Draw a percent character (laying the PB dead-center on the elevator is questionable)
+;    LDA !IH_PERCENT : STA !HUD_TILEMAP+$88
+;    BRA .setpb
+;
+;  .timecheck
+;    ; Need to activate the elevator 154 frames after laying the power bomb
+;    LDA !ram_roomstrat_state : CMP #!elevatorcf_frame : BEQ .frameperfect : BMI .early
+;
+;    ; Late
+;    SEC : SBC #!elevatorcf_frame
+;    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
+;    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8C
+;
+;  .reset
+;    LDA #$0000 : STA !ram_roomstrat_state
+;    RTS
+;
+;  .badpb
+;    LDA !IH_LETTER_X : STA !HUD_TILEMAP+$88
+;    BRA .setpb
+;
+;  .goodpb
+;    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88
+;
+;  .setpb
+;    LDA !SAMUS_PBS : STA !ram_roomstrat_counter
+;    LDA #$0001 : STA !ram_roomstrat_state
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E : STA !HUD_TILEMAP+$90
+;    RTS
+;
+;  .early
+;    LDA #!elevatorcf_frame : SEC : SBC !ram_roomstrat_state
+;    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
+;    LDA !IH_LETTER_E : STA !HUD_TILEMAP+$8C
+;    BRA .reset
+;
+;  .frameperfect
+;    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E
+;    BRA .reset
+;}
+;
+;status_botwooncf:
+;{
+;    !botwooncf_frame = $0099
+;
+;    ; Counter used to check if a power bomb has been laid
+;    LDA !ram_roomstrat_counter : CMP !SAMUS_PBS : BNE .pbcheck
+;    LDA !ram_roomstrat_state : BEQ .setxy
+;
+;    ; Check if we have returned to PB location with zero vertical speed
+;    ; (we assume horizontal speed is also zero)
+;    ; Note by only checking the lower byte of Y position,
+;    ; the same check now works for the shaktool CF clip
+;    ; Arbitrary wait of 90 frames before checking
+;    CMP #$005A : BMI .inc
+;    LDA !SAMUS_X : CMP !ram_xpos : BNE .inc
+;    LDA !SAMUS_Y : AND #$00FF : CMP #$00B7 : BNE .inc
+;    LDA !SAMUS_Y_SPEED : CMP #$0000 : BNE .inc
+;    LDA !SAMUS_Y_SUBSPEED : CMP #$0000 : BNE .inc
+;    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8A
+;    BRA .timecheck
+;
+;  .pbcheck
+;    ; Height check specific for botwoon hallway
+;    LDA !ram_ypos : AND #$00FF : CMP #$00B7 : BEQ .startpb
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$88
+;    BRA .setpb
+;
+;  .startpb
+;    LDA #$0001 : STA !ram_roomstrat_state
+;    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88
+;
+;  .setpb
+;    LDA !SAMUS_PBS : STA !ram_roomstrat_counter
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E : STA !HUD_TILEMAP+$90
+;    RTS
+;
+;  .setxy
+;    LDA !SAMUS_X : STA !ram_xpos
+;    LDA !SAMUS_Y : STA !ram_ypos
+;    RTS
+;
+;  .inc
+;    ; Arbitrary give up waiting after 192 frames
+;    LDA !ram_roomstrat_state : CMP #$00C0 : BPL .reset
+;    INC : STA !ram_roomstrat_state
+;    RTS
+;
+;  .timecheck
+;    ; Need to be in position 153 frames after laying the power bomb
+;    LDA !ram_roomstrat_state : CMP #!botwooncf_frame : BEQ .frameperfect : BMI .early
+;
+;    ; Late
+;    SEC : SBC #!botwooncf_frame
+;    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
+;    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8C
+;
+;  .reset
+;    LDA #$0000 : STA !ram_roomstrat_state
+;    RTS
+;
+;  .early
+;    LDA #!botwooncf_frame : SEC : SBC !ram_roomstrat_state
+;    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
+;    LDA !IH_LETTER_E : STA !HUD_TILEMAP+$8C
+;    ; Keep waiting if we are early
+;    BRA .inc
+;
+;  .frameperfect
+;    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E
+;    BRA .reset
+;}
 
 status_snailclip:
 {

@@ -33,8 +33,8 @@ org $9493B8      ; hijack, runs when Samus hits a door BTS
 org $82E764      ; hijack, runs when Samus is coming out of a room transition
     JSL ih_after_room_transition : RTS
 
-org $809B4C      ; hijack, HUD routine (game timer by Quote58)
-    JSL ih_hud_code : NOP
+org $809B4A      ; hijack, HUD routine (game timer by Quote58)
+    JSL ih_hud_code; : NOP
 
 org $8290F6      ; hijack, HUD routine while paused
     JSL ih_hud_code_paused
@@ -549,7 +549,7 @@ ih_update_hud_code:
 
     ; Percent counter -> decimal form and drawn on HUD
     LDX #$0012 : JSR Draw3
-    LDA !IH_PERCENT : STA !HUD_TILEMAP+$18
+;    LDA !IH_PERCENT : STA !HUD_TILEMAP+$18
 
   .skipToLag
     LDA !sram_top_display_mode : CMP !TOP_DISPLAY_VANILLA : BEQ .vanilla_infohud_draw_lag_and_reserves
@@ -566,7 +566,8 @@ ih_update_hud_code:
     LDA !ram_last_realtime_door
   .infohud_transition_time
     LDX #$00C2 : JSR Draw3
-    BRA .pick_segment_timer
+; skip segment timer in Subversion
+;    BRA .pick_segment_timer
 
   .end
     PLB : PLP
@@ -763,8 +764,8 @@ ih_hud_code:
     ; Samus' HP
     LDA !SAMUS_HP : CMP !ram_last_hp : BEQ .reserves : STA !ram_last_hp
     LDA !sram_top_display_mode : CMP !TOP_DISPLAY_VANILLA : BEQ .vanilla_draw_health
-    LDA !SAMUS_HP : LDX #$0092 : JSR Draw4
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$90 : STA !HUD_TILEMAP+$9A
+    LDA !SAMUS_HP : LDX #$0092 : JSR Draw3
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$90; : STA !HUD_TILEMAP+$9A
     BRA .reserves
 
   .vanilla_check_health
@@ -870,8 +871,8 @@ ih_hud_code:
   .end
     PLB
     ; overwritten code
-    REP #$30
-    LDA $7E09C0
+    STZ $02
+    %ai16()
     RTL
 }
 
@@ -1435,21 +1436,21 @@ ih_hud_code_paused:
 
   .end
     LDA $7E09C0 ; overwritten code
-    JMP $9B51
+    JMP $9BFB
 }
 
 NumberGFXTable:
-    dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
-    dw #$0C70, #$0C71, #$0C72, #$0C73, #$0C74, #$0C75, #$0C78, #$0C79, #$0C7A, #$0C7B
-    dw #$0C7C, #$0C7D, #$0C7E, #$0C7F, #$0CD2, #$0CD4, #$0CD5, #$0CD6, #$0CD7, #$0CD8
-    dw #$0CD9, #$0CDA, #$0CDB, #$0C5C, #$0C5D, #$0CB8, #$0C8D, #$0C12, #$0C13, #$0C14
-    dw #$0C15, #$0C16, #$0C17, #$0C18, #$0C19, #$0C1A, #$0C1B, #$0C20, #$0C21, #$0C22
-    dw #$0C23, #$0C24, #$0C25, #$0C26, #$0C27, #$0C28, #$0C29, #$0C2A, #$0C2B, #$0C2C
-    dw #$0C2D, #$0C2E, #$0C2F, #$0C5E, #$0C5F, #$0CCA
+    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
+    dw #$0C10, #$0C71, #$0C12, #$0C13, #$0C14, #$0C15, #$0C16, #$0C17, #$0C18, #$0C19
+    dw #$0C2C, #$0C2D, #$0C2E, #$0C2F, #$0C3C, #$0C3D, #$0C3E, #$0C3F, #$0C40, #$0C41
+    dw #$0C42, #$0C43, #$0C44, #$0C45, #$0C46, #$0C47, #$0C48, #$0C49, #$0C4A, #$0C4B
+    dw #$0C4C, #$0C4D, #$0C4E, #$0C4F, #$0C50, #$0C51, #$0C52, #$0C53, #$0C54, #$0C5C
+    dw #$0C5D, #$0C5E, #$0C5F, #$0C6D, #$0C6E, #$0C6F, #$0C70, #$0C71, #$0C72, #$0C73
+    dw #$0C74, #$0C75, #$0C76, #$0C77, #$0C78, #$0C79
 
 HexGFXTable:
-    dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
-    dw #$0C64, #$0C65, #$0C58, #$0C59, #$0C5A, #$0C5B
+    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
+    dw #$0CC0, #$0CC1, #$0CC2, #$0CC3, #$0CC4, #$0CC5
 
 ControllerTable1:
     dw #$0020, #$0800, #$0010, #$4000, #$0040, #$2000
@@ -1463,20 +1464,20 @@ ControllerGfx2:
     dw #$0C60, #$0C63, #$0C62, #$0C65, #$0C64, #$0C6B
 
 HexToNumberGFX1:
-    dw #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09
     dw #$0C00, #$0C00, #$0C00, #$0C00, #$0C00, #$0C00, #$0C00, #$0C00, #$0C00, #$0C00
     dw #$0C01, #$0C01, #$0C01, #$0C01, #$0C01, #$0C01, #$0C01, #$0C01, #$0C01, #$0C01
     dw #$0C02, #$0C02, #$0C02, #$0C02, #$0C02, #$0C02, #$0C02, #$0C02, #$0C02, #$0C02
     dw #$0C03, #$0C03, #$0C03, #$0C03, #$0C03, #$0C03, #$0C03, #$0C03, #$0C03, #$0C03
     dw #$0C04, #$0C04, #$0C04, #$0C04, #$0C04, #$0C04, #$0C04, #$0C04, #$0C04, #$0C04
+    dw #$0C05, #$0C05, #$0C05, #$0C05, #$0C05, #$0C05, #$0C05, #$0C05, #$0C05, #$0C05
 
 HexToNumberGFX2:
-    dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
-    dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
-    dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
-    dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
-    dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
-    dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
+    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
+    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
+    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
+    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
+    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
+    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
 
 print pc, " infohud bank80 end"
 warnpc $80FF80 ; cutscenes.asm door transition code
