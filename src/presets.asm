@@ -181,30 +181,6 @@ preset_load_library_end_transfer_to_vram:
     RTS
 endif
 
-reset_all_counters:
-{
-    LDA #$0000
-    STA !ram_room_has_set_rng
-    STA !IGT_FRAMES : STA !IGT_SECONDS : STA !IGT_MINUTES : STA !IGT_HOURS
-    STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds : STA !ram_seg_rt_minutes
-    STA !ram_realtime_room : STA !ram_last_realtime_room
-    STA !ram_gametime_room : STA !ram_last_gametime_room
-    STA !ram_last_room_lag : STA !ram_last_door_lag_frames : STA !ram_transition_counter
-    RTL
-}
-
-startgame_seg_timer:
-{
-    ; seg timer will be 1:50 (1 second, 50 frames) behind by the time it appears
-    ; 20 frames more if the file was new
-    ; initializing to 1:50 for now
-    LDA #$0032 : STA !ram_seg_rt_frames
-    LDA #$0001 : STA !ram_seg_rt_seconds
-    LDA #$0000 : STA !ram_seg_rt_minutes
-    JSL $808924    ; overwritten code
-    RTL
-}
-
 preset_load_preset:
 {
     PHB
@@ -316,10 +292,10 @@ category_preset_load:
 }
 
 category_preset_data_table:
-    dl preset_prkd_crateria_ceres_elevator
+;    dl preset_prkd_crateria_ceres_elevator
 
 print pc, " presets bank82 end"
-warnpc $82FE00
+;warnpc $82FE00
 
 org $82E8D9
     JSL preset_room_setup_asm_fixes
@@ -710,16 +686,16 @@ warnpc $80F600 ; save.asm
 ; -------------------
 
 ; Preset data/menus can be anywhere in the rom, even in separate banks
-org !ORG_PRESETS_DATA
-check bankcross off
-print pc, " preset data crossbank start"
-  incsrc presets/prkd_data.asm
-print pc, " preset data crossbank end"
-warnpc $FEE000
-check bankcross on
-
-org !ORG_PRESETS_MENU
-print pc, " preset menu bankFE start"
-  incsrc presets/prkd_menu.asm
-print pc, " preset menu bankFE end"
+;org !ORG_PRESETS_DATA
+;check bankcross off
+;print pc, " preset data crossbank start"
+;  incsrc presets/prkd_data.asm
+;print pc, " preset data crossbank end"
+;warnpc $FEE000
+;check bankcross on
+;
+;org !ORG_PRESETS_MENU
+;print pc, " preset menu bankFE start"
+;  incsrc presets/prkd_menu.asm
+;print pc, " preset menu bankFE end"
 

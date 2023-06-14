@@ -21,9 +21,9 @@ endif
 ;  (skip to Zebes)     LDA #$CDAF (skip to Zebes)
 ;                      LDA #Intro_Skip_to_Zebes
 org $82EEDF
-    LDA #$C100
+    LDA #Intro_Skip_to_Zebes
 
-org !ORG_MISC_BANK8B = $8BFF00
+org !ORG_MISC_BANK8B
 print pc, " misc bank8B start"
 
 Intro_Skip_to_Zebes:
@@ -42,6 +42,7 @@ Intro_Skip_to_Zebes:
     ; Screen fade delay/counter = 0
     STZ $0723 : STZ $0725
     LDA !SAMUS_HP_MAX : STA !SAMUS_HP
+    JSL $A2A9A0 ; Ascent code sets save station
     RTS
 }
 print pc, " misc bank8B end"

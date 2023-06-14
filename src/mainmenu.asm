@@ -54,13 +54,13 @@ endif
 
 preset_category_submenus:
 {
-    dw #PresetsMenuPrkd
+;    dw #PresetsMenuPrkd
     dw #$0000
 }
 
 preset_category_banks:
 {
-    dw #PresetsMenuPrkd>>16
+;    dw #PresetsMenuPrkd>>16
     dw #$0000
 }
 
@@ -1987,9 +1987,9 @@ GameMenu:
     dw #game_debugplms
     dw #game_debugprojectiles
     dw #game_debugfixscrolloffsets
-    dw #$FFFF
-    dw #game_minimap
-    dw #game_clear_minimap
+;    dw #$FFFF
+;    dw #game_minimap
+;    dw #game_clear_minimap
     dw #$0000
     %cm_header("GAME")
 
@@ -2097,7 +2097,7 @@ CutscenesMenu:
     dw #cutscenes_skip_g4
     dw #cutscenes_skip_game_over
     dw #$FFFF
-    dw #cutscenes_fast_kraid
+;    dw #cutscenes_fast_kraid
     dw #cutscenes_fast_phantoon
     dw #cutscenes_fast_mb
     dw #$0000
@@ -2456,8 +2456,8 @@ RngMenu:
     dw #$FFFF
     dw #rng_crocomire_rng
     dw #$FFFF
-    dw #rng_kraid_claw_rng
-    dw #rng_kraid_wait_rng
+;    dw #rng_kraid_claw_rng
+;    dw #rng_kraid_wait_rng
     dw #$0000
     %cm_header("BOSS RNG CONTROL")
 

@@ -21,11 +21,11 @@ org $90A91B
     JMP mm_update_minimap
 
 org $90A97E
-    JMP mm_inc_tile_count
+    JMP mm_inc_tile_count_bridge
 
 org $90A7EE      ; only clear minimap if it is visible
     LDA !ram_minimap : BEQ .skip_minimap
-    JMP mm_clear_boss_room_tiles
+    JMP mm_clear_boss_room_tiles_bridge
 
 org $90A80A      ; normally runs after minimap grid has been drawn
     .skip_minimap
@@ -48,18 +48,73 @@ org $82E488      ; write tiles to VRAM
 
 org $9AB200      ; graphics for HUD
 hudgfx_bin:
-incbin ../resources/hudgfx.bin
+incbin ../resources/Ascent_hudgfx.bin
 
 
 ; Place minimap graphics in bank FD
 org !ORG_MINIMAP_BANKFD
 print pc, " minimap bankFD start"
 mapgfx_bin:
-incbin ../resources/mapgfx.bin
+incbin ../resources/Ascent_mapgfx.bin
 
 ; Next block needs to be all zeros to clear a tilemap
 fillbyte $00
 fill 4096
+
+mm_inc_tile_count:
+{
+    ; Check if tile is already set
+    LDA $07F7,X
+    ORA $AC04,Y
+    CMP $07F7,X : BEQ .done
+
+    ; Set tile and increment counter
+    STA $07F7,X
+    REP #$20
+    LDA !ram_map_counter : INC : STA !ram_map_counter
+    SEP #$20
+
+  .done
+    JML mm_inc_tile_count_bank90
+}
+
+mm_clear_boss_room_tiles:
+{
+    LDA #$2C1F
+    LDX #$0000
+  .loop
+    STA !HUD_TILEMAP+$3C,X
+    STA !HUD_TILEMAP+$7C,X
+    STA !HUD_TILEMAP+$BC,X
+    INX : INX : CPX #$000A : BMI .loop
+    JML mm_clear_boss_room_tiles_bank90
+}
+
+mm_initialize_minimap:
+{
+    ; If we just left Ceres, increment segment timer
+    LDA !GAMEMODE : AND #$00FF : CMP #$0006 : BNE .init_minimap
+    LDA #$0000 : STA $12 : STA $14 : STA !ram_room_has_set_rng
+    STA !ram_realtime_room : STA !ram_last_realtime_room
+    STA !ram_gametime_room : STA !ram_last_gametime_room
+    STA !ram_last_room_lag : STA !ram_last_door_lag_frames : STA !ram_transition_counter
+
+    ; adding 1:13 to seg timer to account for missed frames between Ceres and Zebes
+    LDA !ram_seg_rt_frames : CLC : ADC #$000D : STA !ram_seg_rt_frames
+    CMP #$003C : BMI .add_seconds
+    SEC : SBC #$003C : STA !ram_seg_rt_frames : INC $12
+
+  .add_seconds
+    LDA !ram_seg_rt_seconds : CLC : ADC #$0001 : ADC $12 : STA !ram_seg_rt_seconds
+    CMP #$003C : BMI .add_minutes
+    SEC : SBC #$003C : STA !ram_seg_rt_seconds : INC $14
+
+  .add_minutes
+    LDA $14 : BEQ .init_minimap : CLC : ADC !ram_seg_rt_minutes : STA !ram_seg_rt_minutes
+
+  .init_minimap
+    JML mm_initialize_minimap_bank90
+}
 print pc, " minimap bankFD end"
 
 
@@ -136,38 +191,16 @@ mm_refresh_reserves:
     LDA #$FFFF : STA !ram_reserves_last
     RTS
 }
-
 print pc, " minimap bank82 end"
-warnpc $82F800 ; layout.asm
+warnpc $82F920 ; Ascent code/data
+
 
 
 ; Placed in bank 90 so that the jumps work
-org !ORG_MINIMAP_BANK90
-print pc, " minimap bank90 start"
-
-mm_initialize_minimap:
+org !ORG_MINIMAP_BANK90_PART1
+print pc, " minimap bank90 part1 start"
+mm_initialize_minimap_bank90:
 {
-    ; If we just left Ceres, increment segment timer
-    LDA !GAMEMODE : AND #$00FF : CMP #$0006 : BNE .init_minimap
-    LDA #$0000 : STA $12 : STA $14 : STA !ram_room_has_set_rng
-    STA !ram_realtime_room : STA !ram_last_realtime_room
-    STA !ram_gametime_room : STA !ram_last_gametime_room
-    STA !ram_last_room_lag : STA !ram_last_door_lag_frames : STA !ram_transition_counter
-
-    ; adding 1:13 to seg timer to account for missed frames between Ceres and Zebes
-    LDA !ram_seg_rt_frames : CLC : ADC #$000D : STA !ram_seg_rt_frames
-    CMP #$003C : BMI .add_seconds
-    SEC : SBC #$003C : STA !ram_seg_rt_frames : INC $12
-
-  .add_seconds
-    LDA !ram_seg_rt_seconds : CLC : ADC #$0001 : ADC $12 : STA !ram_seg_rt_seconds
-    CMP #$003C : BMI .add_minutes
-    SEC : SBC #$003C : STA !ram_seg_rt_seconds : INC $14
-
-  .add_minutes
-    LDA $14 : BEQ .init_minimap : CLC : ADC !ram_seg_rt_minutes : STA !ram_seg_rt_minutes
-
-  .init_minimap
     LDA !ram_minimap : BEQ .skip_minimap
     JMP $A8EF  ; resume original logic
 
@@ -186,35 +219,28 @@ mm_update_minimap:
     PLP
     RTL
 }
+print pc, " minimap bank90 part1 end"
 
-mm_inc_tile_count:
+org !ORG_MINIMAP_BANK90_PART2
+print pc, " minimap bank90 part2 start"
+mm_inc_tile_count_bridge:
 {
-    ; Check if tile is already set
-    LDA $07F7,X
-    ORA $AC04,Y
-    CMP $07F7,X : BEQ .done
+    JML mm_inc_tile_count
+}
 
-    ; Set tile and increment counter
-    STA $07F7,X
-    REP #$20
-    LDA !ram_map_counter : INC : STA !ram_map_counter
-    SEP #$20
-
-  .done
+mm_inc_tile_count_bank90:
+{
     JMP $A987  ; resume original logic
 }
 
-mm_clear_boss_room_tiles:
+mm_clear_boss_room_tiles_bridge:
 {
-    LDA #$2C1F
-    LDX #$0000
-  .loop
-    STA !HUD_TILEMAP+$3C,X
-    STA !HUD_TILEMAP+$7C,X
-    STA !HUD_TILEMAP+$BC,X
-    INX : INX : CPX #$000A : BMI .loop
-    JMP $A80A
+    JML mm_inc_tile_count
 }
 
-print pc, " minimap bank90 end"
-
+mm_clear_boss_room_tiles_bank90:
+{
+    JMP $A80A
+}
+print pc, " minimap bank90 part2 end"
+warnpc $90F780 ; Ascent code/data

@@ -1391,8 +1391,32 @@ ih_shinespark_code:
     RTL
 }
 
+reset_all_counters:
+{
+    LDA #$0000
+    STA !ram_room_has_set_rng
+    STA !IGT_FRAMES : STA !IGT_SECONDS : STA !IGT_MINUTES : STA !IGT_HOURS
+    STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds : STA !ram_seg_rt_minutes
+    STA !ram_realtime_room : STA !ram_last_realtime_room
+    STA !ram_gametime_room : STA !ram_last_gametime_room
+    STA !ram_last_room_lag : STA !ram_last_door_lag_frames : STA !ram_transition_counter
+    RTL
+}
+
+startgame_seg_timer:
+{
+    ; seg timer will be 1:50 (1 second, 50 frames) behind by the time it appears
+    ; 20 frames more if the file was new
+    ; initializing to 1:50 for now
+    LDA #$0032 : STA !ram_seg_rt_frames
+    LDA #$0001 : STA !ram_seg_rt_seconds
+    LDA #$0000 : STA !ram_seg_rt_minutes
+    JSL $808924    ; overwritten code
+    RTL
+}
+
 print pc, " infohud end"
-warnpc $F0E000 ; spritefeat.asm
+;warnpc $F0E000 ; spritefeat.asm
 
 
 ; Stuff that needs to be placed in bank 80
@@ -1439,13 +1463,13 @@ ih_hud_code_paused:
 }
 
 NumberGFXTable:
-    dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
+    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
     dw #$0C70, #$0C71, #$0C72, #$0C73, #$0C74, #$0C75, #$0C78, #$0C79, #$0C7A, #$0C7B
-    dw #$0C7C, #$0C7D, #$0C7E, #$0C7F, #$0CD2, #$0CD4, #$0CD5, #$0CD6, #$0CD7, #$0CD8
-    dw #$0CD9, #$0CDA, #$0CDB, #$0C5C, #$0C5D, #$0CB8, #$0C8D, #$0C12, #$0C13, #$0C14
+    dw #$0C7C, #$0C7D, #$0C7E, #$0C7F, #$0C40, #$0C41, #$0C42, #$0C43, #$0C44, #$0C45
+    dw #$0C50, #$0C51, #$0C52, #$0C5C, #$0C5D, #$0C76, #$0C77, #$0C12, #$0C13, #$0C14
     dw #$0C15, #$0C16, #$0C17, #$0C18, #$0C19, #$0C1A, #$0C1B, #$0C20, #$0C21, #$0C22
     dw #$0C23, #$0C24, #$0C25, #$0C26, #$0C27, #$0C28, #$0C29, #$0C2A, #$0C2B, #$0C2C
-    dw #$0C2D, #$0C2E, #$0C2F, #$0C5E, #$0C5F, #$0CCA
+    dw #$0C2D, #$0C2E, #$0C2F, #$0C5E, #$0C5F, #$0C6F
 
 HexGFXTable:
     dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
@@ -1463,20 +1487,20 @@ ControllerGfx2:
     dw #$0C60, #$0C63, #$0C62, #$0C65, #$0C64, #$0C6B
 
 HexToNumberGFX1:
-    dw #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09
     dw #$0C00, #$0C00, #$0C00, #$0C00, #$0C00, #$0C00, #$0C00, #$0C00, #$0C00, #$0C00
     dw #$0C01, #$0C01, #$0C01, #$0C01, #$0C01, #$0C01, #$0C01, #$0C01, #$0C01, #$0C01
     dw #$0C02, #$0C02, #$0C02, #$0C02, #$0C02, #$0C02, #$0C02, #$0C02, #$0C02, #$0C02
     dw #$0C03, #$0C03, #$0C03, #$0C03, #$0C03, #$0C03, #$0C03, #$0C03, #$0C03, #$0C03
     dw #$0C04, #$0C04, #$0C04, #$0C04, #$0C04, #$0C04, #$0C04, #$0C04, #$0C04, #$0C04
+    dw #$0C05, #$0C05, #$0C05, #$0C05, #$0C05, #$0C05, #$0C05, #$0C05, #$0C05, #$0C05
 
 HexToNumberGFX2:
-    dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
-    dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
-    dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
-    dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
-    dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
-    dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
+    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
+    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
+    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
+    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
+    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
+    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
 
 print pc, " infohud bank80 end"
 warnpc $80FF80 ; cutscenes.asm door transition code
