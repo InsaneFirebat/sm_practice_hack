@@ -16,7 +16,10 @@ endif
 
 
 ; Skip intro
-; $82:EEDF A9 95 A3    LDA #$A395
+; $82:EEDF A9 95 A3    LDA #$A395 (original code)
+;  (skip to Ceres)     LDA #$C100 (skip to Ceres)
+;  (skip to Zebes)     LDA #$CDAF (skip to Zebes)
+;                      LDA #Intro_Skip_to_Zebes
 org $82EEDF
     LDA.w #Subversion_Intro_Skip
 
@@ -44,6 +47,29 @@ Subversion_Intro_Skip:
     RTS
 }
 warnpc $8BF800
+print pc, " misc bank8B end"
+
+org !ORG_MISC_BANK8B
+print pc, " misc bank8B start"
+
+Intro_Skip_to_Zebes:
+{
+    %a8()
+    LDA #$80 : STA $51
+    %a16()
+    LDX #$0290
+-   STZ $198D,X
+    DEX #2 : BPL -
+
+    ; mark Ceres completed
+    LDA #$0022 : STA $7ED914
+    ; load game next frame
+    LDA #$0006 : STA !GAMEMODE
+    ; Screen fade delay/counter = 0
+    STZ $0723 : STZ $0725
+    LDA !SAMUS_HP_MAX : STA !SAMUS_HP
+    RTS
+}
 print pc, " misc bank8B end"
 
 
@@ -392,8 +418,8 @@ print pc, " misc bank90 end"
 
 
 if !RAW_TILE_GRAPHICS
-org !ORG_MISC_BANK8B
-print pc, " misc bank8B start"
+org !ORG_MISC_TILE_GRAPHICS
+print pc, " misc decompression start"
 ; Decompression optimization adapted from Kejardon
 ; Compression format: One byte (XXX YYYYY) or two byte (111 XXX YY-YYYYYYYY) headers
 ; XXX = instruction, YYYYYYYYYY = counter
@@ -559,6 +585,6 @@ decompression_increment_bank:
     PLA
     RTS
 }
-print pc, " misc bank8B end"
+print pc, " misc decompression end"
 endif
 

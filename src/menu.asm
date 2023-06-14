@@ -2124,13 +2124,13 @@ pullpc
 ; Resources
 ; ----------
 
-pushpc
-org !ORG_MENU_GFX
-print pc, " menu gfx start"
+;pushpc
+;org !ORG_MENU_GFX
+;print pc, " menu gfx start"
 cm_hud_table:
     incbin ../resources/cm_gfx.bin
-print pc, " menu gfx end"
-pullpc
+;print pc, " menu gfx end"
+;pullpc
 
 HexMenuGFXTable:
     dw $2C70, $2C71, $2C72, $2C73, $2C74, $2C75, $2C76, $2C77, $2C78, $2C79, $2C50, $2C51, $2C52, $2C53, $2C54, $2C55

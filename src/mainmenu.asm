@@ -585,10 +585,11 @@ eq_refill:
     %cm_jsl("Refill", .refill, #$0000)
   .refill
     LDA !SAMUS_HP_MAX : STA !SAMUS_HP ; health
-    LDA !SAMUS_AMMO_MAX : STA !SAMUS_AMMO ; missiles
-;    LDA $7E09CC : STA $7E09CA ; supers
-;    LDA $7E09D0 : STA $7E09CE ; pbs
-;    LDA $7E09D4 : STA $7E09D6 ; reserves
+    LDA !SAMUS_AMMO_MAX : STA !SAMUS_AMMO ; ammo
+;    LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES ; missiles
+;    LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS ; supers
+;    LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS ; pbs
+;    LDA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY ; reserves
     LDA #$0002 : JSL !SFX_LIB2 ; big energy pickup
     RTL
 
@@ -602,7 +603,7 @@ eq_goto_togglebeams:
     %cm_jsl("Toggle Beams", #eq_prepare_beams_menu, #ToggleBeamsMenu)
 
 eq_currentenergy:
-    %cm_numfield_word("Current Energy", $7E09C2, 0, 1499, 1, 20, #0)
+    %cm_numfield_word("Current Energy", !SAMUS_HP, 0, 1499, 1, 20, #0)
 
 eq_setetanks:
     %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 14, 1, 1, .routine)
@@ -622,10 +623,10 @@ eq_setetanks:
     RTL
 
 ;eq_currentreserves:
-;    %cm_numfield_word("Current Reserves", $7E09D6, 0, 900, 1, 20, #0)
+;    %cm_numfield_word("Current Reserves", !SAMUS_RESERVE_ENERGY, 0, 700, 1, 20, #0)
 ;
 ;eq_setreserves:
-;    %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 9, 1, 1, .routine)
+;    %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 7, 1, 1, .routine)
 ;  .routine
 ;    TAX : BEQ .zero
 ;    LDA #$0000
@@ -641,7 +642,7 @@ eq_setetanks:
 ;
 ;eq_reservemode:
 ;    dw !ACTION_CHOICE
-;    dl #$7E0000+!SAMUS_RESERVE_MODE
+;    dl #!SAMUS_RESERVE_MODE
 ;    dw #.routine
 ;    db #$28, "Reserve Mode", #$FF
 ;    db #$28, " UNOBTAINED", #$FF
@@ -679,19 +680,19 @@ eq_accelcharge:
     %cm_numfield("Accel Charge", !SAMUS_ACCEL_CHARGE, 0, 6, 1, 2, #0)
 
 ;eq_currentsupers:
-;    %cm_numfield("Current Super Missiles", $7E09CA, 0, 65, 1, 5, #0)
+;    %cm_numfield("Current Super Missiles", !SAMUS_SUPERS, 0, 65, 1, 5, #0)
 ;
 ;eq_setsupers:
-;    %cm_numfield("Super Missiles", $7E09CC, 0, 65, 5, 5, .routine)
+;    %cm_numfield("Super Missiles", !SAMUS_SUPERS_MAX, 0, 65, 5, 5, .routine)
 ;    .routine
 ;        LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS ; supers
 ;        RTL
 ;
 ;eq_currentpbs:
-;    %cm_numfield("Current Power Bombs", $7E09CE, 0, 70, 1, 5, #0)
+;    %cm_numfield("Current Power Bombs", !SAMUS_PBS, 0, 70, 1, 5, #0)
 ;
 ;eq_setpbs:
-;    %cm_numfield("Power Bombs", $7E09D0, 0, 70, 5, 5, .routine)
+;    %cm_numfield("Power Bombs", !SAMUS_PBS_MAX, 0, 70, 5, 5, .routine)
 ;    .routine
 ;        LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS ; pbs
 ;        RTL
@@ -999,13 +1000,13 @@ ti_darkvisor:
     %cm_equipment_item("Dark Visor", !ram_cm_darkvisor, #$0800, #$F7FF)
 
 ti_grapple:
-    %cm_toggle_bit("Grapple", $7E0000+!SAMUS_ITEMS_COLLECTED, #$4000, .routine)
+    %cm_toggle_bit("Grapple", !SAMUS_ITEMS_COLLECTED, #$4000, .routine)
   .routine
     LDA !SAMUS_ITEMS_EQUIPPED : EOR #$4000 : STA !SAMUS_ITEMS_EQUIPPED
     RTL
 
 ti_xray:
-    %cm_toggle_bit("X-Ray", $7E0000+!SAMUS_ITEMS_COLLECTED, #$8000, .routine)
+    %cm_toggle_bit("X-Ray", !SAMUS_ITEMS_COLLECTED, #$8000, .routine)
   .routine
     LDA !SAMUS_ITEMS_EQUIPPED : EOR #$8000 : STA !SAMUS_ITEMS_EQUIPPED
     ; Dark Visor ($0800) must be equipped for X-Ray to be selectable

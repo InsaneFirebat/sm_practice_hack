@@ -49,18 +49,14 @@ gamemode_start:
 skip_pause:
 {
     PHP ; preserve carry
-    LDA !GAMEMODE
-    CMP #$000C
-    BNE .done
-    LDA #$0008
-    STA !GAMEMODE
-    LDA #$0001
-    STZ $0723   ; Screen fade delay = 0
-    STZ $0725   ; Screen fade counter = 0
-    LDA $0051
-    ORA #$000F
-    STA $0051   ; Brightness = $F (max)
-.done:
+    LDA !GAMEMODE : CMP #$000C : BNE .done
+    LDA #$0008 : STA !GAMEMODE
+;    LDA #$0001 ; wtf
+    ; Screen fade delay/counter = 0
+    STZ $0723 : STZ $0725
+    ; Brightness = $F (max)
+    LDA $51 : ORA #$000F : STA $51
+  .done
     PLP
     RTS
 }
