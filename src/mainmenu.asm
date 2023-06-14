@@ -2136,9 +2136,9 @@ GameMenu:
     dw #game_debugplms
     dw #game_debugprojectiles
     dw #game_debugfixscrolloffsets
-;    dw #$FFFF
-;    dw #game_minimap
-;    dw #game_clear_minimap
+    dw #$FFFF
+    dw #game_minimap
+    dw #game_clear_minimap
     dw #$0000
     %cm_header("GAME")
 

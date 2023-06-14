@@ -452,50 +452,50 @@ ih_update_hud_code:
     PEA $8080 : PLB : PLB
 
   .start
-;    LDA !ram_minimap : BNE .minimap_hud
-;    BRL .start_update
-;
-;  .minimap_vanilla_infohud
+    LDA !ram_minimap : BNE .minimap_hud
+    BRL .start_update
+
+  .minimap_vanilla_infohud
 ;    BRL .end
-;
-;  .minimap_hud
-;    ; Map visible, so draw map counter over item%
+
+  .minimap_hud
+    ; Map visible, so draw map counter over item%
 ;    LDA !sram_top_display_mode : CMP !TOP_DISPLAY_VANILLA : BEQ .minimap_vanilla_infohud
-;    LDA !ram_map_counter : LDX #$0014 : JSR Draw3
-;    LDA !sram_display_mode : CMP #!IH_MODE_SHINETUNE_INDEX : BNE .minimap_roomtimer
-;    BRL .pick_minimap_transition_time
-;
-;  .minimap_roomtimer
-;    STZ $4205
-;    LDA !sram_frame_counter_mode : BNE .minimap_ingame_roomtimer
-;    LDA !ram_last_realtime_room
-;    BRA .minimap_calculate_roomtimer
-;  .minimap_ingame_roomtimer
-;    LDA !ram_last_gametime_room
-;  .minimap_calculate_roomtimer
-;    ; Divide time by 60 or 50 and draw seconds and frames
-;    STA $4204
-;    %a8()
-;    LDA #$3C
-;    STA $4206
-;    %a16()
-;    PEA $0000 : PLA ; wait for CPU math
-;    LDA $4216 : STA $C1
-;    LDA $4214 : LDX #$00B0 : JSR Draw2
+    LDA !ram_map_counter : LDX #$0014 : JSR Draw3
+    LDA !sram_display_mode : CMP #!IH_MODE_SHINETUNE_INDEX : BNE .minimap_roomtimer
+    BRL .pick_minimap_transition_time
+
+  .minimap_roomtimer
+    STZ $4205
+    LDA !sram_frame_counter_mode : BNE .minimap_ingame_roomtimer
+    LDA !ram_last_realtime_room
+    BRA .minimap_calculate_roomtimer
+  .minimap_ingame_roomtimer
+    LDA !ram_last_gametime_room
+  .minimap_calculate_roomtimer
+    ; Divide time by 60 or 50 and draw seconds and frames
+    STA $4204
+    %a8()
+    LDA #$3C
+    STA $4206
+    %a16()
+    PEA $0000 : PLA ; wait for CPU math
+    LDA $4216 : STA $C1
+    LDA $4214 : LDX #$0036 : JSR Draw2
 ;    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$B4
-;    LDA $C1 : ASL : TAX
-;    LDA HexToNumberGFX1,X : STA !HUD_TILEMAP+$B6
-;    LDA HexToNumberGFX2,X : STA !HUD_TILEMAP+$B8
-;
-;  .pick_minimap_transition_time
-;    LDA !sram_lag_counter_mode : BNE .minimap_transition_time_full
-;    LDA !ram_last_door_lag_frames
-;    BRA .draw_minimap_transition_time
-;  .minimap_transition_time_full
-;    LDA !ram_last_realtime_door
-;  .draw_minimap_transition_time
-;    LDX #$0054 : JSR Draw3
-;    BRL .end
+    LDA $C1 : ASL : TAX
+    LDA HexToNumberGFX1,X : AND #$0CFF : STA !HUD_TILEMAP+$76
+    LDA HexToNumberGFX2,X : AND #$0CFF : STA !HUD_TILEMAP+$78
+
+  .pick_minimap_transition_time
+    LDA !sram_lag_counter_mode : BNE .minimap_transition_time_full
+    LDA !ram_last_door_lag_frames
+    BRA .draw_minimap_transition_time
+  .minimap_transition_time_full
+    LDA !ram_last_realtime_door
+  .draw_minimap_transition_time
+    LDX #$0054 : JSR Draw3
+    BRL .end
 
   .start_update
     LDA #$FFFF : STA !ram_last_hp : STA !ram_enemy_hp
@@ -1090,11 +1090,11 @@ Draw4Hundredths:
     RTS
 
   .zerotens
-    LDA #$0C09 : STA !HUD_TILEMAP+$00,X : STA !HUD_TILEMAP+$04,X : STA !HUD_TILEMAP+$06,X
+    LDA #$3C09 : STA !HUD_TILEMAP+$00,X : STA !HUD_TILEMAP+$04,X : STA !HUD_TILEMAP+$06,X
     BRA .done
 
   .zerohundreds
-    LDA #$0C09 : STA !HUD_TILEMAP+$00,X : STA !HUD_TILEMAP+$04,X
+    LDA #$3C09 : STA !HUD_TILEMAP+$00,X : STA !HUD_TILEMAP+$04,X
     BRA .done
 }
 
@@ -1441,17 +1441,17 @@ ih_hud_code_paused:
 }
 
 NumberGFXTable:
-    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
-    dw #$0C10, #$0C71, #$0C12, #$0C13, #$0C14, #$0C15, #$0C16, #$0C17, #$0C18, #$0C19
-    dw #$0C2C, #$0C2D, #$0C2E, #$0C2F, #$0C3C, #$0C3D, #$0C3E, #$0C3F, #$0C40, #$0C41
-    dw #$0C42, #$0C43, #$0C44, #$0C45, #$0C46, #$0C47, #$0C48, #$0C49, #$0C4A, #$0C4B
-    dw #$0C4C, #$0C4D, #$0C4E, #$0C4F, #$0C50, #$0C51, #$0C52, #$0C53, #$0C54, #$0C5C
-    dw #$0C5D, #$0C5E, #$0C5F, #$0C6D, #$0C6E, #$0C6F, #$0C70, #$0C71, #$0C72, #$0C73
-    dw #$0C74, #$0C75, #$0C76, #$0C77, #$0C78, #$0C79
+    dw #$3C00, #$3C01, #$3C02, #$3C03, #$3C04, #$3C05, #$3C06, #$3C07, #$3C08, #$3C09
+    dw #$3C10, #$3C71, #$3C12, #$3C13, #$3C14, #$3C15, #$3C16, #$3C17, #$3C18, #$3C19
+    dw #$3C76, #$3C77, #$3C78, #$3C79, #$3C7A, #$3C7B, #$3C7C, #$3C7D, #$3C7E, #$3C7F
+    dw #$3CA9, #$3CAA, #$3CAB, #$3C36, #$3C37, #$3C38, #$3C0C, #$3C39, #$3C3A, #$3C3B
+    dw #$3C56, #$3C57, #$3C58, #$3C59, #$3C5A, #$3C5B, #$3C5C, #$3C5D, #$3C5E, #$3C5F
+    dw #$3C60, #$3C61, #$3C62, #$3C63, #$3C64, #$3C65, #$3C66, #$3C67, #$3C68, #$3C69
+    dw #$3C6A, #$3C6B, #$3C6C, #$3C6D, #$3C6E, #$3C0D
 
 HexGFXTable:
-    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
-    dw #$0CC0, #$0CC1, #$0CC2, #$0CC3, #$0CC4, #$0CC5
+    dw #$3C00, #$3C01, #$3C02, #$3C03, #$3C04, #$3C05, #$3C06, #$3C07, #$3C08, #$3C09
+    dw #$3CC0, #$3CC1, #$3CC2, #$3CC3, #$3CC4, #$3CC5
 
 ControllerTable1:
     dw #$0020, #$0800, #$0010, #$4000, #$0040, #$2000
@@ -1459,26 +1459,26 @@ ControllerTable2:
     dw #$0200, #$0400, #$0100, #$8000, #$0080, #$1000
 ControllerGfx1:
       ;  L       ^       R       Y       X       Sl
-    dw #$0C68, #$0C61, #$0C69, #$0C67, #$0C66, #$0C6A
+    dw #$3CCB, #$3C71, #$3CD1, #$3CD8, #$3CD7, #$3C74
 ControllerGfx2:
       ;  <       v       >       B       A       St
-    dw #$0C60, #$0C63, #$0C62, #$0C65, #$0C64, #$0C6B
+    dw #$3C1B, #$3C73, #$3C72, #$3CC1, #$3CC0, #$3C75
 
 HexToNumberGFX1:
-    dw #$0C00, #$0C00, #$0C00, #$0C00, #$0C00, #$0C00, #$0C00, #$0C00, #$0C00, #$0C00
-    dw #$0C01, #$0C01, #$0C01, #$0C01, #$0C01, #$0C01, #$0C01, #$0C01, #$0C01, #$0C01
-    dw #$0C02, #$0C02, #$0C02, #$0C02, #$0C02, #$0C02, #$0C02, #$0C02, #$0C02, #$0C02
-    dw #$0C03, #$0C03, #$0C03, #$0C03, #$0C03, #$0C03, #$0C03, #$0C03, #$0C03, #$0C03
-    dw #$0C04, #$0C04, #$0C04, #$0C04, #$0C04, #$0C04, #$0C04, #$0C04, #$0C04, #$0C04
-    dw #$0C05, #$0C05, #$0C05, #$0C05, #$0C05, #$0C05, #$0C05, #$0C05, #$0C05, #$0C05
+    dw #$3C00, #$3C00, #$3C00, #$3C00, #$3C00, #$3C00, #$3C00, #$3C00, #$3C00, #$3C00
+    dw #$3C01, #$3C01, #$3C01, #$3C01, #$3C01, #$3C01, #$3C01, #$3C01, #$3C01, #$3C01
+    dw #$3C02, #$3C02, #$3C02, #$3C02, #$3C02, #$3C02, #$3C02, #$3C02, #$3C02, #$3C02
+    dw #$3C03, #$3C03, #$3C03, #$3C03, #$3C03, #$3C03, #$3C03, #$3C03, #$3C03, #$3C03
+    dw #$3C04, #$3C04, #$3C04, #$3C04, #$3C04, #$3C04, #$3C04, #$3C04, #$3C04, #$3C04
+    dw #$3C05, #$3C05, #$3C05, #$3C05, #$3C05, #$3C05, #$3C05, #$3C05, #$3C05, #$3C05
 
 HexToNumberGFX2:
-    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
-    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
-    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
-    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
-    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
-    dw #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08, #$0C09
+    dw #$3C00, #$3C01, #$3C02, #$3C03, #$3C04, #$3C05, #$3C06, #$3C07, #$3C08, #$3C09
+    dw #$3C00, #$3C01, #$3C02, #$3C03, #$3C04, #$3C05, #$3C06, #$3C07, #$3C08, #$3C09
+    dw #$3C00, #$3C01, #$3C02, #$3C03, #$3C04, #$3C05, #$3C06, #$3C07, #$3C08, #$3C09
+    dw #$3C00, #$3C01, #$3C02, #$3C03, #$3C04, #$3C05, #$3C06, #$3C07, #$3C08, #$3C09
+    dw #$3C00, #$3C01, #$3C02, #$3C03, #$3C04, #$3C05, #$3C06, #$3C07, #$3C08, #$3C09
+    dw #$3C00, #$3C01, #$3C02, #$3C03, #$3C04, #$3C05, #$3C06, #$3C07, #$3C08, #$3C09
 
 print pc, " infohud bank80 end"
 warnpc $80FF80 ; cutscenes.asm door transition code

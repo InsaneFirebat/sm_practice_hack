@@ -6,11 +6,11 @@
 org $809B52
     JMP $9BFB    ; skip drawing auto reserve icon and normal energy numbers and tanks during HUD routine
 
-org $82AED9      ; routine to draw auto reserve icon on HUD from equip screen
-    JSR mm_refresh_reserves
-
-org $82AEAF      ; routine to remove auto reserve icon on HUD from equip screen
-    JSR mm_refresh_reserves
+;org $82AED9      ; routine to draw auto reserve icon on HUD from equip screen
+;    JSR mm_refresh_reserves
+;
+;org $82AEAF      ; routine to remove auto reserve icon on HUD from equip screen
+;    JSR mm_refresh_reserves
 
 org $809AF3
     JSL mm_initialize_minimap
@@ -56,8 +56,7 @@ incbin ../resources/Subversion_hudgfx.bin
 org !ORG_MINIMAP_BANKFD
 print pc, " minimap bankFD start"
 mapgfx_bin:
-incbin ../resources/Subversion_hudgfx.bin
-;incbin ../resources/mapgfx.bin
+incbin ../resources/Subversion_mapgfx.bin
 
 ; Next block needs to be all zeros to clear a tilemap
 fillbyte $00
@@ -66,18 +65,21 @@ print pc, " minimap bankFD end"
 
 
 ; The default HUD minimap should be cleared
-org $8098FF    ; row 1
-    dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
+org $8098BB    ; row 0
+    dw #$3C0F, #$3C0F, #$3C0F, #$3C0F, #$3C0F, #$3C0F, #$3C0F, #$3C0F
 
-org $80993F    ; row 2
-    dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
+org $8098FB    ; row 1
+    dw #$3C0F, #$3C0F, #$3C0F, #$3C0F, #$3C0F, #$3C0F, #$3C0F, #$3C0F
 
-org $80997F    ; row 3
-    dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
+org $80993B    ; row 2
+    dw #$3C0F, #$3C0F, #$3C0F, #$3C0F, #$3C0F, #$3C0F, #$3C0F, #$3C0F
+
+org $80997B    ; row 3
+    dw #$3C0F, #$3C0F, #$3C0F, #$3C0F, #$3C0F, #$3C0F, #$3C0F, #$3C0F
 
 ; The default energy 0 text should be cleared
 org $80994D
-    dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
+    dw #$3C0F, #$3C0F, #$3C0F, #$3C0F, #$3C0F, #$3C0F
 
 
 ; Placed in bank 82 so that the jumps work
@@ -179,7 +181,7 @@ print pc, " minimap bank90 start"
 mm_initialize_minimap_bank90:
 {
     LDA !ram_minimap : BEQ .skip_minimap
-    JMP $A8EF  ; resume original logic
+;    JMP $A8EF  ; resume original logic
 
   .skip_minimap
     RTL
