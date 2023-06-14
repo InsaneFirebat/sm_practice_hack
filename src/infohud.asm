@@ -1106,11 +1106,11 @@ Draw4Hundredths:
     RTS
 
   .zerotens
-    LDA #$0C09 : STA !HUD_TILEMAP+$00,X : STA !HUD_TILEMAP+$04,X : STA !HUD_TILEMAP+$06,X
+    LDA !IH_ZERO : STA !HUD_TILEMAP+$00,X : STA !HUD_TILEMAP+$04,X : STA !HUD_TILEMAP+$06,X
     BRA .done
 
   .zerohundreds
-    LDA #$0C09 : STA !HUD_TILEMAP+$00,X : STA !HUD_TILEMAP+$04,X
+    LDA !IH_ZERO : STA !HUD_TILEMAP+$00,X : STA !HUD_TILEMAP+$04,X
     BRA .done
 }
 

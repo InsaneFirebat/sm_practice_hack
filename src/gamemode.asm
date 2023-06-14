@@ -166,13 +166,13 @@ if !FEATURE_SD2SNES
     JMP .auto_save_state
 endif
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
-    AND !IH_CONTROLLER_PRI_NEW : BEQ +
-    JMP .load_last_preset
-
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
-    AND !IH_CONTROLLER_PRI_NEW : BEQ +
-    JMP .random_preset
+;  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
+;    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+;    JMP .load_last_preset
+;
+;  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
+;    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+;    JMP .random_preset
 
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_save_custom_preset : CMP !sram_ctrl_save_custom_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
@@ -392,18 +392,14 @@ skip_pause:
 ;  presets reset the game mode anyway).
 {
     PHP ; preserve carry
-    LDA !GAMEMODE
-    CMP #$000C
-    BNE .done
-    LDA #$0008
-    STA !GAMEMODE
-    LDA #$0001
-    STZ $0723   ; Screen fade delay = 0
-    STZ $0725   ; Screen fade counter = 0
-    LDA $0051
-    ORA #$000F
-    STA $0051   ; Brightness = $F (max)
-.done:
+    LDA !GAMEMODE : CMP #$000C : BNE .done
+    LDA #$0008 : STA !GAMEMODE
+;    LDA #$0001 ; wtf
+    ; Screen fade delay/counter = 0
+    STZ $0723 : STZ $0725
+    ; Brightness = $F (max)
+    LDA $51 : ORA #$000F : STA $51
+  .done
     PLP
     RTS
 }
