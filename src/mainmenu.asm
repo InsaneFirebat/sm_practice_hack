@@ -1323,7 +1323,7 @@ TeleportNorfairMenu:
     %cm_header("NORFAIR SAVE STATIONS")
 
 tel_norfairgrapple:
-    %cm_jsl("Generator", #action_teleport, #$0200)
+    %cm_jsl("Geothermal Energy Plant", #action_teleport, #$0200)
 
 tel_norfairbubble:
     %cm_jsl("Verdite Mines", #action_teleport, #$0201)
@@ -1417,6 +1417,8 @@ tel_debug_area:
         db #$28, "  REQT SHIP", #$FF
         db #$28, "    MARIDIA", #$FF
         db #$28, "    TOURIAN", #$FF
+        db #$28, "      CERES", #$FF
+        db #$28, "      DEBUG", #$FF
     db #$FF
 
 tel_debug_station:
