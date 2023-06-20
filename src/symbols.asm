@@ -6,6 +6,10 @@
 incsrc wram_symbols.asm
 
 
+!DP_KB_Row = $2A
+!DP_CursorPosition = $2C
+!DP_KB_Shift = $2E
+
 ram_gametime_room = !ram_gametime_room
 ram_last_gametime_room = !ram_last_gametime_room
 ram_realtime_room = !ram_realtime_room

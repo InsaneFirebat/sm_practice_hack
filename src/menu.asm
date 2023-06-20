@@ -1122,6 +1122,25 @@ draw_custom_preset:
     ; determine what to draw
     LDA !ram_cm_custom_preset_labels : BNE .drawSamusData
 
+    ; check if custom preset name exists
+    LDA !DP_ToggleValue : ASL : TAX
+    LDA !sram_custom_preset_safewords,X : CMP #$5AFE : BNE .drawRoomName
+
+    ; preset slot * $18 = name offset
+    TXA : ASL #2 : STA !DP_Temp
+    ASL : ADC !DP_Temp
+    CLC : ADC.w #!sram_custom_preset_names : STA !DP_CurrentMenu
+    LDA.w #!sram_custom_preset_names>>16 : STA !DP_CurrentMenu+2
+    ; set tilemap position and draw area text
+    LDA !DP_JSLTarget : CLC : ADC #$0006 : TAX
+    JSR cm_draw_text
+
+    ; fix bank
+    LDA !DP_MenuIndices+2 : STA !DP_CurrentMenu+2
+    RTS
+    
+
+  .drawRoomName
     ; draw ROOM NAME using ID as pointer
     LDX !DP_Address : LDA !PRESET_SLOTS_ROOM,X : STA !DP_CurrentMenu
     LDA.w #RoomNameTextTable>>16 : STA !DP_CurrentMenu+2
@@ -1503,10 +1522,10 @@ cm_loop:
   .checkInputs
     JSR cm_get_inputs : STA !ram_cm_controller : BEQ cm_loop
 
-;    BIT #$0040 : BNE .pressedX
     BIT !CTRL_A : BEQ + : JMP .pressedA ; more wiggle room with branch limits...
 +   BIT !CTRL_B : BEQ + : JMP .pressedB
 +   BIT !CTRL_Y : BNE .pressedY
+    BIT !CTRL_X : BNE .pressedX
     BIT !CTRL_SELECT : BNE .pressedSelect
     BIT !IH_INPUT_START : BNE .pressedStart
     BIT !IH_INPUT_UP : BNE .pressedUp
@@ -1546,7 +1565,7 @@ cm_loop:
     BRA .redraw
 
   .pressedA
-;  .pressedX
+  .pressedX
   .pressedY
   .pressedLeft
   .pressedRight
@@ -1872,7 +1891,7 @@ cm_edit_decimal_digits:
   .check_minimum
     CMP !DP_DigitMinimum : BPL +
     LDA !DP_DigitMinimum
-+   STA [!DP_DigitAddress]
++   STA [!DP_DigitValue]
 
     ; skip if JSL target is zero
     LDA !DP_JSLTarget : BEQ .end
@@ -1880,7 +1899,7 @@ cm_edit_decimal_digits:
     LDA !ram_cm_menu_bank : STA !DP_JSLTarget+2
     PHK : PEA .end-1
     ; addr in A
-    LDA [!DP_DigitAddress]
+    LDA [!DP_DigitValue]
     JML.w [!DP_JSLTarget]
 
   .end
@@ -1890,6 +1909,456 @@ cm_edit_decimal_digits:
     JSL cm_draw
     RTS
 }
+
+kb_ctrl_mode:
+; init stuff
+{
+    LDA #$0000
+    STA !DP_KB_Row : STA !ram_cm_horizontal_cursor
+    STA !DP_DigitValue : STA !DP_KB_Shift
+    LDA #$0001
+    STA !DP_KB_Cursor : STA !ram_cm_ctrl_mode
+
+    LDA !DP_KB_Control : CMP #$5AFE : BEQ .countChars
+    ; write terminator bytes
+    LDA #$FFFF : LDX #$0018
+-   STA !ram_cm_keyboard_buffer,X
+    DEX #2 : BPL -
+    LDA #$FF28 : STA !ram_cm_keyboard_buffer
+
+  .countChars
+    %ai8()
+    LDX #$00
+-   LDA !ram_cm_keyboard_buffer,X : CMP #$FF : BEQ .counted
+    INX : BRA -
+
+  .counted
+    %ai16()
+    STX !DP_KB_Cursor
+    STZ !DP_KB_Control
+
+  .draw
+    JSR cm_tilemap_bg
+    JSR kb_redraw_tilemap
+
+    ; fall through into main loop
+}
+
+kb_main_loop:
+{
+    LDA !ram_cm_ctrl_mode : BNE +
+
+    ; exit loop
+    LDA !DP_KB_Control : BNE .cancel
+    ; transfer buffer to SRAM pointer
+    LDX #$0016 : TXY
+-   LDA !ram_cm_keyboard_buffer,X : STA [!DP_Address],Y
+    DEX #2
+    DEY #2 : BPL -
+
+    LDX !DP_CtrlInput : LDA #$5AFE : STA !sram_custom_preset_safewords,X
+    %sfxconfirm()
+  .cancel
+    RTL
+
++   JSL wait_for_lag_frame_long
+    JSL $808F0C ; Music queue
+    JSL $8289EF ; Sound fx queue
+    JSR kb_handle_inputs
+
+    ; redraw if inputs pressed
+    LDA !ram_cm_controller : BEQ kb_main_loop
+    ; check if new char should be written
+    LDA !DP_KB_Control : BMI .cancel : BEQ +
+    JSR kb_new_char
++   STZ !DP_KB_Control
+    ; redraw screen
+    JSR cm_tilemap_bg
+    JSR kb_redraw_tilemap
+    BRA kb_main_loop
+}
+
+kb_new_char:
+{
+    ; get cursor position and write char+term to buffer
+    LDA !DP_KB_Cursor : TAX
+    CMP #$0017 : BPL .fail
+    LDA !DP_DigitValue : ORA #$FF00 : STA !ram_cm_keyboard_buffer,X
+    LDA !DP_KB_Cursor : INC : CMP #$0017 : BMI .done
+  .fail
+    ; buffer full
+    LDA #$0036 : JSL !SFX_LIB1 ; beep
+    LDA #$0017
+  .done
+    STA !DP_KB_Cursor
+    RTS
+}
+
+kb_handle_inputs:
+; input handling
+{
+    JSR cm_get_inputs : STA !ram_cm_controller
+    BIT !IH_INPUT_UPDOWN : BNE .input_vertical
+    BIT !IH_INPUT_LEFTRIGHT : BNE .input_horizontal
+    BIT !IH_INPUT_START : BNE .input_confirm
+    BIT !CTRL_SELECT : BNE .input_cancel
+    BIT !CTRL_B : BNE .input_backspace
+    BIT !CTRL_Y : BNE .input_shift
+    BIT !CTRL_A : BEQ .return
+    BRL .input_A
+
+  .input_backspace
+    BRL .delete
+
+  .input_shift
+    BRL .shift
+
+  .input_cancel
+    DEC !DP_KB_Control
+
+  .input_confirm
+    LDA #$0000 : STA !ram_cm_ctrl_mode
+
+  .return
+    RTS
+
+  .input_vertical
+    ; check if up or down
+    LDA !ram_cm_controller : BIT !IH_INPUT_DOWN : BNE .input_down
+    ; input up
+    LDA !DP_KB_Row : DEC : BPL +
+    LDA #$0005 : BRA +
+  .input_down
+    LDA !DP_KB_Row : INC : CMP #$0006 : BMI +
+    LDA #$0000
++   STA !DP_KB_Row
+    STZ !DP_KB_Control
+
+    ; disallow $A cursor position unless row 1
+    LDA !DP_KB_Row : CMP #$0001 : BEQ +
+    LDA !ram_cm_horizontal_cursor : CMP #$000A : BNE +
+    DEC : STA !ram_cm_horizontal_cursor
++   %sfxmove()
+    RTS
+
+  .input_horizontal
+    LDA !DP_KB_Row : CMP #$0001 : BEQ .row1_horizontal
+    ; check if left or right
+    LDA !ram_cm_controller : BIT !IH_INPUT_RIGHT : BNE .input_right
+    ; input left
+    LDA !ram_cm_horizontal_cursor : DEC : BPL +
+    LDA #$0009 : BRA +
+  .input_right
+    LDA !ram_cm_horizontal_cursor : INC : CMP #$000A : BMI +
+    LDA #$0000
+    BRA +
+
+  .row1_horizontal
+    ; check if left or right
+    LDA !ram_cm_controller : BIT !IH_INPUT_RIGHT : BNE .input_row1_right
+    ; input left
+    LDA !ram_cm_horizontal_cursor : DEC : BPL +
+    LDA #$000A : BRA +
+  .input_row1_right
+    LDA !ram_cm_horizontal_cursor : INC : CMP #$000B : BMI +
+    LDA #$0000
+
++   STA !ram_cm_horizontal_cursor
+    STZ !DP_KB_Control
+    %sfxmove()
+    RTS
+
+  .input_A
+    ; pressed A
+    LDA !DP_KB_Row : ASL : TAY
+    LDA !DP_KB_Shift : BNE .lowercase
+    LDA.w KeyboardUpperRowTable,Y : BRA +
+  .lowercase
+    LDA.w KeyboardLowerRowTable,Y
++   STA !DP_JSLTarget
+
+    ; load selected character
++   LDA !ram_cm_horizontal_cursor : TAY
+    ; need checks here for special chars
+    LDA (!DP_JSLTarget),Y : AND #$00FF : CMP #$00FF : BEQ .special
+    STA !DP_DigitValue
+    LDA #$0037 : JSL !SFX_LIB1 ; click
+    INC !DP_KB_Control
+    RTS
+
+  .special
+    LDA !DP_KB_Row : BEQ .delete
+
+  .shift
+    LDA !DP_KB_Shift : INC : AND #$0001 : STA !DP_KB_Shift
+    STZ !DP_KB_Control
+    LDA #$002F : JSL !SFX_LIB1 ; underwater space jump
+    RTS
+
+  .delete
+    ; load index and check if chars to delete
+    LDX !DP_KB_Cursor : DEX : BEQ +
+    ; overwrite previous char with underscore
+    LDA #$FF9E : STA !ram_cm_keyboard_buffer,X
+    STX !DP_KB_Cursor
+    STZ !DP_KB_Control
+    %sfxfail()
++   RTS
+}
+
+kb_redraw_tilemap:
+; redraw base tilemap
+{
+    ; set bank for keyboard text
+    LDA.w #KeyboardTilemap>>16 : STA !DP_CurrentMenu+2
+
+    ; header
+    LDA.w #KeyboardTilemap_header : STA !DP_CurrentMenu
+    LDX #$00C6 : JSR cm_draw_text
+    ; blanks
+    LDA.w #KeyboardTilemap_blanks : STA !DP_CurrentMenu
+    LDX #$01C6 : JSR cm_draw_text
+    ; row 1 symbols
+    LDA.w #KeyboardTilemap_row1 : STA !DP_CurrentMenu
+    LDX #$0286 : JSR cm_draw_text
+    ; row 2 numbers
+    LDA.w #KeyboardTilemap_row2 : STA !DP_CurrentMenu
+    LDX #$0306 : JSR cm_draw_text
+
+    ; check if upper or lowercase
+    LDA !DP_KB_Shift : BNE .lowercase
+    ; row 3 uppercase letters
+    LDA.w #KeyboardTilemap_row3upper : STA !DP_CurrentMenu
+    LDX #$0386 : JSR cm_draw_text
+    ; row 4 uppercase letters
+    LDA.w #KeyboardTilemap_row4upper : STA !DP_CurrentMenu
+    LDX #$0406 : JSR cm_draw_text
+    ; row 5 uppercase letters
+    LDA.w #KeyboardTilemap_row5upper : STA !DP_CurrentMenu
+    LDX #$0486 : JSR cm_draw_text
+    BRA +
+  .lowercase
+    ; row 3 lowercase letters
+    LDA.w #KeyboardTilemap_row3lower : STA !DP_CurrentMenu
+    LDX #$0386 : JSR cm_draw_text
+    ; row 4 lowercase letters
+    LDA.w #KeyboardTilemap_row4lower : STA !DP_CurrentMenu
+    LDX #$0406 : JSR cm_draw_text
+    ; row 5 lowercase letters
+    LDA.w #KeyboardTilemap_row5lower : STA !DP_CurrentMenu
+    LDX #$0486 : JSR cm_draw_text
+
+    ; row 6 spacebar
++   LDA.w #KeyboardTilemap_row6 : STA !DP_CurrentMenu
+    LDX #$0506 : JSR cm_draw_text
+    ; footers
+    LDA.w #KeyboardTilemap_footer1 : STA !DP_CurrentMenu
+    LDX #$05C6 : JSR cm_draw_text
+    LDA.w #KeyboardTilemap_footer2 : STA !DP_CurrentMenu
+    LDX #$0606 : JSR cm_draw_text
+    LDA.w #KeyboardTilemap_footer3 : STA !DP_CurrentMenu
+    LDX #$0646 : JSR cm_draw_text
+    LDA.w #KeyboardTilemap_footer4 : STA !DP_CurrentMenu
+    LDX #$0686 : JSR cm_draw_text
+
+    ; user generated text
+    LDA.w #!ram_cm_keyboard_buffer : STA !DP_CurrentMenu
+    LDA.w #!ram_cm_keyboard_buffer>>16 : STA !DP_CurrentMenu+2
+    LDX #$01CA : JSR cm_draw_text
+
+;    JMP kb_highlight_cursor
+    ; fall through to kb_highlight_cursor
+}
+
+kb_highlight_cursor:
+; highlighting code
+{
+    ; use row to find hardcoded starting positions
+    LDA !DP_KB_Row : BEQ .row1
+    DEC : BEQ .row2
+    DEC : BEQ .row3
+    DEC : BEQ .row4
+    DEC : BEQ .row5
+
+    ; spacebar row
+    LDX #$0514
+-   LDA !ram_tilemap_buffer,X : ORA #$1000 : STA !ram_tilemap_buffer,X
+    INX #2 : CPX #$0528 : BMI -
+    BRL .done
+
+    .row1
+    ; row starting position in X
+    LDX #$028C : BRA +
+    .row2
+    LDX #$030A : BRA +
+    .row3
+    LDX #$038C : BRA +
+    .row4
+    LDX #$040E : BRA +
+    .row5
+    LDX #$048C
+
+    ; cursor position * 4 + tilemap position
++   LDA !ram_cm_horizontal_cursor : ASL #2 : STA !DP_Temp
+    TXA : CLC : ADC !DP_Temp : TAX
+
+    ; highlight selected tile
+    LDA !ram_tilemap_buffer,X : ORA #$1000 : STA !ram_tilemap_buffer,X
+
+    ; check if special button
+    LDY !DP_KB_Row : BEQ .checkDEL
+    CPY #$0004 : BEQ .checkSHIFT
+    BRA .done
+
+  .checkDEL
+    LDA !ram_cm_horizontal_cursor : CMP #$0009 : BNE .done
+    INX #2
+    LDA !ram_tilemap_buffer,X : ORA #$1000 : STA !ram_tilemap_buffer,X
+    BRA .done
+
+  .checkSHIFT
+    LDA !ram_cm_horizontal_cursor : BNE .done
+    DEX #2
+    LDA !ram_tilemap_buffer,X : ORA #$1000 : STA !ram_tilemap_buffer,X
+
+  .done
+    JSR cm_tilemap_transfer
+    RTS
+
+
+; DEAD CODE AHEAD
+DEAD_kb_highlight_cursor:
+    ; get starting index * 2 for row
+    LDA !DP_KB_Row : ASL : TAY
+    %item_index_to_vram_index()
+    ; add offset to first row
+    CLC : ADC #$0286 : STA !DP_Temp : TAX
+
+    ; add offset to first character
+    TYA : LSR : BEQ .plus6 ; row0
+    DEC : BEQ .plus4 ; row1
+    DEC : BEQ .plus6 ; row2
+    DEC : BEQ .plus8 ; row3
+    DEC : BEQ .variable ; row4
+    ; row 5
+    TXA : CLC : ADC #$0010 : BRA +
+  .plus8 ; row 3
+    TXA : CLC : ADC #$0008 : BRA +
+  .plus6 ; rows 0 and 2
+    TXA : CLC : ADC #$0006 : BRA +
+  .plus4 ; rows 1 and 4
+    TXA : CLC : ADC #$0004 : BRA +
+  .variable ; row 4
+    LDA !ram_cm_horizontal_cursor : BEQ .plus4 ; if SHIFT
+    TXA : CLC : ADC #$000A
++   STA !DP_Temp
+
+    ; add cursor index * 4
+    LDA !ram_cm_horizontal_cursor : ASL #2
+    CLC : ADC !DP_Temp : TAX
+
+    ; highlight selected tile
+    LDA !ram_tilemap_buffer,X : ORA #$1000 : STA !ram_tilemap_buffer,X
+
+    ; check for special buttons
+    LDA !DP_KB_Row : BEQ .row1
+    CMP #$0005 : BEQ .space
+    CMP #$0004 : BNE .done
+    ; row 4, 0 = shift
+    LDA !ram_cm_horizontal_cursor : BNE .done
+    LDY #$0001 : BRA .highlight_loop
+  .row1 ; 9 = delete
+    LDA !ram_cm_horizontal_cursor : CMP #$0009 : BNE .done
+    LDY #$0001 : BRA .highlight_loop
+  .space
+    LDY #$0004
+
+  .highlight_loop
+    INX #2
+    LDA !ram_tilemap_buffer,X : ORA #$1000 : STA !ram_tilemap_buffer,X
+    DEY : BNE .highlight_loop
+
+  .done
+    JSR cm_tilemap_transfer
+    RTS
+}
+
+KeyboardUpperRowTable:
+    dw Row0Symbols
+    dw Row1Numbers
+    dw Row2Uppercase
+    dw Row3Uppercase
+    dw Row4Uppercase
+    dw Row5Spacebar
+
+KeyboardLowerRowTable:
+    dw Row0Symbols
+    dw Row1Numbers
+    dw Row2Lowercase
+    dw Row3Lowercase
+    dw Row4Lowercase
+    dw Row5Spacebar
+
+Row0Symbols:
+    db "!#$%()+?:", $FF
+
+Row1Numbers:
+    db "1234567890-"
+
+Row2Uppercase:
+    db "QWERTYUIOP"
+
+Row2Lowercase:
+    db "qwertyuiop"
+
+Row3Uppercase:
+    db "ASDFGHJKL'"
+
+Row3Lowercase:
+    db "asdfghjkl'"
+
+Row4Uppercase:
+    db $FF, "ZXCVBNM,."
+
+Row4Lowercase:
+    db $FF, "zxcvbnm,."
+
+Row5Spacebar:
+    db "          "
+
+KeyboardTilemap:
+table ../resources/header.tbl
+  .header
+    db $28, "NAME YOUR CUSTOM PRESET", $FF
+  .footer1
+    db $28, "  PRESS START TO CONFIRM  ", $FF
+  .footer2
+    db $28, "  PRESS B FOR BACKSPACE   ", $FF
+  .footer3
+    db $28, "    PRESS Y FOR SHIFT     ", $FF
+  .footer4
+    db $28, "PRESS SELECT TO CANCEL    ", $FF
+table ../resources/normal.tbl
+  .blanks
+    db $28, "  ______________________  ", $FF
+  .row1
+    db $28, "   ! # $ % ( ) + ? : ", !KB_DEL1, !KB_DEL2, "   ", $FF
+  .row2
+    db $28, "  1 2 3 4 5 6 7 8 9 0 -   ", $FF
+  .row3upper
+    db $28, "   Q W E R T Y U I O P    ", $FF
+  .row4upper
+    db $28, "    A S D F G H J K L '   ", $FF
+  .row5upper
+    db $28, "  ", !KB_SHIFT1, !KB_SHIFT2, " Z X C V B N M , .    ", $FF
+  .row6
+    db $28, "       (SPACEBAR)         ", $FF
+  .row3lower
+    db $28, "   q w e r t y u i o p    ", $FF
+  .row4lower
+    db $28, "    a s d f g h j k l '   ", $FF
+  .row5lower
+    db $28, "  ", !KB_SHIFT1, !KB_SHIFT2, " z x c v b n m , .    ", $FF
 
 cm_previous_menu:
 {
@@ -2472,9 +2941,34 @@ execute_submenu:
 
 execute_custom_preset:
 {
-    ; check if Y newly pressed
-    LDA !IH_CONTROLLER_PRI_NEW : BIT !CTRL_Y : BEQ .checkLeftRight
+    ; check if X or Y newly pressed
+    LDA !IH_CONTROLLER_PRI_NEW : BIT !CTRL_Y : BNE .toggleDisplay
+    LDA !IH_CONTROLLER_PRI_NEW : BIT !CTRL_X : BEQ .checkLeftRight
 
+    ; enter keyboard editing mode
+    ; get slot number * 2 in X and !DP_CtrlInput
+    LDA [!DP_CurrentMenu] : AND #$00FF : ASL : STA !DP_CtrlInput
+    ; slot number * $18
+    ASL #2 : STA !DP_Temp : ASL : ADC !DP_Temp : TAX
+    CLC : ADC.w #!sram_custom_preset_names : STA !DP_Address
+    LDA.w #!sram_custom_preset_names>>16 : STA !DP_Address+2
+
+    ; check if custom preset name exists
+    LDX !DP_CtrlInput : LDA !sram_custom_preset_safewords,X : CMP #$5AFE : BNE .keyboardMode
+    ; store SAFE word to indicate a name already exists
+    STA !DP_KB_Control
+    ; load existing name
+    LDX #$0016 : TXY
+-   LDA [!DP_Address],Y : STA !ram_cm_keyboard_buffer,X
+    DEX #2
+    DEY #2 : BPL -
+
+  .keyboardMode
+    ; stay a while and listen
+    JSL kb_ctrl_mode
+    BRA .redrawScreen
+
+  .toggleDisplay
     ; swap between room name and Samus data
     LDA !ram_cm_custom_preset_labels : BEQ .turnOn
     LDA #$0000 : STA !ram_cm_custom_preset_labels

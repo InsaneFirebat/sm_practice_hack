@@ -8,7 +8,7 @@
 !VERSION_MINOR = 5
 !VERSION_BUILD = 5
 !VERSION_REV_1 = 1
-!VERSION_REV_2 = 3
+!VERSION_REV_2 = 4
 
 
 ; ---------
@@ -226,6 +226,8 @@
 !ram_cm_phan_first_phase = !WRAM_MENU_START+$80
 !ram_cm_phan_second_phase = !WRAM_MENU_START+$82
 
+!ram_cm_keyboard_buffer = !WRAM_MENU_START+$80 ; $18 bytes
+
 ; ^ FREE SPACE ^ up to +$CE
 
 ; Currently first 28 bytes plus last 2 bytes are used
@@ -247,6 +249,10 @@
 !DP_FirstDigit = $1A
 !DP_SecondDigit = $1C
 !DP_ThirdDigit = $1E
+!DP_KB_Cursor = $18
+!DP_KB_Row = $1A
+!DP_KB_Control = $1C
+!DP_KB_Shift = $1E
 ; v single digit editing v
 !DP_DigitAddress = $20 ; 0x4
 !DP_DigitValue = $24
@@ -324,6 +330,10 @@
 !IH_CONTROLLER_SEC_NEW = $91
 !IH_CONTROLLER_SEC_PREV = $99
 
+!KB_SHIFT1 = $9A
+!KB_SHIFT2 = $9B
+!KB_DEL1 = $9C
+!KB_DEL2 = $9D
 !MENU_CLEAR = #$000E
 !MENU_BLANK = #$281F
 !MENU_SLASH = #$289F
@@ -858,4 +868,12 @@ endif
 !sram_dummy_on = !SRAM_START+$2FA
 !sram_dummy_off = !SRAM_START+$2FC
 !sram_dummy_num = !SRAM_START+$2FE
+
+if !FEATURE_TINYSTATES
+!sram_custom_preset_safewords = !SRAM_START+$E60 ; $20 bytes
+!sram_custom_preset_names = !SRAM_START+$E80 ; $180 bytes
+else
+!sram_custom_preset_safewords = !SRAM_START+$BF0 ; $50 bytes
+!sram_custom_preset_names = !SRAM_START+$C40 ; $3C0 bytes
+endif
 

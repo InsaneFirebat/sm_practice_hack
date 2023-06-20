@@ -493,11 +493,14 @@ BRB_screen2_0F:
 ; BRB Data
 ; --------
 
-org MenuResources
-
+pushpc
+org $B0F000
 cm_brb_table:
     ; 1000h bytes transferred
     incbin ../resources/cm_brb_gfx.bin
+pullpc
+
+org MenuResources
 
 TimerNumberGFX1:
     dw #$2870, #$2870, #$2870, #$2870, #$2870, #$2870, #$2870, #$2870, #$2870, #$2870
