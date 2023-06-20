@@ -518,7 +518,7 @@ else
     dw #custompreset_goto_page3
 endif
     dw #$0000
-    %cm_header("## ENERGY    RES MMM SS PB")
+    %cm_header("PRESS X TO NAME PRESETS")
     %cm_footer("PRESS Y TO TOGGLE DISPLAY")
 
 CustomPresetsMenu2:
@@ -542,7 +542,7 @@ CustomPresetsMenu2:
     dw #custompreset_goto_page1
     dw #custompreset_goto_page3
     dw #$0000
-    %cm_header("## ENERGY    RES MMM SS PB")
+    %cm_header("PRESS X TO NAME PRESETS")
     %cm_footer("PRESS Y TO TOGGLE DISPLAY")
 
 CustomPresetsMenu3:
@@ -566,7 +566,7 @@ CustomPresetsMenu3:
     dw #custompreset_goto_page1
     dw #custompreset_goto_page2
     dw #$0000
-    %cm_header("## ENERGY    RES MMM SS PB")
+    %cm_header("PRESS X TO NAME PRESETS")
     %cm_footer("PRESS Y TO TOGGLE DISPLAY")
 
     %cm_custompreset(00)
