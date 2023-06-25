@@ -1891,7 +1891,7 @@ cm_edit_decimal_digits:
   .check_minimum
     CMP !DP_DigitMinimum : BPL +
     LDA !DP_DigitMinimum
-+   STA [!DP_DigitValue]
++   STA [!DP_DigitAddress]
 
     ; skip if JSL target is zero
     LDA !DP_JSLTarget : BEQ .end
@@ -1899,7 +1899,7 @@ cm_edit_decimal_digits:
     LDA !ram_cm_menu_bank : STA !DP_JSLTarget+2
     PHK : PEA .end-1
     ; addr in A
-    LDA [!DP_DigitValue]
+    LDA [!DP_DigitAddress]
     JML.w [!DP_JSLTarget]
 
   .end
@@ -1917,13 +1917,10 @@ kb_ctrl_mode:
     STA !DP_KB_Row : STA !ram_cm_horizontal_cursor
     STA !DP_DigitValue : STA !DP_KB_Shift
     LDA #$0001
-    STA !DP_KB_Cursor : STA !ram_cm_ctrl_mode
+    STA !DP_KB_Index : STA !ram_cm_ctrl_mode
 
     LDA !DP_KB_Control : CMP #$5AFE : BEQ .countChars
-    ; write terminator bytes
-    LDA #$FFFF : LDX #$0018
--   STA !ram_cm_keyboard_buffer,X
-    DEX #2 : BPL -
+    ; write attribute and terminator bytes
     LDA #$FF28 : STA !ram_cm_keyboard_buffer
 
   .countChars
@@ -1934,7 +1931,7 @@ kb_ctrl_mode:
 
   .counted
     %ai16()
-    STX !DP_KB_Cursor
+    STX !DP_KB_Index
     STZ !DP_KB_Control
 
   .draw
@@ -1947,9 +1944,9 @@ kb_ctrl_mode:
 kb_main_loop:
 {
     LDA !ram_cm_ctrl_mode : BNE +
-
-    ; exit loop
+    ; exit loop, check if user input should be saved
     LDA !DP_KB_Control : BNE .cancel
+
     ; transfer buffer to SRAM pointer
     LDX #$0016 : TXY
 -   LDA !ram_cm_keyboard_buffer,X : STA [!DP_Address],Y
@@ -1981,16 +1978,17 @@ kb_main_loop:
 kb_new_char:
 {
     ; get cursor position and write char+term to buffer
-    LDA !DP_KB_Cursor : TAX
+    LDA !DP_KB_Index : TAX
     CMP #$0017 : BPL .fail
     LDA !DP_DigitValue : ORA #$FF00 : STA !ram_cm_keyboard_buffer,X
-    LDA !DP_KB_Cursor : INC : CMP #$0017 : BMI .done
+    ; attr + $16 chars + term
+    LDA !DP_KB_Index : INC : CMP #$0017 : BMI .done
   .fail
-    ; buffer full
+    ; buffer already full
     LDA #$0036 : JSL !SFX_LIB1 ; beep
     LDA #$0017
   .done
-    STA !DP_KB_Cursor
+    STA !DP_KB_Index
     RTS
 }
 
@@ -2078,7 +2076,7 @@ kb_handle_inputs:
 +   STA !DP_JSLTarget
 
     ; load selected character
-+   LDA !ram_cm_horizontal_cursor : TAY
+    LDA !ram_cm_horizontal_cursor : TAY
     ; need checks here for special chars
     LDA (!DP_JSLTarget),Y : AND #$00FF : CMP #$00FF : BEQ .special
     STA !DP_DigitValue
@@ -2097,10 +2095,10 @@ kb_handle_inputs:
 
   .delete
     ; load index and check if chars to delete
-    LDX !DP_KB_Cursor : DEX : BEQ +
-    ; overwrite previous char with underscore
-    LDA #$FF9E : STA !ram_cm_keyboard_buffer,X
-    STX !DP_KB_Cursor
+    LDX !DP_KB_Index : DEX : BEQ +
+    ; overwrite previous char with terminator
+    LDA #$FFFF : STA !ram_cm_keyboard_buffer,X
+    STX !DP_KB_Index
     STZ !DP_KB_Control
     %sfxfail()
 +   RTS
@@ -2166,14 +2164,8 @@ kb_redraw_tilemap:
     LDA.w #!ram_cm_keyboard_buffer>>16 : STA !DP_CurrentMenu+2
     LDX #$01CA : JSR cm_draw_text
 
-;    JMP kb_highlight_cursor
-    ; fall through to kb_highlight_cursor
-}
-
-kb_highlight_cursor:
-; highlighting code
-{
-    ; use row to find hardcoded starting positions
+    ; highlight selected tile
+    ; use row to find starting positions
     LDA !DP_KB_Row : BEQ .row1
     DEC : BEQ .row2
     DEC : BEQ .row3
@@ -2186,8 +2178,8 @@ kb_highlight_cursor:
     INX #2 : CPX #$0528 : BMI -
     BRL .done
 
-    .row1
     ; row starting position in X
+    .row1
     LDX #$028C : BRA +
     .row2
     LDX #$030A : BRA +
@@ -2198,7 +2190,7 @@ kb_highlight_cursor:
     .row5
     LDX #$048C
 
-    ; cursor position * 4 + tilemap position
+    ; cursor position * 4 + row start position
 +   LDA !ram_cm_horizontal_cursor : ASL #2 : STA !DP_Temp
     TXA : CLC : ADC !DP_Temp : TAX
 
@@ -2224,63 +2216,6 @@ kb_highlight_cursor:
   .done
     JSR cm_tilemap_transfer
     RTS
-
-
-; DEAD CODE AHEAD
-DEAD_kb_highlight_cursor:
-    ; get starting index * 2 for row
-    LDA !DP_KB_Row : ASL : TAY
-    %item_index_to_vram_index()
-    ; add offset to first row
-    CLC : ADC #$0286 : STA !DP_Temp : TAX
-
-    ; add offset to first character
-    TYA : LSR : BEQ .plus6 ; row0
-    DEC : BEQ .plus4 ; row1
-    DEC : BEQ .plus6 ; row2
-    DEC : BEQ .plus8 ; row3
-    DEC : BEQ .variable ; row4
-    ; row 5
-    TXA : CLC : ADC #$0010 : BRA +
-  .plus8 ; row 3
-    TXA : CLC : ADC #$0008 : BRA +
-  .plus6 ; rows 0 and 2
-    TXA : CLC : ADC #$0006 : BRA +
-  .plus4 ; rows 1 and 4
-    TXA : CLC : ADC #$0004 : BRA +
-  .variable ; row 4
-    LDA !ram_cm_horizontal_cursor : BEQ .plus4 ; if SHIFT
-    TXA : CLC : ADC #$000A
-+   STA !DP_Temp
-
-    ; add cursor index * 4
-    LDA !ram_cm_horizontal_cursor : ASL #2
-    CLC : ADC !DP_Temp : TAX
-
-    ; highlight selected tile
-    LDA !ram_tilemap_buffer,X : ORA #$1000 : STA !ram_tilemap_buffer,X
-
-    ; check for special buttons
-    LDA !DP_KB_Row : BEQ .row1
-    CMP #$0005 : BEQ .space
-    CMP #$0004 : BNE .done
-    ; row 4, 0 = shift
-    LDA !ram_cm_horizontal_cursor : BNE .done
-    LDY #$0001 : BRA .highlight_loop
-  .row1 ; 9 = delete
-    LDA !ram_cm_horizontal_cursor : CMP #$0009 : BNE .done
-    LDY #$0001 : BRA .highlight_loop
-  .space
-    LDY #$0004
-
-  .highlight_loop
-    INX #2
-    LDA !ram_tilemap_buffer,X : ORA #$1000 : STA !ram_tilemap_buffer,X
-    DEY : BNE .highlight_loop
-
-  .done
-    JSR cm_tilemap_transfer
-    RTS
 }
 
 KeyboardUpperRowTable:
@@ -2300,29 +2235,21 @@ KeyboardLowerRowTable:
     dw Row5Spacebar
 
 Row0Symbols:
-    db "!#$%()+?:", $FF
-
+    db "!#$%()+?:"
 Row1Numbers:
     db "1234567890-"
-
 Row2Uppercase:
     db "QWERTYUIOP"
-
 Row2Lowercase:
     db "qwertyuiop"
-
 Row3Uppercase:
     db "ASDFGHJKL'"
-
 Row3Lowercase:
     db "asdfghjkl'"
-
 Row4Uppercase:
     db $FF, "ZXCVBNM,."
-
 Row4Lowercase:
     db $FF, "zxcvbnm,."
-
 Row5Spacebar:
     db "          "
 
@@ -2337,7 +2264,7 @@ table ../resources/header.tbl
   .footer3
     db $28, "    PRESS Y FOR SHIFT     ", $FF
   .footer4
-    db $28, "PRESS SELECT TO CANCEL    ", $FF
+    db $28, "  PRESS SELECT TO CANCEL  ", $FF
 table ../resources/normal.tbl
   .blanks
     db $28, "  ______________________  ", $FF
@@ -2946,9 +2873,9 @@ execute_custom_preset:
     LDA !IH_CONTROLLER_PRI_NEW : BIT !CTRL_X : BEQ .checkLeftRight
 
     ; enter keyboard editing mode
-    ; get slot number * 2 in X and !DP_CtrlInput
+    ; get slot number * 2 in !DP_CtrlInput
     LDA [!DP_CurrentMenu] : AND #$00FF : ASL : STA !DP_CtrlInput
-    ; slot number * $18
+    ; slot number * $18 = name index
     ASL #2 : STA !DP_Temp : ASL : ADC !DP_Temp : TAX
     CLC : ADC.w #!sram_custom_preset_names : STA !DP_Address
     LDA.w #!sram_custom_preset_names>>16 : STA !DP_Address+2

@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.5.15] Fixed delected characters showing up as underscores in keyboard menu
+* [2.5.5.15] Fixed broken single-digit editing of large numbers
 * [2.5.5.14] Added a keyboard menu for naming custom presets
 * [2.5.5.13] Use hyphens as separators when in-game time is used in the HUD
 * [2.5.5.12] Fixed rollover bug when single-digit editing decimal numbers

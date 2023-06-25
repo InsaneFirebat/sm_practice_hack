@@ -8,7 +8,7 @@
 !VERSION_MINOR = 5
 !VERSION_BUILD = 5
 !VERSION_REV_1 = 1
-!VERSION_REV_2 = 4
+!VERSION_REV_2 = 5
 
 
 ; ---------
@@ -249,7 +249,7 @@
 !DP_FirstDigit = $1A
 !DP_SecondDigit = $1C
 !DP_ThirdDigit = $1E
-!DP_KB_Cursor = $18
+!DP_KB_Index = $18
 !DP_KB_Row = $1A
 !DP_KB_Control = $1C
 !DP_KB_Shift = $1E
@@ -618,7 +618,15 @@ endif
 !sram_seed_X = !SRAM_START+$82
 !sram_seed_Y = !SRAM_START+$84
 
-; ^ FREE SPACE ^ up to $F03000
+; ^ FREE SPACE ^ up to $F02BEE
+
+if !FEATURE_TINYSTATES
+!sram_custom_preset_safewords = !SRAM_START+$E60 ; $20 bytes
+!sram_custom_preset_names = !SRAM_START+$E80 ; $180 bytes
+else
+!sram_custom_preset_safewords = !SRAM_START+$BF0 ; $50 bytes
+!sram_custom_preset_names = !SRAM_START+$C40 ; $3C0 bytes
+endif
 
 
 ; ----------
@@ -868,12 +876,4 @@ endif
 !sram_dummy_on = !SRAM_START+$2FA
 !sram_dummy_off = !SRAM_START+$2FC
 !sram_dummy_num = !SRAM_START+$2FE
-
-if !FEATURE_TINYSTATES
-!sram_custom_preset_safewords = !SRAM_START+$E60 ; $20 bytes
-!sram_custom_preset_names = !SRAM_START+$E80 ; $180 bytes
-else
-!sram_custom_preset_safewords = !SRAM_START+$BF0 ; $50 bytes
-!sram_custom_preset_names = !SRAM_START+$C40 ; $3C0 bytes
-endif
 
