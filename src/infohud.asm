@@ -615,10 +615,12 @@ ih_update_hud_code:
   .minimap_roomtimer
     STZ $4205
     LDA !sram_frame_counter_mode : BNE .minimap_ingame_roomtimer
+    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$B4
     LDA !ram_last_realtime_room
     BRA .minimap_calculate_roomtimer
 
   .minimap_ingame_roomtimer
+    LDA !IH_HYPHEN : STA !HUD_TILEMAP+$B4
     LDA !ram_last_gametime_room
 
   .minimap_calculate_roomtimer
@@ -635,7 +637,6 @@ endif
     PEA $0000 : PLA ; wait for CPU math
     LDA $4216 : STA $C1
     LDA $4214 : LDX #$00B0 : JSR Draw2
-    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$B4
     LDA $C1 : ASL : TAX
     LDA HexToNumberGFX1,X : STA !HUD_TILEMAP+$B6
     LDA HexToNumberGFX2,X : STA !HUD_TILEMAP+$B8
@@ -785,8 +786,15 @@ endif
     ; Minutes
     LDA [$00] : LDX #$00AE : JSR Draw3
 
-    ; Draw decimal seperators
+    ; Draw decimal/hyphen seperators
+    LDA !sram_frame_counter_mode : BNE .ingame_separators
     LDA !IH_DECIMAL : STA !HUD_TILEMAP+$B4 : STA !HUD_TILEMAP+$BA
+    BRA .blank_end
+
+  .ingame_separators
+    LDA !IH_HYPHEN : STA !HUD_TILEMAP+$B4 : STA !HUD_TILEMAP+$BA
+
+  .blank_end
     LDA !IH_BLANK : STA !HUD_TILEMAP+$C0
     BRL .end
 }
@@ -883,10 +891,12 @@ endif
   .pick_roomtimer
     STZ $4205
     LDA !sram_frame_counter_mode : BNE .ingame_roomtimer
+    LDA !IH_DECIMAL : STA !HUD_TILEMAP+$42
     LDA !ram_last_realtime_room
     BRA .calculate_roomtimer
 
   .ingame_roomtimer
+    LDA !IH_HYPHEN : STA !HUD_TILEMAP+$42
     LDA !ram_last_gametime_room
 
   .calculate_roomtimer
@@ -903,7 +913,6 @@ endif
     PEA $0000 : PLA ; wait for CPU math
     LDA $4216 : STA $C1
     LDA $4214 : JSR Draw3
-    LDA !IH_DECIMAL : STA !HUD_TILEMAP,X
     LDA $C1 : ASL : TAY
     LDA.w HexToNumberGFX1,Y : STA !HUD_TILEMAP+2,X
     LDA.w HexToNumberGFX2,Y : STA !HUD_TILEMAP+4,X
