@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.5.16] Added an option to automatically savestate in every door transition
 * [2.5.5.15] Fixed delected characters showing up as underscores in keyboard menu
 * [2.5.5.15] Fixed broken single-digit editing of large numbers
 * [2.5.5.14] Added a keyboard menu for naming custom presets
