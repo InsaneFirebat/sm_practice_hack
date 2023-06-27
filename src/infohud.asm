@@ -793,7 +793,6 @@ endif
   .ingame_segment_timer
     LDA #$09DA : STA $00
     LDA #$007E : STA $02
-    BRA .draw_segment_timer
 
   .draw_segment_timer
     ; Frames
