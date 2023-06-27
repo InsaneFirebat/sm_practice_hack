@@ -1911,8 +1911,8 @@ cm_edit_decimal_digits:
 }
 
 kb_ctrl_mode:
-; init stuff
 {
+    ; init variables
     LDA #$0000
     STA !DP_KB_Row : STA !ram_cm_horizontal_cursor
     STA !DP_DigitValue : STA !DP_KB_Shift
@@ -1945,16 +1945,16 @@ kb_main_loop:
 {
     LDA !ram_cm_ctrl_mode : BNE +
     ; exit loop, check if user input should be saved
-    LDA !DP_KB_Control : BNE .cancel
+    ; return carry clear if user input discarded
+    LDA !DP_KB_Control : CLC : BNE .cancel
 
     ; transfer buffer to SRAM pointer
     LDX #$0016 : TXY
 -   LDA !ram_cm_keyboard_buffer,X : STA [!DP_Address],Y
     DEX #2
     DEY #2 : BPL -
-
-    LDX !DP_CtrlInput : LDA #$5AFE : STA !sram_custom_preset_safewords,X
     %sfxconfirm()
+    SEC ; return carry set if input saved
   .cancel
     RTL
 
@@ -1966,10 +1966,10 @@ kb_main_loop:
     ; redraw if inputs pressed
     LDA !ram_cm_controller : BEQ kb_main_loop
     ; check if new char should be written
-    LDA !DP_KB_Control : BMI .cancel : BEQ +
+    LDA !DP_KB_Control : BMI .cancel : BEQ .redraw
     JSR kb_new_char
-+   STZ !DP_KB_Control
-    ; redraw screen
+    STZ !DP_KB_Control
+  .redraw
     JSR cm_tilemap_bg
     JSR kb_redraw_tilemap
     BRA kb_main_loop
@@ -2107,8 +2107,9 @@ kb_handle_inputs:
 kb_redraw_tilemap:
 ; redraw base tilemap
 {
-    ; set bank for keyboard text
+    ; set bank for keyboard text and clear palette
     LDA.w #KeyboardTilemap>>16 : STA !DP_CurrentMenu+2
+    STZ !DP_Palette
 
     ; header
     LDA.w #KeyboardTilemap_header : STA !DP_CurrentMenu
@@ -2235,7 +2236,7 @@ KeyboardLowerRowTable:
     dw Row5Spacebar
 
 Row0Symbols:
-    db "!#$%()+?:"
+    db "!#$%()+?:", $FF
 Row1Numbers:
     db "1234567890-"
 Row2Uppercase:
@@ -2256,7 +2257,7 @@ Row5Spacebar:
 KeyboardTilemap:
 table ../resources/header.tbl
   .header
-    db $28, "NAME YOUR CUSTOM PRESET", $FF
+    db $28, "CHOOSE A CUSTOM NAME", $FF
   .footer1
     db $28, "  PRESS START TO CONFIRM  ", $FF
   .footer2
@@ -2891,8 +2892,10 @@ execute_custom_preset:
     DEY #2 : BPL -
 
   .keyboardMode
-    ; stay a while and listen
-    JSL kb_ctrl_mode
+    ; launch keyboard mode
+    JSL kb_ctrl_mode : BCC .redrawScreen
+    ; mark preset slot as having a custom name
+    LDX !DP_CtrlInput : LDA #$5AFE : STA !sram_custom_preset_safewords,X
     BRA .redrawScreen
 
   .toggleDisplay
