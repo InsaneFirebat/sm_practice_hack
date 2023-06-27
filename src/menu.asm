@@ -2002,8 +2002,17 @@ kb_handle_inputs:
     BIT !CTRL_SELECT : BNE .input_cancel
     BIT !CTRL_B : BNE .input_backspace
     BIT !CTRL_Y : BNE .input_shift
-    BIT !CTRL_A : BEQ .return
+    BIT !CTRL_A : BNE .bridge_A
+    LDA !IH_CONTROLLER_PRI : BIT !CTRL_X : BNE .input_X
+    RTS
+
+  .bridge_A
     BRL .input_A
+
+  .input_X
+    ; check if X held for 60 frames
+    LDA $A3 : DEC : CMP #$FFC4 : BCS .return
+    BRL .clear
 
   .input_backspace
     BRL .delete
@@ -2102,6 +2111,15 @@ kb_handle_inputs:
     STZ !DP_KB_Control
     %sfxfail()
 +   RTS
+
+  .clear
+    ; reset index and clear buffer, set controller for redraw
+    LDA #$0001 : STA !DP_KB_Index : STA !ram_cm_controller
+    LDA #$FF28 : STA !ram_cm_keyboard_buffer
+    ; clear previous input to prevent SFX spam
+    STZ !IH_CONTROLLER_PRI_PREV
+    %sfxquake()
+    RTS
 }
 
 kb_redraw_tilemap:
@@ -2152,12 +2170,14 @@ kb_redraw_tilemap:
     LDX #$0506 : JSR cm_draw_text
     ; footers
     LDA.w #KeyboardTilemap_footer1 : STA !DP_CurrentMenu
-    LDX #$05C6 : JSR cm_draw_text
+    LDX #$0586 : JSR cm_draw_text
     LDA.w #KeyboardTilemap_footer2 : STA !DP_CurrentMenu
-    LDX #$0606 : JSR cm_draw_text
+    LDX #$05C6 : JSR cm_draw_text
     LDA.w #KeyboardTilemap_footer3 : STA !DP_CurrentMenu
-    LDX #$0646 : JSR cm_draw_text
+    LDX #$0606 : JSR cm_draw_text
     LDA.w #KeyboardTilemap_footer4 : STA !DP_CurrentMenu
+    LDX #$0646 : JSR cm_draw_text
+    LDA.w #KeyboardTilemap_footer5 : STA !DP_CurrentMenu
     LDX #$0686 : JSR cm_draw_text
 
     ; user generated text
@@ -2257,14 +2277,16 @@ Row5Spacebar:
 KeyboardTilemap:
 table ../resources/header.tbl
   .header
-    db $28, "CHOOSE A CUSTOM NAME", $FF
+    db $28, "   CHOOSE A CUSTOM NAME   ", $FF
   .footer1
     db $28, "  PRESS START TO CONFIRM  ", $FF
   .footer2
     db $28, "  PRESS B FOR BACKSPACE   ", $FF
   .footer3
-    db $28, "    PRESS Y FOR SHIFT     ", $FF
+    db $28, "  PRESS Y TO TOGGLE CAPS  ", $FF
   .footer4
+    db $28, "HOLD X TO CLEAR SELECTION ", $FF
+  .footer5
     db $28, "  PRESS SELECT TO CANCEL  ", $FF
 table ../resources/normal.tbl
   .blanks
