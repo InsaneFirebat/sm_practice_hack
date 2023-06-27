@@ -620,6 +620,8 @@ endif
 
 ; ^ FREE SPACE ^ up to $F02BEE
 
+!sram_custom_header = !SRAM_START+$BD8 ; $18 bytes
+
 if !FEATURE_TINYSTATES
 !sram_custom_preset_safewords = !SRAM_START+$E60 ; $20 bytes
 !sram_custom_preset_names = !SRAM_START+$E80 ; $180 bytes
