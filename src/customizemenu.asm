@@ -708,8 +708,6 @@ ConvertNormal2Header:
     CPX #$18 : BPL .done
     ; grab next byte of user text, exit if term ($FF)
     LDA !sram_custom_header,X : CMP #$FF : BEQ .done
-    ; valid values range from $0-$4F
-    CMP #$50 : BPL .out_of_range
   .loop_compare
     ; compare to first column of table
     CMP.w .Table,Y : BEQ .found
@@ -720,12 +718,6 @@ ConvertNormal2Header:
     ; replace with byte from second column of table
     INY : LDA.w .Table,Y : STA !sram_custom_header,X
     INX : LDY #$00 : BRA .next_char
-
-  .out_of_range
-    ; check for % ($7C)
-    CMP #$7C : BNE .skip_char
-    ; load index for %
-    LDY #$98 : BRA .found
 
   .skip_char
     ; may have already been converted to header font
