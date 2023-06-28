@@ -513,18 +513,21 @@ cm_tilemap_menu:
     ; set pointer to text in SRAM
     LDA.w #!sram_custom_header : STA !DP_CurrentMenu
     LDA.w #!sram_custom_header>>16 : STA !DP_CurrentMenu+2
-    BRA .draw_header
+    ; draw header
+    LDX #$00C6
+    JSR cm_draw_text
+    ; fix !DP_CurrentMenu in case of footer
+    TYA : CLC : ADC !DP_MenuIndices : INC #2 : STA !DP_CurrentMenu
+    LDA !DP_MenuIndices+2 : STA !DP_CurrentMenu+2
+    BRA .footer
 
   .normal_header
     ; menu pointer + index + 2 = header
     TYA : CLC : ADC !DP_MenuIndices : INC #2 : STA !DP_CurrentMenu
-
-  .draw_header
     LDX #$00C6
     JSR cm_draw_text
-    ; fix bank (for custom header)
-    LDA !DP_MenuIndices+2 : STA !DP_CurrentMenu+2
 
+  .footer
     ; menu pointer + header pointer + 1 = footer
     TYA : CLC : ADC !DP_CurrentMenu : INC : STA !DP_CurrentMenu
     LDA [!DP_CurrentMenu] : CMP #$F007 : BNE .done
