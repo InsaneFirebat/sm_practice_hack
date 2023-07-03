@@ -34,7 +34,34 @@ endif
     %cm_footer("MODIFIED BY INSANEFIREBAT")
 
 ifb_customizehud:
-    %cm_numfield("HUD Number Font", !sram_number_gfx_choice, 0, 22, 1, 2, #0)
+;    %cm_numfield("HUD Number Font", !sram_number_gfx_choice, 0, 22, 1, 2, #0)
+    dw !ACTION_CHOICE
+    dl #!sram_number_gfx_choice
+    dw #$0000
+    db #$28, "HUD Number Font", #$FF
+    db #$28, "    DEFAULT", #$FF
+    db #$28, "       LTTP", #$FF
+    db #$28, "     KLONOA", #$FF
+    db #$28, "  SHIN-CHAN", #$FF
+    db #$28, "        SMT", #$FF
+    db #$28, "        SMW", #$FF
+    db #$28, "        DKC", #$FF
+    db #$28, "       ZAMN", #$FF
+    db #$28, "    EMERALD", #$FF
+    db #$28, " EARTHBOUND", #$FF
+    db #$28, "        FF6", #$FF
+    db #$28, "    LUFIA 2", #$FF
+    db #$28, "  GOONIES 2", #$FF
+    db #$28, "    PAC-MAN", #$FF
+    db #$28, "       DOOM", #$FF
+    db #$28, "  UNDERTALE", #$FF
+    db #$28, "        ???", #$FF
+    db #$28, "   SKYROADS", #$FF
+    db #$28, "    YOSHI'S", #$FF
+    db #$28, "     NOT-SM", #$FF
+    db #$28, "   TAZMANIA", #$FF
+    db #$28, " BLACK BASS", #$FF
+    db #$FF
 
 ifb_brb:
     %cm_submenu("BRB Screen", #BRBMenu)
