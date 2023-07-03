@@ -2620,9 +2620,10 @@ CutscenesMenu:
     dw #$FFFF
     dw #kraid_skip_intro
     dw #phan_skip_intro
-    dw #$FFFF
-    dw #cutscenes_g4_skip
     dw #cutscenes_fast_mb
+    dw #$FFFF
+    dw #cutscenes_fast_bowling
+    dw #cutscenes_g4_skip
     dw #$0000
     %cm_header("CUTSCENES")
 
@@ -2635,20 +2636,23 @@ cutscenes_skip_intro:
 cutscenes_skip_ceres_arrival:
     %cm_toggle_bit("Skip Ceres Arrival", !sram_cutscenes, !CUTSCENE_SKIP_CERES_ARRIVAL, #0)
 
+cutscenes_skip_game_over:
+    %cm_toggle_bit("Skip Game Over", !sram_cutscenes, !CUTSCENE_SKIP_GAMEOVER, #0)
+
 kraid_skip_intro:
     %cm_toggle("Skip Kraid Intro", !sram_kraid_intro, #$0001, #0)
 
 phan_skip_intro:
     %cm_toggle_bit("Skip Phantoon Intro", !sram_phantoon_intro, #$0001, 0)
 
-cutscenes_g4_skip:
-    %cm_toggle_bit("Skip G4", !sram_cutscenes, !CUTSCENE_SKIP_G4, #0)
-
 cutscenes_fast_mb:
     %cm_toggle_bit("Fast Mother Brain", !sram_cutscenes, !CUTSCENE_FAST_MB, #0)
 
-cutscenes_skip_game_over:
-    %cm_toggle_bit("Skip Game Over", !sram_cutscenes, !CUTSCENE_SKIP_GAMEOVER, #0)
+cutscenes_fast_bowling:
+    %cm_toggle_bit("Fast Bowling", !sram_cutscenes, !CUTSCENE_FAST_BOWLING, #0)
+
+cutscenes_g4_skip:
+    %cm_toggle_bit("Skip G4", !sram_cutscenes, !CUTSCENE_SKIP_G4, #0)
 
 
 ; -------------------
