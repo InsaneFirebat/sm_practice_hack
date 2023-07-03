@@ -135,6 +135,7 @@ mm_write_hud_tiles_during_door_transition:
   .minimap_vram
     JSR $E039
     dl mapgfx_bin : dw $4000, $1000
+    JSL overwrite_HUD_numbers
     JMP $E492  ; resume logic
 }
 

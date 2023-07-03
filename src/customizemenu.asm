@@ -58,6 +58,7 @@ mc_paletteprofile:
     db #$28, "     PURPLE", #$FF
     db #$28, "        HUD", #$FF
     db #$FF
+
 mc_palette2custom:
     %cm_submenu("Copy Palette to Custom", #Palette2CustomConfirm)
 

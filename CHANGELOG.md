@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.5.18] Added names for the HUD Number Fonts by mm2
 * [2.5.5.17] Updated mm2 color palette profile
 * [2.5.5.16] Allow main menu header to be customized
 * [2.5.5.16] Press and hold X to clear keyboard menu text
