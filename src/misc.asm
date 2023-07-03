@@ -304,6 +304,14 @@ org $A2ABFD
 endif
     JML clear_escape_timer
 
+; Fast bowling chozo cutscene
+if !FEATURE_PAL
+org $84D671
+else
+org $84D66B
+endif
+    JSL lock_samus_bowling
+
 
 org $87D000
 print pc, " misc start"
@@ -344,6 +352,74 @@ random_bubble_sfx:
 
   .mute
     RTL
+}
+
+lock_samus_bowling:
+{
+    LDA !sram_cutscenes : BIT !CUTSCENE_FAST_BOWLING : BNE .speedup
+    TDC
+if !FEATURE_PAL
+    JMP $F081
+else
+    JMP $F084
+endif
+
+  .speedup
+    TDC
+if !FEATURE_PAL
+    JSL $90F081
+else
+    JSL $90F084
+endif
+    LDA #locked_samus_speedup_movement_handler
+    STA $0A42
+    RTL
+}
+
+locked_samus_speedup_movement_handler:
+{
+    ; Original logic
+    PHP : PHB : PHK : PLB
+    %ai16()
+    JSR $AECE     ; Handle projectiles
+if !FEATURE_PAL
+    JSR $EAFF     ; Handle Samus movement
+else
+    JSR $EB02     ; Handle Samus movement
+endif
+
+    ; Bowling cutscene runs for 1938 frames, which is divisible by 6
+    ; We can therefore run two extra passes per frame
+    ; without having to check if the cutscene has ended
+    ; (we could do five extra passes but the rendering is not good)
+
+    ; Execute first extra pass
+    JSL $868104   ; Enemy projectile handler
+    JSL $8485B4   ; PLM handler
+if !FEATURE_PAL
+    JSL $A08FE4   ; Main enemy routine
+    JSR $AECE     ; Handle projectiles
+    JSR $EAFF     ; Handle Samus movement
+else
+    JSL $A08FD4   ; Main enemy routine
+    JSR $AECE     ; Handle projectiles
+    JSR $EB02     ; Handle Samus movement
+endif
+
+    ; Execute second extra pass
+    JSL $868104   ; Enemy projectile handler
+    JSL $8485B4   ; PLM handler
+if !FEATURE_PAL
+    JSL $A08FE4   ; Main enemy routine
+    JSR $AECE     ; Handle projectiles
+    JSR $EAFF     ; Handle Samus movement
+else
+    JSL $A08FD4   ; Main enemy routine
+    JSR $AECE     ; Handle projectiles
+    JSR $EB02     ; Handle Samus movement
+endif
+
+    PLB : PLP : RTL
 }
 
 gamemode_end:
