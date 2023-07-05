@@ -317,6 +317,21 @@ category_preset_load:
 
 category_preset_data_table:
     dl preset_prkd_crateria_ceres_elevator
+    dl preset_kpdr21_crateria_ceres_elevator
+    dl preset_hundo_bombs_ceres_elevator
+    dl preset_100early_crateria_ceres_elevator
+    dl preset_rbo_bombs_ceres_elevator
+    dl preset_pkrd_crateria_ceres_elevator
+    dl preset_kpdr25_bombs_ceres_elevator
+    dl preset_gtclassic_crateria_ceres_elevator
+    dl preset_gtmax_crateria_ceres_elevator
+    dl preset_14ice_crateria_ceres_elevator
+    dl preset_14speed_crateria_ceres_elevator
+    dl preset_100map_bombs_ceres_elevator
+    dl preset_nintendopower_crateria_ceres_elevator
+    dl preset_allbosskpdr_crateria_ceres_elevator
+    dl preset_allbosspkdr_crateria_ceres_elevator
+    dl preset_allbossprkd_crateria_ceres_elevator
 
 print pc, " presets bank82 end"
 warnpc $82FE00
@@ -709,17 +724,64 @@ warnpc $80F600 ; save.asm
 ; Category Menus/Data
 ; -------------------
 
-; Preset data/menus can be anywhere in the rom, even in separate banks
-org !ORG_PRESETS_DATA
+;; Preset data/menus can be anywhere in the rom, even in separate banks
+;org !ORG_PRESETS_DATA
+;check bankcross off
+;print pc, " preset data crossbank start"
+;  incsrc presets/prkd_data.asm
+;print pc, " preset data crossbank end"
+;warnpc $FEE000
+;check bankcross on
+;
+;org !ORG_PRESETS_MENU
+;print pc, " preset menu bankFE start"
+;  incsrc presets/prkd_menu.asm
+;print pc, " preset menu bankFE end"
+
+org $EAE000
 check bankcross off
 print pc, " preset data crossbank start"
+  incsrc presets/14ice_data.asm
+  incsrc presets/14speed_data.asm
+  incsrc presets/100early_data.asm
+  incsrc presets/100map_data.asm
+  incsrc presets/allbosskpdr_data.asm
+  incsrc presets/allbosspkdr_data.asm
+  incsrc presets/allbossprkd_data.asm
+  incsrc presets/gtclassic_data.asm
+  incsrc presets/gtmax_data.asm
+  incsrc presets/hundo_data.asm
+  incsrc presets/kpdr21_data.asm
+  incsrc presets/kpdr25_data.asm
+  incsrc presets/nintendopower_data.asm
+  incsrc presets/pkrd_data.asm
   incsrc presets/prkd_data.asm
+  incsrc presets/rbo_data.asm
 print pc, " preset data crossbank end"
-warnpc $FEE000
+warnpc $F08000 ; infohud.asm
 check bankcross on
 
-org !ORG_PRESETS_MENU
-print pc, " preset menu bankFE start"
+org $F18000
+print pc, " preset menu bankF1 start"
+  incsrc presets/14ice_menu.asm
+  incsrc presets/14speed_menu.asm
+  incsrc presets/100early_menu.asm
+  incsrc presets/100map_menu.asm
+  incsrc presets/allbosskpdr_menu.asm
+  incsrc presets/allbosspkdr_menu.asm
+  incsrc presets/allbossprkd_menu.asm
+  incsrc presets/gtclassic_menu.asm
+print pc, " preset menu bankF1 end"
+
+org $F28000
+print pc, " preset menu bankF2 start"
+  incsrc presets/gtmax_menu.asm
+  incsrc presets/hundo_menu.asm
+  incsrc presets/kpdr21_menu.asm
+  incsrc presets/kpdr25_menu.asm
+  incsrc presets/nintendopower_menu.asm
+  incsrc presets/pkrd_menu.asm
   incsrc presets/prkd_menu.asm
-print pc, " preset menu bankFE end"
+  incsrc presets/rbo_menu.asm
+print pc, " preset menu bankF2 end"
 

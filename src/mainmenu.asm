@@ -55,12 +55,42 @@ endif
 preset_category_submenus:
 {
     dw #PresetsMenuPrkd
+    dw #PresetsMenuKpdr21
+    dw #PresetsMenuHundo
+    dw #PresetsMenu100early
+    dw #PresetsMenuRbo
+    dw #PresetsMenuPkrd
+    dw #PresetsMenuKpdr25
+    dw #PresetsMenuGtclassic
+    dw #PresetsMenuGtmax
+    dw #PresetsMenu14ice
+    dw #PresetsMenu14speed
+    dw #PresetsMenu100map
+    dw #PresetsMenuNintendopower
+    dw #PresetsMenuAllbosskpdr
+    dw #PresetsMenuAllbosspkdr
+    dw #PresetsMenuAllbossprkd
     dw #$0000
 }
 
 preset_category_banks:
 {
     dw #PresetsMenuPrkd>>16
+    dw #PresetsMenuKpdr21>>16
+    dw #PresetsMenuHundo>>16
+    dw #PresetsMenu100early>>16
+    dw #PresetsMenuRbo>>16
+    dw #PresetsMenuPkrd>>16
+    dw #PresetsMenuKpdr25>>16
+    dw #PresetsMenuGtclassic>>16
+    dw #PresetsMenuGtmax>>16
+    dw #PresetsMenu14ice>>16
+    dw #PresetsMenu14speed>>16
+    dw #PresetsMenu100map>>16
+    dw #PresetsMenuNintendopower>>16
+    dw #PresetsMenuAllbosskpdr>>16
+    dw #PresetsMenuAllbosspkdr>>16
+    dw #PresetsMenuAllbossprkd>>16
     dw #$0000
 }
 
@@ -75,7 +105,7 @@ preset_category_banks:
 
 MainMenu:
     dw #mm_goto_equipment
-;    dw #mm_goto_presets
+    dw #mm_goto_presets
     dw #mm_goto_presets_menu
     dw #mm_goto_teleport
     dw #mm_goto_events
@@ -92,14 +122,14 @@ if !FEATURE_CUSTOMIZE_MENU
     dw #mm_goto_customize
 endif
     dw #$0000
-    %cm_version_header("SM PRACTICE HACK", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
+    %cm_version_header("SUBPAR INFOHUD", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
 if defined("PRERELEASE")
     %cm_footer("PRERELEASE COMMIT !PRERELEASE")
 endif
 
 MainMenuBanks:
     dw #EquipmentMenu>>16
-;    dw #preset_category_banks>>16 ; dummy
+    dw #preset_category_banks>>16 ; dummy
     dw #PresetsMenu>>16
     dw #TeleportMenu>>16
     dw #EventsMenu>>16
@@ -163,19 +193,19 @@ endif
 ; -------------------
 
 PresetsMenu:
-;    dw #presets_goto_select_preset_category
-;    dw #presets_current
-;    dw #$FFFF
+    dw #presets_goto_select_preset_category
+    dw #presets_current
+    dw #$FFFF
     dw #presets_custom_preset_slot
     dw #presets_save_custom_preset
     dw #presets_load_custom_preset
     dw #$FFFF
-;    dw #presets_reload_last
-;    dw #presets_load_random
-;if !FEATURE_DEV
-;    dw #presets_random_preset_rng
-;endif
-;    dw #$FFFF
+    dw #presets_reload_last
+    dw #presets_load_random
+if !FEATURE_DEV
+    dw #presets_random_preset_rng
+endif
+    dw #$FFFF
     dw #presets_open_blue_doors
     dw #presets_load_with_enemies
     dw #presets_clear_map_tiles
@@ -297,11 +327,25 @@ presets_compressed_palettes:
 presets_compressed_tables:
     %cm_toggle_bit("Compressed Tables", !sram_preset_options, !PRESETS_COMPRESSED_TABLES, #0)
 endif
-
 SelectPresetCategoryMenu:
     dw #presets_current
     dw #$FFFF
     dw #precat_prkd
+    dw #precat_kpdr21
+    dw #precat_hundo
+    dw #precat_100early
+    dw #precat_rbo
+    dw #precat_pkrd
+    dw #precat_kpdr25
+    dw #precat_gtclassic
+    dw #precat_gtmax
+    dw #precat_14ice
+    dw #precat_14speed
+    dw #precat_100map
+    dw #precat_nintendopower
+    dw #precat_allbosskpdr
+    dw #precat_allbosspkdr
+    dw #precat_allbossprkd
     dw #$0000
     %cm_header("SELECT PRESET CATEGORY")
 
@@ -311,6 +355,21 @@ presets_current:
     dw #.routine
     db #$28, "CURRENT PRESET", #$FF
         db #$28, "       PRKD", #$FF
+        db #$28, "       KPDR", #$FF
+        db #$28, "  100% LATE", #$FF
+        db #$28, " 100% EARLY", #$FF
+        db #$28, "        RBO", #$FF
+        db #$28, "       PKRD", #$FF
+        db #$28, "     KPDR25", #$FF
+        db #$28, " GT CLASSIC", #$FF
+        db #$28, "    GT MAX%", #$FF
+        db #$28, "    14% ICE", #$FF
+        db #$28, "  14% SPEED", #$FF
+        db #$28, "   100% MAP", #$FF
+        db #$28, "  NIN POWER", #$FF
+        db #$28, "   ALL KPDR", #$FF
+        db #$28, "   ALL PKDR", #$FF
+        db #$28, "   ALL PRKD", #$FF
     db #$FF
   .routine
     LDA #$0000 : STA !sram_last_preset
@@ -318,6 +377,51 @@ presets_current:
 
 precat_prkd:
     %cm_jsl("Any% PRKD", #action_select_preset_category, #$0000)
+
+precat_kpdr21:
+    %cm_jsl("Any% KPDR", #action_select_preset_category, #$0001)
+
+precat_hundo:
+    %cm_jsl("100% Late Crocomire", #action_select_preset_category, #$0002)
+
+precat_100early:
+    %cm_jsl("100% Early Crocomire", #action_select_preset_category, #$0003)
+
+precat_rbo:
+    %cm_jsl("Reverse Boss Order", #action_select_preset_category, #$0004)
+
+precat_pkrd:
+    %cm_jsl("Any% PKRD", #action_select_preset_category, #$0005)
+
+precat_kpdr25:
+    %cm_jsl("Any% KPDR Early Ice", #action_select_preset_category, #$0006)
+
+precat_gtclassic:
+    %cm_jsl("GT Classic", #action_select_preset_category, #$0007)
+
+precat_gtmax:
+    %cm_jsl("GT Max%", #action_select_preset_category, #$0008)
+
+precat_14ice:
+    %cm_jsl("Low% Ice", #action_select_preset_category, #$0009)
+
+precat_14speed:
+    %cm_jsl("Low% Speed", #action_select_preset_category, #$000A)
+
+precat_100map:
+    %cm_jsl("100% Map Completion", #action_select_preset_category, #$000B)
+
+precat_nintendopower:
+    %cm_jsl("Nintendo Power", #action_select_preset_category, #$000C)
+
+precat_allbosskpdr:
+    %cm_jsl("All Bosses KPDR", #action_select_preset_category, #$000D)
+
+precat_allbosspkdr:
+    %cm_jsl("All Bosses PKDR", #action_select_preset_category, #$000E)
+
+precat_allbossprkd:
+    %cm_jsl("All Bosses PRKD", #action_select_preset_category, #$000F)
 
 action_select_preset_category:
 {
@@ -654,19 +758,19 @@ eq_setmissiles:
         RTL
 
 eq_currentsupers:
-    %cm_numfield("Current Super Missiles", !SAMUS_SUPERS, 0, 65, 1, 5, #0)
+    %cm_numfield("Current Super", !SAMUS_SUPERS, 0, 65, 1, 5, #0)
 
 eq_setsupers:
-    %cm_numfield("Super Missiles", !SAMUS_SUPERS_MAX, 0, 65, 5, 5, .routine)
+    %cm_numfield("Super", !SAMUS_SUPERS_MAX, 0, 65, 5, 5, .routine)
     .routine
         LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS ; supers
         RTL
 
 eq_currentpbs:
-    %cm_numfield("Current Power Bombs", !SAMUS_PBS, 0, 70, 1, 5, #0)
+    %cm_numfield("Current PB", !SAMUS_PBS, 0, 70, 1, 5, #0)
 
 eq_setpbs:
-    %cm_numfield("Power Bombs", !SAMUS_PBS_MAX, 0, 70, 5, 5, .routine)
+    %cm_numfield("PB", !SAMUS_PBS_MAX, 0, 70, 5, 5, .routine)
     .routine
         LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS ; pbs
         RTL
@@ -880,7 +984,7 @@ ti_gravitysuit:
     %cm_equipment_item("Gravity Suit", !ram_cm_gravity, #$0020, #$FFDF)
 
 ti_morphball:
-    %cm_equipment_item("Morph Ball", !ram_cm_morph, #$0004, #$FFFB)
+    %cm_equipment_item("MorphB", !ram_cm_morph, #$0004, #$FFFB)
 
 ti_bomb:
     %cm_equipment_item("Bombs", !ram_cm_bombs, #$1000, #$EFFF)

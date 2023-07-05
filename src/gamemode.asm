@@ -90,13 +90,13 @@ if !FEATURE_SD2SNES
     JMP .auto_save_state
 endif
 
-;  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
-;    AND !IH_CONTROLLER_PRI_NEW : BEQ +
-;    JMP .load_last_preset
-;
-;  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
-;    AND !IH_CONTROLLER_PRI_NEW : BEQ +
-;    JMP .random_preset
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .load_last_preset
+
+  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .random_preset
 
   + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_save_custom_preset : CMP !sram_ctrl_save_custom_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
