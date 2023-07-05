@@ -1392,7 +1392,7 @@ ih_shinespark_code:
 }
 
 print pc, " infohud end"
-warnpc $F0E000 ; spritefeat.asm
+warnpc !ORG_SPRITEFEAT
 
 
 ; Stuff that needs to be placed in bank 80

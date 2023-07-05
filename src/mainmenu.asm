@@ -92,7 +92,7 @@ if !FEATURE_CUSTOMIZE_MENU
     dw #mm_goto_customize
 endif
     dw #$0000
-    %cm_version_header("SM PRACTICE HACK", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
+    %cm_version_header("VITALITY INFOHUD", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
 if defined("PRERELEASE")
     %cm_footer("PRERELEASE COMMIT !PRERELEASE")
 endif
@@ -1125,129 +1125,194 @@ TeleportMenu:
     %cm_header("TELEPORT TO SAVE STATION")
 
 tel_goto_crat:
-    %cm_submenu("Crateria", #TeleportCrateriaMenu)
+    %cm_submenu("Pendulu Moda", #TeleportCrateriaMenu)
 
 tel_goto_brin:
-    %cm_submenu("Brinstar", #TeleportBrinstarMenu)
+    %cm_submenu("Tchornobog", #TeleportBrinstarMenu)
 
 tel_goto_norf:
-    %cm_submenu("Norfair", #TeleportNorfairMenu)
+    %cm_submenu("Akhlys", #TeleportNorfairMenu)
 
 tel_goto_ship:
-    %cm_submenu("Wrecked Ship", #TeleportWreckedShipMenu)
+    %cm_submenu("Tac Lacora", #TeleportWreckedShipMenu)
 
 tel_goto_mari:
-    %cm_submenu("Maridia", #TeleportMaridiaMenu)
+    %cm_submenu("Andavald", #TeleportMaridiaMenu)
 
 tel_goto_tour:
-    %cm_submenu("Tourian", #TeleportTourianMenu)
+    %cm_submenu("Elseq", #TeleportTourianMenu)
 
 tel_goto_debug:
     %cm_submenu("Debug Teleports", #DebugTeleportMenu)
 
 TeleportCrateriaMenu:
-    dw #tel_crateriaship
-    dw #tel_crateriaparlor
+    dw #tel_pendulumodaship
+    dw #tel_pendulumoda01
+    dw #tel_pendulumoda02
+    dw #tel_pendulumoda03
+    dw #tel_pendulumoda14
+    dw #$FFFF
+    dw #tel_pendulumoda0403
+    dw #tel_pendulumoda13
+    dw #tel_pendulumoda15
+    dw #tel_pendulumoda09
+    dw #tel_pendulumoda10
+    dw #tel_pendulumoda0B
     dw #$0000
-    %cm_header("CRATERIA SAVE STATIONS")
+    %cm_header("PENDULU MODA SAVE STATIONS")
 
-tel_crateriaship:
-    %cm_jsl("Crateria Ship", #action_teleport, #$0000)
+tel_pendulumodaship:
+    %cm_jsl("Pendulu Moda Ship", #action_teleport, #$0000)
 
-tel_crateriaparlor:
-    %cm_jsl("Crateria Parlor", #action_teleport, #$0001)
+tel_pendulumoda01:
+    %cm_jsl("Pendulu Moda 01", #action_teleport, #$0401)
+
+tel_pendulumoda02:
+    %cm_jsl("Pendulu Moda 02", #action_teleport, #$0402)
+
+tel_pendulumoda03:
+    %cm_jsl("Pendulu Moda 03", #action_teleport, #$0103)
+
+tel_pendulumoda14:
+    %cm_jsl("Pendulu Moda 14", #action_teleport, #$0314)
+
+tel_pendulumoda0403:
+    %cm_jsl("DEBUG Pendulu Moda 03", #action_teleport, #$0403)
+
+tel_pendulumoda13:
+    %cm_jsl("DEBUG Pendulu Moda 13", #action_teleport, #$0313)
+
+tel_pendulumoda15:
+    %cm_jsl("DEBUG Pendulu Moda 15", #action_teleport, #$0315)
+
+tel_pendulumoda09:
+    %cm_jsl("DEBUG Pendulu Moda 09", #action_teleport, #$0009)
+
+tel_pendulumoda10:
+    %cm_jsl("DEBUG Wrecked Ship?", #action_teleport, #$0010)
+
+tel_pendulumoda0B:
+    %cm_jsl("DEBUG Pendulu Moda Map", #action_teleport, #$010B)
 
 TeleportBrinstarMenu:
-    dw #tel_brinstarpink
-    dw #tel_brinstargreenshaft
-    dw #tel_brinstargreenetecoons
-    dw #tel_brinstarkraid
-    dw #tel_brinstarredtower
+    dw #tel_tchornobog00
+    dw #tel_tchornobog01
+    dw #tel_tchornobog02
+    dw #$FFFF
+    dw #tel_tchornobog04
+    dw #tel_tchornobog05
+    dw #tel_tchornobog08
+    dw #tel_tchornobog10
     dw #$0000
-    %cm_header("BRINSTAR SAVE STATIONS")
+    %cm_header("TCHORNOBOG SAVE STATIONS")
 
-tel_brinstarpink:
-    %cm_jsl("Brinstar Pink Spospo", #action_teleport, #$0100)
+tel_tchornobog00:
+    %cm_jsl("Tchornobog 00", #action_teleport, #$0100)
 
-tel_brinstargreenshaft:
-    %cm_jsl("Brinstar Green Shaft", #action_teleport, #$0101)
+tel_tchornobog01:
+    %cm_jsl("Tchornobog 01", #action_teleport, #$0101)
 
-tel_brinstargreenetecoons:
-    %cm_jsl("Brinstar Green Etecoons", #action_teleport, #$0102)
+tel_tchornobog02:
+    %cm_jsl("Tchornobog 02", #action_teleport, #$0102)
 
-tel_brinstarkraid:
-    %cm_jsl("Brinstar Kraid", #action_teleport, #$0103)
+tel_tchornobog04:
+    %cm_jsl("DEBUG Tchornobog 04", #action_teleport, #$0104)
 
-tel_brinstarredtower:
-    %cm_jsl("Brinstar Red Tower", #action_teleport, #$0104)
+tel_tchornobog05:
+    %cm_jsl("DEBUG Tchornobog 05", #action_teleport, #$0205)
+
+tel_tchornobog08:
+    %cm_jsl("DEBUG Tchornobog 08", #action_teleport, #$0208)
+
+tel_tchornobog10:
+    %cm_jsl("DEBUG Tchornobog 10", #action_teleport, #$0210)
 
 TeleportNorfairMenu:
-    dw #tel_norfairgrapple
-    dw #tel_norfairbubble
-    dw #tel_norfairtunnel
-    dw #tel_norfaircrocomire
-    dw #tel_norfairlnelevator
-    dw #tel_norfairridley
+    dw #tel_akhlys00
+    dw #tel_akhlys01
+    dw #tel_akhlys02
+    dw #tel_akhlys03
+    dw #$FFFF
+    dw #tel_akhlys09
+    dw #tel_akhlys0A
+    dw #tel_akhlys12
+    dw #tel_akhlys13
+    dw #tel_akhlys0B
+    dw #tel_akhlys11
     dw #$0000
-    %cm_header("NORFAIR SAVE STATIONS")
+    %cm_header("AKHLYS SAVE STATIONS")
 
-tel_norfairgrapple:
-    %cm_jsl("Norfair Grapple", #action_teleport, #$0200)
+tel_akhlys00:
+    %cm_jsl("Akhlys 00", #action_teleport, #$0200)
 
-tel_norfairbubble:
-    %cm_jsl("Norfair Bubble Mountain", #action_teleport, #$0201)
+tel_akhlys01:
+    %cm_jsl("Akhlys 01", #action_teleport, #$0201)
 
-tel_norfairtunnel:
-    %cm_jsl("Norfair Tunnel", #action_teleport, #$0202)
+tel_akhlys02:
+    %cm_jsl("Akhlys 02", #action_teleport, #$0202)
 
-tel_norfaircrocomire:
-    %cm_jsl("Norfair Crocomire", #action_teleport, #$0203)
+tel_akhlys03:
+    %cm_jsl("Akhlys 03", #action_teleport, #$0203)
 
-tel_norfairlnelevator:
-    %cm_jsl("Norfair LN Elevator", #action_teleport, #$0204)
+tel_akhlys09:
+    %cm_jsl("DEBUG Akhlys 09", #action_teleport, #$0209)
 
-tel_norfairridley:
-    %cm_jsl("Norfair Ridley", #action_teleport, #$0205)
+tel_akhlys0A:
+    %cm_jsl("DEBUG Akhlys 0A", #action_teleport, #$020A)
+
+tel_akhlys12:
+    %cm_jsl("DEBUG Akhlys 12", #action_teleport, #$0212)
+
+tel_akhlys13:
+    %cm_jsl("DEBUG Akhlys 13", #action_teleport, #$0213)
+
+tel_akhlys0B:
+    %cm_jsl("DEBUG Akhlys 0B", #action_teleport, #$000B)
+
+tel_akhlys11:
+    %cm_jsl("DEBUG Akhlys 11", #action_teleport, #$0311)
 
 TeleportWreckedShipMenu:
-    dw #tel_wreckedship
+    dw #tel_taclacora00
+    dw #$FFFF
+    dw #tel_taclacora10
     dw #$0000
-    %cm_header("WRECKED SHIP SAVE STATIONS")
+    %cm_header("TAC LACORA SAVE STATIONS")
 
-tel_wreckedship:
-    %cm_jsl("Wrecked Ship", #action_teleport, #$0300)
+tel_taclacora00:
+    %cm_jsl("Tac Lacora 00", #action_teleport, #$0300)
+
+tel_taclacora10:
+    %cm_jsl("DEBUG Tac Lacora 10", #action_teleport, #$0310)
 
 TeleportMaridiaMenu:
-    dw #tel_maridiatube
-    dw #tel_maridiaelevator
-    dw #tel_maridiaaqueduct
-    dw #tel_maridiadraygon
+    dw #tel_andavald01
+    dw #tel_andavald02
+    dw #$FFFF
+    dw #tel_andavald0C
     dw #$0000
-    %cm_header("MARIDIA SAVE STATIONS")
+    %cm_header("ANDAVALD SAVE STATIONS")
 
-tel_maridiatube:
-    %cm_jsl("Maridia Tube", #action_teleport, #$0400)
+tel_andavald01:
+    %cm_jsl("Andavald 01", #action_teleport, #$0001)
 
-tel_maridiaelevator:
-    %cm_jsl("Maridia Elevator", #action_teleport, #$0401)
+tel_andavald02:
+    %cm_jsl("Andavald 02", #action_teleport, #$0002)
 
-tel_maridiaaqueduct:
-    %cm_jsl("Maridia Aqueduct", #action_teleport, #$0402)
-
-tel_maridiadraygon:
-    %cm_jsl("Maridia Draygon", #action_teleport, #$0403)
+tel_andavald0C:
+    %cm_jsl("DEBUG Andavald 0C", #action_teleport, #$000C)
 
 TeleportTourianMenu:
-    dw #tel_tourianentrance
-    dw #tel_tourianmb
+    dw #tel_elseq01
+    dw #tel_elseq11
     dw #$0000
-    %cm_header("TOURIAN SAVE STATIONS")
+    %cm_header("ELSEQ SAVE STATIONS")
 
-tel_tourianentrance:
-    %cm_jsl("Tourian Entrance", #action_teleport, #$0501)
+tel_elseq01:
+    %cm_jsl("DEBUG Elseq 01", #action_teleport, #$0501)
 
-tel_tourianmb:
-    %cm_jsl("Tourian MB", #action_teleport, #$0500)
+tel_elseq11:
+    %cm_jsl("DEBUG Elseq 11", #action_teleport, #$0511)
 
 DebugTeleportMenu:
     dw #tel_debug_area
@@ -1261,16 +1326,16 @@ tel_debug_area:
     dl #!ram_tel_debug_area
     dw #$0000
     db #$28, "Select Area", #$FF
-        db #$28, "   CRATERIA", #$FF
-        db #$28, "   BRINSTAR", #$FF
-        db #$28, "    NORFAIR", #$FF
-        db #$28, "  REQT SHIP", #$FF
-        db #$28, "    MARIDIA", #$FF
-        db #$28, "    TOURIAN", #$FF
+        db #$28, "PENDULU MODA", #$FF
+        db #$28, " TCHORNOBOG", #$FF
+        db #$28, "     AKHLYS", #$FF
+        db #$28, " TAC LACORA", #$FF
+        db #$28, "   ANDAVALD", #$FF
+        db #$28, "      ELSEQ", #$FF
     db #$FF
 
 tel_debug_station:
-    %cm_numfield_hex("Station ID", !ram_tel_debug_station, 0, 22, 1, 4, #0)
+    %cm_numfield_hex("Station ID", !ram_tel_debug_station, 0, 22, 1, 2, #0)
 
 tel_debug_execute:
     %cm_jsl("TELEPORT", #action_debug_teleport, #$0000)

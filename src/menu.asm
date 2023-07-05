@@ -2,31 +2,122 @@
 org !ORG_MENU_BANK85
 print pc, " menu bank85 start"
 
-wait_for_lag_frame_long:
-    JSR $8136
-    RTL
-
+; Remaining functions here are (mostly) copies from vanilla
+; since VITALITY moved or overwrote them.
 initialize_ppu_long:
+{   ; Initialise PPU for message boxes
     PHP : %a16()
     LDA $7E33EA : STA !ram_cgram_cache+$2E
+    STZ $05F9
+    JSL wait_for_lag_frame_long
+    %a8()
+    STZ $420C
+    LDA #$19 : STA $2121
+    LDA #$B1 : STA $2122
+    LDA #$0B : STA $2122
+    LDA #$1F : STA $2122
+    LDA #$00 : STA $2122
+    LDA $85 : STA $7E33EA
+    LDA $5B : STA $7E33EB
+    LDA #$58 : STA $5B
+    LDA #$17 : STA $6A
+    STZ $70 : STZ $73
+    LDA #$20 : STA $2132
+    LDA #$40 : STA $2132
+    LDA #$80 : STA $2132
+;    LDA $2111
+    STZ $2111 : STZ $2111
+;    LDA $2112
+    STZ $2112 : STZ $2112
+    %ai16()
+    LDX #$0080 : LDY #$0000
+-   STA $7E3000,X
+    DEX #2 : BPL -
+    JSL wait_for_lag_frame_long
+    %a16()
+    LDA #$5880 : STA $2116
+    LDA $2139
+    LDA #$3981 : STA $4310
+    LDA #$4100 : STA $4312
+    LDA #$007E : STA $4314
+    LDA #$0700 : STA $4315
+    STZ $4317 : STZ $4319
+    %a8()
+    LDA #$02 : STA $420B
+    JSL $808F0C ; handle music queue
+    JSL $8289EF ; handle sound effects
     PLP
-    JSR $8143
     RTL
+}
+
+wait_for_lag_frame_long:
+{
+    PHP
+    %a8()
+    LDA $05B8
+-   CMP $05B8
+    BEQ -
+    PLP
+    RTL
+}
 
 restore_ppu_long:
-    JSR $861A
-    PHP : %a16()
+{
+    %a16()
     LDA !ram_cgram_cache+$2E : STA $7E33EA
-    PLP
+    JSL wait_for_lag_frame_long
+    %a16()
+    LDA #$5880 : STA $2116
+    LDA #$1801 : STA $4310
+    LDA #$4100 : STA $4312
+    LDA #$007E : STA $4314
+    LDA #$0700 : STA $4315
+    STZ $4317 : STZ $4319
+    %a8()
+    LDA #$80 : STA $2115
+    LDA #$02 : STA $420B
+    JSL wait_for_lag_frame_long
+    %a8()
+    LDA $7E33EA : STA $85 : STA $420C
+    LDA $7E33EB : STA $5B
+    LDA $69 : STA $6A
+    LDA $6E : STA $70
+    LDA $71 : STA $73
+    LDA #$19 : STA $2121
+    LDA $7EC032 : STA $2122
+    LDA $7EC033 : STA $2122
+    LDA $7EC034 : STA $2122
+    LDA $7EC035 : STA $2122
+    JSL $8884B9
+    JSL $8289EF
     RTL
+}
 
 play_music_long:
-    JSR $8574
+{
+    %ai8()
+    LDX #$02
+-   JSL wait_for_lag_frame_long
+    PHX
+    JSL $808F0C ; handle music queue
+    JSL $8289EF ; handle sound effects
+    PLX
+    DEX : BNE -
     RTL
+}
 
 maybe_trigger_pause_long:
-    JSR $80FA
+{
+    %ai16()
+    LDA $1C1F : CMP #$0014 : BNE +
+    LDA #$000C : STA $0998
+    RTS
++   CMP #$001C : BEQ +
+    CMP #$0017 : BNE .done
++   LDA $05F9
+  .done
     RTL
+}
 
 print pc, " menu bank85 end"
 warnpc $85FE00 ; fanfare.asm

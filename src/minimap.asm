@@ -48,14 +48,14 @@ org $82E488      ; write tiles to VRAM
 
 org $9AB200      ; graphics for HUD
 hudgfx_bin:
-incbin ../resources/hudgfx.bin
+incbin ../resources/VITALITY_hudgfx.bin
 
 
 ; Place minimap graphics in bank FD
 org !ORG_MINIMAP_BANKFD
 print pc, " minimap bankFD start"
 mapgfx_bin:
-incbin ../resources/mapgfx.bin
+incbin ../resources/VITALITY_mapgfx.bin
 
 ; Next block needs to be all zeros to clear a tilemap
 fillbyte $00
@@ -137,15 +137,8 @@ mm_refresh_reserves:
     RTS
 }
 
-print pc, " minimap bank82 end"
-warnpc $82F800 ; layout.asm
-
-
-; Placed in bank 90 so that the jumps work
-org !ORG_MINIMAP_BANK90
-print pc, " minimap bank90 start"
-
 mm_initialize_minimap:
+; this exists here to reduce the footprint in bank $90
 {
     ; If we just left Ceres, increment segment timer
     LDA !GAMEMODE : AND #$00FF : CMP #$0006 : BNE .init_minimap
@@ -153,7 +146,21 @@ mm_initialize_minimap:
     STA !ram_realtime_room : STA !ram_last_realtime_room
     STA !ram_gametime_room : STA !ram_last_gametime_room
     STA !ram_last_room_lag : STA !ram_last_door_lag_frames : STA !ram_transition_counter
+    JML mm_initialize_minimap_bank90
 
+ .init_minimap
+    JML mm_initialize_minimap_bank90_init_minimap
+}
+
+print pc, " minimap bank82 end"
+;warnpc $82F800 ; layout.asm
+
+; Placed in bank 90 so that the jumps work
+org !ORG_MINIMAP_BANK90
+print pc, " minimap bank90 start"
+
+mm_initialize_minimap_bank90:
+{
     ; adding 1:13 to seg timer to account for missed frames between Ceres and Zebes
     LDA !ram_seg_rt_frames : CLC : ADC #$000D : STA !ram_seg_rt_frames
     CMP #$003C : BMI .add_seconds

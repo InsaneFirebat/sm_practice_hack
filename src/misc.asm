@@ -21,7 +21,7 @@ endif
 ;  (skip to Zebes)     LDA #$CDAF (skip to Zebes)
 ;                      LDA #Intro_Skip_to_Zebes
 org $82EEDF
-    LDA #$C100
+    LDA #Intro_Skip_to_Zebes
 
 org !ORG_MISC_BANK8B
 print pc, " misc bank8B start"
@@ -118,13 +118,13 @@ org $808F65
 ;    dw #MotherBrainHP
 
 
-; Ceres Ridley modified state check to support presets
-org $8FE0C0
-    dw layout_asm_ceres_ridley_room_state_check
-
-; Ceres Ridley room setup asm when timer is not running
-org $8FE0DF
-    dw layout_asm_ceres_ridley_room_no_timer
+;; Ceres Ridley modified state check to support presets
+;org $8FE0C0
+;    dw layout_asm_ceres_ridley_room_state_check
+;
+;; Ceres Ridley room setup asm when timer is not running
+;org $8FE0DF
+;    dw layout_asm_ceres_ridley_room_no_timer
 
 
 ; Continue drawing escape timer after reaching ship
@@ -137,31 +137,31 @@ org $A2ABFD
 
 
 ;org $8FEA00 ; free space for door asm
-org !ORG_MISC_BANK8F
-print pc, " misc bank8F start"
-
-layout_asm_ceres_ridley_room_state_check:
-{
-    LDA $0943 : BEQ .no_timer
-    LDA $0001,X : TAX
-    JMP $E5E6
-  .no_timer
-    STZ $093F
-    INX : INX : INX
-    RTS
-}
-
-layout_asm_ceres_ridley_room_no_timer:
-{
-    ; Same as original setup asm, except force blue background
-    PHP
-    SEP #$20
-    LDA #$66 : STA $5D
-    PLP
-    JSL $88DDD0
-    LDA #$0009 : STA $07EB
-    RTS
-}
+;org !ORG_MISC_BANK8F
+;print pc, " misc bank8F start"
+;
+;layout_asm_ceres_ridley_room_state_check:
+;{
+;    LDA $0943 : BEQ .no_timer
+;    LDA $0001,X : TAX
+;    JMP $E5E6
+;  .no_timer
+;    STZ $093F
+;    INX : INX : INX
+;    RTS
+;}
+;
+;layout_asm_ceres_ridley_room_no_timer:
+;{
+;    ; Same as original setup asm, except force blue background
+;    PHP
+;    SEP #$20
+;    LDA #$66 : STA $5D
+;    PLP
+;    JSL $88DDD0
+;    LDA #$0009 : STA $07EB
+;    RTS
+;}
 
 print pc, " misc bank8F end"
 

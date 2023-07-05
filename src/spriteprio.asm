@@ -92,4 +92,3 @@ oam_add_samus_sprite_with_prio:
     RTL
 
 print pc, " spriteprio end"
-warnpc $81FA00 ; init.asm
