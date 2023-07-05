@@ -272,6 +272,9 @@ org $808F24
 org $808F65
     JML hook_set_music_data
 
+org $88B446
+    JSL random_bubble_sfx
+
 if !FEATURE_PAL
 org $82F067
 else
@@ -330,6 +333,17 @@ hook_set_music_data:
 
   .fast_no_music
     JML $808F89
+}
+
+random_bubble_sfx:
+{
+    TAY ; preserve A
+    LDA !sram_random_bubble_sfx : BNE .mute
+    TYA
+    JML $8090CB ; overwritten code
+
+  .mute
+    RTL
 }
 
 gamemode_end:

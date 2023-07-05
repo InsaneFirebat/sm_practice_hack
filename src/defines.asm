@@ -847,6 +847,7 @@ endif
 !sram_fanfare_timer_adjust = !SRAM_START+$22E
 !sram_preset_map_tiles = !SRAM_START+$230
 !sram_preset_auto_segment = !SRAM_START+$232
+!sram_random_bubble_sfx = !SRAM_START+$234
 
 ; FREE SPACE ^
 

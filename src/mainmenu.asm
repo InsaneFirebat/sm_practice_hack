@@ -2474,6 +2474,7 @@ GameMenu:
     dw #$FFFF
     dw #game_fanfare_toggle
     dw #game_music_toggle
+    dw #game_bubble_sfx
     dw #game_healthalarm
     dw #$FFFF
     dw #game_debugmode
@@ -2537,6 +2538,9 @@ game_music_toggle:
   .resume_music
     LDA !MUSIC_DATA : CLC : ADC #$FF00 : STZ !MUSIC_DATA : JSL !MUSIC_ROUTINE
     LDA !MUSIC_TRACK : STZ !MUSIC_TRACK : JML !MUSIC_ROUTINE
+
+game_bubble_sfx:
+    %cm_toggle_bit_inverted("Random Bubble SFX", !sram_random_bubble_sfx, #$0001, #0)
 
 game_healthalarm:
     dw !ACTION_CHOICE
