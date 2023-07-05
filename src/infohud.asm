@@ -1833,7 +1833,7 @@ incbin ../resources/num_gfx_choice.bin
 
 overwrite_HUD_numbers:
 {
-; runs after cm_original_tileset_transfer
+; runs after cm_transfer_original_tileset
     ; vanilla first
     PHP : %ai16()
     PHB : PEA $0000 : PLB : PLB

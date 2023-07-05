@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.5.19] Fix HUD numbers being overwritten when loading a full savestate
 * [2.5.5.18] Added a toggle for random lava/acid bubble sound effects
 * [2.5.5.18] Added names for the HUD Number Fonts by mm2
 * [2.5.5.17] Updated mm2 color palette profile

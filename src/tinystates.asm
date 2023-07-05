@@ -137,13 +137,13 @@ post_load_state:
     JSL cm_transfer_original_tileset
     LDA !ram_minimap : BEQ .disableMinimap
     ; Enabled minimap, clear stale tiles
-    LDA #$2C0F ; blank
+    LDA !IH_BLANK
     STA !HUD_TILEMAP+$3A : STA !HUD_TILEMAP+$7A : STA !HUD_TILEMAP+$BA
     LDA #$2C1E ; minimap border
     STA !HUD_TILEMAP+$46 : STA !HUD_TILEMAP+$86 : STA !HUD_TILEMAP+$C6
     BRA +
   .disableMinimap
-    LDA #$2C0F : STA !HUD_TILEMAP+$7C : STA !HUD_TILEMAP+$7E
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$7C : STA !HUD_TILEMAP+$7E
 
     ; Reload custom HUD number GFX
 +   JSL overwrite_HUD_numbers
@@ -354,7 +354,6 @@ save_return:
     %ai16()
     LDA !ram_room_has_set_rng : STA !sram_save_has_set_rng
     LDA !ram_minimap : STA !SRAM_SAVED_MINIMAP
-
     LDA #$5AFE : STA !SRAM_SAVED_STATE
 
     TSC : STA !SRAM_SAVED_SP
