@@ -538,8 +538,10 @@ ih_update_hud_code:
     JSR CalcEtank : STA $C1
 
     ; Max Missiles, Supers & Power Bombs
-    LDA !SAMUS_MISSILES_MAX : CLC : ADC !SAMUS_SUPERS_MAX : CLC : ADC !SAMUS_PBS_MAX
-    JSR CalcItem : CLC : ADC $C1 : STA $C1
+    ; VITALITY: Missiles come in packs of 2, Supers/PBs come as singles
+    LDA !SAMUS_MISSILES_MAX : LSR : CLC : ADC !SAMUS_SUPERS_MAX : CLC : ADC !SAMUS_PBS_MAX
+;    JSR CalcItem
+    CLC : ADC $C1 : STA $C1
 
     ; Collected items
     JSR CalcLargeItem : CLC : ADC $C1 : STA $C1

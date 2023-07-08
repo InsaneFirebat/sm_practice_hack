@@ -78,6 +78,14 @@ org $80994D
     dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
 
 
+; Fix missiles in VITALITY HUD
+org $8099E1
+    LDA #$7449
+
+org $8099F6
+    LDA #$744A
+
+
 ; Placed in bank 82 so that the jumps work
 org !ORG_MINIMAP_BANK82
 print pc, " minimap bank82 start"

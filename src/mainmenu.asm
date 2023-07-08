@@ -555,10 +555,10 @@ EquipmentMenu:
     dw #$FFFF
     dw #eq_currentenergy
     dw #eq_setetanks
-    dw #$FFFF
-    dw #eq_currentreserves
-    dw #eq_setreserves
-    dw #eq_reservemode
+;    dw #$FFFF
+;    dw #eq_currentreserves
+;    dw #eq_setreserves
+;    dw #eq_reservemode
     dw #$FFFF
     dw #eq_currentmissiles
     dw #eq_setmissiles
@@ -578,7 +578,7 @@ eq_refill:
     LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES ; missiles
     LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS ; supers
     LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS ; pbs
-    LDA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY ; reserves
+;    LDA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY ; reserves
     LDA #$0002 : JSL !SFX_LIB2 ; big energy pickup
     RTL
 
@@ -592,7 +592,7 @@ eq_goto_togglebeams:
     %cm_jsl("Toggle Beams", #eq_prepare_beams_menu, #ToggleBeamsMenu)
 
 eq_currentenergy:
-    %cm_numfield_word("Current Energy", !SAMUS_HP, 0, 2100, 1, 20, #0)
+    %cm_numfield_word("Current Energy", !SAMUS_HP, 0, 1299, 1, 20, #0)
 
 eq_setetanks:
     %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 21, 1, 1, .routine)
@@ -645,28 +645,28 @@ eq_reservemode:
 +   RTL
 
 eq_currentmissiles:
-    %cm_numfield_word("Current Missiles", !SAMUS_MISSILES, 0, 325, 1, 20, #0)
+    %cm_numfield_word("Current Missiles", !SAMUS_MISSILES, 0, 60, 1, 4, #0)
 
 eq_setmissiles:
-    %cm_numfield_word("Missiles", !SAMUS_MISSILES_MAX, 0, 325, 5, 20, .routine)
+    %cm_numfield_word("Missiles", !SAMUS_MISSILES_MAX, 0, 60, 2, 4, .routine)
     .routine
         LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES ; missiles
         RTL
 
 eq_currentsupers:
-    %cm_numfield("Current Super Missiles", !SAMUS_SUPERS, 0, 65, 1, 5, #0)
+    %cm_numfield("Current Super Missiles", !SAMUS_SUPERS, 0, 20, 1, 2, #0)
 
 eq_setsupers:
-    %cm_numfield("Super Missiles", !SAMUS_SUPERS_MAX, 0, 65, 5, 5, .routine)
+    %cm_numfield("Super Missiles", !SAMUS_SUPERS_MAX, 0, 20, 1, 2, .routine)
     .routine
         LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS ; supers
         RTL
 
 eq_currentpbs:
-    %cm_numfield("Current Power Bombs", !SAMUS_PBS, 0, 70, 1, 5, #0)
+    %cm_numfield("Current Power Bombs", !SAMUS_PBS, 0, 10, 1, 1, #0)
 
 eq_setpbs:
-    %cm_numfield("Power Bombs", !SAMUS_PBS_MAX, 0, 70, 5, 5, .routine)
+    %cm_numfield("Power Bombs", !SAMUS_PBS_MAX, 0, 10, 1, 1, .routine)
     .routine
         LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS ; pbs
         RTL
@@ -685,7 +685,7 @@ ToggleCategoryMenu:
     dw #cat_gt_max
     dw #cat_rbo
     dw #cat_any_glitched
-    dw #cat_inf_cf
+;    dw #cat_inf_cf
     dw #cat_nothing
     dw #$0000
     %cm_header("TOGGLE CATEGORY")
@@ -750,16 +750,16 @@ action_category:
 
   .table
     ;  Items,  Beams,  Health, Miss,   Supers, PBs,    Reserv, Dummy
-    dw #$F32F, #$100F, #$05DB, #$00E6, #$0032, #$0032, #$0190, #$0000        ; 100%
+    dw #$732F, #$100F, #$0513, #$003C, #$0014, #$000A, #$0000, #$0000        ; 100%
     dw #$3125, #$1007, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% new
     dw #$3325, #$100B, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% old
     dw #$1025, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% ice
     dw #$3025, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% speed
-    dw #$F33F, #$100F, #$02BC, #$0064, #$0014, #$0014, #$012C, #$0000        ; gt code
-    dw #$F33F, #$100F, #$0834, #$0145, #$0041, #$0041, #$02BC, #$0000        ; 135%
-    dw #$710C, #$1001, #$031F, #$001E, #$0019, #$0014, #$0064, #$0000        ; rbo
-    dw #$9004, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0000, #$0000        ; any% glitched
-    dw #$F32F, #$100F, #$0031, #$01A4, #$005A, #$0063, #$0000, #$0000        ; crystal flash
+    dw #$733F, #$100F, #$02BC, #$003C, #$0014, #$000A, #$0000, #$0000        ; gt code
+    dw #$733F, #$100F, #$0513, #$003C, #$0014, #$000A, #$0000, #$0000        ; 135%
+    dw #$710C, #$1001, #$031F, #$001E, #$0014, #$000A, #$0000, #$0000        ; rbo
+    dw #$1004, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0000, #$0000        ; any% glitched
+;    dw #$732F, #$100F, #$0031, #$0063, #$005A, #$000A, #$0000, #$0000        ; crystal flash
     dw #$0000, #$0000, #$0063, #$0000, #$0000, #$0000, #$0000, #$0000        ; nothing
 }
 
@@ -869,7 +869,7 @@ ToggleItemsMenu:
     dw #ti_speedbooster
     dw #$FFFF
     dw #ti_grapple
-    dw #ti_xray
+;    dw #ti_xray
     dw #$0000
     %cm_header("TOGGLE ITEMS")
 

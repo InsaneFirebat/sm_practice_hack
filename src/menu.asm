@@ -7,8 +7,14 @@ print pc, " menu bank85 start"
 initialize_ppu_long:
 {   ; Initialise PPU for message boxes
     PHP : %a16()
-    LDA $7E33EA : STA !ram_cgram_cache+$2E
-    STZ $05F9
+
+;    ; VITALITY has problems with this. See 2 rooms left of save #$0102
+;    LDA !GAMEMODE : CMP #$000C : BEQ .paused : BMI +
+;    CMP #$0013 : BPL +
+;  .paused
+;    LDA $7E33EA : STA !ram_cgram_cache+$2E
+
++   STZ $05F9
     JSL wait_for_lag_frame_long
     %a8()
     STZ $420C
@@ -64,8 +70,14 @@ wait_for_lag_frame_long:
 restore_ppu_long:
 {
     %a16()
-    LDA !ram_cgram_cache+$2E : STA $7E33EA
-    JSL wait_for_lag_frame_long
+
+;    ; VITALITY has problems with this. See 2 rooms left of save #$0102
+;    LDA !GAMEMODE : CMP #$000C : BEQ .paused : BMI +
+;    CMP #$0013 : BPL +
+;  .paused
+;    LDA !ram_cgram_cache+$2E : STA $7E33EA
+
++   JSL wait_for_lag_frame_long
     %a16()
     LDA #$5880 : STA $2116
     LDA #$1801 : STA $4310
