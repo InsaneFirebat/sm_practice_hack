@@ -1887,7 +1887,6 @@ overwrite_HUD_numbers:
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
 
-  .done
     PLB : PLP
     RTL
 }

@@ -34,10 +34,9 @@ endif
     %cm_footer("MODIFIED BY INSANEFIREBAT")
 
 ifb_customizehud:
-;    %cm_numfield("HUD Number Font", !sram_number_gfx_choice, 0, 22, 1, 2, #0)
     dw !ACTION_CHOICE
     dl #!sram_number_gfx_choice
-    dw #$0000
+    dw #.routine
     db #$28, "HUD Number Font", #$FF
     db #$28, "    DEFAULT", #$FF
     db #$28, "       LTTP", #$FF
@@ -62,6 +61,71 @@ ifb_customizehud:
     db #$28, "   TAZMANIA", #$FF
     db #$28, " BLACK BASS", #$FF
     db #$FF
+  .routine
+    ; check if already on submenu
+    LDA !DP_MenuIndices : CMP.w #NumberGFXMenu : BEQ .uploadGFX
+
+    ; don't increment address if A/X/Y pressed
+    LDA !IH_CONTROLLER_PRI_NEW : BIT #$40C0 : BEQ .submenu
+    LDA !sram_number_gfx_choice : DEC : STA !sram_number_gfx_choice
+
+  .submenu
+    ; upload new GFX first
+    JSL ifb_customizehud_uploadGFX
+    ; jump to submenu
+    LDY #NumberGFXMenu
+    PHK : PHK : PLA : STA !ram_cm_menu_bank
+    JML action_submenu
+
+  .uploadGFX
+    ; wait for vertical blanking before uploading GFX
+    PHB : PEA $0000 : PLB : PLB
+    ; multiply by 100h and add to addr
+    LDA !sram_number_gfx_choice : XBA
+    CLC : ADC.w #NumberGFXChoice : TAY
+
+    JSL wait_for_lag_frame_long
+    %a8()
+    ; DMA number GFX to second to last row ($E0-EF)
+    LDA #$80 : STA $2115 ; word access, inc by 1
+    LDX #$4700 : STX $2116 ; VRAM addr ($4700 x 2 = $8E00)
+    STY $4302 ; src addr
+    LDA.b #NumberGFXChoice>>16 : STA $4304 ; src bank
+    LDX #$0100 : STX $4305 ; size
+    LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
+    LDA #$18 : STA $4301 ; destination (VRAM write)
+    LDA #$01 : STA $420B ; initiate DMA (channel 1)
+
+    %ai16()
+    PLB
+    RTL
+
+NumberGFXMenu:
+    dw ifb_customizehud
+    dw #$FFFF
+    dw ifb_numbergfx_display
+    dw #$0000
+    %cm_header("PREVIEW NUMBER GFX")
+
+ifb_numbergfx_display:
+; manual cm_jsl for custom text
+  .dm_actionIndex
+    dw !ACTION_JSL
+  .dm_jsl
+    dw #.routine
+  .dm_arg
+    dw #$0000
+  .dm_text
+    db #$3C, "     "
+    db #$E9, #$E0, #$E1, #$E2, #$E3, #$E4, #$E5, #$E6
+    db #$E7, #$E8, #$EA, #$EB, #$EC, #$ED, #$EE, #$EF
+    db #$FF
+  .routine
+    ; set cursor back to first position
+    LDX !ram_cm_stack_index
+    LDA #$0000 : STA !ram_cm_cursor_stack,X
+    %sfxfail()
+    RTL
 
 ifb_brb:
     %cm_submenu("BRB Screen", #BRBMenu)
