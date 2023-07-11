@@ -925,11 +925,12 @@ status_zebskip:
     ; check if X is beyond 2nd zeb, exit if so
     LDA !SAMUS_X : CMP #$0274 : BMI .end
     CMP #$0285 : BMI .stuck
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$8E
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$8E : STA !HUD_TILEMAP+$90
     BRA .iFrames
 
   .stuck
     LDA #$106B : STA !HUD_TILEMAP+$8E
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$90
 
   .iFrames
     LDA !SAMUS_IFRAME_TIMER : BEQ .noIframes
