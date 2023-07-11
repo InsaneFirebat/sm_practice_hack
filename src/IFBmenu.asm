@@ -41,6 +41,7 @@ ifb_customizehud:
     db #$28, "    DEFAULT", #$FF
     db #$28, "       LTTP", #$FF
     db #$28, "     KLONOA", #$FF
+    db #$28, "      TI-83", #$FF
     db #$28, "  SHIN-CHAN", #$FF
     db #$28, "        SMT", #$FF
     db #$28, "        SMW", #$FF
@@ -48,7 +49,7 @@ ifb_customizehud:
     db #$28, "       ZAMN", #$FF
     db #$28, "    EMERALD", #$FF
     db #$28, " EARTHBOUND", #$FF
-    db #$28, "        FF6", #$FF
+    db #$28, "       FFVI", #$FF
     db #$28, "    LUFIA 2", #$FF
     db #$28, "  GOONIES 2", #$FF
     db #$28, "    PAC-MAN", #$FF
