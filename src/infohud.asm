@@ -91,11 +91,18 @@ endif
     JSL ih_mb1_segment
 
 if !FEATURE_PAL
+org $A9B657
+else             ; update timers when MB2's health is depleted
+org $A9B60A
+endif
+    JML ih_mb2_segment_1
+
+if !FEATURE_PAL
 org $A9BE70
 else             ; update timers when baby spawns (off-screen) in MB2 fight
 org $A9BE23
 endif
-    JSL ih_mb2_segment
+    JSL ih_mb2_segment_2
 
 if !FEATURE_PAL
 org $A0B937
@@ -508,7 +515,21 @@ endif
     JML ih_update_hud_early
 }
 
-ih_mb2_segment:
+ih_mb2_segment_1:
+{
+    ; runs when MB2 realizes she has zero HP
+    JSL ih_update_hud_early
+    ; overwritten code
+if !FEATURE_PAL
+    LDA #$B938 : STA $0FA8
+    JML $A9B938
+else
+    LDA #$B8EB : STA $0FA8
+    JML $A9B8EB
+endif
+}
+
+ih_mb2_segment_2:
 {
     ; runs during baby spawn routine for MB2
     STA $7E7854 ; overwritten code

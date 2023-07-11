@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.5.22] Update timers when MB2 realizes she's at zero HP
 * [2.5.5.21] Fixed missing HUD number GFX that was offsetting most of the list
 * [2.5.5.20] Added a submenu to preview custom HUD number graphics in the menu
 * [2.5.5.19] Fix HUD numbers being overwritten when loading a full savestate
