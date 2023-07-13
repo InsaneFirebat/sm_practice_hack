@@ -216,7 +216,7 @@ ih_get_item_code:
     PLA : STA $14
     PLA : STA $12
 
-    PLA
++   PLA
     JSL $80818E ; Change bit index to byte index and bitmask
     RTL
 }

@@ -212,11 +212,11 @@ endif
     CLC : RTS
 
   .full_equipment
-    LDA $7E09C4 : STA $7E09C2 ; health
-    LDA $7E09C8 : CMP $7E09C6 : BCC + : STA $7E09C6 ; missiles
-+   LDA $7E09CC : CMP $7E09CA : BCC + : STA $7E09CA ; supers
-+   LDA $7E09D0 : CMP $7E09CE : BCC + : STA $7E09CE ; pbs
-+   LDA $7E09D4 : STA $7E09D6 ; reserves
+    LDA !SAMUS_HP_MAX : STA !SAMUS_HP
+    LDA !SAMUS_MISSILES_MAX : CMP !SAMUS_MISSILES : BCC + : STA !SAMUS_MISSILES ; missiles
++   LDA !SAMUS_SUPERS_MAX : CMP !SAMUS_SUPERS : BCC + : STA !SAMUS_SUPERS ; supers
++   LDA !SAMUS_PBS_MAX : CMP !SAMUS_PBS : BCC + : STA !SAMUS_PBS ; pbs
+    LDA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY
     STZ $0CD2  ; reset bomb counter
     %sfxenergy() ; play sound effect
     ; CLC to continue normal gameplay after equipment refill

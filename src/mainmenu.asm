@@ -3380,6 +3380,7 @@ save_delete:
     %cm_jsl("DEV Delete Savestate", .routine, #$DEAD)
   .routine
     TYA : STA !SRAM_SAVED_STATE
+    %sfxconfirm()
     RTL
 
 
