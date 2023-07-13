@@ -233,59 +233,12 @@
 ; Currently first 28 bytes plus last 2 bytes are used
 !ram_cgram_cache = !WRAM_MENU_START+$D0 ; $30 bytes
 
-!DP_MenuIndices = $00 ; 0x4
-!DP_CurrentMenu = $04 ; 0x4
-!DP_Address = $08 ; 0x4
-!DP_JSLTarget = $0C ; 0x4
-!DP_CtrlInput = $10 ; 0x4
-!DP_Palette = $14
-!DP_Temp = $16
-; v these repreat v
-!DP_ToggleValue = $18
-!DP_Increment = $1A
-!DP_Minimum = $1C
-!DP_Maximum = $1E
-!DP_DrawValue = $18
-!DP_FirstDigit = $1A
-!DP_SecondDigit = $1C
-!DP_ThirdDigit = $1E
-!DP_KB_Index = $18
-!DP_KB_Row = $1A
-!DP_KB_Control = $1C
-!DP_KB_Shift = $1E
-; v single digit editing v
-!DP_DigitAddress = $20 ; 0x4
-!DP_DigitValue = $24
-!DP_DigitMinimum = $26
-!DP_DigitMaximum = $28
-
-!ACTION_TOGGLE              = #$0000
-!ACTION_TOGGLE_BIT          = #$0002
-!ACTION_TOGGLE_INVERTED     = #$0004
-!ACTION_TOGGLE_BIT_INVERTED = #$0006
-!ACTION_NUMFIELD            = #$0008
-!ACTION_NUMFIELD_HEX        = #$000A
-!ACTION_NUMFIELD_WORD       = #$000C
-!ACTION_NUMFIELD_HEX_WORD   = #$000E
-!ACTION_NUMFIELD_COLOR      = #$0010
-!ACTION_NUMFIELD_SOUND      = #$0012
-!ACTION_CHOICE              = #$0014
-!ACTION_CTRL_SHORTCUT       = #$0016
-!ACTION_CTRL_INPUT          = #$0018
-!ACTION_JSL                 = #$001A
-!ACTION_JSL_SUBMENU         = #$001C
-!ACTION_CUSTOM_PRESET       = #$001E
-!ACTION_RAM_WATCH           = #$0020
-
-; using macros instead of these in custom builds
-!SOUND_MENU_MOVE = $0039
-!SOUND_MENU_JSL = $0039
-!SOUND_MENU_FAIL = $0007
-
 
 ; -----------------
 ; Crash Handler RAM
 ; -----------------
+
+!CRASHDUMP = $7EFF00
 
 !ram_crash_a = !CRASHDUMP
 !ram_crash_x = !CRASHDUMP+$02
@@ -317,76 +270,6 @@
 !ram_crash_input_prev = !CRASHDUMP+$64
 !ram_crash_input_timer = !CRASHDUMP+$66
 
-
-; ---------
-; Pointers
-; ---------
-
-!IH_CONTROLLER_PRI = $8B
-!IH_CONTROLLER_PRI_NEW = $8F
-!IH_CONTROLLER_PRI_PREV = $97
-
-!IH_CONTROLLER_SEC = $8D
-!IH_CONTROLLER_SEC_NEW = $91
-!IH_CONTROLLER_SEC_PREV = $99
-
-!KB_SHIFT1 = $9A
-!KB_SHIFT2 = $9B
-!KB_DEL1 = $9C
-!KB_DEL2 = $9D
-!MENU_CLEAR = #$000E
-!MENU_BLANK = #$281F
-!MENU_SLASH = #$289F
-!IH_BLANK = #$2C0F
-!IH_PERCENT = #$0C0A
-!IH_DECIMAL = #$0CCB
-!IH_HYPHEN = #$0C55
-!IH_ELEVATOR = #$08CE
-!IH_SHINESPARK = #$1C32
-!IH_HEALTHBOMB = #$085A
-!IH_RESERVE_AUTO = #$0C0C
-!IH_RESERVE_EMPTY = #$0C0D
-!IH_LETTER_A = #$0C76
-!IH_LETTER_B = #$0C77
-!IH_LETTER_C = #$0C58
-!IH_LETTER_D = #$0C59
-!IH_LETTER_E = #$0C5A
-!IH_LETTER_F = #$0C5B
-!IH_LETTER_H = #$0C6C
-!IH_LETTER_L = #$0C68
-!IH_LETTER_N = #$0C56
-!IH_LETTER_R = #$0C69
-!IH_LETTER_X = #$0C66
-!IH_LETTER_Y = #$0C67
-!IH_ARROW_LEFT = #$0C60
-!IH_ARROW_UP = #$0C61
-!IH_ARROW_RIGHT = #$0C62
-!IH_ARROW_DOWN = #$0C63
-
-!IH_PAUSE = #$0100 ; right
-!IH_SLOWDOWN = #$0400 ; down
-!IH_SPEEDUP = #$0800 ; up
-!IH_RESET = #$0200 ; left
-!IH_STATUS_R = #$0010 ; r
-!IH_STATUS_L = #$0020 ; l
-
-!IH_INPUT_HELD = #$0001
-!IH_INPUT_START = #$1000
-!IH_INPUT_UPDOWN = #$0C00
-!IH_INPUT_UP = #$0800
-!IH_INPUT_DOWN = #$0400
-!IH_INPUT_LEFTRIGHT = #$0300
-!IH_INPUT_LEFT = #$0200
-!IH_INPUT_RIGHT = #$0100
-
-!CTRL_B = #$8000
-!CTRL_Y = #$4000
-!CTRL_SELECT = #$2000
-!CTRL_A = #$0080
-!CTRL_X = #$0040
-!CTRL_L = #$0020
-!CTRL_R = #$0010
-
 !IH_INPUT_SHOT = $7E09B2
 !IH_INPUT_JUMP = $7E09B4
 !IH_INPUT_RUN = $7E09B6
@@ -417,25 +300,10 @@ else
 !PRESET_SLOTS_PBS = $703000+$38
 endif
 
-!SPRITE_SAMUS_HITBOX = #$0001
-!SPRITE_ENEMY_HITBOX = #$0002
-!SPRITE_EXTENDED_HITBOX = #$0004
-!SPRITE_BOSS_HITBOX = #$0008
-!SPRITE_SAMUS_PROJ = #$0010
-!SPRITE_ENEMY_PROJ = #$0020
-!SPRITE_32x32_PROJ = #$0040
-!SPRITE_OOB_WATCH = #$0080
 
-!CUTSCENE_SKIP_INTRO = #$0001
-!CUTSCENE_SKIP_CERES_ARRIVAL = #$0002
-!CUTSCENE_SKIP_G4 = #$0080
-!CUTSCENE_FAST_MB = #$0100
-!CUTSCENE_SKIP_GAMEOVER = #$1000
-
-
-; --------------
-; Vanilla Labels
-; --------------
+; ---------------
+; Vanilla Defines
+; ---------------
 
 !MUSIC_ROUTINE = $808FC1
 !SFX_LIB1 = $80903F
@@ -607,7 +475,7 @@ endif
 !sram_palette_numseloutline = !SRAM_START+$6E
 !sram_palette_numsel = !SRAM_START+$70
 !sram_custompalette_profile = !SRAM_START+$72
-!sram_menu_background = !SRAM_START+$74
+;!sram_menu_background = !SRAM_START+$74
 !sram_cm_scroll_delay = !SRAM_START+$76
 !sram_customsfx_move = !SRAM_START+$78
 !sram_customsfx_toggle = !SRAM_START+$7A
@@ -622,25 +490,18 @@ endif
 
 !sram_custom_header = !SRAM_START+$BD8 ; $18 bytes
 
-if !FEATURE_TINYSTATES
-!sram_custom_preset_safewords = !SRAM_START+$E60 ; $20 bytes
-!sram_custom_preset_names = !SRAM_START+$E80 ; $180 bytes
-else
-!sram_custom_preset_safewords = !SRAM_START+$BF0 ; $50 bytes
-!sram_custom_preset_names = !SRAM_START+$C40 ; $3C0 bytes
-endif
+!sram_custom_header_normal = !SRAM_START+$BA8 ; $18 bytes
+!sram_custom_preset_safewords_normal = !SRAM_START+$BC0 ; $50 bytes
+!sram_custom_preset_names_normal = !SRAM_START+$C10 ; $3C0 bytes
+
+!sram_custom_header_tinystates = !SRAM_START+$E18 ; $18 bytes
+!sram_custom_preset_safewords_tinystates = !SRAM_START+$E30 ; $20 bytes
+!sram_custom_preset_names_tinystates = !SRAM_START+$E50 ; $180 bytes
 
 
 ; ----------
 ; Save/Load
 ; ----------
-
-; Savestate code variables
-!SS_BANK = $8000
-
-!SS_INPUT_CUR = $8B
-!SS_INPUT_NEW = $8F
-!SS_INPUT_PREV = $97
 
 if !FEATURE_TINYSTATES
 !SRAM_DMA_BANK = $737000
@@ -802,19 +663,9 @@ endif
 !ram_cm_spazer = !CUSTOM_WRAM+$F8
 !ram_cm_plasma = !CUSTOM_WRAM+$FA
 
-
-; ---------
-; Pointers
-; ---------
-
-!CRASHDUMP = $7EFF00
-
 !PRESET_DOORS = !CUSTOM_WRAM+$180
 !PRESET_SPECIAL = !CUSTOM_WRAM+$182
 !PRESET_ENEMIES = !CUSTOM_WRAM+$184
-
-!BRB_METROID = #$287F
-!BRB_HEART = #$2899
 
 
 ; ------------------------
@@ -880,3 +731,153 @@ endif
 !sram_dummy_off = !SRAM_START+$2FC
 !sram_dummy_num = !SRAM_START+$2FE
 
+
+; ---------
+; Pointers
+; ---------
+
+; this is moved here to prevent symbols.asm from having duplicate labels
+if !FEATURE_TINYSTATES
+!sram_custom_preset_safewords = !SRAM_START+$E60 ; $20 bytes
+!sram_custom_preset_names = !SRAM_START+$E80 ; $180 bytes
+else
+!sram_custom_preset_safewords = !SRAM_START+$BF0 ; $50 bytes
+!sram_custom_preset_names = !SRAM_START+$C40 ; $3C0 bytes
+endif
+
+!IH_CONTROLLER_PRI = $8B
+!IH_CONTROLLER_PRI_NEW = $8F
+!IH_CONTROLLER_PRI_PREV = $97
+
+!IH_CONTROLLER_SEC = $8D
+!IH_CONTROLLER_SEC_NEW = $91
+!IH_CONTROLLER_SEC_PREV = $99
+
+!DP_MenuIndices = $00 ; 0x4
+!DP_CurrentMenu = $04 ; 0x4
+!DP_Address = $08 ; 0x4
+!DP_JSLTarget = $0C ; 0x4
+!DP_CtrlInput = $10 ; 0x4
+!DP_Palette = $14
+!DP_Temp = $16
+; v these repreat v
+!DP_ToggleValue = $18
+!DP_Increment = $1A
+!DP_Minimum = $1C
+!DP_Maximum = $1E
+!DP_DrawValue = $18
+!DP_FirstDigit = $1A
+!DP_SecondDigit = $1C
+!DP_ThirdDigit = $1E
+!DP_KB_Index = $18
+!DP_KB_Row = $1A
+!DP_KB_Control = $1C
+!DP_KB_Shift = $1E
+; v single digit editing v
+!DP_DigitAddress = $20 ; 0x4
+!DP_DigitValue = $24
+!DP_DigitMinimum = $26
+!DP_DigitMaximum = $28
+
+!ACTION_TOGGLE              = #$0000
+!ACTION_TOGGLE_BIT          = #$0002
+!ACTION_TOGGLE_INVERTED     = #$0004
+!ACTION_TOGGLE_BIT_INVERTED = #$0006
+!ACTION_NUMFIELD            = #$0008
+!ACTION_NUMFIELD_HEX        = #$000A
+!ACTION_NUMFIELD_WORD       = #$000C
+!ACTION_NUMFIELD_HEX_WORD   = #$000E
+!ACTION_NUMFIELD_COLOR      = #$0010
+!ACTION_NUMFIELD_SOUND      = #$0012
+!ACTION_CHOICE              = #$0014
+!ACTION_CTRL_SHORTCUT       = #$0016
+!ACTION_CTRL_INPUT          = #$0018
+!ACTION_JSL                 = #$001A
+!ACTION_JSL_SUBMENU         = #$001C
+!ACTION_CUSTOM_PRESET       = #$001E
+!ACTION_RAM_WATCH           = #$0020
+
+; using macros instead of these in custom builds
+;!SOUND_MENU_MOVE = $0039
+;!SOUND_MENU_JSL = $0039
+;!SOUND_MENU_FAIL = $0007
+;marked for deletion, if asar didn't complain
+
+!KB_SHIFT1 = $9A
+!KB_SHIFT2 = $9B
+!KB_DEL1 = $9C
+!KB_DEL2 = $9D
+!MENU_CLEAR = #$000E
+!MENU_BLANK = #$281F
+!MENU_SLASH = #$289F
+!IH_BLANK = #$2C0F
+!IH_PERCENT = #$0C0A
+!IH_DECIMAL = #$0CCB
+!IH_HYPHEN = #$0C55
+!IH_ELEVATOR = #$08CE
+!IH_SHINESPARK = #$1C32
+!IH_HEALTHBOMB = #$085A
+!IH_RESERVE_AUTO = #$0C0C
+!IH_RESERVE_EMPTY = #$0C0D
+!IH_LETTER_A = #$0C76
+!IH_LETTER_B = #$0C77
+!IH_LETTER_C = #$0C58
+!IH_LETTER_D = #$0C59
+!IH_LETTER_E = #$0C5A
+!IH_LETTER_F = #$0C5B
+!IH_LETTER_H = #$0C6C
+!IH_LETTER_L = #$0C68
+!IH_LETTER_N = #$0C56
+!IH_LETTER_R = #$0C69
+!IH_LETTER_X = #$0C66
+!IH_LETTER_Y = #$0C67
+!IH_ARROW_LEFT = #$0C60
+!IH_ARROW_UP = #$0C61
+!IH_ARROW_RIGHT = #$0C62
+!IH_ARROW_DOWN = #$0C63
+
+!IH_PAUSE = #$0100 ; right
+!IH_SLOWDOWN = #$0400 ; down
+!IH_SPEEDUP = #$0800 ; up
+!IH_RESET = #$0200 ; left
+!IH_STATUS_R = #$0010 ; r
+!IH_STATUS_L = #$0020 ; l
+
+!IH_INPUT_HELD = #$0001
+!IH_INPUT_START = #$1000
+!IH_INPUT_UPDOWN = #$0C00
+!IH_INPUT_UP = #$0800
+!IH_INPUT_DOWN = #$0400
+!IH_INPUT_LEFTRIGHT = #$0300
+!IH_INPUT_LEFT = #$0200
+!IH_INPUT_RIGHT = #$0100
+
+!CTRL_B = #$8000
+!CTRL_Y = #$4000
+!CTRL_SELECT = #$2000
+!CTRL_A = #$0080
+!CTRL_X = #$0040
+!CTRL_L = #$0020
+!CTRL_R = #$0010
+
+!SPRITE_SAMUS_HITBOX = #$0001
+!SPRITE_ENEMY_HITBOX = #$0002
+!SPRITE_EXTENDED_HITBOX = #$0004
+!SPRITE_BOSS_HITBOX = #$0008
+!SPRITE_SAMUS_PROJ = #$0010
+!SPRITE_ENEMY_PROJ = #$0020
+!SPRITE_32x32_PROJ = #$0040
+!SPRITE_OOB_WATCH = #$0080
+
+!CUTSCENE_SKIP_INTRO = #$0001
+!CUTSCENE_SKIP_CERES_ARRIVAL = #$0002
+!CUTSCENE_SKIP_G4 = #$0080
+!CUTSCENE_FAST_MB = #$0100
+!CUTSCENE_SKIP_GAMEOVER = #$1000
+
+!BRB_METROID = #$287F
+!BRB_HEART = #$2899
+
+
+; Savestate code variables
+!SS_BANK = $8000
