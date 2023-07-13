@@ -359,8 +359,8 @@ load_return:
     LDA !SRAM_SAVED_SP : TCS
 
     ; rewrite inputs so that holding load won't keep loading, as well as rewriting saving input to loading input
-    LDA !SS_INPUT_CUR : EOR !sram_ctrl_save_state : ORA !sram_ctrl_load_state
-    STA !SS_INPUT_CUR : STA !SS_INPUT_NEW : STA !SS_INPUT_PREV
+    LDA !IH_CONTROLLER_PRI : EOR !sram_ctrl_save_state : ORA !sram_ctrl_load_state
+    STA !IH_CONTROLLER_PRI : STA !IH_CONTROLLER_PRI_NEW : STA !IH_CONTROLLER_PRI_PREV
 
     %a8()
     LDA #$00 : PHA : PLB
