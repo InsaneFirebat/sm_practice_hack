@@ -55,6 +55,7 @@ init_nonzero_wram:
     ; RAM $7E0000 fluctuates so it is not a good default value
     LDA #!ENEMY_HP : STA !ram_watch_left
     LDA #!SAMUS_HP : STA !ram_watch_right
+    LDA #$007E : STA !ram_watch_bank
 
     LDA !sram_seed_X : STA !ram_seed_X
     LDA !sram_seed_Y : STA !ram_seed_Y
@@ -90,6 +91,7 @@ init_sram:
     LDA #$000A : STA !sram_metronome_tickrate
     LDA #$0002 : STA !sram_metronome_sfx
     LDA #$0000 : STA !sram_ctrl_auto_save_state
+    LDA #$0000 : STA !sram_custom_header
 
     JSL init_menu_customization
 

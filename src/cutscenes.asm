@@ -6,17 +6,16 @@ org $82EEE0
 org $8BB240
 ;    JSR cutscenes_load_ceres_arrival
 
-if !FEATURE_PAL
-org $8B92B5
-else
 org $8B930C
-endif
     JSL cutscenes_nintendo_splash
     NOP : NOP
 
 
 org $82DCF4
     JSL cutscenes_game_over
+
+org $82EEDF
+    LDA #cutscenes_load_intro
 
 
 org !ORG_CUTSCENES
@@ -112,10 +111,10 @@ cutscenes_mb_fake_death_check:
     BEQ .check_fast_mb
     CMP #$0001 : BNE $15
   .fast_mb
-    JMP cutscenes_mb_fake_death_fast_init
+    JMP cutscenes_mb_fast_init
   .check_fast_mb
     LDA !sram_cutscenes : BIT !CUTSCENE_FAST_MB : BNE .fast_mb
-    JMP cutscenes_mb_fake_death_normal_init
+    JMP cutscenes_mb_normal_init
 }
 warnpc $A98814
 
@@ -151,7 +150,7 @@ org $A98A8F
 
 org $A98D68
     ; Do not initialize health here, wait until later
-    dw cutscenes_mb_fake_death_setup_mb_fight_or_escape
+    LDA #cutscenes_mb_setup_fight_or_escape
     BRA $04
 
 org $A98D80
@@ -198,7 +197,7 @@ org $A9B1EB
 org !ORG_CUTSCENES_MB
 print pc, " cutscenes MB start"
 
-cutscenes_mb_fake_death_fast_init:
+cutscenes_mb_fast_init:
 {
     ; Set health to non-zero value indicating we want fast logic
     ; If loading a preset, certain flags may already be set
@@ -218,7 +217,7 @@ cutscenes_mb_fake_death_fast_init:
     JMP $8814
 }
 
-cutscenes_mb_fake_death_normal_init:
+cutscenes_mb_normal_init:
 {
     ; Overwritten logic with the song
     LDA #$0001 : STA $7E783A : STA $7E7800
@@ -303,7 +302,7 @@ cutscenes_mb_clear_bottom_left_tube:
     JMP ($0FF0)
 }
 
-cutscenes_mb_clear_ceiling_column_9:
+cutscenes_mb_ceiling_column_9:
 {
     LDA $0FCC : BEQ .continue
     LDA #$0010 : STA $0FF2
@@ -314,7 +313,7 @@ cutscenes_mb_clear_ceiling_column_9:
     JMP ($0FF0)
 }
 
-cutscenes_mb_clear_ceiling_column_6:
+cutscenes_mb_ceiling_column_6:
 {
     LDA $0FCC : BEQ .continue
     LDA #$0010 : STA $0FF2
@@ -325,7 +324,7 @@ cutscenes_mb_clear_ceiling_column_6:
     JMP ($0FF0)
 }
 
-cutscenes_mb_clear_bottom_right_tube:
+cutscenes_mb_bottom_right_tube:
 {
     LDA $0FCC : BEQ .continue
     LDA #$0010 : STA $0FF2
@@ -336,7 +335,7 @@ cutscenes_mb_clear_bottom_right_tube:
     JMP ($0FF0)
 }
 
-cutscenes_mb_clear_bottom_middle_left_tube:
+cutscenes_mb_bottom_middle_left_tube:
 {
     LDA $0FCC : BEQ .continue
     LDA #$0010 : STA $0FF2
@@ -347,7 +346,7 @@ cutscenes_mb_clear_bottom_middle_left_tube:
     JMP ($0FF0)
 }
 
-cutscenes_mb_clear_ceiling_column_7:
+cutscenes_mb_ceiling_column_7:
 {
     LDA $0FCC : BEQ .continue
     LDA #$0010 : STA $0FF2
@@ -358,7 +357,7 @@ cutscenes_mb_clear_ceiling_column_7:
     JMP ($0FF0)
 }
 
-cutscenes_mb_clear_ceiling_column_8:
+cutscenes_mb_ceiling_column_8:
 {
     LDA $0FCC : BEQ .continue
     LDA #$0010 : STA $0FF2
@@ -369,7 +368,7 @@ cutscenes_mb_clear_ceiling_column_8:
     JMP ($0FF0)
 }
 
-cutscenes_mb_fake_death_setup_mb_fight_or_escape:
+cutscenes_mb_setup_fight_or_escape:
 {
     LDA $7ED821 : BIT #$0040 : BEQ .mb
 
@@ -392,7 +391,7 @@ cutscenes_mb_fake_death_setup_mb_fight_or_escape:
     JMP ($0FA8)
 }
 
-cutscenes_mb_fake_death_pause_phase_2:
+cutscenes_mb_pause_phase_2:
 {
     LDA $0FCC : BNE .continue
     LDA #$0000 : STA $0FB2
@@ -403,7 +402,7 @@ cutscenes_mb_fake_death_pause_phase_2:
     JMP ($0FA8)
 }
 
-cutscenes_mb_fake_death_load_tiles_phase_2:
+cutscenes_mb_load_tiles_phase_2:
 {
     LDA $0FCC : BNE .continue
     LDA #$0000 : STA $0FB2
@@ -414,7 +413,7 @@ cutscenes_mb_fake_death_load_tiles_phase_2:
     JMP ($0FA8)
 }
 
-cutscenes_mb_fake_death_raise_mb:
+cutscenes_mb_raise_mb:
 {
     LDA $0FCC : BNE .continue
     LDA !FRAME_COUNTER : AND #$0001 : BNE .done
@@ -479,7 +478,7 @@ cutscenes_mb_bring_head_back_up:
     JMP ($0FA8)
 }
 
-cutscenes_mb_death_move_to_back_of_room:
+cutscenes_mb_death_move_to_back_wall:
 {
     LDA !sram_cutscenes : BIT !CUTSCENE_FAST_MB : BEQ .continue
     LDA #$000A : STA $0FB2
@@ -530,11 +529,11 @@ cutscenes_mb_death_brain_falling_fast:
     ; Vanilla logic except add $40 instead of $20
     LDA $0FB2 : CLC : ADC #$0040 : STA $0FB2
     XBA : AND #$00FF : CLC : ADC $0FBE
-    CMP #$00C4 : BCC .still_falling
+    CMP #$00C4 : BCC .rts
 
     JMP $B144
 
-  .still_falling
+  .rts
     STA $0FBE
     RTS
 }
