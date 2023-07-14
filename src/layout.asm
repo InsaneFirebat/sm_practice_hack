@@ -1,27 +1,33 @@
 
 ; Mother Brain right door asm pointer
 org $83AAD2
+hook_layout_asm_rinkashaft_door2:
     dw #layout_asm_mbhp
 
-; Mother Brain left door asm pointer
+; Mother Brain left door
 org $83AAEA
+hook_layout_asm_tourianescape1_door0:
     dw #layout_asm_mbhp
 
-; Magnet Stairs left door asm pointer
+; Magnet Stairs left door
 org $83AB6E
+hook_layout_asm_fallingtile_door1:
     dw #layout_asm_magnetstairs
 
-; Magnet Stairs right door asm pointer
+; Magnet Stairs right door
 org $83AB92
+hook_layout_asm_deadscientist_door0:
     dw #layout_asm_magnetstairs
 
 ; Ceres Ridley modified state check to support presets
 org $8FE0C0
-    dw layout_asm_ceres_ridley_room_state_check
+hook_layout_asm_ceres_ridley_state_check:
+    dw layout_asm_ceres_ridley_state_check
 
 ; Ceres Ridley room setup asm when timer is not running
 org $8FE0DF
-    dw layout_asm_ceres_ridley_room_no_timer
+hook_layout_asm_ceres_ridley_no_timer:
+    dw layout_asm_ceres_ridley_no_timer
 
 
 ;org $8FEA00
@@ -38,18 +44,18 @@ layout_asm_mbhp:
     RTS
 }
 
-layout_asm_ceres_ridley_room_state_check:
+layout_asm_ceres_ridley_state_check:
 {
-    LDA $0943 : BEQ .no_timer
+    LDA $0943 : BEQ .noTimer
     LDA $0001,X : TAX
     JMP $E5E6
-  .no_timer
+  .noTimer
     STZ $093F
     INX : INX : INX
     RTS
 }
 
-layout_asm_ceres_ridley_room_no_timer:
+layout_asm_ceres_ridley_no_timer:
 {
     ; Same as original setup asm, except force blue background
     PHP
@@ -78,3 +84,22 @@ layout_asm_magnetstairs:
     PLP
     RTS
 }
+
+
+org !ORG_LAYOUT_BANKA1
+print pc, " layout bankA1 start"
+
+layout_asm_statues_oob_viewer_enemies:
+    dw $D73F, #$0080, #$01B0, #$0000, #$2C00, #$0000, #$0000, #$0240
+    db #$FF, #$FF, #$00
+
+print pc, " layout bankA1 end"
+
+
+org !ORG_LAYOUT_BANKB4
+print pc, " layout bankB4 start"
+
+layout_asm_statues_oob_viewer_enemy_set:
+    db #$FF, #$FF, #$00
+
+print pc, " layout bankB4 end"

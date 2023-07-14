@@ -65,7 +65,7 @@ endif
     CMP !ROOM_ID
     BEQ .skip_load_level
 if !RAW_TILE_GRAPHICS
-    JSL preset_load_level_tile_tables_scrolls_plms_and_execute_asm
+    JSL preset_load_level
 else
     JSL $82E7D3  ; Load level data, CRE, tile table, scroll data, create PLMs and execute door ASM and room setup ASM
 endif
@@ -497,9 +497,10 @@ tinystates_load_paused:
 {
     ; restore gameplay palettes before running pause routines
     LDX #$0000 : LDY #$0100
--   LDA $7E3300,X : STA $7EC000,X
-    INX #2
-    DEY : BNE -
+  .restore_loop
+    LDA $7E3300,X : STA $7EC000,X
+    INX : INX
+    DEY : BNE .restore_loop
 
     JSL $828E75 ; Load pause menu tiles and clear BG2 tilemap
     JSL $828EDA ; Load pause screen base tilemaps
@@ -507,15 +508,17 @@ tinystates_load_paused:
 
     ; backup gameplay palettes
     LDX #$0000 : LDY #$0100
--   LDA $7EC000,X : STA $7E3300,X
-    INX #2
-    DEY : BNE -
+  .backup_loop
+    LDA $7EC000,X : STA $7E3300,X
+    INX : INX
+    DEY : BNE .backup_loop
 
     ; load pause screen palettes
     LDX #$0000 : LDY #$0100
--   LDA $B6F000,X : STA $7EC000,X
-    INX #2
-    DEY : BNE -
+  .load_loop
+    LDA $B6F000,X : STA $7EC000,X
+    INX : INX
+    DEY : BNE .load_loop
 
     JSL $82B62B ; Draw pause menu during fade in
     RTL
@@ -524,12 +527,13 @@ tinystates_load_paused:
 print pc, " tinysave end"
 warnpc $80FD00 ; infohud.asm
 
+
 org $82FE00
 print pc, " tinysave bank82 start"
 
 tinystates_preload_bg_data:
-  JSR $82E2 ; Re-load BG3 tiles
-  RTL
+    JSR $82E2 ; Re-load BG3 tiles
+    RTL
 
 tinystates_load_kraid:
 {
@@ -556,8 +560,7 @@ tinystates_load_kraid:
   .priority_loop
     LDA $2000,X : ORA #$2000 : STA $2000,X
     DEX : DEX : BPL .priority_loop
-.update_priority_done
-
+  .update_priority_done
     PLB
 
     ; Copy Kraid to VRAM
