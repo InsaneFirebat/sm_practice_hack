@@ -389,7 +389,7 @@ load_write_table:
     %sram_to_wram($7EC000, $34A0, $712000)
     %sram_to_wram($7F0000, $2B00, $715500)
     %sram_to_wram($7F2B00, $6B01, $720000)
-    %sram_to_wram($7E2000, $2000, $736000)
+    %sram_to_wram($7E2000, $1000, $736000)
 
     ; Address pair, A bus -> B bus.  B address = VRAM write ($2118).
     dw $0000|$4310, $1801  ; direction = A->B, B addr = $2118

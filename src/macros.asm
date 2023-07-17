@@ -515,12 +515,12 @@ macro sfxmissile() ; play missile sound lib2
     LDA #$0003 : JSL !SFX_LIB2
 endmacro
 
-macro sfxshot() ; play credits shot sound lib1
-    LDA #$0022 : JSL !SFX_LIB1
-endmacro
-
 macro sfxdisengage() ; play refill disengage sound lib2
     LDA #$0038 : JSL !SFX_LIB2
+endmacro
+
+macro sfxbeep() ; play minimap movement beep sound lib1
+    LDA #$0036 : JSL !SFX_LIB1
 endmacro
 
 macro sfxdachora() ; play dachora cry sound lib2
@@ -531,8 +531,8 @@ macro sfxdamage() ; play damage boost sound lib1
     LDA #$0035 : JSL !SFX_LIB1
 endmacro
 
-macro sfxbeep() ; play minimap movement beep sound lib1
-    LDA #$0036 : JSL !SFX_LIB1
+macro sfxshot() ; play credits shot sound lib1
+    LDA #$0022 : JSL !SFX_LIB1
 endmacro
 
 macro sfxsave() ; play save station sound lib1

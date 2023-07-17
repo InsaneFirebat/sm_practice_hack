@@ -213,9 +213,9 @@ ifb_brb_timer_mode:
     dl #!ram_cm_brb_timer_mode
     dw #$0000
     db #$28, "Timer Mode", #$FF
-        db #$28, "        OFF", #$FF
-        db #$28, "   COUNT UP", #$FF
-        db #$28, " COUNT DOWN", #$FF
+    db #$28, "        OFF", #$FF
+    db #$28, "   COUNT UP", #$FF
+    db #$28, " COUNT DOWN", #$FF
     db #$FF
 
 ifb_brb_timer_min:
@@ -495,9 +495,9 @@ presetrando_beampref:
     dl #!sram_presetrando_beampref
     dw #$0000
     db #$28, "Beam Preference", #$FF
-        db #$28, "     RANDOM", #$FF
-        db #$28, "     SPAZER", #$FF
-        db #$28, "     PLASMA", #$FF
+    db #$28, "     RANDOM", #$FF
+    db #$28, "     SPAZER", #$FF
+    db #$28, "     PLASMA", #$FF
     db #$FF
 
 presetrando_etanks: 

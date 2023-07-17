@@ -1301,7 +1301,7 @@ tel_tourianmb:
 
 action_teleport:
 {
-    ; teleport destination in Y when called
+    ; Teleport destination in Y when called
     TYA : AND #$FF00 : XBA : STA !AREA_ID
     TYA : AND #$00FF : STA !LOAD_STATION_INDEX
     LDA #$0006 : STA !GAMEMODE
@@ -1312,6 +1312,7 @@ action_teleport:
     %a16()
 
     STZ $0727 ; Clear pause menu index
+    STZ $0E18 ; Set elevator to inactive
     STZ $1C1F ; Clear message box index
 
     JSL reset_all_counters

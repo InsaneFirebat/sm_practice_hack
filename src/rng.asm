@@ -62,7 +62,7 @@ endif
     JSL hook_botwoon_move
 
 if !FEATURE_PAL
-org $B398C1
+org $B398D1
 else
 org $B398C1
 endif

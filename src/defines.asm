@@ -431,6 +431,8 @@ endif
 !sram_ctrl_toggle_tileviewer = !SRAM_START+$1C
 !sram_ctrl_update_timers = !SRAM_START+$1E
 
+; ^ FREE SPACE ^
+
 !sram_artificial_lag = !SRAM_START+$20
 !sram_rerandomize = !SRAM_START+$22
 !sram_fanfare_toggle = !SRAM_START+$24
