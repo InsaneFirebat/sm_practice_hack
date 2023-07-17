@@ -1,6 +1,10 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.6.1]  Fixed crash when activating bowling torizo (by idlechild)
+* [2.5.6]    Fix for spikesuit trainer with springball equipped (by idlechild)
+* [2.5.6]    Minor fixes for some presets
+* [2.5.6]    Added fast cutscene option for bowling torizo (by idlechild)
 * [2.5.5.22] Update timers when MB2 realizes she's at zero HP
 * [2.5.5.21] Fixed missing HUD number GFX that was offsetting most of the list
 * [2.5.5.20] Added a submenu to preview custom HUD number graphics in the menu

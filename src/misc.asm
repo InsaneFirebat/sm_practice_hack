@@ -359,9 +359,9 @@ lock_samus_bowling:
     LDA !sram_cutscenes : BIT !CUTSCENE_FAST_BOWLING : BNE .speedup
     TDC
 if !FEATURE_PAL
-    JMP $F081
+    JML $90F081
 else
-    JMP $F084
+    JML $90F084
 endif
 
   .speedup
