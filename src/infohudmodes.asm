@@ -1582,7 +1582,9 @@ endif
     INC : SEC : SBC !ram_xpos
     ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$98
     LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$96
-    BRL .returnstart
+    LDA !sram_display_mode_reward : BEQ +
+    %sfxenergy()
++   BRL .returnstart
 
   .expandearly
     LDA !ram_xpos : SEC : SBC !ram_walljump_counter
