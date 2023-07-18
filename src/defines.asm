@@ -799,6 +799,7 @@ endif
 !ACTION_JSL_SUBMENU         = #$001C
 !ACTION_CUSTOM_PRESET       = #$001E
 !ACTION_RAM_WATCH           = #$0020
+!ACTION_DYNAMIC             = #$0022
 
 ; using macros instead of these in custom builds
 ;!SOUND_MENU_MOVE = $0039
