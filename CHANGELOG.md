@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.6.3]  Added Draygon AI Tracker room strat
+* [2.5.6.2]  Fixed missing sound effect on Taco Tank trainer
 * [2.5.6.1]  Fixed crash when activating bowling torizo (by idlechild)
 * [2.5.6]    Fix for spikesuit trainer with springball equipped (by idlechild)
 * [2.5.6]    Minor fixes for some presets

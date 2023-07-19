@@ -62,6 +62,7 @@ status_roomstrat:
     dw status_pitdoor
     dw status_ridleyai
     dw status_ceresridley
+    dw status_draygonai
 }
 
 status_chargetimer:
@@ -2578,7 +2579,7 @@ RidleyAI_text_table:
     dw #RidleyAIText_C588 ; explode
 
 RidleyAIText:
-    table ../resources/HUDfont.tbl
+table ../resources/HUDfont.tbl
   .WAIT : db "STALLING"     : db $FF
   .B2F3 : db "LIFTOFF"      : db $FF
   .B321 : db "CHOOSE AI"    : db $FF
@@ -2607,7 +2608,7 @@ RidleyAIText:
   .C538 : db "DEAD MOVE"    : db $FF
   .C588 : db "EXPLODE"      : db $FF
   .DEAD : db "END"          : db $FF
-    table ../resources/normal.tbl
+table ../resources/normal.tbl
 }
 
 status_ceresridley:
