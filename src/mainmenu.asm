@@ -1988,6 +1988,7 @@ RoomStratMenu:
     dw ihstrat_pitdoor
     dw ihstrat_ridleyai
     dw ihstrat_ceresridley
+    dw ihstrat_draygonai
     dw #$0000
     %cm_header("INFOHUD ROOM STRAT")
     %cm_footer("ROOM STRAT MUST BE ACTIVE")
@@ -2044,6 +2045,9 @@ ihstrat_ridleyai:
 ihstrat_ceresridley:
     %cm_jsl("Ceres Ridley Hits", #action_select_room_strat, #$0010)
 
+ihstrat_draygonai:
+    %cm_jsl("Draygon's AI Tracker", #action_select_room_strat, #$0011)
+
 action_select_room_strat:
 {
     TYA : STA !sram_room_strat
@@ -2074,6 +2078,7 @@ ih_room_strat:
     db #$28, "PIT DOOR TC", #$FF
     db #$28, "  RIDLEY AI", #$FF
     db #$28, "RIDLEY HITS", #$FF
+    db #$28, " DRAYGON AI", #$FF
     db #$FF
   .routine
     LDA #$0001 : STA !sram_display_mode
