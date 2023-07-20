@@ -75,8 +75,7 @@ ifb_customizehud:
     JSL ifb_customizehud_uploadGFX
     ; jump to submenu
     LDY #NumberGFXMenu
-    PHK : PHK : PLA : STA !ram_cm_menu_bank
-    JML action_submenu
+    %submenu_jump()
 
   .uploadGFX
     ; wait for vertical blanking before uploading GFX
@@ -644,9 +643,7 @@ ifb_soundtest_music_goto_2:
     %cm_jsl("GOTO PAGE TWO", .routine, #MusicSelectMenu2)
   .routine
     JSL cm_go_back
-    ; set bank for manual submenu jump
-    PHK : PHK : PLA : STA !ram_cm_menu_bank
-    JML action_submenu
+    %submenu_jump()
 
 MusicSelectMenu2:
     dw #ifb_soundtest_music_preboss1
@@ -717,9 +714,7 @@ ifb_soundtest_music_goto_1:
     %cm_jsl("GOTO PAGE ONE", .routine, #MusicSelectMenu1)
   .routine
     JSL cm_go_back
-    ; set bank for manual submenu jump
-    PHK : PHK : PLA : STA !ram_cm_menu_bank
-    JML action_submenu
+    %submenu_jump()
 
 ifb_game_music_toggle:
     dw !ACTION_CHOICE

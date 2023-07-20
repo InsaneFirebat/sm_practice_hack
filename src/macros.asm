@@ -46,6 +46,12 @@ macro item_index_to_vram_index()
     CLC : ADC #$0146 : TAX
 endmacro
 
+macro submenu_jump()
+    ; set bank for manual submenu jump
+    PHK : PHK : PLA : STA !ram_cm_menu_bank
+    JML action_submenu
+endmacro
+
 macro norm2head(char)
 ; used to build a conversion table for normal to header text
     db "<char>"
