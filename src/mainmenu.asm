@@ -284,9 +284,7 @@ presets_custom_preset_slot:
   .page3
     LDY.w #CustomPresetsMenu3
   .done
-    ; set bank for manual submenu jump
-    PHK : PHK : PLA : STA !ram_cm_menu_bank
-    JML action_submenu
+    %submenu_jump()
 
 presets_save_custom_preset:
     %cm_jsl("Save Custom Preset", .routine, #$0000)
@@ -614,9 +612,7 @@ custompreset_goto_page1:
     %cm_jsl("GOTO PAGE ONE", .routine, #CustomPresetsMenu)
   .routine
     JSL cm_go_back
-    ; set bank for manual submenu jump
-    PHK : PHK : PLA : STA !ram_cm_menu_bank
-    JML action_submenu
+    %submenu_jump()
 
 custompreset_goto_page2:
     %cm_jsl("GOTO PAGE TWO", custompreset_goto_page1_routine, #CustomPresetsMenu2)
@@ -967,9 +963,7 @@ eq_prepare_items_menu:
   .noSpeed
     LDA #$0000 : STA !ram_cm_speed
 
-+   PHK : PHK : PLA
-    STA !ram_cm_menu_bank
-    JML action_submenu
++   %submenu_jump()
 }
 
 ToggleItemsMenu:
@@ -1059,10 +1053,7 @@ equipment_toggle_items:
 eq_prepare_beams_menu:
 {
     JSL setup_beams_ram
-
-    PHK : PHK : PLA
-    STA !ram_cm_menu_bank
-    JML action_submenu
+    %submenu_jump()
 }
 
 setup_beams_ram:
@@ -1922,9 +1913,7 @@ ihmode_GOTO_PAGE_TWO:
     %cm_jsl("GOTO PAGE TWO", .routine, #DisplayModeMenu2)
   .routine
     JSL cm_go_back
-    ; set bank for manual submenu jump
-    PHK : PHK : PLA : STA !ram_cm_menu_bank
-    JML action_submenu
+    %submenu_jump()
 
 
 
@@ -2987,9 +2976,7 @@ ih_prepare_phantoon_menu:
     JSL phan_set_phan_first_phase
     JSL phan_set_phan_second_phase
     PLA : STA !ram_phantoon_rng_inverted
-    ; set bank for manual submenu jump
-    PHK : PHK : PLA : STA !ram_cm_menu_bank
-    JML action_submenu
+    %submenu_jump()
 }
 
 PhantoonMenu:
