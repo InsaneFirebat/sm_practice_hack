@@ -3059,7 +3059,7 @@ phan_second_phase:
     RTL
 
 PhantoonPhaseTable:
-    dw #$003F, #$0020, #$0008, #$0002, #$0010, #$0004, #$0001
+    dw #$003F, #$0020, #$0004, #$0002, #$0010, #$0008, #$0001
     dw #$0030, #$000C, #$0003, #$002A, #$0015, #$003C, #$0000 ; 0 = Term
 
 PhantoonPhaseTable2:
@@ -3098,7 +3098,7 @@ phan_fast_left_1:
     %cm_toggle_bit("#1 Fast Left", !ram_phantoon_rng_round_1, #$0020, phan_set_phan_first_phase)
 
 phan_mid_left_1:
-    %cm_toggle_bit("#1 Mid  Left", !ram_phantoon_rng_round_1, #$0008, phan_set_phan_first_phase)
+    %cm_toggle_bit("#1 Mid  Left", !ram_phantoon_rng_round_1, #$0004, phan_set_phan_first_phase)
 
 phan_slow_left_1:
     %cm_toggle_bit("#1 Slow Left", !ram_phantoon_rng_round_1, #$0002, phan_set_phan_first_phase)
@@ -3107,7 +3107,7 @@ phan_fast_right_1:
     %cm_toggle_bit("#1 Fast Right", !ram_phantoon_rng_round_1, #$0010, phan_set_phan_first_phase)
 
 phan_mid_right_1:
-    %cm_toggle_bit("#1 Mid  Right", !ram_phantoon_rng_round_1, #$0004, phan_set_phan_first_phase)
+    %cm_toggle_bit("#1 Mid  Right", !ram_phantoon_rng_round_1, #$0008, phan_set_phan_first_phase)
 
 phan_slow_right_1:
     %cm_toggle_bit("#1 Slow Right", !ram_phantoon_rng_round_1, #$0001, phan_set_phan_first_phase)
