@@ -53,6 +53,7 @@ mc_paletteprofile:
     db #$28, "      DAYNE", #$FF
     db #$28, "DREAMCOWBOY", #$FF
     db #$28, "       ZENI", #$FF
+    db #$28, "       DYCE", #$FF
     db #$28, "       GREY", #$FF
     db #$28, "        RED", #$FF
     db #$28, "     PURPLE", #$FF
@@ -475,10 +476,11 @@ PaletteProfileTables:
     dw #DayneProfileTable         ; E
     dw #DreamCowboyProfileTable   ; F
     dw #ZeniProfileTable          ; 10
-    dw #GreyProfileTable          ; 11
-    dw #RedProfileTable           ; 12
-    dw #PurpleProfileTable        ; 13
-    dw #HUDProfileTable           ; 14
+    dw #DyceProfileTable          ; 11
+    dw #GreyProfileTable          ; 12
+    dw #RedProfileTable           ; 13
+    dw #PurpleProfileTable        ; 14
+    dw #HUDProfileTable           ; 15
     dw #$0000
 
 !PROFILE_CUSTOM       = #$0000
@@ -498,10 +500,11 @@ PaletteProfileTables:
 !PROFILE_Dayne        = #$000E
 !PROFILE_DreamCowboy  = #$000F
 !PROFILE_Zeni         = #$0010
-!PROFILE_Grey         = #$0011
-!PROFILE_Red          = #$0012
-!PROFILE_Purple       = #$0013
-!PROFILE_HUD          = #$0014
+!PROFILE_Dyce         = #$0011
+!PROFILE_Grey         = #$0012
+!PROFILE_Red          = #$0013
+!PROFILE_Purple       = #$0014
+!PROFILE_HUD          = #$0015
 
 ; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
 TwitchProfileTable:
@@ -551,6 +554,9 @@ DreamCowboyProfileTable:
 
 ZeniProfileTable:
     dw $7D40, $3900, $7F00, $0000, $0000, $7FE0, $7EA0, $7FE0, $0000, $0000, $7E00
+
+DyceProfileTable:
+    dw $5DC0, $5DC0, $77BD, $2060, $0000, $7FFF, $7FFF, $7FFF, $5DC0, $5DC0, $7FFF
 
 GreyProfileTable:
     dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $0012, $0C63, $1CE7, $3DEF
