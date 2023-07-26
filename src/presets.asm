@@ -550,11 +550,12 @@ endif
     LDA #$E695 : STA $0A42 ; Unlock Samus
     LDA #$E725 : STA $0A44 ; Unlock Samus
 
-+   LDA #$9F55 : STA $0A6C ; Set X speed table pointer
-    STZ $0E18              ; Set elevator to inactive
-    STZ $0727              ; Clear pause menu index
-    STZ $1C1F              ; Clear message box index
-    STZ $0E1A              ; Clear health bomb flag
+    LDA #$9F55 : STA $0A6C ; Set X speed table pointer
+    STZ !ELEVATOR_PROPERTIES
+    STZ !ELEVATOR_STATUS
+    STZ !HEALTH_BOMB_FLAG
+    STZ !MESSAGE_BOX_INDEX
+    STZ $1E75 ; Save Station Lockout flag
     STZ $0795 : STZ $0797  ; Clear door transition flags
     LDA #$0000 : STA !ram_transition_flag
 
