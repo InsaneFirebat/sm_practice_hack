@@ -1,6 +1,11 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.6.5]  Allow changing custom preset slot pages with left/right
+* [2.5.6.5]  Allow loading custom presets with the load last preset shortcut
+* [2.5.6.5]  Fix save stations when loading a preset into a save room
+* [2.5.6.5]  Equip supers in more GTC presets
+* [2.5.6.5]  Minor optimizations for CPU usage
 * [2.5.6.5]  Added Dyce menu palette profile
 * [2.5.6.4]  Fixed reversed first round mid patterns in Phantoon RNG controls
 * [2.5.6.3]  Added Draygon AI Tracker room strat
