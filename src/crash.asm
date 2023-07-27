@@ -228,6 +228,7 @@ CrashViewer:
 
     LDA #$0000 : STA !ram_crash_page : STA !ram_crash_palette : STA !ram_crash_cursor
     STA !ram_crash_input : STA !ram_crash_input_new
+    LDA #$0001 : STA !ram_crash_bg
     LDA !IH_CONTROLLER_PRI_NEW : STA !ram_crash_input_prev
     LDA #$0A44 : STA !ram_crash_mem_viewer
     LDA #$007E : STA !ram_crash_mem_viewer_bank
@@ -274,9 +275,9 @@ if !FEATURE_SD2SNES
     JML gamemode_shortcuts_load_state
 endif
 
-+   TXA : AND #$0010 : BNE .incPalette ; R
-    TXA : AND #$0020 : BNE .decPalette ; L
-    TXA : AND #$1080 : BNE .next       ; A or Start
++   TXA : BIT #$0010 : BNE .incPalette ; R
+    BIT #$0020 : BNE .decPalette       ; L
+    AND #$1080 : BNE .next             ; A or Start
     TXA : AND #$A000 : BNE .previous   ; B or Select
     JMP CrashLoop
 
@@ -294,18 +295,40 @@ endif
 
   .decPalette
     LDA !ram_crash_palette : BNE +
+    JSR crash_toggle_bg
     LDA #$0008
 +   DEC : STA !ram_crash_palette
     BRA .updateCGRAM
 
   .incPalette
     LDA !ram_crash_palette : CMP #$0007 : BMI +
+    JSR crash_toggle_bg
     LDA #$FFFF
 +   INC : STA !ram_crash_palette
 
   .updateCGRAM
     JSL crash_cgram_transfer
     JMP CrashLoop
+}
+
+crash_toggle_bg:
+{
+    %a8()
+    LDA #$80 : STA $2100 ; enable forced blanking
+    LDA !ram_crash_bg : BEQ .enableBG
+    ; disable BG1/2 on main screen
+    LDA #$14 : STA $212C
+    BRA .done
+
+  .enableBG
+    ; disable BG1/2 on main screen
+    LDA #$17 : STA $212C
+
+  .done
+    LDA #$0F : STA $2100 ; disable forced blanking
+    LDA !ram_crash_bg : EOR #$01 : STA !ram_crash_bg
+    %a16()
+    RTS
 }
 
 CrashPageTable:

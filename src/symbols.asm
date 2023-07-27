@@ -242,16 +242,17 @@ ram_crash_stack = !ram_crash_stack ; !CRASHDUMP+$10
 
 ram_crash_page = !ram_crash_page ; !CRASHDUMP+$40
 ram_crash_palette = !ram_crash_palette ; !CRASHDUMP+$42
-ram_crash_cursor = !ram_crash_cursor ; !CRASHDUMP+$44
-ram_crash_loop_counter = !ram_crash_loop_counter ; !CRASHDUMP+$46
-ram_crash_bytes_to_write = !ram_crash_bytes_to_write ; !CRASHDUMP+$48
-ram_crash_stack_line_position = !ram_crash_stack_line_position ; !CRASHDUMP+$4A
-ram_crash_text = !ram_crash_text ; !CRASHDUMP+$4C
-ram_crash_text_bank = !ram_crash_text_bank ; !CRASHDUMP+$4E
-ram_crash_text_palette = !ram_crash_text_palette ; !CRASHDUMP+$50
-ram_crash_mem_viewer = !ram_crash_mem_viewer ; !CRASHDUMP+$52
-ram_crash_mem_viewer_bank = !ram_crash_mem_viewer_bank ; !CRASHDUMP+$54
-ram_crash_temp = !ram_crash_temp ; !CRASHDUMP+$56
+ram_crash_bg = !ram_crash_bg ; !CRASHDUMP+$44
+ram_crash_cursor = !ram_crash_cursor ; !CRASHDUMP+$46
+ram_crash_loop_counter = !ram_crash_loop_counter ; !CRASHDUMP+$48
+ram_crash_bytes_to_write = !ram_crash_bytes_to_write ; !CRASHDUMP+$4A
+ram_crash_stack_line_position = !ram_crash_stack_line_position ; !CRASHDUMP+$4C
+ram_crash_text = !ram_crash_text ; !CRASHDUMP+$4E
+ram_crash_text_bank = !ram_crash_text_bank ; !CRASHDUMP+$50
+ram_crash_text_palette = !ram_crash_text_palette ; !CRASHDUMP+$52
+ram_crash_mem_viewer = !ram_crash_mem_viewer ; !CRASHDUMP+$54
+ram_crash_mem_viewer_bank = !ram_crash_mem_viewer_bank ; !CRASHDUMP+$56
+ram_crash_temp = !ram_crash_temp ; !CRASHDUMP+$58
 
 ram_crash_input = !ram_crash_input ; !CRASHDUMP+$60
 ram_crash_input_new = !ram_crash_input_new ; !CRASHDUMP+$62
