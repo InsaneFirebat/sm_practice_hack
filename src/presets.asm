@@ -232,12 +232,18 @@ preset_load_preset:
 
     ; check if custom preset is being loaded
 +   LDA !ram_custom_preset : BEQ .category_preset
+
+  .custom_preset
     JSL custom_preset_load
-    PLB
-    RTL
+    LDA #$5AFE : STA !sram_last_preset
+    LDA #$0000 : STA !ram_load_preset
+    BRA .done
 
   .category_preset
+    LDA !ram_load_preset : CMP #$5AFE : BEQ .custom_preset
     JSR category_preset_load
+
+  .done
     PLB
     RTL
 }
@@ -548,7 +554,7 @@ endif
     LDA #$E695 : STA $0A42 ; Unlock Samus
     LDA #$E725 : STA $0A44 ; Unlock Samus
 
-    LDA #$9F55 : STA $0A6C ; Set X speed table pointer
++   LDA #$9F55 : STA $0A6C ; Set X speed table pointer
     STZ !ELEVATOR_PROPERTIES
     STZ !ELEVATOR_STATUS
     STZ !HEALTH_BOMB_FLAG

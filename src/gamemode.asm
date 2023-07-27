@@ -255,28 +255,35 @@ endif
     CLC : RTS
 
   .next_preset_slot
-    LDA !sram_custom_preset_slot : CMP !TOTAL_PRESET_SLOTS
-    BNE + : LDA #$FFFF
-+   INC : STA !sram_custom_preset_slot
+    LDA !sram_custom_preset_slot : CMP !TOTAL_PRESET_SLOTS : BNE .increment_slot
+    LDA #$FFFF
+  .increment_slot
+    INC : STA !sram_custom_preset_slot
 if !FEATURE_VANILLAHUD
 else
     ASL : TAX : LDA.l NumberGFXTable,X : STA !HUD_TILEMAP+$7C
 endif
+    LDA !sram_last_preset : BMI .done_preset_slot
+    LDA #$0000 : STA !sram_last_preset
     %sfxnumber()
     ; CLC to continue normal gameplay after incrementing preset slot
-    CLC : RTS
+    CLC : JMP skip_pause
 
   .prev_preset_slot
-    LDA !sram_custom_preset_slot : BNE +
-    LDA !TOTAL_PRESET_SLOTS+1 ; total slots
-+   DEC : STA !sram_custom_preset_slot
+    LDA !sram_custom_preset_slot : BNE .decrement_slot
+    LDA !TOTAL_PRESET_SLOTS+1
+  .decrement_slot
+    DEC : STA !sram_custom_preset_slot
 if !FEATURE_VANILLAHUD
 else
     ASL : TAX : LDA.l NumberGFXTable,X : STA !HUD_TILEMAP+$7C
 endif
+    LDA !sram_last_preset : BMI .done_preset_slot
+    LDA #$0000 : STA !sram_last_preset
+  .done_preset_slot
     %sfxnumber()
     ; CLC to continue normal gameplay after decrementing preset slot
-    CLC : RTS
+    CLC : JMP skip_pause
 
   .random_preset
     JSL LoadRandomPreset

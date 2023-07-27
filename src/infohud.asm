@@ -1205,7 +1205,7 @@ ih_hud_code:
     LDA !IH_BLANK : STA !HUD_TILEMAP+$58
 
     ; health bomb
-+   LDA !SAMUS_HEALTH_DROP_FLAG : BEQ .clearHealthBomb
++   LDA !HEALTH_BOMB_FLAG : BEQ .clearHealthBomb
     LDA !SAMUS_HP : CMP #$0032 : BMI .pink
     LDA !IH_LETTER_E : STA !HUD_TILEMAP+$54
     BRA +
