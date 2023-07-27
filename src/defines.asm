@@ -8,7 +8,7 @@
 !VERSION_MINOR = 5
 !VERSION_BUILD = 6
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 5
+!VERSION_REV_2 = 6
 
 
 ; ---------
@@ -255,21 +255,23 @@
 
 !ram_crash_page = !CRASHDUMP+$40
 !ram_crash_palette = !CRASHDUMP+$42
-!ram_crash_cursor = !CRASHDUMP+$44
-!ram_crash_loop_counter = !CRASHDUMP+$46
-!ram_crash_bytes_to_write = !CRASHDUMP+$48
-!ram_crash_stack_line_position = !CRASHDUMP+$4A
-!ram_crash_text = !CRASHDUMP+$4C
-!ram_crash_text_bank = !CRASHDUMP+$4E
-!ram_crash_text_palette = !CRASHDUMP+$50
-!ram_crash_mem_viewer = !CRASHDUMP+$52
-!ram_crash_mem_viewer_bank = !CRASHDUMP+$54
-!ram_crash_temp = !CRASHDUMP+$56
+!ram_crash_bg = !CRASHDUMP+$44
+!ram_crash_cursor = !CRASHDUMP+$46
+!ram_crash_loop_counter = !CRASHDUMP+$48
+!ram_crash_bytes_to_write = !CRASHDUMP+$4A
+!ram_crash_stack_line_position = !CRASHDUMP+$4C
+!ram_crash_text = !CRASHDUMP+$4E
+!ram_crash_text_bank = !CRASHDUMP+$50
+!ram_crash_text_palette = !CRASHDUMP+$52
+!ram_crash_mem_viewer = !CRASHDUMP+$54
+!ram_crash_mem_viewer_bank = !CRASHDUMP+$56
+!ram_crash_temp = !CRASHDUMP+$58
 
 !ram_crash_input = !CRASHDUMP+$60
 !ram_crash_input_new = !CRASHDUMP+$62
 !ram_crash_input_prev = !CRASHDUMP+$64
 !ram_crash_input_timer = !CRASHDUMP+$66
+
 
 !IH_INPUT_SHOT = $7E09B2
 !IH_INPUT_JUMP = $7E09B4
