@@ -797,7 +797,7 @@ status_kraidradar:
 ; Draw stuff
 ; Don't draw the enemy if first nibble is non-zero
 ; Second bit determines arrow direction and color:
-; 8 = far away moving down, 4 = close moving up
+; 8 = far away moving down, 4 = close moving down
 ; 2 = far away moving up, 1 = close moving up
 ; Low byte contains one non-zero bit to mark its position
 ; The bottom-left tile of the HUD is unused
@@ -886,6 +886,17 @@ status_kraidradar:
     LDA #$1C63 : STA !HUD_TILEMAP+$8A,X : BRA .done
   .farDown7
     LDA #$1463 : STA !HUD_TILEMAP+$8A,X
+
+  .done
+    RTS
+}
+
+status_ceresridley:
+{
+    ; displays number of shots until Ridley "dies"
+    LDA $7E781A : CMP !ram_HUD_check : BEQ .done
+    STA !ram_HUD_check
+    LDX #$0088 : JSR Draw4
 
   .done
     RTS

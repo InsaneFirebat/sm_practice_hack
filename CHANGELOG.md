@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.6.6]  Added Downback Zeb Skip trainer by NobodyNada
 * [2.5.6.6]  Added ability to disable gameplay backgrounds in the crash viewer by cycling palettes
 * [2.5.6.5]  Allow changing custom preset slot pages with left/right
 * [2.5.6.5]  Allow loading custom presets with the load last preset shortcut
