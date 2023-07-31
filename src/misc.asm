@@ -140,9 +140,9 @@ org $90E908
 org $A2ABFD
     JML clear_escape_timer
 
-; Speed up bowling cutscene
-org $84D66B
-    JSL lock_samus_bowling
+;; Speed up bowling cutscene
+;org $84D66B
+;    JSL lock_samus_bowling
 
 
 ;org $8FEA00 ; free space for door asm
