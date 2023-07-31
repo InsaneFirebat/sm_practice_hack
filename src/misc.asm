@@ -140,10 +140,6 @@ org $90E908
 org $A2ABFD
     JML clear_escape_timer
 
-; Speed up bowling cutscene
-org $84D66B
-    JSL lock_samus_bowling
-
 
 ;org $8FEA00 ; free space for door asm
 org !ORG_MISC_BANK8F
@@ -199,50 +195,6 @@ hook_set_music_data:
 
   .fast_no_music
     JML $808F89
-}
-
-lock_samus_bowling:
-{
-    LDA !sram_cutscenes : BIT !CUTSCENE_FAST_BOWLING : BNE .speedup
-    TDC
-    JMP $F084
-
-  .speedup
-    TDC
-    JSL $90F084
-    LDA #locked_samus_speedup_movement_handler
-    STA $0A42
-    RTL
-}
-
-locked_samus_speedup_movement_handler:
-{
-    ; Original logic
-    PHP : PHB : PHK : PLB
-    %ai16()
-    JSR $AECE     ; Handle projectiles
-    JSR $EB02     ; Handle Samus movement
-
-    ; Bowling cutscene runs for 1938 frames, which is divisible by 6
-    ; We can therefore run two extra passes per frame
-    ; without having to check if the cutscene has ended
-    ; (we could do five extra passes but the rendering is not good)
-
-    ; Execute first extra pass
-    JSL $868104   ; Enemy projectile handler
-    JSL $8485B4   ; PLM handler
-    JSL $A08FD4   ; Main enemy routine
-    JSR $AECE     ; Handle projectiles
-    JSR $EB02     ; Handle Samus movement
-
-    ; Execute second extra pass
-    JSL $868104   ; Enemy projectile handler
-    JSL $8485B4   ; PLM handler
-    JSL $A08FD4   ; Main enemy routine
-    JSR $AECE     ; Handle projectiles
-    JSR $EB02     ; Handle Samus movement
-
-    PLB : PLP : RTL
 }
 
 gamemode_end:
