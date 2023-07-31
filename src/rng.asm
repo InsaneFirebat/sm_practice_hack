@@ -487,7 +487,7 @@ org $A6A2F2
     JMP ceres_ridley_draw_metroid
 
 org $A6A360
-    LDA  ridley_init_hook
+    LDA #ridley_init_hook
 
 ; Fix ceres ridley door instruction list to keep door visible when skipping ridley fight
 org $A6F55C
