@@ -100,7 +100,7 @@ if !FEATURE_CUSTOMIZE_MENU
     dw #mm_goto_customize
 endif
     dw #$0000
-    %cm_version_header("SM PRACTICE HACK", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
+    %cm_version_header("ASCENT INFOHUD", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
 if defined("PRERELEASE")
     %cm_footer("PRERELEASE COMMIT !PRERELEASE")
 endif
@@ -884,7 +884,7 @@ ToggleItemsMenu:
     %cm_header("TOGGLE ITEMS")
 
 ti_variasuit:
-    %cm_equipment_item("Varia Suit", !ram_cm_varia, #$0001, #$FFFE)
+    %cm_equipment_item("Toxin Suit", !ram_cm_varia, #$0001, #$FFFE)
 
 ti_gravitysuit:
     %cm_equipment_item("Gravity Suit", !ram_cm_gravity, #$0020, #$FFDF)
@@ -896,13 +896,13 @@ ti_bomb:
     %cm_equipment_item("Bombs", !ram_cm_bombs, #$1000, #$EFFF)
 
 ti_springball:
-    %cm_equipment_item("Spring Ball", !ram_cm_spring, #$0002, #$FFFD)
+    %cm_equipment_item("Boost Ball", !ram_cm_spring, #$0002, #$FFFD)
 
 ti_screwattack:
     %cm_equipment_item("Screw Attack", !ram_cm_screw, #$0008, #$FFF7)
 
 ti_hijumpboots:
-    %cm_equipment_item("Hi Jump Boots", !ram_cm_hijump, #$0100, #$FEFF)
+    %cm_equipment_item("Hi Jump and Jump Ball", !ram_cm_hijump, #$0100, #$FEFF)
 
 ti_spacejump:
     %cm_equipment_item("Space Jump", !ram_cm_space, #$0200, #$FDFF)
@@ -1034,10 +1034,10 @@ tb_wavebeam:
     %cm_equipment_beam("Wave", !ram_cm_wave, #$0001, #$FFFE, #$100F)
 
 tb_spazerbeam:
-    %cm_equipment_beam("Spazer", !ram_cm_spazer, #$0004, #$FFFB, #$1007)
+    %cm_equipment_beam("Spazer", !ram_cm_spazer, #$0004, #$FFFB, #$100F)
 
 tb_plasmabeam:
-    %cm_equipment_beam("Plasma", !ram_cm_plasma, #$0008, #$FFF7, #$100B)
+    %cm_equipment_beam("Plasma", !ram_cm_plasma, #$0008, #$FFF7, #$100F)
 
 tb_glitchedbeams:
     %cm_submenu("Glitched Beams", #GlitchedBeamsMenu)
@@ -1129,140 +1129,184 @@ action_glitched_beam:
 ; ---------------
 
 TeleportMenu:
-    dw #tel_goto_crat
-    dw #tel_goto_brin
-    dw #tel_goto_norf
-    dw #tel_goto_ship
-    dw #tel_goto_mari
-    dw #tel_goto_tour
+    dw #tel_goto_zone1
+    dw #tel_goto_zone2
+    dw #tel_goto_zone3
+    dw #tel_goto_void
     dw #tel_goto_debug
     dw #$0000
     %cm_header("TELEPORT TO SAVE STATION")
 
-tel_goto_crat:
-    %cm_submenu("Crateria", #TeleportCrateriaMenu)
+tel_goto_zone1:
+    %cm_submenu("Zone 1", #TeleportZone1Menu)
 
-tel_goto_brin:
-    %cm_submenu("Brinstar", #TeleportBrinstarMenu)
+tel_goto_zone2:
+    %cm_submenu("Zone 2", #TeleportZone2Menu)
 
-tel_goto_norf:
-    %cm_submenu("Norfair", #TeleportNorfairMenu)
+tel_goto_zone3:
+    %cm_submenu("Zone 3", #TeleportZone3Menu)
 
-tel_goto_ship:
-    %cm_submenu("Wrecked Ship", #TeleportWreckedShipMenu)
-
-tel_goto_mari:
-    %cm_submenu("Maridia", #TeleportMaridiaMenu)
-
-tel_goto_tour:
-    %cm_submenu("Tourian", #TeleportTourianMenu)
+tel_goto_void:
+    %cm_submenu("Void", #TeleportVoidMenu)
 
 tel_goto_debug:
     %cm_submenu("Debug Teleports", #DebugTeleportMenu)
 
-TeleportCrateriaMenu:
-    dw #tel_crateriaship
-    dw #tel_crateriaparlor
+TeleportZone1Menu:
+    dw #tel_crateria00
+    dw #tel_crateria01
+    dw #tel_crateria02
+    dw #tel_crateria03
+    dw #tel_crateria04
+    dw #tel_crateria0C
+    dw #tel_crateria12
     dw #$0000
-    %cm_header("CRATERIA SAVE STATIONS")
+    %cm_header("ZONE 1 SAVE STATIONS")
 
-tel_crateriaship:
-    %cm_jsl("Crateria Ship", #action_teleport, #$0000)
+tel_crateria00:
+    %cm_jsl("Ascension Begin", #action_teleport, #$0000)
 
-tel_crateriaparlor:
-    %cm_jsl("Crateria Parlor", #action_teleport, #$0001)
+tel_crateria01:
+    %cm_jsl("Save Station A", #action_teleport, #$0001)
 
-TeleportBrinstarMenu:
+tel_crateria02:
+    %cm_jsl("Save Station B", #action_teleport, #$0002)
+
+tel_crateria03:
+    %cm_jsl("Save Station C", #action_teleport, #$0003)
+
+tel_crateria04:
+    %cm_jsl("Save Station D", #action_teleport, #$0004)
+
+tel_crateria0C:
+    %cm_jsl("DEBUG CRE Love", #action_teleport, #$000C)
+
+tel_crateria12:
+    %cm_jsl("DEBUG Ascension Begin", #action_teleport, #$0012)
+
+TeleportZone2Menu:
+    dw #tel_maridiatube
+    dw #tel_maridiaaqueduct
+    dw #tel_maridiaelevator
+    dw #tel_maridiadraygon
+    dw #tel_maridia04
+    dw #tel_crateria0A
+    dw #tel_brinstar11
+    dw #tel_norfaircrocomire
+    dw #tel_norfair09
+    dw #tel_norfair0A
+    dw #tel_norfair10
+    dw #tel_norfair12
+    dw #tel_norfair13
+    dw #tel_norfair16
+    dw #tel_wreckedship10
+    dw #$0000
+    %cm_header("ZONE 2 SAVE STATIONS")
+
+tel_maridiatube:
+    %cm_jsl("Save Station E", #action_teleport, #$0400)
+
+tel_maridiaaqueduct:
+    %cm_jsl("Save Station F", #action_teleport, #$0402)
+
+tel_maridiaelevator:
+    %cm_jsl("Full Equip Save G", #action_teleport, #$0401)
+
+tel_maridiadraygon:
+    %cm_jsl("Save Station H", #action_teleport, #$0403)
+
+tel_maridia04:
+    %cm_jsl("Save Station I", #action_teleport, #$0404)
+
+tel_crateria0A:
+    %cm_jsl("DEBUG Alien Vista", #action_teleport, #$000A)
+
+tel_brinstar11:
+    %cm_jsl("DEBUG Choose", #action_teleport, #$011)
+
+tel_norfaircrocomire:
+    %cm_jsl("DEBUG Pwetty Overlays", #action_teleport, #$0203)
+
+tel_norfair09:
+    %cm_jsl("DEBUG Bottom of Organic", #action_teleport, #$0209)
+
+tel_norfair0A:
+    %cm_jsl("DEBUG Endgame Blockade", #action_teleport, #$020A)
+
+tel_norfair10:
+    %cm_jsl("DEBUG To Cap", #action_teleport, #$0210)
+
+tel_norfair12:
+    %cm_jsl("DEBUG Walljump Assist", #action_teleport, #$0212)
+
+tel_norfair13:
+    %cm_jsl("DEBUG Metallic Nature", #action_teleport, #$0213)
+
+tel_norfair16:
+    %cm_jsl("DEBUG Speed Alley", #action_teleport, #$0216)
+
+tel_wreckedship10:
+    %cm_jsl("DEBUG Body Control", #action_teleport, #$0310)
+
+TeleportZone3Menu:
     dw #tel_brinstarpink
     dw #tel_brinstargreenshaft
     dw #tel_brinstargreenetecoons
     dw #tel_brinstarkraid
-    dw #tel_brinstarredtower
+    dw #tel_brinstar04
+    dw #tel_brinstar05
+    dw #tel_brinstar06
+    dw #tel_brinstar0A
+    dw #tel_maridia11
+    dw #tel_tourian08
     dw #$0000
-    %cm_header("BRINSTAR SAVE STATIONS")
+    %cm_header("ZONE 3 SAVE STATIONS")
 
 tel_brinstarpink:
-    %cm_jsl("Brinstar Pink Spospo", #action_teleport, #$0100)
+    %cm_jsl("Save Station J", #action_teleport, #$0100)
 
 tel_brinstargreenshaft:
-    %cm_jsl("Brinstar Green Shaft", #action_teleport, #$0101)
+    %cm_jsl("Sharp Soil Save L", #action_teleport, #$0101)
 
 tel_brinstargreenetecoons:
-    %cm_jsl("Brinstar Green Etecoons", #action_teleport, #$0102)
+    %cm_jsl("Save Station M", #action_teleport, #$0102)
 
 tel_brinstarkraid:
-    %cm_jsl("Brinstar Kraid", #action_teleport, #$0103)
+    %cm_jsl("Save Station N", #action_teleport, #$0103)
 
-tel_brinstarredtower:
-    %cm_jsl("Brinstar Red Tower", #action_teleport, #$0104)
+tel_brinstar04:
+    %cm_jsl("Save Station O", #action_teleport, #$0104)
 
-TeleportNorfairMenu:
-    dw #tel_norfairgrapple
-    dw #tel_norfairbubble
+tel_brinstar05:
+    %cm_jsl("Save Station P", #action_teleport, #$0105)
+
+tel_brinstar06:
+    %cm_jsl("Metroid Nerd Save", #action_teleport, #$0106)
+
+tel_brinstar0A:
+    %cm_jsl("DEBUG Setting Bomb 1", #action_teleport, #$010A)
+
+tel_maridia11:
+    %cm_jsl("DEBUG Sacred Foes Inlet", #action_teleport, #$0411)
+
+tel_tourian08:
+    %cm_jsl("DEBUG Above Is Easier", #action_teleport, #$0508)
+
+TeleportVoidMenu:
+    dw #tel_wreckedship
+    dw #tel_tourian10
     dw #tel_norfairtunnel
-    dw #tel_norfaircrocomire
-    dw #tel_norfairlnelevator
-    dw #tel_norfairridley
     dw #$0000
-    %cm_header("NORFAIR SAVE STATIONS")
+    %cm_header("VOID SAVE STATIONS")
+; Void
+tel_wreckedship:
+    %cm_jsl("Warping Center", #action_teleport, #$0300)
 
-tel_norfairgrapple:
-    %cm_jsl("Norfair Grapple", #action_teleport, #$0200)
-
-tel_norfairbubble:
-    %cm_jsl("Norfair Bubble Mountain", #action_teleport, #$0201)
+tel_tourian10:
+    %cm_jsl("DEBUG Water Height", #action_teleport, #$0510)
 
 tel_norfairtunnel:
-    %cm_jsl("Norfair Tunnel", #action_teleport, #$0202)
-
-tel_norfaircrocomire:
-    %cm_jsl("Norfair Crocomire", #action_teleport, #$0203)
-
-tel_norfairlnelevator:
-    %cm_jsl("Norfair LN Elevator", #action_teleport, #$0204)
-
-tel_norfairridley:
-    %cm_jsl("Norfair Ridley", #action_teleport, #$0205)
-
-TeleportWreckedShipMenu:
-    dw #tel_wreckedship
-    dw #$0000
-    %cm_header("WRECKED SHIP SAVE STATIONS")
-
-tel_wreckedship:
-    %cm_jsl("Wrecked Ship", #action_teleport, #$0300)
-
-TeleportMaridiaMenu:
-    dw #tel_maridiatube
-    dw #tel_maridiaelevator
-    dw #tel_maridiaaqueduct
-    dw #tel_maridiadraygon
-    dw #$0000
-    %cm_header("MARIDIA SAVE STATIONS")
-
-tel_maridiatube:
-    %cm_jsl("Maridia Tube", #action_teleport, #$0400)
-
-tel_maridiaelevator:
-    %cm_jsl("Maridia Elevator", #action_teleport, #$0401)
-
-tel_maridiaaqueduct:
-    %cm_jsl("Maridia Aqueduct", #action_teleport, #$0402)
-
-tel_maridiadraygon:
-    %cm_jsl("Maridia Draygon", #action_teleport, #$0403)
-
-TeleportTourianMenu:
-    dw #tel_tourianentrance
-    dw #tel_tourianmb
-    dw #$0000
-    %cm_header("TOURIAN SAVE STATIONS")
-
-tel_tourianentrance:
-    %cm_jsl("Tourian Entrance", #action_teleport, #$0501)
-
-tel_tourianmb:
-    %cm_jsl("Tourian MB", #action_teleport, #$0500)
+    %cm_jsl("DEBUG Spacevator", #action_teleport, #$0202)
 
 DebugTeleportMenu:
     dw #tel_debug_area
@@ -1363,17 +1407,9 @@ misc_hyperbeam:
     RTL
 
   .off
-    ; check for Spazer+Plasma
-    LDA !SAMUS_BEAMS_COLLECTED : AND #$000C : CMP #$000C : BEQ .disableMurder
     LDA !SAMUS_BEAMS_COLLECTED : STA !SAMUS_BEAMS_EQUIPPED
-    BRA .FXobjects
 
-  .disableMurder
-    LDA !SAMUS_BEAMS_COLLECTED : AND #$000B : STA !SAMUS_BEAMS_EQUIPPED
-
-  .FXobjects
     LDX #$000E
-
   .loopFXobjects
     LDA $1E7D,X : CMP #$E1F0 : BEQ .found
     DEX #2 : BPL .loopFXobjects
