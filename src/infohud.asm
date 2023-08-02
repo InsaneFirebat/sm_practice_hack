@@ -548,8 +548,9 @@ ih_shinespark_segment:
     JSL $80914D ; overwritten code
 
     PHB
-    LDA !ram_activated_shine_duration
+    ; set index to $7C and DB to $00
     LDX #$007C : PHX : PLB : PLB
+    LDA !ram_activated_shine_duration
     JSR Draw2
     LDA #$0000 : STA !ram_activated_shine_duration
     PLB
