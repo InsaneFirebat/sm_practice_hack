@@ -447,17 +447,16 @@ endif
     ; These can be removed as code is added to maintain CPU parity during normal gameplay
     LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_display_lag_loop
     LDA !sram_artificial_lag
-
     ASL #4
 if !FEATURE_SD2SNES
+; skip 4 (ideally 6) cycles for auto-savestate in doors check
 else
-    NOP #2 ; Add 4 more clock cycles
+    NOP #2  ; Add 2 more clock cycles
 endif
+    CLC : ADC #$0014  ; Add 75 cycles including CLC+ADC
     TAX
-
   .lagloop
     DEX : BNE .lagloop
-
   .endlag
     RTL
 
@@ -466,14 +465,15 @@ endif
     LDA !sram_artificial_lag
     DEC : BEQ .endlag   ; Remove 76 clock cycles
     DEC : BEQ .endlag   ; Remove 76 clock cycles
-    ASL #2 : INC ; Add 4 loops (22 clock cycles including the INC)
-if !FEATURE_SD2SNES
     ASL #2
+    INC  ; Add 4 loops (22 clock cycles including the INC)
+    ASL #2
+if !FEATURE_SD2SNES
 else
-    ASL #2 : INC ; Add 1 loop (7 clock cycles including the INC)
+    INC  ; Add 1 loop (7 clock cycles including the INC)
 endif
+    CLC : ADC #$0014  ; Add 75 cycles including CLC+ADC
     TAX
-
   .vanilla_lagloop
     DEX : BNE .vanilla_lagloop
     RTL

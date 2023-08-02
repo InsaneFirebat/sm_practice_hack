@@ -35,9 +35,8 @@ org $828B34      ; reset room timers for first room of Ceres
     NOP #2
 ceres_start_timers_return:
 
-org $90E6AA      ; hijack, runs on gamestate = 08 (main gameplay), handles most updating HUD information
+org $90E6BC      ; hijack, runs on gamestate = 08 (main gameplay), handles most updating HUD information
     JSL ih_gamemode_frame
-    NOP #2
 
 org $9493FB      ; hijack, runs when Samus hits a door BTS
     JSL ih_before_room_transition
@@ -49,9 +48,8 @@ org $82E764      ; hijack, runs when Samus is coming out of a room transition
     JSL ih_after_room_transition
     RTS
 
-org $809B4C      ; hijack, HUD routine (game timer by Quote58)
+org $809B48      ; hijack, HUD routine (game timer by Quote58)
     JSL ih_hud_code
-    NOP
 
 org $8290F6      ; hijack, HUD routine while paused
     JSL ih_hud_code_paused
@@ -233,8 +231,6 @@ ih_debug_patch:
 
 ih_nmi_end:
 {
-    %ai16()
-
 if !FEATURE_VANILLAHUD
 else
     ; Room timer
@@ -330,13 +326,10 @@ endif
 
 ih_gamemode_frame:
 {
-    PHA
     LDA !ram_gametime_room : INC : STA !ram_gametime_room
-    PLA
 
-    ; overwritten code
-    STZ $0A30 : STZ $0A32
-    RTL
+    ; overwritten code + return
+    JML $949B60
 }
 
 ih_after_room_transition:
@@ -1081,11 +1074,9 @@ ih_hud_vanilla_health:
 
 ih_hud_code:
 {
+    ; overwritten code
+    STZ $02
     %ai16()
-
-    ; fix data bank register
-    PHB
-    PEA $8080 : PLB : PLB
 
     LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_infohud
 
@@ -1147,7 +1138,7 @@ ih_hud_code:
     LDA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$8C
     LDA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A
     LDA !IH_BLANK : STA !HUD_TILEMAP+$88
-    BRL .end
+    RTL
 
 ; Reserve energy counter
   .reserves
@@ -1181,12 +1172,12 @@ ih_hud_code:
 ; Status Icons
   .statusIcons
     LDA !sram_status_icons : BNE +
-    JMP .end
+    RTL
 
     ; check for Super HUD
 +   LDA !sram_display_mode : CMP !IH_MODE_ROOMSTRAT_INDEX : BNE +
     LDA !sram_room_strat : BNE +
-    JMP .end
+    RTL
     
     ; elevator
 +   LDA $0E16 : BEQ .clearElevator
@@ -1223,21 +1214,17 @@ ih_hud_code:
 
     LDA !SAMUS_RESERVE_MAX : BEQ .clearReserve
     LDA !IH_RESERVE_AUTO : STA !HUD_TILEMAP+$1A
-    BRA +
+    RTL
 
   .empty
     LDA !SAMUS_RESERVE_MAX : BEQ .clearReserve
     LDA !IH_RESERVE_EMPTY : STA !HUD_TILEMAP+$1A
-    BRA +
+    RTL
 
   .clearReserve
     LDA !IH_BLANK : STA !HUD_TILEMAP+$1A
 
   .end
-+   PLB
-    ; overwritten code
-    %ai16()
-    LDA !SAMUS_RESERVE_MODE
     RTL
 }
 
