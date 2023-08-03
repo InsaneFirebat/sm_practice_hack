@@ -729,15 +729,7 @@ action_category:
     TYA : ASL #4 : TAX
 
     LDA.l .table,X : STA !SAMUS_ITEMS_COLLECTED : STA !SAMUS_ITEMS_EQUIPPED : INX #2
-
-    LDA.l .table,X : STA !SAMUS_BEAMS_COLLECTED : TAY
-    AND #$000C : CMP #$000C : BEQ .murderBeam
-    TYA : STA !SAMUS_BEAMS_EQUIPPED : INX #2 : BRA .doneMurderBeam
-
-  .murderBeam
-    TYA : AND #$100B : STA !SAMUS_BEAMS_EQUIPPED : INX #2
-
-  .doneMurderBeam
+    LDA.l .table,X : STA !SAMUS_BEAMS_COLLECTED : STA !SAMUS_BEAMS_EQUIPPED : INX #2
     LDA.l .table,X : STA !SAMUS_HP : STA !SAMUS_HP_MAX : INX #2
     LDA.l .table,X : STA !SAMUS_MISSILES : STA !SAMUS_MISSILES_MAX : INX #2
     LDA.l .table,X : STA !SAMUS_SUPERS : STA !SAMUS_SUPERS_MAX : INX #2
@@ -902,7 +894,7 @@ ti_screwattack:
     %cm_equipment_item("Screw Attack", !ram_cm_screw, #$0008, #$FFF7)
 
 ti_hijumpboots:
-    %cm_equipment_item("Hi Jump and Jump Ball", !ram_cm_hijump, #$0100, #$FEFF)
+    %cm_equipment_item("HiJump/JumpBall", !ram_cm_hijump, #$0100, #$FEFF)
 
 ti_spacejump:
     %cm_equipment_item("Space Jump", !ram_cm_space, #$0200, #$FDFF)
@@ -1019,8 +1011,8 @@ ToggleBeamsMenu:
     dw tb_plasmabeam
     dw #$FFFF
     dw misc_hyperbeam
-    dw #$FFFF
-    dw tb_glitchedbeams
+;    dw #$FFFF
+;    dw tb_glitchedbeams
     dw #$0000
     %cm_header("TOGGLE BEAMS")
 

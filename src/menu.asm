@@ -28,6 +28,12 @@ maybe_trigger_pause_long:
     JSR $80FA
     RTL
 
+restore_ascent_bg3_long:
+    PHP
+    JSR $9650
+    PLP
+    RTL
+
 print pc, " menu bank85 end"
 warnpc $85FE00 ; fanfare.asm
 
@@ -61,6 +67,7 @@ cm_start:
     STZ !SAMUS_HEALTH_WARNING
 
     JSL cm_transfer_original_tileset
+    JSL restore_ascent_bg3_long
     JSL cm_transfer_original_cgram
 
     ; Update HUD (in case we added missiles etc.)
@@ -178,6 +185,7 @@ cm_transfer_custom_tileset:
 }
 
 cm_transfer_original_tileset:
+; Ascent uses the last $200 bytes for layer 3 effects
 {
     PHP
     %a16()
@@ -195,7 +203,7 @@ cm_transfer_original_tileset:
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
     LDX.w #hudgfx_bin : STX $4302 ; Source offset
     LDA.b #hudgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$0900 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0E00 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -214,7 +222,7 @@ cm_transfer_original_tileset:
     LDX #$2000 : STX $2116 ; VRAM address (4000 in vram)
     LDX.w #hudgfx_bin : STX $4302 ; Source offset
     LDA.b #hudgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$0900 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0E00 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -230,7 +238,7 @@ cm_transfer_original_tileset:
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
     LDX.w #mapgfx_bin : STX $4302 ; Source offset
     LDA.b #mapgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$0900 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0E00 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -246,7 +254,7 @@ cm_transfer_original_tileset:
     LDX #$2000 : STX $2116 ; VRAM address (4000 in vram)
     LDX.w #mapgfx_bin : STX $4302 ; Source offset
     LDA.b #mapgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$0900 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0E00 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -1471,7 +1479,7 @@ cm_draw_ascent_name:
 
 -   LDA [!DP_CurrentMenu],Y : CMP #$0F : BNE +
     ; convert transparent tile to background tile
-    LDA #$1F
+    LDA #$1F ; blank space relocated
 +   STA !ram_tilemap_buffer,X : INX
     LDA !DP_Palette : STA !ram_tilemap_buffer,X : INX
     INY #2 : CPY #$0024 : BMI - ; all names 18 characters
