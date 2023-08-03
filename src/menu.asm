@@ -151,7 +151,7 @@ cm_transfer_custom_tileset:
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
     LDX.w #cm_hud_table : STX $4302 ; Source offset
     LDA.b #cm_hud_table>>16 : STA $4304 ; Source bank
-    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0E00 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -168,7 +168,7 @@ cm_transfer_custom_tileset:
     LDX #$2000 : STX $2116 ; VRAM address (4000 in vram)
     LDX.w #cm_hud_table : STX $4302 ; Source offset
     LDA.b #cm_hud_table>>16 : STA $4304 ; Source bank
-    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0E00 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -1156,7 +1156,7 @@ if !FEATURE_ROOM_NAMES
     LDA.w #RoomNameTextTable>>16 : STA !DP_CurrentMenu+2
     ; set tilemap position and draw area text
     LDA !DP_JSLTarget : CLC : ADC #$0006 : TAX
-    JSR cm_draw_text
+    JSR cm_draw_ascent_name
     ; fix bank
     LDA !DP_MenuIndices+2 : STA !DP_CurrentMenu+2
     RTS
@@ -1269,7 +1269,9 @@ endif
 
 if !FEATURE_ROOM_NAMES
 pushpc
-incsrc roomnames.asm
+;incsrc roomnames.asm
+org $ED8000
+RoomNameTextTable:
 pullpc
 endif
 }
@@ -1458,6 +1460,22 @@ cm_draw_text:
     INY : BRA .loop
 
   .end
+    %a16()
+    RTS
+}
+
+cm_draw_ascent_name:
+{
+    %a8()
+    LDY #$0000
+
+-   LDA [!DP_CurrentMenu],Y : CMP #$0F : BNE +
+    ; convert transparent tile to background tile
+    LDA #$1F
++   STA !ram_tilemap_buffer,X : INX
+    LDA !DP_Palette : STA !ram_tilemap_buffer,X : INX
+    INY #2 : CPY #$0024 : BMI - ; all names 18 characters
+
     %a16()
     RTS
 }
