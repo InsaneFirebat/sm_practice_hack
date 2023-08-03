@@ -17,6 +17,7 @@ org $808490
     STZ $C000,X
     DEX : DEX
     BPL .clear_bank_loop
+
     JSL init_nonzero_wram
     PLA
     BRA .end_clear_bank
@@ -54,6 +55,14 @@ init_code:
 
 init_nonzero_wram:
 {
+    ; Ascent $7F clear
+    LDX #$00FE
+    LDA #$0000
+-   STA $7FFB00,X
+    STA $7FFC00,X
+    STA $7FFD00,X
+    DEX #2 : BPL -
+
     ; RAM $7E0000 fluctuates so it is not a good default value
     LDA #!ENEMY_HP : STA !ram_watch_left
     LDA #!SAMUS_HP : STA !ram_watch_right

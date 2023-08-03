@@ -17,7 +17,7 @@
 !VERSION_MINOR = 5
 !VERSION_BUILD = 6
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 2
+!VERSION_REV_2 = 3
 
 
 ; ---------------
@@ -78,11 +78,11 @@
 
 !ram_tilemap_buffer = $7E5800
 !CRASHDUMP_TILEMAP_BUFFER = !ram_tilemap_buffer
-!CRASHDUMP = $7EFF00
+!CRASHDUMP = $7FFF00
 
 !WRAM_BANK = #$007E
 !WRAM_SIZE = #$0200
-!WRAM_START = $7EFD00
+!WRAM_START = $7FFB00
 
 ; These variables are NOT PERSISTENT across savestates --
 ; they're saved and reloaded along with the game state.
@@ -237,7 +237,7 @@
 ; RAM Menu
 ; ---------
 
-!WRAM_MENU_START = $7EFE00
+!WRAM_MENU_START = $7FFD00
 
 !ram_cm_stack_index = $05D5
 !ram_cm_menu_stack = !WRAM_MENU_START+$00         ; 16 bytes
@@ -344,7 +344,7 @@
 !PRESET_SLOTS = $703000
 !SRAM_VERSION = $0013
 
-!SRAM_START = $F02200
+!SRAM_START = $702200
 
 !sram_initialized = !SRAM_START+$00
 
