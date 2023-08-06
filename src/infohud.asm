@@ -24,9 +24,9 @@ org $82EE92      ; runs on START GAME
 org $828B34      ; reset room timers for first room of Ceres
     JML ceres_start_timers : NOP : NOP
 ceres_start_timers_return:
-        
-org $90E6AA      ; hijack, runs on gamestate = 08 (main gameplay), handles most updating HUD information
-    JSL ih_gamemode_frame : NOP : NOP
+
+org $90E6BC      ; hijack, runs on gamestate = 08 (main gameplay), handles most updating HUD information
+    JSL ih_gamemode_frame
 
 org $9493B8      ; hijack, runs when Samus hits a door BTS
     JSL ih_before_room_transition
@@ -155,8 +155,7 @@ ih_debug_routine:
 
 ih_nmi_end:
 {
-    %ai16()
-
+    ; Room timer
     LDA !ram_realtime_room : INC : STA !ram_realtime_room
 
     ; Segment real timer
@@ -243,13 +242,10 @@ ih_nmi_end:
 
 ih_gamemode_frame:
 {
-    PHA
     LDA !ram_gametime_room : INC : STA !ram_gametime_room
-    PLA
 
-    ; overwritten code
-    STZ $0A30 : STZ $0A32
-    RTL
+    ; overwritten code + return
+    JML $949B60
 }
 
 ih_after_room_transition:
@@ -728,13 +724,9 @@ ih_hud_vanilla_health:
 
 ih_hud_code:
 {
+    ; overwritten code
+    STZ $02
     %ai16()
-
-    ; fix data bank register
-    PHB
-    PEA $8080
-    PLB
-    PLB
 
     LDA !sram_top_display_mode : CMP !TOP_DISPLAY_VANILLA : BEQ .vanilla_infohud
 
@@ -829,7 +821,7 @@ ih_hud_code:
     ; Status Icons
   .statusIcons
     LDA !sram_status_icons : BNE .check_healthbomb
-    JMP .end
+    RTL
 
     ; health bomb
   .check_healthbomb
@@ -892,10 +884,6 @@ ih_hud_code:
     LDA !IH_BLANK : STA $7EC656
 
   .end
-    PLB
-    ; overwritten code
-    STZ $02
-    %ai16()
     RTL
 }
 
@@ -1181,18 +1169,22 @@ CalcBeams:
 
 ih_game_loop_code:
 {
-    PHA
-
     LDA !ram_transition_counter : INC : STA !ram_transition_counter
 
-    LDA !ram_game_loop_extras : BEQ .handleinputs
+    LDA !ram_game_loop_extras : BNE .extrafeatures
 
+  .checkinputs
+    LDA !IH_CONTROLLER_SEC_NEW : BNE .handleinputs
+    ; overwritten code + return
+    JML $808111
+
+  .extrafeatures
     LDA !ram_metronome : BEQ .metronome_done
     JSR metronome
   .metronome_done
 
     LDA !ram_magic_pants_enabled : XBA : ORA !ram_space_pants_enabled
-    BEQ .handleinputs
+    BEQ .checkinputs
 
     BIT #$00FF : BEQ .magicpants    ; if spacepants are disabled, handle magicpants
     BIT #$FF00 : BEQ .spacepants    ; if magicpants are disabled, handle spacepants
@@ -1202,13 +1194,13 @@ ih_game_loop_code:
 
   .spacepants
     JSR space_pants
-    BRA .handleinputs
+    BRA .checkinputs
 
   .magicpants
     JSR magic_pants
+    BRA .checkinputs
 
   .handleinputs
-    LDA !IH_CONTROLLER_SEC_NEW : BEQ .done
     CMP !IH_PAUSE : BEQ .toggle_pause
     CMP !IH_SLOWDOWN : BEQ .toggle_slowdown
     CMP !IH_SPEEDUP : BEQ .toggle_speedup
@@ -1216,38 +1208,37 @@ ih_game_loop_code:
     CMP !IH_STATUS_R : BEQ .inc_statusdisplay
     CMP !IH_STATUS_L : BEQ .dec_statusdisplay
 
-  .done
-    PLA
-    JSL $808111
-    RTL
-
   .toggle_pause
     TDC : STA !ram_slowdown_frames
     DEC : STA !ram_slowdown_mode
-    JMP .done
+    BRA .done
 
   .toggle_slowdown
     LDA !ram_slowdown_mode
     INC : STA !ram_slowdown_mode
-    JMP .done
+    BRA .done
 
   .toggle_speedup
     LDA !ram_slowdown_mode : BEQ .skip_speedup
     DEC : STA !ram_slowdown_mode
   .skip_speedup
-    JMP .done
+    BRA .done
 
   .reset_slowdown
     TDC
     STA !ram_slowdown_mode
     STA !ram_slowdown_frames
-    JMP .done
+    BRA .done
 
   .inc_statusdisplay
     LDA !sram_display_mode : INC
     CMP #$0014 : BNE .set_displaymode
     TDC : STA !sram_display_mode
     BRA .update_status
+
+  .done
+    ; overwritten code + return
+    JML $808111
 
   .dec_statusdisplay
     LDA !sram_display_mode : DEC
@@ -1277,7 +1268,7 @@ ih_game_loop_code:
     STA !ram_mb_hp
     STA !ram_enemy_hp
     STA !ram_shine_counter
-    JMP .done
+    BRA .done
 }
 
 metronome:
