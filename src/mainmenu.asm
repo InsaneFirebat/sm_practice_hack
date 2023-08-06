@@ -217,6 +217,9 @@ presets_custom_preset_slot:
   .routine
     ; ignore if not A, X, or Y
     LDA !IH_CONTROLLER_PRI_NEW : BIT #$40C0 : BNE .submenu
+    LDA !sram_last_preset : BMI .exit
+    LDA #$0000 : STA !sram_last_preset
+  .exit
     RTL
   .submenu
     ; undo increment from execute_numfield
@@ -2134,6 +2137,8 @@ RoomStratMenu:
     dw ihstrat_botwooncf
     dw ihstrat_snailclip
     dw ihstrat_mbhp
+    dw ihstrat_downbackzeb
+    dw ihstrat_draygonai
     dw ihstrat_ridleyai
     dw #$0000
     %cm_header("INFOHUD ROOM STRAT")
@@ -2170,8 +2175,14 @@ ihstrat_snailclip:
 ihstrat_mbhp:
     %cm_jsl("Mother Brain HP", #action_select_room_strat, #$0009)
 
+ihstrat_downbackzeb:
+    %cm_jsl("Downback Zeb Skip", #action_select_room_strat, #$000A)
+
+ihstrat_draygonai:
+    %cm_jsl("Draygon's AI Tracker", #action_select_room_strat, #$000B)
+
 ihstrat_ridleyai:
-    %cm_jsl("Ridley AI", #action_select_room_strat, #$000A)
+    %cm_jsl("Ridley AI", #action_select_room_strat, #$000C)
 
 action_select_room_strat:
 {
@@ -2195,7 +2206,10 @@ ih_room_strat:
     db #$28, "ELEVATOR CF", #$FF
     db #$28, " BOTWOON CF", #$FF
     db #$28, " SNAIL CLIP", #$FF
-    db #$28, "3 JUMP SKIP", #$FF
+    db #$28, "      MB HP", #$FF
+    db #$28, "  DBACK ZEB", #$FF
+    db #$28, " DRAYGON AI", #$FF
+    db #$28, "  RIDLEY AI", #$FF
     db #$FF
     .routine
         LDA #$0001 : STA !sram_display_mode
@@ -2981,7 +2995,7 @@ PhantoonMenu:
 
 
 phan_phase_1_table:
-    dw #$003F, #$0020, #$0008, #$0002, #$0010, #$0004, #$0001
+    dw #$003F, #$0020, #$0004, #$0002, #$0010, #$0008, #$0001
     dw #$0030, #$000C, #$0003, #$002A, #$0015, #$003C, #$0000
 
 phan_phase_2_table:
@@ -3042,7 +3056,7 @@ phan_fast_left_1:
     %cm_toggle_bit("#1 Fast Left", !ram_phantoon_rng_round_1, #$0020, phan_set_phan_first_phase)
 
 phan_mid_left_1:
-    %cm_toggle_bit("#1 Mid  Left", !ram_phantoon_rng_round_1, #$0008, phan_set_phan_first_phase)
+    %cm_toggle_bit("#1 Mid  Left", !ram_phantoon_rng_round_1, #$0004, phan_set_phan_first_phase)
 
 phan_slow_left_1:
     %cm_toggle_bit("#1 Slow Left", !ram_phantoon_rng_round_1, #$0002, phan_set_phan_first_phase)
@@ -3051,7 +3065,7 @@ phan_fast_right_1:
     %cm_toggle_bit("#1 Fast Right", !ram_phantoon_rng_round_1, #$0010, phan_set_phan_first_phase)
 
 phan_mid_right_1:
-    %cm_toggle_bit("#1 Mid  Right", !ram_phantoon_rng_round_1, #$0004, phan_set_phan_first_phase)
+    %cm_toggle_bit("#1 Mid  Right", !ram_phantoon_rng_round_1, #$0008, phan_set_phan_first_phase)
 
 phan_slow_right_1:
     %cm_toggle_bit("#1 Slow Right", !ram_phantoon_rng_round_1, #$0001, phan_set_phan_first_phase)
