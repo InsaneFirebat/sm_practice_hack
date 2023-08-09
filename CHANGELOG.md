@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.7]    Allow deleting and swapping custom presets in the menu
 * [2.5.6.7]  Fix missing pointer in Draygon AI Tracker
 * [2.5.6.6]  Added Downback Zeb Skip trainer by NobodyNada
 * [2.5.6.6]  Added ability to disable gameplay backgrounds in the crash viewer by cycling palettes
@@ -13,10 +14,10 @@
 * [2.5.6.4]  Fixed reversed first round mid patterns in Phantoon RNG controls
 * [2.5.6.3]  Added Draygon AI Tracker room strat
 * [2.5.6.2]  Fixed missing sound effect on Taco Tank trainer
-* [2.5.6.1]  Fixed crash when activating bowling torizo (by idlechild)
-* [2.5.6]    Fix for spikesuit trainer with springball equipped (by idlechild)
+* [2.5.6.1]  Fixed crash when activating bowling torizo by idlechild
+* [2.5.6]    Fix for spikesuit trainer with springball equipped by idlechild
 * [2.5.6]    Minor fixes for some presets
-* [2.5.6]    Added fast cutscene option for bowling torizo (by idlechild)
+* [2.5.6]    Added fast cutscene option for bowling torizo by idlechild
 * [2.5.5.22] Update timers when MB2 realizes she's at zero HP
 * [2.5.5.21] Fixed missing HUD number GFX that was offsetting most of the list
 * [2.5.5.20] Added a submenu to preview custom HUD number graphics in the menu
@@ -60,12 +61,12 @@
 * [2.5.4.5]  Select power bombs for any% attic presets
 * [2.5.4.4]  Fixed conflicts with room names overwriting preset data
 * [2.5.4.3]  Added option to display Samus data or room names in custom presets menu
-* [2.5.4.3]  Added hitbox viewer for projectile vs projectile collisions (by idlechild)
+* [2.5.4.3]  Added hitbox viewer for projectile vs projectile collisions by idlechild
 * [2.5.4.2]  Added a menu to inspect custom presets
 * [2.5.4.2]  Fixed mismatched '2' in Ridley AI's HUD font
 * [2.5.4.1]  Moved Menu Customization to the main menu
-* [2.5.4]    Updated Wall Jump and Botwoon CF trainers (by idlechild)
-* [2.5.4]    Updated stutter momentum for Shine Tune (by idlechild)
+* [2.5.4]    Updated Wall Jump and Botwoon CF trainers by idlechild
+* [2.5.4]    Updated stutter momentum for Shine Tune by idlechild
 * [2.5.3.12] Fixed visible but intangible fire jet enemy in LN Main Hall presets
 * [2.5.3.11] Fix foreground corruption when loading a preset into Phantoon's room
 * [2.5.3.10] Add RNG controls for Botwoon's hidden movements

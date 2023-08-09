@@ -6,9 +6,9 @@
 !VERSION_HEADER = $00
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 5
-!VERSION_BUILD = 6
+!VERSION_BUILD = 7
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 7
+!VERSION_REV_2 = 0
 
 
 ; ---------
@@ -228,6 +228,9 @@
 !ram_cm_phan_second_phase = !WRAM_MENU_START+$82
 
 !ram_cm_keyboard_buffer = !WRAM_MENU_START+$80 ; $18 bytes
+
+!ram_cm_manage_slots = !WRAM_MENU_START+$80
+!ram_cm_selected_slot = !WRAM_MENU_START+$82
 
 ; ^ FREE SPACE ^ up to +$CE
 
@@ -805,6 +808,7 @@ endif
 !ACTION_CUSTOM_PRESET       = #$001E
 !ACTION_RAM_WATCH           = #$0020
 !ACTION_DYNAMIC             = #$0022
+!ACTION_MANAGE_PRESETS      = #$0024
 
 ; using macros instead of these in custom builds
 ;!SOUND_MENU_MOVE = $0039
@@ -819,6 +823,7 @@ endif
 !MENU_CLEAR = #$000E
 !MENU_BLANK = #$281F
 !MENU_SLASH = #$289F
+!MENU_ARROW_RIGHT = #$3880
 !IH_BLANK = #$2C0F
 !IH_PERCENT = #$0C0A
 !IH_DECIMAL = #$0CCB
