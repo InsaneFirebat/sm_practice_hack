@@ -209,6 +209,11 @@ ram_cm_preserved_timers = !ram_cm_preserved_timers ; !WRAM_MENU_START+$78 ; 8 by
 ; The following RAM may be used multiple times,
 ; as long as it isn't used multiple times on the same menu page
 
+ram_zz_shared_80 = !ram_zz_shared_80 ; !WRAM_MENU_START+$80
+ram_zz_shared_82 = !ram_zz_shared_82 ; !WRAM_MENU_START+$82
+;!ram_zz_shared_84 = !WRAM_MENU_START+$84
+;!ram_zz_shared_86 = !WRAM_MENU_START+$86
+
 ram_cm_watch_enemy_property = !ram_cm_watch_enemy_property ; !WRAM_MENU_START+$80
 ram_cm_watch_enemy_index = !ram_cm_watch_enemy_index ; !WRAM_MENU_START+$82
 ram_cm_watch_enemy_side = !ram_cm_watch_enemy_side ; !WRAM_MENU_START+$84

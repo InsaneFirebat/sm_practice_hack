@@ -140,8 +140,7 @@ paletterando_abort:
     %cm_jsl("ABORT", #.routine, #$0000)
   .routine
     %sfxgoback()
-    JSL cm_previous_menu
-    RTL
+    JML cm_previous_menu
 
 paletterando_confirm:
     %cm_jsl("RANDOMIZE!", #.routine, #$0000)
@@ -379,8 +378,7 @@ mc_sfx_reset:
 
 action_test_sfx:
 {
-    JSL !SFX_LIB1
-    RTL
+    JML !SFX_LIB1
 }
 
 
