@@ -795,6 +795,8 @@ managepreset_confirm:
   .routine
     LDA !ram_cm_selected_slot : %presetslotsize()
     LDA #$DEAD : STA !PRESET_SLOTS,X
+    LDA !ram_cm_selected_slot : ASL : TAX
+    LDA #$DEAD : STA !sram_custom_preset_safewords,X
     JML cm_previous_menu
 
 
