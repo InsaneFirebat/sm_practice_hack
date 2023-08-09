@@ -1279,6 +1279,28 @@ incsrc roomnames.asm
 pullpc
 }
 
+draw_manage_presets:
+{
+    LDA [!DP_CurrentMenu] : AND #$00FF : PHA
+    ; draw it normally first
+    JSR draw_custom_preset
+    ; this puts current slot into !DP_ToggleValue
+    PLY
+
+    ; check if we've already selected a slot
+    LDA !ram_cm_manage_slots : BEQ .done
+
+    ; does it match this slot?
+    TYA : CMP !ram_cm_selected_slot : BNE .done
+
+    ; add the indicator on the left side
+    LDX !DP_JSLTarget : DEX #2
+    LDA !MENU_ARROW_RIGHT : STA !ram_tilemap_buffer,X
+
+  .done
+    RTS
+}
+
 draw_ram_watch:
 {
     PHB : PHK : PLB
@@ -3033,36 +3055,6 @@ endif
     RTS
 }
 
-
-if !FEATURE_TINYSTATES
-!PRESET_SLOT_SIZE = #$0100
-else
-!PRESET_SLOT_SIZE = #$0200
-endif
-
-
-draw_manage_presets:
-{
-    LDA [!DP_CurrentMenu] : AND #$00FF : PHA
-    ; draw it normally first
-    JSR draw_custom_preset
-    ; this puts current slot into !DP_ToggleValue
-    PLY
-
-    ; check if we've already selected a slot
-    LDA !ram_cm_manage_slots : BEQ .done
-
-    ; does it match this slot?
-    TYA : CMP !ram_cm_selected_slot : BNE .done
-
-    ; add the indicator on the left side
-    LDX !DP_JSLTarget : DEX #2
-    LDA !MENU_ARROW_RIGHT : STA !ram_tilemap_buffer,X
-
-  .done
-    RTS
-}
-
 execute_manage_presets:
 {
     LDA !IH_CONTROLLER_PRI : BIT !IH_INPUT_LEFTRIGHT : BEQ .manageSlots
@@ -3133,19 +3125,48 @@ endif
     LDX !DP_Address
     LDA.w #!ram_tilemap_buffer : TAY
     LDA !PRESET_SLOT_SIZE-1
-    MVN $707F ; src, dest
-
+    MVN $707E ; src, dest
     ; slot 2 to slot 1
     LDX !DP_JSLTarget
     LDY !DP_Address
     LDA !PRESET_SLOT_SIZE-1
     MVN $7070
-
     ; buffer (slot 1) to slot 2
     LDA.w #!ram_tilemap_buffer : TAX
     LDY !DP_JSLTarget
     LDA !PRESET_SLOT_SIZE-1
-    MVN $7F70
+    MVN $7E70
+
+    ; pointer to name 1
+    LDA !ram_cm_selected_slot : ASL #3 : STA !DP_Temp
+    ASL : ADC !DP_Temp
+    ADC.w #!sram_custom_preset_names : STA !DP_Address
+    ; pointer to name 2
+    LDA [!DP_CurrentMenu] : AND #$00FF : ASL #3 : STA !DP_Temp
+    ASL : ADC !DP_Temp
+    ADC.w #!sram_custom_preset_names : STA !DP_JSLTarget
+
+    ; name 1 to buffer
+    LDX !DP_Address
+    LDA.w #!ram_tilemap_buffer : TAY
+    LDA #$0018-1
+    MVN $707E
+    ; name 2 to name 1
+    LDX !DP_JSLTarget
+    LDY !DP_Address
+    LDA #$0018-1
+    MVN $7070
+    ; buffer (name 1) to name 2
+    LDA.w #!ram_tilemap_buffer : TAX
+    LDY !DP_JSLTarget
+    LDA #$0018-1
+    MVN $7E70
+    ; swap safewords
+    LDA !ram_cm_selected_slot : ASL : TAX
+    LDA !sram_custom_preset_safewords,X : STA !DP_Address : TXY
+    LDA [!DP_CurrentMenu] : AND #$00FF : ASL : STA !DP_Temp : TAX
+    LDA !sram_custom_preset_safewords,X : TYX : STA !sram_custom_preset_safewords,X
+    LDX !DP_Temp : LDA !DP_Address : STA !sram_custom_preset_safewords,X
 
     LDA #$0000 : STA !ram_cm_manage_slots
     LDA !sram_last_preset : BMI +
