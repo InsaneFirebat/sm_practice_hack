@@ -219,6 +219,9 @@ ram_cm_phan_second_phase = !ram_cm_phan_second_phase ; !WRAM_MENU_START+$82
 
 ram_cm_keyboard_buffer = !ram_cm_keyboard_buffer ; !WRAM_MENU_START+$80 ; $18 bytes
 
+ram_cm_manage_slots = !ram_cm_manage_slots ; !WRAM_MENU_START+$80
+ram_cm_selected_slot = !ram_cm_selected_slot ; !WRAM_MENU_START+$82
+
 ; ^ FREE SPACE ^ up to +$CE
 
 ; Currently first 28 bytes plus last 2 bytes are used

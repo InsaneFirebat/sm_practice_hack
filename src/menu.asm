@@ -616,6 +616,7 @@ cm_draw_action_table:
     dw draw_custom_preset
     dw draw_ram_watch
     dw draw_dynamic
+    dw draw_manage_presets
 
 draw_toggle:
 {
@@ -2517,6 +2518,7 @@ cm_execute_action_table:
     dw execute_custom_preset
     dw execute_ram_watch
     dw execute_dynamic
+    dw execute_manage_presets
 
 execute_toggle:
 {
@@ -3028,6 +3030,127 @@ endif
     ; set bank for manual submenu jump
     LDA !DP_MenuIndices+2 : STA !ram_cm_menu_bank
     JSL action_submenu
+    RTS
+}
+
+
+if !FEATURE_TINYSTATES
+!PRESET_SLOT_SIZE = #$0100
+else
+!PRESET_SLOT_SIZE = #$0200
+endif
+
+
+draw_manage_presets:
+{
+    LDA [!DP_CurrentMenu] : AND #$00FF : PHA
+    ; draw it normally first
+    JSR draw_custom_preset
+    ; this puts current slot into !DP_ToggleValue
+    PLY
+
+    ; check if we've already selected a slot
+    LDA !ram_cm_manage_slots : BEQ .done
+
+    ; does it match this slot?
+    TYA : CMP !ram_cm_selected_slot : BNE .done
+
+    ; add the indicator on the left side
+    LDX !DP_JSLTarget : DEX #2
+    LDA !MENU_ARROW_RIGHT : STA !ram_tilemap_buffer,X
+
+  .done
+    RTS
+}
+
+execute_manage_presets:
+{
+    LDA !IH_CONTROLLER_PRI : BIT !IH_INPUT_LEFTRIGHT : BEQ .manageSlots
+if !FEATURE_TINYSTATES
+    ; TinyStates only has one page
+    RTS
+endif
+    ; flip to the next/prev page
+    BIT !IH_INPUT_LEFT : BNE .decPage
+    LDA [!DP_CurrentMenu] : AND #$00FF : CMP #$0010 : BMI .loadPage2
+    CMP #$0020 : BPL .loadPage1
+  .loadPage3
+    LDY.w #ManagePresetsMenu3 : BRA +
+  .loadPage2
+    LDY.w #ManagePresetsMenu2 : BRA +
+  .check2
+    CMP #$0020 : BPL .loadPage2
+  .loadPage1
+    LDY.w #ManagePresetsMenu : BRA +
+  .decPage
+    LDA [!DP_CurrentMenu] : AND #$00FF : CMP #$0010 : BPL .check2
+    BRA .loadPage3
++   JSL cm_previous_menu
+    ; set bank for manual submenu jump
+    LDA !DP_MenuIndices+2 : STA !ram_cm_menu_bank
+    JSL action_submenu
+    RTS
+
+  .manageSlots
+    ; are we deleting (X) or swapping?
+    LDA !IH_CONTROLLER_PRI_NEW : BIT !CTRL_X : BEQ +
+    ; check if preset exists
+    LDA [!DP_CurrentMenu] : AND #$00FF : STA !ram_cm_selected_slot
+    %presetslotsize()
+    LDA !PRESET_SLOTS,X : CMP #$5AFE : BNE .failSFX
+    ; open confirmation screen before deleting preset
+    LDY.w #ManagePresetsConfirm
+    ; set bank for manual submenu jump
+    LDA !DP_MenuIndices+2 : STA !ram_cm_menu_bank
+    JSL action_submenu
+    RTS
+
+  .failSFX
+    %sfxfail()
+    RTS
+
+    ; swap mode, check if a slot has already been selected
++   LDA !ram_cm_manage_slots : BNE .swapSlots
+
+    ; put preset slot in ram and set swap mode
+    LDA [!DP_CurrentMenu] : AND #$00FF : STA !ram_cm_selected_slot
+    LDA #$0001 : STA !ram_cm_manage_slots
+    RTS
+
+  .swapSlots
+    PHB
+    ; put source address for slot 1 in !DP_Address
+    LDA !ram_cm_selected_slot : %presetslotsize()
+    CLC : ADC.w #!PRESET_SLOTS : STA !DP_Address
+
+    ; get preset slot #
+    LDA [!DP_CurrentMenu] : AND #$00FF : %presetslotsize()
+
+    ; put source address for slot 2 in !DP_JSLTarget
+    CLC : ADC.w #!PRESET_SLOTS : STA !DP_JSLTarget
+
+    ; slot 1 to buffer
+    LDX !DP_Address
+    LDA.w #!ram_tilemap_buffer : TAY
+    LDA !PRESET_SLOT_SIZE-1
+    MVN $707F ; src, dest
+
+    ; slot 2 to slot 1
+    LDX !DP_JSLTarget
+    LDY !DP_Address
+    LDA !PRESET_SLOT_SIZE-1
+    MVN $7070
+
+    ; buffer (slot 1) to slot 2
+    LDA.w #!ram_tilemap_buffer : TAX
+    LDY !DP_JSLTarget
+    LDA !PRESET_SLOT_SIZE-1
+    MVN $7F70
+
+    LDA #$0000 : STA !ram_cm_manage_slots
+    LDA !sram_last_preset : BMI +
+    LDA #$0000 : STA !sram_last_preset
++   PLB
     RTS
 }
 
