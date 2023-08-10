@@ -8,7 +8,7 @@
 !VERSION_MINOR = 5
 !VERSION_BUILD = 7
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 1
+!VERSION_REV_2 = 2
 
 
 ; ---------
@@ -586,6 +586,7 @@ endif
 !ram_lag_counter = !CUSTOM_WRAM+$22
 !ram_lag_counter_HUD = !CUSTOM_WRAM+$24
 !ram_activated_shine_duration = !CUSTOM_WRAM+$26
+!ram_hyper_beam = !CUSTOM_WRAM+$28
 
 ; FREE SPACE ^
 
