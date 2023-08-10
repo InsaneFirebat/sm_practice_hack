@@ -398,6 +398,7 @@ ram_spark_icon = !ram_spark_icon ; !CUSTOM_WRAM+$20
 ram_lag_counter = !ram_lag_counter ; !CUSTOM_WRAM+$22
 ram_lag_counter_HUD = !ram_lag_counter_HUD ; !CUSTOM_WRAM+$24
 ram_activated_shine_duration = !ram_activated_shine_duration ; !CUSTOM_WRAM+$26
+ram_hyper_beam = !ram_hyper_beam ; !CUSTOM_WRAM+$28
 
 ; FREE SPACE ^
 

@@ -66,6 +66,7 @@ preset_nghyper_ceres_station_ceres_elevator:
     dw $D918, $0000 ; Events, Items, Doors
     dw $D91A, $0000 ; Events, Items, Doors
     dw $D91C, $0000 ; Events, Items, Doors
+    dw !ram_hyper_beam, $8000 ; preserve hyper beam
     dw #$FFFF
 .after
 

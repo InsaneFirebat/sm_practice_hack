@@ -313,6 +313,11 @@ endif
     JSL lock_samus_bowling
 
 
+; Preserve Hyper Beam if activated by preset
+org $82805B
+    JSL PreserveHyperBeam
+
+
 org $87D000
 print pc, " misc start"
 
@@ -535,6 +540,12 @@ IconCancelMenu:
     ; overwritten code
     LDA !IH_CONTROLLER_PRI_NEW : BIT #$1380
     RTL
+}
+
+PreserveHyperBeam:
+{
+    LDA !ram_hyper_beam : STA !SAMUS_HYPER_BEAM
+    JML $80C437 ; overwritten code
 }
 print pc, " misc end"
 

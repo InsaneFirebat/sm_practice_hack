@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.7.2]  Fixed Hyper Beam being disabled when leaving Ceres
 * [2.5.7.1]  Fixed custom preset names when swapping slots
 * [2.5.7]    Allow deleting and swapping custom presets in the menu
 * [2.5.6.7]  Fix missing pointer in Draygon AI Tracker
