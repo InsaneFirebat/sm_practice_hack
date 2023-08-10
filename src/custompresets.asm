@@ -570,6 +570,7 @@ preset_scroll_fixes:
     CPX #$CAF6 : BEQ .wrecked_ship_shaft
     CPX #$CBD5 : BEQ .electric_death
     CPX #$CC6F : BEQ .basement
+    CPX #$CEFB : BEQ .main_street
     CPX #$D1A3 : BEQ .crab_shaft
     CPX #$D21C : BEQ .crab_hole
     CPX #$D48E : BEQ .oasis
@@ -593,6 +594,10 @@ preset_scroll_fixes:
     BRA .halfwaydone
   .lower_crab_hole
     STA $CD21 : STZ $CD20
+    BRA .halfwaydone
+
+  .main_street
+    INC : STA $CD20
     BRA .halfwaydone
 
   .oasis
