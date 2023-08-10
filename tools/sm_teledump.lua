@@ -1,4 +1,4 @@
-local CAT = "suitless" -- prkd, hundo, rbo, kpdr25, gtclassic, kpdr21, 14ice, 14speed, allbosskpdr, allbosspkdr, allbossprkd, 100early, pkrd, nintendopower, gtmax, 100map, suitless
+local CAT = "ngplasma" -- prkd, hundo, rbo, kpdr25, gtclassic, kpdr21, 14ice, 14speed, allbosskpdr, allbosspkdr, allbossprkd, 100early, pkrd, nintendopower, gtmax, 100map, suitless
 
 local last_state = {} -- holds all state that has been changed up until last save
 
@@ -297,7 +297,7 @@ local SEGMENTS = {
 		{ ["name"] = "Final Cleanup", ["steps"] = {} },
 		{ ["name"] = "Tourian", ["steps"] = {} },
     },
-["spazer"] = {
+    ["spazer"] = {
         { ["name"] = "Crateria", ["steps"] = {} },
         { ["name"] = "Brinstar", ["steps"] = {} },
         { ["name"] = "Kraid", ["steps"] = {} },
@@ -310,7 +310,18 @@ local SEGMENTS = {
         { ["name"] = "Lower Norfair", ["steps"] = {} },
         { ["name"] = "Backtracking", ["steps"] = {} },
         { ["name"] = "Tourian", ["steps"] = {} },
-},
+    },
+    ["ngplasma"] = {
+		{ ["name"] = "Ceres Station", ["steps"] = {} },
+		{ ["name"] = "Wrecked Ship", ["steps"] = {} },
+		{ ["name"] = "Red Brinstar", ["steps"] = {} },
+		{ ["name"] = "Norfair Pre-Ridley", ["steps"] = {} },
+		{ ["name"] = "Norfair Post-Ridley", ["steps"] = {} },
+		{ ["name"] = "Kraid's Lair", ["steps"] = {} },
+		{ ["name"] = "Maridia", ["steps"] = {} },
+		{ ["name"] = "Crateria", ["steps"] = {} },
+		{ ["name"] = "Tourian", ["steps"] = {} },
+    },
 }
 
 local STEPS = {
@@ -2755,7 +2766,7 @@ local STEPS = {
 	[307560] = { ["segment_no"] = 16, ["name"] = "Escape Parlor" },
 	[309920] = { ["segment_no"] = 16, ["name"] = "Landing Site" },
     },
-["spazer"] = {
+    ["spazer"] = {
 	-- Crateria
 	[9185] = { ["segment_no"] = 1, ["name"] = "Ceres Elevator" },
 	[12426] = { ["segment_no"] = 1, ["name"] = "Ceres Escape Start" },
@@ -2931,6 +2942,111 @@ local STEPS = {
 	[180319] = { ["segment_no"] = 12, ["name"] = "Escape Room 4" },
 	[181650] = { ["segment_no"] = 12, ["name"] = "Climb Spark" },
 	[182171] = { ["segment_no"] = 12, ["name"] = "Escape Parlor" },
+    },
+    ["ngplasma"] = {
+	-- Ceres Station
+	[1036] = { ["segment_no"] = 1, ["name"] = "Ceres Elevator" },
+	[1534] = { ["segment_no"] = 1, ["name"] = "Magnet Stairs" },
+	[2444] = { ["segment_no"] = 1, ["name"] = "Ceres Ridley" },
+	[4223] = { ["segment_no"] = 1, ["name"] = "Ceres Escape" },
+	[4769] = { ["segment_no"] = 1, ["name"] = "Magnet Stairs Escape" },
+	-- Wrecked Ship
+	[8652] = { ["segment_no"] = 2, ["name"] = "Ship" },
+	[9600] = { ["segment_no"] = 2, ["name"] = "Moat" },
+	[10000] = { ["segment_no"] = 2, ["name"] = "Ocean" },
+	[10581] = { ["segment_no"] = 2, ["name"] = "Entering Wrecked Ship" },
+	[11726] = { ["segment_no"] = 2, ["name"] = "Basement" },
+	[12504] = { ["segment_no"] = 2, ["name"] = "Phantoon" },
+	[15763] = { ["segment_no"] = 2, ["name"] = "Leaving Phantoon" },
+	[16378] = { ["segment_no"] = 2, ["name"] = "Wrecked Ship Shaft" },
+	[17196] = { ["segment_no"] = 2, ["name"] = "Leaving Wrecked Ship" },
+	[18324] = { ["segment_no"] = 2, ["name"] = "Kihunters Revisit" },
+	-- Red Brinstar
+	[20047] = { ["segment_no"] = 3, ["name"] = "Red Brinstar Elevator" },
+	[20397] = { ["segment_no"] = 3, ["name"] = "Hellway" },
+	[20764] = { ["segment_no"] = 3, ["name"] = "Red Tower" },
+	[21624] = { ["segment_no"] = 3, ["name"] = "Bottom of Red Tower" },
+	[22360] = { ["segment_no"] = 3, ["name"] = "Breaking Tube" },
+	[23565] = { ["segment_no"] = 3, ["name"] = "Upper Norfair Elevator" },
+	-- Norfair Pre-Ridley
+	[24374] = { ["segment_no"] = 4, ["name"] = "Business Center" },
+	[25045] = { ["segment_no"] = 4, ["name"] = "Frog Speedway" },
+	[25900] = { ["segment_no"] = 4, ["name"] = "Purple Shaft" },
+	[26324] = { ["segment_no"] = 4, ["name"] = "Magdollite Room" },
+	[26895] = { ["segment_no"] = 4, ["name"] = "Kronic Boost" },
+	[28345] = { ["segment_no"] = 4, ["name"] = "Lower Norfair Elevator" },
+	[29175] = { ["segment_no"] = 4, ["name"] = "LN Main Hall" },
+	[29429] = { ["segment_no"] = 4, ["name"] = "Pre-Pillars" },
+	[30073] = { ["segment_no"] = 4, ["name"] = "Fast Pillars" },
+	[30584] = { ["segment_no"] = 4, ["name"] = "Worst Room in the Game" },
+	[31303] = { ["segment_no"] = 4, ["name"] = "Amphitheatre" },
+	[32118] = { ["segment_no"] = 4, ["name"] = "Kihunter Stairs Down" },
+	[33333] = { ["segment_no"] = 4, ["name"] = "Wasteland" },
+	[34500] = { ["segment_no"] = 4, ["name"] = "Metal Ninja Pirates" },
+	[35273] = { ["segment_no"] = 4, ["name"] = "Plowerhouse" },
+	[36174] = { ["segment_no"] = 4, ["name"] = "Ridley" },
+	-- Norfair Post-Ridley
+	[39140] = { ["segment_no"] = 5, ["name"] = "Leaving Ridley" },
+	[39761] = { ["segment_no"] = 5, ["name"] = "Reverse Plowerhouse" },
+	[40600] = { ["segment_no"] = 5, ["name"] = "Wasteland Revisit" },
+	[41686] = { ["segment_no"] = 5, ["name"] = "Kihunter Stairs Up" },
+	[42800] = { ["segment_no"] = 5, ["name"] = "Fire Flea Room" },
+	[43528] = { ["segment_no"] = 5, ["name"] = "Springball Maze" },
+	[43930] = { ["segment_no"] = 5, ["name"] = "Three Musketeers" },
+	[44674] = { ["segment_no"] = 5, ["name"] = "Single Chamber" },
+	[45575] = { ["segment_no"] = 5, ["name"] = "Bubble Mountain" },
+	[46224] = { ["segment_no"] = 5, ["name"] = "Frog Speedway Revisit" },
+	[47135] = { ["segment_no"] = 5, ["name"] = "Business Center Revisit" },
+	-- Kraid's Lair
+	[48395] = { ["segment_no"] = 6, ["name"] = "Entering Kraid's Lair" },
+	[49265] = { ["segment_no"] = 6, ["name"] = "Warehouse Kihunters" },
+	[49721] = { ["segment_no"] = 6, ["name"] = "MiniKraid Hallway" },
+	[50560] = { ["segment_no"] = 6, ["name"] = "Kraid" },
+	[51975] = { ["segment_no"] = 6, ["name"] = "Leaving Kraid" },
+	[52370] = { ["segment_no"] = 6, ["name"] = "MiniKraid Hallway Revisit" },
+	[52841] = { ["segment_no"] = 6, ["name"] = "Kihunters Revisit" },
+	[53341] = { ["segment_no"] = 6, ["name"] = "Warehouse Zealas" },
+	[54112] = { ["segment_no"] = 6, ["name"] = "Leaving Kraids Lair" },
+	-- Maridia
+	[54527] = { ["segment_no"] = 7, ["name"] = "Entering Maridia" },
+	[55055] = { ["segment_no"] = 7, ["name"] = "Main Street" },
+	[55480] = { ["segment_no"] = 7, ["name"] = "Fish Tank" },
+	[56112] = { ["segment_no"] = 7, ["name"] = "Mt Everest" },
+	[56585] = { ["segment_no"] = 7, ["name"] = "Crab Shaft" },
+	[56950] = { ["segment_no"] = 7, ["name"] = "Aqueduct" },
+	[57686] = { ["segment_no"] = 7, ["name"] = "Botwoon Hallway" },
+	[58270] = { ["segment_no"] = 7, ["name"] = "Botwoon" },
+	[59397] = { ["segment_no"] = 7, ["name"] = "Halfie" },
+	[61285] = { ["segment_no"] = 7, ["name"] = "Draygon" },
+	[64345] = { ["segment_no"] = 7, ["name"] = "Spike Suit Colosseum" },
+	[64350] = { ["segment_no"] = 7, ["name"] = "Womple Jump" },
+	[65276] = { ["segment_no"] = 7, ["name"] = "Reverse Botwoon Hallway" },
+	[66509] = { ["segment_no"] = 7, ["name"] = "Aqueduct Revisit" },
+	[66917] = { ["segment_no"] = 7, ["name"] = "Crab Shaft Revisit" },
+	[67388] = { ["segment_no"] = 7, ["name"] = "Mt Everest Revisit" },
+	[67906] = { ["segment_no"] = 7, ["name"] = "Leaving Maridia" },
+	-- Crateria
+	[68545] = { ["segment_no"] = 8, ["name"] = "Red Brinstar Gate" },
+	[69795] = { ["segment_no"] = 8, ["name"] = "Crateria Kihunters Final" },
+	[70860] = { ["segment_no"] = 8, ["name"] = "Landing Site" },
+	[72048] = { ["segment_no"] = 8, ["name"] = "Terminator E-Tank" },
+	[72588] = { ["segment_no"] = 8, ["name"] = "Green Pirate Shaft" },
+	-- Tourian
+	[77464] = { ["segment_no"] = 9, ["name"] = "Tourian Elevator Room" },
+	[77599] = { ["segment_no"] = 9, ["name"] = "Metroids 1" },
+	[78165] = { ["segment_no"] = 9, ["name"] = "Metroids 2" },
+	[78775] = { ["segment_no"] = 9, ["name"] = "Metroids 3" },
+	[79569] = { ["segment_no"] = 9, ["name"] = "Metroids 4" },
+	[80274] = { ["segment_no"] = 9, ["name"] = "Giant Hoppers" },
+	[80876] = { ["segment_no"] = 9, ["name"] = "Baby Skip" },
+	[83042] = { ["segment_no"] = 9, ["name"] = "Gadora Room" },
+	[83960] = { ["segment_no"] = 9, ["name"] = "Zeb Skip" },
+	[85925] = { ["segment_no"] = 9, ["name"] = "Mother Brain 2" },
+	[95868] = { ["segment_no"] = 9, ["name"] = "Zebes Escape" },
+	[96828] = { ["segment_no"] = 9, ["name"] = "Escape Room 3" },
+	[97384] = { ["segment_no"] = 9, ["name"] = "Escape Room 4" },
+	[98709] = { ["segment_no"] = 9, ["name"] = "Escape Climb" },
+	[99241] = { ["segment_no"] = 9, ["name"] = "Escape Parlor" },
     },
 }
 
