@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.7.5]  Fixed potential bug after using Hyper Beam presets
 * [2.5.7.4]  Fixed Draygon and Space Jump room background when loading presets
 * [2.5.7.3]  Remade NewGame+ Plasma presets
 * [2.5.7.2]  Fixed Hyper Beam being disabled when leaving Ceres
