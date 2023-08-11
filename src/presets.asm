@@ -221,7 +221,7 @@ preset_load_preset:
     PHB
     LDA #$0000
     STA !PRESET_DOORS : STA !PRESET_SPECIAL : STA !PRESET_ENEMIES
-    STA !ram_room_has_set_rng
+    STA !ram_room_has_set_rng : STA !ram_hyper_beam
     STZ $09D2 ; Current selected weapon
     STZ $0A04 ; Auto-cancel item
     LDA #$5AFE : STA $0917 ; Load garbage into Layer 2 X position

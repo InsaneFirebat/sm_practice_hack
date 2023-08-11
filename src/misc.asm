@@ -544,6 +544,7 @@ IconCancelMenu:
 
 PreserveHyperBeam:
 {
+    ; flag set by NG+ Hyper presets
     LDA !ram_hyper_beam : STA !SAMUS_HYPER_BEAM
     JML $80C437 ; overwritten code
 }
