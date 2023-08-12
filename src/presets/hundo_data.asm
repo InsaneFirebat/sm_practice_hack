@@ -1310,8 +1310,12 @@ preset_hundo_brinstar_cleanup_gauntlet_etank:
     dw $09A6, $1001  ; Beams
     dw $09C2, $001D  ; Health
     dw $09D6, $0035  ; Reserves
-    dw $0A1C, $000A  ; Samus position/state
-    dw $0AF6, $0074  ; Samus X
+    dw $0A1C, $00CA  ; Samus position/state
+    dw $0A1E, $1B04  ; More position/state
+    dw $0A68, $000E  ; Flash suit
+    dw $0AF6, $0084  ; Samus X
+    dw $0AFA, $0073  ; Samus Y
+    dw $0B3F, $0004  ; Blue suit
     dw #$FFFF
 
 preset_hundo_brinstar_cleanup_green_pirates_shaft:
@@ -1324,7 +1328,12 @@ preset_hundo_brinstar_cleanup_green_pirates_shaft:
     dw $09C2, $01F8  ; Health
     dw $09C4, $0257  ; Max health
     dw $09CE, $0009  ; Pbs
+    dw $0A1C, $000C  ; Samus position/state
+    dw $0A1E, $0104  ; More position/state
+    dw $0A68, $0000  ; Flash suit
     dw $0AF6, $002B  ; Samus X
+    dw $0AFA, $008B  ; Samus Y
+    dw $0B3F, $0000  ; Blue suit
     dw $D870, $81BF  ; Items
     dw #$FFFF
 
@@ -1578,8 +1587,10 @@ preset_hundo_mama_turtle_etank_main_street:
     dw $09C2, $037C  ; Health
     dw $09CA, $0009  ; Supers
     dw $09CE, $000F  ; Pbs
-    dw $0A1C, $0016  ; Samus position/state
-    dw $0A1E, $0204  ; More position/state
+;    dw $0A1C, $0016  ; Samus position/state
+;    dw $0A1E, $0204  ; More position/state
+    dw $0A1C, $009B  ; Samus position/state
+    dw $0A1E, $0000  ; More position/state
     dw $0AF6, $019A  ; Samus X
     dw $0AFA, $07A8  ; Samus Y
     dw $D820, $0801  ; Events
@@ -2325,6 +2336,7 @@ preset_hundo_ridley_wasteland_down:
     dw $0911, $01F2  ; Screen X position in pixels
     dw $0913, $E400  ; Screen subpixel Y position
     dw $0915, $041F  ; Screen Y position in pixels
+    dw $09CA, $0016  ; Supers
     dw $09CE, $000C  ; Pbs
     dw $0A1C, $0079  ; Samus position/state
     dw $0A1E, $1108  ; More position/state
@@ -2344,7 +2356,7 @@ preset_hundo_ridley_ninja_pirates:
     dw $0917, $00C0  ; Layer 2 X position
     dw $0919, $0194  ; Layer 2 Y position
     dw $09C2, $0191  ; Health
-    dw $09CA, $0014  ; Supers
+    dw $09CA, $0015  ; Supers
     dw $09CE, $0011  ; Pbs
     dw $09D0, $0023  ; Max pbs
     dw $0A1C, $0002  ; Samus position/state
@@ -2366,7 +2378,7 @@ preset_hundo_ridley_plowerhouse_room:
     dw $0917, $00ED  ; Layer 2 X position
     dw $0919, $0000  ; Layer 2 Y position
     dw $09C2, $0213  ; Health
-    dw $09CA, $0018  ; Supers
+    dw $09CA, $001F  ; Supers
     dw $0AF6, $01DC  ; Samus X
     dw $0AFA, $00BB  ; Samus Y
     dw $D8BC, $0001  ; Doors
@@ -2380,7 +2392,7 @@ preset_hundo_ridley_ridley_2:
     dw $0911, $0000  ; Screen X position in pixels
     dw $0913, $D800  ; Screen subpixel Y position
     dw $09C2, $0210  ; Health
-    dw $09CA, $0017  ; Supers
+    dw $09CA, $001E  ; Supers
     dw $0A1C, $0082  ; Samus position/state
     dw $0A1E, $0304  ; More position/state
     dw $0AF6, $002C  ; Samus X

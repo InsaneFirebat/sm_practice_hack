@@ -578,6 +578,7 @@ MusicSelectMenu1:
     dw #ifb_soundtest_music_hallway
     dw #ifb_soundtest_music_goldenstatue
     dw #ifb_soundtest_music_tourian
+    dw #$FFFF
     dw #ifb_soundtest_music_goto_2
     dw #$0000
     %cm_header("PLAY MUSIC - PAGE ONE")
@@ -661,6 +662,7 @@ MusicSelectMenu2:
     dw #ifb_soundtest_music_death
     dw #ifb_soundtest_music_lastmetroid
     dw #ifb_soundtest_music_galaxypeace
+    dw #$FFFF
     dw #ifb_soundtest_music_goto_1
     dw #$0000
     %cm_header("PLAY MUSIC - PAGE TWO")
