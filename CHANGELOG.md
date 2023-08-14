@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.7.7]  Fixed random flash suit on some presets
 * [2.5.7.6]  Adjustments to Late Croc Hundo presets
 * [2.5.7.5]  Fixed potential bug after using Hyper Beam presets
 * [2.5.7.4]  Fixed Draygon and Space Jump room background when loading presets
