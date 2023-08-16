@@ -109,6 +109,15 @@ org $89AD0A      ; update timers when Samus escapes Ceres
 org $A2AA20      ; update timers when Samus enters ship
     JSL ih_ship_elevator_segment
 
+org $90FBB3      ; Ascent energy flashing
+    LDX #$008E
+
+org $90FBE6      ; Ascent energy flashing
+    LDX #$008E
+
+org $90FBF7      ; Ascent energy flashing
+    LDX #$008E
+
 
 ; Main bank stuff
 org !ORG_INFOHUD
@@ -557,8 +566,13 @@ ih_update_hud_code:
     ; Collected beams and charge
     JSR CalcBeams : CLC : ADC $C1
 
+    ; (Ascent) Collected "damage" and "e reducer"
+    LDA $09D8 : CLC : ADC $7ED86A : CLC : ADC $C1
+
     ; Percent counter -> decimal form and drawn on HUD
     LDX #$0012 : JSR Draw3
+    ; (Ascent) Don't draw % symbol if it would overwrite room name
+    LDA !HUD_TILEMAP+$18 : CMP #$280F : BNE .skipToLag
     LDA !IH_PERCENT : STA !HUD_TILEMAP+$18
 
   .skipToLag
@@ -611,7 +625,7 @@ ih_update_hud_code:
   .pickSegmentTimer
     LDA !sram_frame_counter_mode : BNE .inGameSegmentTimer
     LDA.w #!ram_seg_rt_frames : STA $00
-    LDA !WRAM_BANK : STA $02
+    LDA.w #!WRAM_BANK : STA $02
     BRA .drawSegmentTimer
 
   .inGameSegmentTimer

@@ -591,10 +591,10 @@ eq_goto_togglebeams:
     %cm_jsl("Toggle Beams", #eq_prepare_beams_menu, #ToggleBeamsMenu)
 
 eq_currentenergy:
-    %cm_numfield_word("Current Energy", !SAMUS_HP, 0, 2100, #0)
+    %cm_numfield_word("Current Energy", !SAMUS_HP, 0, 1499, #0)
 
 eq_setetanks:
-    %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 21, 1, 1, .routine)
+    %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 14, 1, 1, .routine)
   .routine
     TAX : BEQ .zero
     LDA #$0000
@@ -611,10 +611,10 @@ eq_setetanks:
     RTL
 
 eq_currentreserves:
-    %cm_numfield_word("Current Reserves", !SAMUS_RESERVE_ENERGY, 0, 700, #0)
+    %cm_numfield_word("Current Reserves", !SAMUS_RESERVE_ENERGY, 0, 800, #0)
 
 eq_setreserves:
-    %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 7, 1, 1, .routine)
+    %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 8, 1, 1, .routine)
   .routine
     TAX : BEQ .zero
     LDA #$0000
@@ -645,28 +645,28 @@ eq_reservemode:
     RTL
 
 eq_currentmissiles:
-    %cm_numfield_word("Current Missiles", !SAMUS_MISSILES, 0, 325, #0)
+    %cm_numfield_word("Current Missiles", !SAMUS_MISSILES, 0, 200, #0)
 
 eq_setmissiles:
-    %cm_numfield_word("Missiles", !SAMUS_MISSILES_MAX, 0, 325, .routine)
+    %cm_numfield_word("Missiles", !SAMUS_MISSILES_MAX, 0, 200, .routine)
     .routine
         LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES ; missiles
         RTL
 
 eq_currentsupers:
-    %cm_numfield("Current Super Missiles", !SAMUS_SUPERS, 0, 65, 1, 5, #0)
+    %cm_numfield("Current Super Missiles", !SAMUS_SUPERS, 0, 60, 1, 5, #0)
 
 eq_setsupers:
-    %cm_numfield("Super Missiles", !SAMUS_SUPERS_MAX, 0, 65, 5, 5, .routine)
+    %cm_numfield("Super Missiles", !SAMUS_SUPERS_MAX, 0, 60, 5, 5, .routine)
     .routine
         LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS ; supers
         RTL
 
 eq_currentpbs:
-    %cm_numfield("Current Power Bombs", !SAMUS_PBS, 0, 70, 1, 5, #0)
+    %cm_numfield("Current Power Bombs", !SAMUS_PBS, 0, 35, 1, 5, #0)
 
 eq_setpbs:
-    %cm_numfield("Power Bombs", !SAMUS_PBS_MAX, 0, 70, 5, 5, .routine)
+    %cm_numfield("Power Bombs", !SAMUS_PBS_MAX, 0, 35, 5, 5, .routine)
     .routine
         LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS ; pbs
         RTL
@@ -871,7 +871,10 @@ ToggleItemsMenu:
     dw #ti_speedbooster
     dw #$FFFF
     dw #ti_grapple
-    dw #ti_xray
+;    dw #ti_xray
+    dw #$FFFF
+    dw #ti_damage
+    dw #ti_ered
     dw #$0000
     %cm_header("TOGGLE ITEMS")
 
@@ -913,6 +916,12 @@ ti_xray:
   .routine
     LDA !SAMUS_ITEMS_EQUIPPED : EOR #$8000 : STA !SAMUS_ITEMS_EQUIPPED
     RTL
+
+ti_damage:
+    %cm_numfield("Damage", $7E09D8, 0, 9, 1, 1, #0)
+
+ti_ered:
+    %cm_numfield("E Reducer", $7ED86A, 0, 4, 1, 1, #0)
 
 equipment_toggle_items:
 {
@@ -1152,6 +1161,7 @@ TeleportZone1Menu:
     dw #tel_crateria04
     dw #tel_crateria0C
     dw #tel_crateria12
+    dw #tel_brinstar0A
     dw #$0000
     %cm_header("ZONE 1 SAVE STATIONS")
 
@@ -1175,6 +1185,9 @@ tel_crateria0C:
 
 tel_crateria12:
     %cm_jsl("DEBUG Ascension Begin", #action_teleport, #$0012)
+
+tel_brinstar0A:
+    %cm_jsl("DEBUG Setting Bomb 1", #action_teleport, #$010A)
 
 TeleportZone2Menu:
     dw #tel_maridiatube
@@ -1248,7 +1261,6 @@ TeleportZone3Menu:
     dw #tel_brinstar04
     dw #tel_brinstar05
     dw #tel_brinstar06
-    dw #tel_brinstar0A
     dw #tel_maridia11
     dw #tel_tourian08
     dw #$0000
@@ -1274,9 +1286,6 @@ tel_brinstar05:
 
 tel_brinstar06:
     %cm_jsl("Metroid Nerd Save", #action_teleport, #$0106)
-
-tel_brinstar0A:
-    %cm_jsl("DEBUG Setting Bomb 1", #action_teleport, #$010A)
 
 tel_maridia11:
     %cm_jsl("DEBUG Sacred Foes Inlet", #action_teleport, #$0411)
@@ -1367,6 +1376,7 @@ MiscMenu:
     dw #misc_bluesuit
     dw #misc_flashsuit
     dw #misc_hyperbeam
+    dw #misc_gravity
     dw #$FFFF
     dw #misc_invincibility
     dw #misc_gooslowdown
@@ -1414,6 +1424,9 @@ misc_hyperbeam:
 
     JSL $90AC8D ; update beam gfx
     RTL
+
+misc_gravity:
+    %cm_toggle("Reverse Gravity", $7EFD18, #$0001, #0)
 
 misc_gooslowdown:
     %cm_numfield("Goo Slowdown", $7E0A66, 0, 4, 1, 1, #0)
