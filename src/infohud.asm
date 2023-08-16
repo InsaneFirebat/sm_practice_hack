@@ -642,7 +642,7 @@ ih_update_hud_code:
 
   .inGameSegmentTimer
     LDA #!IGT_FRAMES : STA $00
-    LDA #$007E : STA $02
+    LDA #!WRAM_BANK : STA $02
 
   .drawSegmentTimer
     ; Frames
