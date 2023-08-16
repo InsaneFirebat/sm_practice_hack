@@ -82,9 +82,9 @@
 !CRASHDUMP_TILEMAP_BUFFER = !ram_tilemap_buffer
 !CRASHDUMP = $7EFF00
 
-!WRAM_BANK = #$007F
+!WRAM_BANK = !WRAM_START>>16
 !WRAM_SIZE = #$0200
-!WRAM_START = $7EF800
+!WRAM_START = $7FF800
 
 ; These variables are NOT PERSISTENT across savestates --
 ; they're saved and reloaded along with the game state.
