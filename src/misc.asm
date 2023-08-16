@@ -230,6 +230,7 @@ else
     NOP  ; Add 2 more clock cycles
     NOP  ; Add 2 more clock cycles
 endif
+    CLC : ADC #$0014 ; Add 75 cycles including CLC+ADC
     TAX
   .lagloop
     DEX : BNE .lagloop
@@ -250,6 +251,7 @@ if !FEATURE_SD2SNES
 else
     INC  ; Add 1 loop (7 clock cycles including the INC)
 endif
+    CLC : ADC #$0014 ; Add 75 cycles including CLC+ADC
     TAX
   .vanilla_lagloop
     DEX : BNE .vanilla_lagloop
