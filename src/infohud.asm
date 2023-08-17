@@ -403,7 +403,8 @@ ih_before_room_transition:
 
     ; Calculate door alignment time
     LDX !DOOR_POINTER
-    LDA $830003,X : AND #$00FF : BIT #$0002 : BNE .verticalDoor
+    AND #$00FF : %a8() ; Draw3 returns a16
+    LDA $830003,X : BIT #$02 : BNE .verticalDoor
     LDA !LAYER1_Y : BRA .checkAlignment
 
   .branch_done
@@ -411,13 +412,11 @@ ih_before_room_transition:
 
   .verticalDoor
     LDA !LAYER1_X
-
   .checkAlignment
-    AND #$00FF : CMP #$0080 : BMI .drawDoorLag
-    EOR #$00FF : INC
-
+    BPL .drawDoorLag
+    EOR #$FF : INC
   .drawDoorLag
-    PHB : PEA $8080 : PLB : PLB
+    PHB : PHD : PLB : PLB
     LDX #$00C2 : JSR Draw3
     PLB
 
