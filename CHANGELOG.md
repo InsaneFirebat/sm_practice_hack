@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.7.10] Small optimizations and cleanup
 * [2.5.7.9]  Optimize door alignment calculation
 * [2.5.7.8]  Calculate door alignment time before scrolling
 * [2.5.7.7]  Fixed random flash suit on some presets
