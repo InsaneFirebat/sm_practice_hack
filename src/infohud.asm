@@ -335,8 +335,6 @@ ih_gamemode_frame:
 
 ih_after_room_transition:
 {
-    PHX : PHY
-
     ; update last door times
     LDA !ram_transition_counter : STA !ram_last_door_lag_frames
     LDA !ram_realtime_room : STA !ram_last_realtime_door
@@ -361,13 +359,8 @@ ih_after_room_transition:
   .update_hud
     JSL ih_update_hud_code
 
-    ; Reset gametime/transition timer
-    LDA #$0000 : STA !ram_transition_counter
-
-    ; Reset realtime timer
-    LDA #$0000 : STA !ram_realtime_room
-
-    PLY : PLX
+    ; Reset realtime and gametime/transition timers
+    LDA #$0000 : STA !ram_realtime_room : STA !ram_transition_counter
 
     ; original hijacked code
     LDA #$0008 : STA !GAMEMODE
@@ -376,24 +369,26 @@ ih_after_room_transition:
 
 ih_before_room_transition:
 {
-    PHA : PHX : PHY
+    STA !GAMEMODE ; overwritten code
 
-    ; Save and reset timers
-    LDA !ram_transition_flag : CMP #$0001 : BEQ .branch_done
-    LDA #$0001 : STA !ram_transition_flag : STA !ram_lag_counter_HUD
-    LDA #$0000 : STA !ram_room_has_set_rng
+    ; Check if we've already run on this frame
+    LDA !ram_transition_flag : BEQ .first_run
+    CLC ; overwritten code
+    RTL
 
+  .first_run
     ; Lag
     LDA !ram_realtime_room : SEC : SBC !ram_transition_counter : STA !ram_last_room_lag
-    LDA #$0000 : STA !ram_transition_counter
 
-    ; Gametime
+    ; Room timers
     LDA !ram_gametime_room : STA !ram_last_gametime_room
-    LDA #$0000 : STA !ram_gametime_room
-
-    ; Realtime
     LDA !ram_realtime_room : STA !ram_last_realtime_room
-    LDA #$0000 : STA !ram_realtime_room : STA !ram_last_realtime_door
+
+    ; Reset variables
+    LDA #$0000 : STA !ram_room_has_set_rng
+    STA !ram_transition_counter : STA !ram_gametime_room
+    STA !ram_realtime_room : STA !ram_last_realtime_door
+    LDA #$0001 : STA !ram_transition_flag : STA !ram_lag_counter_HUD
 
     ; Save temp variables
     LDA $12 : PHA
@@ -402,15 +397,15 @@ ih_before_room_transition:
     ; Update HUD
     JSL ih_update_hud_code_before_transition
 
+    ; Restore temp variables
+    PLA : STA $14
+    PLA : STA $12
+
     ; Calculate door alignment time
     LDX !DOOR_POINTER
     AND #$00FF : %a8() ; Draw3 returns a16
     LDA $830003,X : BIT #$02 : BNE .verticalDoor
     LDA !LAYER1_Y : BRA .checkAlignment
-
-  .branch_done
-    BRA .done
-
   .verticalDoor
     LDA !LAYER1_X
   .checkAlignment
@@ -420,10 +415,6 @@ ih_before_room_transition:
     PHB : PHD : PLB : PLB
     LDX #$00C2 : JSR Draw3
     PLB
-
-    ; Restore temp variables
-    PLA : STA $14
-    PLA : STA $12
 
     ; Overwrite Enemy HP only
     LDA !sram_display_mode : BNE .done
@@ -436,10 +427,7 @@ ih_before_room_transition:
     LDA !ENEMY_HP : STA !ram_enemy_hp
 
   .done
-    ; Run standard code and return
-    PLY : PLX : PLA
-    STA !GAMEMODE
-    CLC
+    CLC ; overwritten code
     RTL
 
   .status_door_display_table
@@ -1581,8 +1569,6 @@ ForceCountDamage:
 
 ih_game_loop_code:
 {
-    PHA
-
     ; inc transition timer
     LDA !ram_transition_counter : INC : STA !ram_transition_counter
 
@@ -1647,9 +1633,7 @@ else
 endif
 
   .done
-    PLA
-    JSL $808111
-    RTL
+    JML $808111 ; overwritten code
 
   .toggle_pause
     LDA #$FFFF : STA !ram_slowdown_mode
