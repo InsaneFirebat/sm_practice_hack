@@ -1519,6 +1519,7 @@ MiscMenu:
     dw #misc_killenemies
     dw #misc_forcestand
     dw #misc_elevatorfix
+    dw #misc_kraidcamera
     dw #$0000
     %cm_header("MISC OPTIONS")
 
@@ -1666,6 +1667,18 @@ misc_elevatorfix:
   .routine
     LDA #$0000 : STA $7E0E16
     %sfxconfirm()
+    RTL
+
+misc_kraidcamera:
+    %cm_jsl("Unlock Kraid Camera", .routine, #$0101)
+  .routine
+    ; check if in Kraid's room
+    LDA !ROOM_ID : CMP #$A59F : BNE .fail
+    TYA : STA $7ECD20 : STA $7ECD22
+    %sfxconfirm()
+    RTL
+  .fail
+    %sfxfail()
     RTL
 
 GameLoopExtras:
