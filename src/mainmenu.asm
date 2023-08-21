@@ -2797,6 +2797,7 @@ CutscenesMenu:
     dw #cutscenes_skip_game_over
     dw #$FFFF
     dw #kraid_skip_intro
+    dw #kraid_death_camera
     dw #phan_skip_intro
     dw #cutscenes_fast_mb
     dw #$FFFF
@@ -2819,6 +2820,9 @@ cutscenes_skip_game_over:
 
 kraid_skip_intro:
     %cm_toggle("Skip Kraid Intro", !sram_kraid_intro, #$0001, #0)
+
+kraid_death_camera:
+    %cm_toggle("Unlock Kraid Death Camera", !sram_cutscenes, !CUTSCENE_KRAID_DEATH_CAMERA, #0)
 
 phan_skip_intro:
     %cm_toggle_bit("Skip Phantoon Intro", !sram_phantoon_intro, #$0001, 0)
