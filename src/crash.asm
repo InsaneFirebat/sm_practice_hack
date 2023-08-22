@@ -663,11 +663,11 @@ CrashMemViewer:
     LDX #$0334 : JSR crash_draw2
 
     ; draw the current value and nearby bytes
-    LDA !ram_crash_mem_viewer : BMI .drawUpperHalf
+    LDA !ram_crash_mem_viewer : BMI .bridge_drawUpperHalf
     %a16()
     LDA $C1 : PHA : LDA $C3 : PHA
     LDA !ram_crash_mem_viewer_bank : STA $C3
-    LDA !ram_crash_mem_viewer : STA $C1
+    LDA !ram_crash_mem_viewer : STA $C1 : STA !ram_crash_temp
     LDA [$C1] : STA !ram_crash_draw_value
     LDX #$01E8 : JSR crash_draw4
 
@@ -675,14 +675,26 @@ CrashMemViewer:
     %a8()
     LDA #$00 : STA !ram_crash_stack_line_position : STA !ram_crash_loop_counter
     LDA $C1 : AND #$F0 : STA $C1
+    BRA .drawLowerHalfNearby
+
+  .bridge_drawUpperHalf
+    BRA .drawUpperHalf
 
   .drawLowerHalfNearby
     ; draw a byte
     LDA [$C1] : STA !ram_crash_draw_value
     JSR crash_draw2
-    INC $C1
 
-    ; inc tilemap position
+    ; highlight selected byte
+    %a16()
+    LDA $C1 : CMP !ram_crash_temp : BNE .incLower
+    LDA !ram_tilemap_buffer,X : ORA #$1000 : STA !ram_tilemap_buffer,X
+    LDA !ram_tilemap_buffer+2,X : ORA #$1000 : STA !ram_tilemap_buffer+2,X
+
+  .incLower
+    ; inc address and tilemap position
+    %a8()
+    INC $C1
     INX #6 : LDA !ram_crash_stack_line_position : INC
     STA !ram_crash_stack_line_position : AND #$08 : BEQ +
 
@@ -706,7 +718,7 @@ CrashMemViewer:
     %a16()
     LDA $41 : PHA : LDA $43 : PHA
     LDA !ram_crash_mem_viewer_bank : STA $43
-    LDA !ram_crash_mem_viewer : STA $41
+    LDA !ram_crash_mem_viewer : STA $41 : STA !ram_crash_temp
     LDA [$41] : STA !ram_crash_draw_value
     LDX #$01E8 : JSR crash_draw4
 
@@ -719,9 +731,17 @@ CrashMemViewer:
     ; draw a byte
     LDA [$41] : STA !ram_crash_draw_value
     JSR crash_draw2
-    INC $41
 
-    ; inc tilemap position
+    ; highlight selected byte
+    %a16()
+    LDA $41 : CMP !ram_crash_temp : BNE .incUpper
+    LDA !ram_tilemap_buffer,X : ORA #$1000 : STA !ram_tilemap_buffer,X
+    LDA !ram_tilemap_buffer+2,X : ORA #$1000 : STA !ram_tilemap_buffer+2,X
+
+  .incUpper
+    ; inc address and tilemap position
+    %a8()
+    INC $41
     INX #6 : LDA !ram_crash_stack_line_position : INC
     STA !ram_crash_stack_line_position : AND #$08 : BEQ +
 
@@ -922,8 +942,10 @@ crash_cgram_transfer:
     LDA $7EC012 : STA $7EC01A
     LDA $7EC014 : STA $7EC01C
 
+    LDA #$001F : STA $7EC03A ; red highlight
     LDA #$0000 : STA $7EC000
     STA $7EC016 : STA $7EC01E
+    STA $7EC03C
 
     JSL transfer_cgram_long
     PLP
@@ -937,7 +959,7 @@ crash_toggle_bg:
     LDA #$80 : STA $2100 ; enable forced blanking
     LDA !ram_crash_bg : BEQ .enableBG
     ; disable BG1/2 and sprites on main/sub screen
-    LDA #$14 : STA $212C : STA $212D
+    LDA #$04 : STA $212C : STA $212D
     BRA .done
 
   .enableBG
