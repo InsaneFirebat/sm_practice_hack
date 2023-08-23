@@ -232,7 +232,7 @@ ifb_brb_timer_clear:
     RTL
 
 ifb_brb_cycle_timer:
-    %cm_numfield_word("Cycle Timer (seconds)", !ram_cm_brb_set_cycle, 1, 512, .routine)
+    %cm_numfield_word("Cycle Timer (seconds)", !ram_cm_brb_set_cycle, 1, 512, 1, 10, .routine)
   .routine
     LDA !ram_cm_brb_set_cycle : BNE +
     LDA #$0009 ; default to ~10s
