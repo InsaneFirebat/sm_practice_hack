@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.7.10] Allow incrementing large decimal numbers the old way with left/right
 * [2.5.7.10] Added option to unlock the camera after a Kraid quick kill
 * [2.5.7.9]  Optimize door alignment calculation
 * [2.5.7.8]  Calculate door alignment time before scrolling
