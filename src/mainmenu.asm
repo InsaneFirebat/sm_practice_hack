@@ -2226,7 +2226,7 @@ ihstrat_downbackzeb:
     %cm_jsl("Downback Zeb Skip", #action_select_room_strat, #$0012)
 
 ihstrat_twocries:
-    %cm_jsl("Two Cries Standup", #action_select_room_strat, #$000D)
+    %cm_jsl("Two Cries Standup", #action_select_room_strat, #$0013)
 
 action_select_room_strat:
 {

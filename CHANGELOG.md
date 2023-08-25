@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.7.11] Fixed corner cases with Two Cries Standup by idlechild
 * [2.5.7.10] Add health bomb toggle to Misc menu
 * [2.5.7.10] Added "Two Cries Standup" room strat by idlechild
 * [2.5.7.10] Allow incrementing large decimal numbers the old way with left/right

@@ -838,7 +838,7 @@ draw_numfield_word:
 
     ; skip min/max and increment values
     INC !DP_CurrentMenu : INC !DP_CurrentMenu : INC !DP_CurrentMenu : INC !DP_CurrentMenu
-    INC !DP_CurrentMenu : INC !DP_CurrentMenu : INC !DP_CurrentMenu : INC !DP_CurrentMenu
+    INC !DP_CurrentMenu : INC !DP_CurrentMenu; : INC !DP_CurrentMenu : INC !DP_CurrentMenu
 
     ; increment past JSL
     INC !DP_CurrentMenu : INC !DP_CurrentMenu

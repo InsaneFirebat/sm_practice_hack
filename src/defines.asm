@@ -8,7 +8,7 @@
 !VERSION_MINOR = 5
 !VERSION_BUILD = 7
 !VERSION_REV_1 = 1
-!VERSION_REV_2 = 0
+!VERSION_REV_2 = 1
 
 
 ; ---------
