@@ -1506,6 +1506,7 @@ MiscMenu:
     dw #misc_invincibility
     dw #misc_infiniteammo
     dw #misc_slowdownrate
+    dw #misc_healthbomb
     dw #misc_waterphysics
     dw #misc_suit_properties
     dw #$FFFF
@@ -1566,6 +1567,9 @@ endif
 
 misc_slowdownrate:
     %cm_numfield("Samus Slowdown Rate", $7E0A66, 0, 4, 1, 1, #0)
+
+misc_healthbomb:
+    %cm_toggle("Health Bomb Flag", !SAMUS_HEALTH_WARNING, #$0001, #0)
 
 misc_magicpants:
     dw !ACTION_CHOICE
