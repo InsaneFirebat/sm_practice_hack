@@ -613,7 +613,7 @@ ih_update_hud_code:
 ;  .pickSegmentTimer
 ;    LDA !sram_frame_counter_mode : BNE .inGameSegmentTimer
 ;    LDA.w #!ram_seg_rt_frames : STA $00
-;    LDA !WRAM_BANK : STA $02
+;    LDA.w #!WRAM_BANK : STA $02
 ;    BRA .drawSegmentTimer
 ;
 ;  .inGameSegmentTimer

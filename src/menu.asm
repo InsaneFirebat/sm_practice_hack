@@ -117,7 +117,6 @@ Initialize_PPU:
     %a8()
     STZ $420C ; clear HDMA enable flags
     %a16()
-
     ; VRAM $5880 -> $7E4100, $700 bytes
     LDA #$5880 : STA $2116
     LDA $2139 ; dummy read?
@@ -129,34 +128,27 @@ Initialize_PPU:
     %a8()
     LDA #$80 : STA $2115
     LDA #$02 : STA $420B
-
     ; CGRAM BG3 palette 6 color 1 = green
     LDA #$19 : STA $2121
     LDA #$B1 : STA $2122
     LDA #$0B : STA $2122
-
     ; CGRAM BG3 palette 6 color 2 = red
     LDA #$1F : STA $2122
     LDA #$00 : STA $2122
-
     ; HDMA channels to enable
     LDA $7E33EA : STA !ram_cgram_cache+$2E
     LDA $85 : STA $7E33EA
-
     LDA $5B : STA $7E33EB ; BG3 tilemap base address and size
     LDA #$58 : STA $5B ; BG3 tilemap base address = $5800, size = 32x32
     LDA #$17 : STA $6A ; Gameplay main screen layers = BG1/BG2/BG3/sprites
     STZ $70 : STZ $73 ; Gameplay color math control registers
-
     ; color math subscreen backdrop color = transparent
     LDA #$20 : STA $2132
     LDA #$40 : STA $2132
     LDA #$80 : STA $2132
-
     ; BG3 X/Y scroll
     STZ $2111 : STZ $2111
     STZ $2112 : STZ $2112
-
     JSL $808F0C ; Handle music queue
     JSL $8289EF ; Handle sound effects
     %a16()
@@ -166,7 +158,6 @@ Initialize_PPU:
 Restore_PPU:
 {
     JSL wait_for_lag_frame_long
-
     ; $7E4100 -> VRAM $5880, $700 bytes
     LDA #$5880 : STA $2116
     LDA #$1801 : STA $4310
@@ -177,24 +168,19 @@ Restore_PPU:
     %a8()
     LDA #$80 : STA $2115
     LDA #$02 : STA $420B
-
     LDA $7E33EA : STA $85 : STA $420C ; HDMA channels to enable
     LDA $7E33EB : STA $5B ; BG3 tilemap base address and size
     LDA $69 : STA $6A ; Gameplay main screen layers
-
     ; Gameplay color math control register
     LDA $6E : STA $70
     LDA $71 : STA $73
-
     ; CGRAM BG3 palette 6 color 1
     LDA #$19 : STA $2121
     LDA $7EC032 : STA $2122
     LDA $7EC033 : STA $2122
-
     ; CGRAM BG3 palette 6 color 2
     LDA $7EC034 : STA $2122
     LDA $7EC035 : STA $2122
-
     JSL $8884B9 ; HDMA object handler (also handle music queue)
     JSL $8289EF ; Handle sound effects
     %a16()
@@ -272,7 +258,7 @@ cm_transfer_original_tileset:
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
     LDX.w #hudgfx_bin : STX $4302 ; Source offset
     LDA.b #hudgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$1000 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -291,7 +277,7 @@ cm_transfer_original_tileset:
     LDX #$2000 : STX $2116 ; VRAM address (4000 in vram)
     LDX.w #hudgfx_bin : STX $4302 ; Source offset
     LDA.b #hudgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$1000 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -307,7 +293,7 @@ cm_transfer_original_tileset:
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
     LDX.w #mapgfx_bin : STX $4302 ; Source offset
     LDA.b #mapgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$1000 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -323,7 +309,7 @@ cm_transfer_original_tileset:
     LDX #$2000 : STX $2116 ; VRAM address (4000 in vram)
     LDX.w #mapgfx_bin : STX $4302 ; Source offset
     LDA.b #mapgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$1000 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -3373,4 +3359,4 @@ print pc, " menu end"
 ; Crash handler
 ; -------------
 
-;incsrc crash.asm
+incsrc crash.asm
