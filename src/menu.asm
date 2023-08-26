@@ -206,7 +206,7 @@ cm_transfer_original_tileset:
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
     LDX.w #hudgfx_bin : STX $4302 ; Source offset
     LDA.b #hudgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$0900 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -225,7 +225,7 @@ cm_transfer_original_tileset:
     LDX #$2000 : STX $2116 ; VRAM address (4000 in vram)
     LDX.w #hudgfx_bin : STX $4302 ; Source offset
     LDA.b #hudgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$0900 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -241,7 +241,7 @@ cm_transfer_original_tileset:
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
     LDX.w #mapgfx_bin : STX $4302 ; Source offset
     LDA.b #mapgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$0900 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -257,7 +257,7 @@ cm_transfer_original_tileset:
     LDX #$2000 : STX $2116 ; VRAM address (4000 in vram)
     LDX.w #mapgfx_bin : STX $4302 ; Source offset
     LDA.b #mapgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$0900 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
