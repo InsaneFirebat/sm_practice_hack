@@ -150,4 +150,4 @@ init_menu_customization:
 
 
 print pc, " init end"
-warnpc $81FF00 ;;; $FF00: Thanks Genji! ;;;
+;warnpc $81FF00 ;;; $FF00: Thanks Genji! ;;;

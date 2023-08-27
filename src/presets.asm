@@ -325,7 +325,7 @@ category_preset_data_table:
     dl preset_zfackpdr_bombs_ship
 
 print pc, " presets bank82 end"
-warnpc $82FE00 ; tinystates.asm
+;warnpc $82FE00 ; tinystates.asm
 
 
 org $82E8D9
@@ -705,7 +705,7 @@ transfer_cgram_long:
 ;}
 
 print pc, " presets bank80 end"
-warnpc $80F600 ; save.asm or tinystates.asm
+;warnpc $80F600 ; save.asm or tinystates.asm
 
 
 ; $80:9AB1: Add x-ray and grapple HUD items if necessary
@@ -729,6 +729,7 @@ warnpc $80F600 ; save.asm or tinystates.asm
 
 ; Preset data/menus can be anywhere in the rom, even in separate banks
 org !ORG_PRESETS_MENU
+check bankcross off
 print pc, " preset menu start"
   incsrc presets/zfackpdr_menu.asm
 print pc, " preset menu end"
@@ -737,4 +738,6 @@ org !ORG_PRESETS_DATA
 print pc, " preset data start"
   incsrc presets/zfackpdr_data.asm
 print pc, " preset data end"
+;warnpc $FEE000
+check bankcross on
 
