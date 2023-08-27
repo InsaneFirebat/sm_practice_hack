@@ -105,7 +105,8 @@ custom_preset_save:
     LDA $7ECD4C : STA $7030B8,X  ; Scrolls
     LDA $7ECD4E : STA $7030BA,X  ; Scrolls
     LDA $7ECD50 : STA $7030BC,X  ; Scrolls
-    ; next available byte is $7030BE
+    LDA $09D8 : STA $7030BE,X    ; Damage (Ascent)
+    ; next available byte is $7030C0
     RTL
 }
 
@@ -183,6 +184,7 @@ custom_preset_load:
     LDA $703086,X : STA $7ED908  ; Map Stations
     LDA $703088,X : STA $7ED90A  ; Map Stations
     LDA $70308A,X : STA $7ED90C  ; Map Stations
+    LDA $7030BE,X : STA $09D8    ; Damage (Ascent)
     ; set flag to load scrolls later
     LDA #$5AFE : STA !ram_custom_preset
     ; next available byte is $7030BE
@@ -262,7 +264,8 @@ custom_preset_save:
 
     LDA $0AF8 : STA $7031EA,X    ; Samus subpixel X
     LDA $0AFC : STA $7031EC,X    ; Samus subpixel Y
-    ; next available byte is $7031EE
+    LDA $09D8 : STA $7031EE,X    ; Damage (Ascent)
+    ; next available byte is $7031F0
 
     RTL
 }
@@ -342,6 +345,7 @@ custom_preset_load:
     LDA $703002,X : CMP #$01EC : BMI .done_with_scrolls
     LDA $7031EA,X : STA $0AF8    ; Samus subpixel X
     LDA $7031EC,X : STA $0AFC    ; Samus subpixel Y
+    LDA $7031EE,X : STA $09D8    ; Damage (Ascent)
 
   .done_with_scrolls
     RTL
