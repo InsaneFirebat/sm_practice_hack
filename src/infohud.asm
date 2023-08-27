@@ -617,8 +617,8 @@ ih_update_hud_code:
 ;    BRA .drawSegmentTimer
 ;
 ;  .inGameSegmentTimer
-;    LDA #!IGT_FRAMES : STA $00
-;    LDA #!WRAM_BANK : STA $02
+;    LDA.w #!IGT_FRAMES : STA $00
+;    LDA.w #!WRAM_BANK : STA $02
 ;
 ;  .drawSegmentTimer
 ;    ; Frames
@@ -1415,7 +1415,7 @@ ih_shinespark_code:
 }
 
 print pc, " infohud end"
-warnpc $F0E000 ; spritefeat.asm
+;warnpc $F0E000 ; spritefeat.asm
 
 
 ; Stuff that needs to be placed in bank 80
@@ -1487,13 +1487,14 @@ ih_hud_code_paused:
 }
 
 NumberGFXTable:
-    dw #$3C00, #$3C01, #$3C02, #$3C03, #$3C04, #$3C05, #$3C06, #$3C07, #$3C08, #$3C09
-    dw #$3C10, #$3C71, #$3C12, #$3C13, #$3C14, #$3C15, #$3C16, #$3C17, #$3C18, #$3C19
-    dw #$3C76, #$3C77, #$3C78, #$3C79, #$3C7A, #$3C7B, #$3C7C, #$3C7D, #$3C7E, #$3C7F
-    dw #$3CA9, #$3CAA, #$3CAB, #$3C36, #$3C37, #$3C38, #$3C0C, #$3C39, #$3C3A, #$3C3B
-    dw #$3C56, #$3C57, #$3C58, #$3C59, #$3C5A, #$3C5B, #$3C5C, #$3C5D, #$3C5E, #$3C5F
-    dw #$3C60, #$3C61, #$3C62, #$3C63, #$3C64, #$3C65, #$3C66, #$3C67, #$3C68, #$3C69
-    dw #$3C6A, #$3C6B, #$3C6C, #$3C6D, #$3C6E, #$3C0D
+    ;    x0      x1      x2      x3      x4      x5      x6      x7      x8      x9
+    dw #$3C00, #$3C01, #$3C02, #$3C03, #$3C04, #$3C05, #$3C06, #$3C07, #$3C08, #$3C09 ; 0x
+    dw #$3C10, #$3C71, #$3C12, #$3C13, #$3C14, #$3C15, #$3C16, #$3C17, #$3C18, #$3C19 ; 1x
+    dw #$3C76, #$3C77, #$3C78, #$3C79, #$3C7A, #$3C7B, #$3C7C, #$3C7D, #$3C7E, #$3C7F ; 2x
+    dw #$3CA9, #$3CAA, #$3CAB, #$3C36, #$3C37, #$3C38, #$3C0C, #$3C39, #$3C3A, #$3C3B ; 3x
+    dw #$3C56, #$3C57, #$3C58, #$3C59, #$3C5A, #$3C5B, #$3C5C, #$3C5D, #$3C5E, #$3C5F ; 4x
+    dw #$3C60, #$3C61, #$3C62, #$3C63, #$3C64, #$3C65, #$3C66, #$3C67, #$3C68, #$3C69 ; 5x
+    dw #$3C6A, #$3C6B, #$3C6C, #$3C6D, #$3C6E, #$3C0D                                 ; 6x
 
 HexGFXTable:
     dw #$3C00, #$3C01, #$3C02, #$3C03, #$3C04, #$3C05, #$3C06, #$3C07, #$3C08, #$3C09
@@ -1527,5 +1528,5 @@ HexToNumberGFX2:
     dw #$3C00, #$3C01, #$3C02, #$3C03, #$3C04, #$3C05, #$3C06, #$3C07, #$3C08, #$3C09
 
 print pc, " infohud bank80 end"
-warnpc $80FF80 ; cutscenes.asm door transition code
+;warnpc $80FF80 ; cutscenes.asm door transition code
 

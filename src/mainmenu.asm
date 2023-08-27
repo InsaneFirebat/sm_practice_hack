@@ -661,7 +661,7 @@ eq_currentmissiles:
 eq_setmissiles:
     %cm_numfield_word("Max Ammo", !SAMUS_AMMO_MAX, 0, 400, .routine)
     .routine
-        LDA !SAMUS_AMMO_MAX : STA !SAMUS_AMMO ; missiles
+        LDA !SAMUS_AMMO_MAX : STA !SAMUS_AMMO
         RTL
 
 eq_togglemisiles:

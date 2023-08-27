@@ -144,6 +144,7 @@ mm_refresh_reserves:
 print pc, " minimap bank82 end"
 ;warnpc $82F800 ; layout.asm
 
+
 org !ORG_MINIMAP_BANK88
 print pc, " minimap bank88 start"
 mm_initialize_minimap:
