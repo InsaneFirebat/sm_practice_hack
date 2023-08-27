@@ -17,7 +17,7 @@
 !VERSION_MINOR = 5
 !VERSION_BUILD = 7
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 0
+!VERSION_REV_2 = 1
 
 
 ; ---------------
@@ -66,7 +66,7 @@
 ;!ORG_LAYOUT_BANKB4 = $B4F640 ; unused
 ;!ORG_CUTSCENES = $8BF800 ; unused
 ;!ORG_CUTSCENES_MB = $A9FBC0 ; unused
-!ORG_SPRITEPRIO =                      $81FE00 ; $8D
+!ORG_SPRITEPRIO = $81FE00 ; $8D
 ;!ORG_ROOMNAMES = $E70000 ; whole bank pointer style
 ;!ORG_CUSTOMIZEMENU = $AFEC00 ; move if used
 ;!ORG_PALETTEPROFILES = $AEFD20 ; move if used

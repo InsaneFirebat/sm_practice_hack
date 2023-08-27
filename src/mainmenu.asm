@@ -1099,6 +1099,10 @@ tel_goto_debug:
 TeleportCrateriaMenu:
     dw #tel_crateriaship
     dw #tel_crateriaparlor
+    dw #tel_crateria02
+    dw #tel_crateria03
+    dw #tel_crateria04
+    dw #tel_crateria05
     dw #$0000
     %cm_header("OUTSKIRTS SAVE STATIONS")
 
