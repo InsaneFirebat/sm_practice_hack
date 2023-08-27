@@ -611,12 +611,12 @@ ih_update_hud_code:
   .pickSegmentTimer
     LDA !sram_frame_counter_mode : BNE .inGameSegmentTimer
     LDA.w #!ram_seg_rt_frames : STA $00
-    LDA !WRAM_BANK : STA $02
+    LDA.w #!WRAM_BANK : STA $02
     BRA .drawSegmentTimer
 
   .inGameSegmentTimer
-    LDA #!IGT_FRAMES : STA $00
-    LDA #!WRAM_BANK : STA $02
+    LDA.w #!IGT_FRAMES : STA $00
+    LDA.w #!WRAM_BANK : STA $02
 
   .drawSegmentTimer
     ; Frames
@@ -1485,12 +1485,12 @@ ih_hud_code_paused:
 
 NumberGFXTable:
     dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08
-    dw #$0C70, #$0C71, #$0C72, #$0C73, #$0C74, #$0C75, #$0C78, #$0C79, #$0C7A, #$0C7B
-    dw #$0C7C, #$0C7D, #$0C7E, #$0C7F, #$0CD2, #$0CD4, #$0CD5, #$0CD6, #$0CD7, #$0CD8
-    dw #$0CD9, #$0CDA, #$0CDB, #$0C5C, #$0C5D, #$0CB8, #$0C8D, #$0C12, #$0C13, #$0C14
-    dw #$0C15, #$0C16, #$0C17, #$0C18, #$0C19, #$0C1A, #$0C1B, #$0C20, #$0C21, #$0C22
+    dw #$0CD4, #$0CD5, #$0CD6, #$0CD7, #$0CD8, #$0CDB, #$0C0B, #$0C0C, #$0C0D, #$0CFA
+    dw #$0CFB, #$0CFC, #$0CFD, #$0CFE, #$0CFF, #$0C30, #$0C31, #$0C32, #$0C33, #$0C34
+    dw #$0C35, #$0C36, #$0C37, #$0C38, #$0C39, #$0C3A, #$0C3B, #$0C1D, #$0C13, #$0C14
+    dw #$0C15, #$0C16, #$0C17, #$0C18, #$0C19, #$0C1A, #$0C1B, #$0C1C, #$0C21, #$0C22
     dw #$0C23, #$0C24, #$0C25, #$0C26, #$0C27, #$0C28, #$0C29, #$0C2A, #$0C2B, #$0C2C
-    dw #$0C2D, #$0C2E, #$0C2F, #$0C5E, #$0C5F, #$0CCA
+    dw #$0C2D, #$0C2E, #$0C1E, #$0C3C, #$0C3D, #$0C40
 
 HexGFXTable:
     dw #$0C09, #$0C00, #$0C01, #$0C02, #$0C03, #$0C04, #$0C05, #$0C06, #$0C07, #$0C08

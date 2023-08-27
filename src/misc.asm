@@ -24,7 +24,7 @@ endif
 ;  (skip to Zebes)     LDA #$CDAF (skip to Zebes)
 ;                      LDA #Intro_Skip_to_Zebes
 org $82EEDF
-    LDA #$C100
+    LDA #$BCA0
 
 org !ORG_MISC_BANK8B
 print pc, " misc bank8B start"
@@ -54,6 +54,19 @@ print pc, " misc bank8B end"
 ; Enable version display
 org $8B8697
     NOP
+
+; Shift version string down a bit for Junkoid
+org $8B86AA
+    LDA #$00D0
+
+org $8B8717
+    LDA #$00D0
+
+org $8B8729
+    LDA #$00D0
+
+org $8B8746
+    LDA #$00D0
 
 org $8BF754
 hook_version_data:

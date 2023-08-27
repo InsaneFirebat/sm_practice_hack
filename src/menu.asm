@@ -127,8 +127,22 @@ cm_init:
 
 cm_set_etanks_and_reserve:
 {
-    LDA !SAMUS_HP_MAX : JSR cm_divide_100 : STA !ram_cm_etanks
-    LDA !SAMUS_RESERVE_MAX : JSR cm_divide_100 : STA !ram_cm_reserve
+    ; divide by 25, subtract 4
+    LDA !SAMUS_HP_MAX : STA $4204
+    %a8()
+    LDA #$19 : STA $4206
+    %a16()
+    PEA $0000 : PLA ; wait for CPU math
+    LDA $4214 : SEC : SBC #$0004 : STA !ram_cm_etanks
+
+    ; divide by 50
+    LDA !SAMUS_RESERVE_MAX : STA $4204
+    %a8()
+    LDA #$32 : STA $4206
+    %a16()
+    PEA $0000 : PLA ; wait for CPU math
+    LDA $4214 : STA !ram_cm_reserve
+
     RTL
 }
 
@@ -195,7 +209,7 @@ cm_transfer_original_tileset:
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
     LDX.w #hudgfx_bin : STX $4302 ; Source offset
     LDA.b #hudgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$0900 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -214,7 +228,7 @@ cm_transfer_original_tileset:
     LDX #$2000 : STX $2116 ; VRAM address (4000 in vram)
     LDX.w #hudgfx_bin : STX $4302 ; Source offset
     LDA.b #hudgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$0900 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -230,7 +244,7 @@ cm_transfer_original_tileset:
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
     LDX.w #mapgfx_bin : STX $4302 ; Source offset
     LDA.b #mapgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$0900 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -246,7 +260,7 @@ cm_transfer_original_tileset:
     LDX #$2000 : STX $2116 ; VRAM address (4000 in vram)
     LDX.w #mapgfx_bin : STX $4302 ; Source offset
     LDA.b #mapgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$0900 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -3214,19 +3228,6 @@ cm_reverse_hex2dec:
     RTS
 }
 
-cm_divide_100:
-{
-    STA $4204
-    %a8()
-    ; divide by 100
-    LDA #$64 : STA $4206
-    %a16()
-    PEA $0000 : PLA ; wait for math
-    ; 16-bit result
-    LDA $4214
-    RTS
-}
-
 MenuRNG:
 ; Generates new random number
 ; 32-bit period (uses two 16-bit seeds)
@@ -3245,7 +3246,7 @@ MenuRNG:
     STA !ram_seed_Y
 
     ; return y (in a)
-    RTL    
+    RTL
 }
 
 MenuRNG2:
@@ -3278,13 +3279,13 @@ pullpc
 ; Resources
 ; ----------
 
-;pushpc
-;org !ORG_MENU_GFX
-;print pc, " menu gfx start"
+pushpc
+org !ORG_MENU_GFX
+print pc, " menu gfx start"
 cm_hud_table:
     incbin ../resources/cm_gfx.bin
-;print pc, " menu gfx end"
-;pullpc
+print pc, " menu gfx end"
+pullpc
 
 HexMenuGFXTable:
     dw $2C70, $2C71, $2C72, $2C73, $2C74, $2C75, $2C76, $2C77, $2C78, $2C79, $2C50, $2C51, $2C52, $2C53, $2C54, $2C55

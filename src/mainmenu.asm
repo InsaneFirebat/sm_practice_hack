@@ -100,7 +100,7 @@ if !FEATURE_CUSTOMIZE_MENU
     dw #mm_goto_customize
 endif
     dw #$0000
-    %cm_version_header("SM PRACTICE HACK", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
+    %cm_version_header("SUPER JUNKOID", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
 
 MainMenuBanks:
     dw #EquipmentMenu>>16
@@ -175,7 +175,7 @@ PresetsMenu:
     dw #presets_save_custom_preset
     dw #presets_load_custom_preset
     dw #$FFFF
-;    dw #presets_reload_last
+    dw #presets_reload_last
 ;    dw #presets_load_random
 ;if !FEATURE_DEV
 ;    dw #presets_random_preset_rng
@@ -570,6 +570,8 @@ EquipmentMenu:
     dw #$0000
     %cm_header("EQUIPMENT")
 
+; 600 HP, 75 Magic, 50 Baseballs, 25 Sparksuits, 4 Frogs
+
 eq_refill:
     %cm_jsl("Refill", .refill, #$0000)
   .refill
@@ -578,6 +580,7 @@ eq_refill:
     LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS
     LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS
     LDA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY
+    LDA #$0001 : STA !SAMUS_RESERVE_MODE
     LDA #$0002 : JSL !SFX_LIB2 ; big energy pickup
     RTL
 
@@ -591,41 +594,34 @@ eq_goto_togglebeams:
     %cm_jsl("Toggle Beams", #eq_prepare_beams_menu, #ToggleBeamsMenu)
 
 eq_currentenergy:
-    %cm_numfield_word("Current Energy", !SAMUS_HP, 0, 2100, #0)
+    %cm_numfield_word("Current Energy", !SAMUS_HP, 0, 600, #0)
 
 eq_setetanks:
-    %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 21, 1, 1, .routine)
+    %cm_numfield("Max Energy", !ram_cm_etanks, 0, 20, 1, 2, .routine)
   .routine
-    TAX : BEQ .zero
-    LDA #$0000
-    CPX #$000F : BPL .loop
-    LDA #$0063
-  .loop
-    DEX : BMI .endloop
-    CLC : ADC #$0064
-    BRA .loop
-  .zero
-    LDA #$0063
-  .endloop
+    ; divide by 25, ignore remainder, multiply by 25, subtract 4?
+    ; this will need some thought
+    %a8()
+    LDA !ram_cm_etanks : STA $4202
+    LDA #$19 : STA $4203
+    %a16()
+    PEA $0000 : PLA ; wait for CPU math
+    LDA $4216 : CLC : ADC #$0064
     STA !SAMUS_HP_MAX : STA !SAMUS_HP
     RTL
 
 eq_currentreserves:
-    %cm_numfield_word("Current Reserves", !SAMUS_RESERVE_ENERGY, 0, 700, #0)
+    %cm_numfield_word("Current Reserves", !SAMUS_RESERVE_ENERGY, 0, 200, #0)
 
 eq_setreserves:
-    %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 7, 1, 1, .routine)
+    %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 4, 1, 1, .routine)
   .routine
-    TAX : BEQ .zero
-    LDA #$0000
-  .loop
-    DEX : BMI .endloop
-    CLC : ADC #$0064
-    BRA .loop
-  .zero
-    STA !SAMUS_RESERVE_MODE
-  .endloop
-    STA !SAMUS_RESERVE_ENERGY : STA !SAMUS_RESERVE_MAX
+    %a8()
+    LDA !ram_cm_reserve : STA $4202
+    LDA #$32 : STA $4203
+    %a16()
+    PEA $0000 : PLA ; wait for CPU math
+    LDA $4216 : STA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY
     RTL
 
 eq_reservemode:
@@ -645,31 +641,55 @@ eq_reservemode:
     RTL
 
 eq_currentmissiles:
-    %cm_numfield_word("Current Missiles", !SAMUS_MISSILES, 0, 325, #0)
+    %cm_numfield("Current Magic Bolts", !SAMUS_MISSILES, 0, 75, 1, 4, #0)
 
 eq_setmissiles:
-    %cm_numfield_word("Missiles", !SAMUS_MISSILES_MAX, 0, 325, .routine)
-    .routine
-        LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES ; missiles
-        RTL
+    %cm_numfield("Max Magic Bolts", !SAMUS_MISSILES_MAX, 0, 75, 5, 10, .routine)
+  .routine
+    LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES
+    RTL
 
 eq_currentsupers:
-    %cm_numfield("Current Super Missiles", !SAMUS_SUPERS, 0, 65, 1, 5, #0)
+    %cm_numfield("Current Baseballs", !SAMUS_SUPERS, 0, 50, 1, 5, #.routine)
+  .routine
+    LDA !SAMUS_SUPERS_MAX : BEQ .zero
+    LDA !SAMUS_ITEMS_EQUIPPED : ORA #$0800 : STA !SAMUS_ITEMS_EQUIPPED
+    RTL
+  .zero
+    LDA !SAMUS_ITEMS_EQUIPPED : AND #$F7FF : STA !SAMUS_ITEMS_EQUIPPED
+    RTL
 
 eq_setsupers:
-    %cm_numfield("Super Missiles", !SAMUS_SUPERS_MAX, 0, 65, 5, 5, .routine)
-    .routine
-        LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS ; supers
-        RTL
+    %cm_numfield("Max Baseballs", !SAMUS_SUPERS_MAX, 0, 50, 5, 5, .routine)
+  .routine
+    LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS
+    BEQ .zero
+    LDA !SAMUS_ITEMS_EQUIPPED : ORA #$0800 : STA !SAMUS_ITEMS_EQUIPPED
+    RTL
+  .zero
+    LDA !SAMUS_ITEMS_EQUIPPED : AND #$F7FF : STA !SAMUS_ITEMS_EQUIPPED
+    RTL
 
 eq_currentpbs:
-    %cm_numfield("Current Power Bombs", !SAMUS_PBS, 0, 70, 1, 5, #0)
+    %cm_numfield("Current Sparksuits", !SAMUS_PBS, 0, 25, 1, 5, #.routine)
+  .routine
+    LDA !SAMUS_SUPERS_MAX : BEQ .zero
+    LDA !SAMUS_ITEMS_EQUIPPED : ORA #$4000 : STA !SAMUS_ITEMS_EQUIPPED
+    RTL
+  .zero
+    LDA !SAMUS_ITEMS_EQUIPPED : AND #$BFFF : STA !SAMUS_ITEMS_EQUIPPED
+    RTL
 
 eq_setpbs:
-    %cm_numfield("Power Bombs", !SAMUS_PBS_MAX, 0, 70, 5, 5, .routine)
-    .routine
-        LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS ; pbs
-        RTL
+    %cm_numfield("Max Sparksuits", !SAMUS_PBS_MAX, 0, 25, 5, 5, .routine)
+  .routine
+    LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS
+    BEQ .zero
+    LDA !SAMUS_ITEMS_EQUIPPED : ORA #$4000 : STA !SAMUS_ITEMS_EQUIPPED
+    RTL
+  .zero
+    LDA !SAMUS_ITEMS_EQUIPPED : AND #$BFFF : STA !SAMUS_ITEMS_EQUIPPED
+    RTL
 
 ; ---------------------
 ; Toggle Category menu
@@ -729,15 +749,7 @@ action_category:
     TYA : ASL #4 : TAX
 
     LDA.l .table,X : STA !SAMUS_ITEMS_COLLECTED : STA !SAMUS_ITEMS_EQUIPPED : INX #2
-
-    LDA.l .table,X : STA !SAMUS_BEAMS_COLLECTED : TAY
-    AND #$000C : CMP #$000C : BEQ .murderBeam
-    TYA : STA !SAMUS_BEAMS_EQUIPPED : INX #2 : BRA .doneMurderBeam
-
-  .murderBeam
-    TYA : AND #$100B : STA !SAMUS_BEAMS_EQUIPPED : INX #2
-
-  .doneMurderBeam
+    LDA.l .table,X : STA !SAMUS_BEAMS_COLLECTED : INX #2
     LDA.l .table,X : STA !SAMUS_HP : STA !SAMUS_HP_MAX : INX #2
     LDA.l .table,X : STA !SAMUS_MISSILES : STA !SAMUS_MISSILES_MAX : INX #2
     LDA.l .table,X : STA !SAMUS_SUPERS : STA !SAMUS_SUPERS_MAX : INX #2
@@ -751,16 +763,16 @@ action_category:
 
   .table
     ;  Items,  Beams,  Health, Miss,   Supers, PBs,    Reserv, Dummy
-    dw #$F32F, #$100F, #$05DB, #$00E6, #$0032, #$0032, #$0190, #$0000        ; 100%
-    dw #$3125, #$1007, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% new
-    dw #$3325, #$100B, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% old
-    dw #$1025, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% ice
-    dw #$3025, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% speed
-    dw #$F33F, #$100F, #$02BC, #$0064, #$0014, #$0014, #$012C, #$0000        ; gt code
-    dw #$F33F, #$100F, #$0834, #$0145, #$0041, #$0041, #$02BC, #$0000        ; 135%
-    dw #$710C, #$1001, #$031F, #$001E, #$0019, #$0014, #$0064, #$0000        ; rbo
-    dw #$9004, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0000, #$0000        ; any% glitched
-    dw #$F32F, #$100F, #$0031, #$01A4, #$005A, #$0063, #$0000, #$0000        ; crystal flash
+    dw #$7B2F, #$100B, #$0258, #$004B, #$0032, #$0019, #$00C8, #$0000        ; 100%
+    dw #$7925, #$1003, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% new
+    dw #$7B25, #$100B, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% old
+    dw #$5825, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% ice
+    dw #$7825, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% speed
+    dw #$7B2F, #$100B, #$02BC, #$0064, #$0014, #$0014, #$012C, #$0000        ; gt code
+    dw #$7B2F, #$100B, #$0834, #$0145, #$0041, #$0041, #$02BC, #$0000        ; 135%
+    dw #$790C, #$1001, #$031F, #$001E, #$0019, #$0014, #$0064, #$0000        ; rbo
+    dw #$5804, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0000, #$0000        ; any% glitched
+    dw #$7B2F, #$100B, #$0031, #$01A4, #$005A, #$0063, #$0000, #$0000        ; crystal flash
     dw #$0000, #$0000, #$0063, #$0000, #$0000, #$0000, #$0000, #$0000        ; nothing
 }
 
@@ -866,61 +878,50 @@ eq_prepare_items_menu:
 }
 
 ToggleItemsMenu:
-    dw #ti_variasuit
-    dw #ti_gravitysuit
-    dw #$FFFF
     dw #ti_morphball
     dw #ti_bomb
-    dw #ti_springball
-    dw #ti_screwattack
-    dw #$FFFF
-    dw #ti_hijumpboots
-    dw #ti_spacejump
     dw #ti_speedbooster
     dw #$FFFF
-    dw #ti_grapple
-    dw #ti_xray
+    dw #ti_hijumpboots
+    dw #ti_screwattack
+    dw #ti_spacejump
+    dw #ti_gravitysuit
+    dw #ti_variasuit
+    dw #ti_springball
+    dw #$FFFF
+    dw #ti_dreamercrown
     dw #$0000
     %cm_header("TOGGLE ITEMS")
 
 ti_variasuit:
-    %cm_equipment_item("Varia Suit", !ram_cm_varia, #$0001, #$FFFE)
+    %cm_equipment_item("Purple Locket", !ram_cm_varia, #$0001, #$FFFE)
 
 ti_gravitysuit:
-    %cm_equipment_item("Gravity Suit", !ram_cm_gravity, #$0020, #$FFDF)
+    %cm_equipment_item("Sanguine Fin", !ram_cm_gravity, #$0020, #$FFDF)
 
 ti_morphball:
-    %cm_equipment_item("Morph Ball", !ram_cm_morph, #$0004, #$FFFB)
+    %cm_equipment_item("Rat Cloak", !ram_cm_morph, #$0004, #$FFFB)
 
 ti_bomb:
-    %cm_equipment_item("Bombs", !ram_cm_bombs, #$1000, #$EFFF)
+    %cm_equipment_item("Rat Burst", !ram_cm_bombs, #$1000, #$EFFF)
 
 ti_springball:
-    %cm_equipment_item("Spring Ball", !ram_cm_spring, #$0002, #$FFFD)
+    %cm_equipment_item("Wave Bangle", !ram_cm_spring, #$0002, #$FFFD)
 
 ti_screwattack:
-    %cm_equipment_item("Screw Attack", !ram_cm_screw, #$0008, #$FFF7)
+    %cm_equipment_item("Wallkicks", !ram_cm_screw, #$0008, #$FFF7)
 
 ti_hijumpboots:
-    %cm_equipment_item("Hi Jump Boots", !ram_cm_hijump, #$0100, #$FEFF)
+    %cm_equipment_item("Feather", !ram_cm_hijump, #$0100, #$FEFF)
 
 ti_spacejump:
-    %cm_equipment_item("Space Jump", !ram_cm_space, #$0200, #$FDFF)
+    %cm_equipment_item("Magic Broom", !ram_cm_space, #$0200, #$FDFF)
 
 ti_speedbooster:
-    %cm_equipment_item("Speed Booster", !ram_cm_speed, #$2000, #$DFFF)
+    %cm_equipment_item("Rat Dasher", !ram_cm_speed, #$2000, #$DFFF)
 
-ti_grapple:
-    %cm_toggle_bit("Grapple", !SAMUS_ITEMS_COLLECTED, #$4000, .routine)
-  .routine
-    LDA !SAMUS_ITEMS_EQUIPPED : EOR #$4000 : STA !SAMUS_ITEMS_EQUIPPED
-    RTL
-
-ti_xray:
-    %cm_toggle_bit("X-Ray", !SAMUS_ITEMS_COLLECTED, #$8000, .routine)
-  .routine
-    LDA !SAMUS_ITEMS_EQUIPPED : EOR #$8000 : STA !SAMUS_ITEMS_EQUIPPED
-    RTL
+ti_dreamercrown:
+    %cm_equipment_item("Dreamer's Crown", !ram_cm_crown, #$4000, #$BFFF)
 
 equipment_toggle_items:
 {
@@ -1012,35 +1013,29 @@ setup_beams_ram:
 }
 
 ToggleBeamsMenu:
-    dw tb_chargebeam
     dw tb_icebeam
     dw tb_wavebeam
-    dw tb_spazerbeam
     dw tb_plasmabeam
+    dw tb_chargebeam
     dw #$FFFF
     dw misc_hyperbeam
-    dw #$FFFF
-    dw tb_glitchedbeams
     dw #$0000
     %cm_header("TOGGLE BEAMS")
 
 tb_chargebeam:
-    %cm_equipment_beam("Charge", !ram_cm_charge, #$1000, #$EFFF, #$100F)
+    %cm_equipment_beam("Death", !ram_cm_charge, #$1000, #$EFFF, #$100F)
 
 tb_icebeam:
     %cm_equipment_beam("Ice", !ram_cm_ice, #$0002, #$FFFD, #$100F)
 
 tb_wavebeam:
-    %cm_equipment_beam("Wave", !ram_cm_wave, #$0001, #$FFFE, #$100F)
+    %cm_equipment_beam("Blood", !ram_cm_wave, #$0001, #$FFFE, #$100F)
 
 tb_spazerbeam:
     %cm_equipment_beam("Spazer", !ram_cm_spazer, #$0004, #$FFFB, #$1007)
 
 tb_plasmabeam:
-    %cm_equipment_beam("Plasma", !ram_cm_plasma, #$0008, #$FFF7, #$100B)
-
-tb_glitchedbeams:
-    %cm_submenu("Glitched Beams", #GlitchedBeamsMenu)
+    %cm_equipment_beam("Storms", !ram_cm_plasma, #$0008, #$FFF7, #$100B)
 
 equipment_toggle_beams:
 {
@@ -1051,76 +1046,17 @@ equipment_toggle_beams:
     ; unquipped
     LDA !SAMUS_BEAMS_EQUIPPED : AND !DP_Increment : STA !SAMUS_BEAMS_EQUIPPED
     LDA !SAMUS_BEAMS_COLLECTED : ORA !DP_ToggleValue : STA !SAMUS_BEAMS_COLLECTED
-    BRA .checkSpazer
+    JML $90AC8D ; update beam gfx
 
   .equipped
     LDA !SAMUS_BEAMS_EQUIPPED : ORA !DP_ToggleValue : AND !DP_Temp : STA !SAMUS_BEAMS_EQUIPPED
     LDA !SAMUS_BEAMS_COLLECTED : ORA !DP_ToggleValue : STA !SAMUS_BEAMS_COLLECTED
-    BRA .checkSpazer
+    JML $90AC8D ; update beam gfx
 
   .unobtained
     LDA !SAMUS_BEAMS_EQUIPPED : AND !DP_Increment : STA !SAMUS_BEAMS_EQUIPPED
     LDA !SAMUS_BEAMS_COLLECTED : AND !DP_Increment : STA !SAMUS_BEAMS_COLLECTED
-
-  .checkSpazer
-    ; Reinitialize Spazer and Plasma since they affect each other
-    LDA !SAMUS_BEAMS_COLLECTED : BIT #$0004 : BEQ .noSpazer
-    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0004 : BNE .equipSpazer
-    ; unequip Spazer
-    LDA #$0002 : STA !ram_cm_spazer : BRA .checkPlasma
-  .equipSpazer
-    LDA #$0001 : STA !ram_cm_spazer : BRA .checkPlasma
-  .noSpazer
-    LDA #$0000 : STA !ram_cm_spazer
-
-  .checkPlasma
-    LDA !SAMUS_BEAMS_COLLECTED : BIT #$0008 : BEQ .noPlasma
-    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0008 : BNE .equipPlasma
-    ; unequip Plasma
-    LDA #$0002 : STA !ram_cm_plasma : BRA .done
-  .equipPlasma
-    LDA #$0001 : STA !ram_cm_plasma : BRA .done
-  .noPlasma
-    LDA #$0000 : STA !ram_cm_plasma
-
-  .done
     JML $90AC8D ; update beam gfx
-}
-
-
-; -------------------
-; Glitched Beams menu
-; -------------------
-
-GlitchedBeamsMenu:
-    dw #gb_murder
-    dw #gb_spacetime
-    dw #gb_chainsaw
-    dw #gb_unnamed
-    dw #$0000
-    %cm_header("GLITCHED BEAMS")
-    %cm_footer("BEWARE OF CRASHES")
-
-gb_murder:
-    %cm_jsl("Murder Beam", action_glitched_beam, #$100F)
-
-gb_spacetime:
-    %cm_jsl("Spacetime Beam", action_glitched_beam, #$100E)
-
-gb_chainsaw:
-    %cm_jsl("Chainsaw Beam", action_glitched_beam, #$100D)
-
-gb_unnamed:
-    %cm_jsl("Unnamed Glitched Beam", action_glitched_beam, #$100C)
-
-action_glitched_beam:
-{
-    TYA : STA !SAMUS_BEAMS_EQUIPPED
-    LDA !SAMUS_BEAMS_COLLECTED : ORA !SAMUS_BEAMS_EQUIPPED : STA !SAMUS_BEAMS_COLLECTED
-    JSL setup_beams_ram
-    LDA #$0042 : JSL !SFX_LIB1 ; unlabled, song dependent sound
-    JSL $90AC8D ; update beam gfx
-    RTL
 }
 
 
@@ -1140,22 +1076,22 @@ TeleportMenu:
     %cm_header("TELEPORT TO SAVE STATION")
 
 tel_goto_crat:
-    %cm_submenu("Crateria", #TeleportCrateriaMenu)
+    %cm_submenu("Outskirts", #TeleportCrateriaMenu)
 
 tel_goto_brin:
-    %cm_submenu("Brinstar", #TeleportBrinstarMenu)
+    %cm_submenu("False Idol", #TeleportBrinstarMenu)
 
 tel_goto_norf:
-    %cm_submenu("Norfair", #TeleportNorfairMenu)
+    %cm_submenu("Deep Purple", #TeleportNorfairMenu)
 
 tel_goto_ship:
-    %cm_submenu("Wrecked Ship", #TeleportWreckedShipMenu)
+    %cm_submenu("Ice Castle", #TeleportWreckedShipMenu)
 
 tel_goto_mari:
-    %cm_submenu("Maridia", #TeleportMaridiaMenu)
+    %cm_submenu("Blood Bethel", #TeleportMaridiaMenu)
 
 tel_goto_tour:
-    %cm_submenu("Tourian", #TeleportTourianMenu)
+    %cm_submenu("Sheol", #TeleportTourianMenu)
 
 tel_goto_debug:
     %cm_submenu("Debug Teleports", #DebugTeleportMenu)
@@ -1164,73 +1100,81 @@ TeleportCrateriaMenu:
     dw #tel_crateriaship
     dw #tel_crateriaparlor
     dw #$0000
-    %cm_header("CRATERIA SAVE STATIONS")
+    %cm_header("OUTSKIRTS SAVE STATIONS")
 
 tel_crateriaship:
-    %cm_jsl("Crateria Ship", #action_teleport, #$0000)
+    %cm_jsl("Outskirts Ship", #action_teleport, #$0000)
 
 tel_crateriaparlor:
-    %cm_jsl("Crateria Parlor", #action_teleport, #$0001)
+    %cm_jsl("Outskirts South", #action_teleport, #$0001)
+
+tel_crateria02:
+    %cm_jsl("Outskirts East", #action_teleport, #$0002)
+
+tel_crateria03:
+    %cm_jsl("Outskirts West of Ship", #action_teleport, #$0003)
+
+tel_crateria04:
+    %cm_jsl("Outskirts Southeast", #action_teleport, #$0004)
+
+tel_crateria05:
+    %cm_jsl("Outskirts Southeaster", #action_teleport, #$0005)
 
 TeleportBrinstarMenu:
     dw #tel_brinstarpink
     dw #tel_brinstargreenshaft
     dw #tel_brinstargreenetecoons
     dw #tel_brinstarkraid
-    dw #tel_brinstarredtower
     dw #$0000
-    %cm_header("BRINSTAR SAVE STATIONS")
+    %cm_header("FALSE IDOL SAVE STATIONS")
 
 tel_brinstarpink:
-    %cm_jsl("Brinstar Pink Spospo", #action_teleport, #$0100)
+    %cm_jsl("False Idol West", #action_teleport, #$0100)
 
 tel_brinstargreenshaft:
-    %cm_jsl("Brinstar Green Shaft", #action_teleport, #$0101)
+    %cm_jsl("False Idol East", #action_teleport, #$0101)
 
 tel_brinstargreenetecoons:
-    %cm_jsl("Brinstar Green Etecoons", #action_teleport, #$0102)
+    %cm_jsl("False Idol Central", #action_teleport, #$0102)
 
 tel_brinstarkraid:
-    %cm_jsl("Brinstar Kraid", #action_teleport, #$0103)
-
-tel_brinstarredtower:
-    %cm_jsl("Brinstar Red Tower", #action_teleport, #$0104)
+    %cm_jsl("False Idol South", #action_teleport, #$0103)
 
 TeleportNorfairMenu:
     dw #tel_norfairgrapple
     dw #tel_norfairbubble
     dw #tel_norfairtunnel
     dw #tel_norfaircrocomire
-    dw #tel_norfairlnelevator
-    dw #tel_norfairridley
     dw #$0000
-    %cm_header("NORFAIR SAVE STATIONS")
+    %cm_header("DEEP PURPLE SAVE STATIONS")
 
 tel_norfairgrapple:
-    %cm_jsl("Norfair Grapple", #action_teleport, #$0200)
+    %cm_jsl("Deep Purple North", #action_teleport, #$0200)
 
 tel_norfairbubble:
-    %cm_jsl("Norfair Bubble Mountain", #action_teleport, #$0201)
+    %cm_jsl("Deep Purple East", #action_teleport, #$0201)
 
 tel_norfairtunnel:
-    %cm_jsl("Norfair Tunnel", #action_teleport, #$0202)
+    %cm_jsl("Deep Purple Southeast", #action_teleport, #$0202)
 
 tel_norfaircrocomire:
-    %cm_jsl("Norfair Crocomire", #action_teleport, #$0203)
-
-tel_norfairlnelevator:
-    %cm_jsl("Norfair LN Elevator", #action_teleport, #$0204)
-
-tel_norfairridley:
-    %cm_jsl("Norfair Ridley", #action_teleport, #$0205)
+    %cm_jsl("Deep Purple West", #action_teleport, #$0203)
 
 TeleportWreckedShipMenu:
     dw #tel_wreckedship
+    dw #tel_wreckedship01
+    dw #tel_wreckedship02
     dw #$0000
-    %cm_header("WRECKED SHIP SAVE STATIONS")
+    %cm_header("ICE CASTLE SAVE STATIONS")
 
 tel_wreckedship:
-    %cm_jsl("Wrecked Ship", #action_teleport, #$0300)
+    %cm_jsl("Ice Castle North", #action_teleport, #$0300)
+
+tel_wreckedship01:
+    %cm_jsl("Ice Castle Central", #action_teleport, #$0301)
+
+tel_wreckedship02:
+    %cm_jsl("Ice Castle South", #action_teleport, #$0302)
 
 TeleportMaridiaMenu:
     dw #tel_maridiatube
@@ -1238,31 +1182,31 @@ TeleportMaridiaMenu:
     dw #tel_maridiaaqueduct
     dw #tel_maridiadraygon
     dw #$0000
-    %cm_header("MARIDIA SAVE STATIONS")
+    %cm_header("BLOOD BETHEL SAVE STATIONS")
 
 tel_maridiatube:
-    %cm_jsl("Maridia Tube", #action_teleport, #$0400)
+    %cm_jsl("Blood Bethel North", #action_teleport, #$0400)
 
 tel_maridiaelevator:
-    %cm_jsl("Maridia Elevator", #action_teleport, #$0401)
+    %cm_jsl("Blood Bethel Central", #action_teleport, #$0401)
 
 tel_maridiaaqueduct:
-    %cm_jsl("Maridia Aqueduct", #action_teleport, #$0402)
+    %cm_jsl("Blood Bethel East", #action_teleport, #$0402)
 
 tel_maridiadraygon:
-    %cm_jsl("Maridia Draygon", #action_teleport, #$0403)
+    %cm_jsl("Blood Bethel Southeast", #action_teleport, #$0403)
 
 TeleportTourianMenu:
     dw #tel_tourianentrance
     dw #tel_tourianmb
     dw #$0000
-    %cm_header("TOURIAN SAVE STATIONS")
-
-tel_tourianentrance:
-    %cm_jsl("Tourian Entrance", #action_teleport, #$0501)
+    %cm_header("SHEOL SAVE STATIONS")
 
 tel_tourianmb:
-    %cm_jsl("Tourian MB", #action_teleport, #$0500)
+    %cm_jsl("Sheol North", #action_teleport, #$0500)
+
+tel_tourianentrance:
+    %cm_jsl("Sheol South", #action_teleport, #$0501)
 
 DebugTeleportMenu:
     dw #tel_debug_area
@@ -1276,12 +1220,12 @@ tel_debug_area:
     dl #!ram_tel_debug_area
     dw #$0000
     db #$28, "Select Area", #$FF
-        db #$28, "   CRATERIA", #$FF
-        db #$28, "   BRINSTAR", #$FF
-        db #$28, "    NORFAIR", #$FF
-        db #$28, "  REQT SHIP", #$FF
-        db #$28, "    MARIDIA", #$FF
-        db #$28, "    TOURIAN", #$FF
+        db #$28, "  OUTSKIRTS", #$FF
+        db #$28, " FALSE IDOL", #$FF
+        db #$28, "DEEP PURPLE", #$FF
+        db #$28, " ICE CASTLE", #$FF
+        db #$28, "BLOOD BETHEL", #$FF
+        db #$28, "      SHEOL", #$FF
     db #$FF
 
 tel_debug_station:
@@ -1459,7 +1403,7 @@ misc_killenemies:
     RTL
 
 misc_forcestand:
-    %cm_jsl("Force Samus to Stand Up", .routine, #0)
+    %cm_jsl("Force Junko to Stand Up", .routine, #0)
   .routine
     JSL $90E2D4
     %sfxconfirm()
@@ -1487,10 +1431,10 @@ SpritesMenu:
     %cm_header("SPRITE FEATURES")
 
 sprites_samus_prio:
-    %cm_toggle_bit("Samus on Top", !sram_sprite_prio_flag, #$3000, #0)
+    %cm_toggle_bit("Junko on Top", !sram_sprite_prio_flag, #$3000, #0)
 
 sprites_show_samus_hitbox:
-    %cm_toggle_bit("Show Samus Hitbox", !ram_sprite_feature_flags, !SPRITE_SAMUS_HITBOX, #0)
+    %cm_toggle_bit("Show Junko Hitbox", !ram_sprite_feature_flags, !SPRITE_SAMUS_HITBOX, #0)
 
 sprites_show_enemy_hitbox:
     %cm_toggle_bit("Normal Enemy Hitboxes", !ram_sprite_feature_flags, !SPRITE_ENEMY_HITBOX, #0)
@@ -1502,7 +1446,7 @@ sprites_show_custom_boss_hitbox:
     %cm_toggle_bit("Special Boss Hitboxes", !ram_sprite_feature_flags, !SPRITE_BOSS_HITBOX, #0)
 
 sprites_show_samusproj_hitbox:
-    %cm_toggle_bit("Samus Projectile Hitbox", !ram_sprite_feature_flags, !SPRITE_SAMUS_PROJ, #0)
+    %cm_toggle_bit("Junko Projectile Hitbox", !ram_sprite_feature_flags, !SPRITE_SAMUS_PROJ, #0)
 
 sprites_show_enemyproj_hitbox:
     %cm_toggle_bit("Enemy Projectile Hitbox", !ram_sprite_feature_flags, !SPRITE_ENEMY_PROJ, #0)
@@ -1984,6 +1928,7 @@ ih_status_icons:
     LDA !IH_BLANK : STA !HUD_TILEMAP+$54 : STA !HUD_TILEMAP+$56 : STA !HUD_TILEMAP+$58
     RTL
 
+if !PRESERVE_WRAM_DURING_SPACETIME
 ih_spacetime_infohud:
     dw !ACTION_CHOICE
     dl #!ram_spacetime_infohud
@@ -1992,6 +1937,7 @@ ih_spacetime_infohud:
     db #$28, "    VANILLA", #$FF
     db #$28, "  PRESERVED", #$FF
     db #$FF
+endif
 
 ih_lag:
     %cm_numfield("Artificial Lag", !sram_artificial_lag, 0, 64, 1, 4, #0)

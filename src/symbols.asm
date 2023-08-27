@@ -14,16 +14,62 @@ incsrc wram_symbols.asm
 ; Freespace ORGs
 ; ---------------
 
-;!ORG_MENU_GFX = $F0D700 ; unused, $900, can be used to reduce menu code size
+; $E0-FF are filled by Junkoid, needs more work :( 
+
 ;!ORG_MISC_TILE_GRAPHICS = $8BFA00 ; unused, $140
 ;!ORG_LAYOUT = $8FFF00 ; unused
 ;!ORG_LAYOUT_BANKA1 = $A1EBD1 ; unused
-;!ORG_LAYOUT_BANKB4 = $B4F4B8 ; unused
+;!ORG_LAYOUT_BANKB4 = $B4F640 ; unused
 ;!ORG_CUTSCENES = $8BF800 ; unused
 ;!ORG_CUTSCENES_MB = $A9FBC0 ; unused
 ;!ORG_ROOMNAMES = $E70000 ; whole bank pointer style
-;!ORG_CUSTOMIZEMENU = $AFEC00
-;!ORG_PALETTEPROFILES = $AEFD20
+;!ORG_CUSTOMIZEMENU = $AFEC00 ; move if used
+;!ORG_PALETTEPROFILES = $AEFD20 ; move if used
+
+;!ORG_INFOHUD = $F08000 ; $2BD4
+;!ORG_INFOHUD_BANK80 = $80FD00 ; $216, bank $80
+;!ORG_MAINMENU_INFOHUD = $85D140 ; $1439
+;!ORG_MAINMENU_GAME = $87F000 ; $85C
+;!ORG_INIT = $81FA00 ; $124
+;!ORG_MENU_BANK85 = $85FD00 ; $2C, bank $85
+;!ORG_MENU_BANK89 = $89B000 ; $20D6
+;;!ORG_MENU_GFX = $F0D700 ; unused, $900, can be used to reduce menu code size
+;!ORG_MAINMENU = $87AE00 ; $28D6
+;!ORG_GAMEMODE = $85F800 ; $2ED
+;!ORG_PRESETS_BANK82 = $82FC80 ; $2B0, bank $82
+;!ORG_PRESETS_BANK80 = $80F000 ; $3B3, bank $80
+;!ORG_PRESETS_DATA = $FE8000 ; $2088
+;!ORG_PRESETS_MENU = $FEE000 ; $108F
+;!ORG_PRESETS_CUSTOM = $83B400 ; $6DB
+;!ORG_MORPHLOCK = $80CD90 ; ???
+;!ORG_MISC_BANKA0 = $A0FFD0 ; $2A, bank $A0
+;!ORG_MISC_BANK90 = $908E75 ; $1C, bank $90, overwrites vanilla unused
+;!ORG_MISC_BANK87 = $87FF00 ; $83
+;;!ORG_MISC_TILE_GRAPHICS = $8BFA00 ; unused, $140
+;!ORG_MISC_BANK8B = $8BFF00
+;!ORG_MISC_BANK8F = $8FFE00 ; $??, bank $8F
+;!ORG_MINIMAP_BANKFD = $FDD500 ; $2000
+;!ORG_MINIMAP_BANK82 = $82F70F ; $8C, bank $82
+;!ORG_MINIMAP_BANK90 = $90F8C0 ; $C8, bank $90
+;!ORG_SAVE = $80F600 ; $439
+;!ORG_RNG_BANK83 = $83B140 ; $148
+;!ORG_RNG_BANKA4 = $A4FFA0 ; $15, bank $A4
+;!ORG_RNG_BANKA5 = $A5FD50 ; $18, bank $A5
+;!ORG_RNG_BANKA6 = $A6FF00 ; $6B, bank $A6
+;!ORG_RNG_BANKA7 = $A7FFD0 ; $22, bank $A7
+;!ORG_FANFARE_BANK84 = $84FF6D ; $11
+;!ORG_FANFARE_BANK85 = $85FF00 ; $69
+;;!ORG_LAYOUT = $8FFF00 ; unused
+;;!ORG_LAYOUT_BANKA1 = $A1EBD1 ; unused
+;;!ORG_LAYOUT_BANKB4 = $B4F640 ; unused
+;;!ORG_CUTSCENES = $8BF800 ; unused
+;;!ORG_CUTSCENES_MB = $A9FBC0 ; unused
+;!ORG_CRASH = $80E000 ; $1BC, bank $80
+;!ORG_SPRITEPRIO = $81F700 ; $8D
+;!ORG_SPRITEFEAT = $F0E000 ; $ED4
+;;!ORG_ROOMNAMES = $E70000 ; whole bank pointer style
+;;!ORG_CUSTOMIZEMENU = $AFEC00 ; move if used
+;;!ORG_PALETTEPROFILES = $AEFD20 ; move if used
 
 ; ---------
 ; Work RAM

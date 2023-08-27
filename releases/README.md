@@ -1,4 +1,4 @@
-# HACK
+# Super Junkoid
 
 ## Notes
 

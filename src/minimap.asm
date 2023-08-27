@@ -5,7 +5,7 @@
 org $809AF3
     JSL mm_initialize_minimap
 
-org $809B51
+org $809B4E      ; moved to overwrite Junkoid's HUD hijack
     JMP $9BFB
 
 org $82AEAF      ; routine to remove auto reserve icon on HUD from equip screen
@@ -45,17 +45,72 @@ org $828EB8      ; write and clear tiles to VRAM
 org $82E488      ; write tiles to VRAM
     JMP mm_write_hud_tiles_during_transition
 
+org $80D018      ; move magic bolt icon
+    LDA $D1A3 : STA $7EC61A
+    LDA $D1A5 : STA $7EC61E
+    LDA $D1A7 : STA $7EC620
+    LDA $D1A9 : STA $7EC65A
+    LDA $D1AB : STA $7EC65E
+    LDA $D1AD : STA $7EC660
+warnpc $80D042
+
+org $80D051      ; move magic bolt icon
+    LDA $99A3 : STA $7EC61A
+    LDA $99A5 : STA $7EC61E
+    LDA $99A7 : STA $7EC620
+    LDA $99A9 : STA $7EC65A
+    LDA $99AB : STA $7EC65E
+    LDA $99AD : STA $7EC660
+warnpc $80D07B
+
+org $80D0A3      ; move baseball icon
+    LDX #$001C
+
+org $80D0AB      ; move baseball icon
+    LDX #$001C
+
+org $80D123      ; move sparksuit icon
+    LDX #$0022
+
+org $80D12B      ; move sparksuit icon
+    LDX #$0022
+
+org $809D6E      ; move icon highlight offsets
+    dw $0014     ; magic bolts
+    dw $001C     ; baseballs
+    dw $0022     ; sparksuits
+    dw $0028     ; Grapple beam (dummy write)
+    dw $002E     ; frog
+
+org $809C10      ; move magic bolt count
+    LDX #$0096
+
+org $809B09      ; move magic bolt count
+    LDX #$0096
+
+org $809C26      ; move baseball count
+    LDX #$009C
+
+org $809B14      ; move baseball count
+    LDX #$009C
+
+org $809C4F      ; move sparksuit count
+    LDX #$00A2
+
+org $809B25      ; move sparksuit count
+    LDX #$00A2
+
 
 org $9AB200      ; graphics for HUD
 hudgfx_bin:
-incbin ../resources/hudgfx.bin
+incbin ../resources/Junkoid_hudgfx.bin
 
 
 ; Place minimap graphics in bank FD
 org !ORG_MINIMAP_BANKFD
 print pc, " minimap bankFD start"
 mapgfx_bin:
-incbin ../resources/mapgfx.bin
+incbin ../resources/Junkoid_mapgfx.bin
 
 ; Next block needs to be all zeros to clear a tilemap
 fillbyte $00
@@ -64,17 +119,15 @@ print pc, " minimap bankFD end"
 
 
 ; The default HUD minimap should be cleared
-org $8098FF
-mm_default_HUD_row_1:
-    dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
-
-org $80993F
-mm_default_HUD_row_2:
-    dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
-
-org $80997F
-mm_default_HUD_row_3:
-    dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
+org $80988B
+    dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
+    dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
+    dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
+    dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
+    dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
+    dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
+    dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
+    dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
 
 ; The default energy 0 text should be cleared
 org $80994D
@@ -142,7 +195,7 @@ mm_refresh_reserves:
 }
 
 print pc, " minimap bank82 end"
-warnpc $82F800 ; layout.asm
+warnpc !ORG_PRESETS_BANK82
 
 
 ; Placed in bank 90 so that the jumps work
