@@ -29,7 +29,7 @@ maybe_trigger_pause_long:
     RTL
 
 print pc, " menu bank85 end"
-warnpc $85FE00 ; fanfare.asm
+;warnpc $85FE00 ; fanfare.asm
 
 
 org !ORG_MENU_BANK89

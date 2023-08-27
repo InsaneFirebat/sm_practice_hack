@@ -525,7 +525,7 @@ tinystates_load_paused:
 }
 
 print pc, " tinysave end"
-warnpc $80FD00 ; infohud.asm
+;warnpc $80FD00 ; infohud.asm
 
 
 org $82FE00

@@ -329,7 +329,7 @@ category_preset_data_table:
     dl preset_cchamber_crateria_puzzle_1
 
 print pc, " presets bank82 end"
-warnpc $82FE00 ; tinystates.asm
+;warnpc $82FE00 ; tinystates.asm
 
 
 org $82E8D9
@@ -719,7 +719,7 @@ transfer_cgram_long:
 ;}
 
 print pc, " presets bank80 end"
-warnpc $80F600 ; save.asm or tinystates.asm
+;warnpc $80F600 ; save.asm or tinystates.asm
 
 
 ; $80:9AB1: Add x-ray and grapple HUD items if necessary
@@ -747,7 +747,7 @@ check bankcross off
 print pc, " preset data crossbank start"
   incsrc presets/cchamber_data.asm
 print pc, " preset data crossbank end"
-warnpc $FEE000
+;warnpc $FEE000
 check bankcross on
 
 org !ORG_PRESETS_MENU

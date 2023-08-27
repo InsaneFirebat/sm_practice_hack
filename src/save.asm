@@ -436,4 +436,4 @@ vm:
 }
 
 print pc, " save end"
-warnpc $80FD00 ; infohud.asm
+;warnpc $80FD00 ; infohud.asm
