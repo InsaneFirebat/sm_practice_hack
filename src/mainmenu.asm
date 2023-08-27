@@ -650,7 +650,7 @@ eq_currentmissiles:
 eq_setmissiles:
     %cm_numfield_word("Missiles", !SAMUS_MISSILES_MAX, 0, 325, .routine)
     .routine
-        LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES ; missiles
+        LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES
         RTL
 
 eq_currentsupers:
@@ -659,7 +659,7 @@ eq_currentsupers:
 eq_setsupers:
     %cm_numfield("Super Missiles", !SAMUS_SUPERS_MAX, 0, 65, 5, 5, .routine)
     .routine
-        LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS ; supers
+        LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS
         RTL
 
 eq_currentpbs:
@@ -668,7 +668,7 @@ eq_currentpbs:
 eq_setpbs:
     %cm_numfield("Power Bombs", !SAMUS_PBS_MAX, 0, 70, 5, 5, .routine)
     .routine
-        LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS ; pbs
+        LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS
         RTL
 
 ; ---------------------
@@ -2045,7 +2045,7 @@ ih_auto_update_timers:
 incsrc ramwatchmenu.asm
 
 print pc, " mainmenu InfoHUD end"
-warnpc $85F800 ; gamemode.asm
+;warnpc $85F800 ; gamemode.asm
 pullpc
 
 

@@ -239,7 +239,7 @@ COPHandler:
 }
 
 print pc, " crash handler bank80 end"
-warnpc $80F000 ; presets.asm
+;warnpc $80F000 ; presets.asm
 
 pullpc
 print pc, " crash handler bank89 start"

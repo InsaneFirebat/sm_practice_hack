@@ -359,4 +359,4 @@ gamemode_door_transition:
 endif
 
 print pc, " gamemode end"
-warnpc $85FD00 ; menu.asm
+;warnpc $85FD00 ; menu.asm
