@@ -16,9 +16,9 @@ org $82DCF4
 
 
 if !FEATURE_PAL
-org $82C394
+org $A7C394
 else
-org $82C360
+org $A7C360
 endif
     JSL cutscenes_kraid_death_camera
 

@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.8.1]  Fix bad address on Kraid camera unlock
 * [2.5.8]    Fix for Two Cries Standup by idlechild
 * [2.5.7.11] Fixed corner cases with Two Cries Standup by idlechild
 * [2.5.7.10] Add health bomb toggle to Misc menu
