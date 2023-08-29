@@ -171,7 +171,7 @@ preset_load_library_background:
   .done_fx_tilemap
     PEA $8F00 : PLB : PLB
     %a16()
-    LDX $07BB
+    LDX !STATE_POINTER
     LDY $0016,X : BPL .done
 
   .load_library_loop
@@ -224,7 +224,7 @@ preset_load_preset:
     STA !ram_room_has_set_rng : STA !ram_hyper_beam
     STZ $09D2 ; Current selected weapon
     STZ $0A04 ; Auto-cancel item
-    LDA #$5AFE : STA $0917 ; Load garbage into Layer 2 X position
+    LDA #$5AFE : STA !LAYER2_X ; Load garbage into Layer 2 X position
 
     ; check if segment timer should be reset now or later
     LDA !sram_preset_auto_segment : BEQ +
@@ -436,8 +436,8 @@ endif
   .end_load_game_state
 
     ; Preserve layer 2 values we may have loaded from presets
-    LDA $0919 : PHA
-    LDA $0917 : PHA
+    LDA !LAYER2_Y : PHA
+    LDA !LAYER2_X : PHA
 
     JSL $8882C1  ; Initialize special effects for new room
     JSL $8483C3  ; Clear PLMs
@@ -483,16 +483,16 @@ endif
 
     ; Pull layer 2 values, and use them if they are valid
     PLA : CMP #$5AFE : BEQ .calculate_layer_2
-    STA $0917
-    PLA : STA $0919
+    STA !LAYER2_X
+    PLA : STA !LAYER2_Y
     BRA .layer_2_loaded
 
   .calculate_layer_2
     PLA                    ; Pull other layer 2 value but do not use it
     JSR $A2F9              ; Calculate layer 2 X position
     JSR $A33A              ; Calculate layer 2 Y position
-    LDA $0917 : STA $0921  ; BG2 X scroll = layer 2 X scroll position
-    LDA $0919 : STA $0923  ; BG2 Y scroll = layer 2 Y scroll position
+    LDA !LAYER2_X : STA !BG2_X_SCROLL  ; BG2 X scroll = layer 2 X scroll position
+    LDA !LAYER2_Y : STA !BG2_Y_SCROLL  ; BG2 Y scroll = layer 2 Y scroll position
 
   .layer_2_loaded
     JSR $A37B    ; Calculate BG positions
@@ -504,8 +504,8 @@ endif
     BRA .bg_offsets_calculated
 
   .bg_offsets_scrolling_sky
-    LDA $0915 : STA $0919 : STA $B7
-    STZ $0923
+    LDA !LAYER1_Y : STA !LAYER2_Y : STA $B7
+    STZ !BG2_Y_SCROLL
 
   .bg_offsets_calculated
     JSL $80A176  ; Display the viewable part of the room
@@ -565,7 +565,7 @@ endif
 
     LDA #$E737 : STA $099C ; Pointer to next frame's room transition code = $82:E737
 if !RAW_TILE_GRAPHICS
-    LDX $07BB : LDA $8F0018,X
+    LDX !STATE_POINTER : LDA $8F0018,X
     CMP #$91C9 : BEQ .post_preset_scrolling_sky
     CMP #$91CE : BEQ .post_preset_scrolling_sky
     PLB : PLP
@@ -738,7 +738,7 @@ preset_room_setup_asm_fixes:
     ; Start with original logic
     PHP : PHB
     %ai16()
-    LDX $07BB
+    LDX !STATE_POINTER
     LDA $0018,X : BEQ .end
 
     ; Check if this is scrolling sky
