@@ -1063,8 +1063,8 @@ ih_hud_vanilla_health:
     LDA.w NumberGFXTable : STA !HUD_TILEMAP+$94
 
   .vanilla_subtank_whitespace
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$92 : STA !HUD_TILEMAP+$98 : STA !HUD_TILEMAP+$9A
-    STA !HUD_TILEMAP+$08 : STA !HUD_TILEMAP+$48 : STA !HUD_TILEMAP+$88
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$92 : STA !HUD_TILEMAP+$98
+    STA !HUD_TILEMAP+$9A : STA !HUD_TILEMAP+$08 : STA !HUD_TILEMAP+$48
     LDA !SAMUS_RESERVE_MODE : CMP #$0001 : BNE .vanilla_no_reserves
 
     ; Draw reserve icon
