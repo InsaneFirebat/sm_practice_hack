@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.8.4]  Moved Timer Settings into a submenu of InfoHUD
 * [2.5.8.4]  Separate options to reset segment after door or on item touch
 * [2.5.8.4]  Fix HUD position for door alignment and lag counter when minimap enabled
 * [2.5.8.3]  Reset Segment in Next Room also triggers on item touch
