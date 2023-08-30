@@ -213,10 +213,10 @@ endif
 
   .full_equipment
     LDA !SAMUS_HP_MAX : STA !SAMUS_HP
-    LDA !SAMUS_MISSILES_MAX : CMP !SAMUS_MISSILES : BCC + : STA !SAMUS_MISSILES ; missiles
-+   LDA !SAMUS_SUPERS_MAX : CMP !SAMUS_SUPERS : BCC + : STA !SAMUS_SUPERS ; supers
-+   LDA !SAMUS_PBS_MAX : CMP !SAMUS_PBS : BCC + : STA !SAMUS_PBS ; pbs
-    LDA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY
+    LDA !SAMUS_MISSILES_MAX : CMP !SAMUS_MISSILES : BCC + : STA !SAMUS_MISSILES
++   LDA !SAMUS_SUPERS_MAX : CMP !SAMUS_SUPERS : BCC + : STA !SAMUS_SUPERS
++   LDA !SAMUS_PBS_MAX : CMP !SAMUS_PBS : BCC + : STA !SAMUS_PBS
++   LDA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY
     STZ $0CD2  ; reset bomb counter
     %sfxenergy() ; play sound effect
     ; CLC to continue normal gameplay after equipment refill
