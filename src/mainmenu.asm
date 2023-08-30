@@ -1671,8 +1671,6 @@ MiscMenu:
     dw #misc_flashsuit
     dw #misc_hyperbeam
     dw #$FFFF
-    dw #misc_invincibility
-    dw #misc_infiniteammo
     dw #misc_slowdownrate
     dw #misc_healthbomb
     dw #misc_waterphysics
@@ -1687,7 +1685,6 @@ MiscMenu:
     dw #$FFFF
     dw #misc_killenemies
     dw #misc_forcestand
-    dw #misc_elevatorfix
     dw #$0000
     %cm_header("MISC OPTIONS")
 
@@ -1789,12 +1786,6 @@ init_suit_properties_ram:
     RTL
 }
 
-misc_invincibility:
-    %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
-
-misc_infiniteammo:
-    %cm_toggle_bit("Infinite Ammo", !ram_infinite_ammo, #$0001, #GameLoopExtras)
-
 misc_metronome:
     %cm_toggle("Metronome", !ram_metronome, #$0001, GameLoopExtras)
 
@@ -1830,13 +1821,6 @@ misc_forcestand:
     %cm_jsl("Force Samus to Stand Up", .routine, #0)
   .routine
     JSL $90E2D4 ; bridge to: Release Samus from Draygon
-    %sfxconfirm()
-    RTL
-
-misc_elevatorfix:
-    %cm_jsl("OoB Elevator Tile Fix", .routine, #0)
-  .routine
-    LDA #$0000 : STA $7E0E16
     %sfxconfirm()
     RTL
 
@@ -2847,23 +2831,14 @@ GameMenu:
     dw #game_bubble_sfx
     dw #game_healthalarm
     dw #$FFFF
-    dw #game_debugmode
-    dw #game_debugbrightness
-if !FEATURE_PAL
-    dw #game_paldebug
-endif
-    dw #game_pacifist
-    dw #game_debugplms
-    dw #game_debugprojectiles
-    dw #game_debugfixscrolloffsets
+    dw #game_goto_debug
+    dw #game_goto_cutscenes
     dw #$FFFF
 if !FEATURE_VANILLAHUD
 else
     dw #game_minimap
 endif
     dw #game_clear_minimap
-    dw #$FFFF
-    dw #game_cutscenes
     dw #$0000
     %cm_header("GAME OPTIONS")
 
@@ -2923,8 +2898,38 @@ game_healthalarm:
     db #$28, "m  IMPROVED", #$FF
     db #$FF
 
+game_goto_debug:
+    %cm_submenu("Debug Settings", #DebugMenu)
+
+DebugMenu:
+    dw #game_debugmode
+    dw #$FFFF
+    dw #game_invincibility
+    dw #game_infiniteammo
+    dw #game_pacifist
+    dw #$FFFF
+    dw #game_debugbrightness
+if !FEATURE_PAL
+    dw #game_paldebug
+endif
+    dw #game_debugplms
+    dw #game_debugprojectiles
+    dw #game_debugfixscrolloffsets
+    dw #game_elevatorfix
+    dw #$0000
+    %cm_header("DEBUG SETTINGS")
+
 game_debugmode:
     %cm_toggle("Debug Mode", !DEBUG_MODE_FLAG, #$0001, #0)
+
+game_invincibility:
+    %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
+
+game_infiniteammo:
+    %cm_toggle_bit("Infinite Ammo", !ram_infinite_ammo, #$0001, #GameLoopExtras)
+
+game_pacifist:
+    %cm_toggle("Deal Zero Damage", !ram_pacifist, #$0001, #0)
 
 game_debugbrightness:
     %cm_toggle("Debug CPU Brightness", $7E0DF4, #$0001, #0)
@@ -2934,9 +2939,6 @@ game_paldebug:
     %cm_toggle_inverted("PAL Debug Movement", $7E09E6, #$0001, #0)
 endif
 
-game_pacifist:
-    %cm_toggle("Deal Zero Damage", !ram_pacifist, #$0001, #0)
-
 game_debugplms:
     %cm_toggle_bit_inverted("Pseudo G-Mode", $7E1C23, #$8000, #0)
 
@@ -2945,6 +2947,13 @@ game_debugprojectiles:
 
 game_debugfixscrolloffsets:
     %cm_toggle_bit("Fix Scroll Offsets", !ram_fix_scroll_offsets, #$0001, #0)
+
+game_elevatorfix:
+    %cm_jsl("OoB Elevator Tile Fix", .routine, #0)
+  .routine
+    STZ !ELEVATOR_PROPERTIES
+    %sfxconfirm()
+    RTL
 
 game_minimap:
     %cm_toggle("Minimap", !ram_minimap, #$0001, #0)
@@ -2968,7 +2977,7 @@ game_clear_minimap:
     %sfxquake()
     RTL
 
-game_cutscenes:
+game_goto_cutscenes:
     %cm_submenu("Cutscenes", #CutscenesMenu)
 
 
