@@ -207,7 +207,13 @@ ih_get_item_code:
     LDA $12 : PHA
     LDA $14 : PHA
 
-    ; Update HUD
+    ; check if segment timer should be reset
+    LDA !ram_reset_segment_later : BEQ .update_HUD
+    LDA #$0000 : STA !ram_reset_segment_later : STA !ram_lag_counter
+    STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds : STA !ram_seg_rt_minutes
+    LDA #$FFFF : STA !ram_lag_counter_HUD
+
+  .update_HUD
     JSL ih_update_hud_code
 
     ; restore temp variables
@@ -351,9 +357,8 @@ ih_after_room_transition:
 
   .check_reset_segment_timer
     LDA !ram_reset_segment_later : BEQ .update_hud
-    LDA #$0000 : STA !ram_reset_segment_later
+    LDA #$0000 : STA !ram_reset_segment_later : STA !ram_lag_counter
     STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds : STA !ram_seg_rt_minutes
-    STA !ram_lag_counter
     LDA #$FFFF : STA !ram_lag_counter_HUD
 
   .update_hud
