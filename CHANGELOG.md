@@ -1,7 +1,8 @@
 
 ## Changelog since v2.2.7
 
-* [2.5.8.4]  Reset Segment in Next Room also triggers on item touch
+* [2.5.8.4]  Fix HUD position for door alignment and lag counter when minimap enabled
+* [2.5.8.3]  Reset Segment in Next Room also triggers on item touch
 * [2.5.8.3]  Fix blank HUD tile when taking damage
 * [2.5.8.2]  Moved debug teleports into normal list
 * [2.5.8.1]  Fix bad address on Kraid camera unlock
