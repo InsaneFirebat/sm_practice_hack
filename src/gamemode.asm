@@ -206,9 +206,9 @@ endif
     CLC : RTS
 
   .reset_segment_later
-    LDA #$7FFF : STA !ram_reset_segment_later
+    LDA #$FFFF : STA !ram_reset_segment_later
     %sfxquake()
-    ; CLC to continue normal gameplay after resetting segment timer
+    ; CLC to continue normal gameplay after setting reset flag
     CLC : RTS
 
   .full_equipment
