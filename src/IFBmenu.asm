@@ -3,7 +3,7 @@
 ; ------------
 
 pushpc
-org $85C000
+org $85D000
 print pc, " mainmenuu IFBmenu start"
 
 IFBMenu:

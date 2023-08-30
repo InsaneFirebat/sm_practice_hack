@@ -2128,12 +2128,8 @@ InfoHudMenu:
     dw #ih_superhud
     dw #ih_door_display_mode
     dw #$FFFF
-    dw #ih_room_counter
-    dw #ih_lag_counter
-    dw #ih_auto_update_timers
-    dw #ih_reset_seg_after_door
-    dw #ih_reset_seg_item_touch
-    dw #ih_fanfare_timer_adjust
+    dw #ih_goto_timer_settings
+    dw #$FFFF
     dw #ih_top_HUD_mode
 if !PRESERVE_WRAM_DURING_SPACETIME
     dw #ih_spacetime_infohud
@@ -2266,8 +2262,6 @@ ihmode_GOTO_PAGE_TWO:
   .routine
     JSL cm_go_back
     %submenu_jump()
-
-
 
 action_select_infohud_mode:
 {
@@ -2747,13 +2741,20 @@ ih_door_display_mode:
     db #$28, " Y POSITION", #$FF
     db #$FF
 
-ih_ram_watch:
-    %cm_jsl("Customize RAM Watch", #ih_prepare_ram_watch_menu, #RAMWatchMenu)
+ih_goto_timer_settings:
+    %cm_submenu("Timer Settings", #TimerSettingsMenu)
 
-incsrc ramwatchmenu.asm
-
-ih_auto_update_timers:
-    %cm_toggle_inverted("Auto update timers", !ram_timers_autoupdate, #$0001, #0)
+TimerSettingsMenu:
+    dw #ih_room_counter
+    dw #ih_lag_counter
+    dw #$FFFF
+    dw #ih_fanfare_timer_adjust
+    dw #ih_auto_update_timers
+    dw #$FFFF
+    dw #ih_reset_seg_after_door
+    dw #ih_reset_seg_item_touch
+    dw #$0000
+    %cm_header("TIMER SETTINGS")
 
 ih_room_counter:
     dw !ACTION_CHOICE
@@ -2773,15 +2774,11 @@ ih_lag_counter:
     db #$28, "       FULL", #$FF
     db #$FF
 
-ih_status_icons:
-    %cm_toggle("Status Icons", !sram_status_icons, #$0001, #.routine)
-  .routine
-    LDA !IH_BLANK
-    STA $7EC654 : STA $7EC656 : STA $7EC658
-    RTL
+ih_fanfare_timer_adjust:
+    %cm_toggle("Adjust Fanfare Timers", !sram_fanfare_timer_adjust, #$0001, #0)
 
-ih_lag:
-    %cm_numfield("Artificial Lag", !sram_artificial_lag, 0, 64, 1, 4, #0)
+ih_auto_update_timers:
+    %cm_toggle_inverted("Auto Update Timers", !ram_timers_autoupdate, #$0001, #0)
 
 ih_reset_seg_after_door:
     %cm_jsl("Reset Segment in Next Room", #.routine, #$0001)
@@ -2793,8 +2790,11 @@ ih_reset_seg_after_door:
 ih_reset_seg_item_touch:
     %cm_jsl("Reset Segment on Item Touch", #ih_reset_seg_after_door_routine, #$8000)
 
-ih_fanfare_timer_adjust:
-    %cm_toggle("Adjust Fanfare Timers", !sram_fanfare_timer_adjust, #$0001, #0)
+ih_status_icons:
+    %cm_toggle("Status Icons", !sram_status_icons, #$0001, #0)
+
+ih_lag:
+    %cm_numfield("Artificial Lag", !sram_artificial_lag, 0, 64, 1, 4, #0)
 
 ih_top_HUD_mode:
     dw !ACTION_CHOICE
@@ -2818,8 +2818,13 @@ ih_spacetime_infohud:
     db #$28, "  PRESERVED", #$FF
     db #$FF
 
+ih_ram_watch:
+    %cm_jsl("Customize RAM Watch", #ih_prepare_ram_watch_menu, #RAMWatchMenu)
+
+incsrc ramwatchmenu.asm
+
 print pc, " mainmenu InfoHUD end"
-warnpc $85C000 ; IFBmenu.asm
+warnpc $85D000 ; IFBmenu.asm
 pullpc
 
 
