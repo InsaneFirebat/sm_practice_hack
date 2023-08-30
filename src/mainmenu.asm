@@ -2131,7 +2131,8 @@ InfoHudMenu:
     dw #ih_room_counter
     dw #ih_lag_counter
     dw #ih_auto_update_timers
-    dw #ih_reset_seg_later
+    dw #ih_reset_seg_after_door
+    dw #ih_reset_seg_item_touch
     dw #ih_fanfare_timer_adjust
     dw #ih_top_HUD_mode
 if !PRESERVE_WRAM_DURING_SPACETIME
@@ -2782,12 +2783,15 @@ ih_status_icons:
 ih_lag:
     %cm_numfield("Artificial Lag", !sram_artificial_lag, 0, 64, 1, 4, #0)
 
-ih_reset_seg_later:
-    %cm_jsl("Reset Segment in Next Room", #.routine, #$FFFF)
+ih_reset_seg_after_door:
+    %cm_jsl("Reset Segment in Next Room", #.routine, #$0001)
   .routine
     TYA : STA !ram_reset_segment_later
     %sfxquake()
     RTL
+
+ih_reset_seg_item_touch:
+    %cm_jsl("Reset Segment on Item Touch", #ih_reset_seg_after_door_routine, #$8000)
 
 ih_fanfare_timer_adjust:
     %cm_toggle("Adjust Fanfare Timers", !sram_fanfare_timer_adjust, #$0001, #0)
