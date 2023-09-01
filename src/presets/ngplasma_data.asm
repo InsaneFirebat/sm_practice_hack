@@ -1585,8 +1585,8 @@ preset_ngplasma_tourian_zebes_escape:
     dw $0A1E, $0000  ; More position/state
     dw $0A76, $8000  ; Hyper beam
     dw $0AF6, $0025  ; Samus X
-    dw $0AFA, $0097  ; Samus Y
     dw $0AF8, $0000  ; Samus subpixel X
+    dw $0AFA, $0097  ; Samus Y
     dw $D820, $4FCD  ; Events
     dw $D82C, $0203  ; Bosses
     dw #$FFFF
@@ -1653,4 +1653,5 @@ preset_ngplasma_tourian_escape_parlor:
     dw $0AFA, $0043  ; Samus Y
     dw $0AFC, $0000  ; Samus subpixel Y
     dw $D90C, $FF00  ; Map Stations
+    dw !PRESET_DOORS, $0001 ; doors closed
     dw #$FFFF

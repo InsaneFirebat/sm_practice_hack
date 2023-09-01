@@ -9,7 +9,7 @@ PresetsMenuNgplasma:
     dw #presets_goto_ngplasma_crateria
     dw #presets_goto_ngplasma_tourian
     dw #$0000
-    %cm_header("PRESETS FOR NGPLASMA")
+    %cm_header("PRESETS FOR NG+ PLASMA")
 
 presets_goto_ngplasma_ceres_station:
     %cm_submenu("Ceres Station", #presets_submenu_ngplasma_ceres_station)
