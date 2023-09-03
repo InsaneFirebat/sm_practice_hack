@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.8.8]  Fix timers immediately after closing menu
 * [2.5.8.7]  Removed remaining randomizer features
 * [2.5.8.6]  Added Forever menu palette profile
 * [2.5.8.5]  Remade NewGame+ Hyper presets

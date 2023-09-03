@@ -137,6 +137,12 @@ endif
     JSL $809B44 ; Handle HUD tilemap
     JSL GameLoopExtras ; check if game_loop_extras needs to be disabled
 
+    ; Restore timers
+    LDA !ram_cm_preserved_timers : STA !ram_realtime_room
+    LDA !ram_cm_preserved_timers+2 : STA !ram_seg_rt_frames
+    LDA !ram_cm_preserved_timers+4 : STA !ram_seg_rt_seconds
+    LDA !ram_cm_preserved_timers+6 : STA !ram_seg_rt_minutes
+
 if !FEATURE_VANILLAHUD
 else
     ; I think the above subroutines erases some of infohud, so we make sure we redraw it.
@@ -155,7 +161,7 @@ endif
     JSL play_music_long ; Play 2 lag frames of music and sound effects
     JSL maybe_trigger_pause_long ; Maybe trigger pause screen or return save confirmation selection
 
-    ; Restore timers and subtract for skipping a frame of gameplay
+    ; Restore timers
     LDA !ram_cm_preserved_timers : STA !ram_realtime_room
     LDA !ram_cm_preserved_timers+2 : STA !ram_seg_rt_frames
     LDA !ram_cm_preserved_timers+4 : STA !ram_seg_rt_seconds
