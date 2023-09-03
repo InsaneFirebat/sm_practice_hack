@@ -58,9 +58,6 @@ ram_magic_pants_pal1 = !ram_magic_pants_pal1 ; !WRAM_START+$3A
 ram_magic_pants_pal2 = !ram_magic_pants_pal2 ; !WRAM_START+$3C
 ram_magic_pants_pal3 = !ram_magic_pants_pal3 ; !WRAM_START+$3E
 
-ram_suits_enemy_damage_check = !ram_suits_enemy_damage_check ; !WRAM_START+$40
-ram_suits_periodic_damage_check = !ram_suits_periodic_damage_check ; !WRAM_START+$42
-
 ; FREE SPACE ^ up to +$4E
 
 ram_room_has_set_rng = !ram_room_has_set_rng ; !WRAM_START+$50
@@ -313,7 +310,7 @@ sram_status_icons = !sram_status_icons ; !SRAM_START+$3C
 sram_suit_properties = !sram_suit_properties ; !SRAM_START+$3E
 sram_top_display_mode = !sram_top_display_mode ; !SRAM_START+$40
 sram_healthalarm = !sram_healthalarm ; !SRAM_START+$42
-sram_room_layout = !sram_room_layout ; !SRAM_START+$44
+sram_magnetstairs = !sram_magnetstairs ; !SRAM_START+$44
 sram_cutscenes = !sram_cutscenes ; !SRAM_START+$46
 sram_compressed_graphics = !sram_compressed_graphics ; !SRAM_START+$48
 sram_lag_counter_mode = !sram_lag_counter_mode ; !SRAM_START+$4A

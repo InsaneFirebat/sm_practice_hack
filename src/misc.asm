@@ -61,90 +61,10 @@ else
 endif
 endif
 
-if !FEATURE_PAL
-org $8B92B5
-else
-org $8B930C
-endif
-    JSL FastNintendoLogo
-    BRA $00 ; NOP #2
-
 
 ; Fix Zebes planet tiling error
 org $8C9607
     dw #$0E2F
-
-
-; Suit periodic damage
-org $8DE37C
-    ; Replaced the check and also take one additional byte
-    ; Thus the following logic is the same but shifted down
-    AND !ram_suits_periodic_damage_check : BNE $29
-    LDA $0A4E : CLC : ADC #$4000 : STA $0A4E
-    ; We don't have enough space to add the carry bit inline,
-    ; so we need to jump to freespace, but only do that if the carry bit is set
-    BCC $06
-    JMP increment_periodic_damage
-
-
-org $8DFFF1
-print pc, " misc bank8D start"
-
-increment_periodic_damage:
-{
-    LDA $0A50 : INC : STA $0A50
-    JMP $E394
-}
-
-print pc, " misc bank8D end"
-
-
-; We now have three separate periodic damage routines,
-; so we need to load an index to jump to the correct routine
-org $90E72B
-    LDA !sram_suit_properties : ASL : PHA
-    JSR misc_overwritten_movement_routine
-
-; Handle periodic damage based on suit properties
-; Overwritten logic will be transferred
-org $90E74D
-    PLA : PHX : TAX
-    JSR (periodic_damage_table,X)
-    PLX : NOP : NOP
-
-; Transfer logic here by overwriting redundant end of periodic damage
-; Also repoint jump and branch to avoid the redundant section
-if !FEATURE_PAL
-org $90E9D3
-    JMP $EA32
-else
-org $90E9D6
-    JMP $EA35
-endif
-
-if !FEATURE_PAL
-org $90EA2A
-else
-org $90EA2D
-endif
-    BPL $06
-
-; Optimize CPU by overwriting our PLP/RTS
-; and skipping over the PHP/REP #$30 in the pause check routine
-if !FEATURE_PAL
-org $90EA38
-else
-org $90EA3B
-endif
-    BRA $0B
-
-; Optimize CPU by removing RTS so we go straight to the low health check
-if !FEATURE_PAL
-org $90EA7B
-else
-org $90EA7E
-endif
-    NOP
 
 
 ; Turn off health alarm
@@ -182,38 +102,6 @@ else
 org $91E6DA
 endif
     JML healthalarm_turn_on_remote
-
-
-; Suit enemy damage
-if !FEATURE_PAL
-org $A0A473
-else
-org $A0A463
-endif
-    BIT #$0020 : BEQ .checksuit
-    LSR $12
-  .checksuit
-    AND !ram_suits_enemy_damage_check : BEQ .return
-    LSR $12
-  .return
-    LDA $12
-    RTL
-
-
-; Suit metroid damage
-if !FEATURE_PAL
-org $A3EEF4
-else
-org $A3EED8
-endif
-    LDA #$C000 : STA $12
-    LDA $09A2 : AND !ram_suits_enemy_damage_check : BEQ .metroidcheckgravity
-    LSR $12
-  .metroidcheckgravity
-    LDA $09A2 : BIT #$0020 : BEQ .metroidnogravity
-    LSR $12
-  .metroidnogravity
-    ; Continue vanilla routine
 
 
 if !PRESERVE_WRAM_DURING_SPACETIME
@@ -516,17 +404,6 @@ GameModeExtras:
 
   .enabled
     STA !ram_game_mode_extras
-    RTL
-}
-
-FastNintendoLogo:
-{
-    LDA !sram_fast_nintendo_logo : BEQ .normal
-    LDA #$0001 : STA $0DE2
-    RTL
-
-  .normal
-    LDA #$0078 : STA $0DE2
     RTL
 }
 

@@ -8,7 +8,7 @@
 !VERSION_MINOR = 5
 !VERSION_BUILD = 8
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 6
+!VERSION_REV_2 = 7
 
 
 ; ---------
@@ -64,9 +64,6 @@
 !ram_magic_pants_pal1 = !WRAM_START+$3A
 !ram_magic_pants_pal2 = !WRAM_START+$3C
 !ram_magic_pants_pal3 = !WRAM_START+$3E
-
-!ram_suits_enemy_damage_check = !WRAM_START+$40
-!ram_suits_periodic_damage_check = !WRAM_START+$42
 
 ; FREE SPACE ^ up to +$4E
 
@@ -477,7 +474,7 @@ endif
 !sram_suit_properties = !SRAM_START+$3E
 !sram_top_display_mode = !SRAM_START+$40
 !sram_healthalarm = !SRAM_START+$42
-!sram_room_layout = !SRAM_START+$44
+!sram_magnetstairs = !SRAM_START+$44
 !sram_cutscenes = !SRAM_START+$46
 !sram_compressed_graphics = !SRAM_START+$48
 !sram_lag_counter_mode = !SRAM_START+$4A

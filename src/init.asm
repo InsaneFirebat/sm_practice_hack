@@ -127,7 +127,7 @@ init_sram:
     LDA #$0001 : STA !sram_status_icons ; 1 - On
     LDA #$0000 : STA !sram_suit_properties
     LDA #$0001 : STA !sram_healthalarm
-    LDA #$0000 : STA !sram_room_layout
+    LDA #$0000 : STA !sram_magnetstairs
     LDA #$1003 : STA !sram_cutscenes ; skip game over ($1000)
     LDA #$0000 : STA !sram_compressed_graphics
     LDA #$0000 : STA !sram_lag_counter_mode

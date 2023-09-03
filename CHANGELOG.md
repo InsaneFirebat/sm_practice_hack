@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.8.7]  Removed remaining randomizer features
+* [2.5.8.6]  Added Forever menu palette profile
 * [2.5.8.5]  Remade NewGame+ Hyper presets
 * [2.5.8.5]  Fixed shinesparks in presets again
 * [2.5.8.4]  Moved Debug Settings into submenu of Game Options

@@ -22,6 +22,14 @@ org $A7C360
 endif
     JSL cutscenes_kraid_death_camera
 
+if !FEATURE_PAL
+org $8B92B5
+else
+org $8B930C
+endif
+    JSL FastNintendoLogo
+    BRA $00 ; NOP #2
+
 
 org $8BF800
 print pc, " cutscenes start"
@@ -124,6 +132,17 @@ cutscenes_kraid_death_camera:
 
   .done
     LDA $7E782A ; overwritten code
+    RTL
+}
+
+FastNintendoLogo:
+{
+    LDA !sram_fast_nintendo_logo : BEQ .normal
+    LDA #$0001 : STA $0DE2
+    RTL
+
+  .normal
+    LDA #$0078 : STA $0DE2
     RTL
 }
 
