@@ -127,7 +127,7 @@ init_sram:
     LDA #$0000 : STA !sram_status_icons
     LDA #$0000 : STA !sram_suit_properties
     LDA #$0001 : STA !sram_healthalarm
-    LDA #$0000 : STA !sram_room_layout
+    LDA #$0000 : STA !sram_magnetstairs
     LDA #$0003 : STA !sram_cutscenes
     LDA #$0000 : STA !sram_compressed_graphics
     LDA #$0000 : STA !sram_lag_counter_mode

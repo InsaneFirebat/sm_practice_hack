@@ -116,7 +116,6 @@ MainMenu:
     dw #mm_goto_events
     dw #mm_goto_misc
     dw #mm_goto_sprites
-    dw #mm_goto_layout
 if !FEATURE_VANILLAHUD
 else
     dw #mm_goto_infohud
@@ -146,7 +145,6 @@ MainMenuBanks:
     dw #EventsMenu>>16
     dw #MiscMenu>>16
     dw #SpritesMenu>>16
-    dw #LayoutMenu>>16
 if !FEATURE_VANILLAHUD
 else
     dw #InfoHudMenu>>16
@@ -181,9 +179,6 @@ mm_goto_misc:
 
 mm_goto_sprites:
     %cm_mainmenu("Sprite Features", #SpritesMenu)
-
-mm_goto_layout:
-    %cm_mainmenu("Room Layout", #LayoutMenu)
 
 mm_goto_infohud:
     %cm_mainmenu("InfoHUD", #InfoHudMenu)
@@ -1412,6 +1407,7 @@ tel_goto_tourian:
 TeleportCrateriaMenu:
     dw #tel_crateriaship
     dw #tel_crateriaparlor
+    dw #$FFFF
     dw #tel_crateria08
     dw #tel_crateria09
     dw #tel_crateria0A
@@ -1455,6 +1451,7 @@ TeleportBrinstarMenu:
     dw #tel_brinstargreenetecoons
     dw #tel_brinstarkraid
     dw #tel_brinstarredtower
+    dw #$FFFF
     dw #tel_brinstar08
     dw #tel_brinstar09
     dw #tel_brinstar0A
@@ -1504,6 +1501,7 @@ TeleportNorfairMenu:
     dw #tel_norfaircrocomire
     dw #tel_norfairlnelevator
     dw #tel_norfairridley
+    dw #$FFFF
     dw #tel_norfair08
     dw #tel_norfair09
     dw #tel_norfair0A
@@ -1559,6 +1557,7 @@ tel_norfair16:
 
 TeleportWreckedShipMenu:
     dw #tel_wreckedship
+    dw #$FFFF
     dw #tel_wreckedship10
     dw #tel_wreckedship11
     dw #$0000
@@ -1578,6 +1577,7 @@ TeleportMaridiaMenu:
     dw #tel_maridiaelevator
     dw #tel_maridiaaqueduct
     dw #tel_maridiadraygon
+    dw #$FFFF
     dw #tel_maridia08
     dw #tel_maridia10
     dw #tel_maridia11
@@ -1616,6 +1616,7 @@ tel_maridia13:
 TeleportTourianMenu:
     dw #tel_tourianmb
     dw #tel_tourianentrance
+    dw #$FFFF
     dw #tel_tourian08
     dw #tel_tourian10
     dw #tel_tourian11
@@ -1674,7 +1675,6 @@ MiscMenu:
     dw #misc_slowdownrate
     dw #misc_healthbomb
     dw #misc_waterphysics
-    dw #misc_suit_properties
     dw #$FFFF
     dw #misc_magicpants
     dw #misc_spacepants
@@ -1685,6 +1685,7 @@ MiscMenu:
     dw #$FFFF
     dw #misc_killenemies
     dw #misc_forcestand
+    dw #misc_magnetstairs
     dw #$0000
     %cm_header("MISC OPTIONS")
 
@@ -1761,31 +1762,6 @@ misc_spacepants:
 misc_waterphysics:
     %cm_toggle("Ignore Water this Room", $7E197E, #$0004, #0)
 
-misc_suit_properties:
-    dw !ACTION_CHOICE
-    dl #!sram_suit_properties
-    dw init_suit_properties_ram
-    db #$28, "Suit Properties", #$FF
-    db #$28, "    VANILLA", #$FF
-    db #$28, "   BALANCED", #$FF
-    db #$28, "   PROGRESS", #$FF
-    db #$FF
-
-init_suit_properties_ram:
-{
-    LDA #$0021 : STA !ram_suits_enemy_damage_check : STA !ram_suits_periodic_damage_check
-
-    LDA !sram_suit_properties : CMP #$0002 : BNE .init_periodic_damage
-    LDA #$0001 : STA !ram_suits_enemy_damage_check
-
-  .init_periodic_damage
-    LDA !sram_suit_properties : BEQ .end
-    LDA #$0001 : STA !ram_suits_periodic_damage_check
-
-  .end
-    RTL
-}
-
 misc_metronome:
     %cm_toggle("Metronome", !ram_metronome, #$0001, GameLoopExtras)
 
@@ -1822,6 +1798,25 @@ misc_forcestand:
   .routine
     JSL $90E2D4 ; bridge to: Release Samus from Draygon
     %sfxconfirm()
+    RTL
+
+!ROOM_LAYOUT_MAGNET_STAIRS = #$0001
+misc_magnetstairs:
+    %cm_toggle("Magnet Stairs Fix", !sram_magnetstairs, #$0001, #.routine)
+  .routine
+    LDA !ROOM_ID : CMP #$DFD7 : BNE .done
+    LDA !sram_magnetstairs : BEQ .broken
+    ; change tile type and BTS
+    %a8()
+    LDA #$10 : STA $7F01F9 : STA $7F02EB
+    LDA #$53 : STA $7F64FD : STA $7F6576
+    RTL
+  .broken
+    ; change tile type and BTS
+    %a8()
+    LDA #$80 : STA $7F01F9 : STA $7F02EB
+    LDA #$00 : STA $7F64FD : STA $7F6576
+  .done
     RTL
 
 GameLoopExtras:
@@ -1889,53 +1884,10 @@ sprites_oob_viewer:
 +   RTL
 
 
-; ----------------
-; Room Layout Menu
-; ----------------
-
-LayoutMenu:
-    dw #layout_magnetstairs
-    dw #$FFFF
-    dw #layout_arearando
-    dw #layout_antisoftlock
-    dw #$0000
-    %cm_header("ROOM LAYOUTS")
-    %cm_footer("APPLIED WHEN ROOM RELOADED")
-
-!ROOM_LAYOUT_MAGNET_STAIRS = #$0001
-layout_magnetstairs:
-    %cm_toggle_bit("Magnet Stairs Fix", !sram_room_layout, !ROOM_LAYOUT_MAGNET_STAIRS, #.routine)
-  .routine
-    LDA !ROOM_ID : CMP #$DFD7 : BNE .done
-    LDA !sram_room_layout : AND !ROOM_LAYOUT_MAGNET_STAIRS : BEQ .broken
-
-    ; change tile type and BTS
-    %a8()
-    LDA #$10 : STA $7F01F9 : STA $7F02EB
-    LDA #$53 : STA $7F64FD : STA $7F6576
-    RTL
-
-  .broken
-    ; change tile type and BTS
-    %a8()
-    LDA #$80 : STA $7F01F9 : STA $7F02EB
-    LDA #$00 : STA $7F64FD : STA $7F6576
-
-  .done
-    RTL
-
-!ROOM_LAYOUT_AREA_RANDO = #$0002
-layout_arearando:
-    %cm_toggle_bit("Area Rando Patches", !sram_room_layout, !ROOM_LAYOUT_AREA_RANDO, #0)
-
-!ROOM_LAYOUT_ANTISOFTLOCK = #$0004
-layout_antisoftlock:
-    %cm_toggle_bit("Anti-Softlock Patches", !sram_room_layout, !ROOM_LAYOUT_ANTISOFTLOCK, #0)
-
-
 ; -----------
 ; Events menu
 ; -----------
+
 EventsMenu:
     dw #events_resetevents
     dw #events_resetdoors
@@ -3917,7 +3869,6 @@ ctrl_reset_defaults:
 
 init_wram_based_on_sram:
 {
-    JSL init_suit_properties_ram
     JSL GameModeExtras
     JML validate_sram_for_savestates
 }
