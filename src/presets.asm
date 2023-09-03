@@ -196,7 +196,7 @@ endif
 reset_all_counters:
 {
     LDA #$0000
-    STZ $09DA : STZ $09DC : STZ $09DE : STZ $09E0 ; game time
+    STZ !IGT_FRAMES : STZ !IGT_SECONDS : STZ !IGT_MINUTES : STZ !IGT_HOURS
     STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds : STA !ram_seg_rt_minutes
     STA !ram_realtime_room : STA !ram_last_realtime_room
     STA !ram_gametime_room : STA !ram_last_gametime_room

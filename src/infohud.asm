@@ -802,8 +802,8 @@ endif
     BRA .draw_segment_timer
 
   .ingame_segment_timer
-    LDA #$09DA : STA $00
-    LDA #$007E : STA $02
+    LDA.w #!IGT_FRAMES : STA $00
+    STZ $02
 
   .draw_segment_timer
     ; Frames
@@ -1003,13 +1003,13 @@ endif
     LDA !sram_frame_counter_mode : BNE .ingame_segment_timer
     LDA !IH_DECIMAL : STA !HUD_TILEMAP+$B4 : STA !HUD_TILEMAP+$BA
     LDA.w #!ram_seg_rt_frames : STA $00
-    LDA !WRAM_BANK : STA $02
+    LDA.w !WRAM_BANK : STA $02
     BRA .draw_segment_timer
 
   .ingame_segment_timer
     LDA !IH_HYPHEN : STA !HUD_TILEMAP+$B4 : STA !HUD_TILEMAP+$BA
-    LDA #$09DA : STA $00
-    LDA #$007E : STA $02
+    LDA.w #!IGT_FRAMES : STA $00
+    STZ $02
     BRA .draw_segment_timer
 
   .draw_segment_timer
