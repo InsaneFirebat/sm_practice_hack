@@ -1,6 +1,9 @@
 
 ## Changelog since v2.2.7
 
+@idlechild
+
+* [2.5.8.9]  Fix Two Cries room strat so it doesn't report YEYE or YEYL by idlechild
 * [2.5.8.8]  Fix timers immediately after closing menu
 * [2.5.8.7]  Removed remaining randomizer features
 * [2.5.8.6]  Added Forever menu palette profile
