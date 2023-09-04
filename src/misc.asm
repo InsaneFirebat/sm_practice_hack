@@ -247,74 +247,6 @@ random_bubble_sfx:
     RTL
 }
 
-lock_samus_bowling:
-{
-    LDA !sram_cutscenes : BIT !CUTSCENE_FAST_BOWLING : BNE .speedup
-    TDC
-if !FEATURE_PAL
-    JML $90F081
-else
-    JML $90F084
-endif
-
-  .speedup
-    TDC
-if !FEATURE_PAL
-    JSL $90F081
-else
-    JSL $90F084
-endif
-    LDA #locked_samus_speedup_movement_handler
-    STA $0A42
-    RTL
-}
-
-locked_samus_speedup_movement_handler:
-{
-    ; Original logic
-    PHP : PHB : PHK : PLB
-    %ai16()
-    JSR $AECE     ; Handle projectiles
-if !FEATURE_PAL
-    JSR $EAFF     ; Handle Samus movement
-else
-    JSR $EB02     ; Handle Samus movement
-endif
-
-    ; Bowling cutscene runs for 1938 frames, which is divisible by 6
-    ; We can therefore run two extra passes per frame
-    ; without having to check if the cutscene has ended
-    ; (we could do five extra passes but the rendering is not good)
-
-    ; Execute first extra pass
-    JSL $868104   ; Enemy projectile handler
-    JSL $8485B4   ; PLM handler
-if !FEATURE_PAL
-    JSL $A08FE4   ; Main enemy routine
-    JSR $AECE     ; Handle projectiles
-    JSR $EAFF     ; Handle Samus movement
-else
-    JSL $A08FD4   ; Main enemy routine
-    JSR $AECE     ; Handle projectiles
-    JSR $EB02     ; Handle Samus movement
-endif
-
-    ; Execute second extra pass
-    JSL $868104   ; Enemy projectile handler
-    JSL $8485B4   ; PLM handler
-if !FEATURE_PAL
-    JSL $A08FE4   ; Main enemy routine
-    JSR $AECE     ; Handle projectiles
-    JSR $EAFF     ; Handle Samus movement
-else
-    JSL $A08FD4   ; Main enemy routine
-    JSR $AECE     ; Handle projectiles
-    JSR $EB02     ; Handle Samus movement
-endif
-
-    PLB : PLP : RTL
-}
-
 gamemode_end:
 {
    ; overwritten logic
@@ -430,71 +362,73 @@ print pc, " misc end"
 
 org $90F800
 print pc, " misc bank90 start"
-misc_overwritten_movement_routine:
-    ; We overwrote an unnecessary JSR, a STZ command, and a jump to the movement routine
-    STZ $0A6E
-    JMP ($0A58)
 
-periodic_damage_table:
-if !FEATURE_PAL
-    dw $E9CB   ; vanilla routine
-else
-    dw $E9CE   ; vanilla routine
-endif
-    dw periodic_damage_balanced
-    dw periodic_damage_progressive
-
-; Make our minor adjustments and jump back to the vanilla routine
-periodic_damage_balanced:
+lock_samus_bowling:
 {
-    PHP : %ai16()
-    LDA $0A78 : BEQ $03
+    LDA !sram_cutscenes : BIT !CUTSCENE_FAST_BOWLING : BNE .speedup
+    TDC
 if !FEATURE_PAL
-    JMP $EA32
+    JML $90F081
 else
-    JMP $EA35
+    JML $90F084
 endif
-    LDA $09A2 : BIT #$0001 : BNE $03
+
+  .speedup
+    TDC
 if !FEATURE_PAL
-    JMP $EA0E   ; Varia not equipped
-    JMP $E9F9   ; Varia equipped
+    JSL $90F081
 else
-    JMP $EA11   ; Varia not equipped
-    JMP $E9FC   ; Varia equipped
+    JSL $90F084
 endif
+    LDA.w #locked_samus_speedup_movement_handler
+    STA $0A42
+    RTL
 }
 
-periodic_damage_progressive:
+locked_samus_speedup_movement_handler:
 {
-    PHP : %ai16()
-    LDA $0A78 : BEQ $03
-    ; Nothing to do, jump back to vanilla routine
+    ; Original logic
+    PHP : PHB : PHK : PLB
+    %ai16()
+    JSR $AECE     ; Handle projectiles
 if !FEATURE_PAL
-    JMP $EA32
+    JSR $EAFF     ; Handle Samus movement
 else
-    JMP $EA35
+    JSR $EB02     ; Handle Samus movement
 endif
 
-    LDA $09A2 : BIT #$0020 : BEQ .nogravity
-    ; Gravity equipped, so halve damage
-    LDA $0A4F : LSR
-    PHA : XBA : AND #$FF00 : STA $0A4E
-    PLA : XBA : AND #$00FF : STA $0A50
+    ; Bowling cutscene runs for 1938 frames, which is divisible by 6
+    ; We can therefore run two extra passes per frame
+    ; without having to check if the cutscene has ended
+    ; (we could do five extra passes but the rendering is not good)
 
-  .nogravity
-    LDA $09A2 : BIT #$0001 : BEQ .novaria
-    ; Varia equipped, so halve damage
-    LDA $0A4F : LSR
-    PHA : XBA : AND #$FF00 : STA $0A4E
-    PLA : XBA : AND #$00FF : STA $0A50
-
-  .novaria
-    ; Jump back into the vanilla routine
+    ; Execute first extra pass
+    JSL $868104   ; Enemy projectile handler
+    JSL $8485B4   ; PLM handler
 if !FEATURE_PAL
-    JMP $EA0E
+    JSL $A08FE4   ; Main enemy routine
+    JSR $AECE     ; Handle projectiles
+    JSR $EAFF     ; Handle Samus movement
 else
-    JMP $EA11
+    JSL $A08FD4   ; Main enemy routine
+    JSR $AECE     ; Handle projectiles
+    JSR $EB02     ; Handle Samus movement
 endif
+
+    ; Execute second extra pass
+    JSL $868104   ; Enemy projectile handler
+    JSL $8485B4   ; PLM handler
+if !FEATURE_PAL
+    JSL $A08FE4   ; Main enemy routine
+    JSR $AECE     ; Handle projectiles
+    JSR $EAFF     ; Handle Samus movement
+else
+    JSL $A08FD4   ; Main enemy routine
+    JSR $AECE     ; Handle projectiles
+    JSR $EB02     ; Handle Samus movement
+endif
+
+    PLB : PLP : RTL
 }
 
 
