@@ -23,13 +23,13 @@ Regardless of which tool you use, the process is the same: you select the .IPS f
 ## Exclusive Features
 
 * Super HUD InfoHUD mode to run multiple modes at once
+* Door HUD mode to display a different HUD mode when touching a door
 * InfoHUD Mode to display a damage counter that resets at Phantoon and Ridley
 * Room Strat to track Kihunter movement in Kihunter Stairs and Three Musketeers rooms
 * Room Strat to track off-screen nails during Kraid's intro
-* HUD timers update on shinespark crash
+* Remaining spark timer automatically printed on HUD
 * Option to enable infinite ammo
 * Controller shortcut to toggle the damage counter InfoHUD Mode
-* Controller shortcut to advance the RNG seed
 * Event flags for Zebetites
 * Option to clear the elevator flag for OoB travel
 * No tile marker when applying Magnet Stairs fix
@@ -41,3 +41,12 @@ Regardless of which tool you use, the process is the same: you select the .IPS f
 * Access to developer/debug load points
 * Option to draw a border (or fill the screen) for easier capture cropping
 * Option to factory reset practice rom settings
+* Option to play a sound effect for certain strat successes (Taco Tank, Spikesuit, etc)
+* Option to change the menu font
+* Options to change the HUD number font
+* BRB screen for streamers
+
+## Removed Features
+
+* Anything related to randomizers
+* Fast doors/elevators
