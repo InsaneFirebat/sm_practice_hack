@@ -3,6 +3,7 @@
 
 @idlechild
 
+* [2.5.8.10] Added frames held mode by idlechild
 * [2.5.8.9]  Fixed crash when using Fast Bowling Cutscene
 * [2.5.8.9]  Fix Two Cries room strat so it doesn't report YEYE or YEYL by idlechild
 * [2.5.8.8]  Fix timers immediately after closing menu

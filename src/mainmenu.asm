@@ -1,6 +1,7 @@
-; --------
-; Helpers
-; --------
+
+; ------------
+; Menu Helpers
+; ------------
 
 action_mainmenu:
 {
@@ -181,7 +182,11 @@ mm_goto_sprites:
     %cm_mainmenu("Sprite Features", #SpritesMenu)
 
 mm_goto_infohud:
-    %cm_mainmenu("InfoHUD", #InfoHudMenu)
+    %cm_jsl("InfoHUD", #.routine, #InfoHudMenu)
+  .routine
+    LDA !sram_top_display_mode : CMP #$0003 : BCC +
+    LDA #$0000 : STA !sram_top_display_mode
++   JML action_mainmenu
 
 mm_goto_gamemenu:
     %cm_mainmenu("Game Options", #GameMenu)
@@ -2067,6 +2072,7 @@ InfoHudMenu:
     dw #ih_goto_timer_settings
     dw #$FFFF
     dw #ih_top_HUD_mode
+    dw #ih_dynamic_frames_held
 if !PRESERVE_WRAM_DURING_SPACETIME
     dw #ih_spacetime_infohud
 endif
@@ -2741,6 +2747,69 @@ ih_top_HUD_mode:
     db #$28, "y  RESERVES", #$FF
     db #$28, "y   VANILLA", #$FF
     db #$FF
+
+ih_dynamic_frames_held:
+    dw !ACTION_DYNAMIC
+    dl #!sram_top_display_mode
+    dw #ih_goto_frames_held
+    dw #ih_goto_frames_held
+    dw #$0000
+    dw #$0000
+
+ih_goto_frames_held:
+    %cm_submenu("Frames Held Mode", #IHFramesHeldMenu)
+
+IHFramesHeldMenu:
+    dw #ih_frames_held_a
+    dw #ih_frames_held_b
+    dw #ih_frames_held_x
+    dw #ih_frames_held_y
+    dw #ih_frames_held_l
+    dw #ih_frames_held_r
+    dw #ih_frames_held_select
+    dw #ih_frames_held_start
+    dw #ih_frames_held_left
+    dw #ih_frames_held_right
+    dw #ih_frames_held_up
+    dw #ih_frames_held_down
+    dw #$0000
+    %cm_header("FRAMES HELD MODE")
+
+ih_frames_held_a:
+    %cm_toggle_bit("A", !ram_frames_held, !CTRL_A, #0)
+
+ih_frames_held_b:
+    %cm_toggle_bit("B", !ram_frames_held, !CTRL_B, #0)
+
+ih_frames_held_x:
+    %cm_toggle_bit("X", !ram_frames_held, !CTRL_X, #0)
+
+ih_frames_held_y:
+    %cm_toggle_bit("Y", !ram_frames_held, !CTRL_Y, #0)
+
+ih_frames_held_l:
+    %cm_toggle_bit("L", !ram_frames_held, !CTRL_L, #0)
+
+ih_frames_held_r:
+    %cm_toggle_bit("R", !ram_frames_held, !CTRL_R, #0)
+
+ih_frames_held_select:
+    %cm_toggle_bit("Select", !ram_frames_held, !CTRL_SELECT, #0)
+
+ih_frames_held_start:
+    %cm_toggle_bit("Start", !ram_frames_held, !IH_INPUT_START, #0)
+
+ih_frames_held_left:
+    %cm_toggle_bit("Left", !ram_frames_held, !IH_INPUT_LEFT, #0)
+
+ih_frames_held_right:
+    %cm_toggle_bit("Right", !ram_frames_held, !IH_INPUT_RIGHT, #0)
+
+ih_frames_held_up:
+    %cm_toggle_bit("Up", !ram_frames_held, !IH_INPUT_UP, #0)
+
+ih_frames_held_down:
+    %cm_toggle_bit("Down", !ram_frames_held, !IH_INPUT_DOWN, #0)
 
 !TOP_HUD_RESERVES_INDEX = #$0001
 !TOP_HUD_VANILLA_INDEX = #$0002
