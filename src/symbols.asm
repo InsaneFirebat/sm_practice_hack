@@ -138,6 +138,7 @@ ram_phantoon_flame_direction = !ram_phantoon_flame_direction ; !WRAM_START+$DA
 ram_sprite_feature_flags = !ram_sprite_feature_flags ; !WRAM_START+$DC
 ram_auto_save_state = !ram_auto_save_state ; !WRAM_START+$DE
 ram_timers_autoupdate = !ram_timers_autoupdate ; !WRAM_START+$E0
+ram_frames_held = !ram_frames_held ; !WRAM_START+$E2
 
 ; FREE SPACE ^ up to +$E8
 
@@ -225,6 +226,7 @@ ram_cm_manage_slots = !ram_cm_manage_slots ; !WRAM_MENU_START+$80
 ram_cm_selected_slot = !ram_cm_selected_slot ; !WRAM_MENU_START+$82
 
 ; ^ FREE SPACE ^ up to +$CE
+; Note: +$B8 to +$CE range also used as frames held counters
 
 ; Currently first 28 bytes plus last 2 bytes are used
 ram_cgram_cache = !ram_cgram_cache ; !WRAM_MENU_START+$D0 ; $30 bytes
