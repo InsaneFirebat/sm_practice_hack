@@ -423,6 +423,15 @@ load_return:
     LDA !IH_CONTROLLER_PRI : EOR !sram_ctrl_save_state : ORA !sram_ctrl_load_state
     STA !IH_CONTROLLER_PRI : STA !IH_CONTROLLER_PRI_NEW : STA !IH_CONTROLLER_PRI_PREV
 
+    ; clear frame held counters
+    TDC
+    STA !WRAM_MENU_START+$B8 : STA !WRAM_MENU_START+$BA
+    STA !WRAM_MENU_START+$BC : STA !WRAM_MENU_START+$BE
+    STA !WRAM_MENU_START+$C0 : STA !WRAM_MENU_START+$C2
+    STA !WRAM_MENU_START+$C4 : STA !WRAM_MENU_START+$C6
+    STA !WRAM_MENU_START+$C8 : STA !WRAM_MENU_START+$CA
+    STA !WRAM_MENU_START+$CC : STA !WRAM_MENU_START+$CE
+
     JSL tinystates_load_kraid
 
     ; pause menu graphics
