@@ -1251,11 +1251,11 @@ ih_hud_code:
   .clearCountersLoop
     TYA : AND ControllerTable1,X : BEQ .clearCountersRow2
     PHX : LDA FramesHeldTable1,X : TAX
-    TDC : STA !WRAM_MENU_START,X : PLX
+    LDA #$0000 : STA !ram_frames_held_timers,X : PLX
   .clearCountersRow2
     TYA : AND ControllerTable2,X : BEQ .clearCountersNext
     PHX : LDA FramesHeldTable2,X : TAX
-    TDC : STA !WRAM_MENU_START,X : PLX
+    LDA #$0000 : STA !ram_frames_held_timers,X : PLX
   .clearCountersNext
     DEX : DEX : BNE .clearCountersLoop
 
@@ -1285,13 +1285,13 @@ ih_hud_code:
   .useFramesHeldRow1
     PHX : TYA : AND ControllerTable1,X : BNE .incFramesHeldRow1
     LDA FramesHeldTable1,X : TAX
-    LDA !WRAM_MENU_START,X : BEQ .plxBlankFramesHeldRow1
+    LDA !ram_frames_held_timers,X : BEQ .plxBlankFramesHeldRow1
     CMP #$0042 : BCC .loadFramesHeldRow1
   .plxBlankFramesHeldRow1
     PLX : BRA .blankFramesHeldRow1
   .incFramesHeldRow1
     LDA FramesHeldTable1,X : TAX
-    LDA !WRAM_MENU_START,X : INC : STA !WRAM_MENU_START,X
+    LDA !ram_frames_held_timers,X : INC : STA !ram_frames_held_timers,X
     CMP #$0042 : BCC .loadFramesHeldRow1
     PLX : BRA .nonBlankFramesHeldRow1
   .loadFramesHeldRow1
@@ -1301,13 +1301,13 @@ ih_hud_code:
   .useFramesHeldRow2
     PHX : TYA : AND ControllerTable2,X : BNE .incFramesHeldRow2
     LDA FramesHeldTable2,X : TAX
-    LDA !WRAM_MENU_START,X : BEQ .plxBlankFramesHeldRow2
+    LDA !ram_frames_held_timers,X : BEQ .plxBlankFramesHeldRow2
     CMP #$0042 : BCC .loadFramesHeldRow2
   .plxBlankFramesHeldRow2
     PLX : BRA .blankFramesHeldRow2
   .incFramesHeldRow2
     LDA FramesHeldTable2,X : TAX
-    LDA !WRAM_MENU_START,X : INC : STA !WRAM_MENU_START,X
+    LDA !ram_frames_held_timers,X : INC : STA !ram_frames_held_timers,X
     CMP #$0042 : BCC .loadFramesHeldRow2
     PLX : BRA .nonBlankFramesHeldRow2
   .loadFramesHeldRow2

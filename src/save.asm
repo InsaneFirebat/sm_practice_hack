@@ -363,13 +363,13 @@ load_return:
     STA !IH_CONTROLLER_PRI : STA !IH_CONTROLLER_PRI_NEW : STA !IH_CONTROLLER_PRI_PREV
 
     ; clear frame held counters
-    TDC
-    STA !WRAM_MENU_START+$B8 : STA !WRAM_MENU_START+$BA
-    STA !WRAM_MENU_START+$BC : STA !WRAM_MENU_START+$BE
-    STA !WRAM_MENU_START+$C0 : STA !WRAM_MENU_START+$C2
-    STA !WRAM_MENU_START+$C4 : STA !WRAM_MENU_START+$C6
-    STA !WRAM_MENU_START+$C8 : STA !WRAM_MENU_START+$CA
-    STA !WRAM_MENU_START+$CC : STA !WRAM_MENU_START+$CE
+    LDA #$0000
+    STA !ram_frames_held_timers+$B8 : STA !ram_frames_held_timers+$BA
+    STA !ram_frames_held_timers+$BC : STA !ram_frames_held_timers+$BE
+    STA !ram_frames_held_timers+$C0 : STA !ram_frames_held_timers+$C2
+    STA !ram_frames_held_timers+$C4 : STA !ram_frames_held_timers+$C6
+    STA !ram_frames_held_timers+$C8 : STA !ram_frames_held_timers+$CA
+    STA !ram_frames_held_timers+$CC : STA !ram_frames_held_timers+$CE
 
     %a8()
     LDA #$00 : PHA : PLB

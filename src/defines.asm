@@ -6,8 +6,8 @@
 !VERSION_HEADER = $FB
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 5
-!VERSION_BUILD = 8
-!VERSION_REV_1 = 1
+!VERSION_BUILD = 9
+!VERSION_REV_1 = 0
 !VERSION_REV_2 = 0
 
 
@@ -236,8 +236,6 @@
 !ram_cm_selected_slot = !WRAM_MENU_START+$82
 
 ; ^ FREE SPACE ^ up to +$CE
-; Note: +$B8 to +$CE range also used as frames held counters
-;       and is reset to zero when loading a savestate
 
 ; Currently first 28 bytes plus last 2 bytes are used
 !ram_cgram_cache = !WRAM_MENU_START+$D0 ; $30 bytes
@@ -692,6 +690,8 @@ endif
 !ram_cm_wave = !CUSTOM_WRAM+$F6
 !ram_cm_spazer = !CUSTOM_WRAM+$F8
 !ram_cm_plasma = !CUSTOM_WRAM+$FA
+
+!ram_frames_held_timers = !CUSTOM_WRAM+$100 ; $18 bytes
 
 !PRESET_DOORS = !CUSTOM_WRAM+$180
 !PRESET_SPECIAL = !CUSTOM_WRAM+$182

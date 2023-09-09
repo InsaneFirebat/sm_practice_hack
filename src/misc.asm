@@ -370,7 +370,7 @@ print pc, " misc bank90 start"
 lock_samus_bowling:
 {
     LDA !sram_cutscenes : BIT !CUTSCENE_FAST_BOWLING : BNE .speedup
-    TDC
+    LDA #$0000
 if !FEATURE_PAL
     JML $90F081
 else
@@ -378,7 +378,7 @@ else
 endif
 
   .speedup
-    TDC
+    LDA #$0000
 if !FEATURE_PAL
     JSL $90F081
 else
