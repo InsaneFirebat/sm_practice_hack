@@ -1,8 +1,7 @@
 
 ## Changelog since v2.2.7
 
-@idlechild
-
+* [2.5.9]    Fix for Two Cries Standup without Springball by idlechild
 * [2.5.8.10] Added frames held mode by idlechild
 * [2.5.8.9]  Fixed crash when using Fast Bowling Cutscene
 * [2.5.8.9]  Fix Two Cries room strat so it doesn't report YEYE or YEYL by idlechild

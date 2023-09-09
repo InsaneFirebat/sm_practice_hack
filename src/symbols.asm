@@ -226,8 +226,6 @@ ram_cm_manage_slots = !ram_cm_manage_slots ; !WRAM_MENU_START+$80
 ram_cm_selected_slot = !ram_cm_selected_slot ; !WRAM_MENU_START+$82
 
 ; ^ FREE SPACE ^ up to +$CE
-; Note: +$B8 to +$CE range also used as frames held counters
-;       and is reset to zero when loading a savestate
 
 ; Currently first 28 bytes plus last 2 bytes are used
 ram_cgram_cache = !ram_cgram_cache ; !WRAM_MENU_START+$D0 ; $30 bytes
@@ -489,6 +487,8 @@ ram_cm_ice = !ram_cm_ice ; !CUSTOM_WRAM+$F4
 ram_cm_wave = !ram_cm_wave ; !CUSTOM_WRAM+$F6
 ram_cm_spazer = !ram_cm_spazer ; !CUSTOM_WRAM+$F8
 ram_cm_plasma = !ram_cm_plasma ; !CUSTOM_WRAM+$FA
+
+ram_frames_held_timers = !ram_frames_held_timers ; !CUSTOM_WRAM+$100 ; $18 bytes
 
 ; ------------------------
 ; SRAM for custom features
