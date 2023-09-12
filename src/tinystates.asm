@@ -39,7 +39,7 @@ macro sram_to_vram(vram_addr, size, sram_addr)
 endmacro
 
 
-org $80F600
+org $80F500
 print pc, " tinysave start"
 
 ; These can be modified to do game-specific things before and after saving and loading
