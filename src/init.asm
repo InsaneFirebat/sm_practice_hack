@@ -111,6 +111,7 @@ init_sram:
     LDA #$0002 : STA !sram_metronome_sfx
     LDA #$0000 : STA !sram_ctrl_auto_save_state
     LDA #$0000 : STA !sram_custom_header
+    LDA #$0000 : STA !sram_fanfare_timer_adjust
 
     JSL init_menu_customization
 
@@ -129,7 +130,6 @@ init_sram:
     LDA #$0000 : STA !sram_ctrl_load_custom_preset
     LDA #$0000 : STA !sram_ctrl_inc_custom_preset
     LDA #$0000 : STA !sram_ctrl_dec_custom_preset
-    ; duplicates for reset defaults routine
     LDA #$0000 : STA !sram_ctrl_toggle_tileviewer
     LDA #$0000 : STA !sram_ctrl_update_timers
     LDA #$0000 : STA !sram_ctrl_auto_save_state

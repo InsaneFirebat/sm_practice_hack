@@ -18,6 +18,10 @@ org $82EEDF
     LDA #cutscenes_load_intro
 
 
+org $A7C360
+    JSL cutscenes_kraid_death_camera
+
+
 org !ORG_CUTSCENES
 print pc, " cutscenes start"
 
@@ -99,6 +103,17 @@ endif
   .game_over
     ; overwritten code
     JML $88829E
+}
+
+cutscenes_kraid_death_camera:
+{
+    LDA !sram_cutscenes : BIT !CUTSCENE_KRAID_DEATH_CAMERA : BEQ .done
+    LDA #$0202 : STA $7ECD20
+    LDA #$0101 : STA $7ECD22
+
+  .done
+    LDA $7E782A ; overwritten code
+    RTL
 }
 
 print pc, " cutscenes end"

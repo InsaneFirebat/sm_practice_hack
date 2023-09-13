@@ -175,6 +175,7 @@ ram_watch_edit_lock_right = !ram_watch_edit_lock_right ; !WRAM_PERSIST_START+$4C
 ram_game_loop_extras = !ram_game_loop_extras ; !WRAM_PERSIST_START+$4E
 ram_game_mode_extras = !ram_game_mode_extras ; !WRAM_PERSIST_START+$50
 ram_sprite_feature_flags = !ram_sprite_feature_flags ; !WRAM_PERSIST_START+$52
+ram_frames_held = !ram_frames_held ; !WRAM_PERSIST_START+$54
 
 ; ^ FREE SPACE ^ up to +$76 (!WRAM_START+$FC - !WRAM_PERSIST_START)
 
@@ -247,9 +248,6 @@ ram_cm_watch_enemy_index = !ram_cm_watch_enemy_index ; !WRAM_MENU_START+$82
 ram_cm_watch_enemy_side = !ram_cm_watch_enemy_side ; !WRAM_MENU_START+$84
 ram_cm_watch_common_address = !ram_cm_watch_common_address ; !WRAM_MENU_START+$86
 
-ram_cm_door_menu_value = !ram_cm_door_menu_value ; !WRAM_MENU_START+$80
-ram_cm_door_menu_bank = !ram_cm_door_menu_bank ; !WRAM_MENU_START+$82
-
 ram_cm_phan_first_phase = !ram_cm_phan_first_phase ; !WRAM_MENU_START+$80
 ram_cm_phan_second_phase = !ram_cm_phan_second_phase ; !WRAM_MENU_START+$82
 
@@ -282,7 +280,12 @@ ram_cm_dummy_num = !ram_cm_dummy_num ; !WRAM_MENU_START+$8E
 
 ram_cm_keyboard_buffer = !ram_cm_keyboard_buffer ; !WRAM_MENU_START+$80 ; $18 bytes
 
+ram_cm_manage_slots = !ram_cm_manage_slots ; !WRAM_MENU_START+$80
+ram_cm_selected_slot = !ram_cm_selected_slot ; !WRAM_MENU_START+$82
+
 ; ^ FREE SPACE ^ up to +$CE
+; Note: +$B8 to +$CE range also used as frames held counters
+;       and is reset to zero when loading a savestate
 
 ; Reserve 48 bytes for CGRAM cache
 ; Currently first 28 bytes plus last 2 bytes are used
@@ -326,7 +329,7 @@ sram_sprite_prio_flag = !sram_sprite_prio_flag ; !SRAM_START+$36
 sram_metronome_tickrate = !sram_metronome_tickrate ; !SRAM_START+$38
 sram_metronome_sfx = !sram_metronome_sfx ; !SRAM_START+$3A
 sram_status_icons = !sram_status_icons ; !SRAM_START+$3C
-sram_suit_properties = !sram_suit_properties ; !SRAM_START+$3E
+sram_fanfare_timer_adjust = !sram_fanfare_timer_adjust ; !SRAM_START+$3E
 sram_top_display_mode = !sram_top_display_mode ; !SRAM_START+$40
 sram_healthalarm = !sram_healthalarm ; !SRAM_START+$42
 sram_room_layout = !sram_room_layout ; !SRAM_START+$44
