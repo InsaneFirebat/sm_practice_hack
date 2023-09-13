@@ -149,11 +149,13 @@ macro cm_numfield(title, addr, start, end, increment, heldincrement, jsltarget)
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_numfield_word(title, addr, start, end, jsltarget)
+macro cm_numfield_word(title, addr, start, end, increment, heldincrement, jsltarget)
 ; Allows editing a 16-bit value at the specified address
     dw !ACTION_NUMFIELD_WORD
     dl <addr> ; 24bit RAM address to display/manipulate
     dw <start>, <end> ; minimum and maximum values allowed
+    dw <increment> ; inc/dec amount when pressed
+    dw <heldincrement> ; inc/dec amount when direction is held (scroll faster)
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
     db #$28, "<title>", #$FF
 endmacro
@@ -261,9 +263,12 @@ macro cm_submenu(title, target)
 endmacro
 
 macro cm_adjacent_submenu(title, target)
-; runs action_adjacent_submenu to return to previous menu, set the bank of the next menu and continue into action_submenu
+; return to previous menu and then runs action_submenu
 ; can only used for submenus and when already on a submenu
-    %cm_jsl("<title>", #action_adjacent_submenu, <target>)
+    %cm_jsl("<title>", #.routine, <target>)
+  .routine
+    JSL cm_previous_menu
+    JML action_submenu
 endmacro
 
 macro cm_preset(title, target)
@@ -275,6 +280,14 @@ macro cm_custompreset(slot)
 ; Displays custom preset data and allows selecting active slot
 custompreset_<slot>:
     dw !ACTION_CUSTOM_PRESET
+    db <slot> ; 8bit slot ID
+    db #$28, "<slot>", #$FF ; slot ID text
+endmacro
+
+macro cm_managepreset(slot)
+; Allows reorganizing custom preset slots
+managepreset_<slot>:
+    dw !ACTION_MANAGE_PRESETS
     db <slot> ; 8bit slot ID
     db #$28, "<slot>", #$FF ; slot ID text
 endmacro
