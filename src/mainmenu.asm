@@ -3,6 +3,13 @@
 ; Menu Helpers
 ; ------------
 
+action_infohud_mainmenu:
+{
+    LDA !sram_top_display_mode : CMP #$0003 : BCC action_mainmenu
+    LDA #$0000 : STA !sram_top_display_mode
+    ; continue into action_mainmenu
+}
+
 action_mainmenu:
 {
     ; Set bank of new menu
@@ -20,14 +27,6 @@ action_submenu:
     TYA : STA !ram_cm_menu_stack,X
 
     BRA action_submenu_jump
-}
-
-action_adjacent_submenu:
-{
-    JSL cm_previous_menu
-    %setmenubank()
-
-    BRA action_submenu
 }
 
 action_presets_submenu:
@@ -152,7 +151,7 @@ mm_goto_misc:
     %cm_mainmenu("Misc", #MiscMenu)
 
 mm_goto_infohud:
-    %cm_mainmenu("Infohud", #InfoHudMenu)
+    %cm_jsl("Infohud", #action_infohud_mainmenu, #InfoHudMenu)
 
 mm_goto_sprites:
     %cm_mainmenu("Sprite Features", #SpritesMenu)
@@ -444,6 +443,7 @@ if !FEATURE_TINYSTATES
 ; Tinystates only has slots $00-15
 else
     dw #$FFFF
+    dw #custompreset_manage
     dw #custompreset_goto_page2
     dw #custompreset_goto_page3
 endif
@@ -471,6 +471,7 @@ CustomPresetsMenu2:
     dw #custompreset_30
     dw #custompreset_31
     dw #$FFFF
+    dw #custompreset_manage
     dw #custompreset_goto_page1
     dw #custompreset_goto_page3
     dw #$0000
@@ -497,6 +498,7 @@ CustomPresetsMenu3:
     dw #$FFFF
     dw #$FFFF
     dw #$FFFF
+    dw #custompreset_manage
     dw #custompreset_goto_page1
     dw #custompreset_goto_page2
     dw #$0000
@@ -546,6 +548,149 @@ endif
     %cm_custompreset(38)
     %cm_custompreset(39)
 
+custompreset_manage:
+    %cm_jsl("Manage Preset Slots", .routine, #$0000)
+  .routine
+    LDA #$0000 : STA !ram_cm_manage_slots
+if !FEATURE_TINYSTATES
+    LDY.w #ManagePresetsMenu
+else
+    ; determine which page is currently loaded
+    LDA !ram_cm_stack_index : DEC #2 : TAX
+    ; exit if not in a color menu
+    LDA !ram_cm_menu_stack,X : CMP.w #CustomPresetsMenu : BPL .page2
+    LDY.w #ManagePresetsMenu : BRA .done
+  .page2
+    CMP.w #CustomPresetsMenu2 : BPL .page3
+    LDY.w #ManagePresetsMenu2 : BRA .done
+  .page3
+    LDY.w #ManagePresetsMenu3
+  .done
+endif
+    JSL cm_previous_menu
+    %setmenubank()
+    JML action_submenu
+
+ManagePresetsMenu:
+    dw #managepreset_00
+    dw #managepreset_01
+    dw #managepreset_02
+    dw #managepreset_03
+    dw #managepreset_04
+    dw #managepreset_05
+    dw #managepreset_06
+    dw #managepreset_07
+    dw #managepreset_08
+    dw #managepreset_09
+    dw #managepreset_10
+    dw #managepreset_11
+    dw #managepreset_12
+    dw #managepreset_13
+    dw #managepreset_14
+    dw #managepreset_15
+if !FEATURE_TINYSTATES
+; Tinystates only has slots $00-15
+else
+    dw #$FFFF
+    dw #$FFFF
+    dw #managepreset_goto_page2
+    dw #managepreset_goto_page3
+endif
+    dw #$0000
+    %cm_header("PRESS A TO SWAP PRESETS")
+    %cm_footer("PRESS X TO DELETE PRESET")
+
+ManagePresetsMenu2:
+    dw #managepreset_16
+    dw #managepreset_17
+    dw #managepreset_18
+    dw #managepreset_19
+    dw #managepreset_20
+    dw #managepreset_21
+    dw #managepreset_22
+    dw #managepreset_23
+    dw #managepreset_24
+    dw #managepreset_25
+    dw #managepreset_26
+    dw #managepreset_27
+    dw #managepreset_28
+    dw #managepreset_29
+    dw #managepreset_30
+    dw #managepreset_31
+    dw #$FFFF
+    dw #$FFFF
+    dw #managepreset_goto_page1
+    dw #managepreset_goto_page3
+    dw #$0000
+    %cm_header("PRESS A TO SWAP PRESETS")
+    %cm_footer("PRESS X TO DELETE PRESET")
+
+ManagePresetsMenu3:
+    dw #managepreset_32
+    dw #managepreset_33
+    dw #managepreset_34
+    dw #managepreset_35
+    dw #managepreset_36
+    dw #managepreset_37
+    dw #managepreset_38
+    dw #managepreset_39
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #$FFFF
+    dw #managepreset_goto_page1
+    dw #managepreset_goto_page2
+    dw #$0000
+    %cm_header("PRESS A TO SWAP PRESETS")
+    %cm_footer("PRESS X TO DELETE PRESET")
+
+    %cm_managepreset(00)
+    %cm_managepreset(01)
+    %cm_managepreset(02)
+    %cm_managepreset(03)
+    %cm_managepreset(04)
+    %cm_managepreset(05)
+    %cm_managepreset(06)
+    %cm_managepreset(07)
+    %cm_managepreset(08)
+    %cm_managepreset(09)
+    %cm_managepreset(10)
+    %cm_managepreset(11)
+    %cm_managepreset(12)
+    %cm_managepreset(13)
+    %cm_managepreset(14)
+    %cm_managepreset(15)
+    %cm_managepreset(16)
+    %cm_managepreset(17)
+    %cm_managepreset(18)
+    %cm_managepreset(19)
+    %cm_managepreset(20)
+    %cm_managepreset(21)
+    %cm_managepreset(22)
+    %cm_managepreset(23)
+    %cm_managepreset(24)
+    %cm_managepreset(25)
+    %cm_managepreset(26)
+    %cm_managepreset(27)
+    %cm_managepreset(28)
+    %cm_managepreset(29)
+    %cm_managepreset(30)
+    %cm_managepreset(31)
+    %cm_managepreset(32)
+    %cm_managepreset(33)
+    %cm_managepreset(34)
+    %cm_managepreset(35)
+    %cm_managepreset(36)
+    %cm_managepreset(37)
+    %cm_managepreset(38)
+    %cm_managepreset(39)
+
 custompreset_goto_page1:
     %cm_adjacent_submenu("GOTO PAGE ONE", #CustomPresetsMenu)
 
@@ -554,6 +699,40 @@ custompreset_goto_page2:
 
 custompreset_goto_page3:
     %cm_adjacent_submenu("GOTO PAGE THREE", #CustomPresetsMenu3)
+
+managepreset_goto_page1:
+    %cm_jsl("GOTO PAGE ONE", .routine, #ManagePresetsMenu)
+  .routine
+    JSL cm_previous_menu
+    %setmenubank()
+    JML action_submenu
+
+managepreset_goto_page2:
+    %cm_jsl("GOTO PAGE TWO", managepreset_goto_page1_routine, #ManagePresetsMenu2)
+
+managepreset_goto_page3:
+    %cm_jsl("GOTO PAGE THREE", managepreset_goto_page1_routine, #ManagePresetsMenu3)
+
+ManagePresetsConfirm:
+    dw #managepreset_abort
+    dw #$FFFF
+    dw #managepreset_confirm
+    dw #$0000
+    %cm_header("DELETE SELECTED PRESET?")
+
+managepreset_abort:
+    %cm_jsl("ABORT", .routine, #$0000)
+  .routine
+    JML cm_previous_menu
+
+managepreset_confirm:
+    %cm_jsl("Confirm Delete Preset", .routine, #$0000)
+  .routine
+    LDA !ram_cm_selected_slot : %presetslotsize()
+    LDA #$DEAD : STA $703000,X
+    LDA !ram_cm_selected_slot : ASL : TAX
+    LDA #$DEAD : STA !sram_custom_preset_safewords,X
+    JML cm_previous_menu
 
 
 ; ----------------
@@ -605,7 +784,7 @@ eq_goto_togglebeams:
     %cm_jsl("Toggle Beams", #eq_prepare_beams_menu, #ToggleBeamsMenu)
 
 eq_currentenergy:
-    %cm_numfield_word("Current Energy", !SAMUS_HP, 0, 1499, #0)
+    %cm_numfield_word("Current Energy", !SAMUS_HP, 0, 1499, 1, 20, #0)
 
 eq_setetanks:
     %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 21, 1, 1, .routine)
@@ -625,7 +804,7 @@ eq_setetanks:
     RTL
 
 eq_currentreserves:
-    %cm_numfield_word("Current Reserves", !SAMUS_RESERVE_ENERGY, 0, 400, #0)
+    %cm_numfield_word("Current Reserves", !SAMUS_RESERVE_ENERGY, 0, 400, 1, 20, #0)
 
 eq_setreserves:
     %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 7, 1, 1, .routine)
@@ -659,31 +838,31 @@ eq_reservemode:
     RTL
 
 eq_currentmissiles:
-    %cm_numfield_word("Current Missiles", !SAMUS_MISSILES, 0, 325, #0)
+    %cm_numfield_word("Current Missiles", !SAMUS_MISSILES, 0, 230, 1, 20, #0)
 
 eq_setmissiles:
-    %cm_numfield_word("Missiles", !SAMUS_MISSILES_MAX, 0, 300, .routine)
-    .routine
-        LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES
-        RTL
+    %cm_numfield_word("Missiles", !SAMUS_MISSILES_MAX, 0, 300, 5, 20, .routine)
+  .routine
+    LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES
+    RTL
 
 eq_currentsupers:
-    %cm_numfield("Current Super Missiles", !SAMUS_SUPERS, 0, 65, 1, 5, #0)
+    %cm_numfield("Current Super Missiles", !SAMUS_SUPERS, 0, 50, 1, 5, #0)
 
 eq_setsupers:
     %cm_numfield("Super Missiles", !SAMUS_SUPERS_MAX, 0, 30, 2, 2, .routine)
-    .routine
-        LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS
-        RTL
+  .routine
+    LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS
+    RTL
 
 eq_currentpbs:
-    %cm_numfield("Current Power Bombs", !SAMUS_PBS, 0, 70, 1, 5, #0)
+    %cm_numfield("Current Power Bombs", !SAMUS_PBS, 0, 50, 1, 5, #0)
 
 eq_setpbs:
-    %cm_numfield("Power Bombs", !SAMUS_PBS_MAX, 0, 30, 1, 1, .routine)
-    .routine
-        LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS
-        RTL
+    %cm_numfield("Power Bombs", !SAMUS_PBS_MAX, 0, 30, 1, 2, .routine)
+  .routine
+    LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS
+    RTL
 
 ; ---------------------
 ; Toggle Category menu
@@ -1573,8 +1752,8 @@ MiscMenu:
     dw #misc_flashsuit
     dw #misc_hyperbeam
     dw #$FFFF
-    dw #misc_invincibility
     dw #misc_gooslowdown
+    dw #misc_healthbomb
     dw #$FFFF
     dw #misc_magicpants
     dw #misc_spacepants
@@ -1633,6 +1812,9 @@ misc_hyperbeam:
 misc_gooslowdown:
     %cm_numfield("Goo Slowdown", $7E0A66, 0, 4, 1, 1, #0)
 
+misc_healthbomb:
+    %cm_toggle("Health Bomb Flag", !SAMUS_HEALTH_WARNING, #$0001, #0)
+
 misc_magicpants:
     dw !ACTION_CHOICE
     dl #!ram_magic_pants_enabled
@@ -1686,9 +1868,6 @@ misc_metronome_sfx:
     db #$28, " POWER BEAM", #$FF
     db #$28, "     SPAZER", #$FF
     db #$FF
-
-misc_invincibility:
-    %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
 
 misc_killenemies:
     %cm_jsl("Kill Enemies", .kill_loop, #0)
@@ -1969,18 +2148,15 @@ InfoHudMenu:
     dw #ih_goto_room_strat
     dw #ih_room_strat
     dw #$FFFF
+    dw #ih_goto_timers
+    dw #$FFFF
     dw #ih_top_HUD_mode
-    dw #$FFFF
-    dw #ih_room_counter
-    dw #ih_lag_counter
-    dw #$FFFF
-    dw #ih_reset_seg_later
+    dw #ih_dynamic_frames_held
     dw #ih_status_icons
 if !PRESERVE_WRAM_DURING_SPACETIME
     dw #ih_spacetime_infohud
 endif
     dw #ih_lag
-    dw #ih_auto_update_timers
     dw #$FFFF
     dw #ih_ram_watch
     dw #$0000
@@ -2086,8 +2262,6 @@ ihmode_gateglitch:
 ihmode_ramwatch:
     %cm_jsl("RAM Watch", #action_select_infohud_mode, #$0015)
 
-
-
 action_select_infohud_mode:
 {
     TYA : STA !sram_display_mode
@@ -2140,6 +2314,7 @@ RoomStratMenu:
     dw ihstrat_downbackzeb
     dw ihstrat_draygonai
     dw ihstrat_ridleyai
+    dw ihstrat_twocries
     dw #$0000
     %cm_header("INFOHUD ROOM STRAT")
     %cm_footer("ROOM STRAT MUST BE ACTIVE")
@@ -2179,10 +2354,13 @@ ihstrat_downbackzeb:
     %cm_jsl("Downback Zeb Skip", #action_select_room_strat, #$000A)
 
 ihstrat_draygonai:
-    %cm_jsl("Draygon's AI Tracker", #action_select_room_strat, #$000B)
+    %cm_jsl("Draygon AI Tracker", #action_select_room_strat, #$000B)
 
 ihstrat_ridleyai:
     %cm_jsl("Ridley AI", #action_select_room_strat, #$000C)
+
+ihstrat_twocries:
+    %cm_jsl("Two Cries Standup", #action_select_room_strat, #$000D)
 
 action_select_room_strat:
 {
@@ -2210,10 +2388,59 @@ ih_room_strat:
     db #$28, "  DBACK ZEB", #$FF
     db #$28, " DRAYGON AI", #$FF
     db #$28, "  RIDLEY AI", #$FF
+    db #$28, "  TWO CRIES", #$FF
     db #$FF
     .routine
         LDA #$0001 : STA !sram_display_mode
         RTL
+
+ih_goto_timers:
+    %cm_submenu("Timer Settings", #IHTimerMenu)
+
+IHTimerMenu:
+    dw #ih_room_counter
+    dw #ih_fanfare_timer_adjust
+    dw #ih_lag_counter
+    dw #ih_auto_update_timers
+    dw #$FFFF
+    dw #ih_reset_seg_after_door
+    dw #ih_reset_seg_item_touch
+    dw #$0000
+    %cm_header("TIMER SETTINGS")
+
+ih_room_counter:
+    dw !ACTION_CHOICE
+    dl #!sram_frame_counter_mode
+    dw #$0000
+    db #$28, "Frame Counters", #$FF
+    db #$28, "   REALTIME", #$FF
+    db #$28, "     INGAME", #$FF
+    db #$FF
+
+ih_fanfare_timer_adjust:
+    %cm_toggle("Adjust Fanfare Timers", !sram_fanfare_timer_adjust, #$0001, #0)
+
+ih_lag_counter:
+    dw !ACTION_CHOICE
+    dl #!sram_lag_counter_mode
+    dw #$0000
+    db #$28, "Transition Lag", #$FF
+    db #$28, "       DOOR", #$FF
+    db #$28, "       FULL", #$FF
+    db #$FF
+
+ih_auto_update_timers:
+    %cm_toggle_inverted("Auto-Update Timers", !ram_timers_autoupdate, #$0001, #0)
+
+ih_reset_seg_after_door:
+    %cm_jsl("Reset Segment in Next Room", #.routine, #$0001)
+  .routine
+    TYA : STA !ram_reset_segment_later
+    %sfxconfirm()
+    RTL
+
+ih_reset_seg_item_touch:
+    %cm_jsl("Reset Segment on Item Touch", #ih_reset_seg_after_door_routine, #$8000)
 
 ih_top_HUD_mode:
     dw !ACTION_CHOICE
@@ -2225,30 +2452,68 @@ ih_top_HUD_mode:
     db #$28, "y   VANILLA", #$FF
     db #$FF
 
-ih_room_counter:
-    dw !ACTION_CHOICE
-    dl #!sram_frame_counter_mode
+ih_dynamic_frames_held:
+    dw !ACTION_DYNAMIC
+    dl #!sram_top_display_mode
+    dw #ih_goto_frames_held
+    dw #ih_goto_frames_held
     dw #$0000
-    db #$28, "Frame Counters", #$FF
-    db #$28, "   REALTIME", #$FF
-    db #$28, "     INGAME", #$FF
-    db #$FF
-
-ih_lag_counter:
-    dw !ACTION_CHOICE
-    dl #!sram_lag_counter_mode
     dw #$0000
-    db #$28, "Transition Lag", #$FF
-    db #$28, "       DOOR", #$FF
-    db #$28, "       FULL", #$FF
-    db #$FF
 
-ih_reset_seg_later:
-    %cm_jsl("Reset Segment Next Room", #.routine, #$FFFF)
-  .routine
-    TYA : STA !ram_reset_segment_later
-    %sfxconfirm()
-    RTL
+ih_goto_frames_held:
+    %cm_submenu("Frames Held Mode", #IHFramesHeldMenu)
+
+IHFramesHeldMenu:
+    dw #ih_frames_held_a
+    dw #ih_frames_held_b
+    dw #ih_frames_held_x
+    dw #ih_frames_held_y
+    dw #ih_frames_held_l
+    dw #ih_frames_held_r
+    dw #ih_frames_held_select
+    dw #ih_frames_held_start
+    dw #ih_frames_held_left
+    dw #ih_frames_held_right
+    dw #ih_frames_held_up
+    dw #ih_frames_held_down
+    dw #$0000
+    %cm_header("FRAMES HELD MODE")
+
+ih_frames_held_a:
+    %cm_toggle_bit("A", !ram_frames_held, !CTRL_A, #0)
+
+ih_frames_held_b:
+    %cm_toggle_bit("B", !ram_frames_held, !CTRL_B, #0)
+
+ih_frames_held_x:
+    %cm_toggle_bit("X", !ram_frames_held, !CTRL_X, #0)
+
+ih_frames_held_y:
+    %cm_toggle_bit("Y", !ram_frames_held, !CTRL_Y, #0)
+
+ih_frames_held_l:
+    %cm_toggle_bit("L", !ram_frames_held, !CTRL_L, #0)
+
+ih_frames_held_r:
+    %cm_toggle_bit("R", !ram_frames_held, !CTRL_R, #0)
+
+ih_frames_held_select:
+    %cm_toggle_bit("Select", !ram_frames_held, !CTRL_SELECT, #0)
+
+ih_frames_held_start:
+    %cm_toggle_bit("Start", !ram_frames_held, !IH_INPUT_START, #0)
+
+ih_frames_held_left:
+    %cm_toggle_bit("Left", !ram_frames_held, !IH_INPUT_LEFT, #0)
+
+ih_frames_held_right:
+    %cm_toggle_bit("Right", !ram_frames_held, !IH_INPUT_RIGHT, #0)
+
+ih_frames_held_up:
+    %cm_toggle_bit("Up", !ram_frames_held, !IH_INPUT_UP, #0)
+
+ih_frames_held_down:
+    %cm_toggle_bit("Down", !ram_frames_held, !IH_INPUT_DOWN, #0)
 
 ih_status_icons:
     %cm_toggle("Status Icons", !sram_status_icons, #1, #.routine)
@@ -2270,9 +2535,6 @@ ih_lag:
 
 ih_ram_watch:
     %cm_jsl("Customize RAM Watch", #ih_prepare_ram_watch_menu, #RAMWatchMenu)
-
-ih_auto_update_timers:
-    %cm_toggle_inverted("Auto-Update Timers", !ram_timers_autoupdate, #$0001, #0)
 
 incsrc ramwatchmenu.asm
 
@@ -2300,12 +2562,7 @@ GameMenu:
     dw #game_music_toggle
     dw #game_healthalarm
     dw #$FFFF
-    dw #game_debugmode
-    dw #game_debugbrightness
-    dw #game_pacifist
-    dw #game_debugplms
-    dw #game_debugprojectiles
-    dw #game_debugfixscrolloffsets
+    dw #game_goto_debug
     dw #$FFFF
     dw #game_minimap
     dw #game_clear_minimap
@@ -2363,25 +2620,6 @@ game_healthalarm:
     db #$28, "m    PB FIX", #$FF
     db #$28, "m  IMPROVED", #$FF
     db #$FF
-
-game_debugmode:
-    %cm_toggle("Debug Mode", $7E05D1, #$0001, #0)
-
-game_debugbrightness:
-    %cm_toggle("Debug CPU Brightness", $7E0DF4, #$0001, #0)
-
-game_pacifist:
-    %cm_toggle("Pacifist Mode", !ram_pacifist, #$0001, #0)
-
-game_debugplms:
-    %cm_toggle_bit_inverted("Pseudo G-Mode", $7E1C23, #$8000, #0)
-
-game_debugprojectiles:
-    %cm_toggle_bit("Enable Projectiles", $7E198D, #$8000, #0)
-
-game_debugfixscrolloffsets:
-    %cm_toggle_bit("Fix Scroll Offsets", !ram_fix_scroll_offsets, #$0001, #0)
-
 game_minimap:
     %cm_toggle("Minimap", !ram_minimap, #$0001, #0)
 
@@ -2404,16 +2642,45 @@ game_clear_minimap:
     %sfxreset()
     RTL
 
-GameLoopExtras:
-{
-    LDA !ram_magic_pants_enabled : AND #$000B : BNE .enabled
-    LDA !ram_metronome : BNE .enabled
-    LDA #$0000 : STA !ram_game_loop_extras
-    RTS
-  .enabled
-    LDA #$0001 : STA !ram_game_loop_extras
-    RTL
-}
+game_goto_debug:
+    %cm_submenu("Debug Settings", #DebugMenu)
+
+
+; ----------
+; Debug Menu
+; ----------
+
+DebugMenu:
+    dw #game_debugmode
+    dw #game_debugbrightness
+    dw #game_invincibility
+    dw #game_pacifist
+    dw #game_debugplms
+    dw #game_debugprojectiles
+    dw #game_debugfixscrolloffsets
+    dw #$0000
+    %cm_header("DEBUG SETTINGS")
+
+game_debugmode:
+    %cm_toggle("Debug Mode", $7E05D1, #$0001, #0)
+
+game_debugbrightness:
+    %cm_toggle("Debug CPU Brightness", $7E0DF4, #$0001, #0)
+
+game_invincibility:
+    %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
+
+game_pacifist:
+    %cm_toggle("Pacifist Mode", !ram_pacifist, #$0001, #0)
+
+game_debugplms:
+    %cm_toggle_bit_inverted("Pseudo G-Mode", $7E1C23, #$8000, #0)
+
+game_debugprojectiles:
+    %cm_toggle_bit("Enable Projectiles", $7E198D, #$8000, #0)
+
+game_debugfixscrolloffsets:
+    %cm_toggle_bit("Fix Scroll Offsets", !ram_fix_scroll_offsets, #$0001, #0)
 
 
 ; ---------------
@@ -2428,6 +2695,7 @@ CutscenesMenu:
     dw #cutscenes_skip_game_over
     dw #$FFFF
     dw #cutscenes_fast_kraid
+    dw #cutscenes_kraid_camera
     dw #cutscenes_fast_phantoon
     dw #cutscenes_fast_bowling
     dw #cutscenes_fast_mb
@@ -2454,6 +2722,9 @@ cutscenes_fast_kraid:
 
 cutscenes_fast_phantoon:
     %cm_toggle_bit("Skip Phantoon Intro", !sram_cutscenes, !CUTSCENE_FAST_PHANTOON, #0)
+
+cutscenes_kraid_camera:
+    %cm_toggle_bit("Unlock Kraid Death Cam", !sram_cutscenes, !CUTSCENE_KRAID_DEATH_CAMERA, #0)
 
 cutscenes_fast_bowling:
     %cm_toggle_bit("Fast Bowling", !sram_cutscenes, !CUTSCENE_FAST_BOWLING, #0)
