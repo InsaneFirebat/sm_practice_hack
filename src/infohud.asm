@@ -130,7 +130,12 @@ ih_get_item_code:
     LDA $12 : PHA
     LDA $14 : PHA
 
-    ; Update HUD
+    ; check if segment timer should be reset
+    LDA !ram_reset_segment_later : BPL .update_HUD
+    LDA #$0000 : STA !ram_reset_segment_later : STA !ram_lag_counter
+    STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds : STA !ram_seg_rt_minutes
+
+  .update_HUD
     JSL ih_update_hud_code
 
     ; restore temp variables
@@ -250,8 +255,7 @@ ih_gamemode_frame:
 
 ih_after_room_transition:
 {
-    PHX : PHY
-
+    ; update last door times
     LDA !ram_transition_counter : STA !ram_last_door_lag_frames
     LDA !ram_realtime_room : STA !ram_last_realtime_door
 
@@ -266,7 +270,7 @@ ih_after_room_transition:
     LDA #$0000 : STA !sram_display_mode
 
   .segmentTimer
-    LDA !ram_reset_segment_later : BEQ .updateHud
+    LDA !ram_reset_segment_later : AND #$0001 : BEQ .updateHud
     LDA #$0000 : STA !ram_reset_segment_later
     STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds
     STA !ram_seg_rt_minutes
@@ -274,13 +278,8 @@ ih_after_room_transition:
   .updateHud
     JSL ih_update_hud_code
 
-    ; Reset gametime/transition timer
-    LDA #$0000 : STA !ram_transition_counter
-
-    ; Reset realtime timer
-    LDA #$0000 : STA !ram_realtime_room
-
-    PLY : PLX
+    ; Reset realtime and gametime/transition timers
+    LDA #$0000 : STA !ram_realtime_room : STA !ram_transition_counter
 
     ; original hijacked code
     LDA #$0008 : STA !GAMEMODE
@@ -289,25 +288,26 @@ ih_after_room_transition:
 
 ih_before_room_transition:
 {
-    PHA : PHX : PHY
+    STA !GAMEMODE ; overwritten code
 
-    ; Save and reset timers
-    LDA !ram_transition_flag : CMP #$0001 : BEQ .done
-    LDA #$0001 : STA !ram_transition_flag
-    LDA #$0000 : STA !ram_room_has_set_rng
+    ; Check if we've already run on this frame
+    LDA !ram_transition_flag : BEQ .first_run
+    CLC ; overwritten code
+    RTL
 
+  .first_run
     ; Lag
     LDA !ram_realtime_room : SEC : SBC !ram_transition_counter : STA !ram_last_room_lag
-    LDA #$0000 : STA !ram_transition_counter
 
-    ; Gametime
+    ; Room timers
     LDA !ram_gametime_room : STA !ram_last_gametime_room
-    LDA #$0000 : STA !ram_gametime_room
-
-    ; Realtime
     LDA !ram_realtime_room : STA !ram_last_realtime_room
-    LDA #$0000 : STA !ram_realtime_room
-    LDA #$0000 : STA !ram_last_realtime_door
+
+    ; Reset variables
+    LDA #$0000 : STA !ram_room_has_set_rng
+    STA !ram_transition_counter : STA !ram_gametime_room
+    STA !ram_realtime_room : STA !ram_last_realtime_door
+    LDA #$0001 : STA !ram_transition_flag
 
     ; Save temp variables
     LDA $12 : PHA
@@ -320,11 +320,27 @@ ih_before_room_transition:
     PLA : STA $14
     PLA : STA $12
 
+    ; Calculate door alignment time
+    LDX !DOOR_ID
+    AND #$00FF : %a8() ; Draw3 returns a16
+    LDA $830003,X : BIT #$02 : BNE .verticalDoor
+    LDA !LAYER1_Y : BRA .checkAlignment
+  .verticalDoor
+    LDA !LAYER1_X
+  .checkAlignment
+    BPL .drawDoorLag
+    EOR #$FF : INC
+  .drawDoorLag
+    PHB : PHD : PLB : PLB : PHA
+    LDX #$00C2
+    LDA !ram_minimap : BEQ .draw3
+    LDX #$0054
+  .draw3
+    PLA : JSR Draw3
+    PLB
+
   .done
-    ; Run standard code and return
-    PLY : PLX : PLA
-    STA !GAMEMODE
-    CLC
+    CLC ; overwritten code
     RTL
 }
 
@@ -701,8 +717,8 @@ ih_hud_vanilla_health:
     LDA.w NumberGFXTable : STA !HUD_TILEMAP+$94
 
   .subtankWhitespace
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$92 : STA !HUD_TILEMAP+$98 : STA !HUD_TILEMAP+$9A
-    STA !HUD_TILEMAP+$08 : STA !HUD_TILEMAP+$48 : STA !HUD_TILEMAP+$88
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$92 : STA !HUD_TILEMAP+$98
+    STA !HUD_TILEMAP+$9A : STA !HUD_TILEMAP+$08 : STA !HUD_TILEMAP+$48
 
     LDA !SAMUS_RESERVE_MODE : CMP #$0001 : BNE .noReserves
 
@@ -730,13 +746,17 @@ ih_hud_code:
 
     ; -- input display --
     ; -- check if we want to update --
+    LDA !ram_frames_held : BNE .frames_help_update
     LDA !IH_CONTROLLER_PRI : CMP !ram_ih_controller : BNE .controller_update
     BRL .status_display
 
+  .frames_help_update
+    BRL .framesHeld
+
   .controller_update
     ; -- read input
-    TAY : LDX #$0000
-  .controller_row_1_loop
+    TAY : LDX #$000C
+  .controller_row_loop
     TYA : AND ControllerTable1,X
     BEQ .controller_row_1_blank
     LDA ControllerGfx1,X
@@ -744,11 +764,7 @@ ih_hud_code:
   .controller_row_1_blank
     LDA !IH_BLANK
   .controller_row_1_draw
-    STA !HUD_TILEMAP+$08,X
-    INX : INX : CPX #$000C : BNE .controller_row_1_loop
-
-    LDX #$0000
-  .controller_row_2_loop
+    STA !HUD_TILEMAP+$06,X
     TYA : AND ControllerTable2,X
     BEQ .controller_row_2_blank
     LDA ControllerGfx2,X
@@ -756,8 +772,8 @@ ih_hud_code:
   .controller_row_2_blank
     LDA !IH_BLANK
   .controller_row_2_draw
-    STA !HUD_TILEMAP+$48,X
-    INX : INX : CPX #$000C : BNE .controller_row_2_loop
+    STA !HUD_TILEMAP+$46,X
+    DEX : DEX : BNE .controller_row_loop
 
     TYA : STA !ram_ih_controller
     BRA .status_display
@@ -882,6 +898,74 @@ ih_hud_code:
 
   .end
     RTL
+
+  .framesHeld
+    LDA !IH_CONTROLLER_PRI_NEW : TAY : LDX #$000C
+  .clearCountersLoop
+    TYA : AND ControllerTable1,X : BEQ .clearCountersRow2
+    PHX : LDA FramesHeldTable1,X : TAX
+    LDA #$0000 : STA !WRAM_MENU_START,X : PLX
+  .clearCountersRow2
+    TYA : AND ControllerTable2,X : BEQ .clearCountersNext
+    PHX : LDA FramesHeldTable2,X : TAX
+    LDA #$0000 : STA !WRAM_MENU_START,X : PLX
+  .clearCountersNext
+    DEX : DEX : BNE .clearCountersLoop
+
+    LDA !IH_CONTROLLER_PRI : TAY : LDX #$000C
+  .drawFramesHeldLoop
+    LDA !ram_frames_held : AND ControllerTable1,X : BNE .useFramesHeldRow1
+    TYA : AND ControllerTable1,X : BEQ .blankFramesHeldRow1
+  .nonBlankFramesHeldRow1
+    LDA ControllerGfx1,X
+    BRA .drawFramesHeldRow1
+  .blankFramesHeldRow1
+    LDA !IH_BLANK
+  .drawFramesHeldRow1
+    STA !HUD_TILEMAP+$06,X
+    LDA !ram_frames_held : AND ControllerTable2,X : BNE .useFramesHeldRow2
+    TYA : AND ControllerTable2,X : BEQ .blankFramesHeldRow2
+  .nonBlankFramesHeldRow2
+    LDA ControllerGfx2,X
+    BRA .drawFramesHeldRow2
+  .blankFramesHeldRow2
+    LDA !IH_BLANK
+  .drawFramesHeldRow2
+    STA !HUD_TILEMAP+$46,X
+    DEX : DEX : BNE .drawFramesHeldLoop
+    BRL .status_display
+
+  .useFramesHeldRow1
+    PHX : TYA : AND ControllerTable1,X : BNE .incFramesHeldRow1
+    LDA FramesHeldTable1,X : TAX
+    LDA !WRAM_MENU_START,X : BEQ .plxBlankFramesHeldRow1
+    CMP #$0042 : BCC .loadFramesHeldRow1
+  .plxBlankFramesHeldRow1
+    PLX : BRA .blankFramesHeldRow1
+  .incFramesHeldRow1
+    LDA FramesHeldTable1,X : TAX
+    LDA !WRAM_MENU_START,X : INC : STA !WRAM_MENU_START,X
+    CMP #$0042 : BCC .loadFramesHeldRow1
+    PLX : BRA .nonBlankFramesHeldRow1
+  .loadFramesHeldRow1
+    ASL : TAX : LDA NumberGFXTable,X : PLX
+    BRA .drawFramesHeldRow1
+
+  .useFramesHeldRow2
+    PHX : TYA : AND ControllerTable2,X : BNE .incFramesHeldRow2
+    LDA FramesHeldTable2,X : TAX
+    LDA !WRAM_MENU_START,X : BEQ .plxBlankFramesHeldRow2
+    CMP #$0042 : BCC .loadFramesHeldRow2
+  .plxBlankFramesHeldRow2
+    PLX : BRA .blankFramesHeldRow2
+  .incFramesHeldRow2
+    LDA FramesHeldTable2,X : TAX
+    LDA !WRAM_MENU_START,X : INC : STA !WRAM_MENU_START,X
+    CMP #$0042 : BCC .loadFramesHeldRow2
+    PLX : BRA .nonBlankFramesHeldRow2
+  .loadFramesHeldRow2
+    ASL : TAX : LDA NumberGFXTable,X : PLX
+    BRA .drawFramesHeldRow2
 }
 
 incsrc infohudmodes.asm
@@ -1166,6 +1250,7 @@ CalcBeams:
 
 ih_game_loop_code:
 {
+    ; inc transition timer
     LDA !ram_transition_counter : INC : STA !ram_transition_counter
 
     LDA !ram_game_loop_extras : BNE .extrafeatures
@@ -1204,6 +1289,8 @@ ih_game_loop_code:
     CMP !IH_RESET : BEQ .reset_slowdown
     CMP !IH_STATUS_R : BEQ .inc_statusdisplay
     CMP !IH_STATUS_L : BEQ .dec_statusdisplay
+
+    JML $808111 ; overwritten code
 
   .toggle_pause
     TDC : STA !ram_slowdown_frames
@@ -1498,15 +1585,19 @@ HexGFXTable:
     dw #$0C64, #$0C65, #$0C58, #$0C59, #$0C5A, #$0C5B
 
 ControllerTable1:
-    dw #$0020, #$0800, #$0010, #$4000, #$0040, #$2000
+    dw #$0000, #$0020, #$0800, #$0010, #$4000, #$0040, #$2000
 ControllerTable2:
-    dw #$0200, #$0400, #$0100, #$8000, #$0080, #$1000
+    dw #$0000, #$0200, #$0400, #$0100, #$8000, #$0080, #$1000
 ControllerGfx1:
-      ;  L       ^       R       Y       X       Sl
-    dw #$0C68, #$0C61, #$0C69, #$0C67, #$0C66, #$0C6A
+      ;          L       ^       R       Y       X       Sl
+    dw #$0000, #$0C68, #$0C61, #$0C69, #$0C67, #$0C66, #$0C6A
 ControllerGfx2:
-      ;  <       v       >       B       A       St
-    dw #$0C60, #$0C63, #$0C62, #$0C65, #$0C64, #$0C6B
+      ;          <       v       >       B       A       St
+    dw #$0000, #$0C60, #$0C63, #$0C62, #$0C65, #$0C64, #$0C6B
+FramesHeldTable1:
+    dw #$0000, #$00BA, #$00C6, #$00B8, #$00CC, #$00BC, #$00CA
+FramesHeldTable2:
+    dw #$0000, #$00C2, #$00C4, #$00C0, #$00CE, #$00BE, #$00C8
 
 HexToNumberGFX1:
     dw #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09, #$0C09
