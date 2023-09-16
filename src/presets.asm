@@ -44,6 +44,7 @@ endif
     LDA #$0001
     STA $0723    ; Screen fade delay = 1
     STA $0725    ; Screen fade counter = 1
+    STZ $0727    ; Clear pause menu index
 
     JSL $80834B  ; Enable NMI with $84 options
     JSL $868000  ; Enable enemy projectiles
