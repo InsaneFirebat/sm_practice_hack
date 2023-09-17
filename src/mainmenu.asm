@@ -99,7 +99,7 @@ if !FEATURE_CUSTOMIZE_MENU
     dw #mm_goto_customize
 endif
     dw #$0000
-    %cm_version_header("SM PRACTICE HACK", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
+    %cm_version_header("UNHUNDRED INFOHUD", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
 
 MainMenuBanks:
     dw #EquipmentMenu>>16

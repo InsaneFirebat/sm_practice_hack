@@ -23,31 +23,31 @@ endif
 ;  (skip to Ceres)     LDA #$C100 (skip to Ceres)
 ;  (skip to Zebes)     LDA #$CDAF (skip to Zebes)
 ;                      LDA #Intro_Skip_to_Zebes
-org $82EEDF
-    LDA #$C100
+;org $82EEDF
+;    LDA #$C100
 
-org !ORG_MISC_BANK8B
-print pc, " misc bank8B start"
-
-Intro_Skip_to_Zebes:
-{
-    %a8()
-    LDA #$80 : STA $51
-    %a16()
-    LDX #$0290
-  .loop
-    STZ $198D,X
-    DEX #2 : BPL .loop
-
-    ; mark Ceres completed
-    LDA #$0022 : STA $7ED914
-    ; load game next frame
-    LDA #$0006 : STA !GAMEMODE
-    ; Screen fade delay/counter = 0
-    STZ $0723 : STZ $0725
-    LDA !SAMUS_HP_MAX : STA !SAMUS_HP
-    RTS
-}
+;org !ORG_MISC_BANK8B
+;print pc, " misc bank8B start"
+;
+;Intro_Skip_to_Zebes:
+;{
+;    %a8()
+;    LDA #$80 : STA $51
+;    %a16()
+;    LDX #$0290
+;  .loop
+;    STZ $198D,X
+;    DEX #2 : BPL .loop
+;
+;    ; mark Ceres completed
+;    LDA #$0022 : STA $7ED914
+;    ; load game next frame
+;    LDA #$0006 : STA !GAMEMODE
+;    ; Screen fade delay/counter = 0
+;    STZ $0723 : STZ $0725
+;    LDA !SAMUS_HP_MAX : STA !SAMUS_HP
+;    RTS
+;}
 print pc, " misc bank8B end"
 
 
