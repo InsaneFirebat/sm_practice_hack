@@ -335,15 +335,15 @@ CrashDump:
     LDX #$0686 : JSR crash_draw_text
 
     ; -- Draw register labels --
-    LDA #$2800 : STA !ram_tilemap_buffer+$10A  ; A
-    LDA #$2817 : STA !ram_tilemap_buffer+$114  ; X
-    LDA #$2818 : STA !ram_tilemap_buffer+$11E  ; Y
-    LDA #$2803 : STA !ram_tilemap_buffer+$126  ; D
-    LDA #$2801 : STA !ram_tilemap_buffer+$128  ; B
-    LDA #$284F : STA !ram_tilemap_buffer+$12A  ; +
-    LDA #$280F : STA !ram_tilemap_buffer+$12C  ; P
-    LDA #$2812 : STA !ram_tilemap_buffer+$132  ; S
-    LDA #$280F : STA !ram_tilemap_buffer+$134  ; P
+    LDA #$2800|'A' : STA !ram_tilemap_buffer+$10A
+    LDA #$2800|'X' : STA !ram_tilemap_buffer+$114
+    LDA #$2800|'Y' : STA !ram_tilemap_buffer+$11E
+    LDA #$2800|'D' : STA !ram_tilemap_buffer+$126
+    LDA #$2800|'B' : STA !ram_tilemap_buffer+$128
+    LDA #$2800|'+' : STA !ram_tilemap_buffer+$12A
+    LDA #$2800|'P' : STA !ram_tilemap_buffer+$12C
+    LDA #$2800|'S' : STA !ram_tilemap_buffer+$132
+    LDA #$2800|'P' : STA !ram_tilemap_buffer+$134
 
     ; -- Draw stack label --
     LDA.l #CrashTextStack1 : STA !ram_crash_text
@@ -387,8 +387,7 @@ CrashDump:
     LDA !ram_crash_dbp : XBA : STA !ram_crash_draw_value
     LDX #$0166 : JSR crash_draw2  ; DB
     LDA #$288E  ; draw XX instead of P
-    STA !ram_tilemap_buffer+$16A
-    STA !ram_tilemap_buffer+$16C
+    STA !ram_tilemap_buffer+$16A : STA !ram_tilemap_buffer+$16C
 
 +   LDA !ram_crash_sp : STA !ram_crash_draw_value
     LDX #$0170 : JSR crash_draw4  ; SP
@@ -442,34 +441,29 @@ CrashDump:
 
   .corruptBRKCOP
     LDA #$288E  ; draw X's instead
-    STA !ram_tilemap_buffer+$2D8
-    STA !ram_tilemap_buffer+$2DA
-    STA !ram_tilemap_buffer+$2E0
-    STA !ram_tilemap_buffer+$2E2
-    STA !ram_tilemap_buffer+$2E8
-    STA !ram_tilemap_buffer+$2EA
-    STA !ram_tilemap_buffer+$2EC
-    STA !ram_tilemap_buffer+$2EE
-    STA !ram_tilemap_buffer+$2F0
-    STA !ram_tilemap_buffer+$2F2
+    STA !ram_tilemap_buffer+$2D8 : STA !ram_tilemap_buffer+$2DA
+    STA !ram_tilemap_buffer+$2E0 : STA !ram_tilemap_buffer+$2E2
+    STA !ram_tilemap_buffer+$2E8 : STA !ram_tilemap_buffer+$2EA
+    STA !ram_tilemap_buffer+$2EC : STA !ram_tilemap_buffer+$2EE
+    STA !ram_tilemap_buffer+$2F0 : STA !ram_tilemap_buffer+$2F2
 
   .drawBRKCOPText
     LDA !ram_crash_type : AND #$000F : CMP #$0002 : BEQ .COPcrash
-    LDA #$2C01 : STA !ram_tilemap_buffer+$2CC ; B
-    LDA #$2C11 : STA !ram_tilemap_buffer+$2CE ; R
-    LDA #$2C0A : STA !ram_tilemap_buffer+$2D0 ; K
-    LDA #$2C44 : STA !ram_tilemap_buffer+$2D4 ; #
-    LDA #$2C4E : STA !ram_tilemap_buffer+$2D6 ; $
-    STA !ram_tilemap_buffer+$2E6 ; $
+    LDA #$2C00|'B' : STA !ram_tilemap_buffer+$2CC
+    LDA #$2C11|'R' : STA !ram_tilemap_buffer+$2CE
+    LDA #$2C0A|'K' : STA !ram_tilemap_buffer+$2D0
+    LDA #$2C44|'#' : STA !ram_tilemap_buffer+$2D4
+    LDA #$2C4E|'$' : STA !ram_tilemap_buffer+$2D6
+    STA !ram_tilemap_buffer+$2E6
     BRA .drawStack
 
   .COPcrash
-    LDA #$2C02 : STA !ram_tilemap_buffer+$2CC ; C
-    LDA #$2C7D : STA !ram_tilemap_buffer+$2CE ; O
-    LDA #$2C0F : STA !ram_tilemap_buffer+$2D0 ; P
-    LDA #$2C44 : STA !ram_tilemap_buffer+$2D4 ; #
-    LDA #$2C4E : STA !ram_tilemap_buffer+$2D6 ; $
-    STA !ram_tilemap_buffer+$2E6 ; $
+    LDA #$2C02|'C' : STA !ram_tilemap_buffer+$2CC
+    LDA #$2C7D|'O' : STA !ram_tilemap_buffer+$2CE
+    LDA #$2C0F|'P' : STA !ram_tilemap_buffer+$2D0
+    LDA #$2C44|'#' : STA !ram_tilemap_buffer+$2D4
+    LDA #$2C4E|'$' : STA !ram_tilemap_buffer+$2D6
+    STA !ram_tilemap_buffer+$2E6
 
   .drawStack
     ; -- Draw Stack Values --
