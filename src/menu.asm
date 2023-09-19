@@ -628,15 +628,15 @@ draw_toggle:
     LDA [!DP_Address] : CMP !DP_ToggleValue : BEQ .checked
 
     ; Off
-    LDA #$244B : STA !ram_tilemap_buffer+0,X
-    LDA #$244D : STA !ram_tilemap_buffer+2,X
-    LDA #$244D : STA !ram_tilemap_buffer+4,X
+    LDA #$2400|'O' : STA !ram_tilemap_buffer+2,X
+    LDA #$2400|'F' : STA !ram_tilemap_buffer+4,X
+    LDA #$2400|'F' : STA !ram_tilemap_buffer+6,X
     RTS
 
   .checked
     ; On
-    LDA #$384B : STA !ram_tilemap_buffer+2,X
-    LDA #$384C : STA !ram_tilemap_buffer+4,X
+    LDA #$3800|'O' : STA !ram_tilemap_buffer+4,X
+    LDA #$3800|'N' : STA !ram_tilemap_buffer+6,X
     RTS
 }
 
@@ -663,15 +663,15 @@ draw_toggle_bit:
     LDA [!DP_Address] : AND !DP_ToggleValue : BNE .checked
 
     ; Off
-    LDA #$244B : STA !ram_tilemap_buffer+0,X
-    LDA #$244D : STA !ram_tilemap_buffer+2,X
-    LDA #$244D : STA !ram_tilemap_buffer+4,X
+    LDA #$2400|'O' : STA !ram_tilemap_buffer+2,X
+    LDA #$2400|'F' : STA !ram_tilemap_buffer+4,X
+    LDA #$2400|'F' : STA !ram_tilemap_buffer+6,X
     RTS
 
   .checked
     ; On
-    LDA #$384B : STA !ram_tilemap_buffer+2,X
-    LDA #$384C : STA !ram_tilemap_buffer+4,X
+    LDA #$3800|'O' : STA !ram_tilemap_buffer+4,X
+    LDA #$3800|'N' : STA !ram_tilemap_buffer+6,X
     RTS
 }
 
@@ -698,15 +698,15 @@ draw_toggle_inverted:
     LDA [!DP_Address] : CMP !DP_ToggleValue : BNE .checked
 
     ; Off
-    LDA #$244B : STA !ram_tilemap_buffer+0,X
-    LDA #$244D : STA !ram_tilemap_buffer+2,X
-    LDA #$244D : STA !ram_tilemap_buffer+4,X
+    LDA #$2400|'O' : STA !ram_tilemap_buffer+2,X
+    LDA #$2400|'F' : STA !ram_tilemap_buffer+4,X
+    LDA #$2400|'F' : STA !ram_tilemap_buffer+6,X
     RTS
 
   .checked
     ; On
-    LDA #$384B : STA !ram_tilemap_buffer+2,X
-    LDA #$384C : STA !ram_tilemap_buffer+4,X
+    LDA #$3800|'O' : STA !ram_tilemap_buffer+4,X
+    LDA #$3800|'N' : STA !ram_tilemap_buffer+6,X
     RTS
 }
 
@@ -733,15 +733,15 @@ draw_toggle_bit_inverted:
     LDA [!DP_Address] : AND !DP_ToggleValue : BEQ .checked
 
     ; Off
-    LDA #$244B : STA !ram_tilemap_buffer+2,X
-    LDA #$244D : STA !ram_tilemap_buffer+4,X
-    LDA #$244D : STA !ram_tilemap_buffer+6,X
+    LDA #$2400|'O' : STA !ram_tilemap_buffer+2,X
+    LDA #$2400|'F' : STA !ram_tilemap_buffer+4,X
+    LDA #$2400|'F' : STA !ram_tilemap_buffer+6,X
     RTS
 
   .checked
     ; On
-    LDA #$384B : STA !ram_tilemap_buffer+4,X
-    LDA #$384C : STA !ram_tilemap_buffer+6,X
+    LDA #$3800|'O' : STA !ram_tilemap_buffer+4,X
+    LDA #$3800|'N' : STA !ram_tilemap_buffer+6,X
     RTS
 }
 
@@ -1298,7 +1298,7 @@ draw_ram_watch:
     JSR cm_draw_text
 
     ; Draw $ signs in the appropriate places
-    LDX #$2C4E
+    LDX #$2C00|'$'
     LDA !ram_watch_write_mode : BNE .both_8bit
     TXA : STA !ram_tilemap_buffer+$5D0 : STA !ram_tilemap_buffer+$5E6
     BRA +
@@ -1566,7 +1566,7 @@ cm_loop:
     JSL wait_for_lag_frame_long  ; Wait for lag frame
     JSL $808F0C ; Music queue
     JSL $8289EF ; Sound fx queue
-    JSL MenuRNG ; Let the RNG flow
+    JSL MenuRNG
 
     LDA !ram_cm_leave : BEQ .checkCtrlMode
     RTS ; Exit menu loop
@@ -1895,7 +1895,7 @@ cm_edit_decimal_digits:
     TXA : CLC : ADC #$002C : TAX
 
     ; is editing thousands digit allowed?
-    LDA #$2C70
+    LDA #$2C00|'0'
     LDY !DP_DigitMaximum : CPY #1000 : BMI +
 
     ; start with zero tiles
