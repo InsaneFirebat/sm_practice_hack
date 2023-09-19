@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.9.3]  Fixed power bomb damage with Damage Counter and Pacifist
 * [2.5.9.2]  Fixed pause menu crash from loading a preset in the title menu
 * [2.5.9.1]  Fixed fanfare time being added to non-item message boxes
 * [2.5.9]    Fix for Two Cries Standup without Springball by idlechild
