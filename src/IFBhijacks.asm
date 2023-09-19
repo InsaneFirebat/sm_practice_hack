@@ -1,3 +1,4 @@
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;; Custom Build Hijacks ;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -30,6 +31,13 @@ else             ; shinespark damage hijack
 org $A0A54C
 endif
     JSR CountDamageShinespark
+
+if !FEATURE_PAL
+org $A0A63B
+else             ; power bomb damage hijack
+org $A0A62B
+endif
+    JSR EnemyDamagePowerBomb
 
 if !FEATURE_EXTRAS
 org $948F49      ; RTS this routine to enable walk through walls
