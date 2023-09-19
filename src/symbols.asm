@@ -15,15 +15,11 @@ incsrc wram_symbols.asm
 ; ---------------
 
 ;!ORG_MENU_GFX = $F0D700 ; unused, $900, can be used to reduce menu code size
-;!ORG_MISC_TILE_GRAPHICS = $8BFA00 ; unused, $140
 ;!ORG_LAYOUT = $8FFF00 ; unused
 ;!ORG_LAYOUT_BANKA1 = $A1EBD1 ; unused
 ;!ORG_LAYOUT_BANKB4 = $B4F4B8 ; unused
 ;!ORG_CUTSCENES = $8BF800 ; unused
 ;!ORG_CUTSCENES_MB = $A9FBC0 ; unused
-;!ORG_ROOMNAMES = $E70000 ; whole bank pointer style
-;!ORG_CUSTOMIZEMENU = $AFEC00
-;!ORG_PALETTEPROFILES = $AEFD20
 
 ; ---------
 ; Work RAM
