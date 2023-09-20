@@ -137,7 +137,7 @@ post_load_state:
     LDA !SRAM_SAVED_FRAME_COUNTER : STA !FRAME_COUNTER
 
   .done
-    JSL init_nonzero_wram
+    JSL init_wram_based_on_sram
 
     ; Freeze inputs if necessary
     LDA !ram_freeze_on_load : BEQ .return
