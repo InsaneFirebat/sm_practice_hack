@@ -3247,7 +3247,6 @@ endif
     BRA .loadPage3
   .adjacentMenu
     JSL cm_previous_menu
-    %setmenubank()
     JSL action_submenu
     RTS
 
