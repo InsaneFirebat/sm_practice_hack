@@ -1594,7 +1594,7 @@ ControllerTable2:
 ControllerGfx1:
       ;          L       ^       R       Y       X       Sl
     dw #$0000, #$3CCB, #$3C71, #$3CD1, #$3CD8, #$3CD7, #$3C74
-ControllerGfx2:lerGfx2:
+ControllerGfx2:
       ;          <       v       >       B       A       St
     dw #$0000, #$3C1B, #$3C73, #$3C72, #$3CC1, #$3CC0, #$3C75
 FramesHeldTable1:

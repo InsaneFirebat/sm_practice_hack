@@ -41,6 +41,7 @@ if !RAW_TILE_GRAPHICS
     incsrc tilegraphics.asm
 endif
 
+incsrc crash.asm
 incsrc symbols.asm
 
 ; Make sure the ROM expands to 4MB

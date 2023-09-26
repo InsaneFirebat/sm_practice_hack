@@ -66,7 +66,8 @@
 ;!ORG_LAYOUT_BANKB4 = $B4F4B8 ; unused
 ;!ORG_CUTSCENES = $8BF800 ; unused
 ;!ORG_CUTSCENES_MB = $A9FEC0 ; unused
-!ORG_CRASH = $80F540 ; $1BC, bank $80
+!ORG_CRASH_BANK80 = $80F480 ; $1BC, bank $80
+!ORG_CRASH_BANKAB = $ABA000 ; $D87
 !ORG_SPRITEPRIO = $81FF60 ; $8D
 !ORG_SPRITEFEAT = $E2D000 ; $ED4
 ;!ORG_ROOMNAMES = $E70000 ; whole bank pointer style
@@ -84,7 +85,7 @@
 
 !WRAM_BANK = !WRAM_START>>16
 !WRAM_SIZE = #$0200
-!WRAM_START = $7FF800
+!WRAM_START = $7EF800
 
 ; These variables are NOT PERSISTENT across savestates --
 ; they're saved and reloaded along with the game state.

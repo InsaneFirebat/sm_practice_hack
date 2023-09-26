@@ -781,7 +781,7 @@ eq_goto_togglebeams:
     %cm_jsl("Toggle Beams", #eq_prepare_beams_menu, #ToggleBeamsMenu)
 
 eq_currentenergy:
-    %cm_numfield_word("Current Energy", !SAMUS_HP, 0, 1499, #0)
+    %cm_numfield_word("Current Energy", !SAMUS_HP, 0, 1499, 1, 20, #0)
 
 eq_setetanks:
     %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 14, 1, 1, .routine)
@@ -801,7 +801,7 @@ eq_setetanks:
     RTL
 
 ;eq_currentreserves:
-;    %cm_numfield_word("Current Reserves", !SAMUS_RESERVE_ENERGY, 0, 700, #0)
+;    %cm_numfield_word("Current Reserves", !SAMUS_RESERVE_ENERGY, 0, 700, 1, 20, #0)
 ;
 ;eq_setreserves:
 ;    %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 7, 1, 1, .routine)
@@ -835,10 +835,10 @@ eq_setetanks:
 ;    RTL
 
 eq_currentmissiles:
-    %cm_numfield_word("Current Ammo", !SAMUS_AMMO, 0, 400, #0)
+    %cm_numfield_word("Current Ammo", !SAMUS_AMMO, 0, 400, 1, 10, #0)
 
 eq_setmissiles:
-    %cm_numfield_word("Max Ammo", !SAMUS_AMMO_MAX, 0, 400, .routine)
+    %cm_numfield_word("Max Ammo", !SAMUS_AMMO_MAX, 0, 400, 1, 10, .routine)
     .routine
         LDA !SAMUS_AMMO_MAX : STA !SAMUS_AMMO
         RTL
@@ -2041,7 +2041,6 @@ InfoHudMenu:
     dw #ih_room_counter
     dw #ih_lag_counter
     dw #$FFFF
-    dw #ih_reset_seg_later
     dw #ih_status_icons
 if !PRESERVE_WRAM_DURING_SPACETIME
     dw #ih_spacetime_infohud

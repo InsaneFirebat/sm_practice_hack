@@ -43,15 +43,15 @@ status_roomstrat:
     RTS
 
   .status_room_table
-    dw status_doorskip
-    dw status_tacotank
+;    dw status_doorskip
+;    dw status_tacotank
     dw status_gateglitch
-    dw status_moatcwj
-    dw status_robotflush
+;    dw status_moatcwj
+;    dw status_robotflush
 ;    dw status_shinetopb
 ;    dw status_elevatorcf
 ;    dw status_botwooncf
-    dw status_snailclip
+;    dw status_snailclip
     dw status_mbhp
     dw status_downbackzeb
     dw status_draygonai
@@ -1329,401 +1329,401 @@ status_ramwatch:
     RTS
 }
 
-status_doorskip:
-{
-    !start_to_jump_delay = $0007
-
-    ; Check if Samus is in starting position
-    LDA !SAMUS_Y : CMP #$04BB : BEQ .startpos
-
-    ; Reset state if Samus is well out of position
-    CMP #$0300 : BMI .clearstate
-    BRL .notinit
-
-    ; Check if we are initial state, which means no vertical speed
-    ; and no animation delay in normal gamestate holding jump and not holding start
-  .startpos
-    LDA !SAMUS_Y_SPEEDCOMBINED : BNE .notinit
-    LDA !SAMUS_CONTROLLER_HANDLER : CMP #$E913 : BNE .notinit
-    LDA !GAMEMODE : CMP #$0008 : BNE .notinit
-    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_JUMP : BEQ .notinit
-    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_START : BNE .notinit
-
-    ; Initial state
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E
-    LDA #$0001 : STA !ram_roomstrat_state
-    RTS
-
-  .clearstate
-    LDA !ram_roomstrat_state : CMP #$0001 : BNE .resetstate : CMP #$0004 : BNE .clear
-    BRL .expandlate
-
-  .clear
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E
-    BRA .resetstate
-
-  .notinit
-    LDA !ram_roomstrat_state : CMP #$0001 : BEQ .checkpause : CMP #$0002 : BEQ .checkjump
-    CMP #$0003 : BEQ .checkfall : CMP #$0004 : BEQ .checkexpand
-
-  .resetstate
-    LDA #$0000 : STA !ram_roomstrat_state : STA !ram_roomstrat_counter
-    RTS
-
-  .checkpause
-    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_START : BEQ .done
-    LDA #$0002 : STA !ram_roomstrat_counter : STA !ram_roomstrat_state
-    RTS
-
-  .checkfall
-    ; Check if we are falling in aim down pose
-    LDA !SAMUS_Y_DIRECTION : CMP #$0002 : BNE .inccounter
-    LDA !SAMUS_POSE : CMP #$0017 : BEQ .readyexpand : CMP #$0018 : BEQ .readyexpand
-
-  .inccounter
-    LDA !ram_roomstrat_counter : INC : STA !ram_roomstrat_counter
-
-  .done
-    RTS
-
-  .checkjump
-    LDA !SAMUS_Y_DIRECTION : CMP #$0001 : BNE .inccounter
-    LDA !ram_roomstrat_counter : CMP #!start_to_jump_delay : BEQ .jumpframeperfect : BMI .jumpearly
-
-    ; Jumped late
-    SEC : SBC #!start_to_jump_delay : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8A
-    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$88
-    BRA .resetstate
-
-  .checkexpand
-    LDA !SAMUS_POSE : CMP #$0017 : BEQ .inccounter : CMP #$0018 : BEQ .inccounter
-    LDA !ram_roomstrat_counter : CMP #$003D : BEQ .expandoneframelate
-    CMP #$003C : BEQ .expandframeperfect : BMI .expandearly
-
-  .expandlate
-    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8C
-    LDA !IH_LETTER_X : STA !HUD_TILEMAP+$8E
-    BRL .resetstate
-
-  .readyexpand
-    LDA #$0004 : STA !ram_roomstrat_state
-    BRA .inccounter
-
-  .jumpearly
-    LDA #!start_to_jump_delay : SEC : SBC !ram_roomstrat_counter
-    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8A
-    LDA !IH_LETTER_E : STA !HUD_TILEMAP+$88
-    BRL .resetstate
-
-  .jumpframeperfect
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A
-    LDA #$0003 : STA !ram_roomstrat_state
-    RTS
-
-  .expandoneframelate
-    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8C
-    LDY #$0002 : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
-    BRL .resetstate
-
-  .expandframeperfect
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E
-    BRL .resetstate
-
-  .expandearly
-    LDA #$003C : SEC : SBC !ram_roomstrat_counter
-    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
-    LDA !IH_LETTER_E : STA !HUD_TILEMAP+$8C
-    BRL .resetstate
-}
-
-status_tacotank:
-{
-    !expected_subspeed = $3C00
-    !first_possible_x = $002D
-
-    ; Suppress Samus HP display
-    LDA !SAMUS_HP : STA !ram_last_hp
-
-    ; Seven states of taco tank
-    LDA !ram_roomstrat_state : CMP #$0007 : BPL .falling : CMP #$0002 : BMI .checkstart
-    BRL .checkotherstates
-
-  .donestart
-    RTS
-
-  .returnstart
-    LDA #$0001 : STA !ram_roomstrat_state
-
-  .checkstart
-    ; Check if Samus is in starting position not facing right with no animation delay and not holding left
-    LDA !SAMUS_X : CMP #$022B : BNE .donestart
-    LDA !SAMUS_X_SUBPX : CMP #$FFFF : BNE .donestart
-    LDA !SAMUS_Y_DIRECTION : CMP #$0000 : BNE .donestart
-    LDA !SAMUS_POSE_DIRECTION : AND #$0004 : CMP #$0004 : BNE .donestart
-    LDA !SAMUS_CONTROLLER_HANDLER : CMP #$E913 : BNE .donestart
-    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_LEFT : BNE .donestart
-
-    ; Ready to start
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E : STA !HUD_TILEMAP+$90
-    STA !HUD_TILEMAP+$92 : STA !HUD_TILEMAP+$94 : STA !HUD_TILEMAP+$96 : STA !HUD_TILEMAP+$98
-    BRL .incstate
-
-  .falling
-    LDA !ram_walljump_counter : INC : STA !ram_walljump_counter
-
-    ; Check if we are still in aim down pose
-    LDA !SAMUS_POSE : CMP #$0018 : BEQ .donestart
-
-    ; If not, assume we expanded our hitbox
-    LDA !ram_walljump_counter : CMP !ram_xpos : BMI .expandearly
-    CMP !ram_ypos : BPL .expandlate
-
-    ; We expanded hitbox on time
-    INC : SEC : SBC !ram_xpos
-    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$98
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$96
-    BRL .returnstart
-
-  .expandearly
-    LDA !ram_xpos : SEC : SBC !ram_walljump_counter
-    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$98
-    LDA !IH_LETTER_E : STA !HUD_TILEMAP+$96
-    BRL .returnstart
-
-  .expandlate
-    INC : SEC : SBC !ram_ypos
-    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$98
-    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$96
-    BRL .returnstart
-
-  .clearreturnstart
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A
-    BRL .returnstart
-
-  .incstate
-    LDA !ram_roomstrat_state : INC : STA !ram_roomstrat_state
-    LDA #$0000 : STA !ram_roomstrat_counter
-    RTS
-
-  .incleft
-    ; Arbitrary wait of 64 frames before giving up
-    LDA !ram_roomstrat_counter : CMP #$0040 : BPL .clearreturnstart
-    INC : STA !ram_roomstrat_counter
-
-  .donerising
-    RTS
-
-  .rising
-    ; If our speed is still good then we haven't broken spin
-    LDA !SAMUS_X_SUBMOMENTUM : CMP #$6000 : BEQ .donerising
-
-    ; We have broken spin, combine starting X position with walljump to see how we did
-    LDA !ram_xpos : CLC : ADC !ram_walljump_counter : STA !ram_xpos
-    BRL .setx
-
-  .initialjump
-    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_JUMP : BEQ .checkleft
-
-    ; If we haven't pressed left yet, move back to previous state
-    LDA !ram_roomstrat_counter : BEQ .clearreturnstart
-
-    ; Print number of frames after holding left that we pressed jump
-    LDA !ram_roomstrat_counter : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8A
-
-  .checkleft
-    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_LEFT : BNE .incleft
-
-    ; Nothing to do if we haven't pressed left yet
-    LDA !ram_roomstrat_counter : BEQ .donerising
-
-    ; Print number of frames we were holding left, if we haven't already
-    ASL : TAY : LDA !HUD_TILEMAP+$88 : CMP !IH_LETTER_Y : BNE .noleftcheckjump
-    LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$88
-
-  .noleftcheckjump
-    ; If we stopped holding left, but we haven't jumped yet,
-    ; then we aren't ready to move to the next state
-    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_JUMP : BNE .incstate
-    BRA .incleft
-
-  .checkotherstates
-    ; Most states require the walljump counter incremented, so just do it for all of them
-    LDA !ram_walljump_counter : INC : STA !ram_walljump_counter
-    LDA !ram_roomstrat_state : CMP #$0002 : BEQ .initialjump : CMP #$0005 : BEQ .rising
-    CMP #$0006 : BEQ .peaking : CMP #$0004 : BEQ .accel
-    BRA .walljump
-
-  .wjfail
-    LDA !IH_LETTER_X : STA !HUD_TILEMAP+$94
-    BRL .returnstart
-
-  .done
-    RTS
-
-  .accel
-    ; We can't evaluate the horizontal movement for a few frames
-    LDA !ram_walljump_counter : AND #$0004 : BEQ .done
-
-    ; Once we can evaluate, make sure it is good
-    LDA !SAMUS_X_SUBRUNSPEED : CMP #!expected_subspeed : BNE .wjfail
-    LDA !ram_xpos : CMP #$0039 : BPL .wjfail
-
-    BRL .incstate
-
-  .peakfail
-    LDA !IH_LETTER_X : STA !HUD_TILEMAP+$96 : STA !HUD_TILEMAP+$98
-    BRL .returnstart
-
-  .checkground
-    LDA !SAMUS_Y : CMP #$02BB : BNE .done
-
-    ; We're back on the ground
-    BRL .returnstart
-
-  .peaking
-    ; If still rising, nothing to do
-    LDA !SAMUS_Y_DIRECTION : CMP #$0001 : BEQ .done
-    
-    ; Fail if not falling with proper speed and pose
-    CMP #$0002 : BNE .peakfail
-    LDA !SAMUS_Y : CMP #$0243 : BPL .peakfail
-    LDA !SAMUS_X_SUBRUNSPEED : CMP #!expected_subspeed : BNE .peakfail
-    LDA !SAMUS_X_SUBMOMENTUM : CMP #$4000 : BNE .peakfail
-    LDA !SAMUS_POSE : CMP #$0018 : BNE .peakfail
-    BRL .incstate
-
-  .wjfar
-    ; We jumped so late we are more than 65 pixels from the wall
-    ; Set ram_xpos to an arbitrarily large value to ensure we'll fail later
-    LDA !IH_LETTER_X : STA !HUD_TILEMAP+$92 : STA !ram_xpos
-    BRA .wjcontinue
-
-  .walljump
-    ; Waiting for the walljump
-    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_JUMP : BEQ .checkground
-
-    ; We jumped, first calculate our distance from the wall
-    LDA #$022B : SEC : SBC !SAMUS_X : CMP #$0042 : BPL .wjfar
-    STA !ram_xpos : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$92
-
-    ; Store this for later, each pixel counts as 8 frames of good horizontal movement
-    TYA : ASL : ASL
-    STA !ram_xpos
-
-  .wjcontinue
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$A4
-    LDA #$0000 : STA !ram_walljump_counter
-
-    ; Now time to evaluate the jump height
-    ; If necessary evaluate down to the subpixel
-    LDA !SAMUS_Y : CMP #$029D : BEQ .bonk : CMP #$029E : BEQ .threey : BPL .maybelow
-
-  .high
-    LDA #$029E : SEC : SBC !SAMUS_Y : CMP #$0042 : BPL .toohigh
-    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
-    BRA .highprint
-
-  .toohigh
-    LDA !IH_LETTER_X : STA !HUD_TILEMAP+$8E
-
-  .highprint
-    LDA !IH_LETTER_H : STA !HUD_TILEMAP+$8C
-    BRL .wjfail
-
-  .bonk
-    LDA !SAMUS_Y_SUBPX : CMP #$F000 : BCS .printtwob : CMP #$B000 : BCS .printoneb
-    BRA .high
-
-  .maybelow
-    CMP #$029F : BEQ .twoy : CMP #$02A0 : BEQ .printoney : CMP #$02A1 : BEQ .oney
-
-  .low
-    LDA !SAMUS_Y : SEC : SBC #$02A0
-    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
-    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8C
-    BRL .wjfail
-
-  .threey
-    LDA !SAMUS_Y_SUBPX : CMP #$9400 : BCS .printtwoy : CMP #$1400 : BCC .printtwob
-    CMP #$1C00 : BCC .printthreeb
-
-    LDA #$0003
-
-  .printy
-    STA !ram_ypos : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8C
-
-    ; Determine last frame where we can gather the tank
-    LDA #!first_possible_x : CLC : ADC !ram_ypos : STA !ram_ypos
-    BRL .incstate
-
-  .twoy
-    LDA !SAMUS_Y_SUBPX : CMP #$E400 : BCS .printoney
-
-  .printtwoy
-    LDA #$0002
-    BRA .printy
-
-  .printtwob
-    LDA #$0002
-    BRA .printb
-
-  .printoneb
-    LDA #$0001
-    BRA .printb
-
-  .oney
-    LDA !SAMUS_Y_SUBPX : CMP #$1800 : BCS .low
-
-  .printoney
-    LDA #$0001
-    BRA .printy
-
-  .printthreeb
-    LDA #$0003
-
-  .printb
-    STA !ram_ypos : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
-    LDA !IH_LETTER_B : STA !HUD_TILEMAP+$8C
-
-    ; Determine last frame where we can gather the tank
-    LDA #!first_possible_x : CLC : ADC !ram_ypos : STA !ram_ypos
-    BRL .incstate
-
-  .setx
-    ; Determine first frame where we can gather the tank
-    LDA !ram_xpos : CMP #$0051 : BPL .threex : CMP #$0046 : BPL .twox : CMP #$003A : BPL .onex
-
-    BRA .predictfail
-
-  .threex
-    LDA #!first_possible_x : STA !ram_xpos
-    BRA .predict
-
-  .twox
-    LDA #(!first_possible_x+1) : STA !ram_xpos
-    BRA .predict
-
-  .onex
-    LDA #(!first_possible_x+2) : STA !ram_xpos
-
-  .predict
-    ; Compare first frame we can get the tank to the last frame
-    CMP !ram_ypos : BMI .predictchance
-
-  .predictfail
-    ; There are no frames where we can gather the tank
-    LDY #$0000 : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$94
-    BRL .returnstart
-
-  .predictchance
-    ; There is at least one frame where we can gather the tank
-    LDA !ram_ypos : SEC : SBC !ram_xpos
-    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$94
-    BRL .incstate
-}
+;status_doorskip:
+;{
+;    !start_to_jump_delay = $0007
+;
+;    ; Check if Samus is in starting position
+;    LDA !SAMUS_Y : CMP #$04BB : BEQ .startpos
+;
+;    ; Reset state if Samus is well out of position
+;    CMP #$0300 : BMI .clearstate
+;    BRL .notinit
+;
+;    ; Check if we are initial state, which means no vertical speed
+;    ; and no animation delay in normal gamestate holding jump and not holding start
+;  .startpos
+;    LDA !SAMUS_Y_SPEEDCOMBINED : BNE .notinit
+;    LDA !SAMUS_CONTROLLER_HANDLER : CMP #$E913 : BNE .notinit
+;    LDA !GAMEMODE : CMP #$0008 : BNE .notinit
+;    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_JUMP : BEQ .notinit
+;    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_START : BNE .notinit
+;
+;    ; Initial state
+;    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E
+;    LDA #$0001 : STA !ram_roomstrat_state
+;    RTS
+;
+;  .clearstate
+;    LDA !ram_roomstrat_state : CMP #$0001 : BNE .resetstate : CMP #$0004 : BNE .clear
+;    BRL .expandlate
+;
+;  .clear
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E
+;    BRA .resetstate
+;
+;  .notinit
+;    LDA !ram_roomstrat_state : CMP #$0001 : BEQ .checkpause : CMP #$0002 : BEQ .checkjump
+;    CMP #$0003 : BEQ .checkfall : CMP #$0004 : BEQ .checkexpand
+;
+;  .resetstate
+;    LDA #$0000 : STA !ram_roomstrat_state : STA !ram_roomstrat_counter
+;    RTS
+;
+;  .checkpause
+;    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_START : BEQ .done
+;    LDA #$0002 : STA !ram_roomstrat_counter : STA !ram_roomstrat_state
+;    RTS
+;
+;  .checkfall
+;    ; Check if we are falling in aim down pose
+;    LDA !SAMUS_Y_DIRECTION : CMP #$0002 : BNE .inccounter
+;    LDA !SAMUS_POSE : CMP #$0017 : BEQ .readyexpand : CMP #$0018 : BEQ .readyexpand
+;
+;  .inccounter
+;    LDA !ram_roomstrat_counter : INC : STA !ram_roomstrat_counter
+;
+;  .done
+;    RTS
+;
+;  .checkjump
+;    LDA !SAMUS_Y_DIRECTION : CMP #$0001 : BNE .inccounter
+;    LDA !ram_roomstrat_counter : CMP #!start_to_jump_delay : BEQ .jumpframeperfect : BMI .jumpearly
+;
+;    ; Jumped late
+;    SEC : SBC #!start_to_jump_delay : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8A
+;    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$88
+;    BRA .resetstate
+;
+;  .checkexpand
+;    LDA !SAMUS_POSE : CMP #$0017 : BEQ .inccounter : CMP #$0018 : BEQ .inccounter
+;    LDA !ram_roomstrat_counter : CMP #$003D : BEQ .expandoneframelate
+;    CMP #$003C : BEQ .expandframeperfect : BMI .expandearly
+;
+;  .expandlate
+;    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8C
+;    LDA !IH_LETTER_X : STA !HUD_TILEMAP+$8E
+;    BRL .resetstate
+;
+;  .readyexpand
+;    LDA #$0004 : STA !ram_roomstrat_state
+;    BRA .inccounter
+;
+;  .jumpearly
+;    LDA #!start_to_jump_delay : SEC : SBC !ram_roomstrat_counter
+;    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8A
+;    LDA !IH_LETTER_E : STA !HUD_TILEMAP+$88
+;    BRL .resetstate
+;
+;  .jumpframeperfect
+;    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A
+;    LDA #$0003 : STA !ram_roomstrat_state
+;    RTS
+;
+;  .expandoneframelate
+;    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8C
+;    LDY #$0002 : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
+;    BRL .resetstate
+;
+;  .expandframeperfect
+;    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E
+;    BRL .resetstate
+;
+;  .expandearly
+;    LDA #$003C : SEC : SBC !ram_roomstrat_counter
+;    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
+;    LDA !IH_LETTER_E : STA !HUD_TILEMAP+$8C
+;    BRL .resetstate
+;}
+;
+;status_tacotank:
+;{
+;    !expected_subspeed = $3C00
+;    !first_possible_x = $002D
+;
+;    ; Suppress Samus HP display
+;    LDA !SAMUS_HP : STA !ram_last_hp
+;
+;    ; Seven states of taco tank
+;    LDA !ram_roomstrat_state : CMP #$0007 : BPL .falling : CMP #$0002 : BMI .checkstart
+;    BRL .checkotherstates
+;
+;  .donestart
+;    RTS
+;
+;  .returnstart
+;    LDA #$0001 : STA !ram_roomstrat_state
+;
+;  .checkstart
+;    ; Check if Samus is in starting position not facing right with no animation delay and not holding left
+;    LDA !SAMUS_X : CMP #$022B : BNE .donestart
+;    LDA !SAMUS_X_SUBPX : CMP #$FFFF : BNE .donestart
+;    LDA !SAMUS_Y_DIRECTION : CMP #$0000 : BNE .donestart
+;    LDA !SAMUS_POSE_DIRECTION : AND #$0004 : CMP #$0004 : BNE .donestart
+;    LDA !SAMUS_CONTROLLER_HANDLER : CMP #$E913 : BNE .donestart
+;    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_LEFT : BNE .donestart
+;
+;    ; Ready to start
+;    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E : STA !HUD_TILEMAP+$90
+;    STA !HUD_TILEMAP+$92 : STA !HUD_TILEMAP+$94 : STA !HUD_TILEMAP+$96 : STA !HUD_TILEMAP+$98
+;    BRL .incstate
+;
+;  .falling
+;    LDA !ram_walljump_counter : INC : STA !ram_walljump_counter
+;
+;    ; Check if we are still in aim down pose
+;    LDA !SAMUS_POSE : CMP #$0018 : BEQ .donestart
+;
+;    ; If not, assume we expanded our hitbox
+;    LDA !ram_walljump_counter : CMP !ram_xpos : BMI .expandearly
+;    CMP !ram_ypos : BPL .expandlate
+;
+;    ; We expanded hitbox on time
+;    INC : SEC : SBC !ram_xpos
+;    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$98
+;    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$96
+;    BRL .returnstart
+;
+;  .expandearly
+;    LDA !ram_xpos : SEC : SBC !ram_walljump_counter
+;    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$98
+;    LDA !IH_LETTER_E : STA !HUD_TILEMAP+$96
+;    BRL .returnstart
+;
+;  .expandlate
+;    INC : SEC : SBC !ram_ypos
+;    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$98
+;    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$96
+;    BRL .returnstart
+;
+;  .clearreturnstart
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A
+;    BRL .returnstart
+;
+;  .incstate
+;    LDA !ram_roomstrat_state : INC : STA !ram_roomstrat_state
+;    LDA #$0000 : STA !ram_roomstrat_counter
+;    RTS
+;
+;  .incleft
+;    ; Arbitrary wait of 64 frames before giving up
+;    LDA !ram_roomstrat_counter : CMP #$0040 : BPL .clearreturnstart
+;    INC : STA !ram_roomstrat_counter
+;
+;  .donerising
+;    RTS
+;
+;  .rising
+;    ; If our speed is still good then we haven't broken spin
+;    LDA !SAMUS_X_SUBMOMENTUM : CMP #$6000 : BEQ .donerising
+;
+;    ; We have broken spin, combine starting X position with walljump to see how we did
+;    LDA !ram_xpos : CLC : ADC !ram_walljump_counter : STA !ram_xpos
+;    BRL .setx
+;
+;  .initialjump
+;    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_JUMP : BEQ .checkleft
+;
+;    ; If we haven't pressed left yet, move back to previous state
+;    LDA !ram_roomstrat_counter : BEQ .clearreturnstart
+;
+;    ; Print number of frames after holding left that we pressed jump
+;    LDA !ram_roomstrat_counter : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8A
+;
+;  .checkleft
+;    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_LEFT : BNE .incleft
+;
+;    ; Nothing to do if we haven't pressed left yet
+;    LDA !ram_roomstrat_counter : BEQ .donerising
+;
+;    ; Print number of frames we were holding left, if we haven't already
+;    ASL : TAY : LDA !HUD_TILEMAP+$88 : CMP !IH_LETTER_Y : BNE .noleftcheckjump
+;    LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$88
+;
+;  .noleftcheckjump
+;    ; If we stopped holding left, but we haven't jumped yet,
+;    ; then we aren't ready to move to the next state
+;    LDA !IH_CONTROLLER_PRI : AND !IH_INPUT_JUMP : BNE .incstate
+;    BRA .incleft
+;
+;  .checkotherstates
+;    ; Most states require the walljump counter incremented, so just do it for all of them
+;    LDA !ram_walljump_counter : INC : STA !ram_walljump_counter
+;    LDA !ram_roomstrat_state : CMP #$0002 : BEQ .initialjump : CMP #$0005 : BEQ .rising
+;    CMP #$0006 : BEQ .peaking : CMP #$0004 : BEQ .accel
+;    BRA .walljump
+;
+;  .wjfail
+;    LDA !IH_LETTER_X : STA !HUD_TILEMAP+$94
+;    BRL .returnstart
+;
+;  .done
+;    RTS
+;
+;  .accel
+;    ; We can't evaluate the horizontal movement for a few frames
+;    LDA !ram_walljump_counter : AND #$0004 : BEQ .done
+;
+;    ; Once we can evaluate, make sure it is good
+;    LDA !SAMUS_X_SUBRUNSPEED : CMP #!expected_subspeed : BNE .wjfail
+;    LDA !ram_xpos : CMP #$0039 : BPL .wjfail
+;
+;    BRL .incstate
+;
+;  .peakfail
+;    LDA !IH_LETTER_X : STA !HUD_TILEMAP+$96 : STA !HUD_TILEMAP+$98
+;    BRL .returnstart
+;
+;  .checkground
+;    LDA !SAMUS_Y : CMP #$02BB : BNE .done
+;
+;    ; We're back on the ground
+;    BRL .returnstart
+;
+;  .peaking
+;    ; If still rising, nothing to do
+;    LDA !SAMUS_Y_DIRECTION : CMP #$0001 : BEQ .done
+;    
+;    ; Fail if not falling with proper speed and pose
+;    CMP #$0002 : BNE .peakfail
+;    LDA !SAMUS_Y : CMP #$0243 : BPL .peakfail
+;    LDA !SAMUS_X_SUBRUNSPEED : CMP #!expected_subspeed : BNE .peakfail
+;    LDA !SAMUS_X_SUBMOMENTUM : CMP #$4000 : BNE .peakfail
+;    LDA !SAMUS_POSE : CMP #$0018 : BNE .peakfail
+;    BRL .incstate
+;
+;  .wjfar
+;    ; We jumped so late we are more than 65 pixels from the wall
+;    ; Set ram_xpos to an arbitrarily large value to ensure we'll fail later
+;    LDA !IH_LETTER_X : STA !HUD_TILEMAP+$92 : STA !ram_xpos
+;    BRA .wjcontinue
+;
+;  .walljump
+;    ; Waiting for the walljump
+;    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_JUMP : BEQ .checkground
+;
+;    ; We jumped, first calculate our distance from the wall
+;    LDA #$022B : SEC : SBC !SAMUS_X : CMP #$0042 : BPL .wjfar
+;    STA !ram_xpos : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$92
+;
+;    ; Store this for later, each pixel counts as 8 frames of good horizontal movement
+;    TYA : ASL : ASL
+;    STA !ram_xpos
+;
+;  .wjcontinue
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$A4
+;    LDA #$0000 : STA !ram_walljump_counter
+;
+;    ; Now time to evaluate the jump height
+;    ; If necessary evaluate down to the subpixel
+;    LDA !SAMUS_Y : CMP #$029D : BEQ .bonk : CMP #$029E : BEQ .threey : BPL .maybelow
+;
+;  .high
+;    LDA #$029E : SEC : SBC !SAMUS_Y : CMP #$0042 : BPL .toohigh
+;    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
+;    BRA .highprint
+;
+;  .toohigh
+;    LDA !IH_LETTER_X : STA !HUD_TILEMAP+$8E
+;
+;  .highprint
+;    LDA !IH_LETTER_H : STA !HUD_TILEMAP+$8C
+;    BRL .wjfail
+;
+;  .bonk
+;    LDA !SAMUS_Y_SUBPX : CMP #$F000 : BCS .printtwob : CMP #$B000 : BCS .printoneb
+;    BRA .high
+;
+;  .maybelow
+;    CMP #$029F : BEQ .twoy : CMP #$02A0 : BEQ .printoney : CMP #$02A1 : BEQ .oney
+;
+;  .low
+;    LDA !SAMUS_Y : SEC : SBC #$02A0
+;    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
+;    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8C
+;    BRL .wjfail
+;
+;  .threey
+;    LDA !SAMUS_Y_SUBPX : CMP #$9400 : BCS .printtwoy : CMP #$1400 : BCC .printtwob
+;    CMP #$1C00 : BCC .printthreeb
+;
+;    LDA #$0003
+;
+;  .printy
+;    STA !ram_ypos : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
+;    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8C
+;
+;    ; Determine last frame where we can gather the tank
+;    LDA #!first_possible_x : CLC : ADC !ram_ypos : STA !ram_ypos
+;    BRL .incstate
+;
+;  .twoy
+;    LDA !SAMUS_Y_SUBPX : CMP #$E400 : BCS .printoney
+;
+;  .printtwoy
+;    LDA #$0002
+;    BRA .printy
+;
+;  .printtwob
+;    LDA #$0002
+;    BRA .printb
+;
+;  .printoneb
+;    LDA #$0001
+;    BRA .printb
+;
+;  .oney
+;    LDA !SAMUS_Y_SUBPX : CMP #$1800 : BCS .low
+;
+;  .printoney
+;    LDA #$0001
+;    BRA .printy
+;
+;  .printthreeb
+;    LDA #$0003
+;
+;  .printb
+;    STA !ram_ypos : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
+;    LDA !IH_LETTER_B : STA !HUD_TILEMAP+$8C
+;
+;    ; Determine last frame where we can gather the tank
+;    LDA #!first_possible_x : CLC : ADC !ram_ypos : STA !ram_ypos
+;    BRL .incstate
+;
+;  .setx
+;    ; Determine first frame where we can gather the tank
+;    LDA !ram_xpos : CMP #$0051 : BPL .threex : CMP #$0046 : BPL .twox : CMP #$003A : BPL .onex
+;
+;    BRA .predictfail
+;
+;  .threex
+;    LDA #!first_possible_x : STA !ram_xpos
+;    BRA .predict
+;
+;  .twox
+;    LDA #(!first_possible_x+1) : STA !ram_xpos
+;    BRA .predict
+;
+;  .onex
+;    LDA #(!first_possible_x+2) : STA !ram_xpos
+;
+;  .predict
+;    ; Compare first frame we can get the tank to the last frame
+;    CMP !ram_ypos : BMI .predictchance
+;
+;  .predictfail
+;    ; There are no frames where we can gather the tank
+;    LDY #$0000 : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$94
+;    BRL .returnstart
+;
+;  .predictchance
+;    ; There is at least one frame where we can gather the tank
+;    LDA !ram_ypos : SEC : SBC !ram_xpos
+;    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$94
+;    BRL .incstate
+;}
 
 status_gateglitch:
 {
@@ -1851,150 +1851,150 @@ status_gateglitch:
     BRA .reset
 }
 
-status_moatcwj:
-{
-    LDA !SAMUS_Y : CMP !ram_ypos : BEQ .didxchange : STA !ram_ypos
-    LDA !SAMUS_X
-
-  .onchange
-    STA !ram_xpos
-
-    ; If position moving and we haven't started yet, nothing to do
-    LDA !ram_roomstrat_state : BEQ .done
-
-    ; If we haven't jumped yet, increment counter
-    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_JUMP : BEQ .inc
-
-    ; We jumped, check if it was on time
-    LDA !ram_roomstrat_state : CMP #$0002 : BNE .checkfirstjump
-    BRL .checksecondjump
-
-  .checkfirstjump
-    LDA !ram_roomstrat_counter : CMP #$0013 : BEQ .firstframeperfect : BMI .firstjumpearly
-    SEC : SBC #$0013 : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8A
-
-    ; First jump late
-    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$88
-    LDA #$0000 : STA !ram_roomstrat_state : STA !ram_roomstrat_counter
-    RTS
-
-  .inc
-    LDA !ram_roomstrat_counter : INC : STA !ram_roomstrat_counter
-    RTS
-
-  .didxchange
-    LDA !SAMUS_X : CMP !ram_xpos : BNE .onchange
-    BRL .nochange
-
-  .firstframeperfect
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A
-    LDA #$0002 : STA !ram_roomstrat_counter : STA !ram_roomstrat_state
-
-  .done
-    RTS
-
-  .firstjumpearly
-    LDA #$0013 : SEC : SBC !ram_roomstrat_counter
-    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8A
-    LDA !IH_LETTER_E : STA !HUD_TILEMAP+$88
-    LDA #$0000 : STA !ram_roomstrat_state : STA !ram_roomstrat_counter
-    RTS
-
-  .inccheck
-    ; If our X and Y whole pixels did not change, but we are holding a direction,
-    ; we may still want to increment the counter
-    CMP !ram_xpos : BEQ .done
-    LDA !ram_xpos : CMP #$00EB : BNE .incconfirm
-    LDA !ram_ypos : CMP #$0084 : BEQ .done
-
-  .incconfirm
-    LDA !ram_roomstrat_counter : INC : STA !ram_roomstrat_counter
-    RTS
-
-  .nochange
-    ; Check if we are at a valid starting position
-    LDA !ram_ypos : CMP #$008B : BNE .incorrectstartpos
-    LDA !ram_xpos : CMP #$0015 : BEQ .startcounter : CMP #$02DB : BEQ .startcounter
-
-  .incorrectstartpos
-    LDA !ram_roomstrat_state : BEQ .done
-
-    ; If our X and Y whole pixels did not change, but we are holding a direction,
-    ; we may still want to increment the counter
-    LDA !IH_CONTROLLER_PRI : AND #$0300 : BNE .inccheck
-
-    ; If X and Y did not change and we aren't holding a direction, reset
-    LDA #$0000 : STA !ram_roomstrat_state : STA !ram_roomstrat_counter
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E : STA !HUD_TILEMAP+$90
-    RTS
-
-  .startcounter
-    ; Prevent redundacy on start
-    CMP !ram_roomstrat_state : BEQ .resetcounter
-    STA !ram_roomstrat_state
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E : STA !HUD_TILEMAP+$90
-
-  .resetcounter
-    LDA #$0000 : STA !ram_roomstrat_counter
-    RTS
-
-  .checksecondjump
-    LDA !ram_roomstrat_counter : CMP #$0049 : BEQ .secondframe1 : BMI .secondjumpearly
-    CMP #$004A : BEQ .secondframe2
-
-    ; Second jump late
-    SEC : SBC #$004A : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
-    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8C
-    BRA .clear
-
-  .secondframe1
-    LDA #$0C00 : STA !HUD_TILEMAP+$8E
-    BRA .secondgotit
-
-  .secondframe2
-    LDA #$0C01 : STA !HUD_TILEMAP+$8E
-
-  .secondgotit
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8C
-
-  .clear
-    LDA #$0000 : STA !ram_roomstrat_state : STA !ram_roomstrat_counter
-    RTS
-
-  .secondjumpearly
-    LDA #$0049 : SEC : SBC !ram_roomstrat_counter
-    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
-    LDA !IH_LETTER_E : STA !HUD_TILEMAP+$8C
-    BRA .clear
-}
-
-status_robotflush:
-{
-    ; Checking hit on first robot
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$88
-    LDA $0FEA : CMP #$0030 : BMI .checkfirstfall
-    LDA #$0C3C : STA !HUD_TILEMAP+$88
-
-  .checkfirstfall
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$8A
-    LDA $0FBE : CMP #$0280 : BMI .checksecondhit
-    LDA #$0C3C : STA !HUD_TILEMAP+$8A
-
-  .checksecondhit
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$8C
-    LDA $102A : CMP #$0030 : BMI .checksecondfall
-    LDA #$0C3D : STA !HUD_TILEMAP+$8C
-
-  .checksecondfall
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$8E
-    LDA $0FFE : CMP #$0280 : BMI .done
-    LDA #$0C3D : STA !HUD_TILEMAP+$8E
-
-  .done
-    RTS
-}
-
+;status_moatcwj:
+;{
+;    LDA !SAMUS_Y : CMP !ram_ypos : BEQ .didxchange : STA !ram_ypos
+;    LDA !SAMUS_X
+;
+;  .onchange
+;    STA !ram_xpos
+;
+;    ; If position moving and we haven't started yet, nothing to do
+;    LDA !ram_roomstrat_state : BEQ .done
+;
+;    ; If we haven't jumped yet, increment counter
+;    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_JUMP : BEQ .inc
+;
+;    ; We jumped, check if it was on time
+;    LDA !ram_roomstrat_state : CMP #$0002 : BNE .checkfirstjump
+;    BRL .checksecondjump
+;
+;  .checkfirstjump
+;    LDA !ram_roomstrat_counter : CMP #$0013 : BEQ .firstframeperfect : BMI .firstjumpearly
+;    SEC : SBC #$0013 : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8A
+;
+;    ; First jump late
+;    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$88
+;    LDA #$0000 : STA !ram_roomstrat_state : STA !ram_roomstrat_counter
+;    RTS
+;
+;  .inc
+;    LDA !ram_roomstrat_counter : INC : STA !ram_roomstrat_counter
+;    RTS
+;
+;  .didxchange
+;    LDA !SAMUS_X : CMP !ram_xpos : BNE .onchange
+;    BRL .nochange
+;
+;  .firstframeperfect
+;    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A
+;    LDA #$0002 : STA !ram_roomstrat_counter : STA !ram_roomstrat_state
+;
+;  .done
+;    RTS
+;
+;  .firstjumpearly
+;    LDA #$0013 : SEC : SBC !ram_roomstrat_counter
+;    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8A
+;    LDA !IH_LETTER_E : STA !HUD_TILEMAP+$88
+;    LDA #$0000 : STA !ram_roomstrat_state : STA !ram_roomstrat_counter
+;    RTS
+;
+;  .inccheck
+;    ; If our X and Y whole pixels did not change, but we are holding a direction,
+;    ; we may still want to increment the counter
+;    CMP !ram_xpos : BEQ .done
+;    LDA !ram_xpos : CMP #$00EB : BNE .incconfirm
+;    LDA !ram_ypos : CMP #$0084 : BEQ .done
+;
+;  .incconfirm
+;    LDA !ram_roomstrat_counter : INC : STA !ram_roomstrat_counter
+;    RTS
+;
+;  .nochange
+;    ; Check if we are at a valid starting position
+;    LDA !ram_ypos : CMP #$008B : BNE .incorrectstartpos
+;    LDA !ram_xpos : CMP #$0015 : BEQ .startcounter : CMP #$02DB : BEQ .startcounter
+;
+;  .incorrectstartpos
+;    LDA !ram_roomstrat_state : BEQ .done
+;
+;    ; If our X and Y whole pixels did not change, but we are holding a direction,
+;    ; we may still want to increment the counter
+;    LDA !IH_CONTROLLER_PRI : AND #$0300 : BNE .inccheck
+;
+;    ; If X and Y did not change and we aren't holding a direction, reset
+;    LDA #$0000 : STA !ram_roomstrat_state : STA !ram_roomstrat_counter
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E : STA !HUD_TILEMAP+$90
+;    RTS
+;
+;  .startcounter
+;    ; Prevent redundacy on start
+;    CMP !ram_roomstrat_state : BEQ .resetcounter
+;    STA !ram_roomstrat_state
+;    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E : STA !HUD_TILEMAP+$90
+;
+;  .resetcounter
+;    LDA #$0000 : STA !ram_roomstrat_counter
+;    RTS
+;
+;  .checksecondjump
+;    LDA !ram_roomstrat_counter : CMP #$0049 : BEQ .secondframe1 : BMI .secondjumpearly
+;    CMP #$004A : BEQ .secondframe2
+;
+;    ; Second jump late
+;    SEC : SBC #$004A : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
+;    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8C
+;    BRA .clear
+;
+;  .secondframe1
+;    LDA #$0C00 : STA !HUD_TILEMAP+$8E
+;    BRA .secondgotit
+;
+;  .secondframe2
+;    LDA #$0C01 : STA !HUD_TILEMAP+$8E
+;
+;  .secondgotit
+;    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8C
+;
+;  .clear
+;    LDA #$0000 : STA !ram_roomstrat_state : STA !ram_roomstrat_counter
+;    RTS
+;
+;  .secondjumpearly
+;    LDA #$0049 : SEC : SBC !ram_roomstrat_counter
+;    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
+;    LDA !IH_LETTER_E : STA !HUD_TILEMAP+$8C
+;    BRA .clear
+;}
+;
+;status_robotflush:
+;{
+;    ; Checking hit on first robot
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$88
+;    LDA $0FEA : CMP #$0030 : BMI .checkfirstfall
+;    LDA #$0C3C : STA !HUD_TILEMAP+$88
+;
+;  .checkfirstfall
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$8A
+;    LDA $0FBE : CMP #$0280 : BMI .checksecondhit
+;    LDA #$0C3C : STA !HUD_TILEMAP+$8A
+;
+;  .checksecondhit
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$8C
+;    LDA $102A : CMP #$0030 : BMI .checksecondfall
+;    LDA #$0C3D : STA !HUD_TILEMAP+$8C
+;
+;  .checksecondfall
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$8E
+;    LDA $0FFE : CMP #$0280 : BMI .done
+;    LDA #$0C3D : STA !HUD_TILEMAP+$8E
+;
+;  .done
+;    RTS
+;}
+;
 ;status_shinetopb:
 ;{
 ;    ; Suppress Samus HP display
@@ -2031,7 +2031,7 @@ status_robotflush:
 ;    LDA !SAMUS_PBS : STA !ram_roomstrat_counter
 ;    RTS
 ;}
-
+;
 ;status_elevatorcf:
 ;{
 ;    !elevatorcf_frame = $009A
@@ -2203,81 +2203,81 @@ status_robotflush:
 ;    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E
 ;    BRA .reset
 ;}
-
-status_snailclip:
-{
-    !snailclip_ypos_hi = $014B
-    !snailclip_ypos_lo = $014D
-
-    LDA !ENEMY_X : CMP !ram_xpos : BEQ .checkypos
-    STA !ram_xpos : LDA !ENEMY_Y : STA !ram_ypos
-    BRA .resetcounter
-
-  .checkypos
-    LDA !ENEMY_Y : CMP !ram_ypos : BEQ .checkcounter
-    STA !ram_ypos
-
-  .resetcounter
-    LDA #$0000 : STA !ram_roomstrat_counter
-    RTS
-
-  .checkcounter
-    ; Arbitrary wait of 15 frames with no X or Y change
-    LDA !ram_roomstrat_counter : CMP #$000F : BEQ .checkpos : BPL .done
-    INC : STA !ram_roomstrat_counter
-
-  .done
-    RTS
-
-  .ignore
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A
-    STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E
-    RTS
-
-  .checkpos
-    ; Increment counter so we don't check again
-    INC : STA !ram_roomstrat_counter
-    LDA !ram_xpos : CMP #$0528 : BEQ .checky
-    CMP #$0478 : BMI .ignore : CMP #$0489 : BPL .ignore
-  .checky
-    LDA !ram_ypos : CMP #$0120 : BMI .ignore : CMP #$0165 : BPL .ignore
-
-    ; Snail is in range
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A
-
-    ; Check the height
-    LDA !ram_ypos : CMP #!snailclip_ypos_hi : BEQ .yeshigh : BMI .high
-    CMP #!snailclip_ypos_lo : BEQ .yeslow : BPL .low
-
-    ; Height is good and centered
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$8E
-    BRA .printy
-
-  .yeshigh
-    LDA !IH_LETTER_H : STA !HUD_TILEMAP+$8E
-
-  .printy
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8C
-    RTS
-
-  .high
-    LDA #!snailclip_ypos_hi : SEC : SBC !ram_ypos
-    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
-    LDA !IH_LETTER_H : STA !HUD_TILEMAP+$8C
-    RTS
-
-  .yeslow
-    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8E
-    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0100 : BNE .printy
-    TDC : BRA .lowzero
-
-  .low
-    LDA !ram_ypos : SEC : SBC #!snailclip_ypos_lo
-  .lowzero
-    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
-    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8C
-    RTS
-}
+;
+;status_snailclip:
+;{
+;    !snailclip_ypos_hi = $014B
+;    !snailclip_ypos_lo = $014D
+;
+;    LDA !ENEMY_X : CMP !ram_xpos : BEQ .checkypos
+;    STA !ram_xpos : LDA !ENEMY_Y : STA !ram_ypos
+;    BRA .resetcounter
+;
+;  .checkypos
+;    LDA !ENEMY_Y : CMP !ram_ypos : BEQ .checkcounter
+;    STA !ram_ypos
+;
+;  .resetcounter
+;    LDA #$0000 : STA !ram_roomstrat_counter
+;    RTS
+;
+;  .checkcounter
+;    ; Arbitrary wait of 15 frames with no X or Y change
+;    LDA !ram_roomstrat_counter : CMP #$000F : BEQ .checkpos : BPL .done
+;    INC : STA !ram_roomstrat_counter
+;
+;  .done
+;    RTS
+;
+;  .ignore
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A
+;    STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E
+;    RTS
+;
+;  .checkpos
+;    ; Increment counter so we don't check again
+;    INC : STA !ram_roomstrat_counter
+;    LDA !ram_xpos : CMP #$0528 : BEQ .checky
+;    CMP #$0478 : BMI .ignore : CMP #$0489 : BPL .ignore
+;  .checky
+;    LDA !ram_ypos : CMP #$0120 : BMI .ignore : CMP #$0165 : BPL .ignore
+;
+;    ; Snail is in range
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A
+;
+;    ; Check the height
+;    LDA !ram_ypos : CMP #!snailclip_ypos_hi : BEQ .yeshigh : BMI .high
+;    CMP #!snailclip_ypos_lo : BEQ .yeslow : BPL .low
+;
+;    ; Height is good and centered
+;    LDA !IH_BLANK : STA !HUD_TILEMAP+$8E
+;    BRA .printy
+;
+;  .yeshigh
+;    LDA !IH_LETTER_H : STA !HUD_TILEMAP+$8E
+;
+;  .printy
+;    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8C
+;    RTS
+;
+;  .high
+;    LDA #!snailclip_ypos_hi : SEC : SBC !ram_ypos
+;    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
+;    LDA !IH_LETTER_H : STA !HUD_TILEMAP+$8C
+;    RTS
+;
+;  .yeslow
+;    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8E
+;    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0100 : BNE .printy
+;    TDC : BRA .lowzero
+;
+;  .low
+;    LDA !ram_ypos : SEC : SBC #!snailclip_ypos_lo
+;  .lowzero
+;    ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
+;    LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8C
+;    RTS
+;}
 
 status_mbhp:
 {

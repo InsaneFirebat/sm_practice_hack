@@ -71,7 +71,7 @@ BRKHandlerHook:
     JML BRKHandler_setBank
 
 
-org !ORG_CRASH
+org !ORG_CRASH_BANK80
 print pc, " crash handler bank80 start"
 
 ; This routine (or a bridge to it) must live in bank $80
@@ -242,7 +242,8 @@ print pc, " crash handler bank80 end"
 ;warnpc $80F000 ; presets.asm
 
 ;pullpc
-print pc, " crash handler bank89 start"
+org !ORG_CRASH_BANKAB
+print pc, " crash handler bankAB start"
 
 CrashViewer:
 {
@@ -1195,5 +1196,5 @@ CrashTextInfo11:
 ; Press LRSlSt to soft reset
     db "Press ", #$8D, #$8C, #$85, #$84, " to soft reset", #$FF
 
-print pc, " crash handler bank89 end"
+print pc, " crash handler bankAB end"
 pullpc

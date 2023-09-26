@@ -3574,9 +3574,3 @@ HexMenuGFXTable:
 
 print pc, " menu end"
 
-
-; -------------
-; Crash handler
-; -------------
-
-incsrc crash.asm
