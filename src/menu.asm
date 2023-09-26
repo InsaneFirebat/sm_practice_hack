@@ -6,20 +6,6 @@ wait_for_lag_frame_long:
     JSR $8136
     RTL
 
-initialize_ppu_long:
-    PHP : %a16()
-    LDA $7E33EA : STA !ram_cgram_cache+$2E
-    PLP
-    JSR $8143
-    RTL
-
-restore_ppu_long:
-    JSR $861A
-    PHP : %a16()
-    LDA !ram_cgram_cache+$2E : STA $7E33EA
-    PLP
-    RTL
-
 play_music_long:
     JSR $8574
     RTL
@@ -75,7 +61,7 @@ cm_start:
     LDA !ram_seed_X : STA !sram_seed_X
     LDA !ram_seed_Y : STA !sram_seed_Y
     JSL GameLoopExtras ; check if game_loop_extras needs to be disabled
-    JSL restore_ppu_long ; Restore PPU registers and tilemaps
+    JSR Restore_PPU ; Restore PPU registers and tilemaps
 
     ; skip sound effects if not gameplay ($7-13 allowed)
     %ai16()
@@ -103,7 +89,7 @@ cm_init:
     LDA #$0F : STA $0F2100 ; disable forced blanking
     %a16()
 
-    JSL initialize_ppu_long   ; Initialise PPU for message boxes
+    JSR Initialize_PPU ; Initialise PPU for message boxes
     JSR cm_transfer_custom_tileset
     JSL cm_transfer_custom_cgram
 
@@ -122,6 +108,97 @@ cm_init:
 
     JSL cm_calculate_max
     JSL cm_set_etanks_and_reserve
+    RTS
+}
+
+Initialize_PPU:
+{
+    JSL wait_for_lag_frame_long
+    %a8()
+    STZ $420C ; clear HDMA enable flags
+    %a16()
+
+    ; VRAM $5880 -> $7E4100, $700 bytes
+    LDA #$5880 : STA $2116
+    LDA $2139 ; dummy read?
+    LDA #$3981 : STA $4310
+    LDA #$4100 : STA $4312
+    LDA #$007E : STA $4314
+    LDA #$0700 : STA $4315
+    STZ $4317 : STZ $4319
+    %a8()
+    LDA #$80 : STA $2115
+    LDA #$02 : STA $420B
+
+    ; CGRAM BG3 palette 6 color 1 = green
+    LDA #$19 : STA $2121
+    LDA #$B1 : STA $2122
+    LDA #$0B : STA $2122
+
+    ; CGRAM BG3 palette 6 color 2 = red
+    LDA #$1F : STA $2122
+    LDA #$00 : STA $2122
+
+    ; HDMA channels to enable
+    LDA $7E33EA : STA !ram_cgram_cache+$2E
+    LDA $85 : STA $7E33EA
+
+    LDA $5B : STA $7E33EB ; BG3 tilemap base address and size
+    LDA #$58 : STA $5B ; BG3 tilemap base address = $5800, size = 32x32
+    LDA #$17 : STA $6A ; Gameplay main screen layers = BG1/BG2/BG3/sprites
+    STZ $70 : STZ $73 ; Gameplay color math control registers
+
+    ; color math subscreen backdrop color = transparent
+    LDA #$20 : STA $2132
+    LDA #$40 : STA $2132
+    LDA #$80 : STA $2132
+
+    ; BG3 X/Y scroll
+    STZ $2111 : STZ $2111
+    STZ $2112 : STZ $2112
+
+    JSL $808F0C ; Handle music queue
+    JSL $8289EF ; Handle sound effects
+    %a16()
+    RTS
+}
+
+Restore_PPU:
+{
+    JSL wait_for_lag_frame_long
+
+    ; $7E4100 -> VRAM $5880, $700 bytes
+    LDA #$5880 : STA $2116
+    LDA #$1801 : STA $4310
+    LDA #$4100 : STA $4312
+    LDA #$007E : STA $4314
+    LDA #$0700 : STA $4315
+    STZ $4317 : STZ $4319
+    %a8()
+    LDA #$80 : STA $2115
+    LDA #$02 : STA $420B
+
+    LDA $7E33EA : STA $85 : STA $420C ; HDMA channels to enable
+    LDA $7E33EB : STA $5B ; BG3 tilemap base address and size
+    LDA $69 : STA $6A ; Gameplay main screen layers
+
+    ; Gameplay color math control register
+    LDA $6E : STA $70
+    LDA $71 : STA $73
+
+    ; CGRAM BG3 palette 6 color 1
+    LDA #$19 : STA $2121
+    LDA $7EC032 : STA $2122
+    LDA $7EC033 : STA $2122
+
+    ; CGRAM BG3 palette 6 color 2
+    LDA $7EC034 : STA $2122
+    LDA $7EC035 : STA $2122
+
+    JSL $8884B9 ; HDMA object handler (also handle music queue)
+    JSL $8289EF ; Handle sound effects
+    %a16()
+    LDA !ram_cgram_cache+$2E : STA $7E33EA
     RTS
 }
 
