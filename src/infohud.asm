@@ -195,8 +195,11 @@ print pc, " infohud start"
 ih_get_item_code:
 {
     PHA
-    LDA !ram_timers_autoupdate : BNE +
-    
+    LDA !ram_timers_autoupdate : BNE .update_timers
+    PLA
+    JML $80818E ; overwritten code
+
+  .update_timers
     ; calculate lag frames
     LDA !ram_realtime_room : SEC : SBC !ram_transition_counter : STA !ram_last_room_lag
 
@@ -208,10 +211,31 @@ ih_get_item_code:
     LDA $14 : PHA
 
     ; check if segment timer should be reset
-    LDA !ram_reset_segment_later : BPL .update_HUD
+    LDA !ram_reset_segment_later : BPL .fanfare_timing
     LDA #$0000 : STA !ram_reset_segment_later : STA !ram_lag_counter
     STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds : STA !ram_seg_rt_minutes
     LDA #$FFFF : STA !ram_lag_counter_HUD
+
+  .fanfare_timing
+    ; option to add missing fanfare time to InfoHUD timers
+    LDA !sram_fanfare_timer_adjust : BEQ .update_HUD
+    LDA !ram_realtime_room : CLC : ADC #$0148 : STA !ram_realtime_room
+
+    ; adding 5:28 to seg timer
+    STZ $12
+    LDA !ram_seg_rt_frames : CLC : ADC #$001C : STA !ram_seg_rt_frames
+    CMP #$003C : BMI .add_seconds
+    SEC : SBC #$003C : STA !ram_seg_rt_frames : INC $12
+
+  .add_seconds
+    LDA !ram_seg_rt_seconds : CLC : ADC #$0005 : ADC $12 : STA !ram_seg_rt_seconds
+    STZ $12
+    CMP #$003C : BMI .add_minutes
+    SEC : SBC #$003C : STA !ram_seg_rt_seconds : INC $12
+
+  .add_minutes
+    LDA $12 : BEQ .update_HUD
+    CLC : ADC !ram_seg_rt_minutes : STA !ram_seg_rt_minutes
 
   .update_HUD
     JSL ih_update_hud_code
@@ -220,9 +244,9 @@ ih_get_item_code:
     PLA : STA $14
     PLA : STA $12
 
-+   PLA
-    JSL $80818E ; Change bit index to byte index and bitmask
-    RTL
+  .done
+    PLA
+    JML $80818E ; overwritten code
 }
 
 ih_debug_patch:
