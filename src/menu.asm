@@ -3137,8 +3137,6 @@ endif
     LDA [!DP_CurrentMenu] : AND #$00FF : CMP #$0010 : BPL .check2
     BRA .loadPage3
 +   JSL cm_previous_menu
-    ; set bank for manual submenu jump
-    LDA !DP_MenuIndices+2 : STA !ram_cm_menu_bank
     JSL action_submenu
     RTS
 
