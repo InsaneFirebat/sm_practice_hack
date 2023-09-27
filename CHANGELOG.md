@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.9.3]  Fix missing fanfare timing adjustment
 * [2.5.9.3]  Set power bombs to max at Ridley in 14% presets
 * [2.5.9.3]  Fixed power bomb damage with Damage Counter and Pacifist
 * [2.5.9.2]  Fixed pause menu crash from loading a preset in the title menu
