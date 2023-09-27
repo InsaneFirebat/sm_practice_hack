@@ -647,15 +647,15 @@ draw_toggle:
     LDA [!DP_Address] : CMP !DP_ToggleValue : BEQ .checked
 
     ; Off
-    LDA #$2400|'O' : STA !ram_tilemap_buffer+2,X
-    LDA #$2400|'F' : STA !ram_tilemap_buffer+4,X
-    LDA #$2400|'F' : STA !ram_tilemap_buffer+6,X
+    LDA #$244B : STA !ram_tilemap_buffer+0,X ; O
+    LDA #$244D : STA !ram_tilemap_buffer+2,X ; F
+    LDA #$244D : STA !ram_tilemap_buffer+4,X ; F
     RTS
 
   .checked
     ; On
-    LDA #$3800|'O' : STA !ram_tilemap_buffer+4,X
-    LDA #$3800|'N' : STA !ram_tilemap_buffer+6,X
+    LDA #$384B : STA !ram_tilemap_buffer+2,X ; O
+    LDA #$384C : STA !ram_tilemap_buffer+4,X ; N
     RTS
 }
 
@@ -682,15 +682,15 @@ draw_toggle_bit:
     LDA [!DP_Address] : AND !DP_ToggleValue : BNE .checked
 
     ; Off
-    LDA #$2400|'O' : STA !ram_tilemap_buffer+2,X
-    LDA #$2400|'F' : STA !ram_tilemap_buffer+4,X
-    LDA #$2400|'F' : STA !ram_tilemap_buffer+6,X
+    LDA #$244B : STA !ram_tilemap_buffer+0,X ; O
+    LDA #$244D : STA !ram_tilemap_buffer+2,X ; F
+    LDA #$244D : STA !ram_tilemap_buffer+4,X ; F
     RTS
 
   .checked
     ; On
-    LDA #$3800|'O' : STA !ram_tilemap_buffer+4,X
-    LDA #$3800|'N' : STA !ram_tilemap_buffer+6,X
+    LDA #$384B : STA !ram_tilemap_buffer+2,X ; O
+    LDA #$384C : STA !ram_tilemap_buffer+4,X ; N
     RTS
 }
 
@@ -717,15 +717,15 @@ draw_toggle_inverted:
     LDA [!DP_Address] : CMP !DP_ToggleValue : BNE .checked
 
     ; Off
-    LDA #$2400|'O' : STA !ram_tilemap_buffer+2,X
-    LDA #$2400|'F' : STA !ram_tilemap_buffer+4,X
-    LDA #$2400|'F' : STA !ram_tilemap_buffer+6,X
+    LDA #$244B : STA !ram_tilemap_buffer+0,X ; O
+    LDA #$244D : STA !ram_tilemap_buffer+2,X ; F
+    LDA #$244D : STA !ram_tilemap_buffer+4,X ; F
     RTS
 
   .checked
     ; On
-    LDA #$3800|'O' : STA !ram_tilemap_buffer+4,X
-    LDA #$3800|'N' : STA !ram_tilemap_buffer+6,X
+    LDA #$384B : STA !ram_tilemap_buffer+2,X ; O
+    LDA #$384C : STA !ram_tilemap_buffer+4,X ; N
     RTS
 }
 
@@ -752,15 +752,15 @@ draw_toggle_bit_inverted:
     LDA [!DP_Address] : AND !DP_ToggleValue : BEQ .checked
 
     ; Off
-    LDA #$2400|'O' : STA !ram_tilemap_buffer+2,X
-    LDA #$2400|'F' : STA !ram_tilemap_buffer+4,X
-    LDA #$2400|'F' : STA !ram_tilemap_buffer+6,X
+    LDA #$244B : STA !ram_tilemap_buffer+0,X ; O
+    LDA #$244D : STA !ram_tilemap_buffer+2,X ; F
+    LDA #$244D : STA !ram_tilemap_buffer+4,X ; F
     RTS
 
   .checked
     ; On
-    LDA #$3800|'O' : STA !ram_tilemap_buffer+4,X
-    LDA #$3800|'N' : STA !ram_tilemap_buffer+6,X
+    LDA #$384B : STA !ram_tilemap_buffer+2,X ; O
+    LDA #$384C : STA !ram_tilemap_buffer+4,X ; N
     RTS
 }
 
