@@ -3464,11 +3464,11 @@ phan_second_phase:
 
 PhantoonPhaseTable:
     dw #$003F, #$0020, #$0004, #$0002, #$0010, #$0008, #$0001
-    dw #$0030, #$000C, #$0003, #$002A, #$0015, #$003C, #$0000 ; 0 = Term
+    dw #$0030, #$000C, #$0003, #$002A, #$0015, #$003C
 
 PhantoonPhaseTable2:
     dw #$003F, #$0020, #$0008, #$0002, #$0010, #$0004, #$0001
-    dw #$0030, #$000C, #$0003, #$002A, #$0015, #$0024, #$0000 ; 0 = Term
+    dw #$0030, #$000C, #$0003, #$002A, #$0015, #$0024
 
 phan_set_phan_first_phase:
 {
@@ -3476,7 +3476,7 @@ phan_set_phan_first_phase:
     LDA !ram_phantoon_rng_round_1 : BEQ +
 
 -   CMP.l PhantoonPhaseTable,X : BEQ +
-    INX #2 : CPX #$0018 : BNE -
+    INX #2 : CPX #$001A : BNE -
 
 +   TXA : LSR : STA !ram_cm_phan_first_phase
     RTL
@@ -3488,7 +3488,7 @@ phan_set_phan_second_phase:
     LDA !ram_phantoon_rng_round_2 : BEQ +
 
 -   CMP.l PhantoonPhaseTable,X : BEQ +
-    INX #2 : CPX #$0018 : BNE -
+    INX #2 : CPX #$001A : BNE -
 
 +   TXA : LSR : STA !ram_cm_phan_second_phase
     BEQ +
