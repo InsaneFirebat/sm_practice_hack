@@ -243,5 +243,29 @@ init_sram_long:
     RTL
 }
 
+init_controller_bindings:
+{
+    ; check if any non-dpad bindings are set
+    LDX #$000A
+    LDA.w !IH_INPUT_SHOT+$0C
+-   ORA.w !IH_INPUT_SHOT,X
+    DEX #2 : BPL -
+    AND #$FFF0 : BNE .done
+
+    ; load default dpad bindings
+    LDA #$0800 : STA.w !INPUT_BIND_UP
+    LSR : STA.w !INPUT_BIND_DOWN
+    LSR : STA.w !INPUT_BIND_LEFT
+    LSR : STA.w !INPUT_BIND_RIGHT
+
+    ; load default non-dpad bindings
+    LDX #$000C
+-   LDA.l ControllerLayoutTable,X : STA.w !IH_INPUT_SHOT,X
+    DEX #2 : BPL -
+
+  .done
+    RTL
+}
+
 print pc, " init end"
 warnpc $81FF00

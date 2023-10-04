@@ -1659,7 +1659,11 @@ action_teleport:
     STZ $0E18 ; Set elevator to inactive
     STZ $1C1F ; Clear message box index
 
-    JSL reset_all_counters
+    JSL init_controller_bindings
+    LDA !SAMUS_HP_MAX : BNE +
+    LDA #$001F : STA !SAMUS_HP
+
++   JSL reset_all_counters
     JSL stop_all_sounds
 
     LDA #$0001 : STA !ram_cm_leave
@@ -3332,13 +3336,13 @@ controls_common_d5:
 action_set_common_controls:
 {
     TYX
-    LDA.l ControllerLayoutTable,X : STA !IH_INPUT_SHOT
-    LDA.l ControllerLayoutTable+2,X : STA !IH_INPUT_JUMP
-    LDA.l ControllerLayoutTable+4,X : STA !IH_INPUT_RUN
-    LDA.l ControllerLayoutTable+6,X : STA !IH_INPUT_ITEM_CANCEL
-    LDA.l ControllerLayoutTable+8,X : STA !IH_INPUT_ITEM_SELECT
-    LDA.l ControllerLayoutTable+10,X : STA !IH_INPUT_ANGLE_UP
-    LDA.l ControllerLayoutTable+12,X : STA !IH_INPUT_ANGLE_DOWN
+    LDA.l ControllerLayoutTable,X : STA.w !IH_INPUT_SHOT
+    LDA.l ControllerLayoutTable+2,X : STA.w !IH_INPUT_JUMP
+    LDA.l ControllerLayoutTable+4,X : STA.w !IH_INPUT_RUN
+    LDA.l ControllerLayoutTable+6,X : STA.w !IH_INPUT_ITEM_CANCEL
+    LDA.l ControllerLayoutTable+8,X : STA.w !IH_INPUT_ITEM_SELECT
+    LDA.l ControllerLayoutTable+10,X : STA.w !IH_INPUT_ANGLE_DOWN
+    LDA.l ControllerLayoutTable+12,X : STA.w !IH_INPUT_ANGLE_UP
     %sfxconfirm()
     JML cm_previous_menu
 }

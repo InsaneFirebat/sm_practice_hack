@@ -563,6 +563,7 @@ endif
     STZ $1E75 ; Save Station Lockout flag
     STZ $0795 : STZ $0797  ; Clear door transition flags
     LDA #$0000 : STA !ram_transition_flag
+    JSL init_controller_bindings
 
     LDA #$E737 : STA $099C ; Pointer to next frame's room transition code = $82:E737
 if !RAW_TILE_GRAPHICS
