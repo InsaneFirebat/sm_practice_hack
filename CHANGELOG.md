@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.9.6]  Another fix for fanfare timer adjustment
 * [2.5.9.5]  Fixed missing controls when using teleport/presets before file select
 * [2.5.9.4]  Revert unnecessary fix for Phantoon RNG mid patterns
 * [2.5.9.4]  Fix Phantoon RNG pattern identification in the menu

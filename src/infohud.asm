@@ -195,7 +195,7 @@ print pc, " infohud start"
 ih_get_item_code:
 {
     PHA
-    LDA !ram_timers_autoupdate : BNE .update_timers
+    LDA !ram_timers_autoupdate : BEQ .update_timers
     PLA
     JML $80818E ; overwritten code
 
