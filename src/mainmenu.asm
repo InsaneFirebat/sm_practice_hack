@@ -3054,7 +3054,22 @@ cutscenes_fast_bowling:
     %cm_toggle_bit("Fast Bowling", !sram_cutscenes, !CUTSCENE_FAST_BOWLING, #0)
 
 cutscenes_g4_skip:
-    %cm_toggle_bit("Skip G4", !sram_cutscenes, !CUTSCENE_SKIP_G4, #0)
+    %cm_toggle_bit("Skip G4", !sram_cutscenes, !CUTSCENE_SKIP_G4, #.routine)
+  .routine
+    BIT !CUTSCENE_SKIP_G4 : BEQ .off
+    LDA !ROOM_ID : CMP #$A5ED : BNE .done
+    ; Verify all four G4 bosses killed
+    LDA $7ED828 : BIT #$0100 : BEQ .done
+    LDA $7ED82C : BIT #$0001 : BEQ .done
+    LDA $7ED82A : AND #$0101 : CMP #$0101 : BNE .done
+    ; Set Tourian open
+    LDA $7ED820 : ORA #$0400 : STA $7ED820
+    BRA .done
+  .off
+    LDA !ROOM_ID : CMP #$A5ED : BNE .done
+    LDA $7ED820 : AND #$FBFF : STA $7ED820
+  .done
+    RTL
 
 
 ; -------------------

@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.9.7]  Allow toggling G4 cutscene skip while in G4 Hallway
 * [2.5.9.6]  Added Memes (MemesAreHealthy) menu palette profile
 * [2.5.9.6]  Another fix for fanfare timer adjustment
 * [2.5.9.5]  Fixed missing controls when using teleport/presets before file select
