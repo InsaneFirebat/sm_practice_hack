@@ -184,7 +184,21 @@ endif
 
 org $90D340      ; update timers when shinespark bonk sound plays
     JSL ih_shinespark_segment
+
+if !FEATURE_PAL
+org $A490BD
+else
+org $A490AD
 endif
+    JSL ih_croc_segments
+
+if !FEATURE_PAL
+org $A497F0
+else
+org $A497E0
+endif
+    JSL ih_croc_segments
+endif ; !FEATURE_VANILLAHUD
 
 
 ; Main bank stuff
@@ -631,6 +645,13 @@ if !FEATURE_PAL
 else
     JML $91E3F6 ; overwritten code
 endif
+}
+
+ih_croc_segments:
+{
+    ; runs on two music changes post-fight
+    JSL !MUSIC_ROUTINE ; overwritten code
+    JML ih_update_hud_early
 }
 
 ih_update_hud_code_before_transition:

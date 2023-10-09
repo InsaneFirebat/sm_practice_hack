@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.9.8]  Update timers on music changes after the Crocomire fight
 * [2.5.9.7]  Added grapedrinkz menu palette profile
 * [2.5.9.7]  Allow toggling G4 cutscene skip while in G4 Hallway
 * [2.5.9.6]  Added Memes (MemesAreHealthy) menu palette profile
