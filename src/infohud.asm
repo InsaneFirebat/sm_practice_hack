@@ -460,7 +460,6 @@ ih_before_room_transition:
     LDX #$0054
   .draw3
     PLA : JSR Draw3
-    PLB
 
     ; Overwrite Enemy HP only
     LDA !sram_display_mode : BNE .done
@@ -473,6 +472,7 @@ ih_before_room_transition:
     LDA !ENEMY_HP : STA !ram_enemy_hp
 
   .done
+    PLB
     CLC ; overwritten code
     RTL
 
