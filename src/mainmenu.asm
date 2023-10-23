@@ -2694,7 +2694,6 @@ TimerSettingsMenu:
     dw #ih_room_counter
     dw #ih_lag_counter
     dw #$FFFF
-    dw #ih_fanfare_timer_adjust
     dw #ih_auto_update_timers
     dw #$FFFF
     dw #ih_reset_seg_after_door
@@ -2709,7 +2708,9 @@ ih_room_counter:
     db #$28, "Frame Counters", #$FF
     db #$28, "   REALTIME", #$FF
     db #$28, "     INGAME", #$FF
+    db #$28, "   SPEEDRUN", #$FF
     db #$FF
+!FRAME_COUNTER_ADJUST_REALTIME = #$0002
 
 ih_lag_counter:
     dw !ACTION_CHOICE
@@ -2719,9 +2720,6 @@ ih_lag_counter:
     db #$28, "       DOOR", #$FF
     db #$28, "       FULL", #$FF
     db #$FF
-
-ih_fanfare_timer_adjust:
-    %cm_toggle("Adjust Fanfare Timers", !sram_fanfare_timer_adjust, #$0001, #0)
 
 ih_auto_update_timers:
     %cm_toggle_inverted("Auto Update Timers", !ram_timers_autoupdate, #$0001, #0)

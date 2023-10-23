@@ -311,6 +311,13 @@ phan_pattern_table:
 ; $A7:D5B9 89 01 00    BIT #$0001               ; Sets Z for left pattern, !Z for right
 hook_phantoon_1st_rng:
 {
+    ; If fast Phantoon is on, adjust the timer by the cutscene time
+    ; (we can't do that while we skip the cutscene since that code
+    ;  happens during the door transition)
+    LDA !sram_phantoon_intro : BEQ .rng
+    LDY #$0257 : JSL ih_adjust_realtime
+
+  .rng
     ; If set to all-on or all-off, don't mess with RNG
     LDA !ram_phantoon_rng_round_1 : BEQ .no_manip
     CMP #$003F : BNE choose_phantoon_pattern
@@ -761,7 +768,7 @@ hook_kraid_claw_rng:
 
 kraid_intro_skip:
     LDA !sram_kraid_intro : BEQ .noSkip
-    LDA #$0001
+    LDA #$8001 : STA !sram_kraid_intro
     JMP kraid_intro_skip_return
 
   .noSkip

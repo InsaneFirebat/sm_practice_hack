@@ -8,7 +8,7 @@
 !VERSION_MINOR = 5
 !VERSION_BUILD = 9
 !VERSION_REV_1 = 0
-!VERSION_REV_2 = 8
+!VERSION_REV_2 = 9
 
 
 ; ---------
@@ -726,7 +726,7 @@ endif
 !sram_preset_ship_landing = !SRAM_START+$228
 !sram_preset_enemies = !SRAM_START+$22A
 !sram_fast_nintendo_logo = !SRAM_START+$22C
-!sram_fanfare_timer_adjust = !SRAM_START+$22E
+;!sram_fanfare_timer_adjust = !SRAM_START+$22E
 !sram_preset_map_tiles = !SRAM_START+$230
 !sram_preset_auto_segment = !SRAM_START+$232
 !sram_random_bubble_sfx = !SRAM_START+$234
@@ -832,11 +832,11 @@ endif
 !ACTION_DYNAMIC             = #$0022
 !ACTION_MANAGE_PRESETS      = #$0024
 
-; using macros instead of these in custom builds
-;!SOUND_MENU_MOVE = $0039
-;!SOUND_MENU_JSL = $0039
-;!SOUND_MENU_FAIL = $0007
-;marked for deletion, if asar didn't complain
+if !FEATURE_PAL
+!FRAMERATE = #$0032
+else
+!FRAMERATE = #$003C
+endif
 
 !KB_SHIFT1 = $9A
 !KB_SHIFT2 = $9B
