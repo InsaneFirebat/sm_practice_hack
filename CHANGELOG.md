@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.9.9]  Improved option to adjust timers and moved it to Frame Counters by NobodyNada
 * [2.5.9.8]  Fix garbage HUD numbers on door HUD modes
 * [2.5.9.8]  Update timers on music changes after the Crocomire fight
 * [2.5.9.7]  Added grapedrinkz menu palette profile
