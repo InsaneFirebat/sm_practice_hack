@@ -230,7 +230,9 @@ ih_get_item_code:
     STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds : STA !ram_seg_rt_minutes
     LDA #$FFFF : STA !ram_lag_counter_HUD
 
-+   LDY #$0148 : JSL ih_adjust_realtime
++   PHY
+    LDY #$0148 : JSL ih_adjust_realtime
+    PLY
 
     JSL ih_update_hud_code
 
