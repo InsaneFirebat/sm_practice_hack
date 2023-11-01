@@ -2882,7 +2882,14 @@ game_goto_controls:
     %cm_submenu("Controller Setting Mode", #ControllerSettingMenu)
 
 game_fanfare_toggle:
-    %cm_toggle("Fanfare", !sram_fanfare_toggle, #$0001, #0)
+    dw !ACTION_CHOICE
+    dl #!sram_fanfare_toggle
+    dw #$0000
+    db #$28, "Fanfare", #$FF
+    db #$28, "        OFF", #$FF
+    db #$28, "         ON", #$FF
+    db #$28, "FORCE MUSIC", #$FF
+    db #$FF
 
 game_music_toggle:
     dw !ACTION_CHOICE
