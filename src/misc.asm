@@ -156,7 +156,7 @@ org $CF8BBF       ; Set map scroll beep to high priority
 
 org $808F24
     JSL hook_set_music_track
-    NOP #2
+    BRA $00
 
 org $808F65
     JML hook_set_music_data
@@ -216,9 +216,17 @@ hook_set_music_track:
 {
     STZ $07F6
     PHA
-    LDA !sram_music_toggle : CMP #$01 : BNE .no_music
+    LDA !sram_music_toggle : CMP #$01 : BNE .music_off
+
+  .play_music
     PLA : STA $2140
     RTL
+
+  .music_off
+    ; option to force fanfare music
+    LDA !sram_fanfare_toggle : CMP #$02 : BNE .no_music
+    LDA !MUSIC_TRACK : BEQ .play_music
+    CMP #$02 : BEQ .play_music
 
   .no_music
     PLA
@@ -226,10 +234,8 @@ hook_set_music_track:
 }
 
 hook_set_music_data:
-; $80:8F65 8D F3 07    STA $07F3  [$7E:07F3]  ;} Music data = [music entry] & FFh
-; $80:8F68 AA          TAX                    ; X = [music data]
 {
-    STA $07F3 : TAX
+    STA $07F3 : TAX ; overwritten code
     LDA !sram_music_toggle : CMP #$0002 : BEQ .fast_no_music
     JML $808F69
 

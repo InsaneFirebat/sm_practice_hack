@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.9.11] Added Fanfare option to Force Music to play
 * [2.5.9.10] Fixed exploding item pickup graphics
 * [2.5.9.9]  Improved option to adjust timers and moved it to Frame Counters by NobodyNada
 * [2.5.9.8]  Fix garbage HUD numbers on door HUD modes
