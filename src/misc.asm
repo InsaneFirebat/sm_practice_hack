@@ -24,7 +24,11 @@ endif
 ;  (skip to Zebes)     LDA #$CDAF (skip to Zebes)
 ;                      LDA #Intro_Skip_to_Zebes
 org $82EEDF
-    LDA #$C100
+    LDA #$B72F
+
+; skip recovering input bindings for Exertion
+org $8BB769
+    BRA $01
 
 org !ORG_MISC_BANK8B
 print pc, " misc bank8B start"

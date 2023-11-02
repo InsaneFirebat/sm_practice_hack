@@ -99,7 +99,7 @@ if !FEATURE_CUSTOMIZE_MENU
     dw #mm_goto_customize
 endif
     dw #$0000
-    %cm_version_header("SM PRACTICE HACK", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
+    %cm_version_header("EXERTION INFOHUD", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
 
 MainMenuBanks:
     dw #EquipmentMenu>>16
@@ -1310,31 +1310,23 @@ action_glitched_beam:
 TeleportMenu:
     dw #tel_goto_crat
     dw #tel_goto_brin
-    dw #tel_goto_norf
     dw #tel_goto_ship
     dw #tel_goto_mari
-    dw #tel_goto_tour
     dw #tel_goto_debug
     dw #$0000
     %cm_header("TELEPORT TO SAVE STATION")
 
 tel_goto_crat:
-    %cm_submenu("Crateria", #TeleportCrateriaMenu)
+    %cm_submenu("Titanion", #TeleportCrateriaMenu)
 
 tel_goto_brin:
-    %cm_submenu("Brinstar", #TeleportBrinstarMenu)
-
-tel_goto_norf:
-    %cm_submenu("Norfair", #TeleportNorfairMenu)
+    %cm_submenu("Vitria", #TeleportBrinstarMenu)
 
 tel_goto_ship:
-    %cm_submenu("Wrecked Ship", #TeleportWreckedShipMenu)
+    %cm_submenu("Sector Z", #TeleportWreckedShipMenu)
 
 tel_goto_mari:
-    %cm_submenu("Maridia", #TeleportMaridiaMenu)
-
-tel_goto_tour:
-    %cm_submenu("Tourian", #TeleportTourianMenu)
+    %cm_submenu("Aquion", #TeleportMaridiaMenu)
 
 tel_goto_debug:
     %cm_submenu("Debug Teleports", #DebugTeleportMenu)
@@ -1342,106 +1334,78 @@ tel_goto_debug:
 TeleportCrateriaMenu:
     dw #tel_crateriaship
     dw #tel_crateriaparlor
+    dw #tel_crateria08
     dw #$0000
-    %cm_header("CRATERIA SAVE STATIONS")
+    %cm_header("TITANION SAVE STATIONS")
 
 tel_crateriaship:
-    %cm_jsl("Crateria Ship", #action_teleport, #$0000)
+    %cm_jsl("Titanion Ship", #action_teleport, #$0000)
 
 tel_crateriaparlor:
-    %cm_jsl("Crateria Parlor", #action_teleport, #$0001)
+    %cm_jsl("Titanion 01", #action_teleport, #$0001)
+
+tel_crateria08:
+    %cm_jsl("DEBUG Titanion 08", #action_teleport, #$0008)
 
 TeleportBrinstarMenu:
     dw #tel_brinstarpink
     dw #tel_brinstargreenshaft
     dw #tel_brinstargreenetecoons
     dw #tel_brinstarkraid
-    dw #tel_brinstarredtower
+    dw #tel_brinstar08
+    dw #tel_brinstar0B
+    dw #tel_brinstar12
     dw #$0000
-    %cm_header("BRINSTAR SAVE STATIONS")
+    %cm_header("VITRIA SAVE STATIONS")
 
 tel_brinstarpink:
-    %cm_jsl("Brinstar Pink Spospo", #action_teleport, #$0100)
+    %cm_jsl("Vitria 00", #action_teleport, #$0100)
 
 tel_brinstargreenshaft:
-    %cm_jsl("Brinstar Green Shaft", #action_teleport, #$0101)
+    %cm_jsl("Vitria Green Shaft", #action_teleport, #$0101)
 
 tel_brinstargreenetecoons:
-    %cm_jsl("Brinstar Green Etecoons", #action_teleport, #$0102)
+    %cm_jsl("Vitria Green Etecoons", #action_teleport, #$0102)
 
 tel_brinstarkraid:
-    %cm_jsl("Brinstar Kraid", #action_teleport, #$0103)
+    %cm_jsl("Vitria Kraid", #action_teleport, #$0103)
 
-tel_brinstarredtower:
-    %cm_jsl("Brinstar Red Tower", #action_teleport, #$0104)
+tel_brinstar08:
+    %cm_jsl("DEBUG Lithium Suit", #action_teleport, #$0108) ; sector Z
 
-TeleportNorfairMenu:
-    dw #tel_norfairgrapple
-    dw #tel_norfairbubble
-    dw #tel_norfairtunnel
-    dw #tel_norfaircrocomire
-    dw #tel_norfairlnelevator
-    dw #tel_norfairridley
-    dw #$0000
-    %cm_header("NORFAIR SAVE STATIONS")
+tel_brinstar0B:
+    %cm_jsl("DEBUG 0B", #action_teleport, #$010B) ; sector Z
 
-tel_norfairgrapple:
-    %cm_jsl("Norfair Grapple", #action_teleport, #$0200)
-
-tel_norfairbubble:
-    %cm_jsl("Norfair Bubble Mountain", #action_teleport, #$0201)
-
-tel_norfairtunnel:
-    %cm_jsl("Norfair Tunnel", #action_teleport, #$0202)
-
-tel_norfaircrocomire:
-    %cm_jsl("Norfair Crocomire", #action_teleport, #$0203)
-
-tel_norfairlnelevator:
-    %cm_jsl("Norfair LN Elevator", #action_teleport, #$0204)
-
-tel_norfairridley:
-    %cm_jsl("Norfair Ridley", #action_teleport, #$0205)
+tel_brinstar12:
+    %cm_jsl("DEBUG Spore Spawn", #action_teleport, #$0112)
 
 TeleportWreckedShipMenu:
     dw #tel_wreckedship
     dw #$0000
-    %cm_header("WRECKED SHIP SAVE STATIONS")
+    %cm_header("SECTOR Z SAVE STATIONS")
 
 tel_wreckedship:
-    %cm_jsl("Wrecked Ship", #action_teleport, #$0300)
+    %cm_jsl("DEBUG 00", #action_teleport, #$0300)
 
 TeleportMaridiaMenu:
-    dw #tel_maridiatube
     dw #tel_maridiaelevator
-    dw #tel_maridiaaqueduct
     dw #tel_maridiadraygon
+    dw #tel_maridia10
+    dw #tel_maridia13
     dw #$0000
-    %cm_header("MARIDIA SAVE STATIONS")
-
-tel_maridiatube:
-    %cm_jsl("Maridia Tube", #action_teleport, #$0400)
+    %cm_header("AQUION SAVE STATIONS")
 
 tel_maridiaelevator:
-    %cm_jsl("Maridia Elevator", #action_teleport, #$0401)
-
-tel_maridiaaqueduct:
-    %cm_jsl("Maridia Aqueduct", #action_teleport, #$0402)
+    %cm_jsl("Aquion Elevator", #action_teleport, #$0401)
 
 tel_maridiadraygon:
-    %cm_jsl("Maridia Draygon", #action_teleport, #$0403)
+    %cm_jsl("Aquion - Sector Z", #action_teleport, #$0403)
 
-TeleportTourianMenu:
-    dw #tel_tourianentrance
-    dw #tel_tourianmb
-    dw #$0000
-    %cm_header("TOURIAN SAVE STATIONS")
+tel_maridia10:
+    %cm_jsl("DEBUG 10", #action_teleport, #$0410) ; sector z
 
-tel_tourianentrance:
-    %cm_jsl("Tourian Entrance", #action_teleport, #$0501)
-
-tel_tourianmb:
-    %cm_jsl("Tourian MB", #action_teleport, #$0500)
+tel_maridia13:
+    %cm_jsl("DEBUG Gravity Suit", #action_teleport, #$0413)
 
 DebugTeleportMenu:
     dw #tel_debug_area
