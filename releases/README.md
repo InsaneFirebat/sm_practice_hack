@@ -1,4 +1,4 @@
-# HACK
+# The Blue Plague
 
 ## Notes
 

@@ -24,7 +24,7 @@ endif
 ;  (skip to Zebes)     LDA #$CDAF (skip to Zebes)
 ;                      LDA #Intro_Skip_to_Zebes
 org $82EEDF
-    LDA #$C100
+    LDA #Intro_Skip_to_Zebes
 
 org !ORG_MISC_BANK8B
 print pc, " misc bank8B start"

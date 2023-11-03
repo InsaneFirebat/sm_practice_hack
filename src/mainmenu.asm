@@ -99,7 +99,7 @@ if !FEATURE_CUSTOMIZE_MENU
     dw #mm_goto_customize
 endif
     dw #$0000
-    %cm_version_header("SM PRACTICE HACK", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
+    %cm_version_header("THE BLUE PLAGUE", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
 
 MainMenuBanks:
     dw #EquipmentMenu>>16
@@ -770,10 +770,10 @@ eq_goto_togglebeams:
     %cm_jsl("Toggle Beams", #eq_prepare_beams_menu, #ToggleBeamsMenu)
 
 eq_currentenergy:
-    %cm_numfield_word("Current Energy", !SAMUS_HP, 0, 2100, 1, 20, #0)
+    %cm_numfield_word("Current Life", !SAMUS_HP, 0, 2100, 1, 20, #0)
 
 eq_setetanks:
-    %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 21, 1, 1, .routine)
+    %cm_numfield("Life Tanks", !ram_cm_etanks, 0, 21, 1, 1, .routine)
   .routine
     TAX : BEQ .zero
     LDA #$0000
@@ -793,7 +793,7 @@ eq_currentreserves:
     %cm_numfield_word("Current Reserves", !SAMUS_RESERVE_ENERGY, 0, 700, 1, 20, #0)
 
 eq_setreserves:
-    %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 7, 1, 1, .routine)
+    %cm_numfield("Amazing Tanks", !ram_cm_reserve, 0, 7, 1, 1, .routine)
   .routine
     TAX : BEQ .zero
     LDA #$0000
@@ -813,8 +813,8 @@ eq_reservemode:
     dw #.routine
     db #$28, "Reserve Mode", #$FF
     db #$28, " UNOBTAINED", #$FF
-    db #$28, "       AUTO", #$FF
-    db #$28, "     MANUAL", #$FF
+    db #$28, "(AUTO) E.D.", #$FF
+    db #$28, " (MAN)  MST", #$FF
     db #$FF
   .routine
     LDA !SAMUS_RESERVE_MAX : BNE .end
@@ -827,7 +827,7 @@ eq_currentmissiles:
     %cm_numfield_word("Current Missiles", !SAMUS_MISSILES, 0, 230, 1, 20, #0)
 
 eq_setmissiles:
-    %cm_numfield_word("Missiles", !SAMUS_MISSILES_MAX, 0, 230, 5, 20, .routine)
+    %cm_numfield_word("Vaporizer Rounds", !SAMUS_MISSILES_MAX, 0, 230, 5, 20, .routine)
   .routine
     LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES
     RTL
@@ -842,10 +842,10 @@ eq_setsupers:
     RTL
 
 eq_currentpbs:
-    %cm_numfield("Current Power Bombs", !SAMUS_PBS, 0, 50, 1, 5, #0)
+    %cm_numfield("Current Unstable Bombs", !SAMUS_PBS, 0, 50, 1, 5, #0)
 
 eq_setpbs:
-    %cm_numfield("Power Bombs", !SAMUS_PBS_MAX, 0, 50, 5, 5, .routine)
+    %cm_numfield("Unstable Bombs", !SAMUS_PBS_MAX, 0, 50, 5, 5, .routine)
   .routine
     LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS
     RTL
@@ -1063,25 +1063,25 @@ ToggleItemsMenu:
     %cm_header("TOGGLE ITEMS")
 
 ti_variasuit:
-    %cm_equipment_item("Varia Suit", !ram_cm_varia, #$0001, #$FFFE)
+    %cm_equipment_item("Supa Suit", !ram_cm_varia, #$0001, #$FFFE)
 
 ti_gravitysuit:
-    %cm_equipment_item("Gravity Suit", !ram_cm_gravity, #$0020, #$FFDF)
+    %cm_equipment_item("Stability Suit", !ram_cm_gravity, #$0020, #$FFDF)
 
 ti_morphball:
-    %cm_equipment_item("Morph Ball", !ram_cm_morph, #$0004, #$FFFB)
+    %cm_equipment_item("Boring Ball", !ram_cm_morph, #$0004, #$FFFB)
 
 ti_bomb:
-    %cm_equipment_item("Bombs", !ram_cm_bombs, #$1000, #$EFFF)
+    %cm_equipment_item("Bomb", !ram_cm_bombs, #$1000, #$EFFF)
 
 ti_springball:
-    %cm_equipment_item("Spring Ball", !ram_cm_spring, #$0002, #$FFFD)
+    %cm_equipment_item("Bouncy Ball", !ram_cm_spring, #$0002, #$FFFD)
 
 ti_screwattack:
     %cm_equipment_item("Screw Attack", !ram_cm_screw, #$0008, #$FFF7)
 
 ti_hijumpboots:
-    %cm_equipment_item("Hi Jump Boots", !ram_cm_hijump, #$0100, #$FEFF)
+    %cm_equipment_item("Gravity Boots", !ram_cm_hijump, #$0100, #$FEFF)
 
 ti_spacejump:
     %cm_equipment_item("Space Jump", !ram_cm_space, #$0200, #$FDFF)
@@ -1204,13 +1204,13 @@ ToggleBeamsMenu:
     %cm_header("TOGGLE BEAMS")
 
 tb_chargebeam:
-    %cm_equipment_beam("Charge", !ram_cm_charge, #$1000, #$EFFF, #$100F)
+    %cm_equipment_beam("Accum.", !ram_cm_charge, #$1000, #$EFFF, #$100F)
 
 tb_icebeam:
-    %cm_equipment_beam("Ice", !ram_cm_ice, #$0002, #$FFFD, #$100F)
+    %cm_equipment_beam("Par.", !ram_cm_ice, #$0002, #$FFFD, #$100F)
 
 tb_wavebeam:
-    %cm_equipment_beam("Wave", !ram_cm_wave, #$0001, #$FFFE, #$100F)
+    %cm_equipment_beam("Space", !ram_cm_wave, #$0001, #$FFFE, #$100F)
 
 tb_spazerbeam:
     %cm_equipment_beam("Spazer", !ram_cm_spazer, #$0004, #$FFFB, #$1007)
@@ -1308,140 +1308,54 @@ action_glitched_beam:
 ; ---------------
 
 TeleportMenu:
-    dw #tel_goto_crat
-    dw #tel_goto_brin
-    dw #tel_goto_norf
-    dw #tel_goto_ship
-    dw #tel_goto_mari
-    dw #tel_goto_tour
+    dw #tel_cavship
+    dw #tel_cavcentral
+    dw #tel_cavsouth
+    dw #tel_cavdebug09
+    dw #tel_cavdebug0B
+    dw #tel_cavdebug08
+    dw #$FFFF
+    dw #tel_labnorth
+    dw #tel_labsouth
+    dw #tel_labgtgrav
+    dw #tel_labdebug0A
+    dw #$FFFF
     dw #tel_goto_debug
     dw #$0000
     %cm_header("TELEPORT TO SAVE STATION")
 
-tel_goto_crat:
-    %cm_submenu("Crateria", #TeleportCrateriaMenu)
+tel_cavship:
+    %cm_jsl("Dark Caverns Ship", #action_teleport, #$0000)
 
-tel_goto_brin:
-    %cm_submenu("Brinstar", #TeleportBrinstarMenu)
+tel_cavcentral:
+    %cm_jsl("Dark Caverns Central", #action_teleport, #$0003)
 
-tel_goto_norf:
-    %cm_submenu("Norfair", #TeleportNorfairMenu)
+tel_cavsouth:
+    %cm_jsl("Dark Caverns South", #action_teleport, #$0004)
 
-tel_goto_ship:
-    %cm_submenu("Wrecked Ship", #TeleportWreckedShipMenu)
+tel_cavdebug09:
+    %cm_jsl("DEBUG Ship Elevator", #action_teleport, #$0009)
 
-tel_goto_mari:
-    %cm_submenu("Maridia", #TeleportMaridiaMenu)
+tel_cavdebug0B:
+    %cm_jsl("DEBUG East to Laboratory", #action_teleport, #$010B)
 
-tel_goto_tour:
-    %cm_submenu("Tourian", #TeleportTourianMenu)
+tel_cavdebug08:
+    %cm_jsl("DEBUG Elevator from Ship", #action_teleport, #$0208)
+
+tel_labnorth:
+    %cm_jsl("Laboratory North", #action_teleport, #$0201)
+
+tel_labsouth:
+    %cm_jsl("Laboratory South", #action_teleport, #$0202)
+
+tel_labgtgrav:
+    %cm_jsl("Laboratory GT / Gravity", #action_teleport, #$0203)
+
+tel_labdebug0A:
+    %cm_jsl("DEBUG Bottom of Elevator", #action_teleport, #$020A)
 
 tel_goto_debug:
     %cm_submenu("Debug Teleports", #DebugTeleportMenu)
-
-TeleportCrateriaMenu:
-    dw #tel_crateriaship
-    dw #tel_crateriaparlor
-    dw #$0000
-    %cm_header("CRATERIA SAVE STATIONS")
-
-tel_crateriaship:
-    %cm_jsl("Crateria Ship", #action_teleport, #$0000)
-
-tel_crateriaparlor:
-    %cm_jsl("Crateria Parlor", #action_teleport, #$0001)
-
-TeleportBrinstarMenu:
-    dw #tel_brinstarpink
-    dw #tel_brinstargreenshaft
-    dw #tel_brinstargreenetecoons
-    dw #tel_brinstarkraid
-    dw #tel_brinstarredtower
-    dw #$0000
-    %cm_header("BRINSTAR SAVE STATIONS")
-
-tel_brinstarpink:
-    %cm_jsl("Brinstar Pink Spospo", #action_teleport, #$0100)
-
-tel_brinstargreenshaft:
-    %cm_jsl("Brinstar Green Shaft", #action_teleport, #$0101)
-
-tel_brinstargreenetecoons:
-    %cm_jsl("Brinstar Green Etecoons", #action_teleport, #$0102)
-
-tel_brinstarkraid:
-    %cm_jsl("Brinstar Kraid", #action_teleport, #$0103)
-
-tel_brinstarredtower:
-    %cm_jsl("Brinstar Red Tower", #action_teleport, #$0104)
-
-TeleportNorfairMenu:
-    dw #tel_norfairgrapple
-    dw #tel_norfairbubble
-    dw #tel_norfairtunnel
-    dw #tel_norfaircrocomire
-    dw #tel_norfairlnelevator
-    dw #tel_norfairridley
-    dw #$0000
-    %cm_header("NORFAIR SAVE STATIONS")
-
-tel_norfairgrapple:
-    %cm_jsl("Norfair Grapple", #action_teleport, #$0200)
-
-tel_norfairbubble:
-    %cm_jsl("Norfair Bubble Mountain", #action_teleport, #$0201)
-
-tel_norfairtunnel:
-    %cm_jsl("Norfair Tunnel", #action_teleport, #$0202)
-
-tel_norfaircrocomire:
-    %cm_jsl("Norfair Crocomire", #action_teleport, #$0203)
-
-tel_norfairlnelevator:
-    %cm_jsl("Norfair LN Elevator", #action_teleport, #$0204)
-
-tel_norfairridley:
-    %cm_jsl("Norfair Ridley", #action_teleport, #$0205)
-
-TeleportWreckedShipMenu:
-    dw #tel_wreckedship
-    dw #$0000
-    %cm_header("WRECKED SHIP SAVE STATIONS")
-
-tel_wreckedship:
-    %cm_jsl("Wrecked Ship", #action_teleport, #$0300)
-
-TeleportMaridiaMenu:
-    dw #tel_maridiatube
-    dw #tel_maridiaelevator
-    dw #tel_maridiaaqueduct
-    dw #tel_maridiadraygon
-    dw #$0000
-    %cm_header("MARIDIA SAVE STATIONS")
-
-tel_maridiatube:
-    %cm_jsl("Maridia Tube", #action_teleport, #$0400)
-
-tel_maridiaelevator:
-    %cm_jsl("Maridia Elevator", #action_teleport, #$0401)
-
-tel_maridiaaqueduct:
-    %cm_jsl("Maridia Aqueduct", #action_teleport, #$0402)
-
-tel_maridiadraygon:
-    %cm_jsl("Maridia Draygon", #action_teleport, #$0403)
-
-TeleportTourianMenu:
-    dw #tel_tourianentrance
-    dw #tel_tourianmb
-    dw #$0000
-    %cm_header("TOURIAN SAVE STATIONS")
-
-tel_tourianentrance:
-    %cm_jsl("Tourian Entrance", #action_teleport, #$0501)
-
-tel_tourianmb:
-    %cm_jsl("Tourian MB", #action_teleport, #$0500)
 
 DebugTeleportMenu:
     dw #tel_debug_area

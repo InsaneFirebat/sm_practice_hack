@@ -1,6 +1,6 @@
 @echo off
 
-echo Building SM NTSC Dev Practice Hack
+echo Building SM The Blue Plague Dev Practice Hack
 python names\create_names.py ..\src\roomnames.asm default_names.txt custom_names.txt
 cd resources
 python create_ram_symbols.py ..\src\defines.asm ..\src\symbols.asm
@@ -13,7 +13,7 @@ copy *.sfc ..\build
 type ..\build\print_pc.log
 python dos_to_unix.py ..\build\Debugging_Symbols.sym
 python sort_debug_symbols.py ..\build\Debugging_Symbols.sym ..\build\Debugging_Sorted.sym ..\build\Debugging_Combined.sym
-python create_ips.py ..\build\00.sfc ..\build\ff.sfc ..\build\smhack20_sd2snes_dev.ips
+python create_ips.py ..\build\00.sfc ..\build\ff.sfc ..\build\BluePlague_sd2snes_dev.ips
 
 del 00.sfc ff.sfc ..\build\00.sfc ..\build\ff.sfc
 cd ..
