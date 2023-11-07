@@ -39,20 +39,25 @@ endif
     DEY #2 : BNE .paletteLoop
     PLP
 
-    LDA #$0000
-    STA $7EC400  ; Used as door fade timer
-    LDA #$0001
-    STA $0723    ; Screen fade delay = 1
-    STA $0725    ; Screen fade counter = 1
-    STZ $0727    ; Clear pause menu index
+    LDA #$0000 : STA $7EC400 ; door fade timer
+    STA $0727 ; Clear pause menu index
 
-    JSL $80834B  ; Enable NMI with $84 options
-    JSL $868000  ; Enable enemy projectiles
-    JSL $8483AD  ; Enable PLMs
-    JSL $8DC4C2  ; Enable palette FX objects
-    JSL $888288  ; Enable HDMA objects
-    JSL $878000  ; Enable animated tile objects
-    JSL $908E0F  ; Set liquid physics type
+    ; Screen fade delay/counter = 1
+    LDA #$0001
+    STA $0723 : STA $0725
+
+    ; Enable NMI with $84 options
+    %a8()
+    LDA $84 : ORA #$80 : STA $4200 : STA $84
+    %a16()
+
+    LDA #$8000
+    TSB $198D ; Enable enemy projectiles
+    TSB $1C23 ; Enable PLMs
+    TSB $1E79 ; Enable palette FX objects
+    TSB $18B0 ; Enable HDMA objects
+    TSB $1EF1 ; Enable animated tile objects
+    JSL $908E0F ; Set liquid physics type
 
     ; Transfer enemy tiles to VRAM and initialize enemies
     LDA #$0006 : STA $0DA0 ; loop counter
