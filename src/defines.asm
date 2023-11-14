@@ -346,6 +346,14 @@
 
 !PRESET_SLOTS = $F03000
 !PRESET_SPECIAL = $7EFD00
+
+; Assert if SRAM is greater than 8k
+; Don't check if creating IPS patches
+if read1($00FFD5) == $00 || read1($00FFD5) == $FF
+else
+assert read1($00FFD8) <= $03,"Hack uses extra SRAM!"
+endif
+
 !PRESET_SLOTS = $703000
 !SRAM_VERSION = $0013
 
