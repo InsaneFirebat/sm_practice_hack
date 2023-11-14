@@ -286,6 +286,9 @@ ram_cgram_cache = !ram_cgram_cache ; !WRAM_MENU_START+$D0
 ; SRAM
 ; -----
 
+; Assert if SRAM is greater than 8k
+; Don't check if creating IPS patches
+
 sram_initialized = !sram_initialized ; !SRAM_START+$00
 
 sram_ctrl_menu = !sram_ctrl_menu ; !SRAM_START+$02
