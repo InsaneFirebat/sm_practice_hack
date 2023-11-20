@@ -48,6 +48,13 @@ endif
     JSL hook_phantoon_init
     BNE $3E : NOP
 
+if !FEATURE_PAL
+org $A7D4AD
+else
+org $A7D479
+endif
+    JSR phantoon_always_visible
+
 
 ; --------------
 ; Botwoon hijack
@@ -767,6 +774,7 @@ hook_kraid_claw_rng:
 }
 
 kraid_intro_skip:
+{
     LDA !sram_kraid_intro : BEQ .noSkip
     LDA #$8001 : STA !sram_kraid_intro
     JMP kraid_intro_skip_return
@@ -778,6 +786,28 @@ else
     LDA #$012C
 endif
     JMP kraid_intro_skip_return
+}
+
+
+phantoon_always_visible:
+{
+    LDA !ram_phantoon_always_visible : BNE .enabled
+    ; overwritten code
+if !FEATURE_PAL
+    JMP $DBCE
+else
+    JMP $D464
+endif
+
+  .enabled
+    ; fake the fade in so it takes the same number of frames
+    LDA $0FEE : INC : CMP $0FF0 : BCS +
+    STZ $0FF0
+    SEC : RTS
+
++   INC $0FF0
+    CLC : RTS
+}
 
 print pc, " kraid rng end"
 
