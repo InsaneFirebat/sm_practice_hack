@@ -3426,10 +3426,10 @@ PhantoonMenu:
     dw #phan_second_phase_inverted
     dw #$FFFF
     dw #phan_eyeclose
-    dw #$FFFF
     dw #phan_flamepattern
     dw #phan_next_flamepattern
     dw #phan_flame_direction
+    dw #phan_always_visible
     dw #$0000
     %cm_header("PHANTOON RNG CONTROL")
 
@@ -3613,6 +3613,10 @@ phan_flame_direction:
     db #$28, "       LEFT", #$FF
     db #$28, "      RIGHT", #$FF
     db #$FF
+
+phan_always_visible:
+    %cm_toggle("Always Visible", !ram_phantoon_always_visible, #$0001, #0)
+
 
 rng_botwoon_first:
     dw !ACTION_CHOICE

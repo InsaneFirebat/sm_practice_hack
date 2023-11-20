@@ -8,7 +8,7 @@
 !VERSION_MINOR = 5
 !VERSION_BUILD = 9
 !VERSION_REV_1 = 1
-!VERSION_REV_2 = 2
+!VERSION_REV_2 = 3
 
 
 ; ---------
@@ -141,11 +141,12 @@
 !ram_botwoon_second = !WRAM_START+$D6
 !ram_botwoon_spit = !WRAM_START+$D8
 !ram_phantoon_flame_direction = !WRAM_START+$DA
+!ram_phantoon_always_visible = !WRAM_START+$DC
 
-!ram_sprite_feature_flags = !WRAM_START+$DC
-!ram_auto_save_state = !WRAM_START+$DE
-!ram_timers_autoupdate = !WRAM_START+$E0
-!ram_frames_held = !WRAM_START+$E2
+!ram_sprite_feature_flags = !WRAM_START+$DE
+!ram_auto_save_state = !WRAM_START+$E0
+!ram_timers_autoupdate = !WRAM_START+$E2
+!ram_frames_held = !WRAM_START+$E4
 
 ; FREE SPACE ^ up to +$E8
 

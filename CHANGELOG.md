@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.9.13] Added toggle to prevent Phantoon from fading out
 * [2.5.9.12] Minor optimization for loading presets
 * [2.5.9.11] Added Fanfare option to Force Music to play
 * [2.5.9.10] Fixed exploding item pickup graphics
