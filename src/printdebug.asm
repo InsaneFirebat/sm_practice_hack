@@ -3,9 +3,9 @@
 
 print ""
 if !FEATURE_PAL
-print "PAL REGION"
+print "NTSC / [PAL] REGION"
 else
-print "NTSC REGION"
+print "[NTSC] / PAL REGION"
 endif
 
 if !FEATURE_SD2SNES
@@ -20,8 +20,6 @@ print "TINYSTATES ENABLED"
 incsrc tinystates.asm
 ; Set to enable savestate features
 !FEATURE_SD2SNES = 1
-else
-print "TINYSTATES DISABLED"
 endif
 
 if !FEATURE_EXTRAS
@@ -29,9 +27,9 @@ print "EXTRAS ENABLED"
 endif
 
 if !FEATURE_VANILLAHUD
-print "VANILLA HUD"
+print " INFOHUD / [VANILLA HUD]"
 else
-print "INFOHUD"
+print " [INFOHUD] / VANILLA HUD"
 endif
 
 if !ORIGINAL_MESSAGE_TEXT
