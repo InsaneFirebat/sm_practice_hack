@@ -1961,6 +1961,7 @@ ih_adjust_realtime:
 ; X must be preserved if used
 {
     LDA !sram_frame_counter_mode : BIT !FRAME_COUNTER_ADJUST_REALTIME : BEQ .done
+    LDA !sram_fanfare_toggle : BNE .done
 
     TYA
     ; add time to segment timer frames, and divide by 60
