@@ -2956,7 +2956,9 @@ game_invincibility:
     %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
 
 game_infiniteammo:
-    %cm_toggle_bit("Infinite Ammo", !ram_infinite_ammo, #$0001, #GameLoopExtras)
+    %cm_toggle_bit("Infinite Ammo", !ram_infinite_ammo, #$0001, .routine)
+  .routine
+    JML GameLoopExtras
 
 game_pacifist:
     %cm_toggle("Deal Zero Damage", !ram_pacifist, #$0001, #0)
