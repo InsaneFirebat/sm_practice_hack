@@ -73,7 +73,7 @@ endif
 print pc, " misc bankA6 end"
 
 
-org $A7FFE0         ; free space
+org $A7FF82         ; free space
 print pc, " misc bankA7 start"
 ResetCountDamagePhan:
 {
@@ -85,6 +85,7 @@ ResetCountDamagePhan:
     RTS
 }
 print pc, " misc bankA7 end"
+warnpc hook_kraid_claw_rng ; rng.asm
 
 
 org $A0FFA0         ; count damage in free space at end of bank
