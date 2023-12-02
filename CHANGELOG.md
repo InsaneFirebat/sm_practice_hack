@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.9.15] Fixed Phantoon crash
 * [2.5.9.14] Fixed crash on Infinite Ammo menu option
 * [2.5.9.14] Fixed timer adjustment when fanfares set to force music
 * [2.5.9.13] Added toggle to prevent Phantoon from fading out

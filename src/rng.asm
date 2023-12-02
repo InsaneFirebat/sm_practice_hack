@@ -796,7 +796,7 @@ phantoon_always_visible:
 if !FEATURE_PAL
     JMP $DBCE
 else
-    JMP $D464
+    JMP $DB9A
 endif
 
   .enabled
