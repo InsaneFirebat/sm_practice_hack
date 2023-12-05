@@ -1985,17 +1985,22 @@ status_gateglitch:
     LDA #$0014 : STA !ram_roomstrat_counter : STA !ram_shot_timer
     RTS
 
+  .rewardSFX
+    LDA !sram_display_mode_reward : BEQ .reset
+    %sfxenergy()
+    BRA .reset
+
   .gotit
     ; Check if this should be YY or Y2
     LDA !ram_roomstrat_state : CMP #$0001 : BNE .gottwoframe
     LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E
-    BRA .reset
+    BRA .rewardSFX
 
   .gottwoframe
     LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8C
     LDA #$0002 : SEC : SBC !ram_shot_timer
     ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
-    BRA .reset
+    BRA .rewardSFX
 
   .late
     LDA !ram_roomstrat_counter : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
@@ -2039,7 +2044,9 @@ status_moatcwj:
     BRL .nochange
 
   .firstframeperfect
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A
+    LDA !sram_display_mode_reward : BEQ +
+    %sfxenergy()
++   LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A
     LDA #$0002 : STA !ram_roomstrat_counter : STA !ram_roomstrat_state
 
   .done
@@ -2084,7 +2091,9 @@ status_moatcwj:
     ; Prevent redundacy on start
     CMP !ram_roomstrat_state : BEQ .resetcounter
     STA !ram_roomstrat_state
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88
+    LDA !sram_display_mode_reward : BEQ +
+    %sfxenergy()
++   LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88
     LDA !IH_BLANK : STA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E : STA !HUD_TILEMAP+$90
 
   .resetcounter
@@ -2108,7 +2117,9 @@ status_moatcwj:
     LDA #$0C01 : STA !HUD_TILEMAP+$8E
 
   .secondgotit
-    LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8C
+    LDA !sram_display_mode_reward : BEQ +
+    %sfxenergy()
++   LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8C
 
   .clear
     LDA #$0000 : STA !ram_roomstrat_state : STA !ram_roomstrat_counter
