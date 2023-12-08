@@ -127,13 +127,13 @@ ifb_numbergfx_display:
     RTL
 
 ifb_brb:
-    %cm_submenu("BRB Screen", #BRBMenu)
+    %cm_submenu(">BRB Screen", #BRBMenu)
 
 ifb_soundtest:
-    %cm_submenu("Sound Test", #SoundTestMenu)
+    %cm_submenu(">Sound Test", #SoundTestMenu)
 
 ifb_presetrando:
-    %cm_submenu("Preset Randomizer", #PresetRandoMenu)
+    %cm_submenu(">Preset Randomizer", #PresetRandoMenu)
 
 if !FEATURE_EXTRAS
     ifb_noclip:
@@ -144,10 +144,10 @@ if !FEATURE_EXTRAS
 endif
 
 ifb_capture_cropping:
-    %cm_submenu("Capture Cropping Mode", #CaptureCroppingMenu)
+    %cm_submenu(">Capture Cropping Mode", #CaptureCroppingMenu)
 
 ifb_factory_reset:
-    %cm_submenu("Factory Reset", #FactoryResetConfirm)
+    %cm_submenu(">Factory Reset", #FactoryResetConfirm)
 
 if !FEATURE_DEV
 ifb_emu_test:
@@ -341,7 +341,7 @@ ifb_soundtest_silence:
     RTL
 
 ifb_soundtest_goto_music:
-    %cm_submenu("Music Selection", #MusicSelectMenu1)
+    %cm_submenu(">Music Selection", #MusicSelectMenu1)
 
 MusicSelectMenu1:
     dw #ifb_soundtest_music_title1
@@ -426,7 +426,7 @@ ifb_soundtest_music_tourian:
     %cm_jsl("Tourian", #action_soundtest_playmusic, #$1E05)
 
 ifb_soundtest_music_goto_2:
-    %cm_jsl("GOTO PAGE TWO", .routine, #MusicSelectMenu2)
+    %cm_jsl(">GOTO PAGE TWO", .routine, #MusicSelectMenu2)
   .routine
     JSL cm_go_back
     %submenu_jump()
@@ -498,7 +498,7 @@ ifb_soundtest_music_galaxypeace:
     %cm_jsl("The Galaxy is at Peace", #action_soundtest_playmusic, #$4205)
 
 ifb_soundtest_music_goto_1:
-    %cm_jsl("GOTO PAGE ONE", .routine, #MusicSelectMenu1)
+    %cm_jsl(">GOTO PAGE ONE", .routine, #MusicSelectMenu1)
   .routine
     JSL cm_go_back
     %submenu_jump()
