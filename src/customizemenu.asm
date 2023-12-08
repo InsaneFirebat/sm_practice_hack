@@ -29,7 +29,7 @@ mc_menubackground:
     %cm_toggle("Menu Background", !sram_menu_background, #$0001, #0)
 
 mc_custompalettes_menu:
-    %cm_submenu("Customize Menu Palette", #CustomPalettesMenu)
+    %cm_submenu(">Customize Menu Palette", #CustomPalettesMenu)
 
 mc_paletteprofile:
     dw !ACTION_CHOICE
@@ -64,7 +64,7 @@ mc_paletteprofile:
     db #$FF
 
 mc_palette2custom:
-    %cm_submenu("Copy Palette to Custom", #Palette2CustomConfirm)
+    %cm_submenu(">Copy Palette to Custom", #Palette2CustomConfirm)
 
 Palette2CustomConfirm:
     dw #palette2custom_abort
@@ -121,7 +121,7 @@ palette2custom_confirm:
     JML action_submenu
 
 mc_paletterando:
-    %cm_submenu("Randomize Custom Palette", #PaletteRandoConfirm)
+    %cm_submenu(">Randomize Custom Palette", #PaletteRandoConfirm)
 
 PaletteRandoConfirm:
     dw #paletterando_abort
@@ -168,7 +168,7 @@ paletterando_confirm:
     RTL
 
 mc_customsfx:
-    %cm_submenu("Customize Menu Sounds", #CustomMenuSFXMenu)
+    %cm_submenu(">Customize Menu Sounds", #CustomMenuSFXMenu)
 
 mc_customfont:
     %cm_numfield("Select Font", !sram_cm_font, 0, 1, 1, 1, .routine)
@@ -176,7 +176,7 @@ mc_customfont:
     JML cm_transfer_custom_tileset
 
 mc_customheader:
-    %cm_jsl("Customize Menu Header", #.routine, #$0000)
+    %cm_jsl(">Customize Menu Header", #.routine, #$0000)
   .routine
     ; enter keyboard editing mode
     LDA.w #!sram_custom_header : STA !DP_Address
@@ -220,37 +220,37 @@ CustomPalettesMenu:
     %cm_header("CUSTOMIZE MENU PALETTE")
 
 custompalettes_text:
-    %palettemenu("Text", CustomPalettesMenu_menutext, !sram_palette_text)
+    %palettemenu(">Text", CustomPalettesMenu_menutext, !sram_palette_text)
 
 custompalettes_seltext:
-    %palettemenu("Selected Text", CustomPalettesMenu_menuseltext, !sram_palette_seltext)
+    %palettemenu(">Selected Text", CustomPalettesMenu_menuseltext, !sram_palette_seltext)
 
 custompalettes_seltextbg:
-    %palettemenu("Selected Text Background", CustomPalettesMenu_menuseltextbg, !sram_palette_seltextbg)
+    %palettemenu(">Selected Text Background", CustomPalettesMenu_menuseltextbg, !sram_palette_seltextbg)
 
 custompalettes_headeroutline:
-    %palettemenu("Header Outline", CustomPalettesMenu_menuheaderoutline, !sram_palette_headeroutline)
+    %palettemenu(">Header Outline", CustomPalettesMenu_menuheaderoutline, !sram_palette_headeroutline)
 
 custompalettes_numfill:
-    %palettemenu("Number Field Text", CustomPalettesMenu_menunumfill, !sram_palette_numfill)
+    %palettemenu(">Number Field Text", CustomPalettesMenu_menunumfill, !sram_palette_numfill)
 
 custompalettes_numoutline:
-    %palettemenu("Number Field Outline", CustomPalettesMenu_menunumoutline, !sram_palette_numoutline)
+    %palettemenu(">Number Field Outline", CustomPalettesMenu_menunumoutline, !sram_palette_numoutline)
 
 custompalettes_numsel:
-    %palettemenu("Selected Num-Field Text", CustomPalettesMenu_menunumsel, !sram_palette_numsel)
+    %palettemenu(">Selected Num-Field Text", CustomPalettesMenu_menunumsel, !sram_palette_numsel)
 
 custompalettes_numseloutline:
-    %palettemenu("Selected Num-Field Outline", CustomPalettesMenu_menunumseloutline, !sram_palette_numseloutline)
+    %palettemenu(">Selected Num-Field Outline", CustomPalettesMenu_menunumseloutline, !sram_palette_numseloutline)
 
 custompalettes_toggleon:
-    %palettemenu("Toggle ON", CustomPalettesMenu_menutoggleon, !sram_palette_toggleon)
+    %palettemenu(">Toggle ON", CustomPalettesMenu_menutoggleon, !sram_palette_toggleon)
 
 custompalettes_border:
-    %palettemenu("Toggle OFF + Border", CustomPalettesMenu_menuborder, !sram_palette_border)
+    %palettemenu(">Toggle OFF + Border", CustomPalettesMenu_menuborder, !sram_palette_border)
 
 custompalettes_background:
-    %palettemenu("Background", CustomPalettesMenu_menubackground, !sram_palette_background)
+    %palettemenu(">Background", CustomPalettesMenu_menubackground, !sram_palette_background)
 
 custompalettes_hex_red:
     %cm_numfield_color("Hexadecimal Red", !sram_custompalette_red, #MixRGB)
@@ -284,7 +284,7 @@ mc_dummy_num:
 
 
 mc_custompalettes_display_menu:
-    %cm_submenu("Screenshot To Share Colors", #CustomPalettesDisplayMenu)
+    %cm_submenu(">Screenshot To Share Colors", #CustomPalettesDisplayMenu)
 
 CustomPalettesDisplayMenu:
     dw #custompalettes_border_display
