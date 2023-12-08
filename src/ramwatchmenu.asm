@@ -47,7 +47,7 @@ RAMWatchMenu:
     %cm_header("READ AND WRITE TO MEMORY")
 
 ramwatch_goto_common:
-    %cm_submenu("Select Common Addresses", #RAMWatchCommonMenu)
+    %cm_submenu(">Select Common Addresses", #RAMWatchCommonMenu)
 
 RAMWatchCommonMenu:
     dw ramwatch_common_enemy
@@ -60,22 +60,22 @@ RAMWatchCommonMenu:
     %cm_header("CHOOSE RAM CATEGORY")
 
 ramwatch_common_enemy:
-    %cm_submenu("Enemy Addresses", #RAMWatchCommonEnemyMenu)
+    %cm_submenu(">Enemy Addresses", #RAMWatchCommonEnemyMenu)
 
 ramwatch_common_samus1:
-    %cm_submenu("Samus Addresses 1", #RAMWatchCommonSamusMenu1)
+    %cm_submenu(">Samus Addresses 1", #RAMWatchCommonSamusMenu1)
 
 ramwatch_common_samus2:
-    %cm_submenu("Samus Addresses 2", #RAMWatchCommonSamusMenu2)
+    %cm_submenu(">Samus Addresses 2", #RAMWatchCommonSamusMenu2)
 
 ramwatch_common_plm:
-    %cm_submenu("PLM Addresses", #RAMWatchCommonPlmMenu)
+    %cm_submenu(">PLM Addresses", #RAMWatchCommonPlmMenu)
 
 ramwatch_common_proj:
-    %cm_submenu("Projectile Addresses", #RAMWatchCommonProjMenu)
+    %cm_submenu(">Projectile Addresses", #RAMWatchCommonProjMenu)
 
 ramwatch_common_misc:
-    %cm_submenu("Misc Addresses", #RAMWatchCommonMiscMenu)
+    %cm_submenu(">Misc Addresses", #RAMWatchCommonMiscMenu)
 
 RAMWatchCommonEnemyMenu:
     dw ramwatch_common_enemy_side

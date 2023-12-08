@@ -161,53 +161,53 @@ endif
     dw #IFBMenu>>16
 
 mm_goto_equipment:
-    %cm_mainmenu("Equipment", #EquipmentMenu)
+    %cm_mainmenu(">Equipment", #EquipmentMenu)
 
 mm_goto_presets:
-    %cm_jsl("Category Presets", #action_presets_submenu, #$0000)
+    %cm_jsl(">Category Presets", #action_presets_submenu, #$0000)
 
 mm_goto_presets_menu:
-    %cm_mainmenu("Presets Menu", #PresetsMenu)
+    %cm_mainmenu(">Presets Menu", #PresetsMenu)
 
 mm_goto_teleport:
-    %cm_mainmenu("Save Stations", #TeleportMenu)
+    %cm_mainmenu(">Save Stations", #TeleportMenu)
 
 mm_goto_events:
-    %cm_mainmenu("Event Flags", #EventsMenu)
+    %cm_mainmenu(">Event Flags", #EventsMenu)
 
 mm_goto_misc:
-    %cm_mainmenu("Misc Options", #MiscMenu)
+    %cm_mainmenu(">Misc Options", #MiscMenu)
 
 mm_goto_sprites:
-    %cm_mainmenu("Sprite Features", #SpritesMenu)
+    %cm_mainmenu(">Sprite Features", #SpritesMenu)
 
 mm_goto_infohud:
-    %cm_jsl("InfoHUD", #.routine, #InfoHudMenu)
+    %cm_jsl(">InfoHUD", #.routine, #InfoHudMenu)
   .routine
     LDA !sram_top_display_mode : CMP #$0003 : BCC +
     LDA #$0000 : STA !sram_top_display_mode
 +   JML action_mainmenu
 
 mm_goto_gamemenu:
-    %cm_mainmenu("Game Options", #GameMenu)
+    %cm_mainmenu(">Game Options", #GameMenu)
 
 mm_goto_rngmenu:
-    %cm_mainmenu("RNG Control", #RngMenu)
+    %cm_mainmenu(">RNG Control", #RngMenu)
 
 mm_goto_savestate:
-    %cm_mainmenu("Savestate Settings", #SavestateMenu)
+    %cm_mainmenu(">Savestate Settings", #SavestateMenu)
 
 mm_goto_timecontrol:
-    %cm_mainmenu("Slowdown Mode", #SlowdownMenu)
+    %cm_mainmenu(">Slowdown Mode", #SlowdownMenu)
 
 mm_goto_ctrlsmenu:
-    %cm_mainmenu("Controller Shortcuts", #CtrlMenu)
+    %cm_mainmenu(">Controller Shortcuts", #CtrlMenu)
 
 mm_goto_customize:
-    %cm_mainmenu("Customize Practice Menu", #CustomizeMenu)
+    %cm_mainmenu(">Customize Practice Menu", #CustomizeMenu)
 
 mm_goto_IFBmenu:
-    %cm_mainmenu("Firebat Menu", #IFBMenu)
+    %cm_mainmenu(">Firebat Menu", #IFBMenu)
 
 
 ; -------------
@@ -247,7 +247,7 @@ if !RAW_TILE_GRAPHICS
 endif
 
 presets_goto_select_preset_category:
-    %cm_submenu("Select Preset Category", #SelectPresetCategoryMenu)
+    %cm_submenu(">Select Preset Category", #SelectPresetCategoryMenu)
 
 presets_reload:
     %cm_jsl("Reload Last Preset", .routine, #$0000)
@@ -755,28 +755,28 @@ ManagePresetsMenu3:
     %cm_managepreset(39)
 
 custompreset_goto_page1:
-    %cm_jsl("GOTO PAGE ONE", .routine, #CustomPresetsMenu)
+    %cm_jsl(">GOTO PAGE ONE", .routine, #CustomPresetsMenu)
   .routine
     JSL cm_go_back
     %submenu_jump()
 
 custompreset_goto_page2:
-    %cm_jsl("GOTO PAGE TWO", custompreset_goto_page1_routine, #CustomPresetsMenu2)
+    %cm_jsl(">GOTO PAGE TWO", custompreset_goto_page1_routine, #CustomPresetsMenu2)
 
 custompreset_goto_page3:
-    %cm_jsl("GOTO PAGE THREE", custompreset_goto_page1_routine, #CustomPresetsMenu3)
+    %cm_jsl(">GOTO PAGE THREE", custompreset_goto_page1_routine, #CustomPresetsMenu3)
 
 managepreset_goto_page1:
-    %cm_jsl("GOTO PAGE ONE", .routine, #ManagePresetsMenu)
+    %cm_jsl(">GOTO PAGE ONE", .routine, #ManagePresetsMenu)
   .routine
     JSL cm_go_back
     %submenu_jump()
 
 managepreset_goto_page2:
-    %cm_jsl("GOTO PAGE TWO", managepreset_goto_page1_routine, #ManagePresetsMenu2)
+    %cm_jsl(">GOTO PAGE TWO", managepreset_goto_page1_routine, #ManagePresetsMenu2)
 
 managepreset_goto_page3:
-    %cm_jsl("GOTO PAGE THREE", managepreset_goto_page1_routine, #ManagePresetsMenu3)
+    %cm_jsl(">GOTO PAGE THREE", managepreset_goto_page1_routine, #ManagePresetsMenu3)
 
 ManagePresetsConfirm:
     dw #managepreset_abort
@@ -843,13 +843,13 @@ eq_refill:
     RTL
 
 eq_toggle_category:
-    %cm_submenu("Category Loadouts", #ToggleCategoryMenu)
+    %cm_submenu(">Category Loadouts", #ToggleCategoryMenu)
 
 eq_goto_toggleitems:
-    %cm_jsl("Toggle Items", #eq_prepare_items_menu, #ToggleItemsMenu)
+    %cm_jsl(">Toggle Items", #eq_prepare_items_menu, #ToggleItemsMenu)
 
 eq_goto_togglebeams:
-    %cm_jsl("Toggle Beams", #eq_prepare_beams_menu, #ToggleBeamsMenu)
+    %cm_jsl(">Toggle Beams", #eq_prepare_beams_menu, #ToggleBeamsMenu)
 
 eq_currentenergy:
     %cm_numfield_word("Current Energy", !SAMUS_HP, 0, 2100, 1, 20, #0)
@@ -1314,7 +1314,7 @@ tb_plasmabeam:
     %cm_equipment_beam("Plasma", !ram_cm_plasma, #$0008, #$FFF7, #$100B)
 
 tb_glitchedbeams:
-    %cm_submenu("Glitched Beams", #GlitchedBeamsMenu)
+    %cm_submenu(">Glitched Beams", #GlitchedBeamsMenu)
 
 equipment_toggle_beams:
 {
@@ -1392,22 +1392,22 @@ TeleportMenu:
     %cm_header("TELEPORT TO SAVE STATION")
 
 tel_goto_crateria:
-    %cm_submenu("Crateria", #TeleportCrateriaMenu)
+    %cm_submenu(">Crateria", #TeleportCrateriaMenu)
 
 tel_goto_brinstar:
-    %cm_submenu("Brinstar", #TeleportBrinstarMenu)
+    %cm_submenu(">Brinstar", #TeleportBrinstarMenu)
 
 tel_goto_norfair:
-    %cm_submenu("Norfair", #TeleportNorfairMenu)
+    %cm_submenu(">Norfair", #TeleportNorfairMenu)
 
 tel_goto_wreckedship:
-    %cm_submenu("Wrecked Ship", #TeleportWreckedShipMenu)
+    %cm_submenu(">Wrecked Ship", #TeleportWreckedShipMenu)
 
 tel_goto_maridia:
-    %cm_submenu("Maridia", #TeleportMaridiaMenu)
+    %cm_submenu(">Maridia", #TeleportMaridiaMenu)
 
 tel_goto_tourian:
-    %cm_submenu("Tourian", #TeleportTourianMenu)
+    %cm_submenu(">Tourian", #TeleportTourianMenu)
 
 TeleportCrateriaMenu:
     dw #tel_crateriaship
@@ -1953,7 +1953,7 @@ events_resetitems:
     RTL
 
 events_goto_bosses:
-    %cm_submenu("Bosses", #BossesMenu)
+    %cm_submenu(">Bosses", #BossesMenu)
 
 events_zebesawake:
     %cm_toggle_bit("Zebes Awake", $7ED820, #$0001, #0)
@@ -2088,7 +2088,7 @@ endif
     %cm_header("INFOHUD")
 
 ih_goto_display_mode:
-    %cm_submenu("Select InfoHUD Mode", #DisplayModeMenu)
+    %cm_submenu(">Select InfoHUD Mode", #DisplayModeMenu)
 
 DisplayModeMenu:
     dw ihmode_enemyhp
@@ -2201,10 +2201,10 @@ ihmode_ramwatch:
 ;    %cm_jsl("WIP - Damage Boost Trainer", #action_select_infohud_mode, #$0016)
 
 ihmode_GOTO_PAGE_ONE:
-    %cm_jsl("GOTO PAGE ONE", ihmode_GOTO_PAGE_TWO_routine, #DisplayModeMenu)
+    %cm_jsl(">GOTO PAGE ONE", ihmode_GOTO_PAGE_TWO_routine, #DisplayModeMenu)
 
 ihmode_GOTO_PAGE_TWO:
-    %cm_jsl("GOTO PAGE TWO", .routine, #DisplayModeMenu2)
+    %cm_jsl(">GOTO PAGE TWO", .routine, #DisplayModeMenu2)
   .routine
     JSL cm_go_back
     %submenu_jump()
@@ -2249,7 +2249,7 @@ ih_display_mode_reward:
     %cm_toggle("Strat Reward SFX", !sram_display_mode_reward, #$0001, #0)
 
 ih_goto_room_strat:
-    %cm_submenu("Select Room Strat", #RoomStratMenu)
+    %cm_submenu(">Select Room Strat", #RoomStratMenu)
 
 RoomStratMenu:
     dw ihstrat_superhud
@@ -2377,7 +2377,7 @@ ih_room_strat:
 
 print pc, " superhud menu end"
 ih_superhud:
-    %cm_submenu("Configure Super HUD", #SuperHUDMenu)
+    %cm_submenu(">Configure Super HUD", #SuperHUDMenu)
 
 SuperHUDMenu:
     dw #ih_superhud_bottom_selector
@@ -2423,7 +2423,7 @@ ih_superhud_bottom_selector:
     db #$FF
 
 ih_superhud_bottom_submenu:
-        %cm_submenu("Bottom HUD List", #SuperHUDBottomMenu)
+        %cm_submenu(">Bottom HUD List", #SuperHUDBottomMenu)
 
 SuperHUDBottomMenu:
     dw ih_superhud_enemyhp
@@ -2541,7 +2541,7 @@ ih_superhud_middle_selector:
     db #$FF
 
 ih_superhud_middle_submenu:
-    %cm_submenu("Middle HUD List", #SuperHUDMiddleMenu)
+    %cm_submenu(">Middle HUD List", #SuperHUDMiddleMenu)
 
 SuperHUDMiddleMenu:
     dw ih_superhud_middle_off
@@ -2611,7 +2611,7 @@ ih_superhud_top_selector:
     db #$FF
 
 ih_superhud_top_submenu:
-    %cm_submenu("Top HUD List", #SuperHUDTopMenu)
+    %cm_submenu(">Top HUD List", #SuperHUDTopMenu)
 
 SuperHUDTopMenu:
     dw ih_superhud_top_off
@@ -2688,7 +2688,7 @@ ih_door_display_mode:
     db #$FF
 
 ih_goto_timer_settings:
-    %cm_submenu("Timer Settings", #TimerSettingsMenu)
+    %cm_submenu(">Timer Settings", #TimerSettingsMenu)
 
 TimerSettingsMenu:
     dw #ih_room_counter
@@ -2759,7 +2759,7 @@ ih_dynamic_frames_held:
     dw #$0000
 
 ih_goto_frames_held:
-    %cm_submenu("Frames Held Mode", #IHFramesHeldMenu)
+    %cm_submenu(">Frames Held Mode", #IHFramesHeldMenu)
 
 IHFramesHeldMenu:
     dw #ih_frames_held_a
@@ -2826,7 +2826,7 @@ ih_spacetime_infohud:
     db #$FF
 
 ih_ram_watch:
-    %cm_jsl("Customize RAM Watch", #ih_prepare_ram_watch_menu, #RAMWatchMenu)
+    %cm_jsl(">Customize RAM Watch", #ih_prepare_ram_watch_menu, #RAMWatchMenu)
 
 incsrc ramwatchmenu.asm
 
@@ -2879,7 +2879,7 @@ game_iconcancel:
     %cm_toggle("Icon Cancel", $7E09EA, #$0001, #0)
 
 game_goto_controls:
-    %cm_submenu("Controller Setting Mode", #ControllerSettingMenu)
+    %cm_submenu(">Controller Setting Mode", #ControllerSettingMenu)
 
 game_fanfare_toggle:
     dw !ACTION_CHOICE
@@ -2929,7 +2929,7 @@ game_healthalarm:
     db #$FF
 
 game_goto_debug:
-    %cm_submenu("Debug Settings", #DebugMenu)
+    %cm_submenu(">Debug Settings", #DebugMenu)
 
 DebugMenu:
     dw #game_debugmode
@@ -3010,7 +3010,7 @@ game_clear_minimap:
     RTL
 
 game_goto_cutscenes:
-    %cm_submenu("Cutscenes", #CutscenesMenu)
+    %cm_submenu(">Cutscenes", #CutscenesMenu)
 
 
 ; ---------------
@@ -3098,7 +3098,7 @@ ControllerSettingMenu:
     %cm_header("CONTROLLER SETTING MODE")
 
 controls_common_layouts:
-    %cm_submenu("Common Controller Layouts", #ControllerCommonMenu)
+    %cm_submenu(">Common Controller Layouts", #ControllerCommonMenu)
 
 controls_shot:
     %cm_ctrl_input("        SHOT", !IH_INPUT_SHOT, action_submenu, #AssignControlsMenu)
@@ -3398,7 +3398,7 @@ RngMenu:
     %cm_header("BOSS RNG CONTROL")
 
 rng_goto_phanmenu:
-    %cm_jsl("Phantoon Menu", ih_prepare_phantoon_menu, #PhantoonMenu)
+    %cm_jsl(">Phantoon Menu", ih_prepare_phantoon_menu, #PhantoonMenu)
 
 ih_prepare_phantoon_menu:
 {
