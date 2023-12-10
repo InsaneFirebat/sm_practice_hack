@@ -2144,7 +2144,69 @@ print pc, " infohud bank80 end"
 warnpc $80FFB0 ; header
 
 
-; Main Menu Tilemap
+; Main Menu Tilemap edits
+; hijack entering OPTION MODE
+org $82ECD3
+    JSR TitleTilemapHijack
+
+; hijack returning to OPTION MODE
+org $82EFD7
+    JSR TitleTilemapHijack
+
+org $82F9A0
+print pc, " infohud bank82 start"
+TitleTilemapHijack:
+{
+    PHA : PHX
+    LDX #$0016
+  .loopUpper
+    LDA.w TitleHeaderReplace_upper,X : STA $7E3054,X
+    DEX #2 : BPL .loopUpper
+
+    LDX #$0016
+  .loopLower
+    LDA.w TitleHeaderReplace_lower,X : STA $7E3094,X
+    DEX #2 : BPL .loopLower
+
+    PLX : PLA
+    JMP $8BCB ; overwritten code
+
+TitleHeaderReplace:
+  .upper
+table ..\resources\LargeUpperChar.tbl
+if !VERSION_REV_1
+    dw "  !VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV_1!VERSION_REV_2  "
+else
+if !VERSION_REV_2
+    dw "  !VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV_2   "
+else
+    dw "   !VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD    "
+endif
+endif
+
+  .lower
+if !VERSION_REV_1
+table ..\resources\SmallChar.tbl
+    dw " V"
+table ..\resources\LargeLowerChar.tbl
+    dw "!VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV_1!VERSION_REV_2  "
+else
+if !VERSION_REV_2
+table ..\resources\SmallChar.tbl
+    dw " V"
+table ..\resources\LargeLowerChar.tbl
+    dw "!VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV_2   "
+else
+table ..\resources\SmallChar.tbl
+    dw "  V"
+table ..\resources\LargeLowerChar.tbl
+    dw "!VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD    "
+endif
+endif
+print pc, " infohud bank82 end"
+warnpc $82FA00 ; presets.asm
+}
+
 org $81B40A
     ;           P      R      A      C      T      I      C      E                
     dw $200F, $200D, $000D, $200A, $200C, $002C, $2022, $200C, $200E, $200F, $FFFE
