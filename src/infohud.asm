@@ -1985,7 +1985,7 @@ ih_adjust_realtime:
 }
 
 NumberGFXChoice:
-incbin ../resources/num_gfx_choice.bin
+incbin ../resources/gfx/num_gfx_choice.bin
 
 overwrite_HUD_numbers:
 {
@@ -2173,7 +2173,7 @@ TitleTilemapHijack:
 
 TitleHeaderReplace:
   .upper
-table ..\resources\LargeUpperChar.tbl
+table ../resources/tables/LargeUpperChar.tbl
 if !VERSION_REV_1
     dw "  !VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV_1!VERSION_REV_2  "
 else
@@ -2186,20 +2186,20 @@ endif
 
   .lower
 if !VERSION_REV_1
-table ..\resources\SmallChar.tbl
+table ../resources/tables/SmallChar.tbl
     dw " V"
-table ..\resources\LargeLowerChar.tbl
+table ../resources/tables/LargeLowerChar.tbl
     dw "!VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV_1!VERSION_REV_2  "
 else
 if !VERSION_REV_2
-table ..\resources\SmallChar.tbl
+table ../resources/tables/SmallChar.tbl
     dw " V"
-table ..\resources\LargeLowerChar.tbl
+table ../resources/tables/LargeLowerChar.tbl
     dw "!VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV_2   "
 else
-table ..\resources\SmallChar.tbl
+table ../resources/tables/SmallChar.tbl
     dw "  V"
-table ..\resources\LargeLowerChar.tbl
+table ../resources/tables/LargeLowerChar.tbl
     dw "!VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD    "
 endif
 endif
@@ -2208,12 +2208,12 @@ warnpc $82FA00 ; presets.asm
 }
 
 org $81B40A
-table ..\resources\LargeUpperChar.tbl
+table ../resources/tables/LargeUpperChar.tbl
     dw " PRACTICE ", $FFFE
-table ..\resources\LargeLowerChar.tbl
+table ../resources/tables/LargeLowerChar.tbl
     dw " PRACTICE ", $FFFF
 
-table ..\resources\SmallChar.tbl
+table ../resources/tables/SmallChar.tbl
 org $8EDC40
     dw "   SM"
 
@@ -2225,7 +2225,7 @@ org $8EDCC0
 
 org $8EDC70
     dw "  SM"
-table ..\resources\normal.tbl
+table ../resources/tables/normal.tbl
 
 org $8EDCB0
     ;           レ      ン     シ      ュ      ウ    top half of "renshuu"

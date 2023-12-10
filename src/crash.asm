@@ -997,7 +997,7 @@ crash_read_inputs:
 ; ------------
 
 CrashTextHeader:
-    table ../resources/header.tbl
+table ../resources/tables/header.tbl
 if !VERSION_REV_1
     db "CRASH HANDLER v", "!VERSION_MAJOR", ".", "!VERSION_MINOR", ".", "!VERSION_BUILD", ".", "!VERSION_REV_1", "!VERSION_REV_2", #$FF
 else
@@ -1007,7 +1007,7 @@ else
     db "CRASH HANDLER v", "!VERSION_MAJOR", ".", "!VERSION_MINOR", ".", "!VERSION_BUILD", #$FF
 endif
 endif
-    table ../resources/normal.tbl
+table ../resources/tables/normal.tbl
 
 CrashTextFooter1:
 ; Navigate pages with A or B
@@ -1030,10 +1030,10 @@ CrashTextStack4:
     db "Stack OVERFLOW!!!", #$FF
 
 CrashTextHeader2:
-    table ../resources/header.tbl
+table ../resources/tables/header.tbl
     db "CRASH MEMORY VIEWER", #$FF
-    table ../resources/normal.tbl
-;    table ../resources/thinfont.tbl
+table ../resources/tables/normal.tbl
+;table ../resources/tables/thinfont.tbl
 
 CrashTextMemAddress:
     db "ADDRESS:  $", #$FF
@@ -1051,10 +1051,10 @@ CrashTextMemSelectLow:
     db "Select Address Low   $", #$FF
 
 CrashTextHeader3:
-    table ../resources/header.tbl
+table ../resources/tables/header.tbl
     db "BUT WHAT DOES IT ALL MEAN?", #$FF
-    table ../resources/normal.tbl
-;    table ../resources/thinfont.tbl
+table ../resources/tables/normal.tbl
+;table ../resources/tables/thinfont.tbl
 
 CrashTextInfo1:
     db "Super Metroid has crashed!", #$FF
@@ -1093,5 +1093,5 @@ CrashTextInfo11:
     db "Press ", #$8D, #$8C, #$85, #$84, " to soft reset", #$FF
 
 print pc, " crash handler bank89 end"
-    table ../resources/normal.tbl
+table ../resources/tables/normal.tbl
 

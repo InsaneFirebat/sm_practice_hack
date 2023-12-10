@@ -2358,7 +2358,7 @@ Row5Spacebar:
     db "          "
 
 KeyboardTilemap:
-table ../resources/header.tbl
+table ../resources/tables/header.tbl
   .header
     db $28, "   CHOOSE A CUSTOM NAME   ", $FF
   .footer1
@@ -2371,7 +2371,7 @@ table ../resources/header.tbl
     db $28, "HOLD X TO CLEAR SELECTION ", $FF
   .footer5
     db $28, "  PRESS SELECT TO CANCEL  ", $FF
-table ../resources/normal.tbl
+table ../resources/tables/normal.tbl
   .blanks
     db $28, "  ______________________  ", $FF
   .row1
@@ -3363,7 +3363,7 @@ incsrc crash.asm
 
 cm_hud_table:
     ; 1000h bytes
-    incbin ../resources/cm_gfx.bin
+incbin ../resources/gfx/cm_gfx.bin
 
 HexMenuGFXTable:
     dw $2C70, $2C71, $2C72, $2C73, $2C74, $2C75, $2C76, $2C77, $2C78, $2C79, $2C50, $2C51, $2C52, $2C53, $2C54, $2C55
@@ -3380,7 +3380,7 @@ print pc, " menu end"
 org $FF8000
 cm_hud_table2:
     ; 1000h bytes
-    incbin ../resources/cm_gfx2.bin
+incbin ../resources/gfx/cm_gfx2.bin
 
 
 ; -----------

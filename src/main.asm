@@ -10,7 +10,7 @@ lorom
 !PRESERVE_WRAM_DURING_SPACETIME ?= 1
 !RAW_TILE_GRAPHICS ?= 1
 
-table ../resources/normal.tbl
+table ../resources/tables/normal.tbl
 
 incsrc macros.asm
 incsrc defines.asm

@@ -939,6 +939,6 @@ DrawMBHitbox:
 }
 
 sprite_tiles:
-    incbin "../resources/spritegfx.bin":0-600
+incbin "../resources/gfx/spritegfx.bin":0-600
 
 print pc, " spritefeat end"

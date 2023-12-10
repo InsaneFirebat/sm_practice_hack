@@ -54,7 +54,7 @@ org $82E488      ; write tiles to VRAM
 
 org $9AB200      ; graphics for HUD
 hudgfx_bin:
-incbin ../resources/hudgfx.bin
+incbin ../resources/gfx/hudgfx.bin
 endif
 
 
@@ -62,7 +62,7 @@ endif
 org $DFD500
 print pc, " minimap bankDF start"
 mapgfx_bin:
-incbin ../resources/mapgfx.bin
+incbin ../resources/gfx/mapgfx.bin
 
 ; Next block needs to be all zeros to clear a tilemap
 fillbyte $00

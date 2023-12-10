@@ -357,9 +357,9 @@ cm_scroll_BG3:
 ; -------------
 
 BRB_common_1:
-    table ../resources/customfont.tbl
+table ../resources/tables/customfont.tbl
     db #$28, "      InsaneFirebat", #$FF
-    table ../resources/normal.tbl
+table ../resources/tables/normal.tbl
 
 BRB_common_2:
     db #$28, "    Will Be Right Back", #$FF
@@ -496,8 +496,8 @@ BRB_screen2_0F:
 pushpc
 org $B0F000
 cm_brb_table:
-    ; 1000h bytes transferred
-    incbin ../resources/cm_brb_gfx.bin
+; 1000h bytes transferred
+incbin ../resources/gfx/cm_brb_gfx.bin
 pullpc
 
 org MenuResources
