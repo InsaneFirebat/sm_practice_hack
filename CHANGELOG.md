@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.9.18] Edited menu header with version number
 * [2.5.9.17] Changed submenu icon
 * [2.5.9.16] Added menu icons for submenus
 * [2.5.9.16] Added reward SFX to Gate Glitch and Moat CWJ trainers
