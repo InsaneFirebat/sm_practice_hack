@@ -358,12 +358,12 @@ cm_scroll_BG3:
 ; -------------
 
 BRB_common_1:
-    table ../resources/header.tbl
+table ../resources/tables/header.tbl
     db #$28, "       The Streamer", #$FF
 
 BRB_common_2:
     db #$28, "    Will Be Right Back", #$FF
-    table ../resources/normal.tbl
+table ../resources/tables/normal.tbl
 
 BRBTilemapAddress:
     dw #BRB_screen_01
@@ -434,8 +434,8 @@ BRB_screen2_07:
 pushpc
 org $B0F000
 cm_brb_table:
-    ; 1000h bytes transferred
-    incbin ../resources/cm_brb_gfx.bin
+; 1000h bytes transferred
+incbin ../resources/gfx/cm_brb_gfx.bin
 pullpc
 
 org MenuResources

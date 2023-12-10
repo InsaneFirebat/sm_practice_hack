@@ -2600,7 +2600,7 @@ RidleyAI_text_table:
     dw #RidleyAIText_C588 ; explode
 
 RidleyAIText:
-table ../resources/HUDfont.tbl
+table ../resources/tables/HUDfont.tbl
   .WAIT : db "STALLING"     : db $FF
   .B2F3 : db "LIFTOFF"      : db $FF
   .B321 : db "CHOOSE AI"    : db $FF
@@ -2629,7 +2629,7 @@ table ../resources/HUDfont.tbl
   .C538 : db "DEAD MOVE"    : db $FF
   .C588 : db "EXPLODE"      : db $FF
   .DEAD : db "END"          : db $FF
-table ../resources/normal.tbl
+table ../resources/tables/normal.tbl
 }
 
 status_downbackzeb:

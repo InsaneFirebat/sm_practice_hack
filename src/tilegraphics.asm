@@ -5,49 +5,49 @@ print pc, " raw tile tables crossbank start"
 
 ; 30K tile tables (6K each)
 tile_table_00_01_upper_crateria:
-incbin ../resources/tile_table_00_01_upper_crateria.bin
+incbin ../resources/gfx/tile_table_00_01_upper_crateria.bin
 
 tile_table_02_03_lower_crateria:
-incbin ../resources/tile_table_02_03_lower_crateria.bin
+incbin ../resources/gfx/tile_table_02_03_lower_crateria.bin
 
 tile_table_04_05_wrecked_ship:
-incbin ../resources/tile_table_04_05_wrecked_ship.bin
+incbin ../resources/gfx/tile_table_04_05_wrecked_ship.bin
 
 tile_table_06_green_blue_brinstar:
-incbin ../resources/tile_table_06_green_blue_brinstar.bin
+incbin ../resources/gfx/tile_table_06_green_blue_brinstar.bin
 
 tile_table_07_08_red_brinstar:
-incbin ../resources/tile_table_07_08_red_brinstar.bin
+incbin ../resources/gfx/tile_table_07_08_red_brinstar.bin
 
 ; 24K tile tables (6K each)
 tile_table_09_10_norfair:
-incbin ../resources/tile_table_09_10_norfair.bin
+incbin ../resources/gfx/tile_table_09_10_norfair.bin
 
 tile_table_11_sandless_maridia:
-incbin ../resources/tile_table_11_sandless_maridia.bin
+incbin ../resources/gfx/tile_table_11_sandless_maridia.bin
 
 tile_table_12_sandy_maridia:
-incbin ../resources/tile_table_12_sandy_maridia.bin
+incbin ../resources/gfx/tile_table_12_sandy_maridia.bin
 
 tile_table_13_14_tourian:
-incbin ../resources/tile_table_13_14_tourian.bin
+incbin ../resources/gfx/tile_table_13_14_tourian.bin
 
 ; 8K Ceres tile table
 tile_table_15_20_ceres:
-incbin ../resources/tile_table_15_20_ceres.bin
+incbin ../resources/gfx/tile_table_15_20_ceres.bin
 
 ; 24K tile tables (6K each)
 tile_table_21_25_utility:
-incbin ../resources/tile_table_21_25_utility.bin
+incbin ../resources/gfx/tile_table_21_25_utility.bin
 
 tile_table_26_kraid:
-incbin ../resources/tile_table_26_kraid.bin
+incbin ../resources/gfx/tile_table_26_kraid.bin
 
 tile_table_27_croc:
-incbin ../resources/tile_table_27_croc.bin
+incbin ../resources/gfx/tile_table_27_croc.bin
 
 tile_table_28_draygon:
-incbin ../resources/tile_table_28_draygon.bin
+incbin ../resources/gfx/tile_table_28_draygon.bin
 
 print pc, " raw tile tables crossbank end"
 warnpc $E8E000 ; presets.asm
@@ -59,39 +59,39 @@ print pc, " tilegraphics start"
 
 ; 12K CRE tile graphics
 tiles_cre:
-incbin ../resources/tiles_CRE.bin
+incbin ../resources/gfx/tiles_CRE.bin
 
 ; 2K CRE tile table
 tile_table_cre:
-incbin ../resources/tile_table_CRE.bin
+incbin ../resources/gfx/tile_table_CRE.bin
 
 ; 6.25K palettes (0.25K each)
 tileset_palettes:
-incbin ../resources/palettes_00_upper_crateria.bin
-incbin ../resources/palettes_01_red_crateria.bin
-incbin ../resources/palettes_02_lower_crateria.bin
-incbin ../resources/palettes_03_old_tourian.bin
-incbin ../resources/palettes_04_wrecked_ship_power_on.bin
-incbin ../resources/palettes_05_wrecked_ship_power_off.bin
-incbin ../resources/palettes_06_green_blue_brinstar.bin
-incbin ../resources/palettes_07_red_brinstar.bin
-incbin ../resources/palettes_08_tourian_entrance.bin
-incbin ../resources/palettes_09_heated_norfair.bin
-incbin ../resources/palettes_10_unheated_norfair.bin
-incbin ../resources/palettes_11_sandless_maridia.bin
-incbin ../resources/palettes_12_sandy_maridia.bin
-incbin ../resources/palettes_13_tourian.bin
-incbin ../resources/palettes_14_mother_brain.bin
-incbin ../resources/palettes_15_17_19_blue_ceres.bin
-incbin ../resources/palettes_16_18_20_white_ceres.bin
-incbin ../resources/palettes_21_map_room.bin
-incbin ../resources/palettes_22_map_room_power_off.bin
-incbin ../resources/palettes_23_blue_refill_room.bin
-incbin ../resources/palettes_24_yellow_refill_room.bin
-incbin ../resources/palettes_25_save_room.bin
-incbin ../resources/palettes_26_kraid.bin
-incbin ../resources/palettes_27_croc.bin
-incbin ../resources/palettes_28_draygon.bin
+incbin ../resources/gfx/palettes_00_upper_crateria.bin
+incbin ../resources/gfx/palettes_01_red_crateria.bin
+incbin ../resources/gfx/palettes_02_lower_crateria.bin
+incbin ../resources/gfx/palettes_03_old_tourian.bin
+incbin ../resources/gfx/palettes_04_wrecked_ship_power_on.bin
+incbin ../resources/gfx/palettes_05_wrecked_ship_power_off.bin
+incbin ../resources/gfx/palettes_06_green_blue_brinstar.bin
+incbin ../resources/gfx/palettes_07_red_brinstar.bin
+incbin ../resources/gfx/palettes_08_tourian_entrance.bin
+incbin ../resources/gfx/palettes_09_heated_norfair.bin
+incbin ../resources/gfx/palettes_10_unheated_norfair.bin
+incbin ../resources/gfx/palettes_11_sandless_maridia.bin
+incbin ../resources/gfx/palettes_12_sandy_maridia.bin
+incbin ../resources/gfx/palettes_13_tourian.bin
+incbin ../resources/gfx/palettes_14_mother_brain.bin
+incbin ../resources/gfx/palettes_15_17_19_blue_ceres.bin
+incbin ../resources/gfx/palettes_16_18_20_white_ceres.bin
+incbin ../resources/gfx/palettes_21_map_room.bin
+incbin ../resources/gfx/palettes_22_map_room_power_off.bin
+incbin ../resources/gfx/palettes_23_blue_refill_room.bin
+incbin ../resources/gfx/palettes_24_yellow_refill_room.bin
+incbin ../resources/gfx/palettes_25_save_room.bin
+incbin ../resources/gfx/palettes_26_kraid.bin
+incbin ../resources/gfx/palettes_27_croc.bin
+incbin ../resources/gfx/palettes_28_draygon.bin
 warnpc $F4D100
 
 ; First byte = size of tile graphics
@@ -623,55 +623,55 @@ print pc, " raw tiles crossbank start"
 
 ; 18K tile graphics
 tiles_00_01_upper_crateria:
-incbin ../resources/tiles_00_01_upper_crateria.bin
+incbin ../resources/gfx/tiles_00_01_upper_crateria.bin
 
 tiles_02_03_lower_crateria:
-incbin ../resources/tiles_02_03_lower_crateria.bin
+incbin ../resources/gfx/tiles_02_03_lower_crateria.bin
 
 tiles_04_05_wrecked_ship:
-incbin ../resources/tiles_04_05_wrecked_ship.bin
+incbin ../resources/gfx/tiles_04_05_wrecked_ship.bin
 
 tiles_06_green_blue_brinstar:
-incbin ../resources/tiles_06_green_blue_brinstar.bin
+incbin ../resources/gfx/tiles_06_green_blue_brinstar.bin
 
 tiles_07_08_red_brinstar:
-incbin ../resources/tiles_07_08_red_brinstar.bin
+incbin ../resources/gfx/tiles_07_08_red_brinstar.bin
 
 tiles_09_10_norfair:
-incbin ../resources/tiles_09_10_norfair.bin
+incbin ../resources/gfx/tiles_09_10_norfair.bin
 
 tiles_11_sandless_maridia:
-incbin ../resources/tiles_11_sandless_maridia.bin
+incbin ../resources/gfx/tiles_11_sandless_maridia.bin
 
 tiles_12_sandy_maridia:
-incbin ../resources/tiles_12_sandy_maridia.bin
+incbin ../resources/gfx/tiles_12_sandy_maridia.bin
 
 tiles_13_14_tourian:
-incbin ../resources/tiles_13_14_tourian.bin
+incbin ../resources/gfx/tiles_13_14_tourian.bin
 
 tiles_15_16_ceres:
-incbin ../resources/tiles_15_16_ceres.bin
+incbin ../resources/gfx/tiles_15_16_ceres.bin
 
 tiles_21_25_utility:
-incbin ../resources/tiles_21_25_utility.bin
+incbin ../resources/gfx/tiles_21_25_utility.bin
 
 tiles_27_croc:
-incbin ../resources/tiles_27_croc.bin
+incbin ../resources/gfx/tiles_27_croc.bin
 
 tiles_28_draygon:
-incbin ../resources/tiles_28_draygon.bin
+incbin ../resources/gfx/tiles_28_draygon.bin
 
 ; 32K tile graphics
 warnpc $FC8000
 
 tiles_17_18_ceres_elevator:
-incbin ../resources/tiles_17_18_ceres_elevator.bin
+incbin ../resources/gfx/tiles_17_18_ceres_elevator.bin
 
 tiles_19_20_ceres_ridley:
-incbin ../resources/tiles_19_20_ceres_ridley.bin
+incbin ../resources/gfx/tiles_19_20_ceres_ridley.bin
 
 tiles_26_kraid:
-incbin ../resources/tiles_26_kraid.bin
+incbin ../resources/gfx/tiles_26_kraid.bin
 
 print pc, " raw tiles crossbank end"
 warnpc $FF8000

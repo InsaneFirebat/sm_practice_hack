@@ -55,31 +55,31 @@ endmacro
 macro norm2head(char)
 ; used to build a conversion table for normal to header text
     db "<char>"
-table ../resources/header.tbl
+table ../resources/tables/header.tbl
     db "<char>"
-table ../resources/normal.tbl
+table ../resources/tables/normal.tbl
 endmacro
 
 macro cm_header(title)
 ; outlined text to be drawn above the menu items
   .dm_header
-    table ../resources/header.tbl
+table ../resources/tables/header.tbl
     db #$28, "<title>", #$FF
-    table ../resources/normal.tbl
+table ../resources/tables/normal.tbl
 endmacro
 
 macro cm_footer(title)
 ; optional outlined text below the menu items
   .dm_footer
-    table ../resources/header.tbl
+table ../resources/tables/header.tbl
     dw #$F007 : db #$28, "<title>", #$FF
-    table ../resources/normal.tbl
+table ../resources/tables/normal.tbl
 endmacro
 
 macro cm_version_header(title, major, minor, build, rev_1, rev_2)
 ; header text with automatic version number appended
   .dm_verHeader
-    table ../resources/header.tbl
+table ../resources/tables/header.tbl
 if !VERSION_REV_1
     db #$28, "<title> v<major>.<minor>.<build>.<rev_1><rev_2>", #$FF
 else
@@ -89,7 +89,7 @@ else
     db #$28, "<title> v<major>.<minor>.<build>", #$FF
 endif
 endif
-    table ../resources/normal.tbl
+table ../resources/tables/normal.tbl
 endmacro
 
 macro cm_numfield(title, addr, start, end, increment, heldincrement, jsltarget)

@@ -1082,7 +1082,7 @@ DraygonAI_text_table:
     dw #DraygonAIText_94A9 ; HOLD SAMUS
 
 DraygonAIText:
-table ../resources/HUDfont.tbl
+table ../resources/tables/HUDfont.tbl
   .871B : db "INIT EVIRS"   : db $FF
   .878B : db "IDLE"         : db $FF
   .87F4 : db "SET SWOOP R"  : db $FF
@@ -1116,6 +1116,6 @@ table ../resources/HUDfont.tbl
   .92AB : db "SINK N FLOOR" : db $FF
   .94A9 : db "HOLD SAMUS"   : db $FF
   .UNKN : db "UNKNOWN"      : db $FF
-table ../resources/normal.tbl
+table ../resources/tables/normal.tbl
 }
 
