@@ -2,12 +2,12 @@
 
 This page hosts the source material for the Super Metroid Practice Hack. It is intended for users that wish to contribute to the project, customize their own Practice Hacks, adapt it for SM romhacks, or just to see how it works. Visit https://smpractice.speedga.me for details on patching your SM rom with the latest version of InfoHUD.
 
-## Getting Started:
+The assembler, asar, is provided for your convenience. You can download your own copy or build it from its official source at https://github.com/RPGHacker/asar
 
-1. Download asar from https://github.com/RPGHacker/asar and place it in the \tools\ folder.
-2. Download and install Python 3 from https://python.org. Windows users will need to set the PATH environmental variable to point to their Python installation folder.
-3. Run build.bat to create IPS patch files.
-4. Locate the patch files in \build\.
+## Building IPS Patches:
+1. Download and install Python 3 from https://python.org. Windows users will need to set the PATH environmental variable to point to their Python installation folder.
+2. Run build.bat to create IPS patch files.
+3. Locate the patch files in \build\.
 
 ## Which rom should I use?
 
