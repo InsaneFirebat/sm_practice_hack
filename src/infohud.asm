@@ -2207,26 +2207,24 @@ warnpc $82FA00 ; presets.asm
 }
 
 org $81B40A
-    ;           P      R      A      C      T      I      C      E                
-    dw $200F, $200D, $000D, $200A, $200C, $002C, $2022, $200C, $200E, $200F, $FFFE
-    dw $200F, $2038, $003A, $201A, $201C, $0011, $2011, $201C, $201E, $200F, $FFFF
+table ..\resources\LargeUpperChar.tbl
+    dw " PRACTICE ", $FFFE
+table ..\resources\LargeLowerChar.tbl
+    dw " PRACTICE ", $FFFF
 
-
+table ..\resources\SmallChar.tbl
 org $8EDC40
-    ;                         S      M  
-    dw $000F, $000F, $000F, $007C, $0076
+    dw "   SM"
 
 org $8EDC80
-    ;    P      R      A      C      T      I      C      E  
-    dw $0079, $007B, $006A, $006C, $007D, $0072, $006C, $006E
+    dw "PRACTICE"
 
 org $8EDCC0
-    ;                  H      A      C      K  
-    dw $000F, $000F, $0071, $006A, $006C, $0074
+    dw "  HACK"
 
 org $8EDC70
-    ;                  S      M         
-    dw $000F, $000F, $007C, $0076
+    dw "  SM"
+table ..\resources\normal.tbl
 
 org $8EDCB0
     ;           レ      ン     シ      ュ      ウ    top half of "renshuu"
