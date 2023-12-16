@@ -80,14 +80,10 @@ macro cm_version_header(title, major, minor, build, rev_1, rev_2)
 ; header text with automatic version number appended
   .dm_verHeader
 table ../resources/tables/header.tbl
-if !VERSION_REV_1
+if !VERSION_REV
     db #$28, "<title> v<major>.<minor>.<build>.<rev_1><rev_2>", #$FF
 else
-if !VERSION_REV_2
-    db #$28, "<title> v<major>.<minor>.<build>.<rev_2>", #$FF
-else
     db #$28, "<title> v<major>.<minor>.<build>", #$FF
-endif
 endif
 table ../resources/tables/normal.tbl
 endmacro

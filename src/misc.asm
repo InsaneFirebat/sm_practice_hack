@@ -45,21 +45,28 @@ org $8BF6DC
 else
 org $8BF754
 endif
-    db #$20, #($30+!VERSION_MAJOR)
-    db #$2E, #($30+!VERSION_MINOR)
-    db #$2E, #($30+!VERSION_BUILD)
+    db $20, !VERSION_MAJOR+$30
+
+if !VERSION_MINOR > 9
+    db $2E, $31, !VERSION_MINOR+$26
+else
+    db $2E, !VERSION_MINOR+$30
+endif
+
+if !VERSION_BUILD > 9
+    db $2E, $31, !VERSION_BUILD+$26
+else
+    db $2E, !VERSION_BUILD+$30
+endif
+
 if !VERSION_REV_1
-    db #$2E, #($30+!VERSION_REV_1)
-    db #($30+!VERSION_REV_2)
-    db #$20, #$20
+    db $2E, !VERSION_REV_1+$30, !VERSION_REV_2+$30
 else
-if !VERSION_REV_2
-    db #$2E, #($30+!VERSION_REV_2)
-    db #$20, #$20, #$20
-else
-    db #$20, #$20, #$20, #$20, #$20
+if !VERSION_REV_1*10+!VERSION_REV_2
+    db $2E, !VERSION_REV_2+$30
 endif
 endif
+    db $00
 
 
 ; Fix Zebes planet tiling error
