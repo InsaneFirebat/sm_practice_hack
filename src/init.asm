@@ -10,7 +10,6 @@ org $808455
 
 
 ; hijack when clearing bank 7E
-if !PRESERVE_WRAM_DURING_SPACETIME
 org $808490
     PHA
     LDX #$3FFE
@@ -29,7 +28,6 @@ warnpc $8084AF
 
 org $8084AF
   .end_clear_bank
-endif
 
 
 org $81F000
