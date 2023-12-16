@@ -19,6 +19,7 @@
 !WRAM_BANK = #$007E
 !WRAM_SIZE = #$0200
 !WRAM_START = $7EFD00
+!WRAM_END = $7EFF00
 !WRAM_PERSIST_START = !ram_game_loop_extras
 
 ; These variables are NOT PERSISTENT across savestates --
@@ -70,9 +71,9 @@
 
 !ram_room_has_set_rng = !WRAM_START+$50
 
-!ram_spacetime_read_address = !WRAM_START+$52
-!ram_spacetime_read_bank = !WRAM_START+$54
-!ram_spacetime_y = !WRAM_START+$56
+;!ram_unused = !WRAM_START+$52
+;!ram_unused = !WRAM_START+$54
+;!ram_unused = !WRAM_START+$56
 
 !ram_watch_left_hud = !WRAM_START+$58
 !ram_watch_right_hud = !WRAM_START+$5A

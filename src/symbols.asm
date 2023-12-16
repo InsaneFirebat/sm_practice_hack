@@ -62,9 +62,9 @@ ram_magic_pants_pal3 = !ram_magic_pants_pal3 ; !WRAM_START+$3E
 
 ram_room_has_set_rng = !ram_room_has_set_rng ; !WRAM_START+$50
 
-ram_spacetime_read_address = !ram_spacetime_read_address ; !WRAM_START+$52
-ram_spacetime_read_bank = !ram_spacetime_read_bank ; !WRAM_START+$54
-ram_spacetime_y = !ram_spacetime_y ; !WRAM_START+$56
+;!ram_unused = !WRAM_START+$52
+;!ram_unused = !WRAM_START+$54
+;!ram_unused = !WRAM_START+$56
 
 ram_watch_left_hud = !ram_watch_left_hud ; !WRAM_START+$58
 ram_watch_right_hud = !ram_watch_right_hud ; !WRAM_START+$5A
