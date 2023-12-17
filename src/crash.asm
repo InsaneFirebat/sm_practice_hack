@@ -998,7 +998,7 @@ crash_read_inputs:
 
 CrashTextHeader:
 table ../resources/tables/header.tbl
-if !VERSION_REV_1
+if !VERSION_REV
     db "CRASH HANDLER v!VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV", #$FF
 else
     db "CRASH HANDLER v!VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD", #$FF
