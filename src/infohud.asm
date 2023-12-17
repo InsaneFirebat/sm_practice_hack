@@ -2174,34 +2174,23 @@ TitleTilemapHijack:
 TitleHeaderReplace:
   .upper
 table ../resources/tables/LargeUpperChar.tbl
-if !VERSION_REV_1
-    dw "  !VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV_1!VERSION_REV_2  "
-else
-if !VERSION_REV_2
-    dw "  !VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV_2   "
+if !VERSION_REV
+    dw "  !VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV  "
 else
     dw "   !VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD    "
 endif
-endif
 
   .lower
-if !VERSION_REV_1
+if !VERSION_REV
 table ../resources/tables/SmallChar.tbl
     dw " V"
 table ../resources/tables/LargeLowerChar.tbl
-    dw "!VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV_1!VERSION_REV_2  "
-else
-if !VERSION_REV_2
-table ../resources/tables/SmallChar.tbl
-    dw " V"
-table ../resources/tables/LargeLowerChar.tbl
-    dw "!VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV_2   "
+    dw "!VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV  "
 else
 table ../resources/tables/SmallChar.tbl
     dw "  V"
 table ../resources/tables/LargeLowerChar.tbl
     dw "!VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD    "
-endif
 endif
 print pc, " infohud bank82 end"
 warnpc $82FA00 ; presets.asm

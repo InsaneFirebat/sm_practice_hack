@@ -69,7 +69,7 @@ if !VERSION_REV
 endif
 endif
     db $00
-table ../resources/normal.tbl
+table ../resources/tables/normal.tbl
 
 
 ; Fix Zebes planet tiling error
