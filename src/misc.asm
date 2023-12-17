@@ -45,28 +45,31 @@ org $8BF6DC
 else
 org $8BF754
 endif
-    db $20, !VERSION_MAJOR+$30
-
+cleartable ; ASCII
+if !VERSION_MAJOR > 9
+    db ' ', $30+(!VERSION_MAJOR/10), $30+(!VERSION_MAJOR%10)
+else
+    db ' ', $30+!VERSION_MAJOR
+endif
 if !VERSION_MINOR > 9
-    db $2E, $31, !VERSION_MINOR+$26
+    db '.', $30+(!VERSION_MINOR/10), $30+(!VERSION_MINOR%10)
 else
-    db $2E, !VERSION_MINOR+$30
+    db '.', $30+!VERSION_MINOR
 endif
-
 if !VERSION_BUILD > 9
-    db $2E, $31, !VERSION_BUILD+$26
+    db '.', $30+(!VERSION_BUILD/10), $30+(!VERSION_BUILD%10)
 else
-    db $2E, !VERSION_BUILD+$30
+    db '.', $30+!VERSION_BUILD
 endif
-
-if !VERSION_REV_1
-    db $2E, !VERSION_REV_1+$30, !VERSION_REV_2+$30
+if !VERSION_REV > 9
+    db '.', $30+(!VERSION_REV/10), $30+(!VERSION_REV%10)
 else
-if !VERSION_REV_1*10+!VERSION_REV_2
-    db $2E, !VERSION_REV_2+$30
+if !VERSION_REV
+    db '.', $30+!VERSION_REV
 endif
 endif
     db $00
+table ../resources/normal.tbl
 
 
 ; Fix Zebes planet tiling error

@@ -132,9 +132,9 @@ endif
     dw #mm_goto_IFBmenu
     dw #$0000
 if !FEATURE_PAL
-    %cm_version_header("PAL INFOHUD", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
+    %cm_version_header("PAL INFOHUD")
 else ; 16 characters available
-    %cm_version_header("CUSTOM INFOHUD", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
+    %cm_version_header("CUSTOM INFOHUD")
 endif
 
 MainMenuBanks:
