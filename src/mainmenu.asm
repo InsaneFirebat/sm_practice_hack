@@ -2119,6 +2119,7 @@ DisplayModeMenu:
 
 DisplayModeMenu2:
     dw ihmode_countdamage
+    dw ihmode_pumpcounter
 ;    dw ihmode_dboost ; (unfinished)
     dw ihmode_armpump
     dw ihmode_ramwatch
@@ -2197,6 +2198,9 @@ ihmode_countdamage:
 ihmode_ramwatch:
     %cm_jsl("Custom RAM Watch", #action_select_infohud_mode, #$0015)
 
+ihmode_pumpcounter:
+    %cm_jsl("Arm Pump Counter", #action_select_infohud_mode, #$0016)
+
 ;ihmode_dboost:
 ;    %cm_jsl("WIP - Damage Boost Trainer", #action_select_infohud_mode, #$0016)
 
@@ -2242,6 +2246,7 @@ ih_display_mode:
     db #$28, " SHOT TIMER", #$FF
     db #$28, "DMG COUNTER", #$FF
     db #$28, "  RAM WATCH", #$FF
+    db #$28, " PUMP COUNT", #$FF
 ;    db #$28, "WIP D-BOOST", #$FF
     db #$FF
 
