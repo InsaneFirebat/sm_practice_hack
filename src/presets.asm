@@ -46,11 +46,12 @@ preset_load:
     STA $0725    ; Screen fade counter = 1
 
     JSL $80834B  ; Enable NMI with $84 options
-    JSL $868000  ; Enable enemy projectiles
-    JSL $8483AD  ; Enable PLMs
-    JSL $8DC4C2  ; Enable palette FX objects
-    JSL $888288  ; Enable HDMA objects
-    JSL $878000  ; Enable animated tile objects
+    LDA #$8000
+    TSB $198D    ; Enable enemy projectiles
+    TSB $1C23    ; Enable PLMs
+    TSB $1E79    ; Enable palette FX objects
+    TSB $18B0    ; Enable HDMA objects
+    TSB $1EF1    ; Enable animated tile objects
     JSL $908E0F  ; Set liquid physics type
 
     LDA #$0006 : STA $0DA0
@@ -384,8 +385,10 @@ preset_start_gameplay:
     STA !SAMUS_POTENTIAL_POSE_VALUES+2 : STA !SAMUS_POTENTIAL_POSE_VALUES+4
 
     ; Set Samus last position same as current position
-    LDA !SAMUS_X : STA $0B10 : LDA !SAMUS_X_SUBPX : STA $0B12
-    LDA !SAMUS_Y : STA $0B14 : LDA !SAMUS_Y_SUBPX : STA $0B16
+    LDA !SAMUS_X : STA !SAMUS_PREVIOUS_X
+    LDA !SAMUS_X_SUBPX : STA !SAMUS_PREVIOUS_X_SUBPX
+    LDA !SAMUS_Y : STA !SAMUS_PREVIOUS_Y
+    LDA !SAMUS_Y_SUBPX : STA !SAMUS_PREVIOUS_Y_SUBPX
 
     ; Set loading game state for Ceres
     LDA #$001F : STA $7ED914
@@ -520,6 +523,7 @@ endif
     STZ $1E75 ; Save Station Lockout flag
     STZ $0795 : STZ $0797  ; Clear door transition flags
     LDA #$0000 : STA !ram_transition_flag
+    JSL init_controller_bindings
 
     LDA #$E737 : STA $099C ; Pointer to next frame's room transition code = $82:E737
 

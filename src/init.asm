@@ -44,8 +44,6 @@ init_code:
     JSL init_sram
 
   .sram_initialized
-    ; WRAM located in bank 7E, clear it later
-
     PLA
     ; Execute overwritten logic and return
     JSL $8B9146
@@ -127,12 +125,12 @@ init_menu_customization:
     LDA #$7277 : STA !sram_palette_border
     LDA #$48F3 : STA !sram_palette_headeroutline
     LDA #$7FFF : STA !sram_palette_text
+    LDA #$0000 : STA !sram_palette_background
     LDA #$0000 : STA !sram_palette_numoutline
     LDA #$7FFF : STA !sram_palette_numfill
     LDA #$4376 : STA !sram_palette_toggleon
     LDA #$761F : STA !sram_palette_seltext
     LDA #$0000 : STA !sram_palette_seltextbg
-    LDA #$0000 : STA !sram_palette_background
     LDA #$0000 : STA !sram_palette_numseloutline
     LDA #$761F : STA !sram_palette_numsel
     LDA #$0001 : STA !sram_menu_background
@@ -148,6 +146,31 @@ init_menu_customization:
     RTL
 }
 
+init_controller_bindings:
+{
+    ; check if any non-dpad bindings are set
+    LDX #$000A
+    LDA.w !IH_INPUT_SHOT+$0C
+  .loopBindings
+    ORA.w !IH_INPUT_SHOT,X
+    DEX #2 : BPL .loopBindings
+    AND #$FFF0 : BNE .done
+
+    ; load default dpad bindings
+    LDA #$0800 : STA.w !INPUT_BIND_UP
+    LSR : STA.w !INPUT_BIND_DOWN
+    LSR : STA.w !INPUT_BIND_LEFT
+    LSR : STA.w !INPUT_BIND_RIGHT
+
+    ; load default non-dpad bindings
+    LDX #$000C
+  .loopTable
+    LDA.l ControllerLayoutTable,X : STA.w !IH_INPUT_SHOT,X
+    DEX #2 : BPL .loopTable
+
+  .done
+    RTL
+}
 
 print pc, " init end"
 ;warnpc $81FF00 ;;; $FF00: Thanks Genji! ;;;
