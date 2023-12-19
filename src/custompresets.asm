@@ -407,12 +407,12 @@ endif
   .ceres
     STZ $5F            ; Initialize mode 7
     CPX #$DF45 : BEQ .ceres_elevator
-    %a16()
-    STZ $78            ; Ceres Elevator room already does this
-    STZ $7A : STZ $7C  ; Other Ceres rooms should zero out the values
-    STZ $7E : STZ $80
-    STZ $82
+    %a16() : STZ $78             ; Ceres Elevator room already does this
+    STZ $7A : STZ $7C            ; Other Ceres rooms should zero out the values
+    STZ $7E : STZ $80 : STZ $82
+    LDA #$0009 : STA $07EB
     %a8()
+    LDA #$09 : STA $56
     CPX #$DF8D : BEQ .ceres_falling_tiles
     CPX #$DFD7 : BEQ .ceres_magnet_stairs
     CPX #$E021 : BEQ .ceres_dead_scientists

@@ -79,43 +79,39 @@ ram_magic_pants_pal3 = !ram_magic_pants_pal3 ; !WRAM_START+$40
 
 ram_room_has_set_rng = !ram_room_has_set_rng ; !WRAM_START+$42
 
-ram_tel_debug_area = !ram_tel_debug_area ; !WRAM_START+$44
-ram_tel_debug_station = !ram_tel_debug_station ; !WRAM_START+$46
+ram_watch_left_hud = !ram_watch_left_hud ; !WRAM_START+$44
+ram_watch_right_hud = !ram_watch_right_hud ; !WRAM_START+$46
 
-; ^ FREE SPACE @ $48
+ram_HUD_check = !ram_HUD_check ; !WRAM_START+$48
+ram_roomstrat_counter = !ram_roomstrat_counter ; !WRAM_START+$4A
+ram_roomstrat_state = !ram_roomstrat_state ; !WRAM_START+$4C
+ram_enemy_hp = !ram_enemy_hp ; !WRAM_START+$4E
+ram_mb_hp = !ram_mb_hp ; !WRAM_START+$50
+ram_shot_timer = !ram_shot_timer ; !WRAM_START+$52
+ram_shine_counter = !ram_shine_counter ; !WRAM_START+$54
+ram_dash_counter = !ram_dash_counter ; !WRAM_START+$56
+ram_shinetune_early_1 = !ram_shinetune_early_1 ; !WRAM_START+$58
+ram_shinetune_late_1 = !ram_shinetune_late_1 ; !WRAM_START+$5A
+ram_shinetune_early_2 = !ram_shinetune_early_2 ; !WRAM_START+$5C
+ram_shinetune_late_2 = !ram_shinetune_late_2 ; !WRAM_START+$5E
+ram_shinetune_early_3 = !ram_shinetune_early_3 ; !WRAM_START+$60
+ram_shinetune_late_3 = !ram_shinetune_late_3 ; !WRAM_START+$62
+ram_shinetune_early_4 = !ram_shinetune_early_4 ; !WRAM_START+$64
+ram_shinetune_late_4 = !ram_shinetune_late_4 ; !WRAM_START+$66
+ram_shine_dash_held_late = !ram_shine_dash_held_late ; !WRAM_START+$68
+ram_xpos = !ram_xpos ; !WRAM_START+$6A
+ram_ypos = !ram_ypos ; !WRAM_START+$6C
+ram_subpixel_pos = !ram_subpixel_pos ; !WRAM_START+$6E
+ram_horizontal_speed = !ram_horizontal_speed ; !WRAM_START+$70
+ram_vertical_speed = !ram_vertical_speed ; !WRAM_START+$72
+ram_quickdrop_counter = !ram_quickdrop_counter ; !WRAM_START+$74
+ram_walljump_counter = !ram_walljump_counter ; !WRAM_START+$76
+ram_fail_sum = !ram_fail_sum ; !WRAM_START+$78
+ram_fail_count = !ram_fail_count ; !WRAM_START+$7A
 
-ram_watch_left_hud = !ram_watch_left_hud ; !WRAM_START+$4A
-ram_watch_right_hud = !ram_watch_right_hud ; !WRAM_START+$4C
-
-ram_HUD_check = !ram_HUD_check ; !WRAM_START+$4E
-ram_roomstrat_counter = !ram_roomstrat_counter ; !WRAM_START+$50
-ram_roomstrat_state = !ram_roomstrat_state ; !WRAM_START+$52
-ram_enemy_hp = !ram_enemy_hp ; !WRAM_START+$54
-ram_mb_hp = !ram_mb_hp ; !WRAM_START+$56
-ram_shot_timer = !ram_shot_timer ; !WRAM_START+$58
-ram_shine_counter = !ram_shine_counter ; !WRAM_START+$5A
-ram_dash_counter = !ram_dash_counter ; !WRAM_START+$5C
-ram_shinetune_early_1 = !ram_shinetune_early_1 ; !WRAM_START+$5E
-ram_shinetune_late_1 = !ram_shinetune_late_1 ; !WRAM_START+$60
-ram_shinetune_early_2 = !ram_shinetune_early_2 ; !WRAM_START+$62
-ram_shinetune_late_2 = !ram_shinetune_late_2 ; !WRAM_START+$64
-ram_shinetune_early_3 = !ram_shinetune_early_3 ; !WRAM_START+$66
-ram_shinetune_late_3 = !ram_shinetune_late_3 ; !WRAM_START+$68
-ram_shinetune_early_4 = !ram_shinetune_early_4 ; !WRAM_START+$6A
-ram_shinetune_late_4 = !ram_shinetune_late_4 ; !WRAM_START+$6C
-ram_shine_dash_held_late = !ram_shine_dash_held_late ; !WRAM_START+$6E
-ram_xpos = !ram_xpos ; !WRAM_START+$70
-ram_ypos = !ram_ypos ; !WRAM_START+$72
-ram_subpixel_pos = !ram_subpixel_pos ; !WRAM_START+$74
-ram_horizontal_speed = !ram_horizontal_speed ; !WRAM_START+$76
-ram_vertical_speed = !ram_vertical_speed ; !WRAM_START+$78
-ram_quickdrop_counter = !ram_quickdrop_counter ; !WRAM_START+$7A
-ram_walljump_counter = !ram_walljump_counter ; !WRAM_START+$7C
-ram_fail_sum = !ram_fail_sum ; !WRAM_START+$7E
-ram_fail_count = !ram_fail_count ; !WRAM_START+$80
-
-ram_auto_save_state = !ram_auto_save_state ; !WRAM_START+$82
-ram_lag_counter = !ram_lag_counter ; !WRAM_START+$84
+ram_auto_save_state = !ram_auto_save_state ; !WRAM_START+$7C
+ram_lag_counter = !ram_lag_counter ; !WRAM_START+$7E
+ram_kraid_adjust_timer = !ram_kraid_adjust_timer ; !WRAM_START+$80
 
 ; ----------------------------------------------------------
 ; Variables below this point are PERSISTENT -- they maintain
@@ -172,7 +168,7 @@ ram_game_mode_extras = !ram_game_mode_extras ; !WRAM_PERSIST_START+$50
 ram_sprite_feature_flags = !ram_sprite_feature_flags ; !WRAM_PERSIST_START+$52
 ram_frames_held = !ram_frames_held ; !WRAM_PERSIST_START+$54
 
-; ^ FREE SPACE ^ up to +$76 (!WRAM_START+$FC - !WRAM_PERSIST_START)
+; ^ FREE SPACE ^ up to +$7A (!WRAM_START+$FC - !WRAM_PERSIST_START)
 
 ; -----------------------
 ; RAM (Bank 7E required)
@@ -229,7 +225,10 @@ ram_seed_Y = !ram_seed_Y ; !WRAM_MENU_START+$62
 
 ram_timers_autoupdate = !ram_timers_autoupdate ; !WRAM_MENU_START+$64
 
-; ^ FREE SPACE ^ up to +$7E
+; ^ FREE SPACE ^ up to +$7A
+
+ram_tel_debug_area = !ram_tel_debug_area ; !WRAM_START+$7C
+ram_tel_debug_station = !ram_tel_debug_station ; !WRAM_START+$7E
 
 ; ------------------
 ; Reusable RAM Menu

@@ -28,7 +28,7 @@ org $8FE0C0
 hook_layout_asm_ceres_ridley_state_check:
     dw layout_asm_ceres_ridley_state_check
 
-; Ceres Ridley room setup asm when timer is not running
+; Ceres Ridley setup asm when timer is not running
 org $8FE0DF
 hook_layout_asm_ceres_ridley_no_timer:
     dw layout_asm_ceres_ridley_no_timer

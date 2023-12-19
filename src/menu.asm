@@ -1319,7 +1319,7 @@ draw_ram_watch:
     JSR cm_draw_text
 
     ; Draw $ signs in the appropriate places
-    LDX #$2C4E
+    LDX #$2C00|'$'
     LDA !ram_watch_write_mode : BNE .both_8bit
     TXA : STA !ram_tilemap_buffer+$5D0 : STA !ram_tilemap_buffer+$5E6
     BRA .draw_hex
@@ -1919,7 +1919,7 @@ cm_edit_decimal_digits:
     TXA : CLC : ADC #$002C : TAX
 
     ; is editing thousands digit allowed?
-    LDA #$2C70
+    LDA #$2C00|'0'
     LDY !DP_DigitMaximum : CPY #1000 : BMI .drawThreeDigits
 
     ; start with zero tiles
@@ -3070,7 +3070,7 @@ execute_controller_input:
 
     ; Use bank of action_submenu
     ; instead of new menu's bank
-    LDA.l #action_submenu>>16 : STA !DP_JSLTarget+2
+    LDA.w #action_submenu>>16 : STA !DP_JSLTarget+2
 
     ; Set return address for indirect JSL
     PHK : PEA .end-1
