@@ -64,6 +64,12 @@ org $91DAD8      ; hijack, runs after a shinespark has been charged
 org $90F1E4      ; hijack, runs when an elevator is activated
     JSL ih_elevator_activation
 
+org $A490AD      ; hijack, runs on music changes during Crocomire fight
+    JSL ih_croc_segments
+
+org $A497E0      ; hijack, runs on music changes during Crocomire fight
+    JSL ih_croc_segments
+
 org $A9F006      ; hijack, runs when the screen locks to start the hopper/baby cutscene
     JSL ih_babyskip_segment
 
@@ -131,11 +137,20 @@ ih_get_item_code:
     LDA $14 : PHA
 
     ; check if segment timer should be reset
-    LDA !ram_reset_segment_later : BPL .update_HUD
+    LDA !ram_reset_segment_later : BPL .fanfare_timing
+    LDA !sram_frame_counter_mode : BEQ .reset_RTA
+    STZ !IGT_FRAMES : STZ !IGT_SECONDS
+    STZ !IGT_MINUTES : STZ !IGT_HOURS
+
+  .reset_RTA
     LDA #$0000 : STA !ram_reset_segment_later : STA !ram_lag_counter
     STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds : STA !ram_seg_rt_minutes
 
-  .update_HUD
+  .fanfare_timing
+    PHY
+    LDY #328 : JSL ih_adjust_realtime
+    PLY
+
     JSL ih_update_hud_code
 
     ; restore temp variables
@@ -281,6 +296,11 @@ ih_after_room_transition:
     ; Reset realtime and gametime/transition timers
     LDA #$0000 : STA !ram_realtime_room : STA !ram_transition_counter
 
+    LDA !ram_kraid_adjust_timer : BEQ .skipKraidTimer
+    LDY #$012B : JSL ih_adjust_realtime
+    LDA #$0000 : STA !ram_kraid_adjust_timer
+
+  .skipKraidTimer
     ; original hijacked code
     LDA #$0008 : STA !GAMEMODE
     RTL
@@ -331,15 +351,15 @@ ih_before_room_transition:
     BPL .drawDoorLag
     EOR #$FF : INC
   .drawDoorLag
-    PHB : PHD : PLB : PLB : PHA
+    PHB : PHD : PLB : PLB
+    TAY
     LDX #$00C2
     LDA !ram_minimap : BEQ .draw3
     LDX #$0054
   .draw3
-    PLA : JSR Draw3
+    TYA : JSR Draw3
     PLB
 
-  .done
     CLC ; overwritten code
     RTL
 }
@@ -396,6 +416,13 @@ ih_elevator_activation:
     STZ $0A56
     SEC
     RTL
+}
+
+ih_croc_segments:
+{
+    ; runs on two music changes post-fight
+    JSL !MUSIC_ROUTINE ; overwritten code
+    JML ih_update_hud_early
 }
 
 ih_babyskip_segment:
@@ -491,7 +518,7 @@ ih_update_hud_code:
 
   .mmRoomTimer
     STZ $4205
-    LDA !sram_frame_counter_mode : BNE .mmInGameTimer
+    LDA !sram_frame_counter_mode : BIT #$0001 : BNE .mmInGameTimer
     LDA !IH_DECIMAL : STA !HUD_TILEMAP+$B4
     LDA !ram_last_realtime_room
     BRA .mmCalculateTimer
@@ -532,7 +559,7 @@ ih_update_hud_code:
 
   .pickRoomTimer
     STZ $4205
-    LDA !sram_frame_counter_mode : BNE .inGameRoomTimer
+    LDA !sram_frame_counter_mode : BIT #$0001 : BNE .inGameRoomTimer
     LDA !IH_DECIMAL : STA !HUD_TILEMAP+$42
     LDA !ram_last_realtime_room
     BRA .calculateRoomTimer
@@ -625,7 +652,7 @@ ih_update_hud_code:
     LDX #$00C2 : JSR Draw2
 
   .pickSegmentTimer
-    LDA !sram_frame_counter_mode : BNE .inGameSegmentTimer
+    LDA !sram_frame_counter_mode : BIT #$0001 : BNE .inGameSegmentTimer
     LDA.w #!ram_seg_rt_frames : STA $00
     LDA.w #!WRAM_BANK : STA $02
     BRA .drawSegmentTimer
@@ -649,7 +676,7 @@ ih_update_hud_code:
     LDA [$00] : LDX #$00AE : JSR Draw3
 
     ; Draw decimal/hyphen seperators
-    LDA !sram_frame_counter_mode : BNE .ingameSeparators
+    LDA !sram_frame_counter_mode : BIT #$0001 : BNE .ingameSeparators
     LDA !IH_DECIMAL : STA !HUD_TILEMAP+$B4 : STA !HUD_TILEMAP+$BA
     BRA .blankEnd
 
@@ -1290,7 +1317,8 @@ ih_game_loop_code:
     CMP !IH_STATUS_R : BEQ .inc_statusdisplay
     CMP !IH_STATUS_L : BEQ .dec_statusdisplay
 
-    JML $808111 ; overwritten code
+  .done
+    JML $808111 ; overwritten code + return
 
   .toggle_pause
     TDC : STA !ram_slowdown_frames
@@ -1303,9 +1331,8 @@ ih_game_loop_code:
     BRA .done
 
   .toggle_speedup
-    LDA !ram_slowdown_mode : BEQ .skip_speedup
+    LDA !ram_slowdown_mode : BEQ .done
     DEC : STA !ram_slowdown_mode
-  .skip_speedup
     BRA .done
 
   .reset_slowdown
@@ -1320,10 +1347,6 @@ ih_game_loop_code:
     TDC : STA !sram_display_mode
     BRA .update_status
 
-  .done
-    ; overwritten code + return
-    JML $808111
-
   .dec_statusdisplay
     LDA !sram_display_mode : DEC
     CMP #$FFFF : BNE .set_displaymode
@@ -1333,7 +1356,7 @@ ih_game_loop_code:
     STA !sram_display_mode
 
   .update_status
-    TDC
+    LDA #$0000
     STA !ram_momentum_sum
     STA !ram_momentum_count
     STA !ram_HUD_check
@@ -1352,7 +1375,8 @@ ih_game_loop_code:
     STA !ram_mb_hp
     STA !ram_enemy_hp
     STA !ram_shine_counter
-    BRA .done
+
+    JML $808111 ; overwritten code + return
 }
 
 metronome:
@@ -1498,6 +1522,30 @@ ih_shinespark_code:
     RTL
 }
 
+; If the frame counter is set to "SPEEDRUN" mode, adds the number of frames in Y to the room and segment timers.
+ih_adjust_realtime:
+{
+    LDA !sram_frame_counter_mode : BIT !FRAME_COUNTER_ADJUST_REALTIME : BEQ .done
+
+    TYA
+    ; add time to segment timer frames, and divide by 60
+    CLC : ADC !ram_seg_rt_frames : STA $4204
+    TYA : %i8() : LDY.b !FRAMERATE : STY $4206
+
+    PHA : CLC : ADC !ram_realtime_room : STA !ram_realtime_room
+    LDA $4216 : STA !ram_seg_rt_frames
+    LDA $4214 : CLC : ADC !ram_seg_rt_seconds : STA $4204 : STY $4206
+    PLA : CLC : ADC !ram_transition_counter : STA !ram_transition_counter
+
+    CLC : LDA !ram_seg_rt_minutes
+    ADC $4214 : STA !ram_seg_rt_minutes
+    LDA $4216 : STA !ram_seg_rt_seconds
+
+    %i16()
+  .done
+    RTL
+}
+
 print pc, " infohud end"
 ;warnpc $F0E000 ; spritefeat.asm
 
@@ -1548,9 +1596,7 @@ ih_hud_code_paused:
 {
     ; overwritten code
     PHP
-    PHB
-    PHK
-    PLB
+    PHB : PHK : PLB
     %a8()
     STZ $02
     %ai16()

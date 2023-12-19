@@ -111,31 +111,27 @@ endmacro
 
 macro cm_header(title)
 ; outlined text to be drawn above the menu items
-    table ../resources/header.tbl
+table ../resources/header.tbl
     db #$28, "<title>", #$FF
-    table ../resources/normal.tbl
+table ../resources/normal.tbl
 endmacro
 
 macro cm_footer(title)
 ; optional outlined text below the menu items
-    table ../resources/header.tbl
+table ../resources/header.tbl
     dw #$F007 : db #$28, "<title>", #$FF
-    table ../resources/normal.tbl
+table ../resources/normal.tbl
 endmacro
 
-macro cm_version_header(title, major, minor, build, rev_1, rev_2)
+macro cm_version_header(title)
 ; header text with automatic version number appended
-    table ../resources/header.tbl
-if !VERSION_REV_1
-    db #$28, "<title> <major>.<minor>.<build>.<rev_1><rev_2>", #$FF
+table ../resources/header.tbl
+if !VERSION_REV
+    db #$28, "<title> !VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV", #$FF
 else
-if !VERSION_REV_2
-    db #$28, "<title> <major>.<minor>.<build>.<rev_2>", #$FF
-else
-    db #$28, "<title> <major>.<minor>.<build>", #$FF
+    db #$28, "<title> !VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD", #$FF
 endif
-endif
-    table ../resources/normal.tbl
+table ../resources/normal.tbl
 endmacro
 
 macro cm_numfield(title, addr, start, end, increment, heldincrement, jsltarget)
@@ -146,6 +142,7 @@ macro cm_numfield(title, addr, start, end, increment, heldincrement, jsltarget)
     db <increment> ; inc/dec amount when pressed
     db <heldincrement> ; inc/dec amount when direction is held (scroll faster)
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+table ../resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -157,6 +154,7 @@ macro cm_numfield_word(title, addr, start, end, increment, heldincrement, jsltar
     dw <increment> ; inc/dec amount when pressed
     dw <heldincrement> ; inc/dec amount when direction is held (scroll faster)
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+table ../resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -168,6 +166,7 @@ macro cm_numfield_hex(title, addr, start, end, increment, heldincrement, jsltarg
     db <increment> ; inc/dec amount when pressed
     db <heldincrement> ; inc/dec amount when direction is held (scroll faster)
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+table ../resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -177,6 +176,7 @@ macro cm_numfield_hex_word(title, addr, bitmask, jsltarget)
     dl <addr> ; 24bit RAM address to display/manipulate
     dw <bitmask> ; 16bit mask to cap value (for colors)
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+table ../resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -185,6 +185,7 @@ macro cm_numfield_color(title, addr, jsltarget)
     dw !ACTION_NUMFIELD_COLOR
     dl <addr> ; 24bit RAM address to display/manipulate
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+table ../resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -196,6 +197,7 @@ macro cm_numfield_sound(title, addr, start, end, increment, heldincrement, jslta
     db <increment> ; inc/dec amount when pressed
     db <heldincrement> ; inc/dec amount when direction is held (scroll faster)
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+table ../resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -205,6 +207,7 @@ macro cm_toggle(title, addr, value, jsltarget)
     dl <addr> ; 24bit RAM address to display/manipulate
     db <value> ; value to write when toggled on
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+table ../resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -214,6 +217,7 @@ macro cm_toggle_inverted(title, addr, value, jsltarget)
     dl <addr> ; 24bit RAM address to display/manipulate
     db <value> ; value to write when toggled off
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+table ../resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -223,6 +227,7 @@ macro cm_toggle_bit(title, addr, mask, jsltarget)
     dl <addr> ; 24bit RAM address to display/manipulate
     dw <mask> ; which bits to flip
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+table ../resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -232,6 +237,7 @@ macro cm_toggle_bit_inverted(title, addr, mask, jsltarget)
     dl <addr> ; 24bit RAM address to display/manipulate
     dw <mask> ; which bits to flip
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+table ../resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -240,6 +246,7 @@ macro cm_jsl(title, routine, argument)
     dw !ACTION_JSL
     dw <routine> ; 16bit address to code in the same bank as current menu/submenu
     dw <argument> ; value passed to routine in Y
+table ../resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -248,6 +255,7 @@ macro cm_jsl_submenu(title, routine, argument)
     dw !ACTION_JSL_SUBMENU
     dw <routine> ; 16bit address to code in the same bank as current menu/submenu
     dw <argument> ; value passed to routine in Y
+table ../resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -281,6 +289,7 @@ macro cm_custompreset(slot)
 custompreset_<slot>:
     dw !ACTION_CUSTOM_PRESET
     db <slot> ; 8bit slot ID
+table ../resources/normal.tbl
     db #$28, "<slot>", #$FF ; slot ID text
 endmacro
 
@@ -289,6 +298,7 @@ macro cm_managepreset(slot)
 managepreset_<slot>:
     dw !ACTION_MANAGE_PRESETS
     db <slot> ; 8bit slot ID
+table ../resources/normal.tbl
     db #$28, "<slot>", #$FF ; slot ID text
 endmacro
 
@@ -296,6 +306,7 @@ macro cm_ctrl_shortcut(title, addr)
 ; configure controller shortcuts
     dw !ACTION_CTRL_SHORTCUT
     dl <addr> ; 24bit RAM address to display/manipulate
+table ../resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -305,6 +316,7 @@ macro cm_ctrl_input(title, addr, routine, argument)
     dl <addr> ; 24bit RAM address to display/manipulate
     dw <routine> ; 16bit address to code in the same bank as current menu/submenu
     dw <argument> ; value passed to routine in Y
+table ../resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
