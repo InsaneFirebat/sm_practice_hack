@@ -99,7 +99,7 @@ if !FEATURE_CUSTOMIZE_MENU
     dw #mm_goto_customize
 endif
     dw #$0000
-    %cm_version_header("SM PRACTICE HACK", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
+    %cm_version_header("SM PRACTICE HACK")
 
 MainMenuBanks:
     dw #EquipmentMenu>>16
@@ -1638,6 +1638,11 @@ action_teleport:
     STZ $0E18 ; Set elevator to inactive
     STZ $1C1F ; Clear message box index
 
+    JSL init_controller_bindings
+    LDA !SAMUS_HP_MAX : BNE .branch
+    LDA #$001F : STA !SAMUS_HP
+
+  .branch
     JSL reset_all_counters
     JSL stop_all_sounds
 
@@ -2282,7 +2287,6 @@ ih_goto_timers:
 
 IHTimerMenu:
     dw #ih_room_counter
-    dw #ih_fanfare_timer_adjust
     dw #ih_lag_counter
     dw #ih_auto_update_timers
     dw #$FFFF
@@ -2298,10 +2302,8 @@ ih_room_counter:
     db #$28, "Frame Counters", #$FF
     db #$28, "   REALTIME", #$FF
     db #$28, "     INGAME", #$FF
+    db #$28, "   SPEEDRUN", #$FF
     db #$FF
-
-ih_fanfare_timer_adjust:
-    %cm_toggle("Adjust Fanfare Timers", !sram_fanfare_timer_adjust, #$0001, #0)
 
 ih_lag_counter:
     dw !ACTION_CHOICE
@@ -2340,7 +2342,6 @@ ih_dynamic_frames_held:
     dl #!sram_top_display_mode
     dw #ih_goto_frames_held
     dw #ih_goto_frames_held
-    dw #$0000
     dw #$0000
 
 ih_goto_frames_held:
@@ -2595,7 +2596,22 @@ game_debugfixscrolloffsets:
 ;    %cm_toggle_bit("Skip Ceres Arrival", !sram_cutscenes, !CUTSCENE_SKIP_CERES_ARRIVAL, #0)
 ;
 ;cutscenes_skip_g4:
-;    %cm_toggle_bit("Skip G4", !sram_cutscenes, !CUTSCENE_SKIP_G4, #0)
+;    %cm_toggle_bit("Skip G4", !sram_cutscenes, !CUTSCENE_SKIP_G4, #.routine)
+;  .routine
+;    BIT !CUTSCENE_SKIP_G4 : BEQ .off
+;    LDA !ROOM_ID : CMP #$A5ED : BNE .done
+;    ; Verify all four G4 bosses killed
+;    LDA $7ED828 : BIT #$0100 : BEQ .done
+;    LDA $7ED82C : BIT #$0001 : BEQ .done
+;    LDA $7ED82A : AND #$0101 : CMP #$0101 : BNE .done
+;    ; Set Tourian open
+;    LDA $7ED820 : ORA #$0400 : STA $7ED820
+;    BRA .done
+;  .off
+;    LDA !ROOM_ID : CMP #$A5ED : BNE .done
+;    LDA $7ED820 : AND #$FBFF : STA $7ED820
+;  .done
+;    RTL
 ;
 ;cutscenes_skip_game_over:
 ;    %cm_toggle_bit("Skip Game Over", !sram_cutscenes, !CUTSCENE_SKIP_GAMEOVER, #0)
@@ -2638,7 +2654,7 @@ controls_common_layouts:
     %cm_submenu("Common Controller Layouts", #ControllerCommonMenu)
 
 controls_shot:
-    %cm_ctrl_input("        SHOT", !IH_INPUT_SHOOT, action_submenu, #AssignControlsMenu)
+    %cm_ctrl_input("        SHOT", !IH_INPUT_SHOT, action_submenu, #AssignControlsMenu)
 
 controls_jump:
     %cm_ctrl_input("        JUMP", !IH_INPUT_JUMP, action_submenu, #AssignControlsMenu)
@@ -2680,7 +2696,7 @@ controls_save_to_file:
     LDX #$0CD8
 
   .save
-    LDA.w !IH_INPUT_SHOOT : STA $700000,X : INX #2
+    LDA.w !IH_INPUT_SHOT : STA $700000,X : INX #2
     LDA.w !IH_INPUT_JUMP : STA $700000,X : INX #2
     LDA.w !IH_INPUT_RUN : STA $700000,X : INX #2
     LDA.w !IH_INPUT_ITEM_CANCEL : STA $700000,X : INX #2
@@ -2913,23 +2929,23 @@ controls_common_d5:
 action_set_common_controls:
 {
     TYX
-    LDA.l ControllerLayoutTable,X : STA !IH_INPUT_SHOOT
-    LDA.l ControllerLayoutTable+2,X : STA !IH_INPUT_JUMP
-    LDA.l ControllerLayoutTable+4,X : STA !IH_INPUT_RUN
-    LDA.l ControllerLayoutTable+6,X : STA !IH_INPUT_ITEM_CANCEL
-    LDA.l ControllerLayoutTable+8,X : STA !IH_INPUT_ITEM_SELECT
-    LDA.l ControllerLayoutTable+10,X : STA !IH_INPUT_ANGLE_UP
-    LDA.l ControllerLayoutTable+12,X : STA !IH_INPUT_ANGLE_DOWN
+    LDA.l ControllerLayoutTable,X : STA.w !IH_INPUT_SHOT
+    LDA.l ControllerLayoutTable+2,X : STA.w !IH_INPUT_JUMP
+    LDA.l ControllerLayoutTable+4,X : STA.w !IH_INPUT_RUN
+    LDA.l ControllerLayoutTable+6,X : STA.w !IH_INPUT_ITEM_CANCEL
+    LDA.l ControllerLayoutTable+8,X : STA.w !IH_INPUT_ITEM_SELECT
+    LDA.l ControllerLayoutTable+10,X : STA.w !IH_INPUT_ANGLE_DOWN
+    LDA.l ControllerLayoutTable+12,X : STA.w !IH_INPUT_ANGLE_UP
     %sfxconfirm()
     JML cm_previous_menu
 
 ControllerLayoutTable:
-    ;  shot     jump     dash     cancel        select        up       down
-    dw !CTRL_X, !CTRL_A, !CTRL_B, !CTRL_Y,      !CTRL_SELECT, !CTRL_R, !CTRL_L ; Default (D1)
-    dw !CTRL_X, !CTRL_A, !CTRL_B, !CTRL_SELECT, !CTRL_Y,      !CTRL_R, !CTRL_L ; Select+Cancel Swap (D2)
-    dw !CTRL_Y, !CTRL_A, !CTRL_B, !CTRL_SELECT, !CTRL_X,      !CTRL_R, !CTRL_L ; D2 + Shot+Select Swap (D3)
-    dw !CTRL_Y, !CTRL_B, !CTRL_A, !CTRL_SELECT, !CTRL_X,      !CTRL_R, !CTRL_L ; MMX Style (D4)
-    dw !CTRL_X, !CTRL_B, !CTRL_Y, !CTRL_SELECT, !CTRL_A,      !CTRL_R, !CTRL_L ; SMW Style (D5)
+    ;  shot     jump     dash     cancel        select        down     up
+    dw !CTRL_X, !CTRL_A, !CTRL_B, !CTRL_Y,      !CTRL_SELECT, !CTRL_L, !CTRL_R ; Default (D1)
+    dw !CTRL_X, !CTRL_A, !CTRL_B, !CTRL_SELECT, !CTRL_Y,      !CTRL_L, !CTRL_R ; Select+Cancel Swap (D2)
+    dw !CTRL_Y, !CTRL_A, !CTRL_B, !CTRL_SELECT, !CTRL_X,      !CTRL_L, !CTRL_R ; D2 + Shot+Select Swap (D3)
+    dw !CTRL_Y, !CTRL_B, !CTRL_A, !CTRL_SELECT, !CTRL_X,      !CTRL_L, !CTRL_R ; MMX Style (D4)
+    dw !CTRL_X, !CTRL_B, !CTRL_Y, !CTRL_SELECT, !CTRL_A,      !CTRL_L, !CTRL_R ; SMW Style (D5)
 }
 
 print pc, " mainmenu GameMenu end"

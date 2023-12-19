@@ -83,21 +83,37 @@ print pc, " misc bank8B end"
 ;
 ;org $8BF754
 ;hook_version_data:
-;    db #$20, #($30+!VERSION_MAJOR)
-;    db #$2E, #($30+!VERSION_MINOR)
-;    db #$2E, #($30+!VERSION_BUILD)
-;if !VERSION_REV_1
-;    db #$2E, #($30+!VERSION_REV_1)
-;    db #($30+!VERSION_REV_2)
-;    db #$20, #$20
+;cleartable ; ASCII
+;if !VERSION_MAJOR > 9
+;    db ' ', $30+(!VERSION_MAJOR/10), $30+(!VERSION_MAJOR%10)
 ;else
-;if !VERSION_REV_2
-;    db #$2E, #($30+!VERSION_REV_2)
-;    db #$20, #$20, #$20
+;    db ' ', $30+!VERSION_MAJOR
+;endif
+;if !VERSION_MINOR > 9
+;    db '.', $30+(!VERSION_MINOR/10), $30+(!VERSION_MINOR%10)
 ;else
-;    db #$20, #$20, #$20, #$20, #$20
+;    db '.', $30+!VERSION_MINOR
+;endif
+;if !VERSION_BUILD > 9
+;    db '.', $30+(!VERSION_BUILD/10), $30+(!VERSION_BUILD%10)
+;else
+;    db '.', $30+!VERSION_BUILD
+;endif
+;if !VERSION_REV > 9
+;    db '.', $30+(!VERSION_REV/10), $30+(!VERSION_REV%10)
+;else
+;if !VERSION_REV
+;    db '.', $30+!VERSION_REV
 ;endif
 ;endif
+;    db $00
+;table ../resources/normal.tbl
+
+
+; Fix Zebes planet tiling error
+;org $8C9607
+;zebes_planet_tile_data:
+;    dw #$0E2F
 
 
 ; Skips the waiting time after teleporting
