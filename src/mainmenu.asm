@@ -1864,6 +1864,9 @@ EventsMenu:
     dw #$FFFF
     dw #events_goto_bosses
     dw #$FFFF
+    dw #events_spaceport
+    dw #events_power
+    dw #$FFFF
     dw #events_zebesawake
     dw #events_maridiatubebroken
     dw #events_chozoacid
@@ -1915,6 +1918,12 @@ events_resetitems:
 
 events_goto_bosses:
     %cm_submenu("Bosses", #BossesMenu)
+
+events_spaceport:
+    %cm_toggle_bit("Space Port Crash", $7ED823, #$0020, #0)
+
+events_power:
+    %cm_toggle_bit("Power Disabled", $7ED823, #$0080, #0)
 
 events_zebesawake:
     %cm_toggle_bit("Zebes Awake", $7ED820, #$0001, #0)
