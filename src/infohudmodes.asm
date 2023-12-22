@@ -27,6 +27,7 @@
     dw status_shottimer
     dw status_countdamage
     dw status_ramwatch
+    dw status_pumpcounter
 ;    dw status_dboost
 
 status_enemyhp:

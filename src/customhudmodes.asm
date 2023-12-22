@@ -1119,3 +1119,61 @@ table ../resources/tables/HUDfont.tbl
 table ../resources/tables/normal.tbl
 }
 
+status_pumpcounter:
+{
+
+!ram_HUD_check = !WRAM_START+$5C          ; where to draw
+!ram_roomstrat_counter = !WRAM_START+$5E  ; pumps counted
+!ram_roomstrat_state = !WRAM_START+$60    ; neutral/angle
+    ; $0020 = L
+    ; $0010 = R
+
+    LDA !SAMUS_HP : STA !ram_last_hp
+    LDA !SAMUS_MOVEMENT_TYPE : AND #$00FF : CMP #$0001 : BEQ .running
+    LDA #$0000
+    STA !ram_HUD_check : STA !ram_roomstrat_counter : STA !ram_roomstrat_state
+    RTS
+
+  .running
+    LDA !ram_roomstrat_state : BNE .angleLast
+    LDA !IH_CONTROLLER_PRI : AND #$0030 : BEQ .fail
+    LDA !ram_roomstrat_state : EOR #$0001 : STA !ram_roomstrat_state
+    LDA !ram_roomstrat_counter : INC : STA !ram_roomstrat_counter
+    RTS
+
+  .angleLast
+    LDA !IH_CONTROLLER_PRI : AND #$0030 : BNE .fail
+    LDA !ram_roomstrat_state : EOR #$0001 : STA !ram_roomstrat_state
+    LDA !ram_roomstrat_counter : INC : STA !ram_roomstrat_counter
+    RTS
+
+  .fail
+    LDA !ram_HUD_check : BNE .printRight
+    EOR #$0001 : STA !ram_HUD_check
+    LDA !ram_roomstrat_counter
+    LDX #$0088 : JSR Draw2
+    LDA #$0000 : STA !ram_roomstrat_counter
+    RTS
+
+  .printRight
+    EOR #$0001 : STA !ram_HUD_check
+    LDA !ram_roomstrat_counter
+    LDX #$008E : JSR Draw2
+    LDA #$0000 : STA !ram_roomstrat_counter
+    RTS
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
