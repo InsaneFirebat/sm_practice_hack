@@ -258,7 +258,7 @@ category_preset_load:
 {
     ; Get offset into preset data table
     LDA !sram_preset_category : STA $C3
-    ASL : CLC : ADC $C3 : TAX
+    ASL : ADC $C3 : TAX
 
     ; Get starting preset data bank into $C5
     INX : LDA.l category_preset_data_table,X : STA $C4 : DEX
