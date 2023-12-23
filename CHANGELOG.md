@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.10.3] Improvements for arm pump counter
 * [2.5.10.2] Added experimental consecutive arm pump counter
 * [2.5.10.1] Added PapaSchmo menu palette profile
 * [2.5.10]   Fixed "random" crashes with spacetime beam on console by idlechild

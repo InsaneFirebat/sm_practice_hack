@@ -1130,20 +1130,13 @@ table ../resources/tables/normal.tbl
 
 status_pumpcounter:
 {
-
-!ram_HUD_check = !WRAM_START+$5C          ; where to draw
-!ram_roomstrat_counter = !WRAM_START+$5E  ; pumps counted
-!ram_roomstrat_state = !WRAM_START+$60    ; neutral/angle
-    ; $0020 = L
-    ; $0010 = R
-
+; this makes the assumption that the user only attempting to pump on one angle button
+; !ram_HUD_check = where to draw (index * 6 + $88)
+; !ram_roomstrat_counter = pumps counted
+; !ram_roomstrat_state = neutral/angle
+; !ram_fail_count = reset after fail, non-zero during counting
     LDA !SAMUS_HP : STA !ram_last_hp
-    LDA !SAMUS_MOVEMENT_TYPE : AND #$00FF : CMP #$0001 : BEQ .running
-    LDA #$0000
-    STA !ram_HUD_check : STA !ram_roomstrat_counter : STA !ram_roomstrat_state
-    RTS
 
-  .running
     LDA !ram_roomstrat_state : BNE .angleLast
     LDA !IH_CONTROLLER_PRI : AND #$0030 : BEQ .fail
     LDA !ram_roomstrat_state : EOR #$0001 : STA !ram_roomstrat_state
@@ -1154,26 +1147,27 @@ status_pumpcounter:
     LDA !IH_CONTROLLER_PRI : AND #$0030 : BNE .fail
     LDA !ram_roomstrat_state : EOR #$0001 : STA !ram_roomstrat_state
     LDA !ram_roomstrat_counter : INC : STA !ram_roomstrat_counter
+    STA !ram_fail_count
     RTS
 
   .fail
-    LDA !ram_HUD_check : BNE .printRight
-    EOR #$0001 : STA !ram_HUD_check
-    LDA !ram_roomstrat_counter
-    LDX #$0088 : JSR Draw2
-    LDA #$0000 : STA !ram_roomstrat_counter
-    RTS
+;    LDA !IH_CONTROLLER_PRI_NEW : BEQ .done
+    LDA !ram_fail_count : BEQ .done
+    LDA !ram_HUD_check : CMP #$0005+1 : BMI .draw
+    LDA #$0000 : STA !ram_HUD_check
 
-  .printRight
-    EOR #$0001 : STA !ram_HUD_check
+  .draw
+    ASL : ADC !ram_HUD_check : ASL : ADC #$0088 : TAX
     LDA !ram_roomstrat_counter
-    LDX #$008E : JSR Draw2
-    LDA #$0000 : STA !ram_roomstrat_counter
+    JSR Draw2
+    LDA !IH_BLANK : STA !HUD_TILEMAP,X
+    LDA #$0000 : STA !ram_roomstrat_counter : STA !ram_roomstrat_state
+    LDA !ram_HUD_check : INC : STA !ram_HUD_check
+    LDA #$0000 : STA !ram_fail_count
+
+  .done
     RTS
 }
-
-
-
 
 
 
