@@ -291,12 +291,7 @@ endif
     LDA !ram_frames_held : BNE .vanilla_display_lag_loop
     LDA !sram_artificial_lag
     ASL #4
-if !FEATURE_SD2SNES
-; skip 6 cycles for auto-savestate in doors check
-else
-    NOP #3 ; Add 6 more clock cycles
-endif
-    NOP  ; Add 2 more clock cycles
+    NOP #4 ; Add 8 more clock cycles
     CLC : ADC #$000B ; Add 60 cycles including CLC+ADC
     TAX
   .lagloop
@@ -312,10 +307,7 @@ endif
     ASL #2
     INC ; Add 4 loops (22 clock cycles including the INC)
     ASL #2
-if !FEATURE_SD2SNES
-else
     INC  ; Add 1 loop (7 clock cycles including the INC)
-endif
     NOP #2 ; Add 4 more clock cycles
     CLC : ADC #$000B ; Add 60 cycles including CLC+ADC
     TAX

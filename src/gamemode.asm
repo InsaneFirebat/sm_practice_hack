@@ -9,6 +9,9 @@ org $82896E
     end_of_normal_gameplay:
 
 if !FEATURE_SD2SNES
+org $82E4A2
+    LDA.w #door_transition_autosave
+
 org $82E526
     JSL gamemode_door_transition : NOP
 endif
@@ -37,6 +40,7 @@ gamemode_start:
     JSL preset_load
 
   .done
+    ; Overwritten logic
     LDA !GAMEMODE : AND #$00FF
     PLP
     PLB
@@ -45,107 +49,96 @@ gamemode_start:
 
 gamemode_shortcuts:
 {
-if !FEATURE_SD2SNES
-    ; Check for auto-save mid-transition
-    LDA !ram_auto_save_state : BEQ +
-    LDA !DOOR_FUNCTION_POINTER : CMP #$E4A9 : BNE +
-    LDA !ram_auto_save_state : BMI .auto_save
-    LDA #$0000 : STA !ram_auto_save_state
-  .auto_save
-    JMP .save_state
-endif
-
-  + LDA !IH_CONTROLLER_PRI_NEW : BNE +
-
-    ; No shortcuts configured, CLC so we won't skip normal gameplay
+    LDA !IH_CONTROLLER_PRI_NEW : BNE +
+    ; CLC so we won't skip normal gameplay
     CLC : RTS
 
 if !FEATURE_SD2SNES
-  + LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_save_state : BNE +
++   LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_save_state : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .save_state
 
-  + LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_load_state : BNE +
++   LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_load_state : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .load_state
 
-  + LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_auto_save_state : BNE +
++   LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_auto_save_state : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .auto_save_state
 endif
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
++   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .load_last_preset
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
++   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .random_preset
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_save_custom_preset : CMP !sram_ctrl_save_custom_preset : BNE +
++   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_save_custom_preset : CMP !sram_ctrl_save_custom_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .save_custom_preset
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_custom_preset : CMP !sram_ctrl_load_custom_preset : BNE +
++   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_custom_preset : CMP !sram_ctrl_load_custom_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .load_custom_preset
 
     ; Check if any less common shortcuts are configured
-  + LDA !ram_game_mode_extras : BNE +
++   LDA !ram_game_mode_extras : BNE +
     JMP .check_menu
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_inc_custom_preset : CMP !sram_ctrl_inc_custom_preset : BNE +
++   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_inc_custom_preset : CMP !sram_ctrl_inc_custom_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .next_preset_slot
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_dec_custom_preset : CMP !sram_ctrl_dec_custom_preset : BNE +
++   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_dec_custom_preset : CMP !sram_ctrl_dec_custom_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .prev_preset_slot
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_full_equipment : CMP !sram_ctrl_full_equipment : BNE +
++   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_full_equipment : CMP !sram_ctrl_full_equipment : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .full_equipment
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_kill_enemies : CMP !sram_ctrl_kill_enemies : BNE +
++   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_kill_enemies : CMP !sram_ctrl_kill_enemies : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .kill_enemies
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_reset_segment_timer : CMP !sram_ctrl_reset_segment_timer : BNE +
++   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_reset_segment_timer : CMP !sram_ctrl_reset_segment_timer : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .reset_segment_timer
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_reset_segment_later : CMP !sram_ctrl_reset_segment_later : BNE +
++   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_reset_segment_later : CMP !sram_ctrl_reset_segment_later : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .reset_segment_later
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_toggle_tileviewer : CMP !sram_ctrl_toggle_tileviewer : BNE +
++   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_toggle_tileviewer : CMP !sram_ctrl_toggle_tileviewer : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .toggle_tileviewer
 
     ; Custom build shortcuts without priority
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_reveal_damage : CMP !sram_ctrl_reveal_damage : BNE +
++   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_reveal_damage : CMP !sram_ctrl_reveal_damage : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .reveal_damage
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_randomize_rng : CMP !sram_ctrl_randomize_rng : BNE +
++   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_randomize_rng : CMP !sram_ctrl_randomize_rng : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .randomize_rng
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_force_stand : CMP !sram_ctrl_force_stand : BNE +
++   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_force_stand : CMP !sram_ctrl_force_stand : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .force_stand
 
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_update_timers : CMP !sram_ctrl_update_timers : BNE +
++   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_update_timers : CMP !sram_ctrl_update_timers : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .update_timers
 
   .check_menu
-  + LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
++   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .menu
 
     ; No shortcuts matched, CLC so we won't skip normal gameplay
-  + CLC : RTS
++   CLC : RTS
 
 if !FEATURE_SD2SNES
   .save_state
@@ -338,7 +331,6 @@ endif
     SEC : RTS
 }
 
-if !FEATURE_SD2SNES
 gamemode_door_transition:
 {
   .checkloadstate
@@ -353,6 +345,26 @@ gamemode_door_transition:
     LDA $0931 : BPL .checkloadstate
     RTL
 }
+
+org $82F900
+print pc, " autosave bank $82 start"
+door_transition_autosave:
+{
+    ; Check for auto-save mid-transition
+    LDA !ram_auto_save_state : BEQ .done
+    BMI .auto_save
+    LDA #$0000 : STA !ram_auto_save_state
+
+  .auto_save
+    PHP : PHB
+    PHK : PLB
+    JSL save_state
+    PLB : PLP
+
+  .done
+    JMP $E4A9 ; return to hijacked code
+}
+print pc, " autosave bank $82 end"
 endif
 
 ; If the current game mode is $C (fading out to pause), set it to $8 (normal), so that
@@ -362,6 +374,7 @@ endif
 ;  presets reset the game mode anyway).
 skip_pause:
 {
+    PHP ; preserve carry
     LDA !GAMEMODE : CMP #$000C : BNE .done
     LDA #$0008 : STA !GAMEMODE
 
@@ -372,6 +385,7 @@ skip_pause:
     LDA $51 : ORA #$000F : STA $51
 
   .done
+    PLP
     RTS
 }
 
