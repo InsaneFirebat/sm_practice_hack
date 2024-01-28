@@ -163,7 +163,7 @@ MultB_05EB_16bit = $05EB
 Product_05F1_32bit = $05F1
 
 Disable_Sounds_Flag = $05F5
-Disable_Minimap $05F7
+Disable_Minimap = $05F7
 Save_Confirm_Select = $05F9
 
 MapScroll_Timer = $05FB
@@ -564,7 +564,7 @@ Samus_TopHalf_Spritemap_Index = $0AC8
 Samus_BottomHalf_Spritemap_Index = $0ACA
 Samus_Special_Palette_Type = $0ACC
 Samus_Special_Palette_Frame = $0ACE
-Samus_Special_Palette_Timer = $0AD0
+Samus_Special_Palette_Timer_0AD0 = $0AD0
 Liquid_Physics_Type = $0AD2
 
 AtmosphericGFX_Anim_Timers = $0AD4
