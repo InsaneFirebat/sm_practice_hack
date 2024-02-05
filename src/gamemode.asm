@@ -28,13 +28,13 @@ gamemode_start:
     JSR gamemode_shortcuts
   .return
     %ai16()
-    PHP
+    PHP : BCC .done
 
     ; don't load presets if we're in credits
     LDA !GAMEMODE : CMP #$0027 : BEQ .done
 
     LDA !ram_custom_preset : BNE .load_preset
-    LDA !ram_load_preset : BEQ .done
+    LDA !ram_load_preset : BEQ .dec_rta
 
   .load_preset
     JSL preset_load
@@ -42,9 +42,32 @@ gamemode_start:
   .done
     ; Overwritten logic
     LDA !GAMEMODE : AND #$00FF
-    PLP
-    PLB
+    PLP : PLB
     RTL
+
+  .dec_rta
+    ; If we are skipping gameplay this frame and not loading a preset,
+    ; it's not fair to still increment timers at the end of the frame,
+    ; so decrement timers here to compensate
+    LDA !ram_realtime_room : DEC : STA !ram_realtime_room
+    LDA !ram_transition_counter : DEC : STA !ram_transition_counter
+
+    ; Segment real timer
+    LDA !ram_seg_rt_frames : BEQ .dec_seconds
+    DEC : STA !ram_seg_rt_frames
+    BRA .done
+
+  .dec_seconds
+    LDA !ram_seg_rt_seconds : BEQ .dec_minutes
+    DEC : STA !ram_seg_rt_seconds
+    LDA #$003B : STA !ram_seg_rt_frames
+    BRA .done
+
+  .dec_minutes
+    LDA !ram_seg_rt_minutes : BEQ .done
+    DEC : STA !ram_seg_rt_minutes
+    LDA #$003B : STA !ram_seg_rt_seconds : STA !ram_seg_rt_frames
+    BRA .done
 }
 
 gamemode_shortcuts:
