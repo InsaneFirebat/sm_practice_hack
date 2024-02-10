@@ -41,3 +41,5 @@ endif
 
 ; Make sure the ROM expands to 4MB
 org $FFFFFF : db $FF
+
+print "Assembly complete. Total bytes written: ", bytes
