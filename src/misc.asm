@@ -84,7 +84,7 @@ else
 org $90EA8C
 endif
     LDA !sram_healthalarm : ASL : PHX : TAX
-    JMP (healthalarm_turn_off_table,X)
+    JMP (healthalarm_disable_table,X)
 
 ; Turn on health alarm
 if !FEATURE_PAL
@@ -93,7 +93,7 @@ else
 org $90EA9D
 endif
     LDA !sram_healthalarm : ASL : PHX : TAX
-    JMP (healthalarm_turn_on_table,X)
+    JMP (healthalarm_enable_table,X)
 
 ; Turn on health alarm
 if !FEATURE_PAL
@@ -111,7 +111,7 @@ org $91E63F
 else
 org $91E6DA
 endif
-    JML healthalarm_turn_on_remote
+    JML healthalarm_enable_remote
 
 
 if !PRESERVE_WRAM_DURING_SPACETIME
@@ -444,56 +444,56 @@ endif
 }
 
 
-healthalarm_turn_on_table:
-    dw healthalarm_turn_on_never
-    dw healthalarm_turn_on_vanilla
-    dw healthalarm_turn_on_pb_fix
-    dw healthalarm_turn_on_improved
-
-healthalarm_turn_on_improved:
+healthalarm_enable:
     ; Do not sound alarm until below 30 combined health
-    LDA $09C2 : CLC : ADC $09D6 : CMP #$001E : BPL healthalarm_turn_on_done
+    LDA !SAMUS_HP : CLC : ADC !SAMUS_RESERVE_ENERGY : CMP #$001E : BPL .done
 
-healthalarm_turn_on_pb_fix:
+  .pb_fix
     ; Do not sound alarm if it won't play due to power bomb explosion
-    LDA $0592 : BMI healthalarm_turn_on_done
+    LDA $0592 : BMI .done
 
-healthalarm_turn_on_vanilla:
+  .vanilla
     LDA #$0002 : JSL $80914D
 
-healthalarm_turn_on_never:
+  .never
     LDA #$0001 : STA !SAMUS_HEALTH_WARNING
 
-healthalarm_turn_on_done:
+  .done
     PLX : RTS
 
-healthalarm_turn_off_table:
-    dw healthalarm_turn_off_never
-    dw healthalarm_turn_off_vanilla
-    dw healthalarm_turn_off_pb_fix
-    dw healthalarm_turn_off_improved
-
-healthalarm_turn_off_improved:
-healthalarm_turn_off_pb_fix:
-    ; Do not stop alarm if it won't stop due to power bomb explosion
-    LDA $0592 : BMI healthalarm_turn_off_done
-
-healthalarm_turn_off_vanilla:
-    LDA #$0001 : JSL $80914D
-
-healthalarm_turn_off_never:
-    STZ !SAMUS_HEALTH_WARNING
-
-healthalarm_turn_off_done:
-    PLX : RTS
-
-healthalarm_turn_on_remote:
+  .remote
+    ; called externally
 if !FEATURE_PAL
     JSR $EA9A
 else
     JSR $EA9D
 endif
     PLB : PLP : RTL
+
+  .table
+    dw healthalarm_enable_never
+    dw healthalarm_enable_vanilla
+    dw healthalarm_enable_pb_fix
+    dw healthalarm_enable ; improved
+
+healthalarm_disable:
+    ; Do not stop alarm if it won't stop due to power bomb explosion
+    LDA $0592 : BMI .done
+
+  .vanilla
+    LDA #$0001 : JSL $80914D
+
+  .never
+    STZ !SAMUS_HEALTH_WARNING
+
+  .done
+    PLX : RTS
+
+  .table
+    dw healthalarm_disable_never
+    dw healthalarm_disable_vanilla
+    dw healthalarm_disable ; pb fix
+    dw healthalarm_disable ; improved
 
 
 if !PRESERVE_WRAM_DURING_SPACETIME
