@@ -235,7 +235,7 @@ endif
   .load_custom_preset
     ; check if slot is populated first
     LDA !sram_custom_preset_slot
-    ASL : XBA : TAX
+    %presetslotsize()
     LDA !PRESET_SLOTS,X : CMP #$5AFE : BNE .load_fail
     STA !ram_custom_preset
     JSL preset_load

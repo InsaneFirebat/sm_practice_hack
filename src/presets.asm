@@ -30,20 +30,17 @@ endif
 +   JSL $809A79  ; HUD routine when game is loading
     JSL $90AD22  ; Reset projectile data
 
-    PHP
-    %ai16()
     LDY #$0020 : LDX #$0000
   .paletteLoop
     LDA $7EC180,X : STA $7EC380,X  ; Target Samus' palette = [Samus' palette]
     INX #2
     DEY #2 : BNE .paletteLoop
-    PLP
 
     LDA #$0000 : STA $7EC400 ; door fade timer
     STA $0727 ; Clear pause menu index
 
     ; Screen fade delay/counter = 1
-    LDA #$0001
+    INC
     STA $0723 : STA $0725
 
     ; Enable NMI with $84 options

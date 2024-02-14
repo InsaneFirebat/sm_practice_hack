@@ -189,8 +189,8 @@ save_state:
 
   .save_dma_regs
     LDA $4300,X : STA !SRAM_DMA_BANK,X
-    INX : INY
-    CPY #$000B : BNE .save_dma_regs
+    INX
+    INY : CPY #$000B : BNE .save_dma_regs
     CPX #$007B : BEQ .done
     INX #5 : LDY #$0000
     BRA .save_dma_regs
@@ -198,6 +198,7 @@ save_state:
   .done
     %ai16()
     LDX #save_write_table
+    ; fallthrough
 }
 
 run_vm:

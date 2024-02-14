@@ -11,7 +11,7 @@ else
 if !FEATURE_SD2SNES
     db $08 ; 256kb
 else
-    db $05 ; 64kb
+    db $05 ; 32kb
 endif
 endif
 
@@ -70,6 +70,7 @@ endif
 endif
     db $00
 table ../resources/tables/normal.tbl
+warnpc $8BF800 ; cutscenes.asm
 
 
 ; Fix Zebes planet tiling error
