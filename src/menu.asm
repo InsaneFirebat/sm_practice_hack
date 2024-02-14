@@ -2661,9 +2661,10 @@ execute_numfield:
   .determine_direction
     LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
     ; pressed right, inc
+    %a8()
     LDA [!DP_Address] : CLC : ADC !DP_Increment
     CMP !DP_Maximum : BCS .set_to_min
-    %a8() : STA [!DP_Address] : BRA .jsl
+    STA [!DP_Address] : BRA .jsl
 
   .skip_inc
 ; unneeded while heldincrement is omitted
@@ -2672,15 +2673,16 @@ execute_numfield:
     BRA .jsl
 
   .pressed_left ; dec
+    %a8()
     LDA [!DP_Address] : SEC : SBC !DP_Increment : BMI .set_to_max
     CMP !DP_Minimum : BCC .set_to_max
-    %a8() : STA [!DP_Address] : BRA .jsl
+    STA [!DP_Address] : BRA .jsl
 
   .set_to_min
-    LDA !DP_Minimum : %a8() : STA [!DP_Address] : BRA .jsl
+    LDA !DP_Minimum : STA [!DP_Address] : BRA .jsl
 
   .set_to_max
-    LDA !DP_Maximum : DEC : %a8() : STA [!DP_Address]
+    LDA !DP_Maximum : DEC : STA [!DP_Address]
 
   .jsl
     %a16()
