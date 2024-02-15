@@ -28,20 +28,18 @@ preset_load:
     JSL $809A79  ; HUD routine when game is loading
     JSL $90AD22  ; Reset projectile data
 
-    PHP : %ai16()
+    TDC : TAX
     LDY #$0020
-    LDX #$0000
   .paletteLoop
     ; Target Samus' palette = [Samus' palette]
     LDA $7EC180,X : STA $7EC380,X
-    INX #2
-    DEY #2 : BNE .paletteLoop
-    PLP
+    INX : INX
+    DEY : DEY : BNE .paletteLoop
 
-    LDA #$0000
+    TDC
     STA $7EC400  ; Used as door fade timer
     STA $0727    ; Pause menu index
-    LDA #$0001
+    INC
     STA $0723    ; Screen fade delay = 1
     STA $0725    ; Screen fade counter = 1
 
@@ -65,15 +63,13 @@ preset_load:
     LDA #$0008 : STA !GAMEMODE
     %a8() : LDA #$0F : STA $51 : %a16()
 
-    PHP : %ai16()
+    TDC : TAX
     LDY #$0200
-    LDX #$0000
-  .paletteLoop2
+  .secondPaletteLoop
     ; Palettes = [target palettes]
     LDA $7EC200,X : STA $7EC000,X
-    INX #2
-    DEY #2 : BNE .paletteLoop2
-    PLP
+    INX : INX
+    DEY : DEY : BNE .secondPaletteLoop
 
     ; Fix Samus' palette
     JSL $91DEBA
@@ -117,7 +113,7 @@ preset_load:
 clear_all_enemies:
 {
     ; Clear enemies (8000 = solid to Samus, 0400 = Ignore Samus projectiles, 0100 = Invisible)
-    LDA #$0000
+    TDC
   .loop
     TAX : LDA $0F86,X : BIT #$8500 : BNE .done_clearing
     ORA #$0200 : STA $0F86,X
@@ -364,15 +360,15 @@ preset_start_gameplay:
     ; Set Samus last pose same as current pose if not shinesparking
     LDA !SAMUS_POSE_DIRECTION : STA !SAMUS_PREVIOUS_POSE_DIRECTION
     STA !SAMUS_LAST_DIFFERENT_POSE_DIRECTION
-    LDA !SAMUS_POSE : CMP #$00C9 : BMI .store_prev_pose
-    CMP #$00CF : BPL .store_prev_pose
+    LDA !SAMUS_POSE : CMP #$00C9 : BMI .storePreviousPose
+    CMP #$00CF : BPL .storePreviousPose
     ; Set timer type to shinespark
     LDA #$0006 : STA !SAMUS_SHINE_TIMER_TYPE
     ; Set timer very high in case player holds inputs before spark moves
     LDA #$7FFF : STA !SAMUS_SHINE_TIMER
     ; Clear previous pose
-    LDA #$0000
-  .store_prev_pose
+    TDC
+  .storePreviousPose
     STA !SAMUS_PREVIOUS_POSE : STA !SAMUS_LAST_DIFFERENT_POSE
 
     ; Clear potential pose flags
@@ -424,15 +420,15 @@ else
 endif
     JSL preset_scroll_fixes
 
-    LDA !sram_preset_options : BIT !PRESETS_CLOSE_BLUE_DOORS : BNE .done_opening_doors
-    LDA !PRESET_DOORS : CMP #$FFFF : BEQ .done_opening_doors
-    LDA !SAMUS_POSE : BEQ .done_opening_doors ; facing forward
-    CMP #$009B : BEQ .done_opening_doors
-    LDA !PRESET_DOORS : CMP #$0001 : BEQ .done_opening_doors
-    LDA $7ED914 : CMP #$0005 : BNE .done_opening_doors
+    LDA !sram_preset_options : BIT !PRESETS_CLOSE_BLUE_DOORS : BNE .doneOpeningDoors
+    LDA !PRESET_DOORS : CMP #$FFFF : BEQ .doneOpeningDoors
+    LDA !SAMUS_POSE : BEQ .doneOpeningDoors ; facing forward
+    CMP #$009B : BEQ .doneOpeningDoors ; facing forward with suit
+    LDA !PRESET_DOORS : CMP #$0001 : BEQ .doneOpeningDoors
+    LDA $7ED914 : CMP #$0005 : BNE .doneOpeningDoors
     JSR preset_open_all_blue_doors
 
-  .done_opening_doors
+  .doneOpeningDoors
     JSL $89AB82  ; Load FX
 if !RAW_TILE_GRAPHICS
     JSL preset_load_library_background
@@ -457,16 +453,15 @@ endif
     JSR $A37B    ; Calculate BG positions
 
     ; Fix BG2 Y offsets for rooms with scrolling sky
-    CMP #$91F8 : BEQ .bg_offsets_scrolling_sky
-    CMP #$93FE : BEQ .bg_offsets_scrolling_sky
-    CMP #$94FD : BEQ .bg_offsets_scrolling_sky
-    BRA .bg_offsets_calculated
+    LDA !ROOM_ID : CMP #$91F8 : BEQ .bgOffsetsScrollingSky
+    CMP #$93FE : BEQ .bgOffsetsScrollingSky
+    CMP #$94FD : BNE .bgOffsetsCalculated
 
-  .bg_offsets_scrolling_sky
+  .bgOffsetsScrollingSky
     LDA !LAYER1_Y : STA !LAYER2_Y : STA $B7
     STZ !BG2_Y_SCROLL
 
-  .bg_offsets_calculated
+  .bgOffsetsCalculated
     JSL $80A176  ; Display the viewable part of the room
 
     ; Enable sounds
@@ -479,31 +474,31 @@ endif
     STZ $0639 : STZ $063B : STZ $063D : STZ $063F
 
     ; If music fast off or preset off, treat music as already loaded
-    LDA !sram_music_toggle : CMP #$0002 : BPL .done_music
+    LDA !sram_music_toggle : CMP #$0002 : BPL .doneMusic
 
     ; Compare to currently loaded music data
-    LDA !SRAM_MUSIC_DATA : CMP !MUSIC_DATA : BEQ .done_load_music_data
+    LDA !SRAM_MUSIC_DATA : CMP !MUSIC_DATA : BEQ .doneLoadMusicData
 
     ; Clear track if necessary
-    LDA !SRAM_MUSIC_TRACK : BEQ .load_music_data
-    LDA #$0000 : JSL !MUSIC_ROUTINE
+    LDA !SRAM_MUSIC_TRACK : BEQ .loadMusicData
+    TDC : JSL !MUSIC_ROUTINE
 
-  .load_music_data
+  .loadMusicData
     LDA !MUSIC_DATA : TAX
     LDA !SRAM_MUSIC_DATA : STA !MUSIC_DATA
     TXA : CLC : ADC #$FF00 : JSL !MUSIC_ROUTINE
-    BRA .load_music_track
+    BRA .loadMusicTrack
 
-  .done_load_music_data
+  .doneLoadMusicData
     ; Compare to currently playing music
-    LDA !SRAM_MUSIC_TRACK : CMP !MUSIC_TRACK : BEQ .done_music
+    LDA !SRAM_MUSIC_TRACK : CMP !MUSIC_TRACK : BEQ .doneMusic
 
-  .load_music_track
+  .loadMusicTrack
     LDA !MUSIC_TRACK : TAX
     LDA !SRAM_MUSIC_TRACK : STA !MUSIC_TRACK
     TXA : JSL !MUSIC_ROUTINE
 
-  .done_music
+  .doneMusic
     JSL $80834B  ; Enable NMI
 
     LDA #$0004 : STA $A7  ; Set optional next interrupt to Main gameplay
