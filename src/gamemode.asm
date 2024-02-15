@@ -354,6 +354,31 @@ endif
     SEC : RTS
 }
 
+; If the current shortcut (register A) contains start,
+; and the current game mode is $C (fading out to pause), set it to $8 (normal),
+; so that shortcuts involving the start button don't trigger accidental pauses.
+; Called after handling most controller shortcuts, except save/load state
+; (because the user might want to practice gravity jumps or something)
+; and load preset (because presets reset the game mode anyway).
+skip_pause:
+{
+    PHP ; preserve carry
+    LDA !IH_CONTROLLER_PRI : BIT !IH_INPUT_START : BEQ .done
+    LDA !GAMEMODE : CMP #$000C : BNE .done
+    LDA #$0008 : STA !GAMEMODE
+
+    ; clear screen fade delay/counter
+    STZ $0723 : STZ $0725
+
+    ; Brightness = $F (max)
+    LDA $51 : ORA #$000F : STA $51
+
+  .done
+    PLP
+    RTS
+}
+
+if !FEATURE_SD2SNES
 gamemode_door_transition:
 {
   .checkloadstate
@@ -389,28 +414,6 @@ door_transition_autosave:
 }
 print pc, " autosave bank $82 end"
 endif
-
-; If the current game mode is $C (fading out to pause), set it to $8 (normal), so that
-;  shortcuts involving the start button don't trigger accidental pauses.
-; Called after handling most controller shortcuts, except save/load state (because the 
-;  user might want to practice gravity jumps or something) and load preset (because
-;  presets reset the game mode anyway).
-skip_pause:
-{
-    PHP ; preserve carry
-    LDA !GAMEMODE : CMP #$000C : BNE .done
-    LDA #$0008 : STA !GAMEMODE
-
-    ; clear screen fade delay/counter
-    STZ $0723 : STZ $0725
-
-    ; Brightness = $F (max)
-    LDA $51 : ORA #$000F : STA $51
-
-  .done
-    PLP
-    RTS
-}
 
 print pc, " gamemode end"
 warnpc $85FD00

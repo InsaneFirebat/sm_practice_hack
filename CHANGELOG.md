@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.11]   Only cancel pause on shortcuts if the shortcut contains start input by idlechild
+* [2.5.11]   Offset timer increment after save/load state by idlechild
 * [2.5.10.3] Improvements for arm pump counter
 * [2.5.10.2] Added experimental consecutive arm pump counter
 * [2.5.10.1] Added PapaSchmo menu palette profile
