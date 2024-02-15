@@ -150,8 +150,10 @@ mm_goto_gamemenu:
 mm_goto_rngmenu:
     %cm_mainmenu("RNG Control", #RngMenu)
 
+if !FEATURE_SD2SNES
 mm_goto_savestate:
     %cm_mainmenu("Savestate Settings", #SavestateMenu)
+endif
 
 mm_goto_ctrlsmenu:
     %cm_mainmenu("Controller Shortcuts", #CtrlMenu)
@@ -217,6 +219,10 @@ presets_custom_preset_slot:
   .skipzero
     STA !sram_custom_preset_slot
     ; determine which page to load
+if !FEATURE_TINYSTATES
+    ; Tinystates only has slots $00-15
+    LDY.w #CustomPresetsMenu
+else
     CMP #$0010 : BPL .page2
     LDY.w #CustomPresetsMenu : BRA .done
   .page2
@@ -225,6 +231,7 @@ presets_custom_preset_slot:
   .page3
     LDY.w #CustomPresetsMenu3
   .done
+endif
     %setmenubank()
     JML action_submenu
 
@@ -439,6 +446,26 @@ if !FEATURE_ROOM_NAMES
     %cm_footer("PRESS Y TO TOGGLE DISPLAY")
 endif
 
+    %cm_custompreset(00)
+    %cm_custompreset(01)
+    %cm_custompreset(02)
+    %cm_custompreset(03)
+    %cm_custompreset(04)
+    %cm_custompreset(05)
+    %cm_custompreset(06)
+    %cm_custompreset(07)
+    %cm_custompreset(08)
+    %cm_custompreset(09)
+    %cm_custompreset(10)
+    %cm_custompreset(11)
+    %cm_custompreset(12)
+    %cm_custompreset(13)
+    %cm_custompreset(14)
+    %cm_custompreset(15)
+
+if !FEATURE_TINYSTATES
+; Tinystates only has slots $00-15
+else
 CustomPresetsMenu2:
     dw #custompreset_16
     dw #custompreset_17
@@ -465,6 +492,23 @@ CustomPresetsMenu2:
 if !FEATURE_ROOM_NAMES
     %cm_footer("PRESS Y TO TOGGLE DISPLAY")
 endif
+
+    %cm_custompreset(16)
+    %cm_custompreset(17)
+    %cm_custompreset(18)
+    %cm_custompreset(19)
+    %cm_custompreset(20)
+    %cm_custompreset(21)
+    %cm_custompreset(22)
+    %cm_custompreset(23)
+    %cm_custompreset(24)
+    %cm_custompreset(25)
+    %cm_custompreset(26)
+    %cm_custompreset(27)
+    %cm_custompreset(28)
+    %cm_custompreset(29)
+    %cm_custompreset(30)
+    %cm_custompreset(31)
 
 CustomPresetsMenu3:
     dw #custompreset_32
@@ -493,38 +537,6 @@ if !FEATURE_ROOM_NAMES
     %cm_footer("PRESS Y TO TOGGLE DISPLAY")
 endif
 
-    %cm_custompreset(00)
-    %cm_custompreset(01)
-    %cm_custompreset(02)
-    %cm_custompreset(03)
-    %cm_custompreset(04)
-    %cm_custompreset(05)
-    %cm_custompreset(06)
-    %cm_custompreset(07)
-    %cm_custompreset(08)
-    %cm_custompreset(09)
-    %cm_custompreset(10)
-    %cm_custompreset(11)
-    %cm_custompreset(12)
-    %cm_custompreset(13)
-    %cm_custompreset(14)
-    %cm_custompreset(15)
-    %cm_custompreset(16)
-    %cm_custompreset(17)
-    %cm_custompreset(18)
-    %cm_custompreset(19)
-    %cm_custompreset(20)
-    %cm_custompreset(21)
-    %cm_custompreset(22)
-    %cm_custompreset(23)
-    %cm_custompreset(24)
-    %cm_custompreset(25)
-    %cm_custompreset(26)
-    %cm_custompreset(27)
-    %cm_custompreset(28)
-    %cm_custompreset(29)
-    %cm_custompreset(30)
-    %cm_custompreset(31)
     %cm_custompreset(32)
     %cm_custompreset(33)
     %cm_custompreset(34)
@@ -533,6 +545,7 @@ endif
     %cm_custompreset(37)
     %cm_custompreset(38)
     %cm_custompreset(39)
+endif
 
 custompreset_manage:
     %cm_jsl("Manage Preset Slots", .routine, #$0000)
@@ -586,6 +599,26 @@ endif
     %cm_header("PRESS A TO SWAP PRESETS")
     %cm_footer("PRESS X TO DELETE PRESET")
 
+    %cm_managepreset(00)
+    %cm_managepreset(01)
+    %cm_managepreset(02)
+    %cm_managepreset(03)
+    %cm_managepreset(04)
+    %cm_managepreset(05)
+    %cm_managepreset(06)
+    %cm_managepreset(07)
+    %cm_managepreset(08)
+    %cm_managepreset(09)
+    %cm_managepreset(10)
+    %cm_managepreset(11)
+    %cm_managepreset(12)
+    %cm_managepreset(13)
+    %cm_managepreset(14)
+    %cm_managepreset(15)
+
+if !FEATURE_TINYSTATES
+; Tinystates only has slots $00-15
+else
 ManagePresetsMenu2:
     dw #managepreset_16
     dw #managepreset_17
@@ -610,6 +643,23 @@ ManagePresetsMenu2:
     dw #$0000
     %cm_header("PRESS A TO SWAP PRESETS")
     %cm_footer("PRESS X TO DELETE PRESET")
+
+    %cm_managepreset(16)
+    %cm_managepreset(17)
+    %cm_managepreset(18)
+    %cm_managepreset(19)
+    %cm_managepreset(20)
+    %cm_managepreset(21)
+    %cm_managepreset(22)
+    %cm_managepreset(23)
+    %cm_managepreset(24)
+    %cm_managepreset(25)
+    %cm_managepreset(26)
+    %cm_managepreset(27)
+    %cm_managepreset(28)
+    %cm_managepreset(29)
+    %cm_managepreset(30)
+    %cm_managepreset(31)
 
 ManagePresetsMenu3:
     dw #managepreset_32
@@ -636,38 +686,6 @@ ManagePresetsMenu3:
     %cm_header("PRESS A TO SWAP PRESETS")
     %cm_footer("PRESS X TO DELETE PRESET")
 
-    %cm_managepreset(00)
-    %cm_managepreset(01)
-    %cm_managepreset(02)
-    %cm_managepreset(03)
-    %cm_managepreset(04)
-    %cm_managepreset(05)
-    %cm_managepreset(06)
-    %cm_managepreset(07)
-    %cm_managepreset(08)
-    %cm_managepreset(09)
-    %cm_managepreset(10)
-    %cm_managepreset(11)
-    %cm_managepreset(12)
-    %cm_managepreset(13)
-    %cm_managepreset(14)
-    %cm_managepreset(15)
-    %cm_managepreset(16)
-    %cm_managepreset(17)
-    %cm_managepreset(18)
-    %cm_managepreset(19)
-    %cm_managepreset(20)
-    %cm_managepreset(21)
-    %cm_managepreset(22)
-    %cm_managepreset(23)
-    %cm_managepreset(24)
-    %cm_managepreset(25)
-    %cm_managepreset(26)
-    %cm_managepreset(27)
-    %cm_managepreset(28)
-    %cm_managepreset(29)
-    %cm_managepreset(30)
-    %cm_managepreset(31)
     %cm_managepreset(32)
     %cm_managepreset(33)
     %cm_managepreset(34)
@@ -698,6 +716,7 @@ managepreset_goto_page2:
 
 managepreset_goto_page3:
     %cm_jsl("GOTO PAGE THREE", managepreset_goto_page1_routine, #ManagePresetsMenu3)
+endif
 
 ManagePresetsConfirm:
     dw #managepreset_abort
@@ -714,7 +733,8 @@ managepreset_abort:
 managepreset_confirm:
     %cm_jsl("Confirm Delete Preset", .routine, #$0000)
   .routine
-    LDA !ram_cm_selected_slot : %presetslotsize()
+    LDA !ram_cm_selected_slot
+    %presetslotsize()
     LDA #$DEAD : STA $703000,X
     LDA !ram_cm_selected_slot : ASL : TAX
     LDA #$DEAD : STA !sram_custom_preset_safewords,X
@@ -902,7 +922,6 @@ cat_inf_cf:
 cat_nothing:
     %cm_jsl("Nothing", action_category, #$000A)
 
-
 action_category:
 {
     TYA : ASL #4 : TAX
@@ -926,7 +945,6 @@ action_category:
     JSL cm_set_etanks_and_reserve
     %sfxconfirm()
     JML $90AC8D ; update beam gfx
-}
 
   .table
     ;  Items,  Beams,  Health, Miss,   Supers, PBs,    Reserv, Dummy
@@ -2289,6 +2307,7 @@ pullpc
 ; ----------
 
 pushpc
+;org $B3F000
 org !ORG_MAINMENU_GAME
 print pc, " mainmenu GameMenu start"
 
@@ -3022,19 +3041,19 @@ PhantoonMenu:
 
 
 phan_phase_1_table:
-    dw #$003F, #$0020, #$0004, #$0002, #$0010, #$0008, #$0001
-    dw #$0030, #$000C, #$0003, #$002A, #$0015, #$003C, #$0000
+    dw #$003F, #$0020, #$0008, #$0002, #$0010, #$0004, #$0001, #$0030
+    dw #$000C, #$0003, #$000F, #$0033, #$003C, #$002A, #$0015, #$0000
 
 phan_phase_2_table:
-    dw #$003F, #$0020, #$0008, #$0002, #$0010, #$0004, #$0001
-    dw #$0030, #$000C, #$0003, #$002A, #$0015, #$0024, #$0000
+    dw #$003F, #$0020, #$0008, #$0002, #$0010, #$0004, #$0001, #$0030
+    dw #$000C, #$0003, #$0007, #$0023, #$0024, #$0022, #$0005, #$0000
 
 phan_set_phan_first_phase:
     LDX #$0000
     LDA !ram_phantoon_rng_round_1 : BEQ .end_first_loop
   .first_loop
     CMP.l phan_phase_1_table,X : BEQ .end_first_loop
-    INX : INX : CPX #$0018 : BNE .first_loop
+    INX : INX : CPX #$001E : BNE .first_loop
   .end_first_loop
     TXA : LSR : STA !ram_cm_phan_first_phase
     RTL
@@ -3044,7 +3063,7 @@ phan_set_phan_second_phase:
     LDA !ram_phantoon_rng_round_2 : BEQ .end_second_loop
   .second_loop
     CMP.l phan_phase_2_table,X : BEQ .end_second_loop
-    INX : INX : CPX #$0018 : BNE .second_loop
+    INX : INX : CPX #$001E : BNE .second_loop
   .end_second_loop
     TXA : LSR : STA !ram_cm_phan_second_phase
     BEQ .set_inverted : TXA : BEQ .set_inverted
@@ -3069,9 +3088,11 @@ phan_first_phase:
     db #$28, "       FAST", #$FF
     db #$28, "        MID", #$FF
     db #$28, "       SLOW", #$FF
+    db #$28, "   NO FASTS", #$FF
+    db #$28, "    NO MIDS", #$FF
+    db #$28, "   NO SLOWS", #$FF
     db #$28, "       LEFT", #$FF
     db #$28, "      RIGHT", #$FF
-    db #$28, "   NO SLOWS", #$FF
     db #$28, "     CUSTOM", #$FF
     db #$FF
   .routine
@@ -3083,7 +3104,7 @@ phan_fast_left_1:
     %cm_toggle_bit("#1 Fast Left", !ram_phantoon_rng_round_1, #$0020, phan_set_phan_first_phase)
 
 phan_mid_left_1:
-    %cm_toggle_bit("#1 Mid  Left", !ram_phantoon_rng_round_1, #$0004, phan_set_phan_first_phase)
+    %cm_toggle_bit("#1 Mid  Left", !ram_phantoon_rng_round_1, #$0008, phan_set_phan_first_phase)
 
 phan_slow_left_1:
     %cm_toggle_bit("#1 Slow Left", !ram_phantoon_rng_round_1, #$0002, phan_set_phan_first_phase)
@@ -3092,7 +3113,7 @@ phan_fast_right_1:
     %cm_toggle_bit("#1 Fast Right", !ram_phantoon_rng_round_1, #$0010, phan_set_phan_first_phase)
 
 phan_mid_right_1:
-    %cm_toggle_bit("#1 Mid  Right", !ram_phantoon_rng_round_1, #$0008, phan_set_phan_first_phase)
+    %cm_toggle_bit("#1 Mid  Right", !ram_phantoon_rng_round_1, #$0004, phan_set_phan_first_phase)
 
 phan_slow_right_1:
     %cm_toggle_bit("#1 Slow Right", !ram_phantoon_rng_round_1, #$0001, phan_set_phan_first_phase)
@@ -3113,9 +3134,11 @@ phan_second_phase:
     db #$28, "       FAST", #$FF
     db #$28, "        MID", #$FF
     db #$28, "       SLOW", #$FF
+    db #$28, "   NO FASTS", #$FF
+    db #$28, "    NO MIDS", #$FF
+    db #$28, "   NO SLOWS", #$FF
     db #$28, "       LEFT", #$FF
     db #$28, "      RIGHT", #$FF
-    db #$28, "   NO SLOWS", #$FF
     db #$28, "     CUSTOM", #$FF
     db #$FF
   .routine
@@ -3203,6 +3226,7 @@ phan_flame_direction:
     db #$FF
 
 
+if !FEATURE_SD2SNES
 ; --------------
 ; Savestate Menu
 ; --------------
@@ -3237,6 +3261,7 @@ save_delete:
     TYA : STA !SRAM_SAVED_STATE
     %sfxconfirm()
     RTL
+endif
 
 
 ; ----------
@@ -3275,6 +3300,7 @@ ctrl_menu:
 ctrl_load_last_preset:
     %cm_ctrl_shortcut("Reload Preset", !sram_ctrl_load_last_preset)
 
+if !FEATURE_SD2SNES
 ctrl_save_state:
     %cm_ctrl_shortcut("Save State", !sram_ctrl_save_state)
 
@@ -3283,6 +3309,7 @@ ctrl_load_state:
 
 ctrl_auto_save_state:
     %cm_ctrl_shortcut("Auto Save State", !sram_ctrl_auto_save_state)
+endif
 
 ctrl_reset_segment_timer:
     %cm_ctrl_shortcut("Reset Seg Timer", !sram_ctrl_reset_segment_timer)
@@ -3372,12 +3399,4 @@ init_wram_based_on_sram:
     ; Check if any less common controller shortcuts are configured
     JML GameModeExtras
 }
-
-
-; ------------------
-; Menu Customization
-; ------------------
-if !FEATURE_CUSTOMIZE_MENU
-incsrc customizemenu.asm
-endif
 
