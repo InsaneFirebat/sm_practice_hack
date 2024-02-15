@@ -407,7 +407,6 @@ cm_tilemap_bg:
     LDA !MENU_BLANK ; blank background tile
 
   .loopBackground
-;    STA !ram_tilemap_buffer+$004,X
     STA !ram_tilemap_buffer+$084,X
     STA !ram_tilemap_buffer+$0C4,X
     STA !ram_tilemap_buffer+$104,X
@@ -554,6 +553,7 @@ cm_draw_action_table:
     dw draw_numfield_hex
     dw draw_numfield_word
     dw draw_numfield_hex_word
+    dw draw_numfield_word
     dw draw_numfield_color
     dw draw_numfield_sound
     dw draw_choice
@@ -1131,8 +1131,9 @@ draw_custom_preset:
     JSR cm_draw_text
 
     ; get preset slot offset
-    LDA !DP_ToggleValue : %presetslotsize()
-    ; store preset slot index in !DP_Address
+    LDA !DP_ToggleValue
+    %presetslotsize()
+    ; store preset slot offset in !DP_Address
     STX !DP_Address
 
     ; check if slot has valid data
@@ -1280,12 +1281,6 @@ endif
 
   .done
     RTS
-
-if !FEATURE_ROOM_NAMES
-pushpc
-incsrc roomnames.asm
-pullpc
-endif
 }
 
 draw_manage_presets:
@@ -2582,6 +2577,7 @@ cm_execute_action_table:
     dw execute_numfield_hex
     dw execute_numfield_word
     dw execute_numfield_hex_word
+    dw execute_nop
     dw execute_numfield_color
     dw execute_numfield_sound
     dw execute_choice
@@ -2591,9 +2587,12 @@ cm_execute_action_table:
     dw execute_jsl
     dw execute_submenu
     dw execute_custom_preset
-    dw execute_ram_watch
+    dw execute_nop
     dw execute_dynamic
     dw execute_manage_presets
+
+execute_nop:
+    RTS
 
 execute_toggle:
 {
@@ -2704,20 +2703,20 @@ execute_numfield:
     ; determine dpad direction
     LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
     ; pressed right, inc
-    LDA [!DP_Address] : CLC : ADC !DP_Increment
+    %a8() : LDA [!DP_Address] : CLC : ADC !DP_Increment
     CMP !DP_Maximum : BCS .set_to_min
-    %a8() : STA [!DP_Address] : BRA .jsl
+    STA [!DP_Address] : BRA .jsl
 
   .pressed_left ; dec
-    LDA [!DP_Address] : SEC : SBC !DP_Increment : BMI .set_to_max
+    %a8() : LDA [!DP_Address] : SEC : SBC !DP_Increment : BMI .set_to_max
     CMP !DP_Minimum : BCC .set_to_max
-    %a8() : STA [!DP_Address] : BRA .jsl
+    STA [!DP_Address] : BRA .jsl
 
   .set_to_min
-    LDA !DP_Minimum : %a8() : STA [!DP_Address] : BRA .jsl
+    LDA !DP_Minimum : STA [!DP_Address] : BRA .jsl
 
   .set_to_max
-    LDA !DP_Maximum : DEC : %a8() : STA [!DP_Address]
+    LDA !DP_Maximum : DEC : STA [!DP_Address]
 
   .jsl
     %a16()
@@ -3046,7 +3045,7 @@ execute_ctrl_shortcut:
     RTS
 
   .reset_shortcut
-    LDA.w #!sram_ctrl_menu : CMP !DP_CtrlInput : BEQ .end
+    LDA.w !sram_ctrl_menu : CMP !DP_CtrlInput : BEQ .end
     %sfxconfirm()
 
     LDA #$0000 : STA [!DP_CtrlInput]
@@ -3199,8 +3198,7 @@ execute_custom_preset:
   .flipPage
 if !FEATURE_TINYSTATES
     ; TinyStates only has one page
-    RTS
-endif
+else
     ; flip to the next/prev page
     BIT !IH_INPUT_LEFT : BNE .decPage
     LDA [!DP_CurrentMenu] : AND #$00FF : CMP #$0010 : BMI .loadPage2
@@ -3220,6 +3218,7 @@ endif
   .done
     JSL cm_previous_menu
     JSL action_submenu
+endif
     RTS
 }
 
@@ -3228,8 +3227,7 @@ execute_manage_presets:
     LDA !IH_CONTROLLER_PRI : BIT !IH_INPUT_LEFTRIGHT : BEQ .manageSlots
 if !FEATURE_TINYSTATES
     ; TinyStates only has one page
-    RTS
-endif
+else
     ; flip to the next/prev page
     BIT !IH_INPUT_LEFT : BNE .decPage
     LDA [!DP_CurrentMenu] : AND #$00FF : CMP #$0010 : BMI .loadPage2
@@ -3248,6 +3246,7 @@ endif
   .adjacentMenu
     JSL cm_previous_menu
     JSL action_submenu
+endif
     RTS
 
   .manageSlots
@@ -3280,11 +3279,13 @@ endif
   .swapSlots
     PHB
     ; put source address for slot 1 in !DP_Address
-    LDA !ram_cm_selected_slot : %presetslotsize()
+    LDA !ram_cm_selected_slot
+    %presetslotsize()
     CLC : ADC.w #$3000 : STA !DP_Address
 
     ; get preset slot #
-    LDA [!DP_CurrentMenu] : AND #$00FF : %presetslotsize()
+    LDA [!DP_CurrentMenu] : AND #$00FF
+    %presetslotsize()
 
     ; put source address for slot 2 in !DP_JSLTarget
     CLC : ADC.w #$3000 : STA !DP_JSLTarget
@@ -3344,12 +3345,6 @@ endif
     RTS
 }
 
-execute_ram_watch:
-{
-    ; do nothing
-    RTS
-}
-
 execute_dynamic:
 {
     ; grab the memory address (long)
@@ -3382,7 +3377,6 @@ execute_dynamic:
   .skip
     RTS
 }
-
 
 cm_hex2dec:
 {
@@ -3495,18 +3489,6 @@ MenuRNG2:
 print pc, " menu end"
 
 
-; -----------
-; Main menu
-; -----------
-
-pushpc
-org !ORG_MAINMENU
-print pc, " mainmenu start"
-incsrc mainmenu.asm
-print pc, " mainmenu end"
-pullpc
-
-
 ; ----------
 ; Resources
 ; ----------
@@ -3527,7 +3509,26 @@ warnpc $B8C458 ; There's a small chunk of Axeil code at $B8C459
 ; Crash handler
 ; -------------
 
+incsrc crash.asm
+
+
+; -----------
+; Main menu
+; -----------
+
+;org $B88000
+org !ORG_MAINMENU
 org $89AF00
 print pc, " mainmenu start"
 incsrc mainmenu.asm
 print pc, " mainmenu end"
+
+
+if !FEATURE_CUSTOMIZE_MENU
+incsrc customizemenu.asm
+endif
+
+if !FEATURE_ROOM_NAMES
+incsrc roomnames.asm
+endif
+
