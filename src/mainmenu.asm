@@ -2277,6 +2277,7 @@ RoomStratMenu:
     dw ihstrat_draygonai
     dw ihstrat_downbackzeb
     dw ihstrat_twocries
+    dw ihstrat_wasteland
     dw #$0000
     %cm_header("INFOHUD ROOM STRAT")
     %cm_footer("ROOM STRAT MUST BE ACTIVE")
@@ -2342,6 +2343,9 @@ ihstrat_downbackzeb:
 ihstrat_twocries:
     %cm_jsl("Two Cries Standup", #action_select_room_strat, #$0013)
 
+ihstrat_wasteland:
+    %cm_jsl("Wasteland RNG Manip", #action_select_room_strat, #$0014)
+
 action_select_room_strat:
 {
     TYA : STA !sram_room_strat
@@ -2375,6 +2379,7 @@ ih_room_strat:
     db #$28, " DRAYGON AI", #$FF
     db #$28, "  DBACK ZEB", #$FF
     db #$28, "  TWO CRIES", #$FF
+    db #$28, "  WASTELAND", #$FF
     db #$FF
   .routine
     LDA #$0001 : STA !sram_display_mode

@@ -204,7 +204,7 @@ endif
     BRA .increment_momentum
 
   .momentum_stopped
-    TDC : STA !ram_momentum_sum : STA !ram_momentum_count : STA !ram_momentum_direction
+    LDA #$0000 : STA !ram_momentum_sum : STA !ram_momentum_count : STA !ram_momentum_direction
 
   .shinetune_start
     ; Track momentum
@@ -224,7 +224,7 @@ endif
     LDA !ram_shinetune_late_4 : LDX #$00C0 : JSR Draw3
 
   .reset
-    TDC : STA !ram_shine_counter : STA !ram_shine_dash_held_late
+    LDA #$0000 : STA !ram_shine_counter : STA !ram_shine_dash_held_late
     STA !ram_shinetune_early_1 : STA !ram_shinetune_late_1
     STA !ram_shinetune_early_2 : STA !ram_shinetune_late_2
     STA !ram_shinetune_early_3 : STA !ram_shinetune_late_3
@@ -1019,7 +1019,7 @@ status_walljump:
     LDA !IH_BLANK : STA !HUD_TILEMAP+$90
 
   .startaverage
-    TDC : STA !ram_vertical_speed : INC : STA !ram_roomstrat_counter
+    LDA #$0000 : STA !ram_vertical_speed : INC : STA !ram_roomstrat_counter
     BRA .incspeed
 
   .blankaverage
@@ -1028,7 +1028,7 @@ status_walljump:
     BRA .startaverage
 
   .clearaverage
-    TDC : STA !ram_roomstrat_counter
+    LDA #$0000 : STA !ram_roomstrat_counter
     BRA .checkleftright
 
   .incframecount
@@ -1073,7 +1073,7 @@ status_walljump:
     BRL .clear
 
   .zerospeed
-    TDC : STA !ram_vertical_speed
+    LDA #$0000 : STA !ram_vertical_speed
 
   .checkleftright
     LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_LEFT : BNE .leftright
@@ -1126,7 +1126,7 @@ endif
     LDA !ram_walljump_counter : LDX #$008C : JSR Draw2
 
   .reset
-    TDC : STA !ram_walljump_counter
+    LDA #$0000 : STA !ram_walljump_counter
     RTS
 
 if !FEATURE_PAL
@@ -2452,7 +2452,7 @@ endif
   .yeslow
     LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8E
     LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0100 : BNE .printy
-    TDC : BRA .lowzero
+    LDA #$0000 : BRA .lowzero
 
   .low
     LDA !ram_ypos : SEC : SBC #!snailclip_ypos_lo
@@ -2460,6 +2460,176 @@ endif
     ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8E
     LDA !IH_LETTER_L : STA !HUD_TILEMAP+$8C
     RTS
+}
+
+status_wasteland:
+{
+    ; save a bunch of bytes/cycles by using 16bit addressing
+    PHB : PEA $7E7E : PLB : PLB
+    ; Suppress Samus HP display
+    LDA !SAMUS_HP : STA.w !ram_last_hp
+
+    LDA.w !ram_realtime_room : CMP #$0001 : BEQ .start
+    LDA.w !ram_roomstrat_state : BEQ .done
+    INC.w !ram_roomstrat_counter
+    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_SHOT : BNE .pressedshot
+    PLB
+    RTS
+
+  .badstart
+    STZ.w !ram_roomstrat_state
+    LDA !IH_LETTER_X
+
+  .clearhud
+    STA.w !HUD_TILEMAP+$88 : STA.w !HUD_TILEMAP+$92
+    LDA !IH_BLANK : STA.w !HUD_TILEMAP+$8A
+    STA.w !HUD_TILEMAP+$8C : STA.w !HUD_TILEMAP+$8E
+    STA.w !HUD_TILEMAP+$90 : STA.w !HUD_TILEMAP+$94
+    STA.w !HUD_TILEMAP+$96 : STA.w !HUD_TILEMAP+$98
+    PLB
+    RTS
+
+  .reset
+    STZ.w !ram_roomstrat_state
+
+  .done
+    PLB
+    RTS
+
+  .start
+    LDA !ROOM_ID : CMP #$B5D5 : BNE .reset
+    LDA !SAMUS_X : CMP #$0564 : BNE .badstart
+    LDA !SAMUS_Y : CMP #$0065 : BNE .badstart
+    LDA !SAMUS_POSE : CMP #$0032 : BEQ .init
+    CMP #$007E : BEQ .init
+    CMP #$0080 : BNE .badstart
+
+  .init
+    STZ.w !ram_roomstrat_counter
+    LDA #$0001 : STA.w !ram_roomstrat_state
+    LDA !IH_LETTER_Y
+    BRA .clearhud
+
+  .incstate
+    INC.w !ram_roomstrat_state
+    PLB
+    RTS
+
+  .pressedshot
+    LDA.w !ram_roomstrat_state : CMP #$0002 : BEQ .secondbomb
+    LDA.w !ram_roomstrat_counter : CMP #$0084 : BPL .secondbomb
+    CMP #$0048 : BPL .firstlate
+    CMP #$003E : BEQ .boost
+    BMI .firstearly
+    SEC : SBC #$003E : ASL : TAX
+    LDA.l NumberGFXTable,X : STA.w !HUD_TILEMAP+$94
+    CPX #$000F : BPL .firsthigh
+    STA.w !HUD_TILEMAP+$8A
+    LDA !IH_LETTER_Y
+    BRA .setfirstletters
+
+  .firstlate
+    SEC : SBC #$0047 : ASL : TAX
+    LDA.l NumberGFXTable,X : STA.w !HUD_TILEMAP+$94
+    INX #2
+    LDA.l NumberGFXTable,X : STA.w !HUD_TILEMAP+$8A
+    LDA !IH_LETTER_L
+
+  .setfirstletters
+    STA.w !HUD_TILEMAP+$88 : STA.w !HUD_TILEMAP+$92
+    BRA .incstate
+
+  .boost
+    BRA .firstboost
+
+  .firstearly
+    LDA #$003F : SEC : SBC.w !ram_roomstrat_counter : ASL : TAX
+    LDA.l NumberGFXTable,X : STA.w !HUD_TILEMAP+$8A : STA.w !HUD_TILEMAP+$94
+    LDA !IH_LETTER_E : STA.w !HUD_TILEMAP+$88 : STA.w !HUD_TILEMAP+$92
+
+  .ignore
+    PLB
+    RTS
+
+  .secondbomb
+    LDA.w !ram_roomstrat_counter
+    CMP #$009C : BMI .ignore
+    CMP #$011A : BPL .ignore
+    CMP #$00DF : BPL .secondlate
+    CMP #$00D6 : BMI .secondearly
+    CMP #$00DD : BPL .secondhigh
+    CMP #$00DA : BMI .secondlow
+    BRL .secondgooddraw
+
+  .firsthigh
+    LDA.w !ram_roomstrat_counter
+    SEC : SBC #$0045 : ASL : TAX
+    LDA.l NumberGFXTable,X : STA.w !HUD_TILEMAP+$8A
+    LDA !IH_LETTER_L : STA.w !HUD_TILEMAP+$88
+    LDA !IH_LETTER_Y : STA.w !HUD_TILEMAP+$92
+    BRL .incstate
+
+  .firstboost
+    LDX #$0002 : LDA.l NumberGFXTable,X
+    STA.w !HUD_TILEMAP+$8A : STA.w !HUD_TILEMAP+$94
+    LDA !IH_LETTER_E : STA.w !HUD_TILEMAP+$88
+    LDA !IH_LETTER_B : STA.w !HUD_TILEMAP+$92
+
+    ; Getting the boost shifts the RNG
+    INC.w !ram_roomstrat_counter
+    BRL .incstate
+
+  .secondlate
+    SEC : SBC #$00DE : ASL : TAX
+    LDA.l NumberGFXTable,X : STA.w !HUD_TILEMAP+$98
+    INX #4
+    LDA.l NumberGFXTable,X : STA.w !HUD_TILEMAP+$8E
+    LDA !IH_LETTER_L : STA.w !HUD_TILEMAP+$8C : STA.w !HUD_TILEMAP+$96
+    BRL .reset
+
+  .secondearly
+    BRA .secondearlydraw
+
+  .secondhigh
+    BRA .secondhighdraw
+
+  .secondlow
+    BRA .secondlowdraw
+
+  .secondearlydraw
+    LDA #$00D6 : SEC : SBC.w !ram_roomstrat_counter : ASL : TAX
+    LDA.l NumberGFXTable,X : STA.w !HUD_TILEMAP+$8E
+    TXA : CLC : ADC #$0008 : TAX
+    LDA.l NumberGFXTable,X : STA.w !HUD_TILEMAP+$98
+    LDA !IH_LETTER_E : STA.w !HUD_TILEMAP+$8C : STA.w !HUD_TILEMAP+$96
+    PLB
+    RTS
+
+  .secondhighdraw
+    SEC : SBC #$00DC : ASL : TAX
+    LDA.l NumberGFXTable,X : STA.w !HUD_TILEMAP+$8E
+    TXA : CLC : ADC #$0006 : TAX
+    LDA.l NumberGFXTable,X : STA.w !HUD_TILEMAP+$98
+    LDA !IH_LETTER_L : STA.w !HUD_TILEMAP+$8C
+    LDA !IH_LETTER_Y : STA.w !HUD_TILEMAP+$96
+    BRL .reset
+
+  .secondlowdraw
+    SEC : SBC #$00D5 : ASL : TAX
+    LDA.l NumberGFXTable,X : STA.w !HUD_TILEMAP+$8E
+    LDA #$00DA : SEC : SBC.w !ram_roomstrat_counter : ASL : TAY
+    LDA.l NumberGFXTable,X : STA.w !HUD_TILEMAP+$98
+    LDA !IH_LETTER_Y : STA.w !HUD_TILEMAP+$8C
+    LDA !IH_LETTER_E : STA.w !HUD_TILEMAP+$96
+    BRL .reset
+
+  .secondgooddraw
+    SEC : SBC #$00D9 : ASL : TAX
+    LDA.l NumberGFXTable,X : STA.w !HUD_TILEMAP+$98
+    TXA : CLC : ADC #$0008 : TAX
+    LDA.l NumberGFXTable,X : STA.w !HUD_TILEMAP+$8E
+    LDA !IH_LETTER_Y : STA.w !HUD_TILEMAP+$8C : STA.w !HUD_TILEMAP+$96
+    BRL .reset
 }
 
 status_mbhp:
@@ -2703,13 +2873,13 @@ status_twocries:
     CMP #$0009 : BMI .check
 
   .reset
-    TDC : STA !ram_roomstrat_state
+    LDA #$0000 : STA !ram_roomstrat_state
     RTS
 
   .start
     LDA $0FA8 : CMP #$BE96 : BNE .done
     LDA $7E784C : CMP #$0005 : BNE .done
-    TDC : STA !ram_roomstrat_counter
+    LDA #$0000 : STA !ram_roomstrat_counter
     LDA #$0008 : STA !ram_roomstrat_state
     LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88
     LDA !IH_BLANK : STA !HUD_TILEMAP+$8A : STA !HUD_TILEMAP+$8C
@@ -2745,7 +2915,7 @@ status_twocries:
     SEC : SBC #$008D : STA !ram_roomstrat_state
     ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8A
     LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88
-    TDC : STA !ram_roomstrat_counter
+    LDA #$0000 : STA !ram_roomstrat_counter
     RTS
 
   .firstlate
@@ -2763,7 +2933,7 @@ status_twocries:
     LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88
     LDA !IH_LETTER_E : STA !HUD_TILEMAP+$8A
     LDA #$0007 : STA !ram_roomstrat_state
-    TDC : STA !ram_roomstrat_counter
+    LDA #$0000 : STA !ram_roomstrat_counter
 
   .seconddone
     RTS
@@ -2844,7 +3014,7 @@ status_twocries_nosb:
     SEC : SBC #$008D : STA !ram_roomstrat_state
     ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8A
     LDA !IH_LETTER_X : STA !HUD_TILEMAP+$88
-    TDC : STA !ram_roomstrat_counter
+    LDA #$0000 : STA !ram_roomstrat_counter
     RTS
 
   .firstcheck
@@ -2856,7 +3026,7 @@ status_twocries_nosb:
     SEC : SBC #$008D : STA !ram_roomstrat_state
     ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$8A
     LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$88
-    TDC : STA !ram_roomstrat_counter
+    LDA #$0000 : STA !ram_roomstrat_counter
     RTS
 
   .wait
