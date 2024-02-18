@@ -448,10 +448,14 @@ ih_before_room_transition:
     PHB : PHD : PLB : PLB
     TAY
     LDX #$00C2
+    LDA !sram_top_display_mode : CMP.b !TOP_DISPLAY_VANILLA : BEQ .vanillaDoorLag
     LDA !ram_minimap : BEQ .draw3
     LDX #$0054
   .draw3
     TYA : JSR Draw3
+  .displayMode
+    %a16()
+    PLB
 
     ; Overwrite Enemy HP only
     LDA !sram_display_mode : BNE .done
@@ -467,6 +471,11 @@ ih_before_room_transition:
     PLB
     CLC ; overwritten code
     RTL
+
+  .vanillaDoorLag
+    LDA !ram_minimap : BNE .displayMode
+    TYA : JSR Draw2
+    BRA .displayMode
 
   .status_door_display_table
     dw #$0000 ; off/dummy

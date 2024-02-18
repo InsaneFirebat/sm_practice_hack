@@ -2278,6 +2278,7 @@ RoomStratMenu:
     dw ihstrat_downbackzeb
     dw ihstrat_twocries
     dw ihstrat_wasteland
+    dw ihstrat_moondance
     dw #$0000
     %cm_header("INFOHUD ROOM STRAT")
     %cm_footer("ROOM STRAT MUST BE ACTIVE")
@@ -2346,6 +2347,9 @@ ihstrat_twocries:
 ihstrat_wasteland:
     %cm_jsl("Wasteland RNG Manip", #action_select_room_strat, #$0014)
 
+ihstrat_moondance:
+    %cm_jsl("Moondance", #action_select_room_strat, #$0015)
+
 action_select_room_strat:
 {
     TYA : STA !sram_room_strat
@@ -2380,6 +2384,7 @@ ih_room_strat:
     db #$28, "  DBACK ZEB", #$FF
     db #$28, "  TWO CRIES", #$FF
     db #$28, "  WASTELAND", #$FF
+    db #$28, "  MOONDANCE", #$FF
     db #$FF
   .routine
     LDA #$0001 : STA !sram_display_mode
@@ -2750,6 +2755,7 @@ ih_status_icons:
 ih_lag:
     %cm_numfield("Artificial Lag", !sram_artificial_lag, 0, 64, 1, 4, #0)
 
+!TOP_DISPLAY_VANILLA = #$0002
 ih_top_HUD_mode:
     dw !ACTION_CHOICE
     dl #!sram_top_display_mode
