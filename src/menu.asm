@@ -1905,7 +1905,6 @@ cm_edit_decimal_digits:
     STA !ram_tilemap_buffer+6,X
 
     ; set palette and default zero tile
-    ; number tiles are 70-79
     STA !DP_Palette
 
     ; Draw numbers
@@ -1924,24 +1923,21 @@ cm_edit_decimal_digits:
 
   .highlighting
     ; highlight the selected tile
-    %a8()
     LDA !ram_cm_horizontal_cursor : BEQ .highlight_ones
     DEC : BEQ .highlight_tens
     DEC : BEQ .highlight_hundreds
     ; thousands $X000
-    LDA #$3C : STA !ram_tilemap_buffer+1,X
-    BRA .done
-  .highlight_hundreds ; $0X00
-    LDA #$3C : STA !ram_tilemap_buffer+3,X
-    BRA .done
-  .highlight_tens ; $00X0
-    LDA #$3C : STA !ram_tilemap_buffer+5,X
-    BRA .done
-  .highlight_ones ; $000X
-    LDA #$3C : STA !ram_tilemap_buffer+7,X
+    BRA .highlight
+  .highlight_hundreds
+    INX #2 : BRA .highlight
+  .highlight_tens
+    INX #4 : BRA .highlight
+  .highlight_ones
+    TXA : CLC : ADC #$0006 : TAX
+  .highlight
+    ; number tiles are 70-79
+    LDA !ram_tilemap_buffer,X : ORA #$3C70 : STA !ram_tilemap_buffer,X
 
-  .done
-    %a16()
     JSR cm_tilemap_transfer
     RTS
 

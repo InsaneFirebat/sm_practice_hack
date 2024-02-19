@@ -1,7 +1,8 @@
 
 ## Changelog since v2.2.7
 
-* [2.5.12] Added Moondance room strat by idlechild
+* [2.5.12.1] Fixed selected digit highlighting when editing large numbers
+* [2.5.12]   Added Moondance room strat by idlechild
 * [2.5.11.1] Added Wasteland room strat by idlechild
 * [2.5.11]   Only cancel pause on shortcuts if the shortcut contains start input by idlechild
 * [2.5.11]   Offset timer increment after save/load state by idlechild
