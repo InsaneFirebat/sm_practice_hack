@@ -208,7 +208,7 @@ ram_cm_preserved_timers = !ram_cm_preserved_timers ; !WRAM_MENU_START+$78 ; 8 by
 ; The following RAM may be used multiple times,
 ; as long as it isn't used multiple times on the same menu page
 
-ram_zz_shared_80 = !ram_zz_shared_80 ; !WRAM_MENU_START+$80
+ram_zz_shared_80 = !ram_zz_shared_80 ; !WRAM_MENU_START+$80 ; this group is for symbols
 ram_zz_shared_82 = !ram_zz_shared_82 ; !WRAM_MENU_START+$82
 ;!ram_zz_shared_84 = !WRAM_MENU_START+$84
 ;!ram_zz_shared_86 = !WRAM_MENU_START+$86
