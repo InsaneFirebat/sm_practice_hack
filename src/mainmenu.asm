@@ -332,7 +332,6 @@ presets_compressed_graphics:
     %cm_toggle_bit("Compressed Graphics", !sram_compressed_graphics, !PRESETS_COMPRESSED_GRAPHICS, #0)
 
 !PRESETS_COMPRESSED_PALETTES = #$0002
-!PRESETS_COMPRESSED_PALETTES_8BIT = #$02
 presets_compressed_palettes:
     %cm_toggle_bit("Compressed Palettes", !sram_compressed_graphics, !PRESETS_COMPRESSED_PALETTES, #0)
 
