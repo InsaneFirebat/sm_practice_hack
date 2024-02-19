@@ -445,7 +445,7 @@ ih_before_room_transition:
     BPL .drawDoorLag
     EOR #$FF : INC
   .drawDoorLag
-    PHB : PHD : PLB : PLB
+    PHB : LDA #$00 : PHA : PLB
     TAY
     LDX #$00C2
     LDA !sram_top_display_mode : CMP.b !TOP_DISPLAY_VANILLA : BEQ .vanillaDoorLag
@@ -2053,7 +2053,7 @@ overwrite_HUD_numbers:
 }
 
 print pc, " infohud end"
-warnpc $F0E000 ; spritefeat.asm
+warnpc $F0EC00 ; spritefeat.asm
 
 
 ; Stuff that needs to be placed in bank 80
