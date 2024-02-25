@@ -445,7 +445,7 @@ ih_before_room_transition:
     BPL .drawDoorLag
     EOR #$FF : INC
   .drawDoorLag
-    PHB : LDA #$00 : PHA : PLB
+    PHB : PEA $0000 : PLB : PLB
     TAY
     LDX #$00C2
     LDA !sram_top_display_mode : CMP.b !TOP_DISPLAY_VANILLA : BEQ .vanillaDoorLag
@@ -468,7 +468,6 @@ ih_before_room_transition:
     LDA !ENEMY_HP : STA !ram_enemy_hp
 
   .done
-    PLB
     CLC ; overwritten code
     RTL
 
