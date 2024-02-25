@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.12.2] Fixed a crash when entering a door
 * [2.5.12.1] Fixed corrupt menu graphics while in Kraid's room
 * [2.5.12.1] Fixed selected digit highlighting when editing large numbers
 * [2.5.12]   Added Moondance room strat by idlechild
