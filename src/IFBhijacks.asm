@@ -158,3 +158,5 @@ NoClip:
 endif
 print pc, " EXTRAS=1 misc bank94 end"
 
+
+incsrc demos.asm
