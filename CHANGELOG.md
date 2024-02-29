@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.5.12.4] PAL support plus more custom demos
 * [2.5.12.3] Added custom demos
 * [2.5.12.2] Fixed a crash when entering a door
 * [2.5.12.1] Fixed corrupt menu graphics while in Kraid's room
