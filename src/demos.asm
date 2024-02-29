@@ -1,7 +1,7 @@
 
+; Allow input instruction lists to be repointed outside bank $91
 org $9183C0
 DemoInputObjectHandler:
-; Allow input instruction lists to be repointed outside bank $91
 {
     PHB
     ; set DB to match input data
@@ -26,16 +26,27 @@ DemoInputObjectHandler:
     PLB
     RTL
 }
+
+NoCodeRTS:
+    RTS
 warnpc $9183F2
 
 
+; adds lava damage to demos, replaces dead debug code
+if !FEATURE_PAL
+org $90E814
+    JSR $E9CB ; Handle periodic damage to Samus
+else
 org $90E817
-    ; adds lava damage to demos, replaces dead debug code
     JSR $E9CE ; Handle periodic damage to Samus
+endif
 warnpc $90E81A
 
-
+if !FEATURE_PAL
+org $919DAA
+else
 org $919E52
+endif
 DemoObject:
 ;;; $9E52: Demo input objects - title ;;;
 {
@@ -44,65 +55,219 @@ DemoObject:
 ;       |      |       ___ Pointer to input instruction list
 ;       |      |      |
 ;  .LandingSite
-;    dw $83BF, $8A9B, DemoInput_LandingSite
-  .PseudoScrewAttack
-    dw $83BF, $8A9B, DemoInput_PseudoScrewAttack
+;    dw NoCodeRTS, $8A9B, DemoInput_LandingSite
+;  .PseudoScrewAttack
+;    dw NoCodeRTS, $8A9B, DemoInput_PseudoScrewAttack
 ;  .SpeedBooster
-;    dw $83BF, $8A9B, DemoInput_SpeedBooster
+;    dw NoCodeRTS, $8A9B, DemoInput_SpeedBooster
   .Dachora
-    dw $83BF, $8A9B, DemoInput_Dachora
+    dw NoCodeRTS, $8A9B, DemoInput_Dachora
   .RedBrinstarElevator
-    dw $83BF, $8A9B, DemoInput_RedBrinstarElevator
+    dw NoCodeRTS, $8A9B, DemoInput_RedBrinstarElevator
   .WreckedShipBasement
-    dw $83BF, $8A9B, DemoInput_WreckedShipBasement
+    dw NoCodeRTS, $8A9B, DemoInput_WreckedShipBasement
   .LowerNorfairEntrance
-    dw $83BF, $8A9B, DemoInput_LowerNorfairEntrance
+    dw NoCodeRTS, $8A9B, DemoInput_LowerNorfairEntrance
   .EyeDoor
-    dw $83BF, $8A9B, DemoInput_EyeDoor
+    dw NoCodeRTS, $8A9B, DemoInput_EyeDoor
   .Shinespark
-    dw $83BF, $8AB0, DemoInput_Shinespark
+    dw NoCodeRTS, $8AB0, DemoInput_Shinespark
 ;  .MissileDoor
-;    dw $83BF, $8A9B, DemoInput_MissileDoor
+;    dw NoCodeRTS, $8A9B, DemoInput_MissileDoor
   .Kraid
-    dw $83BF, $8A9B, DemoInput_Kraid
+    dw NoCodeRTS, $8A9B, DemoInput_Kraid
   .FireFleaRoom
-    dw $83BF, $8A9B, DemoInput_FireFleaRoom
+    dw NoCodeRTS, $8A9B, DemoInput_FireFleaRoom
   .ScrewAttack
-    dw $83BF, $8A9B, DemoInput_ScrewAttack
+    dw NoCodeRTS, $8A9B, DemoInput_ScrewAttack
   .BrinstarDiagonalRoom
-    dw $83BF, $8A9B, DemoInput_BrinstarDiagonalRoom
+    dw NoCodeRTS, $8A9B, DemoInput_BrinstarDiagonalRoom
   .Unused
-    dw $83BF, $8A9B, DemoInput_Unused
+    dw NoCodeRTS, $8A9B, DemoInput_Unused
 ;  .PreSporeSpawnHall
-;    dw $83BF, $8A9B, DemoInput_PreSporeSpawnHall
+;    dw NoCodeRTS, $8A9B, DemoInput_PreSporeSpawnHall
 ;  .GrappleBeam
-;    dw $83BF, $8A9B, DemoInput_GrappleBeam
-  .IceBeam
-    dw $83BF, $8A9B, DemoInput_IceBeam
+;    dw NoCodeRTS, $8A9B, DemoInput_GrappleBeam
+;  .IceBeam
+;    dw NoCodeRTS, $8A9B, DemoInput_IceBeam
   .GauntletEntrance
-    dw $83BF, $8A9B, DemoInput_GauntletEntrance
+    dw NoCodeRTS, $8A9B, DemoInput_GauntletEntrance
   .AdvancedGrappleBeam
-    dw $83BF, $8A9B, DemoInput_AdvancedGrappleBeam
+    dw NoCodeRTS, $8A9B, DemoInput_AdvancedGrappleBeam
   .IBJ
-    dw $83BF, $8A9B, DemoInput_IBJ
+    dw NoCodeRTS, $8A9B, DemoInput_IBJ
   .SBA
-    dw $83BF, $8A9B, DemoInput_SBA
+    dw NoCodeRTS, $8A9B, DemoInput_SBA
   .TourianEntrance
-    dw $83BF, $8A9B, DemoInput_TourianEntrance
+    dw NoCodeRTS, $8A9B, DemoInput_TourianEntrance
   .CrystalFlash
-    dw $83BF, $8A9B, DemoInput_CrystalFlash
+    dw NoCodeRTS, $8A9B, DemoInput_CrystalFlash
+
   .mockball
-    dw $83BF, $8A9B, DemoInput_mockball
+    dw NoCodeRTS, $8A9B, DemoInput_mockball
   .lavadive
-    dw $83BF, $8A9B, DemoInput_lavadive
+    dw NoCodeRTS, $8A9B, DemoInput_lavadive
   .redtower
-    dw $83BF, $8A9B, DemoInput_redtower
+    dw NoCodeRTS, $8A9B, DemoInput_redtower
   .ggg
-    dw $83BF, $8A9B, DemoInput_ggg
+    dw NoCodeRTS, $8A9B, DemoInput_ggg
   .landingsite
-    dw $83BF, $8A9B, DemoInput_landingsite
+    dw NoCodeRTS, $8A9B, DemoInput_landingsite
+;  .babyskip_desync
+;    dw NoCodeRTS, $8A9B, DemoInput_babyskip_desync
+  .babyskip
+    dw NoCodeRTS, $8A9B, DemoInput_babyskip
+  .metroid3
+    dw NoCodeRTS, $8A9B, DemoInput_metroid3
+if !FEATURE_PAL
+warnpc $919E3A
+else
 warnpc $919EE2
+endif
 }
+
+
+org $9189FD 
+;;; $89FD: Demo Samus setup function pointers ;;;
+{
+DemoSamusSetup:
+    dw DemoSamusSetup_set1, DemoSamusSetup_set2, DemoSamusSetup_set3, DemoSamusSetup_set4
+
+  .set1
+    dw DSS_LandingSite ; landingsite
+    dw DSS_FacingRight ; mockball
+    dw DSS_FacingRight ; redtower
+    dw DSS_FacingLeft ; lavadive
+    dw DSS_FacingLeft ; ggg
+    dw DSS_FacingLeft ; babyskip
+
+  .set2
+    dw DSS_FacingRight ; metroid3
+    dw DSS_FacingLeft ; FireFlea Room
+    dw DSS_FacingRight ; Brinstar Diagonal Room
+    dw DSS_FacingLeft ; Lower Norfair Entrance
+    dw DSS_FacingRight ; Screw Attack
+    dw DSS_FallingFacingLeft ; Dachora
+
+ .set3
+    dw DSS_FacingLeft ; Pre Phantoon Hall
+    dw DSS_Shinespark ; Shinespark
+    dw DSS_FacingRight ; Eye Door
+    dw DSS_FacingRight ; Red Brinstar Elevator
+    dw DSS_FacingRight ; Kraid
+    dw DSS_FacingRight ; Tourian Entrance
+
+  .set4
+    dw DSS_GauntletSpark ; Gauntlet Entrance
+    dw DSS_FacingLeft ; Advanced Grapple Beam
+    dw DSS_FacingLeft ; IBJ
+    dw DSS_FacingRight ; SBA
+    dw DSS_LowEnergyFacingLeft ; Crystal Flash
+
+DSS_LandingSite:
+;;; $8A33: Demo Samus setup - landing site ;;;
+{
+if !FEATURE_PAL
+    JSL $91E35B ; Make Samus face forward
+    ; Samus drawing handler = default
+    LDA #$EB4F : STA $0A5C
+else
+    JSL $91E3F6 ; Make Samus face forward
+    ; Samus drawing handler = default
+    LDA #$EB52 : STA $0A5C
+endif
+    RTS
+}
+
+DSS_MorphMovingLeft:
+;;; $8A3E: Demo Samus setup - morph ball moving left ;;;
+{
+    LDA #$001F ; pose = moving left - morph ball - no springball - on ground
+    BRA DSS_InitPose
+}
+
+DSS_LowEnergyFacingLeft:
+;;; $8A43: Demo Samus setup - standing facing left - low health ;;;
+{
+    LDA #$0014 : STA $09C2 ; Samus health = 20
+    ; fallthrough to DSS_FacingLeft
+}
+
+DSS_FacingLeft:
+;;; $8A49: Demo Samus setup - standing facing left ;;;
+{
+    LDA #$0002 ; pose = facing left - normal
+    BRA DSS_InitPose
+}
+
+DSS_FallingFacingLeft:
+;;; $8A4E: Demo Samus setup - falling facing left ;;;
+{
+    LDA #$002A ; pose = facing left - falling
+    BRA DSS_InitPose
+}
+
+DSS_FacingRight:
+;;; $8A53: Demo Samus setup - standing facing right ;;;
+{
+    LDA #$0001 ; pose = facing right - normal
+    ; fallthrough to DSS_InitPose
+}
+
+DSS_InitPose:
+;;; $8A56: Initialise Samus with pose = [A] ;;;
+{
+    STA $0A1C ; Samus pose = [A]
+if !FEATURE_PAL
+    JSL $91F398 ; Initialise Samus pose
+    JSL $91FA6D ; Set Samus animation frame if pose changed
+    LDA #$EB4F : STA $0A5C ; Samus drawing handler = default
+else
+    JSL $91F433 ; Initialise Samus pose
+    JSL $91FB08 ; Set Samus animation frame if pose changed
+    LDA #$EB52 : STA $0A5C ; Samus drawing handler = default
+endif
+    RTS
+}
+
+DSS_Shinespark:
+;;; $8A68: Demo Samus setup - shinespark ;;;
+{
+if !FEATURE_PAL
+    LDA #$EB4F : STA $0A5C ; Samus drawing handler = default
+    JSL $90CFFA ; Trigger shinespark windup
+    LDA #$00CD : STA $0A1C ; pose = facing right - shinespark - diagonal
+    JSL $91F398 ; Initialise Samus pose
+    JSL $91FA6D ; Set Samus animation frame if pose changed
+else
+    LDA #$EB52 : STA $0A5C ; Samus drawing handler = default
+    JSL $90CFFA ; Trigger shinespark windup
+    LDA #$00CD : STA $0A1C ; pose = facing right - shinespark - diagonal
+    JSL $91F433 ; Initialise Samus pose
+    JSL $91FB08 ; Set Samus animation frame if pose changed
+endif
+    RTS
+}
+
+DSS_GauntletSpark:
+;;; $8A81: Demo Samus setup - gauntlet entrance ;;;
+{
+if !FEATURE_PAL
+    LDA #$EB4F : STA $0A5C ; Samus drawing handler = default
+    JSL $90CFFA ; Trigger shinespark windup
+    LDA #$00CA : STA $0A1C ; pose = facing right - shinespark - diagonal
+    JSL $91F398 ; Initialise Samus pose
+    JSL $91FA6D ; Set Samus animation frame if pose changed
+else
+    LDA #$EB52 : STA $0A5C ; Samus drawing handler = default
+    JSL $90CFFA ; Trigger shinespark windup
+    LDA #$00CA : STA $0A1C ; pose = facing right - shinespark - diagonal
+    JSL $91F433 ; Initialise Samus pose
+    JSL $91FB08 ; Set Samus animation frame if pose changed
+endif
+    RTS
+}
+warnpc $918A9A
 
 
 org $82876C
@@ -126,16 +291,32 @@ DemoRoomData:
 ;    dw $9D9C, $8DC6, $0000, $0100, $0000, $00BB, $FFE0, $017A, $8924 ; Pre Spore Spawn Hall
 ;    dw $B106, $970E, $0000, $0700, $0000, $008B, $0048, $01A4, $8924 ; Speed Booster
 ;    dw $AFFB, $9792, $0001, $0000, $0000, $008B, $FFC2, $01BC, $8924 ; Grapple Beam
+;    dw $9D19, $8E7A, $0000, $0200, $0600, $0099, $0027, $0265, $891A ; Pseudo Screw Attack
+if !FEATURE_PAL
+    dw $91F8, $896A, $0001, $0400, $0400, $0040, $0000, $01E3, $8924 ; PAL landingsite
+    dw $9BC8, $8CD6, $0001, $0000, $0100, $005B, $FFCC, $00C4, $8924 ; PAL mockball
+    dw $A253, $8F0A, $0001, $0000, $0400, $008B, $FFAD, $023A, $8924 ; PAL redtower
+    dw $AF14, $967E, $0001, $0300, $0000, $008B, $0052, $02FA, $8924 ; PAL lavadive
+    dw $B2DA, $9906, $0001, $0300, $0000, $008B, $0051, $0100, $8924 ; PAL ggg
+    dw $DCB1, $AA2C, $0001, $0300, $0000, $00BB, $003A, $04F7, $8924 ; PAL babyskip
+else
     dw $91F8, $896A, $0001, $0400, $0400, $0040, $0001, $02C3, $8925 ; landingsite
     dw $9BC8, $8CD6, $0001, $0000, $0100, $005B, $FFCC, $00F6, $8924 ; mockball
     dw $A253, $8F0A, $0001, $0000, $0400, $008B, $FFA5, $027F, $8924 ; redtower
     dw $AF14, $967E, $0001, $0300, $0000, $008B, $005B, $03BC, $8924 ; lavadive
     dw $B2DA, $9906, $0001, $0300, $0000, $008B, $0051, $0100, $8924 ; ggg
-    dw $9D19, $8E7A, $0000, $0200, $0600, $0099, $0027, $0265, $891A ; Pseudo Screw Attack
+;    dw $DCB1, $AA2C, $0001, $0300, $0000, $00BB, $003B, $0653, $8924 ; babyskip_desync
+    dw $DCB1, $AA2C, $0001, $0300, $0000, $00BB, $003B, $0659, $8924 ; babyskip
+endif
     dw $FFFF
 
   .set2
-    dw $A408, $A36C, $0000, $0100, $0100, $008B, $0056, $01FD, $8924 ; Ice Beam
+;    dw $A408, $A36C, $0000, $0100, $0100, $008B, $0056, $01FD, $8924 ; Ice Beam
+if !FEATURE_PAL
+    dw $DB7D, $A9CC, $0001, $0000, $0100, $008B, $FFAD, $0128, $8924 ; PAL metroid3
+else
+    dw $DB7D, $A9CC, $0000, $0000, $0000, $008B, $FFAC, $0188, $8924 ; metroid3
+endif
     dw $9C5E, $8CCA, $0003, $0200, $0000, $008B, $0049, $019A, $8924 ; FireFlea Room
     dw $9E52, $8DEA, $0003, $0500, $0300, $00AB, $FFE2, $0117, $8924 ; Brinstar Diagonal Room
     dw $AF14, $967E, $0002, $0300, $0000, $008B, $004B, $03CA, $8924 ; Lower Norfair Entrance
@@ -182,15 +363,31 @@ DemoSamusData:
 ;    dw $0004, $000F, $0000, $0000, $00C7, $1000, $1000, DemoObject_PreSporeSpawnHall
 ;    dw $2105, $001E, $0005, $0000, $012B, $1004, $1004, DemoObject_SpeedBooster
 ;    dw $6105, $001E, $0005, $0005, $018F, $1006, $1006, DemoObject_GrappleBeam
+;    dw $0004, $0014, $0000, $0000, $00C7, $1000, $1000, DemoObject_PseudoScrewAttack
+if !FEATURE_PAL
+    dw $2000, $0000, $0000, $0000, $0063, $0000, $0000, DemoObject_landingsite ; PAL
+    dw $1004, $0001, $0000, $0000, $00C7, $0000, $0000, DemoObject_mockball ; PAL
+    dw $1004, $0002, $0004, $0000, $00C7, $0000, $0000, DemoObject_redtower ; PAL
+    dw $1005, $0002, $0002, $0002, $012B, $0000, $0000, DemoObject_lavadive ; PAL
+    dw $1005, $0002, $0002, $0003, $0085, $0000, $0000, DemoObject_ggg ; PAL
+    dw $F33F, $0064, $0014, $0014, $02BC, $100F, $100B, DemoObject_babyskip ; PAL
+else
     dw $2000, $0000, $0000, $0000, $0063, $0000, $0000, DemoObject_landingsite
-    dw $0004, $0005, $0000, $0000, $00C7, $0000, $0000, DemoObject_mockball
+    dw $1004, $0001, $0000, $0000, $00C7, $0000, $0000, DemoObject_mockball
     dw $1004, $0002, $0004, $0000, $00C7, $0000, $0000, DemoObject_redtower
-    dw $0005, $0002, $0002, $0002, $0121, $0000, $0000, DemoObject_lavadive
-    dw $1005, $0002, $0002, $0002, $001F, $0000, $0000, DemoObject_ggg
-    dw $0004, $0014, $0000, $0000, $00C7, $1000, $1000, DemoObject_PseudoScrewAttack
+    dw $1005, $0002, $0002, $0002, $012B, $0000, $0000, DemoObject_lavadive
+    dw $1005, $0002, $0002, $0003, $0085, $0000, $0000, DemoObject_ggg
+;    dw $F33F, $0064, $0014, $0014, $02BC, $100F, $100B, DemoObject_babyskip_desync
+    dw $F33F, $0064, $0014, $0014, $02BC, $100F, $100B, DemoObject_babyskip
+endif
 
   .set2
-    dw $2105, $001E, $0005, $0000, $012B, $1006, $1006, DemoObject_IceBeam
+;    dw $2105, $001E, $0005, $0000, $012B, $1006, $1006, DemoObject_IceBeam
+if !FEATURE_PAL
+    dw $F33F, $0064, $0014, $0014, $02BC, $100F, $100B, DemoObject_metroid3 ; PAL
+else
+    dw $F33F, $0064, $0014, $0014, $02BC, $100F, $100B, DemoObject_metroid3
+endif
     dw $0004, $000A, $0000, $0000, $00C7, $0000, $0000, DemoObject_FireFleaRoom
     dw $0004, $0019, $0005, $0000, $00C7, $1000, $1000, DemoObject_BrinstarDiagonalRoom
     dw $E325, $004B, $000F, $000A, $0383, $1000, $1000, DemoObject_LowerNorfairEntrance
@@ -214,9 +411,1489 @@ DemoSamusData:
 }
 
 
-org $83E000 ; $918ACE ; repoint to any bank with WRAM access
+org $83D000 ; $918ACE ; repoint to any bank with WRAM access
 print pc, " demos start"
 DemoInputInstructionLists:
+
+if !FEATURE_PAL
+DemoInput_LandingSite:
+{
+    dw $00E7, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0005, $0200, $0000
+    dw $0001, $0A00, $0800
+    dw $0002, $0A00, $0000
+    dw $000F, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $0020, $0280, $0000
+    dw $0028, $0200, $0000
+    dw $001D, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0004, $0100, $0000
+    dw $000C, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0004, $0200, $0000
+    dw $001B, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0048, $0200, $0000
+    dw $0004, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0004, $0100, $0000
+    dw $0037, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0002, $0200, $0000
+    dw $0001, $8200, $8000
+    dw $003A, $8200, $0000
+    dw $0001, $8A00, $0800
+    dw $0002, $8A00, $0000
+    dw $0001, $0200, $0000
+    dw $0002, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0006, $0100, $0000
+    dw $0009, $0000, $0000
+    dw $0001, $0010, $0010
+    dw $0019, $0010, $0000
+    dw $0001, $0210, $0200
+    dw $0004, $0210, $0000
+    dw $0017, $0010, $0000
+    dw $0001, $0200, $0200
+    dw $004B, $0200, $0000
+    dw $0026, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0030, $0200, $0000
+    dw $0019, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0003, $0100, $0000
+    dw $0033, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0003, $0200, $0000
+    dw $0020, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0005, $0040, $0000
+    dw $0022, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $000E, $0200, $0000
+    dw $0006, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0003, $0200, $0000
+    dw $0010, $0100, $0000
+    dw $0001, $0140, $0040
+    dw $0002, $0140, $0000
+    dw $8427 ; Delete
+
+DemoInput_PseudoScrewAttack:
+{
+    dw $0012, $0000, $0000
+    dw $0001, $0800, $0800
+    dw $0002, $0800, $0000
+    dw $0004, $0000, $0000
+    dw $0001, $0800, $0800
+    dw $0005, $0800, $0000
+    dw $0012, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0004, $0200, $0000
+    dw $0009, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $003E, $0040, $0000
+    dw $0001, $0240, $0200
+    dw $000A, $0240, $0000
+    dw $0001, $02C0, $0080
+    dw $0010, $02C0, $0000
+    dw $0010, $0240, $0000
+    dw $001A, $0040, $0000
+    dw $0001, $0140, $0100
+    dw $000C, $0140, $0000
+    dw $0001, $01C0, $0080
+    dw $0005, $01C0, $0000
+    dw $0002, $00C0, $0000
+    dw $0001, $02C0, $0200
+    dw $0018, $02C0, $0000
+    dw $0006, $0240, $0000
+    dw $0005, $0040, $0000
+    dw $0001, $0140, $0100
+    dw $0009, $0140, $0000
+    dw $0001, $01C0, $0080
+    dw $0028, $01C0, $0000
+    dw $002E, $0140, $0000
+    dw $0001, $01C0, $0080
+    dw $0020, $01C0, $0000
+    dw $0001, $09C0, $0800
+    dw $0002, $01C0, $0000
+    dw $0006, $00C0, $0000
+    dw $000A, $0040, $0000
+    dw $0001, $0240, $0200
+    dw $0028, $0240, $0000
+    dw $0001, $02C0, $0080
+    dw $0006, $02C0, $0000
+    dw $0001, $0AC0, $0800
+    dw $0002, $0AC0, $0000
+    dw $0001, $08C0, $0000
+    dw $0001, $01C0, $0100
+    dw $0020, $01C0, $0000
+    dw $000D, $0140, $0000
+    dw $0005, $0040, $0000
+    dw $0001, $00C0, $0080
+    dw $0003, $00C0, $0000
+    dw $0001, $00E0, $0020
+    dw $000E, $00E0, $0000
+    dw $0022, $0020, $0000
+    dw $0001, $0120, $0100
+    dw $0002, $0120, $0000
+    dw $0004, $0100, $0000
+    dw $0006, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $000E, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $000C, $0180, $0000
+    dw $000F, $0100, $0000
+    dw $0001, $8100, $8000
+    dw $0021, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $001A, $8180, $0000
+    dw $0004, $8080, $0000
+    dw $0005, $8000, $0000
+    dw $0001, $0200, $0200
+    dw $000C, $0200, $0000
+    dw $0051, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_SpeedBooster:
+{
+    dw $001A, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0002, $0200, $0000
+    dw $0001, $8200, $8000
+    dw $00D0, $8200, $0000
+    dw $0001, $8A00, $0800
+    dw $0002, $8200, $0000
+    dw $0001, $8100, $0100
+    dw $0012, $0100, $0000
+    dw $0027, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0004, $0200, $0000
+    dw $000F, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $000E, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0016, $0200, $0000
+    dw $004F, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_Dachora:
+{
+    dw $0006, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0001, $0200, $0000
+    dw $00D5, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0003, $0100, $0000
+    dw $000E, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0003, $0200, $0000
+    dw $002D, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0130, $0200, $0000
+    dw $00E5, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_RedBrinstarElevator:
+{
+    dw $0048, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0008, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0005, $0180, $0000
+    dw $000E, $0100, $0000
+    dw $001A, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0001, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $0010, $0280, $0000
+    dw $0002, $0200, $0000
+    dw $0010, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0003, $0100, $0000
+    dw $003A, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $000E, $0080, $0000
+    dw $0001, $0180, $0100
+    dw $0008, $0180, $0000
+    dw $0012, $0100, $0000
+    dw $019A, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_WreckedShipBasement:
+{
+    dw $0031, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0004, $0100, $0000
+    dw $000C, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0004, $0200, $0000
+    dw $001F, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0052, $0200, $0000
+    dw $0001, $8200, $8000
+    dw $0006, $8200, $0000
+    dw $003F, $0200, $0000
+    dw $0046, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0002, $0100, $0000
+    dw $0050, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $003E, $0100, $0000
+    dw $0001, $8100, $8000
+    dw $0012, $8100, $0000
+    dw $0005, $0100, $0000
+    dw $0001, $8100, $8000
+    dw $0002, $8100, $0000
+    dw $0001, $0100, $0000
+    dw $0001, $8100, $8000
+    dw $0002, $8100, $0000
+    dw $002A, $0100, $0000
+    dw $0087, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_LowerNorfairEntrance:
+{
+    dw $000F, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $001E, $0200, $0000
+    dw $0011, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0151, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $0008, $0280, $0000
+    dw $0003, $0080, $0000
+    dw $0005, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $000E, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $000C, $0180, $0000
+    dw $0005, $0080, $0000
+    dw $0001, $0280, $0200
+    dw $0008, $0280, $0000
+    dw $0002, $0200, $0000
+    dw $0011, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $000C, $0080, $0000
+    dw $0001, $0180, $0100
+    dw $000B, $0180, $0000
+    dw $0002, $0100, $0000
+    dw $0013, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0009, $0080, $0000
+    dw $0001, $0280, $0200
+    dw $000B, $0280, $0000
+    dw $0012, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0009, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $000F, $0180, $0000
+    dw $0005, $0100, $0000
+    dw $0005, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $000C, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $001A, $0280, $0000
+    dw $002A, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $001A, $0280, $0000
+    dw $0080, $0200, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_EyeDoor:
+{
+    dw $0009, $0100, $0000
+    dw $0012, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $0003, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0002, $0100, $0000
+    dw $000A, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0005, $2000, $0000
+    dw $000A, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0008, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0005, $0180, $0000
+    dw $000B, $0100, $0000
+    dw $000D, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0002, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0005, $0180, $0000
+    dw $000A, $0100, $0000
+    dw $000D, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0002, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0006, $0180, $0000
+    dw $0016, $0100, $0000
+    dw $001A, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0001, $0180, $0080
+    dw $0009, $0180, $0000
+    dw $000E, $0100, $0000
+    dw $0012, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0005, $0100, $0000
+    dw $0020, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0005, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0006, $0180, $0000
+    dw $0012, $0100, $0000
+    dw $000C, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0005, $0080, $0000
+    dw $0008, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0005, $0040, $0000
+    dw $001E, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0006, $0200, $0000
+    dw $0006, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0006, $0100, $0000
+    dw $0042, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0006, $0080, $0000
+    dw $000E, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0003, $0040, $0000
+    dw $000A, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0009, $0080, $0000
+    dw $0018, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0005, $0040, $0000
+    dw $000A, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0004, $0080, $0000
+    dw $000A, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0005, $0040, $0000
+    dw $0063, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0006, $0200, $0000
+    dw $000E, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0007, $0100, $0000
+    dw $0001, $0140, $0040
+    dw $0002, $0140, $0000
+    dw $0003, $0100, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_Shinespark:
+{
+    dw $00A5, $0000, $0000
+    dw $8448, DemoInput_Shinespark ; Go to DemoInput_Shinespark
+
+    ; The demo timer expires before these inputs are used
+    dw $0078, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $00A3, $0200, $0000
+    dw $0001, $8200, $8000
+    dw $005E, $8200, $0000
+    dw $0002, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $0092, $8100, $0000
+    dw $000A, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0005, $0180, $0000
+    dw $000B, $0100, $0000
+    dw $001D, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0004, $2000, $0000
+    dw $0009, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0003, $2000, $0000
+    dw $000B, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $00C0, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_MissileDoor:
+{
+    dw $0021, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0027, $0100, $0000
+    dw $0036, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0004, $2000, $0000
+    dw $001C, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $0008, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $000E, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $000A, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $0006, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0007, $0040, $0000
+    dw $001A, $0000, $0000
+    dw $0001, $8100, $8100
+    dw $000E, $8100, $0000
+    dw $0015, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_Kraid:
+{
+    dw $019A, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_FireFleaRoom:
+{
+    dw $0009, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $003F, $0200, $0000
+    dw $0028, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $000A, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $000B, $0280, $0000
+    dw $000E, $0200, $0000
+    dw $0001, $0240, $0040
+    dw $0008, $0240, $0000
+    dw $0013, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $0009, $0280, $0000
+    dw $000E, $0200, $0000
+    dw $000B, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0008, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $000B, $0280, $0000
+    dw $0005, $0200, $0000
+    dw $0012, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0005, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $0004, $0280, $0000
+    dw $0010, $0200, $0000
+    dw $000E, $0000, $0000
+    dw $0001, $0400, $0400
+    dw $000A, $0400, $0000
+    dw $0001, $0420, $0020
+    dw $008A, $0420, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_ScrewAttack:
+{
+    dw $0030, $0000, $0000
+    dw $0001, $8100, $8100
+    dw $001E, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $000C, $8180, $0000
+    dw $001C, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0017, $8180, $0000
+    dw $002B, $8100, $0000
+    dw $0001, $0400, $0400
+    dw $0003, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0001, $0210, $0010
+    dw $009D, $0010, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_BrinstarDiagonalRoom:
+{
+    dw $0021, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $000E, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0012, $0180, $0000
+    dw $0034, $0100, $0000
+    dw $0010, $0000, $0000
+    dw $0001, $0010, $0010
+    dw $0008, $0010, $0000
+    dw $0001, $0050, $0040
+    dw $0017, $0050, $0000
+    dw $0004, $0040, $0000
+    dw $0001, $0440, $0400
+    dw $002C, $0440, $0000
+    dw $00AF, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_Unused:
+{
+    dw $0021, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0013, $0200, $0000
+    dw $000E, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0013, $0080, $0000
+    dw $0001, $0280, $0200
+    dw $0004, $0280, $0000
+    dw $000D, $0200, $0000
+    dw $001A, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0007, $0080, $0000
+    dw $0001, $0280, $0200
+    dw $0011, $0280, $0000
+    dw $0012, $0200, $0000
+    dw $0010, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0006, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0013, $0180, $0000
+    dw $0017, $0100, $0000
+    dw $000D, $0000, $0000
+    dw $0001, $0400, $0400
+    dw $0004, $0400, $0000
+    dw $0001, $0600, $0200
+    dw $0078, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_PreSporeSpawnHall:
+{
+    dw $0016, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0004, $0200, $0000
+    dw $000C, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0004, $0100, $0000
+    dw $000D, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $000A, $0100, $0000
+    dw $0022, $0100, $0000
+    dw $0006, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0011, $0080, $0000
+    dw $0010, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $000F, $0200, $0000
+    dw $000D, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0006, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $000C, $0180, $0000
+    dw $0001, $0080, $0000
+    dw $0001, $0280, $0200
+    dw $0006, $0280, $0000
+    dw $0003, $0200, $0000
+    dw $0001, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0003, $0100, $0000
+    dw $0001, $0140, $0040
+    dw $0007, $0140, $0000
+    dw $0004, $0140, $0000
+    dw $001C, $0140, $0000
+    dw $002D, $0040, $0000
+    dw $0001, $0440, $0400
+    dw $0002, $0040, $0000
+    dw $0001, $0050, $0010
+    dw $0003, $0050, $0000
+    dw $006A, $0010, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_GrappleBeam:
+{
+    dw $0010, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $000C, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $000C, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $000C, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $000C, $0000, $0000
+    dw $0001, $0010, $0010
+    dw $0022, $0010, $0000
+    dw $0001, $0050, $0040
+    dw $0010, $0050, $0000
+    dw $0001, $0650, $0600
+    dw $0006, $0650, $0000
+    dw $0008, $0450, $0000
+    dw $0001, $0550, $0100
+    dw $0004, $0550, $0000
+    dw $0012, $0150, $0000
+    dw $0004, $0110, $0000
+    dw $0001, $0150, $0040
+    dw $000A, $0150, $0000
+    dw $0001, $0550, $0400
+    dw $000C, $0550, $0000
+    dw $000A, $0450, $0000
+    dw $0001, $0550, $0100
+    dw $0005, $0550, $0000
+    dw $000B, $0150, $0000
+    dw $0004, $0110, $0000
+    dw $0001, $0150, $0040
+    dw $000A, $0150, $0000
+    dw $0001, $0550, $0400
+    dw $000C, $0550, $0000
+    dw $000E, $0150, $0000
+    dw $0008, $0110, $0000
+    dw $0001, $0150, $0040
+    dw $0008, $0150, $0000
+    dw $0001, $0550, $0400
+    dw $000C, $0550, $0000
+    dw $000E, $0150, $0000
+    dw $0008, $0110, $0000
+    dw $0001, $0150, $0040
+    dw $0008, $0150, $0000
+    dw $0001, $0550, $0400
+    dw $000D, $0550, $0000
+    dw $000E, $0150, $0000
+    dw $0008, $0110, $0000
+    dw $0001, $0150, $0040
+    dw $0006, $0150, $0000
+    dw $0001, $0550, $0400
+    dw $000C, $0550, $0000
+    dw $0008, $0150, $0000
+    dw $0004, $0100, $0000
+    dw $0020, $0000, $0000
+    dw $0001, $0400, $0400
+    dw $0005, $0400, $0000
+    dw $0001, $0200, $0200
+    dw $0005, $0200, $0000
+    dw $0028, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_IceBeam:
+{
+    dw $0021, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0005, $0040, $0000
+    dw $0006, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0005, $0040, $0000
+    dw $0012, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0017, $0200, $0000
+    dw $001C, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $000E, $0080, $0000
+    dw $0001, $0480, $0400
+    dw $0005, $0480, $0000
+    dw $000B, $0400, $0000
+    dw $0001, $0440, $0040
+    dw $0006, $0440, $0000
+    dw $0008, $0400, $0000
+    dw $0007, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $001D, $0200, $0000
+    dw $0009, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $000E, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $001D, $0280, $0000
+    dw $0038, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $0016, $0280, $0000
+    dw $002B, $0200, $0000
+    dw $0001, $0080, $0080
+    dw $0010, $0080, $0000
+    dw $0001, $0480, $0400
+    dw $0008, $0480, $0000
+    dw $0005, $0400, $0000
+    dw $0001, $0440, $0040
+    dw $0008, $0440, $0000
+    dw $0008, $0400, $0000
+    dw $0008, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $002B, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $0010, $0280, $0000
+    dw $0012, $0200, $0000
+    dw $005D, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_GauntletEntrance:
+{
+    dw $0012, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0004, $0100, $0000
+    dw $00CD, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_AdvancedGrappleBeam:
+{
+    dw $0032, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0007, $2000, $0000
+    dw $0006, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0004, $2000, $0000
+    dw $0008, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0007, $2000, $0000
+    dw $0005, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0005, $2000, $0000
+    dw $0010, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0015, $0200, $0000
+    dw $0001, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0005, $0100, $0000
+    dw $0003, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0013, $0040, $0000
+    dw $0001, $0440, $0400
+    dw $0011, $0440, $0000
+    dw $0022, $0040, $0000
+    dw $0001, $0240, $0200
+    dw $0013, $0240, $0000
+    dw $001F, $0040, $0000
+    dw $0001, $0140, $0100
+    dw $009F, $0140, $0000
+    dw $0070, $0100, $0000
+    dw $001E, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_IBJ:
+{
+    dw $0014, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $001B, $0100, $0000
+    dw $0013, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0009, $0080, $0000
+    dw $0001, $0480, $0400
+    dw $0006, $0480, $0000
+    dw $0002, $0080, $0000
+    dw $0001, $0480, $0400
+    dw $0006, $0480, $0000
+    dw $0001, $04C0, $0040
+    dw $0002, $04C0, $0000
+    dw $0008, $00C0, $0000
+    dw $0002, $0080, $0000
+    dw $001A, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0009, $0040, $0000
+    dw $0022, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0007, $0040, $0000
+    dw $001E, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0007, $0040, $0000
+    dw $0024, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $0021, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0007, $0040, $0000
+    dw $0023, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $0020, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0007, $0040, $0000
+    dw $001E, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $0020, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $0021, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $0021, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $0020, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $001F, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $0022, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $0022, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $0020, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $0020, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $000D, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0018, $0100, $0000
+    dw $0012, $0000, $0000
+    dw $0001, $0800, $0800
+    dw $0007, $0800, $0000
+    dw $0006, $0000, $0000
+    dw $0001, $0800, $0800
+    dw $0004, $0800, $0000
+    dw $0001, $0000, $0000
+    dw $0001, $0800, $0800
+    dw $0007, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0003, $0200, $0000
+    dw $009D, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_SBA:
+{
+    dw $001A, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0008, $2000, $0000
+    dw $0006, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0006, $2000, $0000
+    dw $0006, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0006, $2000, $0000
+    dw $0008, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0003, $0080, $0000
+    dw $0001, $0180, $0100
+    dw $0023, $0180, $0000
+    dw $0007, $0100, $0000
+    dw $0010, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0010, $0080, $0000
+    dw $0001, $0280, $0200
+    dw $0007, $0280, $0000
+    dw $0001, $02C0, $0040
+    dw $0004, $02C0, $0000
+    dw $000E, $0240, $0000
+    dw $0010, $0040, $0000
+    dw $0001, $00C0, $0080
+    dw $0008, $00C0, $0000
+    dw $0001, $01C0, $0100
+    dw $000B, $01C0, $0000
+    dw $0014, $0140, $0000
+    dw $0015, $0040, $0000
+    dw $0001, $0440, $0400
+    dw $0006, $0440, $0000
+    dw $0040, $0040, $0000
+    dw $0034, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_TourianEntrance:
+{
+    dw $0144, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_CrystalFlash:
+{
+    dw $0016, $0000, $0000
+    dw $0001, $0400, $0400
+    dw $0004, $0400, $0000
+    dw $0004, $0000, $0000
+    dw $0001, $0400, $0400
+    dw $0006, $0400, $0000
+    dw $0007, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0005, $2000, $0000
+    dw $0005, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0004, $2000, $0000
+    dw $0006, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0006, $2000, $0000
+    dw $0027, $0000, $0000
+    dw $0001, $0430, $0430
+    dw $0007, $0430, $0000
+    dw $0001, $0470, $0040
+    dw $000D, $0470, $0000
+    dw $0018, $0430, $0000
+    dw $0001, $0470, $0040
+    dw $0098, $0470, $0000
+    dw $0002, $0070, $0000
+    dw $0001, $0030, $0000
+    dw $0001, $0010, $0000
+    dw $00FD, $0000, $0000
+    dw $8427
+}
+
+DemoInput_landingsite:
+{
+    dw $0106, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $001F, $8200, $0000
+    dw $0001, $0280, $0080
+    dw $0001, $0280, $0000
+    dw $0001, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0026, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0001, $0100, $0000
+    dw $0001, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0008, $0100, $0000
+    dw $0002, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0004, $0100, $0000
+    dw $0001, $8100, $8000
+    dw $0002, $8100, $0000
+    dw $0011, $0100, $0000
+    dw $0001, $8100, $8000
+    dw $0002, $8100, $0000
+    dw $0011, $0100, $0000
+    dw $0001, $8100, $8000
+    dw $0004, $8100, $0000
+    dw $0006, $0100, $0000
+    dw $0001, $8100, $8000
+    dw $0001, $8100, $0000
+    dw $0001, $8500, $0400
+    dw $0001, $8500, $0000
+    dw $0002, $0400, $0000
+    dw $000F, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_mockball:
+{
+    dw $003B, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0004, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $0007, $8100, $0000
+    dw $0001, $8120, $0020
+    dw $0003, $8120, $0000
+    dw $0001, $8130, $0010
+    dw $0002, $8130, $0000
+    dw $0001, $8120, $0000
+    dw $0004, $8100, $0000
+    dw $0001, $8130, $0030
+    dw $0002, $8130, $0000
+    dw $0003, $8120, $0000
+    dw $0001, $8100, $0000
+    dw $0001, $8110, $0010
+    dw $0003, $8110, $0000
+    dw $0001, $8120, $0020
+    dw $0003, $8120, $0000
+    dw $0001, $8110, $0010
+    dw $0004, $8110, $0000
+    dw $0003, $8100, $0000
+    dw $0001, $8120, $0020
+    dw $0002, $8120, $0000
+    dw $0003, $8100, $0000
+    dw $0001, $8190, $0090
+    dw $0001, $0190, $0000
+    dw $0002, $0180, $0000
+    dw $0003, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0002, $0180, $0000
+    dw $0001, $0580, $0400
+    dw $0001, $0580, $0000
+    dw $0002, $0480, $0000
+    dw $0005, $0080, $0000
+    dw $0001, $0480, $0400
+    dw $0003, $0580, $0000
+    dw $0004, $0180, $0000
+    dw $0027, $0100, $0000
+    dw $0001, $0900, $0800
+    dw $0006, $0810, $0000
+    dw $0013, $0010, $0000
+    dw $0033, $0000, $0000
+    dw $8427 ; Delete
+} ; mockball
+
+DemoInput_redtower:
+{
+    dw $002C, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $000C, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $0015, $8200, $0000
+    dw $0001, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $0010, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $001E, $8180, $0000
+    dw $0001, $8280, $0200
+    dw $0002, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $0002, $0280, $0000
+    dw $0001, $0180, $0100
+    dw $0016, $0180, $0000
+    dw $0001, $0080, $0000
+    dw $0001, $0280, $0200
+    dw $0002, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $000D, $0280, $0000
+    dw $0001, $8280, $8000
+    dw $0002, $82C0, $0000
+    dw $0001, $C6C0, $4400
+    dw $0001, $C4C0, $0000
+    dw $0002, $84C0, $0000
+    dw $0002, $8400, $0000
+    dw $0001, $8600, $0200
+    dw $000B, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0010, $8280, $0000
+    dw $0001, $0280, $0000
+    dw $0001, $0180, $0100
+    dw $0002, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $000C, $0180, $0000
+    dw $0005, $0100, $0000
+    dw $0001, $0120, $0020
+    dw $0003, $0120, $0000
+    dw $0001, $01A0, $0080
+    dw $0003, $01A0, $0000
+    dw $0007, $0180, $0000
+    dw $0001, $0080, $0000
+    dw $0001, $0280, $0200
+    dw $000F, $0280, $0000
+    dw $0001, $0080, $0000
+    dw $0001, $0180, $0100
+    dw $0001, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0001, $0180, $0000
+    dw $0001, $0080, $0000
+    dw $0001, $0280, $0200
+    dw $0004, $0280, $0000
+    dw $0003, $0200, $0000
+    dw $0001, $0800, $0800
+    dw $0008, $0800, $0000
+    dw $0001, $8800, $8000
+    dw $0009, $8880, $0000
+    dw $0021, $8800, $0000
+    dw $0001, $8840, $0040
+    dw $0001, $8840, $0000
+    dw $0001, $8240, $0200
+    dw $0001, $8240, $0000
+    dw $0001, $8200, $0000
+    dw $0001, $0280, $0080
+    dw $000C, $0280, $0000
+    dw $0001, $0180, $0100
+    dw $0002, $0180, $0000
+    dw $0002, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0009, $0280, $0000
+    dw $0001, $0180, $0100
+    dw $0001, $0180, $0000
+    dw $0003, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0001, $0180, $0000
+    dw $0001, $0280, $0200
+    dw $0007, $0280, $0000
+    dw $0001, $0080, $0000
+    dw $0001, $0180, $0100
+    dw $0001, $0180, $0000
+    dw $0001, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0002, $0180, $0000
+    dw $0001, $0280, $0200
+    dw $0009, $0280, $0000
+    dw $000E, $0200, $0000
+    dw $0001, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0003, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0001, $0180, $0000
+    dw $0001, $0080, $0000
+    dw $0001, $0280, $0200
+    dw $0002, $0280, $0000
+    dw $0006, $0200, $0000
+    dw $0001, $0100, $0100
+    dw $0002, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0003, $0180, $0000
+    dw $0001, $0280, $0200
+    dw $000C, $0280, $0000
+    dw $0001, $0180, $0100
+    dw $0002, $0180, $0000
+    dw $0002, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $001D, $0180, $0000
+    dw $0001, $0280, $0200
+    dw $0001, $0280, $0000
+    dw $0002, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $0001, $0280, $0000
+    dw $0001, $0180, $0100
+    dw $0006, $0180, $0000
+    dw $0001, $0100, $0000
+    dw $0001, $0140, $0040
+    dw $0004, $0140, $0000
+    dw $0001, $8040, $8000
+    dw $0003, $8000, $0000
+    dw $003E, $0000, $0000
+    dw $0001, $4000, $4000
+    dw $0000, $4000, $0000
+    dw $8427 ; Delete
+} ; redtower
+
+DemoInput_lavadive:
+{
+    dw $0026, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0002, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $001D, $8100, $0000
+    dw $0003, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $0012, $8200, $0000
+    dw $0001, $0280, $0080
+    dw $0001, $0280, $0000
+    dw $0002, $0200, $0000
+    dw $0001, $0600, $0400
+    dw $0002, $0600, $0000
+    dw $0001, $0480, $0080
+    dw $0001, $0480, $0000
+    dw $0005, $0080, $0000
+    dw $0001, $0480, $0400
+    dw $0001, $0480, $0000
+    dw $0001, $0680, $0200
+    dw $0002, $0680, $0000
+    dw $00B5, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $0006, $0280, $0000
+    dw $000A, $0200, $0000
+    dw $0001, $8200, $8000
+    dw $000C, $8200, $0000
+    dw $0001, $8220, $0020
+    dw $0005, $8220, $0000
+    dw $0009, $8200, $0000
+    dw $0003, $8000, $0000
+    dw $0001, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0001, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0005, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0003, $8280, $0000
+    dw $0006, $8200, $0000
+    dw $0001, $8220, $0020
+    dw $0005, $8220, $0000
+    dw $0001, $82A0, $0080
+    dw $002C, $8280, $0000
+    dw $0007, $8200, $0000
+    dw $0001, $8220, $0020
+    dw $0004, $8220, $0000
+    dw $0004, $8020, $0000
+    dw $0001, $8120, $0100
+    dw $0003, $8120, $0000
+    dw $0009, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $000A, $0180, $0000
+    dw $0001, $0080, $0000
+    dw $0001, $0280, $0200
+    dw $001B, $0280, $0000
+    dw $0001, $0180, $0100
+    dw $0001, $0180, $0000
+    dw $0001, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0068, $0180, $0000
+    dw $0004, $0100, $0000
+    dw $0001, $0200, $0200
+    dw $0002, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $0002, $0280, $0000
+    dw $0001, $0180, $0100
+    dw $0008, $0100, $0000
+    dw $0001, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0002, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $000B, $0280, $0000
+    dw $0001, $0080, $0000
+    dw $0001, $0180, $0100
+    dw $000A, $0180, $0000
+    dw $0001, $0080, $0000
+    dw $0001, $0200, $0200
+    dw $0001, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $0026, $0280, $0000
+    dw $000E, $0200, $0000
+    dw $0001, $0100, $0100
+    dw $0001, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0002, $0180, $0000
+    dw $0001, $0280, $0200
+    dw $000A, $0280, $0000
+    dw $0004, $0200, $0000
+    dw $0001, $0220, $0020
+    dw $0002, $0220, $0000
+    dw $0002, $0020, $0000
+    dw $002E, $0000, $0000
+    dw $8427 ; Delete
+} ; lavadive
+
+DemoInput_ggg:
+{
+    dw $002C, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0004, $2000, $0000
+    dw $0003, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0002, $2000, $0000
+    dw $0001, $A000, $8000
+    dw $0003, $A000, $0000
+    dw $000A, $8000, $0000
+    dw $0001, $8010, $0010
+    dw $001A, $8110, $0000
+    dw $0001, $8010, $0000
+    dw $0001, $8210, $0200
+    dw $001B, $8210, $0000
+    dw $0001, $8290, $0080
+    dw $0005, $8290, $0000
+    dw $000E, $8210, $0000
+    dw $0001, $8250, $0040
+    dw $0003, $8250, $0000
+    dw $0001, $8150, $0100
+    dw $0001, $8150, $0000
+    dw $000C, $8110, $0000
+    dw $0001, $8100, $0000
+    dw $0006, $8000, $0000
+    dw $0007, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0003, $0200, $0000
+    dw $0001, $4200, $4000
+    dw $0005, $4000, $0000
+    dw $0045, $0000, $0000
+    dw $8427 ; Delete
+}
+
+DemoInput_babyskip:
+{
+    dw $0020, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0003, $8000, $0000
+    dw $0001, $8040, $0040
+    dw $0003, $8040, $0000
+    dw $0008, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $001E, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0014, $8280, $0000
+    dw $0019, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0005, $8280, $0000
+    dw $0001, $8200, $0000
+    dw $0001, $0100, $0100
+    dw $0001, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0017, $8180, $0000
+    dw $0001, $8080, $0000
+    dw $0001, $8280, $0200
+    dw $0003, $8280, $0000
+    dw $0001, $8600, $0400
+    dw $0008, $8400, $0000
+    dw $0001, $8500, $0100
+    dw $0003, $8100, $0000
+    dw $0001, $8400, $0400
+    dw $0005, $8200, $0000
+    dw $0001, $8100, $0100
+    dw $0004, $8100, $0000
+    dw $0001, $8400, $0400
+    dw $0005, $8200, $0000
+    dw $0001, $8100, $0100
+    dw $0005, $8100, $0000
+    dw $0001, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $0003, $8200, $0000
+    dw $0001, $8400, $0400
+    dw $0003, $8500, $0000
+    dw $0006, $8400, $0000
+    dw $0005, $8000, $0000
+    dw $0001, $8400, $0400
+    dw $0004, $8400, $0000
+    dw $0004, $8000, $0000
+    dw $0001, $8400, $0400
+    dw $0004, $8400, $0000
+    dw $0001, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $0011, $8100, $0000
+    dw $0003, $0100, $0000
+    dw $0001, $8000, $8000
+    dw $0001, $8040, $0000
+    dw $0002, $0040, $0000
+    dw $0001, $4000, $4000
+    dw $0003, $0000, $0000
+    dw $0001, $0800, $0800
+    dw $0005, $0800, $0000
+    dw $0001, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0006, $0100, $0000
+    dw $0001, $0200, $0200
+    dw $0005, $0200, $0000
+    dw $006D, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0001, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $0012, $8100, $0000
+    dw $0002, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $0002, $8200, $0000
+    dw $001B, $8000, $0000
+    dw $0001, $0100, $0100
+    dw $0001, $0180, $0000
+    dw $0002, $0100, $0000
+    dw $0001, $0200, $0200
+    dw $0001, $0200, $0000
+    dw $0112, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0006, $0100, $0000
+    dw $0001, $8100, $8000
+    dw $0023, $8100, $0000
+    dw $0007, $8000, $0000
+    dw $0060, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0051, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $0002, $8200, $0000
+    dw $003E, $8000, $0000
+    dw $0001, $8040, $0040
+    dw $0005, $8040, $0000
+    dw $004D, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $0023, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $001B, $8280, $0000
+    dw $000C, $8200, $0000
+    dw $0008, $0200, $0000
+    dw $0001, $8280, $8080
+    dw $0002, $8280, $0000
+    dw $0001, $82C0, $0040
+    dw $0002, $82C0, $0000
+    dw $0001, $8640, $0400
+    dw $0001, $8400, $0000
+    dw $0001, $0400, $0000
+    dw $0001, $0480, $0080
+    dw $0002, $0480, $0000
+    dw $0001, $8480, $8000
+    dw $0015, $8080, $0000
+    dw $0001, $8480, $0400
+    dw $0001, $8480, $0000
+    dw $0001, $8680, $0200
+    dw $0001, $8680, $0000
+    dw $0003, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $0015, $8280, $0000
+    dw $0001, $8200, $0000
+    dw $0004, $0200, $0000
+    dw $0001, $8200, $8000
+    dw $0003, $8200, $0000
+    dw $000E, $0200, $0000
+    dw $8427 ; Delete
+} ; babyskip
+
+DemoInput_metroid3:
+{
+    dw $0017, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0001, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $000F, $8100, $0000
+    dw $0001, $8200, $0200
+    dw $0005, $8200, $0000
+    dw $0001, $8100, $0100
+    dw $000B, $8100, $0000
+    dw $0001, $8140, $0040
+    dw $0004, $8140, $0000
+    dw $0007, $8100, $0000
+    dw $0001, $8140, $0040
+    dw $0005, $8140, $0000
+    dw $0002, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0003, $8180, $0000
+    dw $0001, $8580, $0400
+    dw $0002, $8480, $0000
+    dw $0006, $8400, $0000
+    dw $0001, $8500, $0100
+    dw $0008, $8100, $0000
+    dw $0001, $8140, $0040
+    dw $0004, $8140, $0000
+    dw $0002, $8100, $0000
+    dw $0001, $A100, $2000
+    dw $0005, $A100, $0000
+    dw $0004, $8100, $0000
+    dw $0001, $A100, $2000
+    dw $0005, $A100, $0000
+    dw $0001, $8100, $0000
+    dw $0001, $8140, $0040
+    dw $0001, $0140, $0000
+    dw $0001, $4140, $4000
+    dw $0001, $4140, $0000
+    dw $0001, $4100, $0000
+    dw $0001, $8140, $8040
+    dw $0001, $8140, $0000
+    dw $0018, $8100, $0000
+    dw $0001, $8140, $0040
+    dw $0004, $8140, $0000
+    dw $0001, $A100, $2000
+    dw $0003, $A100, $0000
+    dw $0001, $8100, $0000
+    dw $0001, $A100, $2000
+    dw $0004, $A100, $0000
+    dw $0003, $8100, $0000
+    dw $0001, $8140, $0040
+    dw $0001, $8140, $0000
+    dw $0001, $81C0, $0080
+    dw $0001, $8180, $0000
+    dw $0004, $0180, $0000
+    dw $0001, $0100, $0000
+    dw $0001, $4100, $4000
+    dw $0002, $4100, $0000
+    dw $0001, $8100, $8000
+    dw $0017, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0002, $81C0, $0000
+    dw $0001, $A1C0, $2000
+    dw $0002, $A1C0, $0000
+    dw $0002, $8180, $0000
+    dw $0001, $A180, $2000
+    dw $0002, $A180, $0000
+    dw $0001, $8180, $0000
+    dw $0001, $81A0, $0020
+    dw $0004, $81A0, $0000
+    dw $0001, $81E0, $0040
+    dw $0002, $81E0, $0000
+    dw $0001, $C1C0, $4000
+    dw $0001, $41C0, $0000
+    dw $0003, $4180, $0000
+    dw $0002, $0180, $0000
+    dw $0009, $0100, $0000
+    dw $0001, $0140, $0040
+    dw $0006, $0140, $0000
+    dw $0001, $0100, $0000
+    dw $0001, $8180, $8080
+    dw $0001, $8580, $0000
+    dw $0001, $8480, $0000
+    dw $0001, $8080, $0000
+    dw $0001, $8480, $0400
+    dw $0004, $8180, $0000
+    dw $0008, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0009, $8180, $0000
+    dw $000E, $8100, $0000
+    dw $0001, $C100, $4000
+    dw $0000, $C100, $0000
+    dw $8427 ; Delete
+} ; metroid3
+else ; END OF PAL DEMOS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 DemoInput_LandingSite:
 ;;; $8ACE: Instruction list - demo input - landing site ;;;
 {
@@ -1322,7 +2999,7 @@ DemoInput_lavadive:
     dw $0001, $0200, $0000
     dw $0006, $0000, $0000
     dw $8427 ; Delete
-}
+} ; lavadive
 
 DemoInput_redtower:
 {
@@ -1450,7 +3127,7 @@ DemoInput_redtower:
     dw $0004, $0020, $0000
     dw $0039, $0000, $0000
     dw $8427 ; Delete
-}
+} ; redtower
 
 DemoInput_ggg:
 {
@@ -1534,5 +3211,364 @@ DemoInput_landingsite:
     dw $0003, $8400, $0000
     dw $0048, $0000, $0000
     dw $8427 ; Delete
-}
+} ; landingsite
+
+DemoInput_babyskip_desync:
+{
+    dw $003B, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0006, $8000, $0000
+    dw $0001, $8040, $0040
+    dw $0007, $8040, $0000
+    dw $000D, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $0021, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $001C, $8280, $0000
+    dw $0019, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0004, $8280, $0000
+    dw $0001, $0080, $0000
+    dw $0001, $0180, $0100
+    dw $0003, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0011, $0180, $0000
+    dw $0006, $0100, $0000
+    dw $0001, $8100, $8000
+    dw $0005, $8100, $0000
+    dw $0001, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $0003, $8200, $0000
+    dw $0001, $8600, $0400
+    dw $000C, $8400, $0000
+    dw $0001, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $0003, $8100, $0000
+    dw $0001, $8200, $0200
+    dw $0006, $8200, $0000
+    dw $0001, $8100, $0100
+    dw $0005, $8100, $0000
+    dw $0001, $8400, $0400
+    dw $0006, $8200, $0000
+    dw $0001, $8600, $0400
+    dw $0007, $8500, $0000
+    dw $0006, $8400, $0000
+    dw $0005, $8000, $0000
+    dw $0001, $8400, $0400
+    dw $0005, $8400, $0000
+    dw $0005, $8000, $0000
+    dw $0001, $8400, $0400
+    dw $0007, $8400, $0000
+    dw $0004, $8000, $0000
+    dw $0001, $8400, $0400
+    dw $0002, $8400, $0000
+    dw $0001, $8100, $0100
+    dw $0016, $8100, $0000
+    dw $0001, $0040, $0040
+    dw $0003, $0840, $0000
+    dw $0001, $4800, $4000
+    dw $0001, $4800, $0000
+    dw $0002, $0800, $0000
+    dw $0007, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0005, $0200, $0000
+    dw $003A, $0000, $0000
+    dw $0001, $0400, $0400
+    dw $0004, $0400, $0000
+    dw $0005, $0000, $0000
+    dw $0001, $0400, $0400
+    dw $0005, $0400, $0000
+    dw $0003, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0004, $0040, $0000
+    dw $0001, $0800, $0800
+    dw $0003, $0800, $0000
+    dw $0004, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0004, $0080, $0000
+    dw $0001, $0480, $0400
+    dw $0005, $0480, $0000
+    dw $0001, $0080, $0000
+    dw $0003, $0000, $0000
+    dw $0001, $0400, $0400
+    dw $0007, $0400, $0000
+    dw $0003, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0002, $0040, $0000
+    dw $0001, $4000, $4000
+    dw $0001, $4000, $0000
+    dw $0030, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0007, $0040, $0000
+    dw $0012, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0004, $0040, $0000
+    dw $0032, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0003, $0040, $0000
+    dw $002E, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0007, $0040, $0000
+    dw $002B, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0006, $0040, $0000
+    dw $0010, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0008, $0040, $0000
+    dw $0010, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $000A, $0040, $0000
+    dw $000B, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $000B, $0040, $0000
+    dw $000D, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0009, $0040, $0000
+    dw $0066, $0000, $0000
+    dw $0001, $0800, $0800
+    dw $0003, $0800, $0000
+    dw $0072, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0021, $8000, $0000
+    dw $0001, $8800, $0800
+    dw $0004, $8800, $0000
+    dw $0019, $8000, $0000
+    dw $0001, $8040, $0040
+    dw $0007, $8040, $0000
+    dw $002D, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $0027, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0003, $8280, $0000
+    dw $0001, $8680, $0400
+    dw $0046, $8480, $0000
+    dw $0002, $8400, $0000
+    dw $000B, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $000A, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0012, $8280, $0000
+    dw $0023, $8200, $0000
+    dw $0001, $8600, $0400
+    dw $0003, $8400, $0000
+    dw $0001, $8440, $0040
+    dw $0006, $8440, $0000
+    dw $0001, $8540, $0100
+    dw $0001, $8500, $0000
+    dw $0012, $8100, $0000
+    dw $0001, $8280, $0280
+    dw $0012, $8280, $0000
+    dw $0021, $8200, $0000
+    dw $0001, $8240, $0040
+    dw $0007, $8240, $0000
+    dw $0008, $8200, $0000
+    dw $0002, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $0012, $8100, $0000
+    dw $0001, $8000, $0000
+    dw $0001, $8280, $0280
+    dw $000F, $8280, $0000
+    dw $0011, $8200, $0000
+    dw $0001, $8210, $0010
+    dw $0002, $8210, $0000
+    dw $0001, $8250, $0040
+    dw $0004, $8250, $0000
+    dw $0011, $8200, $0000
+    dw $0001, $0200, $0000
+    dw $000C, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0005, $0480, $0000
+    dw $0004, $0080, $0000
+    dw $0001, $0480, $0400
+    dw $0006, $0480, $0000
+    dw $0001, $0680, $0200
+    dw $0003, $0280, $0000
+    dw $0032, $0200, $0000
+    dw $0017, $0000, $0000
+    dw $8427 ; Delete
+} ; babyskip_desync
+
+DemoInput_babyskip:
+{
+    dw $0030, $0000, $0000
+    dw $0001, $8040, $8040
+    dw $0003, $8040, $0000
+    dw $0025, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $0023, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0017, $8280, $0000
+    dw $0019, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0002, $8280, $0000
+    dw $0002, $0280, $0000
+    dw $0002, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0004, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $001C, $0180, $0000
+    dw $0008, $0100, $0000
+    dw $0001, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $000A, $8200, $0000
+    dw $000F, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $001B, $8200, $0000
+    dw $0001, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $002E, $8100, $0000
+    dw $0001, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $0002, $8200, $0000
+    dw $003D, $8000, $0000
+    dw $01B4, $0000, $0000
+    dw $0001, $0400, $0400
+    dw $0004, $0400, $0000
+    dw $00CB, $0000, $0000
+    dw $0001, $8800, $8800
+    dw $0003, $8800, $0000
+    dw $0020, $8000, $0000
+    dw $0001, $8040, $0040
+    dw $0006, $8040, $0000
+    dw $0046, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $0025, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0003, $8280, $0000
+    dw $0001, $8480, $0400
+    dw $004A, $8480, $0000
+    dw $0002, $8400, $0000
+    dw $0006, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $000A, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0011, $8280, $0000
+    dw $0024, $8200, $0000
+    dw $0001, $8600, $0400
+    dw $0005, $8400, $0000
+    dw $0001, $8440, $0040
+    dw $0003, $8440, $0000
+    dw $0001, $8540, $0100
+    dw $0001, $8140, $0000
+    dw $000D, $8100, $0000
+    dw $0001, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $0002, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0013, $8280, $0000
+    dw $001B, $8200, $0000
+    dw $0001, $8240, $0040
+    dw $0007, $8240, $0000
+    dw $0006, $8200, $0000
+    dw $0002, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $0014, $8100, $0000
+    dw $0002, $8000, $0000
+    dw $0001, $8280, $0280
+    dw $0010, $8280, $0000
+    dw $0012, $8200, $0000
+    dw $0001, $8210, $0010
+    dw $0006, $8210, $0000
+    dw $0001, $8250, $0040
+    dw $0006, $8250, $0000
+    dw $0001, $8210, $0000
+    dw $0011, $8200, $0000
+    dw $0001, $8000, $0000
+    dw $0001, $8800, $0800
+    dw $0004, $8800, $0000
+    dw $0001, $8840, $0040
+    dw $0001, $8840, $0000
+    dw $0001, $80C0, $0080
+    dw $0003, $8080, $0000
+    dw $0001, $8480, $0400
+    dw $0006, $8480, $0000
+    dw $0002, $8080, $0000
+    dw $0001, $8480, $0400
+    dw $0002, $8480, $0000
+    dw $0001, $8680, $0200
+    dw $0002, $8280, $0000
+    dw $0005, $0280, $0000
+    dw $003A, $0200, $0000
+    dw $000F, $0000, $0000
+    dw $8427 ; Delete
+} ; babyskip
+
+DemoInput_metroid3:
+{
+    dw $0019, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $000C, $0100, $0000
+    dw $0001, $8100, $8000
+    dw $0001, $8100, $0000
+    dw $0002, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $000D, $8200, $0000
+    dw $0006, $8000, $0000
+    dw $0001, $8040, $0040
+    dw $0003, $8040, $0000
+    dw $0001, $8140, $0100
+    dw $0002, $8140, $0000
+    dw $0009, $8100, $0000
+    dw $0001, $8140, $0040
+    dw $0006, $8140, $0000
+    dw $000C, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0004, $8180, $0000
+    dw $0001, $8580, $0400
+    dw $0003, $8480, $0000
+    dw $000C, $8400, $0000
+    dw $0002, $8000, $0000
+    dw $0013, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $001C, $8000, $0000
+    dw $000A, $0000, $0000
+    dw $0001, $8140, $8140
+    dw $0005, $8140, $0000
+    dw $0001, $A140, $2000
+    dw $0006, $A100, $0000
+    dw $0006, $8100, $0000
+    dw $0001, $A100, $2000
+    dw $0008, $A100, $0000
+    dw $0001, $8140, $0040
+    dw $0006, $8140, $0000
+    dw $0030, $8100, $0000
+    dw $0001, $8140, $0040
+    dw $0001, $81C0, $0080 ; bug here, we wrote 8140 in .newInput
+    dw $0002, $8180, $0000
+    dw $0004, $0180, $0000
+    dw $0008, $0100, $0000
+    dw $0001, $8100, $8000
+    dw $000C, $8100, $0000
+    dw $0001, $4100, $4000
+    dw $0003, $4100, $0000
+    dw $0007, $0100, $0000
+    dw $0001, $8180, $8080
+    dw $0001, $81C0, $0040 ; and here
+    dw $0002, $81C0, $0000
+    dw $0001, $A1C0, $2000
+    dw $0003, $A1C0, $0000
+    dw $0002, $A180, $0000
+    dw $0004, $8180, $0000
+    dw $0001, $A1A0, $2020
+    dw $0003, $A120, $0000
+    dw $0001, $8160, $0040
+    dw $0007, $8160, $0000
+    dw $0001, $C140, $4000
+    dw $0002, $C140, $0000
+    dw $000E, $8100, $0000
+    dw $0001, $81C0, $00C0
+    dw $0004, $81C0, $0000
+    dw $0001, $8580, $0400
+    dw $0001, $8580, $0000
+    dw $0002, $8480, $0000
+    dw $0004, $8080, $0000
+    dw $0001, $8580, $0500
+    dw $0002, $8580, $0000
+    dw $0006, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $000B, $8180, $0000
+    dw $000E, $0100, $0000
+    dw $8427 ; Delete
+} ; metroid3
+endif
 print pc, " demos end"
