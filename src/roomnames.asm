@@ -73,7 +73,7 @@ org $E5A2F7 : db $28, "Hellway", $FF
 org $E5A322 : db $28, "Caterpillar Room", $FF
 org $E5A37C : db $28, "Beta Power Bomb Room", $FF
 org $E5A3AE : db $28, "Alpha Power Bomb Room", $FF
-org $E5A3DD : db $28, "Bat Room", $FF
+org $E5A3DD : db $28, "Skree Boost Room", $FF
 org $E5A408 : db $28, "Below Spazer", $FF
 org $E5A447 : db $28, "Spazer Room", $FF
 org $E5A471 : db $28, "Warehouse Zeela Room", $FF
