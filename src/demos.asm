@@ -228,20 +228,13 @@ endif
     RTS
 }
 
-DSS_MorphMovingLeft:
-;;; $8A3E: Demo Samus setup - morph ball moving left ;;;
-{
-    LDA #$001F ; pose = moving left - morph ball - no springball - on ground
-    BRA DSS_InitPose
-}
-
 DSS_LowEnergyFacingLeft:
 ;;; $8A43: Demo Samus setup - standing facing left - low health ;;;
 {
 if !FEATURE_PAL
-    LDA #$0014 : STA $09C2 ; Samus health = 20
+    LDA #$0014 : STA !SAMUS_HP ; Samus health = 20
 else
-    LDA #$0040 : STA $09C2 ; Samus health = 64
+    LDA #$0040 : STA !SAMUS_HP ; Samus health = 64
 endif
     ; fallthrough to DSS_FacingLeft
 }
@@ -250,13 +243,6 @@ DSS_FacingLeft:
 ;;; $8A49: Demo Samus setup - standing facing left ;;;
 {
     LDA #$0002 ; pose = facing left - normal
-    BRA DSS_InitPose
-}
-
-DSS_FallingFacingLeft:
-;;; $8A4E: Demo Samus setup - falling facing left ;;;
-{
-    LDA #$002A ; pose = facing left - falling
     BRA DSS_InitPose
 }
 
@@ -270,7 +256,7 @@ DSS_FacingRight:
 DSS_InitPose:
 ;;; $8A56: Initialise Samus with pose = [A] ;;;
 {
-    STA $0A1C ; Samus pose = [A]
+    STA !SAMUS_POSE
 if !FEATURE_PAL
     JSL $91F398 ; Initialise Samus pose
     JSL $91FA6D ; Set Samus animation frame if pose changed
@@ -283,43 +269,49 @@ endif
     RTS
 }
 
+if !FEATURE_PAL
+DSS_FallingFacingLeft:
+;;; $8A4E: Demo Samus setup - falling facing left ;;;
+{
+    LDA #$002A ; pose = facing left - falling
+    BRA DSS_InitPose
+}
+
 DSS_Shinespark:
 ;;; $8A68: Demo Samus setup - shinespark ;;;
 {
-if !FEATURE_PAL
     LDA #$EB4F : STA $0A5C ; Samus drawing handler = default
     JSL $90CFFA ; Trigger shinespark windup
-    LDA #$00CD : STA $0A1C ; pose = facing right - shinespark - diagonal
+    LDA #$00CD : STA !SAMUS_POSE ; facing right - shinespark - diagonal
     JSL $91F398 ; Initialise Samus pose
     JSL $91FA6D ; Set Samus animation frame if pose changed
-else
-    LDA #$EB52 : STA $0A5C ; Samus drawing handler = default
-    JSL $90CFFA ; Trigger shinespark windup
-    LDA #$00CD : STA $0A1C ; pose = facing right - shinespark - diagonal
-    JSL $91F433 ; Initialise Samus pose
-    JSL $91FB08 ; Set Samus animation frame if pose changed
-endif
     RTS
 }
 
 DSS_GauntletSpark:
 ;;; $8A81: Demo Samus setup - gauntlet entrance ;;;
 {
-if !FEATURE_PAL
     LDA #$EB4F : STA $0A5C ; Samus drawing handler = default
     JSL $90CFFA ; Trigger shinespark windup
-    LDA #$00CA : STA $0A1C ; pose = facing right - shinespark - diagonal
+    LDA #$00CA : STA !SAMUS_POSE ; facing right - shinespark - diagonal
     JSL $91F398 ; Initialise Samus pose
     JSL $91FA6D ; Set Samus animation frame if pose changed
-else
-    LDA #$EB52 : STA $0A5C ; Samus drawing handler = default
-    JSL $90CFFA ; Trigger shinespark windup
-    LDA #$00CA : STA $0A1C ; pose = facing right - shinespark - diagonal
-    JSL $91F433 ; Initialise Samus pose
-    JSL $91FB08 ; Set Samus animation frame if pose changed
-endif
     RTS
 }
+
+EndDemo_Shinespark:
+; why does this routine exist?
+{
+;    LDA !SAMUS_MOVEMENT_TYPE : AND #$00FF : CMP #$001A : BEQ .return
+
+    LDA.w #EndDemo : STA $0A7A
+    LDA.w #DemoInput_Shinespark_unseen : STA $0A7E
+    LDA #$0001 : STA $0A7C
+
+  .return
+    RTS
+}
+endif
 
 EndDemo:
 {
@@ -336,11 +328,10 @@ EndDemo:
 
 if !FEATURE_PAL
 EndDemo_Shinespark:
+; why does this routine exist?
 {
-    ; likely a bug
-    LDA !SAMUS_MOVEMENT_TYPE : AND #$00FF : CMP #$001A : BEQ .return
+;    LDA !SAMUS_MOVEMENT_TYPE : AND #$00FF : CMP #$001A : BEQ .return
 
-    ; wait... is all of it a bug?
     LDA.w #EndDemo : STA $0A7A
     LDA.w #DemoInput_Shinespark_unseen : STA $0A7E
     LDA #$0001 : STA $0A7C
@@ -351,30 +342,32 @@ EndDemo_Shinespark:
 endif
 
 DemoRoomReset:
+; set event bits in time for room state checks
 {
     LDX #$0008
     LDA #$FFFF
 
   .loop
-    INC
+    INC ; $0000
     STA $7ED8B0,X : STA $7ED820,X : STA $7ED828,X
 
-    DEC
+    DEC ; $FFFF
     STA $7ED830,X : STA $7ED870,X : STA $7ED8F0,X
     STA $7ED908,X : STA $7ED8F8,X : STA $7ED900,X
 
     DEX #2 : BPL .loop
 
     ; set Zebes Awake bit for climb demo
-    INC : STA $7ED820
+    LDA #$0001 : STA $7ED820
     JML $82872D
 }
 if !FEATURE_PAL
 warnpc $919DAA
-else
+else ; space freed up from repointing input data
 warnpc $919E52
 endif
 
+; hijack event bit loop for climb demo
 org $8286F9
     JML DemoRoomReset
 
@@ -396,7 +389,7 @@ DemoRoomData:
 ;       |      |      |      |      |      |      |      |      |
   .set1
 if !FEATURE_PAL
-    dw $91F8, $896A, $0001, $0400, $0400, $0040, $0000, $01E3, DRC_RTS ; PAL landingsite
+    dw $91F8, $896A, $0001, $0400, $0400, $0040, $0000, $01E3, DRC_LandingSite ; PAL landingsite
     dw $9BC8, $8CD6, $0001, $0000, $0100, $005B, $FFCC, $00C4, DRC_RTS ; PAL mockball
     dw $A253, $8F0A, $0001, $0000, $0400, $008B, $FFAD, $023A, DRC_RTS ; PAL redtower
     dw $AF14, $967E, $0001, $0300, $0000, $008B, $0052, $02FA, DRC_RTS ; PAL lavadive
@@ -423,7 +416,7 @@ if !FEATURE_PAL
 else
     dw $95FF, $8A36, $0000, $0000, $0000, $008B, $FFAA, $0199, DRC_RTS ; moat
     dw $92FD, $8BB6, $0001, $0300, $0200, $008B, $0055, $0144, DRC_RTS ; alcatraz
-    dw $D0B9, $A3F0, $0001, $0100, $0300, $00BB, $FFE5, $01FA, DRC_RTS ; pseudo
+    dw $D0B9, $A3F0, $0001, $0100, $0300, $00BB, $FFE5, $01DA, DRC_RTS ; pseudo
     dw $A59F, $91B6, $0001, $0000, $0100, $008B, $FFCB, $02B4, DRC_Kraid ; kqk
     dw $CC6F, $A21C, $0001, $0200, $0000, $005B, $FFFB, $01D7, DRC_RTS ; speedball
     dw $91F8, $89B2, $0001, $0800, $0100, $008B, $0055, $02F8, DRC_RTS ; wraparound
@@ -486,6 +479,7 @@ DRC_LandingSite:
 
 DRC_Kraid:
 {
+    ; suspense timer = 60 frames
     LDA #$003C : STA $0FB2
     RTS
 }
@@ -586,172 +580,6 @@ DemoInputInstructionLists:
 ; Order does not matter
 
 if !FEATURE_PAL
-DemoInput_LandingSite:
-{
-    dw $00E7, $0000, $0000
-    dw $0001, $0200, $0200
-    dw $0005, $0200, $0000
-    dw $0001, $0A00, $0800
-    dw $0002, $0A00, $0000
-    dw $000F, $0200, $0000
-    dw $0001, $0280, $0080
-    dw $0020, $0280, $0000
-    dw $0028, $0200, $0000
-    dw $001D, $0000, $0000
-    dw $0001, $0100, $0100
-    dw $0004, $0100, $0000
-    dw $000C, $0000, $0000
-    dw $0001, $0200, $0200
-    dw $0004, $0200, $0000
-    dw $001B, $0000, $0000
-    dw $0001, $0200, $0200
-    dw $0048, $0200, $0000
-    dw $0004, $0000, $0000
-    dw $0001, $0100, $0100
-    dw $0004, $0100, $0000
-    dw $0037, $0000, $0000
-    dw $0001, $0200, $0200
-    dw $0002, $0200, $0000
-    dw $0001, $8200, $8000
-    dw $003A, $8200, $0000
-    dw $0001, $8A00, $0800
-    dw $0002, $8A00, $0000
-    dw $0001, $0200, $0000
-    dw $0002, $0000, $0000
-    dw $0001, $0100, $0100
-    dw $0006, $0100, $0000
-    dw $0009, $0000, $0000
-    dw $0001, $0010, $0010
-    dw $0019, $0010, $0000
-    dw $0001, $0210, $0200
-    dw $0004, $0210, $0000
-    dw $0017, $0010, $0000
-    dw $0001, $0200, $0200
-    dw $004B, $0200, $0000
-    dw $0026, $0000, $0000
-    dw $0001, $0200, $0200
-    dw $0030, $0200, $0000
-    dw $0019, $0000, $0000
-    dw $0001, $0100, $0100
-    dw $0003, $0100, $0000
-    dw $0033, $0000, $0000
-    dw $0001, $0200, $0200
-    dw $0003, $0200, $0000
-    dw $0020, $0000, $0000
-    dw $0001, $0040, $0040
-    dw $0005, $0040, $0000
-    dw $0022, $0000, $0000
-    dw $0001, $0200, $0200
-    dw $000E, $0200, $0000
-    dw $0006, $0000, $0000
-    dw $0001, $0200, $0200
-    dw $0003, $0200, $0000
-    dw $0010, $0100, $0000
-    dw $0001, $0140, $0040
-    dw $0002, $0140, $0000
-    dw $8427 ; Delete
-
-DemoInput_PseudoScrewAttack:
-{
-    dw $0012, $0000, $0000
-    dw $0001, $0800, $0800
-    dw $0002, $0800, $0000
-    dw $0004, $0000, $0000
-    dw $0001, $0800, $0800
-    dw $0005, $0800, $0000
-    dw $0012, $0000, $0000
-    dw $0001, $0200, $0200
-    dw $0004, $0200, $0000
-    dw $0009, $0000, $0000
-    dw $0001, $0040, $0040
-    dw $003E, $0040, $0000
-    dw $0001, $0240, $0200
-    dw $000A, $0240, $0000
-    dw $0001, $02C0, $0080
-    dw $0010, $02C0, $0000
-    dw $0010, $0240, $0000
-    dw $001A, $0040, $0000
-    dw $0001, $0140, $0100
-    dw $000C, $0140, $0000
-    dw $0001, $01C0, $0080
-    dw $0005, $01C0, $0000
-    dw $0002, $00C0, $0000
-    dw $0001, $02C0, $0200
-    dw $0018, $02C0, $0000
-    dw $0006, $0240, $0000
-    dw $0005, $0040, $0000
-    dw $0001, $0140, $0100
-    dw $0009, $0140, $0000
-    dw $0001, $01C0, $0080
-    dw $0028, $01C0, $0000
-    dw $002E, $0140, $0000
-    dw $0001, $01C0, $0080
-    dw $0020, $01C0, $0000
-    dw $0001, $09C0, $0800
-    dw $0002, $01C0, $0000
-    dw $0006, $00C0, $0000
-    dw $000A, $0040, $0000
-    dw $0001, $0240, $0200
-    dw $0028, $0240, $0000
-    dw $0001, $02C0, $0080
-    dw $0006, $02C0, $0000
-    dw $0001, $0AC0, $0800
-    dw $0002, $0AC0, $0000
-    dw $0001, $08C0, $0000
-    dw $0001, $01C0, $0100
-    dw $0020, $01C0, $0000
-    dw $000D, $0140, $0000
-    dw $0005, $0040, $0000
-    dw $0001, $00C0, $0080
-    dw $0003, $00C0, $0000
-    dw $0001, $00E0, $0020
-    dw $000E, $00E0, $0000
-    dw $0022, $0020, $0000
-    dw $0001, $0120, $0100
-    dw $0002, $0120, $0000
-    dw $0004, $0100, $0000
-    dw $0006, $0000, $0000
-    dw $0001, $0100, $0100
-    dw $000E, $0100, $0000
-    dw $0001, $0180, $0080
-    dw $000C, $0180, $0000
-    dw $000F, $0100, $0000
-    dw $0001, $8100, $8000
-    dw $0021, $8100, $0000
-    dw $0001, $8180, $0080
-    dw $001A, $8180, $0000
-    dw $0004, $8080, $0000
-    dw $0005, $8000, $0000
-    dw $0001, $0200, $0200
-    dw $000C, $0200, $0000
-    dw $0051, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_SpeedBooster:
-{
-    dw $001A, $0000, $0000
-    dw $0001, $0200, $0200
-    dw $0002, $0200, $0000
-    dw $0001, $8200, $8000
-    dw $00D0, $8200, $0000
-    dw $0001, $8A00, $0800
-    dw $0002, $8200, $0000
-    dw $0001, $8100, $0100
-    dw $0012, $0100, $0000
-    dw $0027, $0000, $0000
-    dw $0001, $0200, $0200
-    dw $0004, $0200, $0000
-    dw $000F, $0000, $0000
-    dw $0001, $0040, $0040
-    dw $0006, $0040, $0000
-    dw $000E, $0000, $0000
-    dw $0001, $0200, $0200
-    dw $0016, $0200, $0000
-    dw $004F, $0000, $0000
-    dw $8427 ; Delete
-}
-
 DemoInput_Dachora:
 {
     dw $0006, $0000, $0000
@@ -997,36 +825,6 @@ DemoInput_Shinespark:
     dw $8427 ; Delete
 }
 
-DemoInput_MissileDoor:
-{
-    dw $0021, $0000, $0000
-    dw $0001, $0100, $0100
-    dw $0027, $0100, $0000
-    dw $0036, $0000, $0000
-    dw $0001, $2000, $2000
-    dw $0004, $2000, $0000
-    dw $001C, $0000, $0000
-    dw $0001, $0040, $0040
-    dw $0006, $0040, $0000
-    dw $0008, $0000, $0000
-    dw $0001, $0040, $0040
-    dw $0006, $0040, $0000
-    dw $000E, $0000, $0000
-    dw $0001, $0040, $0040
-    dw $0006, $0040, $0000
-    dw $000A, $0000, $0000
-    dw $0001, $0040, $0040
-    dw $0006, $0040, $0000
-    dw $0006, $0000, $0000
-    dw $0001, $0040, $0040
-    dw $0007, $0040, $0000
-    dw $001A, $0000, $0000
-    dw $0001, $8100, $8100
-    dw $000E, $8100, $0000
-    dw $0015, $0000, $0000
-    dw $8427 ; Delete
-}
-
 DemoInput_Kraid:
 {
     dw $019A, $0000, $0000
@@ -1106,144 +904,6 @@ DemoInput_BrinstarDiagonalRoom:
     dw $0001, $0440, $0400
     dw $002C, $0440, $0000
     dw $00AF, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_Unused:
-{
-    dw $0021, $0000, $0000
-    dw $0001, $0200, $0200
-    dw $0013, $0200, $0000
-    dw $000E, $0000, $0000
-    dw $0001, $0080, $0080
-    dw $0013, $0080, $0000
-    dw $0001, $0280, $0200
-    dw $0004, $0280, $0000
-    dw $000D, $0200, $0000
-    dw $001A, $0000, $0000
-    dw $0001, $0080, $0080
-    dw $0007, $0080, $0000
-    dw $0001, $0280, $0200
-    dw $0011, $0280, $0000
-    dw $0012, $0200, $0000
-    dw $0010, $0000, $0000
-    dw $0001, $0100, $0100
-    dw $0006, $0100, $0000
-    dw $0001, $0180, $0080
-    dw $0013, $0180, $0000
-    dw $0017, $0100, $0000
-    dw $000D, $0000, $0000
-    dw $0001, $0400, $0400
-    dw $0004, $0400, $0000
-    dw $0001, $0600, $0200
-    dw $0078, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_PreSporeSpawnHall:
-{
-    dw $0016, $0000, $0000
-    dw $0001, $0200, $0200
-    dw $0004, $0200, $0000
-    dw $000C, $0000, $0000
-    dw $0001, $0100, $0100
-    dw $0004, $0100, $0000
-    dw $000D, $0000, $0000
-    dw $0001, $0100, $0100
-    dw $000A, $0100, $0000
-    dw $0022, $0100, $0000
-    dw $0006, $0000, $0000
-    dw $0001, $0080, $0080
-    dw $0011, $0080, $0000
-    dw $0010, $0000, $0000
-    dw $0001, $0200, $0200
-    dw $000F, $0200, $0000
-    dw $000D, $0000, $0000
-    dw $0001, $0100, $0100
-    dw $0006, $0100, $0000
-    dw $0001, $0180, $0080
-    dw $000C, $0180, $0000
-    dw $0001, $0080, $0000
-    dw $0001, $0280, $0200
-    dw $0006, $0280, $0000
-    dw $0003, $0200, $0000
-    dw $0001, $0000, $0000
-    dw $0001, $0100, $0100
-    dw $0003, $0100, $0000
-    dw $0001, $0140, $0040
-    dw $0007, $0140, $0000
-    dw $0004, $0140, $0000
-    dw $001C, $0140, $0000
-    dw $002D, $0040, $0000
-    dw $0001, $0440, $0400
-    dw $0002, $0040, $0000
-    dw $0001, $0050, $0010
-    dw $0003, $0050, $0000
-    dw $006A, $0010, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_GrappleBeam:
-{
-    dw $0010, $0000, $0000
-    dw $0001, $2000, $2000
-    dw $000C, $0000, $0000
-    dw $0001, $2000, $2000
-    dw $000C, $0000, $0000
-    dw $0001, $2000, $2000
-    dw $000C, $0000, $0000
-    dw $0001, $2000, $2000
-    dw $000C, $0000, $0000
-    dw $0001, $0010, $0010
-    dw $0022, $0010, $0000
-    dw $0001, $0050, $0040
-    dw $0010, $0050, $0000
-    dw $0001, $0650, $0600
-    dw $0006, $0650, $0000
-    dw $0008, $0450, $0000
-    dw $0001, $0550, $0100
-    dw $0004, $0550, $0000
-    dw $0012, $0150, $0000
-    dw $0004, $0110, $0000
-    dw $0001, $0150, $0040
-    dw $000A, $0150, $0000
-    dw $0001, $0550, $0400
-    dw $000C, $0550, $0000
-    dw $000A, $0450, $0000
-    dw $0001, $0550, $0100
-    dw $0005, $0550, $0000
-    dw $000B, $0150, $0000
-    dw $0004, $0110, $0000
-    dw $0001, $0150, $0040
-    dw $000A, $0150, $0000
-    dw $0001, $0550, $0400
-    dw $000C, $0550, $0000
-    dw $000E, $0150, $0000
-    dw $0008, $0110, $0000
-    dw $0001, $0150, $0040
-    dw $0008, $0150, $0000
-    dw $0001, $0550, $0400
-    dw $000C, $0550, $0000
-    dw $000E, $0150, $0000
-    dw $0008, $0110, $0000
-    dw $0001, $0150, $0040
-    dw $0008, $0150, $0000
-    dw $0001, $0550, $0400
-    dw $000D, $0550, $0000
-    dw $000E, $0150, $0000
-    dw $0008, $0110, $0000
-    dw $0001, $0150, $0040
-    dw $0006, $0150, $0000
-    dw $0001, $0550, $0400
-    dw $000C, $0550, $0000
-    dw $0008, $0150, $0000
-    dw $0004, $0100, $0000
-    dw $0020, $0000, $0000
-    dw $0001, $0400, $0400
-    dw $0005, $0400, $0000
-    dw $0001, $0200, $0200
-    dw $0005, $0200, $0000
-    dw $0028, $0000, $0000
     dw $8427 ; Delete
 }
 
@@ -1710,9 +1370,7 @@ DemoInput_redtower:
     dw $0004, $0140, $0000
     dw $0001, $8040, $8000
     dw $0003, $8000, $0000
-    dw $003E, $0000, $0000
-    dw $0001, $4000, $4000
-    dw $0000, $4000, $0000
+    dw $003F, $0000, $0000
     dw $8427 ; Delete
 } ; PAL redtower
 
@@ -2796,10 +2454,10 @@ DemoInput_wraparound:
     dw $0019, $8060, $0000
     dw $0001, $8160, $0100
     dw $0002, $8160, $0000
-    dw $0038, $8060, $0000
+    dw $0010, $8060, $0000
     dw $0001, $8160, $0100
     dw $0001, $8160, $0000
-    dw $0020, $8060, $0000
+    dw $0048, $8060, $0000
     dw $0004, $8020, $0000
     dw $0001, $8120, $0100
     dw $0001, $8120, $0000
@@ -3681,7 +3339,7 @@ DemoInput_ocean:
 
 DemoInput_pseudo:
 {
-    dw $002F, $0000, $0000
+    dw $000F, $0000, $0000
     dw $0001, $8000, $8000
     dw $0001, $8040, $0040
     dw $0029, $8040, $0000
