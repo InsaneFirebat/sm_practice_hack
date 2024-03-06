@@ -1,7 +1,7 @@
 
 ## Changelog since v2.2.7
 
-* [2.5.12.5] More custom demos
+* [2.5.12.5] Finished out demo list with DarkXoa
 * [2.5.12.4] PAL support plus more custom demos
 * [2.5.12.3] Added custom demos
 * [2.5.12.2] Fixed a crash when entering a door

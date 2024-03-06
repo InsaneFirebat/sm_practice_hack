@@ -57,66 +57,90 @@ DemoObject:
 ;       |      |      |
 if !FEATURE_PAL
   .IceBeam
-    dw NoCodeRTS, $8A9B, DemoInput_IceBeam
+    dw NoCodeRTS, EndDemo, DemoInput_IceBeam
   .LowerNorfairEntrance
-    dw NoCodeRTS, $8A9B, DemoInput_LowerNorfairEntrance
+    dw NoCodeRTS, EndDemo, DemoInput_LowerNorfairEntrance
   .FireFleaRoom
-    dw NoCodeRTS, $8A9B, DemoInput_FireFleaRoom
+    dw NoCodeRTS, EndDemo, DemoInput_FireFleaRoom
   .BrinstarDiagonalRoom
-    dw NoCodeRTS, $8A9B, DemoInput_BrinstarDiagonalRoom
-endif
-  .Dachora
-    dw NoCodeRTS, $8A9B, DemoInput_Dachora
-  .RedBrinstarElevator
-    dw NoCodeRTS, $8A9B, DemoInput_RedBrinstarElevator
+    dw NoCodeRTS, EndDemo, DemoInput_BrinstarDiagonalRoom
   .WreckedShipBasement
-    dw NoCodeRTS, $8A9B, DemoInput_WreckedShipBasement
-  .EyeDoor
-    dw NoCodeRTS, $8A9B, DemoInput_EyeDoor
-  .Shinespark
-    dw NoCodeRTS, $8AB0, DemoInput_Shinespark
+    dw NoCodeRTS, EndDemo, DemoInput_WreckedShipBasement
   .Kraid
-    dw NoCodeRTS, $8A9B, DemoInput_Kraid
-  .ScrewAttack
-    dw NoCodeRTS, $8A9B, DemoInput_ScrewAttack
-  .Unused
-    dw NoCodeRTS, $8A9B, DemoInput_Unused
-  .GauntletEntrance
-    dw NoCodeRTS, $8A9B, DemoInput_GauntletEntrance
+    dw NoCodeRTS, EndDemo, DemoInput_Kraid
   .AdvancedGrappleBeam
-    dw NoCodeRTS, $8A9B, DemoInput_AdvancedGrappleBeam
+    dw NoCodeRTS, EndDemo, DemoInput_AdvancedGrappleBeam
   .IBJ
-    dw NoCodeRTS, $8A9B, DemoInput_IBJ
-  .SBA
-    dw NoCodeRTS, $8A9B, DemoInput_SBA
-  .TourianEntrance
-    dw NoCodeRTS, $8A9B, DemoInput_TourianEntrance
+    dw NoCodeRTS, EndDemo, DemoInput_IBJ
   .CrystalFlash
-    dw NoCodeRTS, $8A9B, DemoInput_CrystalFlash
+    dw NoCodeRTS, EndDemo, DemoInput_CrystalFlash
+  .ScrewAttack
+    dw NoCodeRTS, EndDemo, DemoInput_ScrewAttack
+  .Dachora
+    dw NoCodeRTS, EndDemo, DemoInput_Dachora
+  .RedBrinstarElevator
+    dw NoCodeRTS, EndDemo, DemoInput_RedBrinstarElevator
+  .EyeDoor
+    dw NoCodeRTS, EndDemo, DemoInput_EyeDoor
+  .Shinespark
+    dw NoCodeRTS, EndDemo_Shinespark, DemoInput_Shinespark
+  .GauntletEntrance
+    dw NoCodeRTS, EndDemo, DemoInput_GauntletEntrance
+  .TourianEntrance
+    dw NoCodeRTS, EndDemo, DemoInput_TourianEntrance
+  .SBA
+    dw NoCodeRTS, EndDemo, DemoInput_SBA
+endif
 
-; custom demos below
+; custom demos below, first 6 shared between NTSC and PAL
   .mockball
-    dw NoCodeRTS, $8A9B, DemoInput_mockball
+    dw NoCodeRTS, EndDemo, DemoInput_mockball
   .lavadive
-    dw NoCodeRTS, $8A9B, DemoInput_lavadive
+    dw NoCodeRTS, EndDemo, DemoInput_lavadive
   .redtower
-    dw NoCodeRTS, $8A9B, DemoInput_redtower
+    dw NoCodeRTS, EndDemo, DemoInput_redtower
   .ggg
-    dw NoCodeRTS, $8A9B, DemoInput_ggg
+    dw NoCodeRTS, EndDemo, DemoInput_ggg
   .landingsite
-    dw NoCodeRTS, $8A9B, DemoInput_landingsite
+    dw NoCodeRTS, EndDemo, DemoInput_landingsite
   .babyskip
-    dw NoCodeRTS, $8A9B, DemoInput_babyskip
+    dw NoCodeRTS, EndDemo, DemoInput_babyskip
 if !FEATURE_PAL
 else
   .metroid3
-    dw NoCodeRTS, $8A9B, DemoInput_metroid3
+    dw NoCodeRTS, EndDemo, DemoInput_metroid3
   .moat
-    dw NoCodeRTS, $8A9B, DemoInput_moat
+    dw NoCodeRTS, EndDemo, DemoInput_moat
   .frogspeedway
-    dw NoCodeRTS, $8A9B, DemoInput_frogspeedway
+    dw NoCodeRTS, EndDemo, DemoInput_frogspeedway
   .wraparound
-    dw NoCodeRTS, $8A9B, DemoInput_wraparound
+    dw NoCodeRTS, EndDemo, DemoInput_wraparound
+  .speedball
+    dw NoCodeRTS, EndDemo, DemoInput_speedball
+  .kqk
+    dw NoCodeRTS, EndDemo, DemoInput_kqk
+  .grapplejump
+    dw NoCodeRTS, EndDemo, DemoInput_grapplejump
+  .bombjump
+    dw NoCodeRTS, EndDemo, DemoInput_bombjump
+  .crystalflash
+    dw NoCodeRTS, EndDemo, DemoInput_crystalflash
+  .flyway
+    dw NoCodeRTS, EndDemo, DemoInput_flyway
+  .alcatraz
+    dw NoCodeRTS, EndDemo, DemoInput_alcatraz
+  .tunneljump
+    dw NoCodeRTS, EndDemo, DemoInput_tunneljump
+  .climb
+    dw NoCodeRTS, EndDemo, DemoInput_climb
+  .ocean
+    dw NoCodeRTS, EndDemo, DemoInput_ocean
+  .pseudo
+    dw NoCodeRTS, EndDemo, DemoInput_pseudo
+  .everest
+    dw NoCodeRTS, EndDemo, DemoInput_everest
+  .alphapb
+    dw NoCodeRTS, EndDemo, DemoInput_alphapb
 endif
 if !FEATURE_PAL
 warnpc $919E3A
@@ -146,29 +170,48 @@ if !FEATURE_PAL
     dw DSS_FacingLeft ; FireFlea Room
     dw DSS_FacingRight ; Brinstar Diagonal Room
     dw DSS_FacingLeft ; Lower Norfair Entrance
-else
-    dw DSS_FacingRight ; metroid3
-    dw DSS_FacingRight ; moat
-    dw DSS_FacingLeft ; frogspeedway
-    dw DSS_FacingLeft ; wraparound
-endif
     dw DSS_FacingRight ; Screw Attack
     dw DSS_FallingFacingLeft ; Dachora
+else
+    dw DSS_FacingRight ; moat
+    dw DSS_FacingLeft ; alcatraz
+    dw DSS_FacingRight ; pseudo
+    dw DSS_FacingRight ; kqk
+    dw DSS_FacingRight ; speedball
+    dw DSS_FacingLeft ; wraparound
+endif
 
  .set3
+if !FEATURE_PAL
     dw DSS_FacingLeft ; Pre Phantoon Hall
     dw DSS_Shinespark ; Shinespark
     dw DSS_FacingRight ; Eye Door
     dw DSS_FacingRight ; Red Brinstar Elevator
     dw DSS_FacingRight ; Kraid
     dw DSS_FacingRight ; Tourian Entrance
+else
+    dw DSS_FacingRight ; everest
+    dw DSS_FacingLeft ; alphapb
+    dw DSS_FacingLeft ; bombjump
+    dw DSS_FacingLeft ; tunneljump
+    dw DSS_FacingLeft ; climb
+    dw DSS_FacingLeft ; ocean
+endif
 
   .set4
+if !FEATURE_PAL
     dw DSS_GauntletSpark ; Gauntlet Entrance
     dw DSS_FacingLeft ; Advanced Grapple Beam
     dw DSS_FacingLeft ; IBJ
     dw DSS_FacingRight ; SBA
     dw DSS_LowEnergyFacingLeft ; Crystal Flash
+else
+    dw DSS_FacingRight ; metroid3
+    dw DSS_FacingRight ; flyway
+    dw DSS_FacingLeft ; frogspeedway
+    dw DSS_FacingLeft ; grapplejump
+    dw DSS_LowEnergyFacingLeft ; crystalflash
+endif
 
 DSS_LandingSite:
 ;;; $8A33: Demo Samus setup - landing site ;;;
@@ -195,7 +238,11 @@ DSS_MorphMovingLeft:
 DSS_LowEnergyFacingLeft:
 ;;; $8A43: Demo Samus setup - standing facing left - low health ;;;
 {
+if !FEATURE_PAL
     LDA #$0014 : STA $09C2 ; Samus health = 20
+else
+    LDA #$0040 : STA $09C2 ; Samus health = 64
+endif
     ; fallthrough to DSS_FacingLeft
 }
 
@@ -273,7 +320,63 @@ else
 endif
     RTS
 }
-warnpc $918A9A
+
+EndDemo:
+{
+    ; check if transitioning from demo
+    LDA !GAMEMODE : CMP #$002C : BNE .return
+
+    ; instruction list pointer = delete
+    LDA #$0001 : STA $0A7C
+    LDA #$8776 : STA $0A7E
+
+  .return
+    RTS
+}
+
+if !FEATURE_PAL
+EndDemo_Shinespark:
+{
+    ; likely a bug
+    LDA !SAMUS_MOVEMENT_TYPE : AND #$00FF : CMP #$001A : BEQ .return
+
+    ; wait... is all of it a bug?
+    LDA.w #EndDemo : STA $0A7A
+    LDA.w #DemoInput_Shinespark_unseen : STA $0A7E
+    LDA #$0001 : STA $0A7C
+
+  .return
+    RTS
+}
+endif
+
+DemoRoomReset:
+{
+    LDX #$0008
+    LDA #$FFFF
+
+  .loop
+    INC
+    STA $7ED8B0,X : STA $7ED820,X : STA $7ED828,X
+
+    DEC
+    STA $7ED830,X : STA $7ED870,X : STA $7ED8F0,X
+    STA $7ED908,X : STA $7ED8F8,X : STA $7ED900,X
+
+    DEX #2 : BPL .loop
+
+    ; set Zebes Awake bit for climb demo
+    INC : STA $7ED820
+    JML $82872D
+}
+if !FEATURE_PAL
+warnpc $919DAA
+else
+warnpc $919E52
+endif
+
+org $8286F9
+    JML DemoRoomReset
 
 
 org $82876C
@@ -283,7 +386,7 @@ DemoRoomData:
 
 ;        _____________________________________________________________ Room pointer
 ;       |       ______________________________________________________ Door pointer
-;       |      |       _______________________________________________ Door slot
+;       |      |       _______________________________________________ Door slot (useless?)
 ;       |      |      |       ________________________________________ Screen X position
 ;       |      |      |      |       _________________________________ Screen Y position
 ;       |      |      |      |      |       __________________________ Samus Y offset from top of screen
@@ -292,63 +395,109 @@ DemoRoomData:
 ;       |      |      |      |      |      |      |      |       _____ Pointer to code
 ;       |      |      |      |      |      |      |      |      |
   .set1
-;    dw $91F8, $896A, $0001, $0400, $0400, $0040, $0001, $04D3, $8925 ; Landing Site
-;    dw $9F11, $8EAA, $0001, $0000, $0000, $006B, $FFD2, $0151, $8924 ; Missile Door
-;    dw $9D9C, $8DC6, $0000, $0100, $0000, $00BB, $FFE0, $017A, $8924 ; Pre Spore Spawn Hall
-;    dw $B106, $970E, $0000, $0700, $0000, $008B, $0048, $01A4, $8924 ; Speed Booster
-;    dw $AFFB, $9792, $0001, $0000, $0000, $008B, $FFC2, $01BC, $8924 ; Grapple Beam
-;    dw $9D19, $8E7A, $0000, $0200, $0600, $0099, $0027, $0265, $891A ; Pseudo Screw Attack
 if !FEATURE_PAL
-    dw $91F8, $896A, $0001, $0400, $0400, $0040, $0000, $01E3, $8924 ; PAL landingsite
-    dw $9BC8, $8CD6, $0001, $0000, $0100, $005B, $FFCC, $00C4, $8924 ; PAL mockball
-    dw $A253, $8F0A, $0001, $0000, $0400, $008B, $FFAD, $023A, $8924 ; PAL redtower
-    dw $AF14, $967E, $0001, $0300, $0000, $008B, $0052, $02FA, $8924 ; PAL lavadive
-    dw $B2DA, $9906, $0001, $0300, $0000, $008B, $0051, $0100, $8924 ; PAL ggg
-    dw $DCB1, $AA2C, $0001, $0300, $0000, $00BB, $003B, $0615, $8924 ; PAL babyskip
+    dw $91F8, $896A, $0001, $0400, $0400, $0040, $0000, $01E3, DRC_RTS ; PAL landingsite
+    dw $9BC8, $8CD6, $0001, $0000, $0100, $005B, $FFCC, $00C4, DRC_RTS ; PAL mockball
+    dw $A253, $8F0A, $0001, $0000, $0400, $008B, $FFAD, $023A, DRC_RTS ; PAL redtower
+    dw $AF14, $967E, $0001, $0300, $0000, $008B, $0052, $02FA, DRC_RTS ; PAL lavadive
+    dw $B2DA, $9906, $0001, $0300, $0000, $008B, $0051, $0100, DRC_RTS ; PAL ggg
+    dw $DCB1, $AA2C, $0001, $0300, $0000, $00BB, $003B, $0615, DRC_RTS ; PAL babyskip
 else
-    dw $91F8, $896A, $0001, $0400, $0400, $0040, $0001, $02C3, $8925 ; landingsite
-    dw $9BC8, $8CD6, $0001, $0000, $0100, $005B, $FFCC, $00F6, $8924 ; mockball
-    dw $A253, $8F0A, $0001, $0000, $0400, $008B, $FFA5, $027F, $8924 ; redtower
-    dw $AF14, $967E, $0001, $0300, $0000, $008B, $005B, $03BC, $8924 ; lavadive
-    dw $B2DA, $9906, $0001, $0300, $0000, $008B, $0051, $0100, $8924 ; ggg
-    dw $DCB1, $AA2C, $0001, $0300, $0000, $00BB, $003B, $0659, $8924 ; babyskip
+    dw $91F8, $896A, $0001, $0400, $0400, $0040, $0001, $02C3, DRC_LandingSite ; landingsite
+    dw $9BC8, $8CD6, $0001, $0000, $0100, $005B, $FFCC, $00F6, DRC_RTS ; mockball
+    dw $A253, $8F0A, $0001, $0000, $0400, $008B, $FFA5, $027F, DRC_RTS ; redtower
+    dw $AF14, $967E, $0001, $0300, $0000, $008B, $005B, $03BC, DRC_RTS ; lavadive
+    dw $B2DA, $9906, $0001, $0300, $0000, $008B, $0051, $0100, DRC_RTS ; ggg
+    dw $DCB1, $AA2C, $0001, $0300, $0000, $00BB, $003B, $0659, DRC_RTS ; babyskip
 endif
     dw $FFFF
 
   .set2
 if !FEATURE_PAL
-    dw $A408, $A36C, $0000, $0100, $0100, $008B, $0056, $01FD, $8924 ; Ice Beam
-    dw $9C5E, $8CCA, $0003, $0200, $0000, $008B, $0049, $019A, $8924 ; FireFlea Room
-    dw $9E52, $8DEA, $0003, $0500, $0300, $00AB, $FFE2, $0117, $8924 ; Brinstar Diagonal Room
-    dw $AF14, $967E, $0002, $0300, $0000, $008B, $004B, $03CA, $8924 ; Lower Norfair Entrance
+    dw $A408, $A36C, $0000, $0100, $0100, $008B, $0056, $01FD, DRC_RTS ; Ice Beam
+    dw $9C5E, $8CCA, $0003, $0200, $0000, $008B, $0049, $019A, DRC_RTS ; FireFlea Room
+    dw $9E52, $8DEA, $0003, $0500, $0300, $00AB, $FFE2, $0117, DRC_RTS ; Brinstar Diagonal Room
+    dw $AF14, $967E, $0002, $0300, $0000, $008B, $004B, $03CA, DRC_RTS ; Lower Norfair Entrance
+    dw $9879, $8982, $0003, $0000, $0000, $00BB, $FFF1, $00D5, DRC_RTS ; Screw Attack
+    dw $9CB3, $8DD2, $0001, $0400, $0200, $0080, $0005, $0317, DRC_RTS ; Dachora
 else
-    dw $DB7D, $A9CC, $0000, $0000, $0000, $008B, $FFAC, $0188, $8924 ; metroid3
-    dw $95FF, $8A36, $0000, $0000, $0000, $008B, $FFAA, $03D8, $8924 ; moat
-    dw $B106, $970E, $0001, $0700, $0000, $008B, $0051, $0312, $8924 ; frogspeedway
-    dw $91F8, $89B2, $0001, $0800, $0100, $008B, $0055, $02F8, $8924 ; wraparound
+    dw $95FF, $8A36, $0000, $0000, $0000, $008B, $FFAA, $0199, DRC_RTS ; moat
+    dw $92FD, $8BB6, $0001, $0300, $0200, $008B, $0055, $0144, DRC_RTS ; alcatraz
+    dw $D0B9, $A3F0, $0001, $0100, $0300, $00BB, $FFE5, $01FA, DRC_RTS ; pseudo
+    dw $A59F, $91B6, $0001, $0000, $0100, $008B, $FFCB, $02B4, DRC_Kraid ; kqk
+    dw $CC6F, $A21C, $0001, $0200, $0000, $005B, $FFFB, $01D7, DRC_RTS ; speedball
+    dw $91F8, $89B2, $0001, $0800, $0100, $008B, $0055, $02F8, DRC_RTS ; wraparound
 endif
-    dw $9879, $8982, $0003, $0000, $0000, $00BB, $FFF1, $00D5, $8924 ; Screw Attack
-    dw $9CB3, $8DD2, $0001, $0400, $0200, $0080, $0005, $0317, $8924 ; Dachora
     dw $FFFF
 
   .set3
-    dw $CC6F, $A21C, $0003, $0200, $0000, $0060, $0004, $02EF, $8924 ; Pre Phantoon Hall
-    dw $91F8, $896A, $0001, $0300, $0400, $00B0, $0000, $00C7, $8925 ; Shinespark
-    dw $A56B, $919E, $0001, $0000, $0100, $008B, $FFD2, $02D3, $8924 ; Eye Door
-    dw $A322, $90EA, $0000, $0000, $0700, $008B, $FFAA, $0164, $8924 ; Red Brinstar Elevator
-    dw $A59F, $91B6, $0001, $0000, $0100, $008B, $FFBF, $013F, $892B ; Kraid
-    dw $A66A, $91F2, $0001, $0000, $0000, $008B, $FFB1, $0197, $8932 ; Tourian Entrance
+if !FEATURE_PAL
+    dw $CC6F, $A21C, $0003, $0200, $0000, $0060, $0004, $02EF, DRC_RTS ; Pre Phantoon Hall
+    dw $91F8, $896A, $0001, $0300, $0400, $00B0, $0000, $00C7, DRC_LandingSite ; Shinespark
+    dw $A56B, $919E, $0001, $0000, $0100, $008B, $FFD2, $02D3, DRC_RTS ; Eye Door
+    dw $A322, $90EA, $0000, $0000, $0700, $008B, $FFAA, $0149, DRC_RTS ; Red Brinstar Elevator
+    dw $A59F, $91B6, $0001, $0000, $0100, $008B, $FFBF, $013F, DRC_Kraid ; Kraid
+    dw $A66A, $91F2, $0001, $0000, $0000, $008B, $FFB1, $0197, DRC_G4 ; Tourian Entrance
+else
+    dw $D0B9, $A3F0, $0001, $0100, $0300, $00BB, $FFE5, $015C, DRC_RTS ; everest
+    dw $A3AE, $9096, $0001, $0200, $0000, $008B, $0053, $015F, DRC_RTS ; alphapb
+    dw $91F8, $896A, $0001, $0600, $0200, $007B, $0026, $032C, DRC_RTS ; bombjump
+    dw $A322, $A480, $0001, $0200, $0300, $008B, $0035, $0127, DRC_RTS ; tunneljump
+    dw $96BA, $8B7A, $0001, $0100, $0800, $008B, $0052, $0311, DRC_RTS ; climb
+    dw $93FE, $A1B0, $0001, $0700, $0400, $008B, $0054, $019B, DRC_LandingSite ; ocean
+endif
     dw $FFFF
 
   .set4
-    dw $91F8, $890A, $0000, $0600, $0200, $0080, $0030, $0100, $8925 ; Gauntlet Entrance
-    dw $D0B9, $A474, $0000, $0200, $0000, $00AB, $0000, $0332, $8924 ; Advanced Grapple Beam
-    dw $91F8, $890A, $0000, $0600, $0200, $007B, $0020, $0185, $8925 ; IBJ
-    dw $9AD9, $8D42, $0001, $0000, $0400, $008B, $FFB7, $018A, $8924 ; SBA
-    dw $91F8, $890A, $0000, $0600, $0200, $008B, $0004, $0200, $8925 ; Crystal Flash
+if !FEATURE_PAL
+    dw $91F8, $890A, $0000, $0600, $0200, $0080, $0030, $0100, DRC_LandingSite ; Gauntlet Entrance
+    dw $D0B9, $A474, $0000, $0200, $0000, $00AB, $0000, $0332, DRC_RTS ; Advanced Grapple Beam
+    dw $91F8, $890A, $0000, $0600, $0200, $007B, $0020, $0185, DRC_LandingSite ; IBJ
+    dw $9AD9, $8D42, $0001, $0000, $0400, $008B, $FFB7, $018A, DRC_RTS ; SBA
+    dw $91F8, $890A, $0000, $0600, $0200, $008B, $0004, $0200, DRC_LandingSite ; Crystal Flash
+else
+    dw $DB7D, $A9CC, $0000, $0000, $0000, $008B, $FFAC, $0188, DRC_RTS ; metroid3
+    dw $9879, $8982, $0001, $0000, $0000, $008B, $FFAE, $011B, DRC_RTS ; flyway
+    dw $B106, $970E, $0001, $0700, $0000, $008B, $0051, $0312, DRC_RTS ; frogspeedway
+    dw $D5A7, $A828, $0001, $0000, $0200, $008B, $FFA7, $0485, DRC_RTS ; grapplejump
+    dw $9D19, $8F8E, $0000, $0200, $0600, $008B, $001C, $040A, DRC_BigPink ; crystalflash
+endif
     dw $FFFF
 }
 
+; Demo Room Code
+DRC_BigPink:
+{
+    %a8()
+    ; scroll $21 = red
+    LDA #$00 : STA $7ECD41
+    %a16()
+
+DRC_RTS:
+    RTS
+}
+
+DRC_LandingSite:
+{
+    ; BG2 tilemap address/size
+    LDA #$004A : STA $59
+    RTS
+}
+
+DRC_Kraid:
+{
+    LDA #$003C : STA $0FB2
+    RTS
+}
+
+DRC_G4:
+{
+    %a8()
+    LDA #$01 : STA $7ED829
+    %a16()
+    RTS
+}
+warnpc $82893D
 
 org $918885
 DemoSamusData:
@@ -365,12 +514,6 @@ DemoSamusData:
 ;       |      |      |      |      |      |      |       _____ Demo input object pointer
 ;       |      |      |      |      |      |      |      |
   .set1
-;    dw $0000, $0000, $0000, $0000, $0063, $0000, $0000, DemoObject_LandingSite
-;    dw $0004, $0005, $0000, $0000, $0063, $0000, $0000, DemoObject_MissileDoor
-;    dw $0004, $000F, $0000, $0000, $00C7, $1000, $1000, DemoObject_PreSporeSpawnHall
-;    dw $2105, $001E, $0005, $0000, $012B, $1004, $1004, DemoObject_SpeedBooster
-;    dw $6105, $001E, $0005, $0005, $018F, $1006, $1006, DemoObject_GrappleBeam
-;    dw $0004, $0014, $0000, $0000, $00C7, $1000, $1000, DemoObject_PseudoScrewAttack
 if !FEATURE_PAL
     dw $2000, $0000, $0000, $0000, $0063, $0000, $0000, DemoObject_landingsite ; PAL
     dw $1004, $0001, $0000, $0000, $00C7, $0000, $0000, DemoObject_mockball ; PAL
@@ -393,29 +536,47 @@ if !FEATURE_PAL
     dw $0004, $000A, $0000, $0000, $00C7, $0000, $0000, DemoObject_FireFleaRoom
     dw $0004, $0019, $0005, $0000, $00C7, $1000, $1000, DemoObject_BrinstarDiagonalRoom
     dw $E325, $004B, $000F, $000A, $0383, $1000, $1000, DemoObject_LowerNorfairEntrance
-else
-    dw $F33F, $0064, $0014, $0014, $02BC, $100F, $100B, DemoObject_metroid3
-    dw $1004, $0006, $0004, $0001, $0081, $0000, $0000, DemoObject_moat
-    dw $1005, $000A, $0005, $0000, $012B, $0005, $0005, DemoObject_frogspeedway
-    dw $2000, $000A, $0005, $0005, $012B, $1001, $1001, DemoObject_wraparound
-endif
     dw $E32D, $0055, $000F, $000A, $03E7, $0000, $0000, DemoObject_ScrewAttack
     dw $E105, $002D, $0005, $0005, $018F, $1000, $1000, DemoObject_Dachora
+else
+    dw $1004, $0006, $0004, $0001, $0081, $0000, $0000, DemoObject_moat
+    dw $1004, $0005, $0000, $0000, $0063, $0000, $0000, DemoObject_alcatraz
+    dw $3125, $0014, $000A, $0004, $012B, $1001, $1001, DemoObject_pseudo
+    dw $1004, $0002, $0004, $0002, $0045, $0000, $0000, DemoObject_kqk
+    dw $F33F, $005B, $000F, $000D, $01C1, $100F, $100B, DemoObject_speedball
+    dw $2000, $000A, $0005, $0005, $012B, $1001, $1001, DemoObject_wraparound
+endif
 
   .set3
+if !FEATURE_PAL
     dw $E105, $0037, $0005, $0005, $018F, $1000, $1000, DemoObject_WreckedShipBasement
     dw $F33F, $0055, $000F, $000A, $03E7, $100F, $1000, DemoObject_Shinespark
-    dw $0104, $0019, $0005, $0000, $012B, $1004, $1004, DemoObject_EyeDoor
     dw $2105, $001E, $0005, $0000, $012B, $0000, $0000, DemoObject_RedBrinstarElevator
     dw $0104, $0019, $0005, $0000, $012B, $0000, $0000, DemoObject_Kraid
     dw $2105, $001E, $0005, $0005, $012B, $1008, $1008, DemoObject_TourianEntrance
+else
+    dw $F33F, $005E, $0014, $000F, $0239, $100F, $100B, DemoObject_everest
+    dw $1004, $0004, $0003, $0005, $0095, $0000, $0000, DemoObject_alphapb
+    dw $1004, $0000, $0000, $0000, $0063, $0000, $0000, DemoObject_bombjump
+    dw $332F, $005B, $000E, $000F, $01C6, $100F, $100B, DemoObject_tunneljump
+    dw $0004, $0005, $0000, $0000, $0063, $0000, $0000, DemoObject_climb
+    dw $F33F, $005B, $0010, $000E, $01B7, $100F, $100B, DemoObject_ocean
+endif
 
   .set4
+if !FEATURE_PAL
     dw $F32D, $0055, $000F, $000A, $03E7, $1000, $1000, DemoObject_GauntletEntrance
     dw $F32D, $0055, $000F, $000A, $03E7, $0000, $0000, DemoObject_AdvancedGrappleBeam
     dw $F32D, $0055, $000F, $000A, $03E7, $0000, $0000, DemoObject_IBJ
     dw $F32D, $0055, $000F, $000A, $03E7, $1008, $1008, DemoObject_SBA
     dw $F32D, $0055, $0014, $0014, $03E7, $1000, $1000, DemoObject_CrystalFlash
+else
+    dw $F33F, $0064, $0014, $0014, $02BC, $100F, $100B, DemoObject_metroid3
+    dw $0004, $0005, $0000, $0000, $0063, $0000, $0000, DemoObject_flyway
+    dw $1005, $000A, $0005, $0000, $012B, $0005, $0005, DemoObject_frogspeedway
+    dw $7114, $000F, $0002, $0002, $018F, $0000, $0000, DemoObject_grapplejump
+    dw $1004, $000A, $000B, $000C, $0063, $0000, $0000, DemoObject_crystalflash
+endif
 }
 
 
@@ -809,6 +970,7 @@ DemoInput_Shinespark:
     dw $00A5, $0000, $0000
     dw $8448, DemoInput_Shinespark ; Go to DemoInput_Shinespark
 
+  .unseen
     ; The demo timer expires before these inputs are used
     dw $0078, $0000, $0000
     dw $0001, $0200, $0200
@@ -1863,977 +2025,6 @@ DemoInput_babyskip:
     dw $8427 ; Delete
 } ; PAL babyskip
 else ; END OF PAL DEMOS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-DemoInput_LandingSite:
-;;; $8ACE: Instruction list - demo input - landing site ;;;
-{
-    dw $0121, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0006, $0200, $0000 ;       <
-    dw $0001, $0A00, $0800 ;     ^ <
-    dw $0003, $0A00, $0000 ;     ^ <
-    dw $0013, $0200, $0000 ;       <
-    dw $0001, $0280, $0080 ;       < A
-    dw $0028, $0280, $0000 ;       < A
-    dw $0032, $0200, $0000 ;       <
-    dw $0024, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0005, $0100, $0000 ;        >
-    dw $000F, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0005, $0200, $0000 ;       <
-    dw $0022, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $004A, $0200, $0000 ;       <
-    dw $0005, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0005, $0100, $0000 ;        >
-    dw $0045, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0003, $0200, $0000 ;       <
-    dw $0001, $8200, $8000 ; B     <
-    dw $0049, $8200, $0000 ; B     <
-    dw $0001, $8A00, $0800 ; B   ^ <
-    dw $0003, $8A00, $0000 ; B   ^ <
-    dw $0001, $0200, $0000 ;       <
-    dw $0002, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0007, $0100, $0000 ;        >
-    dw $000B, $0000, $0000
-    dw $0001, $0010, $0010 ;            R
-    dw $001F, $0010, $0000 ;            R
-    dw $0001, $0210, $0200 ;       <    R
-    dw $0005, $0210, $0000 ;       <    R
-    dw $001D, $0010, $0000 ;            R
-    dw $0001, $0200, $0200 ;       <
-    dw $005E, $0200, $0000 ;       <
-    dw $0030, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $002E, $0200, $0000 ;       <
-    dw $001F, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0004, $0100, $0000 ;        >
-    dw $0040, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0004, $0200, $0000 ;       <
-    dw $0028, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0006, $0040, $0000 ;          X
-    dw $002B, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0011, $0200, $0000 ;       <
-    dw $0007, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0004, $0200, $0000 ;       <
-    dw $0014, $0100, $0000 ;        >
-    dw $0001, $0140, $0040 ;        > X
-    dw $0003, $0140, $0000 ;        > X
-    dw $8427 ; Delete
-}
-
-DemoInput_PseudoScrewAttack:
-;;; $8C3E: Instruction list - demo input - pseudo screw attack ;;;
-{
-    dw $0016, $0000, $0000
-    dw $0001, $0800, $0800 ;     ^
-    dw $0003, $0800, $0000 ;     ^
-    dw $0005, $0000, $0000
-    dw $0001, $0800, $0800 ;     ^
-    dw $0006, $0800, $0000 ;     ^
-    dw $0016, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0005, $0200, $0000 ;       <
-    dw $000B, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $004E, $0040, $0000 ;          X
-    dw $0001, $0240, $0200 ;       <  X
-    dw $000D, $0240, $0000 ;       <  X
-    dw $0001, $02C0, $0080 ;       < AX
-    dw $0014, $02C0, $0000 ;       < AX
-    dw $0014, $0240, $0000 ;       <  X
-    dw $0020, $0040, $0000 ;          X
-    dw $0001, $0140, $0100 ;        > X
-    dw $000F, $0140, $0000 ;        > X
-    dw $0001, $01C0, $0080 ;        >AX
-    dw $0006, $01C0, $0000 ;        >AX
-    dw $0002, $00C0, $0000 ;         AX
-    dw $0001, $02C0, $0200 ;       < AX
-    dw $001E, $02C0, $0000 ;       < AX
-    dw $0008, $0240, $0000 ;       <  X
-    dw $0006, $0040, $0000 ;          X
-    dw $0001, $0140, $0100 ;        > X
-    dw $000B, $0140, $0000 ;        > X
-    dw $0001, $01C0, $0080 ;        >AX
-    dw $0023, $01C0, $0000 ;        >AX
-    dw $003A, $0140, $0000 ;        > X
-    dw $0001, $01C0, $0080 ;        >AX
-    dw $0013, $01C0, $0000 ;        >AX
-    dw $0001, $09C0, $0800 ;     ^  >AX
-    dw $0002, $01C0, $0000 ;        >AX
-    dw $0008, $00C0, $0000 ;         AX
-    dw $000D, $0040, $0000 ;          X
-    dw $0001, $0240, $0200 ;       <  X
-    dw $0029, $0240, $0000 ;       <  X
-    dw $0001, $02C0, $0080 ;       < AX
-    dw $0007, $02C0, $0000 ;       < AX
-    dw $0001, $0AC0, $0800 ;     ^ < AX
-    dw $0002, $0AC0, $0000 ;     ^ < AX
-    dw $0001, $08C0, $0000 ;     ^   AX
-    dw $0001, $01C0, $0100 ;        >AX
-    dw $0028, $01C0, $0000 ;        >AX
-    dw $0010, $0140, $0000 ;        > X
-    dw $0006, $0040, $0000 ;          X
-    dw $0001, $00C0, $0080 ;         AX
-    dw $0004, $00C0, $0000 ;         AX
-    dw $0001, $00E0, $0020 ;         AXL
-    dw $0012, $00E0, $0000 ;         AXL
-    dw $002A, $0020, $0000 ;           L
-    dw $0001, $0120, $0100 ;        >  L
-    dw $0002, $0120, $0000 ;        >  L
-    dw $0005, $0100, $0000 ;        >
-    dw $0008, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0011, $0100, $0000 ;        >
-    dw $0001, $0180, $0080 ;        >A
-    dw $000F, $0180, $0000 ;        >A
-    dw $0013, $0100, $0000 ;        >
-    dw $0001, $8100, $8000 ; B      >
-    dw $0029, $8100, $0000 ; B      >
-    dw $0001, $8180, $0080 ; B      >A
-    dw $0020, $8180, $0000 ; B      >A
-    dw $0005, $8080, $0000 ; B       A
-    dw $0006, $8000, $0000 ; B
-    dw $0001, $0200, $0200 ;       <
-    dw $000F, $0200, $0000 ;       <
-    dw $0065, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_SpeedBooster:
-;;; $8DF0: Instruction list - demo input - speed booster ;;;
-{
-    dw $0020, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0002, $0200, $0000 ;       <
-    dw $0001, $8200, $8000 ; B     <
-    dw $00EE, $8200, $0000 ; B     <
-    dw $0001, $8A00, $0800 ; B   ^ <
-    dw $0002, $8200, $0000 ; B     <
-    dw $0001, $8100, $0100 ; B      >
-    dw $0016, $0100, $0000 ;        >
-    dw $0031, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0005, $0200, $0000 ;       <
-    dw $0013, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0008, $0040, $0000 ;          X
-    dw $0011, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $001B, $0200, $0000 ;       <
-    dw $0063, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_Dachora:
-;;; $8E64: Instruction list - demo input - dachora ;;;
-{
-    dw $0008, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0001, $0200, $0000 ;       <
-    dw $010A, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0004, $0100, $0000 ;        >
-    dw $0011, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0004, $0200, $0000 ;       <
-    dw $0038, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0164, $0200, $0000 ;       <
-    dw $011E, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_RedBrinstarElevator:
-;;; $8EB4: Instruction list - demo input - Red Brinstar -> Crateria elevator ;;;
-{
-    dw $005A, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $000A, $0100, $0000 ;        >
-    dw $0001, $0180, $0080 ;        >A
-    dw $0006, $0180, $0000 ;        >A
-    dw $0011, $0100, $0000 ;        >
-    dw $0020, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0001, $0200, $0000 ;       <
-    dw $0001, $0280, $0080 ;       < A
-    dw $0014, $0280, $0000 ;       < A
-    dw $0003, $0200, $0000 ;       <
-    dw $0014, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0004, $0100, $0000 ;        >
-    dw $0048, $0000, $0000
-    dw $0001, $0080, $0080 ;         A
-    dw $0011, $0080, $0000 ;         A
-    dw $0001, $0180, $0100 ;        >A
-    dw $000A, $0180, $0000 ;        >A
-    dw $0016, $0100, $0000 ;        >
-    dw $0200, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_WreckedShipBasement:
-;;; $8F3A: Instruction list - demo input - pre Phantoon hall ;;;
-{
-    dw $003D, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0005, $0100, $0000 ;        >
-    dw $000F, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0005, $0200, $0000 ;       <
-    dw $0027, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0066, $0200, $0000 ;       <
-    dw $0001, $8200, $8000 ; B     <
-    dw $0007, $8200, $0000 ; B     <
-    dw $004F, $0200, $0000 ;       <
-    dw $0057, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0002, $0100, $0000 ;        >
-    dw $0064, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $004E, $0100, $0000 ;        >
-    dw $0001, $8100, $8000 ; B      >
-    dw $0017, $8100, $0000 ; B      >
-    dw $0006, $0100, $0000 ;        >
-    dw $0001, $8100, $8000 ; B      >
-    dw $0003, $8100, $0000 ; B      >
-    dw $0001, $0100, $0000 ;        >
-    dw $0001, $8100, $8000 ; B      >
-    dw $0002, $8100, $0000 ; B      >
-    dw $0034, $0100, $0000 ;        >
-    dw $00A9, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_LowerNorfairEntrance:
-;;; $8FE4: Instruction list - demo input - Lower Norfair entrance ;;;
-{
-    dw $0013, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0012, $0200, $0000 ;       <
-    dw $0029, $0000, $0000
-    dw $0001, $8000, $8000 ; B
-    dw $0015, $8000, $0000 ; B
-    dw $000B, $0000, $0000
-    dw $0001, $8000, $8000 ; B
-    dw $001F, $8000, $0000 ; B
-    dw $0001, $8200, $0200 ; B     <
-    dw $0030, $8200, $0000 ; B     <
-    dw $0003, $8000, $0000 ; B
-    dw $0001, $8200, $0200 ; B     <
-    dw $0007, $8200, $0000 ; B     <
-    dw $0045, $8000, $0000 ; B
-    dw $0001, $8200, $0200 ; B     <
-    dw $0091, $8200, $0000 ; B     <
-    dw $000A, $8000, $0000 ; B
-    dw $0001, $8200, $0200 ; B     <
-    dw $0006, $8200, $0000 ; B     <
-    dw $0036, $8000, $0000 ; B
-    dw $0001, $8200, $0200 ; B     <
-    dw $0090, $8200, $0000 ; B     <
-    dw $0011, $0200, $0000 ;       <
-    dw $0001, $0280, $0080 ;       < A
-    dw $0017, $0280, $0000 ;       < A
-    dw $0008, $0080, $0000 ;         A
-    dw $0001, $0180, $0100 ;        >A
-    dw $000E, $0180, $0000 ;        >A
-    dw $000F, $0100, $0000 ;        >
-    dw $0002, $0000, $0000
-    dw $0001, $0080, $0080 ;         A
-    dw $001C, $0080, $0000 ;         A
-    dw $0001, $0280, $0200 ;       < A
-    dw $000C, $0280, $0000 ;       < A
-    dw $0002, $0200, $0000 ;       <
-    dw $000F, $0000, $0000
-    dw $0001, $0080, $0080 ;         A
-    dw $0011, $0080, $0000 ;         A
-    dw $0001, $0180, $0100 ;        >A
-    dw $000F, $0180, $0000 ;        >A
-    dw $0002, $0080, $0000 ;         A
-    dw $0010, $0000, $0000
-    dw $0001, $0080, $0080 ;         A
-    dw $0001, $0280, $0200 ;       < A
-    dw $0014, $0280, $0000 ;       < A
-    dw $0015, $0200, $0000 ;       <
-    dw $0001, $8200, $8000 ; B     <
-    dw $000E, $8200, $0000 ; B     <
-    dw $0006, $0200, $0000 ;       <
-    dw $0001, $0280, $0080 ;       < A
-    dw $0004, $0280, $0000 ;       < A
-    dw $0011, $0200, $0000 ;       <
-    dw $0001, $8200, $8000 ; B     <
-    dw $0024, $8200, $0000 ; B     <
-    dw $0002, $0200, $0000 ;       <
-    dw $0014, $0200, $0000 ;       <
-    dw $0007, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0009, $0100, $0000 ;        >
-    dw $002D, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_EyeDoor:
-;;; $9154: Instruction list - demo input - eye door ;;;
-{
-    dw $000B, $0100, $0000 ;        >
-    dw $0017, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0008, $0040, $0000 ;          X
-    dw $0004, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0002, $0100, $0000 ;        >
-    dw $000C, $0000, $0000
-    dw $0001, $2000, $2000 ;   s
-    dw $0006, $2000, $0000 ;   s
-    dw $000D, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $000A, $0100, $0000 ;        >
-    dw $0001, $0180, $0080 ;        >A
-    dw $0006, $0180, $0000 ;        >A
-    dw $000E, $0100, $0000 ;        >
-    dw $0010, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0002, $0100, $0000 ;        >
-    dw $0001, $0180, $0080 ;        >A
-    dw $0006, $0180, $0000 ;        >A
-    dw $000D, $0100, $0000 ;        >
-    dw $0010, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0002, $0100, $0000 ;        >
-    dw $0001, $0180, $0080 ;        >A
-    dw $0008, $0180, $0000 ;        >A
-    dw $001C, $0100, $0000 ;        >
-    dw $0020, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0001, $0180, $0080 ;        >A
-    dw $000B, $0180, $0000 ;        >A
-    dw $0012, $0100, $0000 ;        >
-    dw $0016, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0006, $0100, $0000 ;        >
-    dw $0028, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0006, $0100, $0000 ;        >
-    dw $0001, $0180, $0080 ;        >A
-    dw $0008, $0180, $0000 ;        >A
-    dw $0017, $0100, $0000 ;        >
-    dw $000F, $0000, $0000
-    dw $0001, $0080, $0080 ;         A
-    dw $0006, $0080, $0000 ;         A
-    dw $000A, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0006, $0040, $0000 ;          X
-    dw $0025, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0007, $0200, $0000 ;       <
-    dw $0008, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0007, $0100, $0000 ;        >
-    dw $0052, $0000, $0000
-    dw $0001, $0080, $0080 ;         A
-    dw $0007, $0080, $0000 ;         A
-    dw $0011, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0004, $0040, $0000 ;          X
-    dw $000C, $0000, $0000
-    dw $0001, $0080, $0080 ;         A
-    dw $000B, $0080, $0000 ;         A
-    dw $001E, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0006, $0040, $0000 ;          X
-    dw $000D, $0000, $0000
-    dw $0001, $0080, $0080 ;         A
-    dw $0005, $0080, $0000 ;         A
-    dw $000D, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0006, $0040, $0000 ;          X
-    dw $007C, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0007, $0200, $0000 ;       <
-    dw $0011, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0009, $0100, $0000 ;        >
-    dw $0001, $0140, $0040 ;        > X
-    dw $0003, $0140, $0000 ;        > X
-    dw $0004, $0100, $0000 ;        >
-    dw $8427 ; Delete
-}
-
-DemoInput_Shinespark:
-;;; $933C: Instruction list - demo input - shinespark ;;;
-{
-    dw $00A5, $0000, $0000
-    dw $8448, DemoInput_Shinespark ; Go to DemoInput_Shinespark
-
-    ; The demo timer expires before these inputs are used
-    dw $0096, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $00CC, $0200, $0000 ;       <
-    dw $0001, $8200, $8000 ; B     <
-    dw $0076, $8200, $0000 ; B     <
-    dw $0002, $8000, $0000 ; B
-    dw $0001, $8100, $0100 ; B      >
-    dw $00B6, $8100, $0000 ; B      >
-    dw $000C, $0100, $0000 ;        >
-    dw $0001, $0180, $0080 ;        >A
-    dw $0006, $0180, $0000 ;        >A
-    dw $000E, $0100, $0000 ;        >
-    dw $0024, $0000, $0000
-    dw $0001, $2000, $2000 ;   s
-    dw $0005, $2000, $0000 ;   s
-    dw $000B, $0000, $0000
-    dw $0001, $2000, $2000 ;   s
-    dw $0004, $2000, $0000 ;   s
-    dw $000E, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0007, $0040, $0000 ;          X
-    dw $00F0, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_MissileDoor:
-;;; $93CC: Instruction list - demo input - missile door ;;;
-{
-    dw $0029, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0031, $0100, $0000 ;        >
-    dw $0044, $0000, $0000
-    dw $0001, $2000, $2000 ;   s
-    dw $0005, $2000, $0000 ;   s
-    dw $0023, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0008, $0040, $0000 ;          X
-    dw $000A, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0008, $0040, $0000 ;          X
-    dw $0011, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0007, $0040, $0000 ;          X
-    dw $000D, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0008, $0040, $0000 ;          X
-    dw $0007, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0009, $0040, $0000 ;          X
-    dw $0020, $0000, $0000
-    dw $0001, $8100, $8100 ; B      >
-    dw $0011, $8100, $0000 ; B      >
-    dw $001A, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_Kraid:
-;;; $9464: Instruction list - demo input - Kraid ;;;
-{
-    dw $0200, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_FireFleaRoom:
-;;; $946C: Instruction list - demo input - fireflea room ;;;
-{
-    dw $002B, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0046, $0200, $0000 ;       <
-    dw $0037, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $000C, $0200, $0000 ;       <
-    dw $0001, $0280, $0080 ;       < A
-    dw $0013, $0280, $0000 ;       < A
-    dw $0013, $0200, $0000 ;       <
-    dw $0001, $0240, $0040 ;       <  X
-    dw $000B, $0240, $0000 ;       <  X
-    dw $0005, $0200, $0000 ;       <
-    dw $0001, $0280, $0080 ;       < A
-    dw $0015, $0280, $0000 ;       < A
-    dw $0025, $0200, $0000 ;       <
-    dw $0001, $0280, $0080 ;       < A
-    dw $000E, $0280, $0000 ;       < A
-    dw $0021, $0200, $0000 ;       <
-    dw $0001, $0280, $0080 ;       < A
-    dw $0009, $0280, $0000 ;       < A
-    dw $001D, $0200, $0000 ;       <
-    dw $0008, $0000, $0000
-    dw $0001, $0020, $0020 ;           L
-    dw $0001, $0020, $0000 ;           L
-    dw $0001, $0420, $0400 ;      v    L
-    dw $00C4, $0020, $0000 ;           L
-    dw $8427 ; Delete
-}
-
-DemoInput_ScrewAttack:
-;;; $950A: Instruction list - demo input - screw attack ;;;
-{
-    dw $0030, $0000, $0000
-    dw $0001, $8100, $8100 ; B      >
-    dw $001E, $8100, $0000 ; B      >
-    dw $0001, $8180, $0080 ; B      >A
-    dw $000C, $8180, $0000 ; B      >A
-    dw $001C, $8100, $0000 ; B      >
-    dw $0001, $8180, $0080 ; B      >A
-    dw $0017, $8180, $0000 ; B      >A
-    dw $002B, $8100, $0000 ; B      >
-    dw $0001, $0400, $0400 ;      v
-    dw $0003, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0001, $0210, $0010 ;       <    R
-    dw $009D, $0010, $0000 ;            R
-    dw $8427 ; Delete
-}
-
-DemoInput_BrinstarDiagonalRoom:
-;;; $9560: Instruction list - demo input - Brinstar diagonal room ;;;
-{
-    dw $0029, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0012, $0100, $0000 ;        >
-    dw $0001, $0180, $0080 ;        >A
-    dw $0016, $0180, $0000 ;        >A
-    dw $0041, $0100, $0000 ;        >
-    dw $0014, $0000, $0000
-    dw $0001, $0010, $0010 ;            R
-    dw $000A, $0010, $0000 ;            R
-    dw $0001, $0050, $0040 ;          X R
-    dw $001D, $0050, $0000 ;          X R
-    dw $0005, $0040, $0000 ;          X
-    dw $0001, $0440, $0400 ;      v   X
-    dw $0037, $0440, $0000 ;      v   X
-    dw $00DB, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_Unused:
-;;; $95BC: Instruction list - demo input - unused ;;;
-{
-    dw $0029, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0018, $0200, $0000 ;       <
-    dw $0011, $0000, $0000
-    dw $0001, $0080, $0080 ;         A
-    dw $0018, $0080, $0000 ;         A
-    dw $0001, $0280, $0200 ;       < A
-    dw $0005, $0280, $0000 ;       < A
-    dw $0010, $0200, $0000 ;       <
-    dw $0020, $0000, $0000
-    dw $0001, $0080, $0080 ;         A
-    dw $0009, $0080, $0000 ;         A
-    dw $0001, $0280, $0200 ;       < A
-    dw $0015, $0280, $0000 ;       < A
-    dw $0016, $0200, $0000 ;       <
-    dw $0014, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0007, $0100, $0000 ;        >
-    dw $0001, $0180, $0080 ;        >A
-    dw $0018, $0180, $0000 ;        >A
-    dw $001D, $0100, $0000 ;        >
-    dw $0010, $0000, $0000
-    dw $0001, $0400, $0400 ;      v
-    dw $0005, $0400, $0000 ;      v
-    dw $0001, $0600, $0200 ;      v<
-    dw $0096, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_PreSporeSpawnHall:
-;;; $965A: Instruction list - demo input - pre Spore Spawn hall ;;;
-{
-    dw $001B, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0005, $0200, $0000 ;       <
-    dw $000F, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0005, $0100, $0000 ;        >
-    dw $0010, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $000D, $0100, $0000 ;        >
-    dw $002A, $0100, $0000 ;        >
-    dw $0007, $0000, $0000
-    dw $0001, $0080, $0080 ;         A
-    dw $0015, $0080, $0000 ;         A
-    dw $001E, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0013, $0200, $0000 ;       <
-    dw $0010, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0008, $0100, $0000 ;        >
-    dw $0001, $0180, $0080 ;        >A
-    dw $000F, $0180, $0000 ;        >A
-    dw $0001, $0080, $0000 ;         A
-    dw $0001, $0280, $0200 ;       < A
-    dw $0007, $0280, $0000 ;       < A
-    dw $0004, $0200, $0000 ;       <
-    dw $0001, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0004, $0100, $0000 ;        >
-    dw $0001, $0140, $0040 ;        > X
-    dw $0009, $0140, $0000 ;        > X
-    dw $0005, $0140, $0000 ;        > X
-    dw $004C, $0040, $0000 ;          X
-    dw $0001, $0440, $0400 ;      v   X
-    dw $0003, $0040, $0000 ;          X
-    dw $0001, $0050, $0010 ;          X R
-    dw $0004, $0050, $0000 ;          X R
-    dw $0084, $0010, $0000 ;            R
-    dw $8427 ; Delete
-}
-
-DemoInput_GrappleBeam:
-;;; $973A: Instruction list - demo input - grapple beam ;;;
-{
-    dw $0010, $0000, $0000
-    dw $0001, $2000, $2000 ;   s
-    dw $000C, $0000, $0000
-    dw $0001, $2000, $2000 ;   s
-    dw $000C, $0000, $0000
-    dw $0001, $2000, $2000 ;   s
-    dw $000C, $0000, $0000
-    dw $0001, $2000, $2000 ;   s
-    dw $000C, $0000, $0000
-    dw $0001, $0010, $0010 ;            R
-    dw $0022, $0010, $0000 ;            R
-    dw $0001, $0050, $0040 ;          X R
-    dw $0010, $0050, $0000 ;          X R
-    dw $0001, $0650, $0600 ;      v<  X R
-    dw $0006, $0650, $0000 ;      v<  X R
-    dw $000C, $0450, $0000 ;      v   X R
-    dw $0001, $0550, $0100 ;      v > X R
-    dw $0004, $0550, $0000 ;      v > X R
-    dw $0012, $0150, $0000 ;        > X R
-    dw $0006, $0110, $0000 ;        >   R
-    dw $0001, $0150, $0040 ;        > X R
-    dw $0007, $0150, $0000 ;        > X R
-    dw $0001, $0550, $0400 ;      v > X R
-    dw $0004, $0550, $0000 ;      v > X R
-    dw $0016, $0450, $0000 ;      v   X R
-    dw $0001, $0550, $0100 ;      v > X R
-    dw $0005, $0550, $0000 ;      v > X R
-    dw $000B, $0150, $0000 ;        > X R
-    dw $0007, $0110, $0000 ;        >   R
-    dw $0001, $0150, $0040 ;        > X R
-    dw $000A, $0150, $0000 ;        > X R
-    dw $0001, $0550, $0400 ;      v > X R
-    dw $000C, $0550, $0000 ;      v > X R
-    dw $000E, $0150, $0000 ;        > X R
-    dw $000A, $0110, $0000 ;        >   R
-    dw $0001, $0150, $0040 ;        > X R
-    dw $0008, $0150, $0000 ;        > X R
-    dw $0001, $0550, $0400 ;      v > X R
-    dw $000C, $0550, $0000 ;      v > X R
-    dw $000E, $0150, $0000 ;        > X R
-    dw $000A, $0110, $0000 ;        >   R
-    dw $0001, $0150, $0040 ;        > X R
-    dw $0008, $0150, $0000 ;        > X R
-    dw $0001, $0550, $0400 ;      v > X R
-    dw $000D, $0550, $0000 ;      v > X R
-    dw $000E, $0150, $0000 ;        > X R
-    dw $000A, $0110, $0000 ;        >   R
-    dw $0001, $0150, $0040 ;        > X R
-    dw $0009, $0150, $0000 ;        > X R
-    dw $0001, $0550, $0400 ;      v > X R
-    dw $000C, $0550, $0000 ;      v > X R
-    dw $0008, $0150, $0000 ;        > X R
-    dw $0004, $0100, $0000 ;        >
-    dw $0020, $0000, $0000
-    dw $0001, $0400, $0400 ;      v
-    dw $0005, $0400, $0000 ;      v
-    dw $0001, $0200, $0200 ;       <
-    dw $0005, $0200, $0000 ;       <
-    dw $0028, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_IceBeam:
-;;; $989E: Instruction list - demo input - ice beam ;;;
-{
-    dw $0021, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0005, $0040, $0000 ;          X
-    dw $0006, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0005, $0040, $0000 ;          X
-    dw $0012, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0017, $0200, $0000 ;       <
-    dw $001C, $0000, $0000
-    dw $0001, $0080, $0080 ;         A
-    dw $000E, $0080, $0000 ;         A
-    dw $0001, $0480, $0400 ;      v  A
-    dw $0005, $0480, $0000 ;      v  A
-    dw $000B, $0400, $0000 ;      v
-    dw $0001, $0440, $0040 ;      v   X
-    dw $0006, $0440, $0000 ;      v   X
-    dw $0008, $0400, $0000 ;      v
-    dw $0007, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $001D, $0200, $0000 ;       <
-    dw $0009, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $000E, $0200, $0000 ;       <
-    dw $0001, $0280, $0080 ;       < A
-    dw $001D, $0280, $0000 ;       < A
-    dw $0038, $0200, $0000 ;       <
-    dw $0001, $0280, $0080 ;       < A
-    dw $0016, $0280, $0000 ;       < A
-    dw $002B, $0200, $0000 ;       <
-    dw $0001, $0080, $0080 ;         A
-    dw $0010, $0080, $0000 ;         A
-    dw $0001, $0480, $0400 ;      v  A
-    dw $0008, $0480, $0000 ;      v  A
-    dw $0005, $0400, $0000 ;      v
-    dw $0001, $0440, $0040 ;      v   X
-    dw $0008, $0440, $0000 ;      v   X
-    dw $0008, $0400, $0000 ;      v
-    dw $0008, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $002B, $0200, $0000 ;       <
-    dw $0001, $0280, $0080 ;       < A
-    dw $0010, $0280, $0000 ;       < A
-    dw $0012, $0200, $0000 ;       <
-    dw $005D, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_GauntletEntrance:
-;;; $99AE: Instruction list - demo input - gauntlet entrance ;;;
-{
-    dw $0016, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0005, $0100, $0000 ;        >
-    dw $0100, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_AdvancedGrappleBeam:
-;;; $99C8: Instruction list - demo input - advanced grapple beam ;;;
-{
-    dw $003F, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0005, $0100, $0000 ;        >
-    dw $001E, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0005, $0200, $0000 ;       <
-    dw $0016, $0000, $0000
-    dw $0001, $2000, $2000 ;   s
-    dw $0004, $2000, $0000 ;   s
-    dw $000D, $0000, $0000
-    dw $0001, $2000, $2000 ;   s
-    dw $0005, $2000, $0000 ;   s
-    dw $0008, $0000, $0000
-    dw $0001, $2000, $2000 ;   s
-    dw $0006, $2000, $0000 ;   s
-    dw $0007, $0000, $0000
-    dw $0001, $2000, $2000 ;   s
-    dw $0005, $2000, $0000 ;   s
-    dw $002F, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0014, $0200, $0000 ;       <
-    dw $0002, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0006, $0100, $0000 ;        >
-    dw $0009, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0019, $0040, $0000 ;          X
-    dw $0001, $0440, $0400 ;      v   X
-    dw $0005, $0440, $0000 ;      v   X
-    dw $0001, $0540, $0100 ;      v > X
-    dw $0002, $0540, $0000 ;      v > X
-    dw $0006, $0140, $0000 ;        > X
-    dw $0027, $0040, $0000 ;          X
-    dw $0001, $0240, $0200 ;       <  X
-    dw $000D, $0240, $0000 ;       <  X
-    dw $0034, $0040, $0000 ;          X
-    dw $0001, $0140, $0100 ;        > X
-    dw $0007, $0140, $0000 ;        > X
-    dw $0037, $0040, $0000 ;          X
-    dw $0001, $0240, $0200 ;       <  X
-    dw $000F, $0240, $0000 ;       <  X
-    dw $002F, $0040, $0000 ;          X
-    dw $0001, $0140, $0100 ;        > X
-    dw $00B1, $0140, $0000 ;        > X
-    dw $0001, $01C0, $0080 ;        >AX
-    dw $000B, $01C0, $0000 ;        >AX
-    dw $00BA, $0180, $0000 ;        >A
-    dw $0003, $0100, $0000 ;        >
-    dw $0046, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_IBJ:
-;;; $9AF0: Instruction list - demo input - IBJ ;;;
-{
-    dw $0019, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $0022, $0100, $0000 ;        >
-    dw $0018, $0000, $0000
-    dw $0001, $0080, $0080 ;         A
-    dw $000B, $0080, $0000 ;         A
-    dw $0001, $0480, $0400 ;      v  A
-    dw $0007, $0480, $0000 ;      v  A
-    dw $0002, $0080, $0000 ;         A
-    dw $0001, $0480, $0400 ;      v  A
-    dw $0008, $0480, $0000 ;      v  A
-    dw $0001, $04C0, $0040 ;      v  AX
-    dw $0003, $04C0, $0000 ;      v  AX
-    dw $000A, $00C0, $0000 ;         AX
-    dw $0002, $0080, $0000 ;         A
-    dw $0020, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $000B, $0040, $0000 ;          X
-    dw $0025, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0009, $0040, $0000 ;          X
-    dw $0026, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0009, $0040, $0000 ;          X
-    dw $0026, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0008, $0040, $0000 ;          X
-    dw $0027, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0009, $0040, $0000 ;          X
-    dw $0028, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0008, $0040, $0000 ;          X
-    dw $0028, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0009, $0040, $0000 ;          X
-    dw $0026, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0008, $0040, $0000 ;          X
-    dw $0028, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0007, $0040, $0000 ;          X
-    dw $0029, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0007, $0040, $0000 ;          X
-    dw $0029, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0007, $0040, $0000 ;          X
-    dw $0028, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0008, $0040, $0000 ;          X
-    dw $0027, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0007, $0040, $0000 ;          X
-    dw $002A, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0007, $0040, $0000 ;          X
-    dw $002A, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0007, $0040, $0000 ;          X
-    dw $0028, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0007, $0040, $0000 ;          X
-    dw $0028, $0000, $0000
-    dw $0001, $0040, $0040 ;          X
-    dw $0007, $0040, $0000 ;          X
-    dw $0010, $0000, $0000
-    dw $0001, $0100, $0100 ;        >
-    dw $001E, $0100, $0000 ;        >
-    dw $0017, $0000, $0000
-    dw $0001, $0800, $0800 ;     ^
-    dw $0009, $0800, $0000 ;     ^
-    dw $0008, $0000, $0000
-    dw $0001, $0800, $0800 ;     ^
-    dw $0005, $0800, $0000 ;     ^
-    dw $0001, $0000, $0000
-    dw $0001, $0800, $0800 ;     ^
-    dw $0009, $0000, $0000
-    dw $0001, $0200, $0200 ;       <
-    dw $0004, $0200, $0000 ;       <
-    dw $00C4, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_SBA:
-;;; $9CD8: Instruction list - demo input - SBA ;;;
-{
-    dw $001A, $0000, $0000
-    dw $0001, $2000, $2000 ;   s
-    dw $0008, $2000, $0000 ;   s
-    dw $0006, $0000, $0000
-    dw $0001, $2000, $2000 ;   s
-    dw $0006, $2000, $0000 ;   s
-    dw $0006, $0000, $0000
-    dw $0001, $2000, $2000 ;   s
-    dw $0006, $2000, $0000 ;   s
-    dw $0008, $0000, $0000
-    dw $0001, $0080, $0080 ;         A
-    dw $0003, $0080, $0000 ;         A
-    dw $0001, $0180, $0100 ;        >A
-    dw $0023, $0180, $0000 ;        >A
-    dw $0007, $0100, $0000 ;        >
-    dw $0010, $0000, $0000
-    dw $0001, $0080, $0080 ;         A
-    dw $0010, $0080, $0000 ;         A
-    dw $0001, $0280, $0200 ;       < A
-    dw $0007, $0280, $0000 ;       < A
-    dw $0001, $02C0, $0040 ;       < AX
-    dw $0004, $02C0, $0000 ;       < AX
-    dw $000E, $0240, $0000 ;       <  X
-    dw $0010, $0040, $0000 ;          X
-    dw $0001, $00C0, $0080 ;         AX
-    dw $0008, $00C0, $0000 ;         AX
-    dw $0001, $01C0, $0100 ;        >AX
-    dw $000B, $01C0, $0000 ;        >AX
-    dw $0014, $0140, $0000 ;        > X
-    dw $0015, $0040, $0000 ;          X
-    dw $0001, $0440, $0400 ;      v   X
-    dw $0006, $0440, $0000 ;      v   X
-    dw $0040, $0040, $0000 ;          X
-    dw $0034, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_TourianEntrance:
-;;; $9DA6: Instruction list - demo input - Tourian entrance ;;;
-{
-    dw $0195, $0000, $0000
-    dw $8427 ; Delete
-}
-
-DemoInput_CrystalFlash:
-;;; $9DAE: Instruction list - demo input - crystal flash ;;;
-{
-    dw $001B, $0000, $0000
-    dw $0001, $0400, $0400 ;      v
-    dw $0005, $0400, $0000 ;      v
-    dw $0005, $0000, $0000
-    dw $0001, $0400, $0400 ;      v
-    dw $0007, $0400, $0000 ;      v
-    dw $0009, $0000, $0000
-    dw $0001, $2000, $2000 ;   s
-    dw $0006, $2000, $0000 ;   s
-    dw $0006, $0000, $0000
-    dw $0001, $2000, $2000 ;   s
-    dw $0005, $2000, $0000 ;   s
-    dw $0008, $0000, $0000
-    dw $0001, $2000, $2000 ;   s
-    dw $0007, $2000, $0000 ;   s
-    dw $0031, $0000, $0000
-    dw $0001, $0430, $0430 ;      v    LR
-    dw $0009, $0430, $0000 ;      v    LR
-    dw $0001, $0470, $0040 ;      v   XLR
-    dw $0010, $0470, $0000 ;      v   XLR
-    dw $001E, $0430, $0000 ;      v    LR
-    dw $0001, $0470, $0040 ;      v   XLR
-    dw $00BE, $0470, $0000 ;      v   XLR
-    dw $0003, $0070, $0000 ;          XLR
-    dw $0001, $0030, $0000 ;           LR
-    dw $0001, $0010, $0000 ;            R
-    dw $013C, $0000, $0000
-    dw $8427 ; Delete
-}
-
 DemoInput_mockball:
 {
     dw $0018, $0000, $0000
@@ -3638,5 +2829,999 @@ DemoInput_wraparound:
     dw $006B, $0000, $0000
     dw $8427 ; Delete
 } ; wraparound
+
+DemoInput_speedball:
+{
+    dw $002A, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0005, $2000, $0000
+    dw $0003, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0006, $2000, $0000
+    dw $0006, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0002, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $001E, $8200, $0000
+    dw $0001, $0280, $0080
+    dw $0001, $0280, $0000
+    dw $0011, $0200, $0000
+    dw $0001, $0000, $0000
+    dw $0001, $0010, $0010
+    dw $0001, $0110, $0100
+    dw $0004, $0110, $0000
+    dw $0003, $0010, $0000
+    dw $0010, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0017, $0100, $0000
+    dw $0001, $8100, $8000
+    dw $0007, $8100, $0000
+    dw $0011, $0100, $0000
+    dw $0001, $8100, $8000
+    dw $0007, $8100, $0000
+    dw $0009, $0100, $0000
+    dw $0001, $8100, $8000
+    dw $0017, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0008, $8180, $0000
+    dw $0001, $0180, $0000
+    dw $0004, $0100, $0000
+    dw $0001, $8180, $8080
+    dw $0001, $8580, $0400
+    dw $0004, $8580, $0000
+    dw $0004, $8480, $0000
+    dw $0013, $8080, $0000
+    dw $0001, $8480, $0400
+    dw $0001, $8480, $0000
+    dw $0001, $8580, $0100
+    dw $0001, $8500, $0000
+    dw $0001, $0500, $0000
+    dw $0021, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $0003, $0180, $0000
+    dw $0001, $0980, $0800
+    dw $0002, $0980, $0000
+    dw $0003, $0880, $0000
+    dw $0001, $0980, $0100
+    dw $0001, $0980, $0000
+    dw $0001, $0900, $0000
+    dw $0001, $8100, $8000
+    dw $0001, $8140, $0040
+    dw $0007, $8140, $0000
+    dw $001E, $8100, $0000
+    dw $0004, $8000, $0000
+    dw $0004, $0000, $0000
+    dw $0001, $4000, $4000
+    dw $0005, $4000, $0000
+    dw $000A, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0013, $8000, $0000
+    dw $0001, $8010, $0010
+    dw $0005, $8010, $0000
+    dw $0001, $8050, $0040
+    dw $0004, $8050, $0000
+    dw $0001, $8010, $0000
+    dw $0007, $8000, $0000
+    dw $0027, $0000, $0000
+    dw $8427 ; Delete
+} ; speedball
+
+DemoInput_kqk:
+{
+    dw $0222, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0003, $2000, $0000
+    dw $0001, $A000, $8000
+    dw $000F, $8000, $0000
+    dw $0001, $8080, $0080
+    dw $0007, $8080, $0000
+    dw $0001, $80C0, $0040
+    dw $0002, $80C0, $0000
+    dw $0004, $8040, $0000
+    dw $0008, $8000, $0000
+    dw $0001, $8040, $0040
+    dw $0005, $8040, $0000
+    dw $000C, $8000, $0000
+    dw $0001, $A000, $2000
+    dw $0007, $A000, $0000
+    dw $0005, $8000, $0000
+    dw $0001, $8080, $0080
+    dw $0008, $8080, $0000
+    dw $0001, $80C0, $0040
+    dw $0001, $80C0, $0000
+    dw $0005, $8040, $0000
+    dw $000F, $8000, $0000
+    dw $0001, $8040, $0040
+    dw $0006, $8040, $0000
+    dw $000A, $8000, $0000
+    dw $0001, $8080, $0080
+    dw $0007, $8080, $0000
+    dw $0001, $80C0, $0040
+    dw $0002, $80C0, $0000
+    dw $0003, $8040, $0000
+    dw $000C, $8000, $0000
+    dw $8427 ; Delete
+} ; kqk
+
+DemoInput_grapplejump:
+{
+    dw $0014, $0000, $0000
+    dw $0001, $0200, $0200
+    dw $0009, $0200, $0000
+    dw $0001, $8200, $8000
+    dw $0016, $8200, $0000
+    dw $0001, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $003D, $8100, $0000
+    dw $0001, $A100, $2000
+    dw $0004, $A100, $0000
+    dw $0007, $8100, $0000
+    dw $0001, $A100, $2000
+    dw $0002, $A100, $0000
+    dw $0006, $8100, $0000
+    dw $0001, $A100, $2000
+    dw $0005, $A100, $0000
+    dw $0064, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $001F, $8180, $0000
+    dw $0001, $8580, $0400
+    dw $0001, $8500, $0000
+    dw $0004, $8400, $0000
+    dw $0005, $8000, $0000
+    dw $0001, $8400, $0400
+    dw $0005, $8400, $0000
+    dw $0001, $8500, $0100
+    dw $000B, $8500, $0000
+    dw $0001, $8540, $0040
+    dw $0002, $8540, $0000
+    dw $0002, $8140, $0000
+    dw $0001, $8940, $0800
+    dw $0001, $8940, $0000
+    dw $0001, $8800, $0000
+    dw $0001, $8900, $0100
+    dw $0002, $8900, $0000
+    dw $0070, $8100, $0000
+    dw $0001, $A100, $2000
+    dw $0004, $A100, $0000
+    dw $0045, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0016, $8180, $0000
+    dw $0007, $8080, $0000
+    dw $0001, $8280, $0200
+    dw $0004, $8280, $0000
+    dw $0017, $8080, $0000
+    dw $0001, $80C0, $0040
+    dw $000D, $80C0, $0000
+    dw $0001, $84C0, $0400
+    dw $001E, $84C0, $0000
+    dw $0001, $86C0, $0200
+    dw $0006, $86C0, $0000
+    dw $0020, $82C0, $0000
+    dw $0002, $8280, $0000
+    dw $0004, $8200, $0000
+    dw $0005, $0200, $0000
+    dw $0001, $0600, $0400
+    dw $0006, $0400, $0000
+    dw $0004, $0000, $0000
+    dw $0001, $0400, $0400
+    dw $0007, $0400, $0000
+    dw $0007, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0006, $0080, $0000
+    dw $0004, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0005, $0080, $0000
+    dw $0004, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0007, $0080, $0000
+    dw $0007, $0000, $0000
+    dw $0001, $0400, $0400
+    dw $0006, $0400, $0000
+    dw $0003, $0000, $0000
+    dw $0001, $0400, $0400
+    dw $0005, $0400, $0000
+    dw $0005, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0005, $0080, $0000
+    dw $0004, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0005, $0080, $0000
+    dw $0004, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0005, $0080, $0000
+    dw $0003, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0007, $0080, $0000
+    dw $0004, $0000, $0000
+    dw $0001, $0400, $0400
+    dw $0006, $0400, $0000
+    dw $0002, $0000, $0000
+    dw $0001, $0400, $0400
+    dw $0007, $0400, $0000
+    dw $0005, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0006, $0080, $0000
+    dw $0005, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0005, $0080, $0000
+    dw $0005, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0004, $0080, $0000
+    dw $0005, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0006, $0080, $0000
+    dw $0001, $0400, $0400
+    dw $0005, $0400, $0000
+    dw $0004, $0000, $0000
+    dw $0001, $0400, $0400
+    dw $0006, $0400, $0000
+    dw $0002, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0006, $0080, $0000
+    dw $0005, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0005, $0080, $0000
+    dw $0005, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0006, $0080, $0000
+    dw $0004, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0002, $0080, $0000
+    dw $0001, $0280, $0200
+    dw $0010, $0280, $0000
+    dw $000C, $0200, $0000
+    dw $0001, $8200, $8000
+    dw $0002, $8200, $0000
+    dw $0001, $8240, $0040
+    dw $000A, $8240, $0000
+    dw $002D, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0008, $8280, $0000
+    dw $002E, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $001C, $8280, $0000
+    dw $0012, $8200, $0000
+    dw $0001, $8000, $0000
+    dw $0001, $8800, $0800
+    dw $0006, $8800, $0000
+    dw $0001, $8840, $0040
+    dw $000F, $8840, $0000
+    dw $0002, $8800, $0000
+    dw $0002, $8000, $0000
+    dw $0014, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0015, $0080, $0000
+    dw $8427 ; Delete
+} ; grapplejump
+
+DemoInput_bombjump:
+{
+    dw $0030, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0023, $0100, $0000
+    dw $0017, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0002, $0100, $0000
+    dw $0013, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0002, $0080, $0000
+    dw $0001, $0480, $0400
+    dw $0004, $0480, $0000
+    dw $0004, $0080, $0000
+    dw $0001, $0480, $0400
+    dw $0004, $0400, $0000
+    dw $0004, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0004, $0040, $0000
+    dw $000C, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0003, $0040, $0000
+    dw $0032, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0004, $0040, $0000
+    dw $000D, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0004, $0040, $0000
+    dw $0030, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0003, $0040, $0000
+    dw $000F, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0003, $0040, $0000
+    dw $0031, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0004, $0040, $0000
+    dw $000E, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0005, $0040, $0000
+    dw $002F, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0005, $0040, $0000
+    dw $000E, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0005, $0040, $0000
+    dw $002F, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0005, $0040, $0000
+    dw $000E, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0004, $0040, $0000
+    dw $002F, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0004, $0040, $0000
+    dw $0011, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0004, $0040, $0000
+    dw $0030, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0003, $0040, $0000
+    dw $0010, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0003, $0040, $0000
+    dw $003E, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0016, $0100, $0000
+    dw $0001, $0800, $0800
+    dw $0007, $0800, $0000
+    dw $0027, $0000, $0000
+    dw $8427 ; Delete
+} ; bombjump
+
+DemoInput_crystalflash:
+{
+    dw $001B, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0004, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $001B, $8200, $0000
+    dw $0001, $8080, $0080
+    dw $0001, $8480, $0400
+    dw $0002, $8480, $0000
+    dw $0003, $8400, $0000
+    dw $0001, $8200, $0200
+    dw $000E, $8200, $0000
+    dw $0001, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $000D, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0004, $8180, $0000
+    dw $0001, $8080, $0000
+    dw $0001, $8280, $0200
+    dw $001D, $8280, $0000
+    dw $0001, $8200, $0000
+    dw $0001, $8220, $0020
+    dw $0009, $8220, $0000
+    dw $0005, $8200, $0000
+    dw $0001, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $0012, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $001C, $8180, $0000
+    dw $0001, $81A0, $0020
+    dw $0007, $8120, $0000
+    dw $0013, $8100, $0000
+    dw $0001, $A100, $2000
+    dw $0006, $A100, $0000
+    dw $0004, $8100, $0000
+    dw $0001, $A100, $2000
+    dw $0004, $A100, $0000
+    dw $0004, $8100, $0000
+    dw $0001, $A100, $2000
+    dw $0008, $A100, $0000
+    dw $0033, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0003, $8180, $0000
+    dw $0001, $8580, $0400
+    dw $0002, $8580, $0000
+    dw $0002, $8480, $0000
+    dw $0005, $8080, $0000
+    dw $0001, $8480, $0400
+    dw $0004, $8480, $0000
+    dw $0004, $8400, $0000
+    dw $0001, $8500, $0100
+    dw $0002, $8500, $0000
+    dw $0001, $8100, $0000
+    dw $0001, $8140, $0040
+    dw $0006, $8140, $0000
+    dw $0031, $8000, $0000
+    dw $0001, $8800, $0800
+    dw $0001, $8800, $0000
+    dw $0005, $0800, $0000
+    dw $000D, $0000, $0000
+    dw $0001, $0080, $0080
+    dw $0001, $4080, $4000
+    dw $0011, $4080, $0000
+    dw $0001, $0400, $0400
+    dw $0002, $0400, $0000
+    dw $0001, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0001, $8400, $0400
+    dw $0001, $8400, $0000
+    dw $0001, $8500, $0100
+    dw $0003, $8100, $0000
+    dw $0001, $8140, $0040
+    dw $0003, $8140, $0000
+    dw $0008, $8100, $0000
+    dw $0010, $0100, $0000
+    dw $0001, $2100, $2000
+    dw $0001, $2100, $0000
+    dw $0005, $0100, $0000
+    dw $0001, $2100, $2000
+    dw $0001, $2100, $0000
+    dw $0004, $0100, $0000
+    dw $0001, $2100, $2000
+    dw $0004, $2100, $0000
+    dw $0002, $0100, $0000
+    dw $0006, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0005, $0040, $0000
+    dw $0001, $0050, $0010
+    dw $0005, $0050, $0000
+    dw $0001, $0040, $0000
+    dw $0023, $0000, $0000
+    dw $0001, $4000, $4000
+    dw $0005, $4000, $0000
+    dw $001B, $0000, $0000
+    dw $0001, $0430, $0430
+    dw $0001, $0470, $0040
+    dw $0075, $0470, $0000
+    dw $0001, $0030, $0000
+    dw $0001, $0020, $0000
+    dw $0010, $0000, $0000
+    dw $0001, $4000, $4000
+    dw $0008, $4000, $0000
+    dw $0001, $6000, $2000
+    dw $0006, $6000, $0000
+    dw $0002, $4000, $0000
+    dw $0001, $6000, $2000
+    dw $0005, $6000, $0000
+    dw $000C, $4000, $0000
+    dw $0025, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0037, $8000, $0000
+    dw $0059, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0007, $0040, $0000
+    dw $0001, $0000, $0000
+    dw $0001, $0400, $0400
+    dw $0006, $0400, $0000
+    dw $0001, $0500, $0100
+    dw $0001, $0500, $0000
+    dw $001A, $0100, $0000
+    dw $0001, $4100, $4000
+    dw $0002, $4100, $0000
+    dw $0001, $4900, $0800
+    dw $0003, $4800, $0000
+    dw $0003, $0800, $0000
+    dw $0005, $0000, $0000
+    dw $0001, $0040, $0040
+    dw $0005, $0040, $0000
+    dw $000F, $0000, $0000
+    dw $0001, $0100, $0100
+    dw $0003, $0100, $0000
+    dw $0001, $8100, $8000
+    dw $0018, $8100, $0000
+    dw $8427 ; Delete
+} ; crystalflash
+
+DemoInput_flyway:
+{
+    dw $003C, $0000, $0000
+    dw $0001, $8100, $8100
+    dw $001A, $8100, $0000
+    dw $0001, $8200, $0200
+    dw $000E, $8200, $0000
+    dw $0001, $8100, $0100
+    dw $004D, $8100, $0000
+    dw $0001, $A100, $2000
+    dw $0004, $A100, $0000
+    dw $0002, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0004, $8180, $0000
+    dw $0001, $81C0, $0040
+    dw $0002, $81C0, $0000
+    dw $0001, $8180, $0000
+    dw $0006, $8100, $0000
+    dw $0001, $8140, $0040
+    dw $0002, $8140, $0000
+    dw $0008, $8100, $0000
+    dw $0001, $8140, $0040
+    dw $0002, $8140, $0000
+    dw $001A, $8100, $0000
+    dw $0001, $8110, $0010
+    dw $0001, $8110, $0000
+    dw $0001, $8150, $0040
+    dw $0002, $8150, $0000
+    dw $0007, $8110, $0000
+    dw $0001, $8150, $0040
+    dw $0002, $8150, $0000
+    dw $0003, $8110, $0000
+    dw $0001, $8190, $0080
+    dw $0002, $8190, $0000
+    dw $000D, $8180, $0000
+    dw $0009, $8100, $0000
+    dw $8427 ; Delete
+} ; flyway
+
+DemoInput_alcatraz:
+{
+    dw $002B, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0004, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $0025, $8100, $0000
+    dw $0003, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $0024, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0004, $8280, $0000
+    dw $0001, $8080, $0000
+    dw $0001, $8180, $0100
+    dw $0011, $8180, $0000
+    dw $0001, $81A0, $0020
+    dw $0001, $81A0, $0000
+    dw $0003, $8120, $0000
+    dw $0002, $0120, $0000
+    dw $0001, $8120, $8000
+    dw $0001, $8120, $0000
+    dw $0001, $8100, $0000
+    dw $0001, $8280, $0280
+    dw $0012, $8280, $0000
+    dw $0002, $8200, $0000
+    dw $0001, $8220, $0020
+    dw $0006, $8220, $0000
+    dw $0006, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0013, $8280, $0000
+    dw $0001, $8180, $0100
+    dw $0001, $8180, $0000
+    dw $0003, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $000E, $0180, $0000
+    dw $0001, $0080, $0000
+    dw $0001, $0280, $0200
+    dw $000A, $0280, $0000
+    dw $0001, $0180, $0100
+    dw $0001, $0180, $0000
+    dw $0004, $0100, $0000
+    dw $0001, $0180, $0080
+    dw $000E, $0180, $0000
+    dw $0001, $0280, $0200
+    dw $0001, $0280, $0000
+    dw $0002, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $0002, $0280, $0000
+    dw $0001, $4680, $4400
+    dw $0004, $4480, $0000
+    dw $0001, $4680, $0200
+    dw $0006, $4680, $0000
+    dw $0006, $0680, $0000
+    dw $0006, $0600, $0000
+    dw $0006, $0200, $0000
+    dw $0001, $8200, $8000
+    dw $0004, $8200, $0000
+    dw $0001, $8A00, $0800
+    dw $0003, $8800, $0000
+    dw $0005, $0800, $0000
+    dw $0006, $0000, $0000
+    dw $8427 ; Delete
+} ; alcatraz
+
+DemoInput_tunneljump:
+{
+    dw $0032, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0002, $2000, $0000
+    dw $0002, $0000, $0000
+    dw $0001, $2000, $2000
+    dw $0002, $2000, $0000
+    dw $0001, $0010, $0010
+    dw $0006, $0010, $0000
+    dw $0001, $0050, $0040
+    dw $0002, $0050, $0000
+    dw $0001, $8100, $8100
+    dw $0032, $8100, $0000
+    dw $0001, $8200, $0200
+    dw $003B, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0003, $8280, $0000
+    dw $0001, $8480, $0400
+    dw $0002, $8400, $0000
+    dw $0001, $8480, $0080
+    dw $0003, $8080, $0000
+    dw $0001, $8680, $0600
+    dw $000A, $8680, $0000
+    dw $001E, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0007, $8280, $0000
+    dw $0001, $A280, $2000
+    dw $0003, $A280, $0000
+    dw $0019, $8280, $0000
+    dw $0001, $8200, $0000
+    dw $0001, $8A00, $0800
+    dw $0002, $8A00, $0000
+    dw $0001, $8220, $0020
+    dw $0012, $8220, $0000
+    dw $0003, $8020, $0000
+    dw $8427 ; Delete
+} ; tunneljump
+
+DemoInput_climb:
+{
+    dw $0009, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0001, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $0026, $8100, $0000
+    dw $0001, $8200, $0200
+    dw $0002, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0003, $8280, $0000
+    dw $0002, $8080, $0000
+    dw $0001, $8180, $0100
+    dw $000F, $8180, $0000
+    dw $0001, $8280, $0200
+    dw $0016, $8280, $0000
+    dw $0001, $8800, $0800
+    dw $0001, $8840, $0040
+    dw $0002, $8840, $0000
+    dw $0001, $8200, $0200
+    dw $0005, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $000E, $8280, $0000
+    dw $0001, $82C0, $0040
+    dw $000E, $82C0, $0000
+    dw $0001, $84C0, $0400
+    dw $0002, $8480, $0000
+    dw $0001, $8200, $0200
+    dw $0005, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0001, $8280, $0000
+    dw $0001, $8180, $0100
+    dw $000A, $8180, $0000
+    dw $0001, $8120, $0020
+    dw $0002, $8120, $0000
+    dw $0003, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0003, $8180, $0000
+    dw $0001, $8280, $0200
+    dw $0011, $8280, $0000
+    dw $0001, $82A0, $0020
+    dw $0003, $82A0, $0000
+    dw $0001, $8220, $0000
+    dw $0002, $8200, $0000
+    dw $0001, $8100, $0100
+    dw $0001, $8180, $0080
+    dw $0007, $8180, $0000
+    dw $0001, $8280, $0200
+    dw $0009, $8280, $0000
+    dw $0001, $82C0, $0040
+    dw $0003, $82C0, $0000
+    dw $0001, $84C0, $0400
+    dw $0005, $84C0, $0000
+    dw $0001, $8200, $0200
+    dw $0003, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0002, $8280, $0000
+    dw $0001, $8180, $0100
+    dw $0009, $8180, $0000
+    dw $0001, $8120, $0020
+    dw $0003, $8120, $0000
+    dw $0001, $8180, $0080
+    dw $0005, $8180, $0000
+    dw $0001, $8280, $0200
+    dw $0013, $8280, $0000
+    dw $0001, $82A0, $0020
+    dw $0004, $8220, $0000
+    dw $0003, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $000E, $8280, $0000
+    dw $0001, $8180, $0100
+    dw $0002, $8180, $0000
+    dw $0001, $81C0, $0040
+    dw $0005, $81C0, $0000
+    dw $0001, $8580, $0400
+    dw $0003, $8480, $0000
+    dw $0001, $8100, $0100
+    dw $0005, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $000B, $8180, $0000
+    dw $0001, $81A0, $0020
+    dw $0004, $8120, $0000
+    dw $0001, $8180, $0080
+    dw $0005, $8180, $0000
+    dw $0001, $8280, $0200
+    dw $000F, $8280, $0000
+    dw $0001, $8290, $0010
+    dw $0003, $8290, $0000
+    dw $0001, $8210, $0000
+    dw $0001, $8250, $0040
+    dw $0002, $8250, $0000
+    dw $0003, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0010, $8280, $0000
+    dw $0001, $8180, $0100
+    dw $0001, $8280, $0200
+    dw $0001, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0011, $8280, $0000
+    dw $0001, $8200, $0000
+    dw $0001, $8400, $0400
+    dw $0002, $8400, $0000
+    dw $0001, $8200, $0200
+    dw $0005, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $000C, $8280, $0000
+    dw $0001, $8220, $0020
+    dw $0002, $8220, $0000
+    dw $0001, $8280, $0080
+    dw $0004, $8280, $0000
+    dw $0001, $8180, $0100
+    dw $000F, $8180, $0000
+    dw $0001, $81C0, $0040
+    dw $0005, $81C0, $0000
+    dw $0001, $8480, $0400
+    dw $0001, $8480, $0000
+    dw $0001, $8400, $0000
+    dw $0001, $8100, $0100
+    dw $0009, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0022, $8180, $0000
+    dw $0001, $8120, $0020
+    dw $0002, $8120, $0000
+    dw $0002, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0003, $8180, $0000
+    dw $0001, $8280, $0200
+    dw $0007, $8280, $0000
+    dw $0001, $82C0, $0040
+    dw $0006, $82C0, $0000
+    dw $0001, $84C0, $0400
+    dw $0005, $8480, $0000
+    dw $0001, $8200, $0200
+    dw $0006, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0010, $8280, $0000
+    dw $0001, $8180, $0100
+    dw $000B, $8180, $0000
+    dw $0001, $8140, $0040
+    dw $0002, $8140, $0000
+    dw $0002, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $000C, $8180, $0000
+    dw $0001, $8120, $0020
+    dw $0004, $8120, $0000
+    dw $0001, $8180, $0080
+    dw $0007, $8180, $0000
+    dw $0002, $8080, $0000
+    dw $0001, $8280, $0200
+    dw $000F, $8280, $0000
+    dw $0001, $8200, $0000
+    dw $0001, $8240, $0040
+    dw $0004, $8240, $0000
+    dw $0001, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $000E, $8280, $0000
+    dw $0001, $8180, $0100
+    dw $000B, $8180, $0000
+    dw $0001, $81A0, $0020
+    dw $0001, $81A0, $0000
+    dw $0003, $8120, $0000
+    dw $0001, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0022, $8180, $0000
+    dw $0001, $8140, $0040
+    dw $0002, $8140, $0000
+    dw $0001, $8180, $0080
+    dw $0006, $8180, $0000
+    dw $0001, $8280, $0200
+    dw $0007, $8280, $0000
+    dw $0001, $82C0, $0040
+    dw $0004, $82C0, $0000
+    dw $0001, $84C0, $0400
+    dw $0004, $84C0, $0000
+    dw $0001, $8200, $0200
+    dw $0003, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0007, $8280, $0000
+    dw $0001, $8880, $0800
+    dw $0007, $8880, $0000
+    dw $0001, $88C0, $0040
+    dw $0009, $88C0, $0000
+    dw $0001, $8480, $0400
+    dw $000E, $8480, $0000
+    dw $0001, $8200, $0200
+    dw $0001, $8200, $0000
+    dw $0001, $8220, $0020
+    dw $0001, $8220, $0000
+    dw $0008, $8020, $0000
+    dw $8427 ; Delete
+} ; climb
+
+DemoInput_ocean:
+{
+    dw $0016, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0015, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $0021, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0012, $8280, $0000
+    dw $000F, $8200, $0000
+    dw $0058, $0200, $0000
+    dw $0001, $8200, $8000
+    dw $0068, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $000B, $8280, $0000
+    dw $0005, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $001B, $8280, $0000
+    dw $0001, $82C0, $0040
+    dw $0002, $82C0, $0000
+    dw $0001, $8240, $0000
+    dw $0001, $8200, $0000
+    dw $0002, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $0001, $0280, $0000
+    dw $0001, $8280, $8000
+    dw $0004, $8280, $0000
+    dw $0001, $8680, $0400
+    dw $0002, $8680, $0000
+    dw $0005, $8480, $0000
+    dw $0004, $8080, $0000
+    dw $0001, $8480, $0400
+    dw $0001, $8480, $0000
+    dw $0001, $8680, $0200
+    dw $0001, $8680, $0000
+    dw $0002, $8280, $0000
+    dw $0008, $8200, $0000
+    dw $0015, $0200, $0000
+    dw $8427 ; Delete
+} ; ocean
+
+DemoInput_pseudo:
+{
+    dw $002F, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0001, $8040, $0040
+    dw $0029, $8040, $0000
+    dw $0001, $8140, $0100
+    dw $0039, $8140, $0000
+    dw $0001, $81C0, $0080
+    dw $001A, $81C0, $0000
+    dw $0001, $85C0, $0400
+    dw $0002, $84C0, $0000
+    dw $0003, $8440, $0000
+    dw $0001, $8540, $0100
+    dw $0030, $8140, $0000
+    dw $0001, $81C0, $0080
+    dw $0004, $81C0, $0000
+    dw $000E, $8180, $0000
+    dw $003E, $0180, $0000
+    dw $0001, $0080, $0000
+    dw $0001, $0280, $0200
+    dw $0003, $0200, $0000
+    dw $0001, $0280, $0080
+    dw $0002, $0280, $0000
+    dw $0001, $0180, $0100
+    dw $0003, $0180, $0000
+    dw $0005, $0100, $0000
+    dw $0001, $0120, $0020
+    dw $0001, $0120, $0000
+    dw $0001, $8120, $8000
+    dw $0007, $8120, $0000
+    dw $002C, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0006, $8180, $0000
+    dw $0001, $8280, $0200
+    dw $001A, $8280, $0000
+    dw $0001, $8080, $0000
+    dw $0001, $8180, $0100
+    dw $001A, $8180, $0000
+    dw $0001, $8580, $0400
+    dw $0001, $8580, $0000
+    dw $0002, $8480, $0000
+    dw $0001, $8580, $0100
+    dw $0002, $8500, $0000
+    dw $000A, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0004, $8180, $0000
+    dw $0002, $8100, $0000
+    dw $0001, $8140, $0040
+    dw $0004, $8140, $0000
+    dw $0009, $8100, $0000
+    dw $0007, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $0010, $8100, $0000
+    dw $8427 ; Delete
+} ; pseudo
+
+DemoInput_everest:
+{
+    dw $0028, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $000B, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $003B, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0019, $8180, $0000
+    dw $0001, $8580, $0400
+    dw $0001, $8580, $0000
+    dw $0001, $8480, $0000
+    dw $0004, $8400, $0000
+    dw $0001, $8500, $0100
+    dw $0001, $8500, $0000
+    dw $0032, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0018, $8180, $0000
+    dw $0003, $8100, $0000
+    dw $0001, $0100, $0000
+    dw $0001, $8000, $8000
+    dw $0002, $8000, $0000
+    dw $0001, $8080, $0080
+    dw $0014, $8080, $0000
+    dw $0002, $8000, $0000
+    dw $0003, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0002, $8000, $0000
+    dw $0001, $8080, $0080
+    dw $0015, $8080, $0000
+    dw $0003, $8000, $0000
+    dw $0002, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $0002, $8000, $0000
+    dw $0001, $8080, $0080
+    dw $0003, $8080, $0000
+    dw $0001, $8090, $0010
+    dw $000E, $8090, $0000
+    dw $0001, $80D0, $0040
+    dw $0001, $C0D0, $4000
+    dw $0004, $C0D0, $0000
+    dw $0001, $80D0, $0000
+    dw $000F, $8090, $0000
+    dw $0001, $8490, $0400
+    dw $0011, $8490, $0000
+    dw $0001, $8480, $0000
+    dw $8427 ; Delete
+} ; everest
+
+DemoInput_alphapb:
+{
+    dw $0018, $0000, $0000
+    dw $0001, $8000, $8000
+    dw $000C, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $0020, $8100, $0000
+    dw $0001, $8000, $0000
+    dw $0001, $8200, $0200
+    dw $0016, $8200, $0000
+    dw $0001, $8280, $0080
+    dw $0023, $8280, $0000
+    dw $0001, $8180, $0100
+    dw $0005, $8180, $0000
+    dw $0001, $8280, $0200
+    dw $0031, $8280, $0000
+    dw $0023, $8200, $0000
+    dw $0002, $8000, $0000
+    dw $0001, $8100, $0100
+    dw $001B, $8100, $0000
+    dw $0001, $8180, $0080
+    dw $0006, $8180, $0000
+    dw $0001, $8580, $0400
+    dw $0001, $85C0, $0040
+    dw $0001, $C5C0, $4000
+    dw $0005, $C4C0, $0000
+    dw $001F, $8480, $0000
+    dw $0001, $8680, $0200
+    dw $0006, $8280, $0000
+    dw $0001, $8480, $0400
+    dw $0001, $8480, $0000
+    dw $0001, $8180, $0100
+    dw $0022, $8180, $0000
+    dw $0006, $0180, $0000
+    dw $0001, $8100, $8000
+    dw $0003, $8100, $0000
+    dw $8427 ; Delete
+} ; alphapb
 endif
 print pc, " demos end"
