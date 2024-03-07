@@ -1,6 +1,9 @@
 
 ## Changelog since v2.2.7
 
+* [2.6.0]    Fixed corrupted background tile when loading tinystates by NobodyNada
+* [2.6.0]    Upgraded skip Nintendo logo option to boot straight into the menu by NobodyNada
+* [2.6.0]    Optimize Kraid-rising lag to better match vanilla by idlechild
 * [2.5.12.5] Finished out demo list with DarkXoa
 * [2.5.12.4] PAL support plus more custom demos
 * [2.5.12.3] Added custom demos
