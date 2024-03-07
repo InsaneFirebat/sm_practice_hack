@@ -35,6 +35,14 @@ else
 endif
 endmacro
 
+macro warnpc(NTSC, PAL)
+if !FEATURE_PAL
+warnpc <PAL>
+else
+warnpc <NTSC>
+endif
+endmacro
+
 
 ; -------------
 ; Practice Menu
