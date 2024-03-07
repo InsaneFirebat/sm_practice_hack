@@ -134,11 +134,7 @@ endif
     LDA !RANDOM_NUMBER : AND #$0007
 kraid_wait_load_delay:
     ASL : TAX : LDA.w KraidWaitTable,X
-if !FEATURE_PAL
-warnpc $A7AE34
-else
-warnpc $A7AE1E
-endif
+%warnpc($A7AE1E, $A7AE34)
 
 if !FEATURE_PAL
 org $A786B7

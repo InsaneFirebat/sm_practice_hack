@@ -19,8 +19,8 @@ DemoInputObjectHandler:
     LDA $0A8E : STA $0E00
 
     ; update current demo inputs
-    LDA $0A84 : STA $8B : STA $0A8C
-    LDA $0A86 : STA $8F : STA $0A8E
+    LDA $0A84 : STA !IH_CONTROLLER_PRI : STA $0A8C
+    LDA $0A86 : STA !IH_CONTROLLER_PRI_NEW : STA $0A8E
 
   .return
     PLB
@@ -142,15 +142,11 @@ else
   .alphapb
     dw NoCodeRTS, EndDemo, DemoInput_alphapb
 endif
-if !FEATURE_PAL
-warnpc $919E3A
-else
-warnpc $919EE2
-endif
 }
+%warnpc($919EE2, $919E3A)
 
 
-org $9189FD 
+org $9189FD
 ;;; $89FD: Demo Samus setup function pointers ;;;
 {
 DemoSamusSetup:
@@ -326,21 +322,6 @@ EndDemo:
     RTS
 }
 
-if !FEATURE_PAL
-EndDemo_Shinespark:
-; why does this routine exist?
-{
-;    LDA !SAMUS_MOVEMENT_TYPE : AND #$00FF : CMP #$001A : BEQ .return
-
-    LDA.w #EndDemo : STA $0A7A
-    LDA.w #DemoInput_Shinespark_unseen : STA $0A7E
-    LDA #$0001 : STA $0A7C
-
-  .return
-    RTS
-}
-endif
-
 DemoRoomReset:
 ; set event bits in time for room state checks
 {
@@ -361,11 +342,7 @@ DemoRoomReset:
     LDA #$0001 : STA $7ED820
     JML $82872D
 }
-if !FEATURE_PAL
-warnpc $919DAA
-else ; space freed up from repointing input data
-warnpc $919E52
-endif
+%warnpc($919E52, $919DAA) ; space freed up from repointing input data
 
 ; hijack event bit loop for climb demo
 org $8286F9
@@ -484,6 +461,7 @@ DRC_Kraid:
     RTS
 }
 
+if !FEATURE_PAL
 DRC_G4:
 {
     %a8()
@@ -491,6 +469,7 @@ DRC_G4:
     %a16()
     RTS
 }
+endif
 warnpc $82893D
 
 org $918885

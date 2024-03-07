@@ -165,11 +165,7 @@ cutscenes_mb_fake_death_check:
     LDA !sram_cutscenes : BIT !CUTSCENE_FAST_MB : BNE .fast_mb
     JMP cutscenes_mb_fake_death_normal_init
 }
-if !FEATURE_PAL
-warnpc $A98824
-else
-warnpc $A98814
-endif
+%warnpc($A98814, $A98824)
 
 if !FEATURE_PAL
 org $A9882E
