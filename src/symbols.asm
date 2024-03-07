@@ -140,6 +140,7 @@ ram_sprite_feature_flags = !ram_sprite_feature_flags ; !WRAM_START+$DE
 ram_auto_save_state = !ram_auto_save_state ; !WRAM_START+$E0
 ram_timers_autoupdate = !ram_timers_autoupdate ; !WRAM_START+$E2
 ram_frames_held = !ram_frames_held ; !WRAM_START+$E4
+ram_quickboot_spc_state = !ram_quickboot_spc_state ; !WRAM_START+$E6
 
 ; FREE SPACE ^ up to +$E8
 
@@ -515,7 +516,7 @@ ram_magnetstairs = !ram_magnetstairs ; !SRAM_START+$224
 sram_preset_open_doors = !sram_preset_open_doors ; !SRAM_START+$226
 sram_preset_ship_landing = !sram_preset_ship_landing ; !SRAM_START+$228
 sram_preset_enemies = !sram_preset_enemies ; !SRAM_START+$22A
-sram_fast_nintendo_logo = !sram_fast_nintendo_logo ; !SRAM_START+$22C
+;!sram_fast_nintendo_logo = !SRAM_START+$22C
 ;!sram_fanfare_timer_adjust = !SRAM_START+$22E
 sram_preset_map_tiles = !sram_preset_map_tiles ; !SRAM_START+$230
 sram_preset_auto_segment = !sram_preset_auto_segment ; !SRAM_START+$232

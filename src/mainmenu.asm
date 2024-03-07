@@ -1658,7 +1658,6 @@ action_teleport:
     STZ $0E18 ; Set elevator to inactive
     STZ $1C1F ; Clear message box index
 
-    JSL init_controller_bindings
     LDA !SAMUS_HP_MAX : BNE +
     LDA #$001F : STA !SAMUS_HP
 
@@ -3033,7 +3032,7 @@ game_goto_cutscenes:
 ; ---------------
 
 CutscenesMenu:
-    dw #cutscenes_fast_nintendo_logo
+    dw #cutscenes_quickboot
     dw #cutscenes_skip_intro
     dw #cutscenes_skip_ceres_arrival
     dw #cutscenes_skip_game_over
@@ -3048,8 +3047,8 @@ CutscenesMenu:
     dw #$0000
     %cm_header("CUTSCENES")
 
-cutscenes_fast_nintendo_logo:
-    %cm_toggle("Fast Nintendo Logo", !sram_fast_nintendo_logo, #$0001, #0)
+cutscenes_quickboot:
+    %cm_toggle_bit("Boot to Menu", !sram_cutscenes, !CUTSCENE_QUICKBOOT, #0)
 
 cutscenes_skip_intro:
     %cm_toggle_bit("Skip Intro", !sram_cutscenes, !CUTSCENE_SKIP_INTRO, #0)

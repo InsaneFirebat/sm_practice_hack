@@ -21,7 +21,7 @@ cm_brb_loop:
     LDA #$0008 : STA !ram_cm_scroll_Y
 
     JSR cm_transfer_brb_tileset
-    JSL wait_for_lag_frame_long ; Wait for lag frame
+    JSL cm_wait_for_lag_frame
     JSL $808F0C ; Music queue
     JSL $8289EF ; Sound fx queue
 
@@ -37,7 +37,7 @@ cm_brb_loop:
     LDA #$0000 : STA !ram_cm_leave
     PLA : STA !ram_cm_brb_palette ; restore menu palette
     LDA #$0046 : JSL !SFX_LIB2 ; lavaquake sfx
-    JSL wait_for_lag_frame_long ; Wait for lag frame
+    JSL cm_wait_for_lag_frame
 
     LDA $B9
     %a8()

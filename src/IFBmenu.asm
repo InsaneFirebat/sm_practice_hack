@@ -83,7 +83,7 @@ ifb_customizehud:
     LDA !sram_number_gfx_choice : XBA
     CLC : ADC.w #NumberGFXChoice : TAY
 
-    JSL wait_for_lag_frame_long
+    JSL cm_wait_for_lag_frame
     %a8()
     ; DMA number GFX to second to last row ($E0-EF)
     LDA #$80 : STA $2115 ; word access, inc by 1
@@ -199,7 +199,7 @@ ifb_brb_screen:
     %cm_jsl("Launch BRB Screen", .routine, #0)
   .routine
     JSL cm_brb_loop
-    JSL wait_for_lag_frame_long
+    JSL cm_wait_for_lag_frame
     JSL cm_transfer_custom_tileset
     JSL cm_refresh_cgram_long
     RTL

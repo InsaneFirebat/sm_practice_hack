@@ -147,6 +147,7 @@
 !ram_auto_save_state = !WRAM_START+$E0
 !ram_timers_autoupdate = !WRAM_START+$E2
 !ram_frames_held = !WRAM_START+$E4
+!ram_quickboot_spc_state = !WRAM_START+$E6
 
 ; FREE SPACE ^ up to +$E8
 
@@ -730,7 +731,7 @@ endif
 !sram_preset_open_doors = !SRAM_START+$226
 !sram_preset_ship_landing = !SRAM_START+$228
 !sram_preset_enemies = !SRAM_START+$22A
-!sram_fast_nintendo_logo = !SRAM_START+$22C
+;!sram_fast_nintendo_logo = !SRAM_START+$22C
 ;!sram_fanfare_timer_adjust = !SRAM_START+$22E
 !sram_preset_map_tiles = !SRAM_START+$230
 !sram_preset_auto_segment = !SRAM_START+$232
@@ -914,6 +915,7 @@ endif
 !CUTSCENE_SKIP_CERES_ARRIVAL = #$0002
 !CUTSCENE_SKIP_G4 = #$0080
 !CUTSCENE_FAST_MB = #$0100
+!CUTSCENE_QUICKBOOT = #$0800
 !CUTSCENE_SKIP_GAMEOVER = #$1000
 !CUTSCENE_FAST_BOWLING = #$2000
 !CUTSCENE_KRAID_DEATH_CAMERA = #$4000
