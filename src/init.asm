@@ -11,23 +11,29 @@ org $808455
 
 ; hijack when clearing bank 7E
 org $808490
-    PHA
+    ; Save quickboot state since it needs to distinguish between a soft and hard reset
+    LDY.w !ram_quickboot_spc_state
     LDX #$3FFE
   .clear_bank_loop
     STZ $0000,X
     STZ $4000,X
     STZ $8000,X
     STZ $C000,X
-    DEX : DEX
+    DEX #2
     BPL .clear_bank_loop
     JSL init_nonzero_wram
-    PLA
+
+    STY.w !ram_quickboot_spc_state
     BRA .end_clear_bank
+
 
 warnpc $8084AF
 
 org $8084AF
   .end_clear_bank
+
+org $80856E
+    JML init_post_boot
 
 
 org $81F000
@@ -128,7 +134,6 @@ init_sram:
     LDA #$1003 : STA !sram_cutscenes ; skip game over ($1000)
     LDA #$0000 : STA !sram_compressed_graphics
     LDA #$0000 : STA !sram_lag_counter_mode
-    LDA #$0000 : STA !sram_fast_nintendo_logo
     LDA #$0000 : STA !sram_suppress_flashing
 
     LDA #$0001 : STA !sram_phantoon_intro ; 1 - skip
@@ -240,28 +245,28 @@ init_sram_long:
     RTL
 }
 
-init_controller_bindings:
+init_post_boot:
 {
-    ; check if any non-dpad bindings are set
-    LDX #$000A
-    LDA.w !IH_INPUT_SHOT+$0C
--   ORA.w !IH_INPUT_SHOT,X
-    DEX #2 : BPL -
-    AND #$FFF0 : BNE .done
+    ; Load the last selected file slot (so that the user's controller
+    ; bindings will apply if they load a preset without loading a save file)
+    LDA $701FEC : STA !CURRENT_SAVE_FILE
+    CMP #$0003 : BCC +
+    LDA #$0000
++   JSL $818085 ; Load save file
+    BCC .check_quickboot
 
-    ; load default dpad bindings
-    LDA #$0800 : STA.w !INPUT_BIND_UP
-    LSR : STA.w !INPUT_BIND_DOWN
-    LSR : STA.w !INPUT_BIND_LEFT
-    LSR : STA.w !INPUT_BIND_RIGHT
+    ; No valid save, load a new file (for default controller bindings)
+    JSR $B2CB
 
-    ; load default non-dpad bindings
-    LDX #$000C
--   LDA.l ControllerLayoutTable,X : STA.w !IH_INPUT_SHOT,X
-    DEX #2 : BPL -
+  .check_quickboot
+    ; Is quickboot enabled?
+    LDA !sram_cutscenes : AND !CUTSCENE_QUICKBOOT : BEQ .done
+
+    ; Boot to the infohud menu
+    JML cm_boot
 
   .done
-    RTL
+    JML $82893D ; hijacked code: start main game loop
 }
 
 print pc, " init end"

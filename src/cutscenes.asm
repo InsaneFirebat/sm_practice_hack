@@ -10,10 +10,16 @@ org $8BB240
 endif
     JSR cutscenes_load_ceres_arrival
 
+if !FEATURE_PAL
+org $8B9287
+else
+org $8B92DE
+endif
+    JSR cutscenes_nintendo_logo_hijack
+    NOP
 
 org $82DCF4
     JSL cutscenes_game_over
-
 
 if !FEATURE_PAL
 org $A7C394
@@ -22,17 +28,28 @@ org $A7C360
 endif
     JSL cutscenes_kraid_death_camera
 
-if !FEATURE_PAL
-org $8B92B5
-else
-org $8B930C
-endif
-    JSL FastNintendoLogo
-    BRA $00 ; NOP #2
-
 
 org $8BF800
 print pc, " cutscenes start"
+
+cutscenes_nintendo_logo_hijack:
+{
+    JSL $80834B ; hijacked code
+
+    LDA !sram_cutscenes : AND !CUTSCENE_QUICKBOOT : BNE .quickboot
+    STA !ram_quickboot_spc_state
+    RTS
+
+.quickboot
+    PLA ; pop return address
+    PLB
+    PLA ; saved processor status and 1 byte of next return address
+    PLA ; remainder of next return address
+
+    LDA #$0001 : STA !ram_quickboot_spc_state
+
+    JML $808482  ; finish boot code; another hijack will launch the menu
+}
 
 cutscenes_load_intro:
 {
@@ -132,17 +149,6 @@ cutscenes_kraid_death_camera:
 
   .done
     LDA $7E782A ; overwritten code
-    RTL
-}
-
-FastNintendoLogo:
-{
-    LDA !sram_fast_nintendo_logo : BEQ .normal
-    LDA #$0001 : STA $0DE2
-    RTL
-
-  .normal
-    LDA #$0078 : STA $0DE2
     RTL
 }
 
