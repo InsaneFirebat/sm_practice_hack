@@ -1,3 +1,4 @@
+asar 1.81
 lorom
 
 table ../resources/normal.tbl
@@ -26,11 +27,7 @@ incsrc infohud.asm
 incsrc rng.asm
 incsrc custompresets.asm
 incsrc presets.asm
-;incsrc damage.asm
-;incsrc physics.asm
 incsrc misc.asm
-;incsrc layout.asm
-;incsrc cutscenes.asm
 incsrc init.asm
 incsrc fanfare.asm
 incsrc spriteprio.asm
