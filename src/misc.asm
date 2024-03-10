@@ -17,6 +17,9 @@ endif
 endif
 
 
+org $8B92DE
+    JSR cutscenes_nintendo_logo_hijack
+    NOP
 
 ; Skip intro
 ; $82:EEDF A9 95 A3    LDA #$A395 (original code)
@@ -28,7 +31,6 @@ org $82EEDF
 
 org !ORG_MISC_BANK8B
 print pc, " misc bank8B start"
-
 Intro_Skip_to_Zebes:
 {
     %a8()
@@ -48,6 +50,25 @@ Intro_Skip_to_Zebes:
     LDA !SAMUS_HP_MAX : STA !SAMUS_HP
     RTS
 }
+
+cutscenes_nintendo_logo_hijack:
+{
+    JSL $80834B     ; hijacked code
+
+    LDA !sram_cutscenes : AND !CUTSCENE_QUICKBOOT : BNE .quickboot
+    STA !ram_quickboot_spc_state    ; A is 0
+    RTS
+
+.quickboot
+    PLA ; pop return address
+    PLB
+    PLA ; saved processor status and 1 byte of next return address
+    PLA ; remainder of next return address
+
+    LDA #$0001 : STA !ram_quickboot_spc_state
+
+    JML $808482  ; finish boot code; another hijack will launch the menu
+}
 print pc, " misc bank8B end"
 
 
@@ -56,10 +77,18 @@ org $8B8697
     NOP
 
 org $8B871D
-    LDA #$0590
+if !FEATURE_SD2SNES
+if !FEATURE_TINYSTATES
+    LDA #$39E3 ; T
+else
+    LDA #$39E2 ; S
+endif
+else
+    LDA #$04F0 ; blank
+endif
 
 org $8B8731
-    LDA #$0590
+    LDA #$04F0 ; blank
 
 org $8BF754
 hook_version_data:
@@ -194,6 +223,48 @@ layout_asm_ceres_ridley_room_no_timer:
 }
 
 print pc, " misc bank8F end"
+
+
+org $869D59
+    JSR move_kraid_rocks_horizontally
+
+org !ORG_MISC_BANK86
+print pc, " misc bank86 start"
+
+; Copied from $8688B6 but optimized for Kraid rocks using a hard-coded radius
+; This is intended to offset extra practice rom lag in Kraid's room
+move_kraid_rocks_horizontally:
+{
+    PHX
+    STZ $12 : STZ $14
+    LDA !ENEMY_PROJ_X_VELOCITY,X : BPL +
+    DEC $14
++   STA $13
+    LDA #$0004 : STA $1C
+    LDA !ENEMY_PROJ_Y,X : SEC : SBC #$0004 : AND #$FFF0 : STA $1A
+    LDA !ENEMY_PROJ_Y,X : CLC : ADC #$0003 : SEC : SBC $1A
+    LSR #4
+    STA $1A : STA $20
+    LDA !ENEMY_PROJ_Y,X : SEC : SBC #$0004 : LSR #4
+    %a8()
+    STA $4202
+    LDA !ROOM_WIDTH_BLOCKS : STA $4203
+    %a16()
+    LDA !ENEMY_PROJ_X_SUBPX,X : CLC : ADC $12 : STA $16
+    LDA !ENEMY_PROJ_X,X : ADC $14 : STA $18
+    BIT $14 : BMI .subtract
+    CLC : ADC #$0003
+    BRA .store
+
+  .subtract
+    SEC : SBC #$0004
+
+  .store
+    STA $22 : LSR #4 : CLC : ADC $4216 : ASL : TAX
+    JMP $8930
+}
+
+print pc, " misc bank86 end"
 
 
 org !ORG_MISC_BANK87

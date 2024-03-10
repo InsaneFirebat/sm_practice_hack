@@ -1,4 +1,4 @@
-;
+
 ; Features using sprites to draw information
 ;
 
