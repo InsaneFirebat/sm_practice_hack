@@ -421,7 +421,6 @@ warnpc $908EA9 ; overwrites unused vanilla routine
 print pc, " misc bank90 end"
 
 
-
 if !RAW_TILE_GRAPHICS
 org !ORG_MISC_TILE_GRAPHICS
 print pc, " misc decompression start"
