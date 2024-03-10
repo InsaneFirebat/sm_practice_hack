@@ -108,10 +108,11 @@ preset_load:
 clear_all_enemies:
 {
     ; Clear enemies (8000 = solid to Samus, 0400 = Ignore Samus projectiles, 0100 = Invisible)
-    TDC
+    LDA #$0000
   .loop
     TAX : LDA $0F86,X : BIT #$8500 : BNE .done_clearing
     ORA #$0200 : STA $0F86,X
+
   .done_clearing
     TXA : CLC : ADC #$0040 : CMP #$0800 : BNE .loop
     STZ $0E52 ; unlock grey doors that require killing enemies
@@ -532,7 +533,6 @@ endif
     STZ $1E75 ; Save Station Lockout flag
     STZ $0795 : STZ $0797  ; Clear door transition flags
     LDA #$0000 : STA !ram_transition_flag
-    JSL init_controller_bindings
 
     LDA #$E737 : STA $099C ; Pointer to next frame's room transition code = $82:E737
 

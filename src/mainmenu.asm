@@ -1739,7 +1739,6 @@ action_teleport:
 
     LDA $09A1 : AND #$7FFF : STA $09A1
 
-    JSL init_controller_bindings
     LDA !SAMUS_HP_MAX : BNE .branch
     LDA #$001F : STA !SAMUS_HP
 
@@ -2718,7 +2717,7 @@ game_debugfixscrolloffsets:
 ; ---------------
 
 CutscenesMenu:
-    dw #cutscenes_skip_splash
+    dw #cutscenes_quickboot
     dw #cutscenes_skip_intro
     dw #cutscenes_skip_ceres_arrival
     dw #cutscenes_skip_g4
@@ -2732,8 +2731,8 @@ CutscenesMenu:
     dw #$0000
     %cm_header("CUTSCENES")
 
-cutscenes_skip_splash:
-    %cm_toggle_bit("Fast Nintendo splash", !sram_cutscenes, !CUTSCENE_SKIP_SPLASH, #0)
+cutscenes_quickboot:
+    %cm_toggle_bit("Boot to Menu", !sram_cutscenes, !CUTSCENE_QUICKBOOT, #0)
 
 cutscenes_skip_intro:
     %cm_toggle_bit("Skip Intro", !sram_cutscenes, !CUTSCENE_SKIP_INTRO, #0)
