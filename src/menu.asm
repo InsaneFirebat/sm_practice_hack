@@ -3045,7 +3045,7 @@ execute_ctrl_shortcut:
     RTS
 
   .reset_shortcut
-    LDA.w !sram_ctrl_menu : CMP !DP_CtrlInput : BEQ .end
+    LDA.w #!sram_ctrl_menu : CMP !DP_CtrlInput : BEQ .end
     %sfxconfirm()
 
     LDA #$0000 : STA [!DP_CtrlInput]

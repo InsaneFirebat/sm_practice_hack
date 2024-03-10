@@ -3,10 +3,9 @@
 ; Controller Shortcuts
 ; Morph Lock Resistent
 ; --------------------
-
-; $82:8963 AD 98 09    LDA $0998  [$7E:0998]
-; $82:8966 29 FF 00    AND #$00FF
-org $828963
+;$82:894B 22 B9 84 88 JSL $8884B9[$88:84B9]  ; HDMA object handler (also handle music queue)
+;$82:894F 22 11 81 80 JSL $808111[$80:8111]  ; Generate new random number (hijacked by infohud ih_game_loop_code)
+org $82894B
     ; gamemode_shortcuts will either CLC or SEC
     ; to control if normal gameplay will happen on this frame
     JSL gamemode_start : BCS end_of_normal_gameplay
@@ -61,8 +60,8 @@ gamemode_start:
     ; If we are skipping gameplay this frame and not loading a preset,
     ; it's not fair to still increment timers at the end of the frame,
     ; so decrement timers here to compensate
+    DEC !FRAME_COUNTER
     LDA !ram_realtime_room : DEC : STA !ram_realtime_room
-    LDA !ram_transition_counter : DEC : STA !ram_transition_counter
 
     ; Segment real timer
     LDA !ram_seg_rt_frames : BEQ .dec_seconds
