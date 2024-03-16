@@ -112,12 +112,21 @@ preset_load:
 
 clear_all_enemies:
 {
+if !FEATURE_CLEAR_ENEMIES
+    LDA.w #ClearEnemiesTable>>16 : STA $C3
+    LDA #$0000
+  .loop
+    TAX : LDA !ENEMY_ID,X
+    SEC : ROR : ROR : STA $C1
+    LDA [$C1] : BEQ .done_clearing
+    LDA !ENEMY_PROPERTIES : ORA #$0200 : STA !ENEMY_PROPERTIES,X
+else
     ; Clear enemies (8000 = solid to Samus, 0400 = Ignore Samus projectiles, 0100 = Invisible)
     LDA #$0000
   .loop
     TAX : LDA $0F86,X : BIT #$8500 : BNE .done_clearing
     ORA #$0200 : STA $0F86,X
-
+endif
   .done_clearing
     TXA : CLC : ADC #$0040 : CMP #$0800 : BNE .loop
     STZ $0E52 ; unlock grey doors that require killing enemies
@@ -135,7 +144,11 @@ preset_load_destination_state_and_tiles:
     JSR $DE12  ; Load door header
     JSR $DE6F  ; Load room header
     JSR $DEF2  ; Load state header
+if !RAW_TILE_GRAPHICS
+    JML load_raw_tile_graphics
+else
     JMP $E78C
+endif
 }
 
 if !RAW_TILE_GRAPHICS
@@ -354,7 +367,7 @@ preset_start_gameplay:
 
     JSL $80835D  ; Disable NMI
     JSL $80985F  ; Disable horizontal and vertical timer interrupts
-    JSL $82E76B  ; Load destination room CRE bitset, door/room/state headers, tiles
+    JSL preset_load_destination_state_and_tiles
     JSL $878016  ; Clear animated tile objects
     JSL $88829E  ; Wait until the end of a v-blank and clear (H)DMA enable flags
 
@@ -428,8 +441,8 @@ endif
     LDA !PRESET_DOORS : CMP #$0001 : BEQ .doneOpeningDoors
     LDA $7ED914 : CMP #$0005 : BNE .doneOpeningDoors
     JSR preset_open_all_blue_doors
-
   .doneOpeningDoors
+
     JSL $89AB82  ; Load FX
 if !RAW_TILE_GRAPHICS
     JSL preset_load_library_background
@@ -733,15 +746,13 @@ print pc, " presets bank80 end"
 
 ; $80:9AB1: Add x-ray and grapple HUD items if necessary
 ;org $809AB1
-    ; Skip x-ray and grapple if max HP is a multiple of 4,
-    ; which is only possible if GT code was used
+;    ; Skip x-ray and grapple if max HP is a multiple of 4,
+;    ; which is only possible if GT code was used
 ;    LDA !SAMUS_HP_MAX : AND #$0003 : BEQ resume_infohud_icon_initialization
 ;    JMP add_grapple_and_xray_to_hud
-
 ;warnpc $809AC9
 
 ; $80:9AC9: Resume original logic
-
 ;org $809AC9
 ;resume_infohud_icon_initialization:
 
@@ -756,7 +767,7 @@ check bankcross off
 print pc, " preset data crossbank start"
   incsrc presets/cchamber_data.asm
 print pc, " preset data crossbank end"
-;warnpc $FEE000
+;warnpc $F08000 ; infohud.asm
 check bankcross on
 
 org !ORG_PRESETS_MENU
