@@ -1,9 +1,8 @@
-
 ; SD2SNES Savestate code
 ; by acmlm, total, Myria
 ;
 
-org $80F600
+org !ORG_SAVE
 print pc, " tinysave start"
 
 ; These can be modified to do game-specific things before and after saving and loading
@@ -22,7 +21,6 @@ pre_load_state:
     LDA !sram_rerandomize : AND #$00FF : BEQ .done
     LDA !CACHED_RANDOM_NUMBER : STA !SRAM_SAVED_RNG
     LDA !FRAME_COUNTER : STA !SRAM_SAVED_FRAME_COUNTER
-    
 
   .done
     ; Force blank and disable NMI
@@ -279,7 +277,7 @@ save_write_table:
     dw $1000|$4200, $00
     ; Single address, B bus -> A bus.  B address = reflector to WRAM ($2180).
     dw $0000|$4310, $8080  ; direction = B->A, byte reg, B addr = $2180
-    
+
     ; Copy WRAM segments
     %wram_to_sram($7E0000, $2000, $704000)
     %wram_to_sram($7E7000, $1000, $706000)
@@ -290,7 +288,7 @@ save_write_table:
     %wram_to_sram($7F0000, $2B00, $715500)
     %wram_to_sram($7F2B00, $6B01, $720000)
     %wram_to_sram($7E2000, $1000, $736000)
-    
+
     ; Address pair, B bus -> A bus.  B address = VRAM read ($2139).
     dw $0000|$4310, $3981  ; direction = B->A, word reg, B addr = $2139
     dw $1000|$2115, $0080  ; VRAM address increment mode.
@@ -308,7 +306,7 @@ save_write_table:
     dw $0000|$4314, $0070  ; A addr = $73xxxx, size = $xx00
     dw $0000|$4316, $0002  ; size = $02xx ($0200), unused bank reg = $00.
     dw $1000|$420B, $02    ; Trigger DMA on channel 1
-    
+
     ; Done
     dw $0000, save_return
 
@@ -396,7 +394,7 @@ load_write_table:
     dw $0000|$4314, $0070  ; A addr = $73xxxx, size = $xx00
     dw $0000|$4316, $0006  ; size = $02xx ($0200), unused bank reg = $00.
     dw $1000|$420B, $02    ; Trigger DMA on channel 1
-    
+
     ; Done
     dw $0000, load_return
 
@@ -538,7 +536,7 @@ print pc, " tinysave end"
 ;warnpc $80FD00 ; infohud.asm
 
 
-org $82FE00
+org !ORG_PRESETS_TINYSTATES_BANK82
 print pc, " tinysave bank82 start"
 
 tinystates_preload_bg_data:

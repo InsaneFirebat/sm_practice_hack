@@ -107,12 +107,21 @@ preset_load:
 
 clear_all_enemies:
 {
+if !FEATURE_CLEAR_ENEMIES
+    LDA.w #ClearEnemiesTable>>16 : STA $C3
+    LDA #$0000
+  .loop
+    TAX : LDA !ENEMY_ID,X
+    SEC : ROR : ROR : STA $C1
+    LDA [$C1] : BEQ .done_clearing
+    LDA !ENEMY_PROPERTIES : ORA #$0200 : STA !ENEMY_PROPERTIES,X
+else
     ; Clear enemies (8000 = solid to Samus, 0400 = Ignore Samus projectiles, 0100 = Invisible)
     LDA #$0000
   .loop
     TAX : LDA $0F86,X : BIT #$8500 : BNE .done_clearing
     ORA #$0200 : STA $0F86,X
-
+endif
   .done_clearing
     TXA : CLC : ADC #$0040 : CMP #$0800 : BNE .loop
     STZ $0E52 ; unlock grey doors that require killing enemies
@@ -126,7 +135,15 @@ preset_load_destination_state_and_tiles:
     %ai16()
     PEA $8F00
     PLB : PLB
-    JML preset_load_destination_state_and_tiles_bank82
+    JSR $DDF1  ; Load destination room CRE bitset
+    JSR $DE12  ; Load door header
+    JSR $DE6F  ; Load room header
+    JSR $DEF2  ; Load state header
+if !RAW_TILE_GRAPHICS
+    JML load_raw_tile_graphics
+else
+    JMP $E78C
+endif
 }
 
 if !RAW_TILE_GRAPHICS
@@ -367,7 +384,7 @@ preset_start_gameplay:
 
     JSL $80835D  ; Disable NMI
     JSL $80985F  ; Disable horizontal and vertical timer interrupts
-    JSL $82E76B  ; Load destination room CRE bitset, door/room/state headers, tiles
+    JSL preset_load_destination_state_and_tiles
     JSL $878016  ; Clear animated tile objects
     JSL $88829E  ; Wait until the end of a v-blank and clear (H)DMA enable flags
 
@@ -439,8 +456,8 @@ endif
     LDA !SAMUS_POSE : BEQ .doneOpeningDoors ; facing forward
     CMP #$009B : BEQ .doneOpeningDoors ; facing forward with suit
     JSR preset_open_all_blue_doors
-
   .doneOpeningDoors
+
     JSL $89AB82  ; Load FX
 if !RAW_TILE_GRAPHICS
     JSL preset_load_library_background
@@ -738,9 +755,12 @@ warnpc $80FB00 ; save.asm
 ; Using Redesign Presets as the new placeholder
 ; Most of them will still work to some degree
 org !ORG_PRESETS_DATA
+check bankcross off
 print pc, " Redesign any% data start"
 incsrc presets/redesign_data.asm
 print pc, " Redesign any% data end"
+;warnpc $F08000 ; infohud.asm
+check bankcross on
 
 org !ORG_PRESETS_MENU
 print pc, " Redesign any% menu start"

@@ -13,6 +13,7 @@
 !RAW_TILE_GRAPHICS ?= 0
 !FEATURE_CUSTOMIZE_MENU ?= 0
 !FEATURE_ROOM_NAMES ?= 0
+!FEATURE_CLEAR_ENEMIES ?= 0
 
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 6
@@ -35,6 +36,7 @@
 !ORG_MAINMENU = $B88000 ; $2FA6
 !ORG_GAMEMODE = $85F800 ; $3B2
 !ORG_PRESETS_BANK82 = $82FA00 ; $2C1, bank $82
+!ORG_PRESETS_TINYSTATES_BANK82 = $82FF00 ; $9D, bank $82
 !ORG_PRESETS_BANK80 = $80F000 ; $439, bank $80
 !ORG_PRESETS_DATA = $FE8000 ; $20C0
 !ORG_PRESETS_MENU = $FEE000 ; $108F
@@ -62,6 +64,7 @@
 !ORG_SPRITEPRIO = $81F700 ; $90
 !ORG_SPRITEFEAT = $F0E000 ; $1060
 ;!ORG_ROOMNAMES = $E70000 ; whole bank pointer style
+;!ORG_CLEAR_ENEMIES = $E70000 ; whole bank pointer style
 ;!ORG_CUSTOMIZEMENU = $AFEC00
 ;!ORG_PALETTEPROFILES = $AEFD20
 
@@ -195,12 +198,11 @@
 !ram_draygon_rng_left               = !WRAM_PERSIST_START+$2C
 !ram_draygon_rng_right              = !WRAM_PERSIST_START+$2E
 
-; ^ FREE SPACE ^ up to +$32
+; ^ FREE SPACE ^ up to +$34
 
-!ram_pacifist                       = !WRAM_PERSIST_START+$34
-!ram_freeze_on_load                 = !WRAM_PERSIST_START+$36
+!ram_pacifist                       = !WRAM_PERSIST_START+$36
+!ram_freeze_on_load                 = !WRAM_PERSIST_START+$38
 
-!ram_spacetime_infohud              = !WRAM_PERSIST_START+$38
 !ram_watch_left_index               = !WRAM_PERSIST_START+$3A
 !ram_watch_right_index              = !WRAM_PERSIST_START+$3C
 !ram_watch_write_mode               = !WRAM_PERSIST_START+$3E
@@ -282,8 +284,8 @@
 
 ; ^ FREE SPACE ^ up to +$7A
 
-!ram_tel_debug_area = !WRAM_START+$7C
-!ram_tel_debug_station = !WRAM_START+$7E
+!ram_tel_debug_area = !WRAM_MENU_START+$7C
+!ram_tel_debug_station = !WRAM_MENU_START+$7E
 
 ; ------------------
 ; Reusable RAM Menu
@@ -352,7 +354,7 @@ assert read1($00FFD8) <= $03,"Hack uses extra SRAM!"
 endif
 
 !PRESET_SLOTS = $703000
-!SRAM_VERSION = $0014
+!SRAM_VERSION = $000D
 
 !SRAM_START = $F02A00
 
@@ -755,26 +757,9 @@ endif
 
 !TOP_DISPLAY_VANILLA = #$0002
 
-!ROOM_LAYOUT_MAGNET_STAIRS = #$0001
-
-!CUTSCENE_SKIP_INTRO = #$0001
-!CUTSCENE_SKIP_CERES_ARRIVAL = #$0002
-!CUTSCENE_SKIP_G4 = #$0080
-!CUTSCENE_FAST_MB = #$0100
 !CUTSCENE_FAST_PHANTOON = #$0200
 !CUTSCENE_FAST_KRAID = #$0400
-!CUTSCENE_SKIP_SPLASH = #$0800
 !CUTSCENE_QUICKBOOT = #$0800
-!CUTSCENE_SKIP_GAMEOVER = #$1000
-!CUTSCENE_FAST_BOWLING = #$2000
-!CUTSCENE_KRAID_DEATH_CAMERA = #$4000
-
-!SUPPRESS_CRATERIA_LIGHTNING = #$0001
-!SUPPRESS_ESCAPE_FLASHING = #$0002
-!SUPPRESS_POWER_BOMB_FLASH = #$0004
-!SUPPRESS_MB1_FLASHING = #$0008
-!SUPPRESS_BOSS_DAMAGE_FLASH = #$0010
-!SUPPRESS_EARTHQUAKE = #$0020
 
 !PRESETS_COMPRESSED_GRAPHICS = #$0001
 !PRESETS_COMPRESSED_PALETTES = #$0002

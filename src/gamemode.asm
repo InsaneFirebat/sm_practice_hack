@@ -8,7 +8,9 @@
 org $82894B
     ; gamemode_shortcuts will either CLC or SEC
     ; to control if normal gameplay will happen on this frame
-    JSL gamemode_start : BCS end_of_normal_gameplay
+    JSL gamemode_start : BCC resume_gameplay
+    BRA end_of_normal_gameplay
+resume_gameplay:
 
 org $82896E
 end_of_normal_gameplay:
@@ -38,8 +40,16 @@ gamemode_start:
   .return
     %ai16()
     PHP
-    BCC .skip_load
+    BCS .skip_gameplay
 
+    ; Overwritten logic
+    JSL $8884B9
+    JSL ih_game_loop_code
+    PLP
+    PLB
+    RTL
+
+  .skip_gameplay
     ; Don't load presets or decrement counters if we're in credits
     LDA !GAMEMODE : CMP #$0027 : BEQ .skip_load
 
@@ -50,8 +60,6 @@ gamemode_start:
     JSL preset_load
 
   .skip_load
-    ; Overwritten logic
-    LDA !GAMEMODE : AND #$00FF
     PLP
     PLB
     RTL
@@ -85,8 +93,6 @@ if !FEATURE_REDESIGN
 
 gamemode_shortcuts:
 {
-    LDA !IH_CONTROLLER_ML_NEW : BNE +
-
 if !FEATURE_SD2SNES
     ; Check for auto-save mid-transition
     LDA !ram_auto_save_state : BEQ +
@@ -95,7 +101,7 @@ if !FEATURE_SD2SNES
     JMP .save_state
 endif
 
-  + LDA !IH_CONTROLLER_PRI_NEW : BNE +
+  + LDA !IH_CONTROLLER_ML_NEW : BNE +
 
     ; No shortcuts configured, CLC so we won't skip normal gameplay
     CLC : RTS
@@ -172,7 +178,16 @@ endif
 else
 gamemode_shortcuts:
 {
-    LDA !IH_CONTROLLER_PRI_NEW : BNE .check_shortcuts
+
+if !FEATURE_SD2SNES
+    ; Check for auto-save mid-transition
+    LDA !ram_auto_save_state : BEQ +
+    LDA !DOOR_FUNCTION_POINTER : CMP #$E4A9 : BNE +
+    LDA #$0000 : STA !ram_auto_save_state
+    JMP .save_state
+endif
+
++   LDA !IH_CONTROLLER_PRI_NEW : BNE .check_shortcuts
     ; CLC so we won't skip normal gameplay
     CLC : RTS
   .check_shortcuts
@@ -476,11 +491,10 @@ skip_pause:
     BIT !IH_INPUT_START : BEQ .done
     LDA !GAMEMODE : CMP #$000C : BNE .done
     LDA #$0008 : STA !GAMEMODE
-;    LDA #$0001 ; wtf
-    ; Screen fade delay/counter = 0
-    STZ $0723 : STZ $0725
-    ; Brightness = $F (max)
-    LDA $51 : ORA #$000F : STA $51
+    STZ $0723   ; Screen fade delay = 0
+    STZ $0725   ; Screen fade counter = 0
+    LDA $51 : ORA #$000F
+    STA $51   ; Brightness = $F (max)
   .done
     PLP
     RTS

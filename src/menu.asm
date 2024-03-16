@@ -261,7 +261,7 @@ cm_transfer_original_tileset:
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
     LDX.w #hudgfx_bin : STX $4302 ; Source offset
     LDA.b #hudgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$1000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -280,7 +280,7 @@ cm_transfer_original_tileset:
     LDX #$2000 : STX $2116 ; VRAM address (4000 in vram)
     LDX.w #hudgfx_bin : STX $4302 ; Source offset
     LDA.b #hudgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$1000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -296,7 +296,7 @@ cm_transfer_original_tileset:
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
     LDX.w #mapgfx_bin : STX $4302 ; Source offset
     LDA.b #mapgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$1000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -312,7 +312,7 @@ cm_transfer_original_tileset:
     LDX #$2000 : STX $2116 ; VRAM address (4000 in vram)
     LDX.w #mapgfx_bin : STX $4302 ; Source offset
     LDA.b #mapgfx_bin>>16 : STA $4304 ; Source bank
-    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$1000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -1229,8 +1229,8 @@ if !FEATURE_ROOM_NAMES
     JSR cm_draw_text
     ; fix bank
     LDA !DP_MenuIndices+2 : STA !DP_CurrentMenu+2
-    RTS
 endif
+    RTS
 
   .drawSamusData
     ; draw Samus CURRENT ENERGY
@@ -3225,11 +3225,10 @@ execute_custom_preset:
 
   .toggleDisplay
     ; swap between room name and Samus data
-    LDA !ram_cm_custom_preset_labels : BEQ .drawRoomNames
-    ; draw Samus data
+    LDA !ram_cm_custom_preset_labels : BEQ .turnOn
     LDA #$0000 : STA !ram_cm_custom_preset_labels
     BRA .redrawScreen
-  .drawRoomNames
+  .turnOn
     LDA #$0001 : STA !ram_cm_custom_preset_labels
 
   .redrawScreen
@@ -3728,5 +3727,9 @@ endif
 
 if !FEATURE_ROOM_NAMES
 incsrc roomnames.asm
+endif
+
+if !FEATURE_CLEAR_ENEMIES
+incsrc clearenemies.asm
 endif
 

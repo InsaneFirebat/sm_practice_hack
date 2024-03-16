@@ -2,22 +2,26 @@ asar 1.81
 lorom
 
 table ../resources/normal.tbl
-
-incsrc macros.asm
-incsrc defines.asm
-
 print ""
 
 if !FEATURE_SD2SNES
-print "SAVESTATES ENABLED"
-incsrc save.asm
-!FEATURE_TINYSTATES = 0
-elseif !FEATURE_TINYSTATES
-print "TINYSTATES ENABLED"
-incsrc tinystates.asm
-!FEATURE_SD2SNES = 1       ; Set this to enable savestate features
+    print "SD2SNES ENABLED"
+    !FEATURE_TINYSTATES = 0
+    incsrc macros.asm
+    incsrc defines.asm
+    incsrc save.asm
 else
-print "SAVESTATES AND TINYSTATES DISABLED"
+if !FEATURE_TINYSTATES
+    print "TINYSTATES ENABLED"
+    !FEATURE_SD2SNES = 1       ; Set this to enable savestate features
+    incsrc macros.asm
+    incsrc defines.asm
+    incsrc tinystates.asm
+else
+    print "SD2SNES AND TINYSTATES DISABLED"
+    incsrc macros.asm
+    incsrc defines.asm
+endif
 endif
 
 incsrc gamemode.asm

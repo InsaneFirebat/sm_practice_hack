@@ -6,7 +6,7 @@
 ; also update infohud.asm: inc_statusdisplay and dec_statusdisplay
 .status_display_table
     dw status_enemyhp
-    dw status_mbhp
+    dw status_roomstrat
     dw status_chargetimer
     dw status_xfactor
     dw status_cooldowncounter
@@ -1574,7 +1574,6 @@ status_tacotank:
     ; Once we can evaluate, make sure it is good
     LDA !SAMUS_X_SUBRUNSPEED : CMP #!expected_subspeed : BNE .wjfail
     LDA !ram_xpos : CMP #$0039 : BPL .wjfail
-
     BRL .incstate
 
   .peakfail
@@ -1653,7 +1652,6 @@ status_tacotank:
   .threey
     LDA !SAMUS_Y_SUBPX : CMP #$9400 : BCS .printtwoy : CMP #$1400 : BCC .printtwob
     CMP #$1C00 : BCC .printthreeb
-
     LDA #$0003
 
   .printy
@@ -1700,7 +1698,6 @@ status_tacotank:
   .setx
     ; Determine first frame where we can gather the tank
     LDA !ram_xpos : CMP #$0051 : BPL .threex : CMP #$0046 : BPL .twox : CMP #$003A : BPL .onex
-
     BRA .predictfail
 
   .threex
@@ -3222,14 +3219,15 @@ status_twocries:
     BRA .yesdonechecking
 
   .oneframeearlycheck
+    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_UP : BEQ .seconddone
     LDA !ram_roomstrat_counter : CMP #$0057 : BMI .seconddone
     CMP #$00D5 : BPL .seconddone : CMP #$0099 : BPL .actuallylate
     CMP #$0093 : BMI .secondearly : CMP #$0096 : BMI .scammed
     BRA .noscam
 
   .secondcheck
-    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_UP : BEQ .seconddone
     CMP #$0007 : BEQ .oneframeearlycheck
+    LDA !IH_CONTROLLER_PRI_NEW : AND !IH_INPUT_UP : BEQ .seconddone
     LDA !ram_roomstrat_counter : CMP #$0057 : BMI .seconddone
     CMP #$00D5 : BPL .seconddone : CMP #$0099 : BPL .secondlate
     CMP #$0093 : BMI .secondearly : CMP #$0096 : BPL .checkscam
