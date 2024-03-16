@@ -16,12 +16,8 @@ incsrc wram_symbols.asm
 
 ;!ORG_MENU_GFX = $F0D700 ; unused, $900, can be used to reduce menu code size
 ;!ORG_MISC_TILE_GRAPHICS = $8BFA00 ; unused, $140
-;!ORG_LAYOUT = $8FFF00 ; unused
-;!ORG_LAYOUT_BANKA1 = $A1EBD1 ; unused
-;!ORG_LAYOUT_BANKB4 = $B4F4B8 ; unused
-;!ORG_CUTSCENES = $8BF800 ; unused
-;!ORG_CUTSCENES_MB = $A9FBC0 ; unused
 ;!ORG_ROOMNAMES = $E70000 ; whole bank pointer style
+;!ORG_CLEAR_ENEMIES = $E70000 ; whole bank pointer style
 ;!ORG_CUSTOMIZEMENU = $AFEC00
 ;!ORG_PALETTEPROFILES = $AEFD20
 
@@ -146,12 +142,11 @@ ram_phantoon_flame_direction = !ram_phantoon_flame_direction ; !WRAM_PERSIST_STA
 ram_draygon_rng_left = !ram_draygon_rng_left ; !WRAM_PERSIST_START+$2C
 ram_draygon_rng_right = !ram_draygon_rng_right ; !WRAM_PERSIST_START+$2E
 
-; ^ FREE SPACE ^ up to +$32
+; ^ FREE SPACE ^ up to +$34
 
-ram_pacifist = !ram_pacifist ; !WRAM_PERSIST_START+$34
-ram_freeze_on_load = !ram_freeze_on_load ; !WRAM_PERSIST_START+$36
+ram_pacifist = !ram_pacifist ; !WRAM_PERSIST_START+$36
+ram_freeze_on_load = !ram_freeze_on_load ; !WRAM_PERSIST_START+$38
 
-ram_spacetime_infohud = !ram_spacetime_infohud ; !WRAM_PERSIST_START+$38
 ram_watch_left_index = !ram_watch_left_index ; !WRAM_PERSIST_START+$3A
 ram_watch_right_index = !ram_watch_right_index ; !WRAM_PERSIST_START+$3C
 ram_watch_write_mode = !ram_watch_write_mode ; !WRAM_PERSIST_START+$3E
@@ -167,6 +162,8 @@ ram_game_loop_extras = !ram_game_loop_extras ; !WRAM_PERSIST_START+$4E
 ram_game_mode_extras = !ram_game_mode_extras ; !WRAM_PERSIST_START+$50
 ram_sprite_feature_flags = !ram_sprite_feature_flags ; !WRAM_PERSIST_START+$52
 ram_frames_held = !ram_frames_held ; !WRAM_PERSIST_START+$54
+
+ram_quickboot_spc_state = !ram_quickboot_spc_state ; !WRAM_PERSIST_START+$56
 
 ; ^ FREE SPACE ^ up to +$7A (!WRAM_START+$FC - !WRAM_PERSIST_START)
 
@@ -227,8 +224,8 @@ ram_timers_autoupdate = !ram_timers_autoupdate ; !WRAM_MENU_START+$64
 
 ; ^ FREE SPACE ^ up to +$7A
 
-ram_tel_debug_area = !ram_tel_debug_area ; !WRAM_START+$7C
-ram_tel_debug_station = !ram_tel_debug_station ; !WRAM_START+$7E
+ram_tel_debug_area = !ram_tel_debug_area ; !WRAM_MENU_START+$7C
+ram_tel_debug_station = !ram_tel_debug_station ; !WRAM_MENU_START+$7E
 
 ; ------------------
 ; Reusable RAM Menu

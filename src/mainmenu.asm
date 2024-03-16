@@ -1921,9 +1921,6 @@ InfoHudMenu:
     dw #ih_top_HUD_mode
     dw #ih_dynamic_frames_held
     dw #ih_status_icons
-if !PRESERVE_WRAM_DURING_SPACETIME
-    dw #ih_spacetime_infohud
-endif
     dw #ih_lag
     dw #$FFFF
     dw #ih_ram_watch
@@ -2289,15 +2286,6 @@ ih_status_icons:
     LDA !IH_BLANK : STA !HUD_TILEMAP+$54 : STA !HUD_TILEMAP+$56 : STA !HUD_TILEMAP+$58
     RTL
 
-ih_spacetime_infohud:
-    dw !ACTION_CHOICE
-    dl #!ram_spacetime_infohud
-    dw #$0000
-    db #$28, "Spacetime HUD", #$FF
-    db #$28, "    VANILLA", #$FF
-    db #$28, "  PRESERVED", #$FF
-    db #$FF
-
 ih_lag:
     %cm_numfield("Artificial Lag", !sram_artificial_lag, 0, 64, 1, 4, #0)
 
@@ -2308,14 +2296,12 @@ incsrc ramwatchmenu.asm
 
 print pc, " mainmenu InfoHUD end"
 ;warnpc $85F800 ; gamemode.asm
-pullpc
 
 
 ; ----------
 ; Game menu
 ; ----------
 
-pushpc
 ;org $B3F000
 org !ORG_MAINMENU_GAME
 print pc, " mainmenu GameMenu start"
@@ -2326,7 +2312,7 @@ GameMenu:
     dw #game_iconcancel
     dw #game_goto_controls
     dw #$FFFF
-;    dw #game_cutscenes
+    dw #game_cutscenes
     dw #game_fanfare_toggle
     dw #game_music_toggle
     dw #game_healthalarm
@@ -2389,6 +2375,7 @@ game_healthalarm:
     db #$28, "m    PB FIX", #$FF
     db #$28, "m  IMPROVED", #$FF
     db #$FF
+
 game_minimap:
     %cm_toggle("Minimap", !ram_minimap, #$0001, #0)
 
@@ -2458,63 +2445,20 @@ game_debugfixscrolloffsets:
 
 CutscenesMenu:
     dw #cutscenes_quickboot
-    dw #cutscenes_skip_intro
-    dw #cutscenes_skip_ceres_arrival
-    dw #cutscenes_skip_g4
-    dw #cutscenes_skip_game_over
     dw #$FFFF
     dw #cutscenes_fast_kraid
-    dw #cutscenes_kraid_camera
     dw #cutscenes_fast_phantoon
-    dw #cutscenes_fast_bowling
-    dw #cutscenes_fast_mb
     dw #$0000
     %cm_header("CUTSCENES")
 
 cutscenes_quickboot:
     %cm_toggle_bit("Boot to Menu", !sram_cutscenes, !CUTSCENE_QUICKBOOT, #0)
 
-cutscenes_skip_intro:
-    %cm_toggle_bit("Skip Intro", !sram_cutscenes, !CUTSCENE_SKIP_INTRO, #0)
-
-cutscenes_skip_ceres_arrival:
-    %cm_toggle_bit("Skip Ceres Arrival", !sram_cutscenes, !CUTSCENE_SKIP_CERES_ARRIVAL, #0)
-
-cutscenes_skip_g4:
-    %cm_toggle_bit("Skip G4", !sram_cutscenes, !CUTSCENE_SKIP_G4, #.routine)
-  .routine
-    BIT !CUTSCENE_SKIP_G4 : BEQ .off
-    LDA !ROOM_ID : CMP #$A5ED : BNE .done
-    ; Verify all four G4 bosses killed
-    LDA $7ED828 : BIT #$0100 : BEQ .done
-    LDA $7ED82C : BIT #$0001 : BEQ .done
-    LDA $7ED82A : AND #$0101 : CMP #$0101 : BNE .done
-    ; Set Tourian open
-    LDA $7ED820 : ORA #$0400 : STA $7ED820
-    BRA .done
-  .off
-    LDA !ROOM_ID : CMP #$A5ED : BNE .done
-    LDA $7ED820 : AND #$FBFF : STA $7ED820
-  .done
-    RTL
-
-cutscenes_skip_game_over:
-    %cm_toggle_bit("Skip Game Over", !sram_cutscenes, !CUTSCENE_SKIP_GAMEOVER, #0)
-
 cutscenes_fast_kraid:
     %cm_toggle_bit("Skip Kraid Intro", !sram_cutscenes, !CUTSCENE_FAST_KRAID, #0)
 
 cutscenes_fast_phantoon:
     %cm_toggle_bit("Skip Phantoon Intro", !sram_cutscenes, !CUTSCENE_FAST_PHANTOON, #0)
-
-cutscenes_kraid_camera:
-    %cm_toggle_bit("Unlock Kraid Death Cam", !sram_cutscenes, !CUTSCENE_KRAID_DEATH_CAMERA, #0)
-
-cutscenes_fast_bowling:
-    %cm_toggle_bit("Fast Bowling", !sram_cutscenes, !CUTSCENE_FAST_BOWLING, #0)
-
-cutscenes_fast_mb:
-    %cm_toggle_bit("Fast Mother Brain", !sram_cutscenes, !CUTSCENE_FAST_MB, #0)
 
 
 ; -------------------

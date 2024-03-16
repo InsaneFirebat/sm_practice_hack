@@ -1,5 +1,3 @@
-!SRAM_VERSION = $000D
-
 
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values
 org $808455
@@ -91,6 +89,7 @@ init_sram:
     LDA #$0000 : STA !sram_status_icons
     LDA #$0000 : STA !sram_top_display_mode
     LDA #$0001 : STA !sram_healthalarm
+    LDA #$0003 : STA !sram_cutscenes
     LDA #$0000 : STA !sram_lag_counter_mode
     LDA #$0000 : STA !sram_preset_options
     LDA #$000A : STA !sram_metronome_tickrate
