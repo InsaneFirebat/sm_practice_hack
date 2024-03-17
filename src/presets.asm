@@ -755,9 +755,9 @@ print pc, " preset menu start"
 print pc, " preset menu end"
 
 org !ORG_PRESETS_DATA
-print pc, " preset data start"
+print pc, " preset data crossbank start"
   incsrc presets/zfackpdr_data.asm
-print pc, " preset data end"
+print pc, " preset data crossbank end"
 ;warnpc $FEE000
 check bankcross on
 
