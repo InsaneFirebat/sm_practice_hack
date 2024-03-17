@@ -1,5 +1,4 @@
 
-
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values
 org $808455
     JML init_code
