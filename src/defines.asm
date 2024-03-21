@@ -7,7 +7,7 @@
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 6
 !VERSION_BUILD = 0
-!VERSION_REV = 0
+!VERSION_REV = 1
 
 
 ; ---------
@@ -731,7 +731,7 @@ endif
 !sram_preset_open_doors = !SRAM_START+$226
 !sram_preset_ship_landing = !SRAM_START+$228
 !sram_preset_enemies = !SRAM_START+$22A
-;!sram_fast_nintendo_logo = !SRAM_START+$22C
+!sram_demo_timer = !SRAM_START+$22C
 ;!sram_fanfare_timer_adjust = !SRAM_START+$22E
 !sram_preset_map_tiles = !SRAM_START+$230
 !sram_preset_auto_segment = !SRAM_START+$232

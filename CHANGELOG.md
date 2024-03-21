@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.6.0.1]  Added an option to set the wait timer before demos play
 * [2.6.0]    Fixed corrupted background tile when loading tinystates by NobodyNada
 * [2.6.0]    Upgraded skip Nintendo logo option to boot straight into the menu by NobodyNada
 * [2.6.0]    Optimize Kraid-rising lag to better match vanilla by idlechild

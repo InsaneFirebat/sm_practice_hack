@@ -155,6 +155,7 @@ init_sram:
     LDA #$0001 : STA !sram_door_display_mode ; 1 - status_door_hspeed
     LDA #$0000 : STA !sram_display_mode_reward
     LDA #$0000 : STA !sram_random_bubble_sfx
+    LDA #$0384 : STA !sram_demo_timer
 
     LDA !PROFILE_Firebat : STA !sram_custompalette_profile
     LDA #$0A20 : STA !sram_palette_text

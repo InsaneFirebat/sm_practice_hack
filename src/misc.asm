@@ -695,12 +695,26 @@ endif
     STZ $0DEC
     RTL
 }
-
 print pc, " misc bank90 end"
+
+
+org $8B9F1A ; runs when title intro completes
+    JSR DemoWaitTimer
+
+org $8B9B5B ; runs when title intro is interrupted
+    JSR DemoWaitTimer
 
 
 org $8BFA00
 print pc, " misc bank8B start"
+
+DemoWaitTimer:
+{
+    ; initial demo wait timer
+    LDA !sram_demo_timer
+    RTS
+}
+
 
 ; Decompression optimization adapted from Kejardon, with fixes by PJBoy and Maddo
 ; Compression format: One byte (XXX YYYYY) or two byte (111 XXX YY-YYYYYYYY) headers
