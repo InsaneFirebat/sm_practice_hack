@@ -23,6 +23,8 @@ endif
     dw #$FFFF
     dw #ifb_capture_cropping
     dw #$FFFF
+    dw #ifb_demo_wait_timer
+    dw #$FFFF
     dw #ifb_factory_reset
 if !FEATURE_DEV
     dw #$FFFF
@@ -136,15 +138,18 @@ ifb_presetrando:
     %cm_submenu(">Preset Randomizer", #PresetRandoMenu)
 
 if !FEATURE_EXTRAS
-    ifb_noclip:
-        %cm_toggle("Walk Through Walls", !ram_noclip, #$0001, #0)
+ifb_noclip:
+    %cm_toggle("Walk Through Walls", !ram_noclip, #$0001, #0)
 
-    ifb_nosteam:
-        %cm_toggle("No Steam Collision", !ram_steamcollision, #$0001, #0)
+ifb_nosteam:
+    %cm_toggle("No Steam Collision", !ram_steamcollision, #$0001, #0)
 endif
 
 ifb_capture_cropping:
     %cm_submenu(">Capture Cropping Mode", #CaptureCroppingMenu)
+
+ifb_demo_wait_timer:
+    %cm_numfield_word("Demo Timer (frames)", !sram_demo_timer, 1, 9999, 1, 20, #0)
 
 ifb_factory_reset:
     %cm_submenu(">Factory Reset", #FactoryResetConfirm)

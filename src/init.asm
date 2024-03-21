@@ -154,6 +154,7 @@ init_sram:
     LDA #$0000 : STA !sram_door_display_mode
     LDA #$0000 : STA !sram_display_mode_reward
     LDA #$0000 : STA !sram_random_bubble_sfx
+    LDA #$0384 : STA !sram_demo_timer
 
     LDA #$0000 : STA !sram_custom_header
 
