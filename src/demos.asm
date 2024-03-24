@@ -380,7 +380,7 @@ else
     dw $B2DA, $9906, $0001, $0300, $0000, $008B, $0051, $0100, DRC_RTS ; ggg
     dw $DCB1, $AA2C, $0001, $0300, $0000, $00BB, $003B, $0659, DRC_RTS ; babyskip
 endif
-    dw $FFFF
+;    dw $FFFF
 
   .set2
 if !FEATURE_PAL
@@ -398,7 +398,7 @@ else
     dw $CC6F, $A21C, $0001, $0200, $0000, $005B, $FFFB, $01D7, DRC_RTS ; speedball
     dw $91F8, $89B2, $0001, $0800, $0100, $008B, $0055, $02F8, DRC_RTS ; wraparound
 endif
-    dw $FFFF
+;    dw $FFFF
 
   .set3
 if !FEATURE_PAL
@@ -416,7 +416,7 @@ else
     dw $96BA, $8B7A, $0001, $0100, $0800, $008B, $0052, $0311, DRC_RTS ; climb
     dw $93FE, $A1B0, $0001, $0700, $0400, $008B, $0054, $019B, DRC_LandingSite ; ocean
 endif
-    dw $FFFF
+;    dw $FFFF
 
   .set4
 if !FEATURE_PAL
