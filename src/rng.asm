@@ -141,8 +141,8 @@ org $A786B7
 else
 org $A786A7
 endif
-    ; Overwrite unused palette
 KraidWaitTable:
+    ; Overwrite unused palette
     dw #$0080, #$0040, #$0080, #$00C0, #$0100, #$0140, #$0180, #$01C0
 
 
@@ -322,6 +322,7 @@ hook_phantoon_1st_rng:
 
   .rng
     ; If set to all-on or all-off, don't mess with RNG
+    ; If set to all-on or all-off, don't mess with RNG.
     LDA !ram_phantoon_rng_round_1 : BEQ .no_manip
     CMP #$003F : BNE choose_phantoon_pattern
 

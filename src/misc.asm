@@ -675,8 +675,8 @@ preserve_escape_timer:
   .done
 if !FEATURE_PAL
     JMP $EA7C
-else
-    JMP $EA7F ; overwritten code
+else          ; overwritten code
+    JMP $EA7F
 endif
 }
 
