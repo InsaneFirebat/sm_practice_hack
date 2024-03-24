@@ -205,7 +205,7 @@ mm_inc_tile_count:
     ; Set tile and increment counter
     STA $07F7,X
     %a16()
-    LDA !ram_map_counter : INC A : STA !ram_map_counter
+    LDA !ram_map_counter : INC : STA !ram_map_counter
     %a8()
 
   .done

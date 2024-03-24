@@ -556,9 +556,9 @@ ih_mb1_segment:
 {
     ; runs during MB1 cutscene when you regain control of Samus, just before music change
 if !FEATURE_PAL
-    JSL $90F081 ; overwritten code
-else
-    JSL $90F084 ; overwritten code
+    JSL $90F081
+else            ; overwritten code
+    JSL $90F084
 endif
 
     JSL ih_reset_damagecounter
@@ -641,9 +641,9 @@ ih_ship_elevator_segment:
 {
     JSL ih_update_hud_early
 if !FEATURE_PAL
-    JML $91E35B ; overwritten code
-else
-    JML $91E3F6 ; overwritten code
+    JML $91E35B
+else            ; overwritten code
+    JML $91E3F6
 endif
 }
 
@@ -706,11 +706,7 @@ ih_update_hud_code:
     ; Divide time by 60 or 50 and draw seconds and frames
     STA $4204
     %a8()
-if !FEATURE_PAL
-    LDA #$32
-else
-    LDA #$3C
-endif
+    LDA.b !FPS
     STA $4206
     %a16()
     PEA $0000 : PLA ; wait for CPU math
@@ -753,11 +749,7 @@ endif
     ; Divide time by 60 or 50 and draw seconds and frames
     STA $4204
     %a8()
-if !FEATURE_PAL
-    LDA #$32
-else
-    LDA #$3C
-endif
+    LDA.b !FPS
     STA $4206
     %a16()
     PEA $0000 : PLA ; wait for CPU math
@@ -843,12 +835,12 @@ endif
   .pick_segment_timer
     LDA !sram_frame_counter_mode : BIT #$0001 : BNE .ingame_segment_timer
     LDA.w #!ram_seg_rt_frames : STA $00
-    LDA !WRAM_BANK : STA $02
+    LDA.w #!WRAM_BANK : STA $02
     BRA .draw_segment_timer
 
   .ingame_segment_timer
     LDA.w #!IGT_FRAMES : STA $00
-    STZ $02
+    LDA.w #!WRAM_BANK : STA $02
 
   .draw_segment_timer
     ; Frames
@@ -1609,12 +1601,12 @@ Draw4Hundredths:
     RTS
 
   .zerotens
-    LDA #$0C09
+    LDA !IH_NUMBER_ZERO
     STA !HUD_TILEMAP,X : STA !HUD_TILEMAP+4,X : STA !HUD_TILEMAP+6,X
     BRA .done
 
   .zerohundreds
-    LDA #$0C09 : STA !HUD_TILEMAP,X : STA !HUD_TILEMAP+4,X
+    LDA !IH_NUMBER_ZERO : STA !HUD_TILEMAP,X : STA !HUD_TILEMAP+4,X
     BRA .done
 }
 
@@ -1756,7 +1748,7 @@ else
 endif
 
   .done
-    JML $808111 ; overwritten code
+    JML $808111 ; overwritten code + return
 
   .toggle_pause
     LDA #$FFFF : STA !ram_slowdown_mode
@@ -1807,7 +1799,8 @@ endif
     LDA !ram_seed_X : LSR
     STA !ram_HUD_top : STA !ram_HUD_middle : STA !ram_HUD_bottom
     STA !ram_HUD_top_counter : STA !ram_HUD_middle_counter
-    JMP .done
+
+    JML $808111 ; overwritten code + return
 }
 
 metronome:
