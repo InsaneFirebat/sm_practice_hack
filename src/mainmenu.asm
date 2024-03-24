@@ -2950,9 +2950,7 @@ DebugMenu:
     dw #game_pacifist
     dw #$FFFF
     dw #game_debugbrightness
-if !FEATURE_PAL
     dw #game_paldebug
-endif
     dw #game_debugplms
     dw #game_debugprojectiles
     dw #game_debugfixscrolloffsets
@@ -2977,10 +2975,17 @@ game_pacifist:
 game_debugbrightness:
     %cm_toggle("Debug CPU Brightness", $7E0DF4, #$0001, #0)
 
-if !FEATURE_PAL
 game_paldebug:
-    %cm_toggle_inverted("PAL Debug Movement", $7E09E6, #$0001, #0)
-endif
+    %cm_toggle_inverted("PAL Debug Movement", $7E09E6, #$0001, .routine)
+  .routine
+    LDA !PAL_DEBUG_MOVEMENT : BNE .clearFlag
+    LDA !sram_suit_properties : ORA !SUIT_PROPRETIES_PAL_DEBUG_FLAG
+    BRA .set
+  .clearFlag
+    LDA !sram_suit_properties : AND !SUIT_PROPERTIES_MASK
+  .set
+    STA !sram_suit_properties
+    RTL
 
 game_debugplms:
     %cm_toggle_bit_inverted("Pseudo G-Mode", $7E1C23, #$8000, #0)

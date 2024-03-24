@@ -68,8 +68,8 @@
 ; FREE SPACE ^ up to +$4E
 
 !ram_room_has_set_rng = !WRAM_START+$50
+!ram_timers_autoupdate = !WRAM_START+$52
 
-;!ram_unused = !WRAM_START+$52
 ;!ram_unused = !WRAM_START+$54
 ;!ram_unused = !WRAM_START+$56
 
@@ -381,6 +381,7 @@ endif
 !IGT_SECONDS = $09DC
 !IGT_MINUTES = $09DE
 !IGT_HOURS = $09E0
+!PAL_DEBUG_MOVEMENT = $09E6
 !SAMUS_AUTO_CANCEL = $0A04
 !SAMUS_LAST_HP = $0A06
 !SAMUS_POSE = $0A1C

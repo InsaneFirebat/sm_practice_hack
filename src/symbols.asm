@@ -61,8 +61,8 @@ ram_magic_pants_pal3 = !ram_magic_pants_pal3 ; !WRAM_START+$3E
 ; FREE SPACE ^ up to +$4E
 
 ram_room_has_set_rng = !ram_room_has_set_rng ; !WRAM_START+$50
+ram_timers_autoupdate = !ram_timers_autoupdate ; !WRAM_START+$52
 
-;!ram_unused = !WRAM_START+$52
 ;!ram_unused = !WRAM_START+$54
 ;!ram_unused = !WRAM_START+$56
 
