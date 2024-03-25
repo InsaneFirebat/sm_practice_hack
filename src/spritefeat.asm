@@ -312,10 +312,11 @@ update_samus_sprite_hitbox:
     STA $0379,Y : STA $037D,Y
     PLA ; discard high byte
 
-    LDA #%00111010 : STA $0373,Y ; Sprite 1 ATTR
-    LDA #%01111010 : STA $0377,Y ; Sprite 2 ATTR
-    LDA #%10111010 : STA $037B,Y ; Sprite 3 ATTR
-    LDA #%11111010 : STA $037F,Y ; Sprite 4 ATTR
+    ; Sprite attributes
+    LDA #%00111010 : STA $0373,Y ; top left
+    LDA #%01111010 : STA $0377,Y ; top right
+    LDA #%10111010 : STA $037B,Y ; bottom left
+    LDA #%11111010 : STA $037F,Y ; bottom right
 
     LDA #$47 ; tile number (8/9 bits)
     STA $0372,Y : STA $0376,Y
