@@ -76,6 +76,10 @@ gamemode_shortcuts:
     ; CLC so we won't skip normal gameplay
     CLC : RTS
 
++   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JMP .menu
+
 if !FEATURE_SD2SNES
 +   LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_save_state : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
@@ -108,7 +112,7 @@ endif
 
     ; Check if any less common shortcuts are configured
 +   LDA !ram_game_mode_extras : BNE +
-    JMP .check_menu
+    JMP .no_shortcuts
 
 +   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_inc_custom_preset : CMP !sram_ctrl_inc_custom_preset : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
@@ -155,11 +159,7 @@ endif
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JMP .update_timers
 
-  .check_menu
-+   LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
-    AND !IH_CONTROLLER_PRI_NEW : BEQ +
-    JMP .menu
-
+  .no_shortcuts
     ; No shortcuts matched, CLC so we won't skip normal gameplay
 +   CLC : RTS
 
