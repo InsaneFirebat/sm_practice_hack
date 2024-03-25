@@ -49,6 +49,14 @@ org $808262
     LDA #$0004
 
 
+; always start with first demo set
+org $828AFE
+    LDA #$0000
+
+org $828669
+    STZ $1F55
+
+
 if !FEATURE_PAL
 org $919DAA
 else
