@@ -689,6 +689,7 @@ ih_update_hud_code:
     LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BEQ .minimap_vanilla_infohud
     LDA !ram_map_counter : LDX #$0014 : JSR Draw3
     LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BNE .minimap_roomtimer
+    CMP !IH_MODE_WALLJUMP_INDEX : BNE .mmRoomTimer
     BRL .pick_minimap_transition_time
 
   .minimap_roomtimer
@@ -789,6 +790,7 @@ ih_update_hud_code:
 
     ; Skip door lag and segment timer when shinetune enabled
     LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BEQ .end
+    CMP !IH_MODE_WALLJUMP_INDEX : BEQ .end
 
     ; Door lag / transition time
     LDA !sram_lag_counter_mode : BNE .transition_time_full
@@ -820,6 +822,7 @@ ih_update_hud_code:
 
     ; Skip door lag and segment timer when shinetune enabled
     LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BEQ .end
+    CMP !IH_MODE_WALLJUMP_INDEX : BEQ .end
 
     ; Door lag / transition time
     LDA !sram_lag_counter_mode : BNE .vanilla_infohud_transition_time_full
