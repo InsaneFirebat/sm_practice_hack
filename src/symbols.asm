@@ -61,10 +61,10 @@ ram_magic_pants_pal3 = !ram_magic_pants_pal3 ; !WRAM_START+$3E
 ; FREE SPACE ^ up to +$4E
 
 ram_room_has_set_rng = !ram_room_has_set_rng ; !WRAM_START+$50
-ram_timers_autoupdate = !ram_timers_autoupdate ; !WRAM_START+$52
+;!ram_FREE_SPACE = !WRAM_START+$52
 
-;!ram_unused = !WRAM_START+$54
-;!ram_unused = !WRAM_START+$56
+ram_load_preset = !ram_load_preset ; !WRAM_START+$54
+ram_custom_preset = !ram_custom_preset ; !WRAM_START+$56
 
 ram_watch_left_hud = !ram_watch_left_hud ; !WRAM_START+$58
 ram_watch_right_hud = !ram_watch_right_hud ; !WRAM_START+$5A
@@ -76,27 +76,31 @@ ram_mb_hp = !ram_mb_hp ; !WRAM_START+$64
 ram_shot_timer = !ram_shot_timer ; !WRAM_START+$66
 ram_shine_counter = !ram_shine_counter ; !WRAM_START+$68
 ram_dash_counter = !ram_dash_counter ; !WRAM_START+$6A
-ram_shinetune_early_1 = !ram_shinetune_early_1 ; !WRAM_START+$6C
-ram_shinetune_late_1 = !ram_shinetune_late_1 ; !WRAM_START+$6E
-ram_shinetune_early_2 = !ram_shinetune_early_2 ; !WRAM_START+$70
-ram_shinetune_late_2 = !ram_shinetune_late_2 ; !WRAM_START+$72
-ram_shinetune_early_3 = !ram_shinetune_early_3 ; !WRAM_START+$74
-ram_shinetune_late_3 = !ram_shinetune_late_3 ; !WRAM_START+$76
-ram_shinetune_early_4 = !ram_shinetune_early_4 ; !WRAM_START+$78
-ram_shinetune_late_4 = !ram_shinetune_late_4 ; !WRAM_START+$7A
-ram_shine_dash_held_late = !ram_shine_dash_held_late ; !WRAM_START+$7C
-ram_xpos = !ram_xpos ; !WRAM_START+$7E
-ram_ypos = !ram_ypos ; !WRAM_START+$80
-ram_subpixel_pos = !ram_subpixel_pos ; !WRAM_START+$82
-ram_horizontal_speed = !ram_horizontal_speed ; !WRAM_START+$84
-ram_vertical_speed = !ram_vertical_speed ; !WRAM_START+$86
-ram_quickdrop_counter = !ram_quickdrop_counter ; !WRAM_START+$88
-ram_walljump_counter = !ram_walljump_counter ; !WRAM_START+$8A
-ram_fail_sum = !ram_fail_sum ; !WRAM_START+$8C
-ram_fail_count = !ram_fail_count ; !WRAM_START+$8E
 
-ram_load_preset = !ram_load_preset ; !WRAM_START+$90
-ram_custom_preset = !ram_custom_preset ; !WRAM_START+$92
+; ----------------------------------------------------------
+; Shinetune uses several variables not used by other modes,
+; but also shinetune does not use many other variables,
+; so the following variables share the same WRAM
+
+ram_xpos = !ram_xpos ; !WRAM_START+$6E
+ram_ypos = !ram_ypos ; !WRAM_START+$70
+ram_subpixel_pos = !ram_subpixel_pos ; !WRAM_START+$72
+ram_horizontal_speed = !ram_horizontal_speed ; !WRAM_START+$74
+ram_vertical_speed = !ram_vertical_speed ; !WRAM_START+$76
+ram_quickdrop_counter = !ram_quickdrop_counter ; !WRAM_START+$78
+ram_walljump_counter = !ram_walljump_counter ; !WRAM_START+$7A
+ram_fail_sum = !ram_fail_sum ; !WRAM_START+$7C
+ram_fail_count = !ram_fail_count ; !WRAM_START+$7E
+
+ram_shine_dash_held_late = !ram_shine_dash_held_late ; !WRAM_START+$6E
+ram_shinetune_early_1 = !ram_shinetune_early_1 ; !WRAM_START+$70
+ram_shinetune_late_1 = !ram_shinetune_late_1 ; !WRAM_START+$72
+ram_shinetune_early_2 = !ram_shinetune_early_2 ; !WRAM_START+$74
+ram_shinetune_late_2 = !ram_shinetune_late_2 ; !WRAM_START+$76
+ram_shinetune_early_3 = !ram_shinetune_early_3 ; !WRAM_START+$78
+ram_shinetune_late_3 = !ram_shinetune_late_3 ; !WRAM_START+$7A
+ram_shinetune_early_4 = !ram_shinetune_early_4 ; !WRAM_START+$7C
+ram_shinetune_late_4 = !ram_shinetune_late_4 ; !WRAM_START+$7E
 
 ; WRAM variables below this point are PERSISTENT -- they
 ; maintain their value across savestates. Use this section
@@ -141,8 +145,7 @@ ram_auto_save_state = !ram_auto_save_state ; !WRAM_START+$E0
 ram_timers_autoupdate = !ram_timers_autoupdate ; !WRAM_START+$E2
 ram_frames_held = !ram_frames_held ; !WRAM_START+$E4
 ram_quickboot_spc_state = !ram_quickboot_spc_state ; !WRAM_START+$E6
-
-; FREE SPACE ^ up to +$E8
+ram_print_segment_timer = !ram_print_segment_timer ; !WRAM_START+$E8
 
 ram_watch_bank = !ram_watch_bank ; !WRAM_START+$EA
 ram_watch_write_mode = !ram_watch_write_mode ; !WRAM_START+$EC

@@ -68,10 +68,10 @@
 ; FREE SPACE ^ up to +$4E
 
 !ram_room_has_set_rng = !WRAM_START+$50
-!ram_timers_autoupdate = !WRAM_START+$52
+;!ram_FREE_SPACE = !WRAM_START+$52
 
-;!ram_unused = !WRAM_START+$54
-;!ram_unused = !WRAM_START+$56
+!ram_load_preset = !WRAM_START+$54
+!ram_custom_preset = !WRAM_START+$56
 
 !ram_watch_left_hud = !WRAM_START+$58
 !ram_watch_right_hud = !WRAM_START+$5A
@@ -83,27 +83,31 @@
 !ram_shot_timer = !WRAM_START+$66
 !ram_shine_counter = !WRAM_START+$68
 !ram_dash_counter = !WRAM_START+$6A
-!ram_shinetune_early_1 = !WRAM_START+$6C
-!ram_shinetune_late_1 = !WRAM_START+$6E
-!ram_shinetune_early_2 = !WRAM_START+$70
-!ram_shinetune_late_2 = !WRAM_START+$72
-!ram_shinetune_early_3 = !WRAM_START+$74
-!ram_shinetune_late_3 = !WRAM_START+$76
-!ram_shinetune_early_4 = !WRAM_START+$78
-!ram_shinetune_late_4 = !WRAM_START+$7A
-!ram_shine_dash_held_late = !WRAM_START+$7C
-!ram_xpos = !WRAM_START+$7E
-!ram_ypos = !WRAM_START+$80
-!ram_subpixel_pos = !WRAM_START+$82
-!ram_horizontal_speed = !WRAM_START+$84
-!ram_vertical_speed = !WRAM_START+$86
-!ram_quickdrop_counter = !WRAM_START+$88
-!ram_walljump_counter = !WRAM_START+$8A
-!ram_fail_sum = !WRAM_START+$8C
-!ram_fail_count = !WRAM_START+$8E
 
-!ram_load_preset = !WRAM_START+$90
-!ram_custom_preset = !WRAM_START+$92
+; ----------------------------------------------------------
+; Shinetune uses several variables not used by other modes,
+; but also shinetune does not use many other variables,
+; so the following variables share the same WRAM
+
+!ram_xpos = !WRAM_START+$6E
+!ram_ypos = !WRAM_START+$70
+!ram_subpixel_pos = !WRAM_START+$72
+!ram_horizontal_speed = !WRAM_START+$74
+!ram_vertical_speed = !WRAM_START+$76
+!ram_quickdrop_counter = !WRAM_START+$78
+!ram_walljump_counter = !WRAM_START+$7A
+!ram_fail_sum = !WRAM_START+$7C
+!ram_fail_count = !WRAM_START+$7E
+
+!ram_shine_dash_held_late = !WRAM_START+$6E
+!ram_shinetune_early_1 = !WRAM_START+$70
+!ram_shinetune_late_1 = !WRAM_START+$72
+!ram_shinetune_early_2 = !WRAM_START+$74
+!ram_shinetune_late_2 = !WRAM_START+$76
+!ram_shinetune_early_3 = !WRAM_START+$78
+!ram_shinetune_late_3 = !WRAM_START+$7A
+!ram_shinetune_early_4 = !WRAM_START+$7C
+!ram_shinetune_late_4 = !WRAM_START+$7E
 
 ; WRAM variables below this point are PERSISTENT -- they
 ; maintain their value across savestates. Use this section
@@ -148,8 +152,7 @@
 !ram_timers_autoupdate = !WRAM_START+$E2
 !ram_frames_held = !WRAM_START+$E4
 !ram_quickboot_spc_state = !WRAM_START+$E6
-
-; FREE SPACE ^ up to +$E8
+!ram_print_segment_timer = !WRAM_START+$E8
 
 !ram_watch_bank = !WRAM_START+$EA
 !ram_watch_write_mode = !WRAM_START+$EC
@@ -279,42 +282,6 @@
 !ram_crash_input_new = !CRASHDUMP+$62
 !ram_crash_input_prev = !CRASHDUMP+$64
 !ram_crash_input_timer = !CRASHDUMP+$66
-
-!INPUT_BIND_UP = $7E09AA
-!INPUT_BIND_DOWN = $7E09AC
-!INPUT_BIND_LEFT = $7E09AE
-!INPUT_BIND_RIGHT = $7E09B0
-!IH_INPUT_SHOT = $7E09B2
-!IH_INPUT_JUMP = $7E09B4
-!IH_INPUT_RUN = $7E09B6
-!IH_INPUT_ITEM_CANCEL = $7E09B8
-!IH_INPUT_ITEM_SELECT = $7E09BA
-!IH_INPUT_ANGLE_UP = $7E09BE
-!IH_INPUT_ANGLE_DOWN = $7E09BC
-
-!PRESET_SLOTS = $703000
-if !FEATURE_TINYSTATES
-!TOTAL_PRESET_SLOTS = #$000F
-!PRESET_SLOT_SIZE = #$0100
-!PRESET_SLOTS_ROOM = $703000+$06
-!PRESET_SLOTS_ENERGY = $703000+$28
-!PRESET_SLOTS_MAXENERGY = $703000+$2A
-!PRESET_SLOTS_RESERVES = $703000+$3C
-!PRESET_SLOTS_MISSILES = $703000+$2C
-!PRESET_SLOTS_SUPERS = $703000+$30
-!PRESET_SLOTS_PBS = $703000+$34
-else
-!TOTAL_PRESET_SLOTS = #$0027
-!PRESET_SLOT_SIZE = #$0200
-!PRESET_SLOTS_AREA = $703000+$0C
-!PRESET_SLOTS_ROOM = $703000+$0A
-!PRESET_SLOTS_ENERGY = $703000+$2C
-!PRESET_SLOTS_MAXENERGY = $703000+$2E
-!PRESET_SLOTS_RESERVES = $703000+$40
-!PRESET_SLOTS_MISSILES = $703000+$30
-!PRESET_SLOTS_SUPERS = $703000+$34
-!PRESET_SLOTS_PBS = $703000+$38
-endif
 
 
 ; ---------------
@@ -476,6 +443,42 @@ endif
 !PLM_DELETE = $AAE3
 
 !HUD_TILEMAP = $7EC600
+
+!INPUT_BIND_UP = $7E09AA
+!INPUT_BIND_DOWN = $7E09AC
+!INPUT_BIND_LEFT = $7E09AE
+!INPUT_BIND_RIGHT = $7E09B0
+!IH_INPUT_SHOT = $7E09B2
+!IH_INPUT_JUMP = $7E09B4
+!IH_INPUT_RUN = $7E09B6
+!IH_INPUT_ITEM_CANCEL = $7E09B8
+!IH_INPUT_ITEM_SELECT = $7E09BA
+!IH_INPUT_ANGLE_UP = $7E09BE
+!IH_INPUT_ANGLE_DOWN = $7E09BC
+
+!PRESET_SLOTS = $703000
+if !FEATURE_TINYSTATES
+!TOTAL_PRESET_SLOTS = #$000F
+!PRESET_SLOT_SIZE = #$0100
+!PRESET_SLOTS_ROOM = $703000+$06
+!PRESET_SLOTS_ENERGY = $703000+$28
+!PRESET_SLOTS_MAXENERGY = $703000+$2A
+!PRESET_SLOTS_RESERVES = $703000+$3C
+!PRESET_SLOTS_MISSILES = $703000+$2C
+!PRESET_SLOTS_SUPERS = $703000+$30
+!PRESET_SLOTS_PBS = $703000+$34
+else
+!TOTAL_PRESET_SLOTS = #$0027
+!PRESET_SLOT_SIZE = #$0200
+!PRESET_SLOTS_AREA = $703000+$0C
+!PRESET_SLOTS_ROOM = $703000+$0A
+!PRESET_SLOTS_ENERGY = $703000+$2C
+!PRESET_SLOTS_MAXENERGY = $703000+$2E
+!PRESET_SLOTS_RESERVES = $703000+$40
+!PRESET_SLOTS_MISSILES = $703000+$30
+!PRESET_SLOTS_SUPERS = $703000+$34
+!PRESET_SLOTS_PBS = $703000+$38
+endif
 
 
 ; -----
@@ -911,6 +914,7 @@ endif
 !IH_LETTER_R = #$0C69
 !IH_LETTER_X = #$0C66
 !IH_LETTER_Y = #$0C67
+!IH_NUMBER_ZERO = #$0C09
 !IH_ARROW_LEFT = #$0C60
 !IH_ARROW_UP = #$0C61
 !IH_ARROW_RIGHT = #$0C62
