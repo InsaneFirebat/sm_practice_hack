@@ -2212,13 +2212,14 @@ ihmode_GOTO_PAGE_TWO:
 action_select_infohud_mode:
 {
     TYA : STA !sram_display_mode
+    JSL init_print_segment_timer
     JML cm_previous_menu
 }
 
 ih_display_mode:
     dw !ACTION_CHOICE
     dl #!sram_display_mode
-    dw #$0000
+    dw #.routine
     db #$28, "Current Mode", #$FF
     db #$28, "   ENEMY HP", #$FF
     db #$28, " ROOM STRAT", #$FF
@@ -2245,6 +2246,8 @@ ih_display_mode:
     db #$28, " PUMP COUNT", #$FF
 ;    db #$28, "WIP D-BOOST", #$FF
     db #$FF
+  .routine
+    JML init_print_segment_timer
 
 ih_display_mode_reward:
     %cm_toggle("Strat Reward SFX", !sram_display_mode_reward, #$0001, #0)
@@ -2351,6 +2354,7 @@ action_select_room_strat:
     TYA : STA !sram_room_strat
     ; enable ROOM STRAT mode
     LDA !IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
+    JSL init_print_segment_timer
     JML cm_previous_menu
 }
 
@@ -2383,8 +2387,8 @@ ih_room_strat:
     db #$28, "  MOONDANCE", #$FF
     db #$FF
   .routine
-    LDA #$0001 : STA !sram_display_mode
-    RTL
+    LDA !IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
+    JML init_print_segment_timer
 
 print pc, " superhud menu end"
 ih_superhud:
@@ -2977,16 +2981,7 @@ game_debugbrightness:
     %cm_toggle("Debug CPU Brightness", $7E0DF4, #$0001, #0)
 
 game_paldebug:
-    %cm_toggle_inverted("PAL Debug Movement", $7E09E6, #$0001, .routine)
-  .routine
-    LDA !PAL_DEBUG_MOVEMENT : BNE .clearFlag
-    LDA !sram_suit_properties : ORA !SUIT_PROPRETIES_PAL_DEBUG_FLAG
-    BRA .set
-  .clearFlag
-    LDA !sram_suit_properties : AND !SUIT_PROPERTIES_MASK
-  .set
-    STA !sram_suit_properties
-    RTL
+    %cm_toggle_inverted("PAL Debug Movement", $7E09E6, #$0001, #0)
 
 game_debugplms:
     %cm_toggle_bit_inverted("Pseudo G-Mode", $7E1C23, #$8000, #0)
@@ -3986,7 +3981,22 @@ ctrl_reset_defaults:
 init_wram_based_on_sram:
 {
     JSL GameModeExtras
+    JSL init_print_segment_timer
     JML validate_sram_for_savestates
+}
+
+init_print_segment_timer:
+{
+    ; Skip printing segment timer when shinetune or walljump enabled
+    LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BEQ .skipSegmentTimer
+    CMP #!IH_MODE_WALLJUMP_INDEX : BEQ .skipSegmentTimer
+    LDA #$0001
+    BRA .setSegmentTimer
+  .skipSegmentTimer
+    LDA #$0000
+  .setSegmentTimer
+    STA !ram_print_segment_timer
+    RTL
 }
 
 validate_sram_for_savestates:

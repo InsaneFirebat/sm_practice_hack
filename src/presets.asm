@@ -800,7 +800,7 @@ warnpc $80F600 ; save.asm / tinystates.asm
 org $809AB1
     ; Skip x-ray and grapple if max HP is a multiple of 4,
     ; which is only possible if GT code was used
-    LDA !SAMUS_HP_MAX : AND #$0003 : BEQ resume_infohud_icon_initialization
+    LDA !SAMUS_HP_MAX : AND #$0003 : BEQ .resume_infohud_icon_initialization
     JMP add_grapple_and_xray_to_hud
 warnpc $809AC9
 
