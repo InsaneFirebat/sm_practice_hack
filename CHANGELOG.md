@@ -1,6 +1,8 @@
 
 ## Changelog since v2.2.7
 
+* [2.6.1]    Added PAL debug movement feature to NTSC by idlechild
+* [2.6.1]    Improvements to various HUD modes by idlechild
 * [2.6.0.2]  Unlock the hidden demo set
 * [2.6.0.2]  Prevent setting a controller shortcut that matches your menu shortcut
 * [2.6.0.1]  Added an option to set the wait timer before demos play
