@@ -218,6 +218,15 @@ org $82805B
     JSL PreserveHyperBeam
 
 
+; Unlock debug feature to move Samus
+if !FEATURE_PAL
+; already accessible in PAL
+else
+org $90E753
+    JSR DebugSamusMovement
+endif
+
+
 org $87D000
 print pc, " misc start"
 hook_set_music_track:
@@ -310,6 +319,11 @@ endif
     INC  ; Add 1 loop (7 clock cycles including the INC)
     NOP #2 ; Add 4 more clock cycles
     CLC : ADC #$000B ; Add 60 cycles including CLC+ADC
+if !FEATURE_PAL
+; demo recorder not blocked in PAL
+else
+    NOP #4 : %a16() ; Waste 11 cycles for debug movement
+endif
     TAX
   .vanilla_lagloop
     DEX : BNE .vanilla_lagloop
@@ -694,6 +708,18 @@ endif
     STA $0FB2,X
     STZ $0DEC
     RTL
+}
+
+DebugSamusMovement:
+{
+    JSR $EA7F ; overwritten code
+
+    LDA !PAL_DEBUG_MOVEMENT : BEQ .debugMovement
+    PLB : PLP
+    RTL
+
+  .debugMovement
+    JMP $E759
 }
 print pc, " misc bank90 end"
 

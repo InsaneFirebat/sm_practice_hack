@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.6.1.1]  Fixed missed debug movement feature
 * [2.6.1]    Added PAL debug movement feature to NTSC by idlechild
 * [2.6.1]    Improvements to various HUD modes by idlechild
 * [2.6.0.2]  Unlock the hidden demo set
