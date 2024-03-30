@@ -2981,7 +2981,7 @@ game_debugbrightness:
     %cm_toggle("Debug CPU Brightness", $7E0DF4, #$0001, #0)
 
 game_paldebug:
-    %cm_toggle_inverted("PAL Debug Movement", $7E09E6, #$0001, #0)
+    %cm_toggle_inverted("Debug Samus Movement", !PAL_DEBUG_MOVEMENT, #$0001, #0)
 
 game_debugplms:
     %cm_toggle_bit_inverted("Pseudo G-Mode", $7E1C23, #$8000, #0)
