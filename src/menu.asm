@@ -806,7 +806,7 @@ draw_toggle_bit_inverted:
     PHX : JSR cm_draw_text : PLX
 
     ; Set position for ON/OFF
-    TXA : CLC : ADC #$002C : TAX
+    TXA : CLC : ADC #$002E : TAX
 
     ; grab the value at that memory address
     LDA [!DP_Address] : AND !DP_ToggleValue : BEQ .checked
