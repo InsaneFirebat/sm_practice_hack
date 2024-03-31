@@ -17,9 +17,9 @@ endif
 endif
 
 
-org $8B92DE
-    JSR cutscenes_nintendo_logo_hijack
-    NOP
+;org $8B92DE
+;    JSR cutscenes_nintendo_logo_hijack
+;    NOP
 
 ; Skip intro
 ; $82:EEDF A9 95 A3    LDA #$A395 (original code)
@@ -27,7 +27,7 @@ org $8B92DE
 ;  (skip to Zebes)     LDA #$CDAF (skip to Zebes)
 ;                      LDA #Intro_Skip_to_Zebes
 org $82EEDF
-    LDA #$C100
+    LDA #Intro_Skip_to_Zebes
 
 org !ORG_MISC_BANK8B
 print pc, " misc bank8B start"
@@ -51,24 +51,24 @@ Intro_Skip_to_Zebes:
     RTS
 }
 
-cutscenes_nintendo_logo_hijack:
-{
-    JSL $80834B     ; hijacked code
-
-    LDA !sram_cutscenes : AND !CUTSCENE_QUICKBOOT : BNE .quickboot
-    STA !ram_quickboot_spc_state    ; A is 0
-    RTS
-
-.quickboot
-    PLA ; pop return address
-    PLB
-    PLA ; saved processor status and 1 byte of next return address
-    PLA ; remainder of next return address
-
-    LDA #$0001 : STA !ram_quickboot_spc_state
-
-    JML $808482  ; finish boot code; another hijack will launch the menu
-}
+;cutscenes_nintendo_logo_hijack:
+;{
+;    JSL $80834B     ; hijacked code
+;
+;    LDA !sram_cutscenes : AND !CUTSCENE_QUICKBOOT : BNE .quickboot
+;    STA !ram_quickboot_spc_state    ; A is 0
+;    RTS
+;
+;.quickboot
+;    PLA ; pop return address
+;    PLB
+;    PLA ; saved processor status and 1 byte of next return address
+;    PLA ; remainder of next return address
+;
+;    LDA #$0001 : STA !ram_quickboot_spc_state
+;
+;    JML $808482  ; finish boot code; another hijack will launch the menu
+;}
 print pc, " misc bank8B end"
 
 

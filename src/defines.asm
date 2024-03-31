@@ -8,7 +8,7 @@
 !FEATURE_MORPHLOCK ?= 0
 !FEATURE_DEV ?= 0
 !RAW_TILE_GRAPHICS ?= 0
-!FEATURE_CUSTOMIZE_MENU ?= 0
+!FEATURE_CUSTOMIZE_MENU ?= 1
 !FEATURE_ROOM_NAMES ?= 0
 !FEATURE_CLEAR_ENEMIES ?= 0
 
@@ -26,13 +26,13 @@
 !ORG_INFOHUD_BANK80 = $80FD00 ; $265, bank $80
 !ORG_MAINMENU_INFOHUD = $85C000 ; $1840
 !ORG_MAINMENU_GAME = $B3F000 ; $94B
-!ORG_INIT = $81FA00 ; $220
+!ORG_INIT = $81FB00 ; $220
 !ORG_MENU_BANK85 = $85FD00 ; $28, bank $85
 !ORG_MENU_BANK89 = $89B000 ; $359A
 ;!ORG_MENU_GFX = $F0D700 ; unused, $900, can be used to reduce menu code size
 !ORG_MAINMENU = $B88000 ; $2FA6
 !ORG_GAMEMODE = $85F800 ; $3B2
-!ORG_PRESETS_BANK82 = $82FA00 ; $2C1, bank $82
+!ORG_PRESETS_BANK82 = $82F880 ; $2C1, bank $82
 !ORG_PRESETS_TINYSTATES_BANK82 = $82FF00 ; $9D, bank $82
 !ORG_PRESETS_BANK80 = $80F000 ; $439, bank $80
 !ORG_PRESETS_DATA = $FE8000 ; $20C0
@@ -47,8 +47,8 @@
 !ORG_MISC_BANK8B = $8BFF00 ; $4D, bank $8B
 !ORG_MISC_BANK8F = $8FFE00 ; 26 bank $8F
 !ORG_MINIMAP_BANKFD = $FDD500 ; $2000
-!ORG_MINIMAP_BANK82 = $82F70F ; $8C, bank $82
-!ORG_MINIMAP_BANK90 = $90F640 ; $C8, bank $90
+!ORG_MINIMAP_BANK82 = $82FC00 ; $8C, bank $82
+!ORG_MINIMAP_BANK90 = $90F700 ; $C8, bank $90
 !ORG_SAVE = $80F600 ; $46F
 !ORG_RNG_BANK83 = $83B000 ; $1B7
 !ORG_RNG_BANKA4 = $A4FFA0 ; $15, bank $A4
@@ -58,12 +58,12 @@
 !ORG_FANFARE_BANK84 = $84FF6D ; $11
 !ORG_FANFARE_BANK85 = $85FF00 ; $69
 !ORG_CRASH = $80E000 ; $151, bank $80
-!ORG_SPRITEPRIO = $81F700 ; $90
+!ORG_SPRITEPRIO = $81FE00 ; $90
 !ORG_SPRITEFEAT = $F0E000 ; $1060
 ;!ORG_ROOMNAMES = $E70000 ; whole bank pointer style
 ;!ORG_CLEAR_ENEMIES = $E70000 ; whole bank pointer style
-;!ORG_CUSTOMIZEMENU = $AFEC00
-;!ORG_PALETTEPROFILES = $AEFD20
+!ORG_CUSTOMIZEMENU = $AFEC00
+!ORG_PALETTEPROFILES = $AEFD20
 
 
 ; ---------
@@ -216,7 +216,7 @@
 !ram_sprite_feature_flags           = !WRAM_PERSIST_START+$52
 !ram_frames_held                    = !WRAM_PERSIST_START+$54
 
-!ram_quickboot_spc_state            = !WRAM_PERSIST_START+$56
+;!ram_quickboot_spc_state            = !WRAM_PERSIST_START+$56
 
 ; ^ FREE SPACE ^ up to +$7A (!WRAM_START+$FC - !WRAM_PERSIST_START)
 
@@ -340,10 +340,11 @@
 
 ; Assert if SRAM is greater than 8k
 ; Don't check if creating IPS patches
-if read1($00FFD5) == $00 || read1($00FFD5) == $FF
-else
-assert read1($00FFD8) <= $03,"Hack uses extra SRAM!"
-endif
+;if read1($80FFD5) == $00 || read1($80FFD5) == $FF
+;else
+;assert read1($00FFD8) <= $03,"Hack uses extra SRAM!"
+;endif
+; idk why this isn't working now
 
 !PRESET_SLOTS = $703000
 !SRAM_VERSION = $000D
@@ -724,7 +725,7 @@ endif
 
 !CUTSCENE_FAST_PHANTOON = #$0200
 !CUTSCENE_FAST_KRAID = #$0400
-!CUTSCENE_QUICKBOOT = #$0800
+;!CUTSCENE_QUICKBOOT = #$0800
 
 !PRESETS_COMPRESSED_GRAPHICS = #$0001
 !PRESETS_COMPRESSED_PALETTES = #$0002

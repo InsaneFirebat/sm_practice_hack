@@ -2,6 +2,10 @@
 org !ORG_MENU_BANK85
 print pc, " menu bank85 start"
 
+wait_for_lag_frame_long:
+    JSR $8136
+    RTL
+
 initialize_ppu_long:
     PHP : %a16()
     LDA $7E33EA : STA !ram_cgram_cache+$2E
@@ -37,7 +41,7 @@ cm_start:
     PHB : PHX : PHY
     PHK : PLB
 
-    LDA #$0000 : STA !ram_quickboot_spc_state
+;    LDA #$0000 : STA !ram_quickboot_spc_state
 
     ; Ensure sound is enabled when menu is open
     LDA !DISABLE_SOUNDS : PHA
@@ -90,40 +94,40 @@ cm_start:
     RTL
 }
 
-cm_boot:
-{
-    PHK : PLB
-    LDA !ram_quickboot_spc_state : BEQ .skip_spc
-    LDA #cm_spc_init : STA !ram_quickboot_spc_state
-
-    ; Disable sounds until we boot the SPC
-    LDA #$0001 : STA !DISABLE_SOUNDS
-.skip_spc
-
-    %a8()
-    LDA #$5A : STA $2109 ; BG3 tilemap base address
-    LDA #$04 : STA $212C ; Enable BG3; disable all else
-    %a16()
-    JSR cm_init
-    JSL cm_draw
-    JSR cm_loop
-
-  .spc_loop
-    JSR cm_wait_for_lag_frame
-    LDA !ram_quickboot_spc_state : BMI .spc_loop
-
-  .done
-    LDA !ram_custom_preset : BNE .preset_load
-    LDA !ram_load_preset : BEQ .main_game_loop
-
-  .preset_load
-    JSL preset_load
-
-  .main_game_loop
-    PEA $8282 : PLB : PLB
-    %a8()
-    JML $828944
-}
+;cm_boot:
+;{
+;    PHK : PLB
+;    LDA !ram_quickboot_spc_state : BEQ .skip_spc
+;    LDA #cm_spc_init : STA !ram_quickboot_spc_state
+;
+;    ; Disable sounds until we boot the SPC
+;    LDA #$0001 : STA !DISABLE_SOUNDS
+;.skip_spc
+;
+;    %a8()
+;    LDA #$5A : STA $2109 ; BG3 tilemap base address
+;    LDA #$04 : STA $212C ; Enable BG3; disable all else
+;    %a16()
+;    JSR cm_init
+;    JSL cm_draw
+;    JSR cm_loop
+;
+;  .spc_loop
+;    JSL wait_for_lag_frame_long
+;    LDA !ram_quickboot_spc_state : BMI .spc_loop
+;
+;  .done
+;    LDA !ram_custom_preset : BNE .preset_load
+;    LDA !ram_load_preset : BEQ .main_game_loop
+;
+;  .preset_load
+;    JSL preset_load
+;
+;  .main_game_loop
+;    PEA $8282 : PLB : PLB
+;    %a8()
+;    JML $828944
+;}
 
 cm_init:
 {
@@ -165,28 +169,28 @@ cm_set_etanks_and_reserve:
     RTL
 }
 
-cm_wait_for_lag_frame:
-{
-    PHP : %ai16()
-    LDA !ram_quickboot_spc_state : TAX
-
-    LDA $05B8   ; lag frame counter
-                ; (it's only 8 bits, but it's OK if we mix it up with the variable after)
-  .loop
-    CMP $05B8
-    BNE .done
-
-    CPX #$0000 : BPL .loop
-    PHA : PHP : PHB : JSR cm_jump_x : PLB : PLP
-    LDA !ram_quickboot_spc_state : TAX : PLA
-    BRA .loop
-
-  .done
-    PLP : RTS
-}
-
-cm_jump_x:
-    DEX : PHX : RTS
+;cm_wait_for_lag_frame:
+;{
+;    PHP : %ai16()
+;    LDA !ram_quickboot_spc_state : TAX
+;
+;    LDA $05B8   ; lag frame counter
+;                ; (it's only 8 bits, but it's OK if we mix it up with the variable after)
+;  .loop
+;    CMP $05B8
+;    BNE .done
+;
+;    CPX #$0000 : BPL .loop
+;    PHA : PHP : PHB : JSR cm_jump_x : PLB : PLP
+;    LDA !ram_quickboot_spc_state : TAX : PLA
+;    BRA .loop
+;
+;  .done
+;    PLP : RTS
+;}
+;
+;cm_jump_x:
+;    DEX : PHX : RTS
 
 ; ----------
 ; Drawing
@@ -570,7 +574,7 @@ cm_tilemap_menu:
 
 cm_tilemap_transfer:
 {
-    JSR cm_wait_for_lag_frame  ; Wait for lag frame
+    JSL wait_for_lag_frame_long  ; Wait for lag frame
 
     %a16()
     LDA #$5800 : STA $2116 ; VRAM addr
@@ -1626,7 +1630,7 @@ menu_ctrl_clear_input_display:
 cm_loop:
 {
     %ai16()
-    JSR cm_wait_for_lag_frame
+    JSL wait_for_lag_frame_long
     JSL $808F0C ; Music queue
     JSL $8289EF ; Sound fx queue
     JSL MenuRNG
@@ -2087,7 +2091,7 @@ kb_main_loop:
     RTL
 
   .new_input
-    JSR cm_wait_for_lag_frame
+    JSL wait_for_lag_frame_long
     JSL $808F0C ; Music queue
     JSL $8289EF ; Sound fx queue
     JSR kb_handle_inputs
@@ -3529,149 +3533,149 @@ MenuRNG2:
     RTL
 }
 
-!cm_spc_db      = $30
-!cm_spc_data    = $31
-!cm_spc_index   = $33
-!cm_spc_len     = $34
-
-cm_spc_init:
-{
-    ; wait for SPC to be ready
-    LDA #$BBAA : CMP $2140 : BNE .return
-
-    LDA #$FFFF : STA $0617   ; disable soft rest
-
-    %a8()
-    LDA #$CC
-    STA !cm_spc_index
-
-    %a16()
-    LDA #$CFCF
-    STA !cm_spc_db
-    LDA #$8000
-    STA !cm_spc_data
-
-    LDA #cm_spc_next_block
-    STA !ram_quickboot_spc_state
-
-.return
-    RTS
-}
-
-cm_spc_next_block:
-{
-    %a8()
-    PHB : LDA !cm_spc_db : PHA : PLB
-    LDY !cm_spc_data
-
-    ; Get block size
-    LDA #$01
-    LDX $0000, y
-    BNE .not_last : LDA #$00
-  .not_last
-    INY : BNE .done_inc_bank_1
-    JSR cm_spc_inc_bank
-  .done_inc_bank_1
-    INY : BNE .done_inc_bank_2
-    JSR cm_spc_inc_bank
-  .done_inc_bank_2
-    STX !cm_spc_len
-
-    ; Get block address
-    LDX $0000, y
-    INY : BNE .done_inc_bank_3
-    JSR cm_spc_inc_bank
-  .done_inc_bank_3
-    INY : BNE .done_inc_bank_4
-    JSR cm_spc_inc_bank
-  .done_inc_bank_4
-    PLB : STX $2142
-
-    STA $2141
-
-    %a16()
-    LDA #cm_spc_next_block_wait
-    STA !ram_quickboot_spc_state
-
-    RTS
-}
-
-cm_spc_inc_bank:
-{
-    PHA : LDA !cm_spc_db : INC A : STA !cm_spc_db
-    PHA : PLB : PLA
-    LDY #$8000
-    RTS
-}
-
-cm_spc_next_block_wait:
-{
-    %a8()
-    LDA !cm_spc_index : STA $2140 : CMP $2140 : BNE .return
-
-    STZ !cm_spc_index
-    %a16()
-    LDA !cm_spc_len : BEQ .eof
-    LDA #cm_spc_transfer
-    STA !ram_quickboot_spc_state
-    STY !cm_spc_data
-    RTS
-
-  .eof
-    LDA #$0000 : STA !ram_quickboot_spc_state
-    STZ !DISABLE_SOUNDS
-    STZ $0617
-
-  .return
-    RTS
-}
-
-cm_spc_transfer:
-{
-    ; Determine how many bytes to transfer
-    LDA !cm_spc_len : TAX
-    SBC #$0040 : BCC .last
-    LDX #$0040 : STA !cm_spc_len
-    BRA .setup
-  .last
-    STZ !cm_spc_len
-
-  .setup
-    %a8()
-    PHB : LDA !cm_spc_db : PHA : PLB
-    LDY !cm_spc_data
-
-    LDA !cm_spc_index
-
-    %a8()
-  .transfer_loop
-    XBA : LDA $0000, y : XBA
-
-    %a16() : STA $002140 : %a8()
-
-  .wait_loop
-    CMP $002140 : BNE .wait_loop
-
-    INC A
-    INY : BNE .done_inc_bank
-    JSR cm_spc_inc_bank
-  .done_inc_bank
-    DEX : BNE .transfer_loop
-
-    LDX !cm_spc_len : BNE .timeout
-    ; Done with the transfer!
-    CLC : ADC #$03 : STA !cm_spc_index : STY !cm_spc_data
-    %a16() : LDA #cm_spc_next_block : STA !ram_quickboot_spc_state
-
-    PLB
-    RTS
-
-  .timeout
-    STA !cm_spc_index : STY !cm_spc_data
-
-    PLB
-    RTS
-}
+;!cm_spc_db      = $30
+;!cm_spc_data    = $31
+;!cm_spc_index   = $33
+;!cm_spc_len     = $34
+;
+;cm_spc_init:
+;{
+;    ; wait for SPC to be ready
+;    LDA #$BBAA : CMP $2140 : BNE .return
+;
+;    LDA #$FFFF : STA $0617   ; disable soft rest
+;
+;    %a8()
+;    LDA #$CC
+;    STA !cm_spc_index
+;
+;    %a16()
+;    LDA #$CFCF
+;    STA !cm_spc_db
+;    LDA #$8000
+;    STA !cm_spc_data
+;
+;    LDA #cm_spc_next_block
+;    STA !ram_quickboot_spc_state
+;
+;.return
+;    RTS
+;}
+;
+;cm_spc_next_block:
+;{
+;    %a8()
+;    PHB : LDA !cm_spc_db : PHA : PLB
+;    LDY !cm_spc_data
+;
+;    ; Get block size
+;    LDA #$01
+;    LDX $0000, y
+;    BNE .not_last : LDA #$00
+;  .not_last
+;    INY : BNE .done_inc_bank_1
+;    JSR cm_spc_inc_bank
+;  .done_inc_bank_1
+;    INY : BNE .done_inc_bank_2
+;    JSR cm_spc_inc_bank
+;  .done_inc_bank_2
+;    STX !cm_spc_len
+;
+;    ; Get block address
+;    LDX $0000, y
+;    INY : BNE .done_inc_bank_3
+;    JSR cm_spc_inc_bank
+;  .done_inc_bank_3
+;    INY : BNE .done_inc_bank_4
+;    JSR cm_spc_inc_bank
+;  .done_inc_bank_4
+;    PLB : STX $2142
+;
+;    STA $2141
+;
+;    %a16()
+;    LDA #cm_spc_next_block_wait
+;    STA !ram_quickboot_spc_state
+;
+;    RTS
+;}
+;
+;cm_spc_inc_bank:
+;{
+;    PHA : LDA !cm_spc_db : INC A : STA !cm_spc_db
+;    PHA : PLB : PLA
+;    LDY #$8000
+;    RTS
+;}
+;
+;cm_spc_next_block_wait:
+;{
+;    %a8()
+;    LDA !cm_spc_index : STA $2140 : CMP $2140 : BNE .return
+;
+;    STZ !cm_spc_index
+;    %a16()
+;    LDA !cm_spc_len : BEQ .eof
+;    LDA #cm_spc_transfer
+;    STA !ram_quickboot_spc_state
+;    STY !cm_spc_data
+;    RTS
+;
+;  .eof
+;    LDA #$0000 : STA !ram_quickboot_spc_state
+;    STZ !DISABLE_SOUNDS
+;    STZ $0617
+;
+;  .return
+;    RTS
+;}
+;
+;cm_spc_transfer:
+;{
+;    ; Determine how many bytes to transfer
+;    LDA !cm_spc_len : TAX
+;    SBC #$0040 : BCC .last
+;    LDX #$0040 : STA !cm_spc_len
+;    BRA .setup
+;  .last
+;    STZ !cm_spc_len
+;
+;  .setup
+;    %a8()
+;    PHB : LDA !cm_spc_db : PHA : PLB
+;    LDY !cm_spc_data
+;
+;    LDA !cm_spc_index
+;
+;    %a8()
+;  .transfer_loop
+;    XBA : LDA $0000, y : XBA
+;
+;    %a16() : STA $002140 : %a8()
+;
+;  .wait_loop
+;    CMP $002140 : BNE .wait_loop
+;
+;    INC A
+;    INY : BNE .done_inc_bank
+;    JSR cm_spc_inc_bank
+;  .done_inc_bank
+;    DEX : BNE .transfer_loop
+;
+;    LDX !cm_spc_len : BNE .timeout
+;    ; Done with the transfer!
+;    CLC : ADC #$03 : STA !cm_spc_index : STY !cm_spc_data
+;    %a16() : LDA #cm_spc_next_block : STA !ram_quickboot_spc_state
+;
+;    PLB
+;    RTS
+;
+;  .timeout
+;    STA !cm_spc_index : STY !cm_spc_data
+;
+;    PLB
+;    RTS
+;}
 
 ; ----------
 ; Resources

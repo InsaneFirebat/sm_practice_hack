@@ -1504,6 +1504,7 @@ action_teleport:
     STZ $0E18 ; Set elevator to inactive
     STZ $1C1F ; Clear message box index
 
+    JSL init_controller_bindings
     LDA !SAMUS_HP_MAX : BNE .branch
     LDA #$001F : STA !SAMUS_HP
 
@@ -2432,15 +2433,15 @@ game_debugfixscrolloffsets:
 ; ---------------
 
 CutscenesMenu:
-    dw #cutscenes_quickboot
+;    dw #cutscenes_quickboot
     dw #$FFFF
     dw #cutscenes_fast_kraid
     dw #cutscenes_fast_phantoon
     dw #$0000
     %cm_header("CUTSCENES")
 
-cutscenes_quickboot:
-    %cm_toggle_bit("Boot to Menu", !sram_cutscenes, !CUTSCENE_QUICKBOOT, #0)
+;cutscenes_quickboot:
+;    %cm_toggle_bit("Boot to Menu", !sram_cutscenes, !CUTSCENE_QUICKBOOT, #0)
 
 cutscenes_fast_kraid:
     %cm_toggle_bit("Skip Kraid Intro", !sram_cutscenes, !CUTSCENE_FAST_KRAID, #0)

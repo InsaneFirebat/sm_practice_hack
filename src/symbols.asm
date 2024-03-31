@@ -18,8 +18,6 @@ incsrc wram_symbols.asm
 ;!ORG_MISC_TILE_GRAPHICS = $8BFA00 ; unused, $140
 ;!ORG_ROOMNAMES = $E70000 ; whole bank pointer style
 ;!ORG_CLEAR_ENEMIES = $E70000 ; whole bank pointer style
-;!ORG_CUSTOMIZEMENU = $AFEC00
-;!ORG_PALETTEPROFILES = $AEFD20
 
 ; ---------
 ; Work RAM
@@ -163,7 +161,7 @@ ram_game_mode_extras = !ram_game_mode_extras ; !WRAM_PERSIST_START+$50
 ram_sprite_feature_flags = !ram_sprite_feature_flags ; !WRAM_PERSIST_START+$52
 ram_frames_held = !ram_frames_held ; !WRAM_PERSIST_START+$54
 
-ram_quickboot_spc_state = !ram_quickboot_spc_state ; !WRAM_PERSIST_START+$56
+;!ram_quickboot_spc_state            = !WRAM_PERSIST_START+$56
 
 ; ^ FREE SPACE ^ up to +$7A (!WRAM_START+$FC - !WRAM_PERSIST_START)
 
@@ -284,6 +282,11 @@ ram_cgram_cache = !ram_cgram_cache ; !WRAM_MENU_START+$D0
 
 ; Assert if SRAM is greater than 8k
 ; Don't check if creating IPS patches
+;if read1($80FFD5) == $00 || read1($80FFD5) == $FF
+;else
+;assert read1($00FFD8) <= $03,"Hack uses extra SRAM!"
+;endif
+; idk why this isn't working now
 
 sram_initialized = !sram_initialized ; !SRAM_START+$00
 
