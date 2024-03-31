@@ -223,7 +223,7 @@ if !FEATURE_PAL
 ; already accessible in PAL
 else
 org $90E753
-    JSR DebugSamusMovement
+    JMP DebugSamusMovement
 endif
 
 
@@ -715,6 +715,7 @@ DebugSamusMovement:
     JSR $EA7F ; overwritten code
 
     LDA !PAL_DEBUG_MOVEMENT : BEQ .debugMovement
+    
     PLB : PLP
     RTL
 
