@@ -725,10 +725,18 @@ DebugSamusMovement:
 print pc, " misc bank90 end"
 
 
-org $8B9F1A ; runs when title intro completes
+if !FEATURE_PAL
+org $8B9EEA
+else ; runs when title intro completes
+org $8B9F1A
+endif
     JSR DemoWaitTimer
 
-org $8B9B5B ; runs when title intro is interrupted
+if !FEATURE_PAL
+org $8B9B2B
+else ; runs when title intro is interrupted
+org $8B9B5B
+endif
     JSR DemoWaitTimer
 
 
