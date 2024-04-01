@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.6.1.3]  Fixed some occasionally corrupted numbers on the segment timer
 * [2.6.1.2]  Fixed a crash
 * [2.6.1.1]  Fixed misaligned ON/OFF on some menus
 * [2.6.1.1]  Fixed missed debug movement feature

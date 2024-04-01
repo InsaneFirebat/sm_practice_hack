@@ -1040,7 +1040,7 @@ endif
     LDA !sram_frame_counter_mode : BIT #$0001 : BNE .ingame_segment_timer
     LDA !IH_DECIMAL : STA !HUD_TILEMAP+$B4 : STA !HUD_TILEMAP+$BA
     LDA.w #!ram_seg_rt_frames : STA $00
-    LDA.w !WRAM_BANK : STA $02
+    LDA.w #!WRAM_BANK : STA $02
     BRA .draw_segment_timer
 
   .ingame_segment_timer
