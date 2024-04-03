@@ -2151,7 +2151,11 @@ org $82ECD3
     JSR TitleTilemapHijack
 
 ; hijack returning to OPTION MODE
+if !FEATURE_PAL
+org $82EFCD
+else
 org $82EFD7
+endif
     JSR TitleTilemapHijack
 
 org $82F9A0
