@@ -3337,6 +3337,8 @@ GameModeExtras:
 }
 
 init_wram_based_on_sram:
+; a pointer to this routine is used as the menu's RNG seed
+; since it lives at the end of the menu data, it moves over time
 {
     ; Check if any less common controller shortcuts are configured
     JML GameModeExtras

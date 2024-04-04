@@ -67,7 +67,7 @@ init_nonzero_wram:
     LDA !sram_seed_Y : STA !ram_seed_Y
 
     LDA #$0001 : STA !ram_cm_dummy_on
-    RTL
+    JML init_wram_based_on_sram
 }
 
 init_sram:
