@@ -2110,7 +2110,7 @@ DisplayModeMenu:
     dw #$FFFF
     dw ihmode_GOTO_PAGE_TWO
     dw #$0000
-    %cm_header("INFOHUD DISPLAY MODE")
+    %cm_header("INFOHUD DISPLAY MODE 1/2")
 
 DisplayModeMenu2:
     dw ihmode_countdamage
@@ -2275,11 +2275,20 @@ RoomStratMenu:
     dw ihstrat_ceresridley
     dw ihstrat_draygonai
     dw ihstrat_downbackzeb
+    dw $FFFF
+    dw ihstrat_GOTO_PAGE_TWO
+    dw $0000
+    %cm_header("INFOHUD ROOM STRATS 1/2")
+    %cm_footer("ROOM STRAT MUST BE ACTIVE")
+
+RoomStratMenu2:
     dw ihstrat_twocries
     dw ihstrat_wasteland
     dw ihstrat_moondance
-    dw #$0000
-    %cm_header("INFOHUD ROOM STRAT")
+    dw $FFFF
+    dw ihstrat_GOTO_PAGE_ONE
+    dw $0000
+    %cm_header("INFOHUD ROOM STRATS 2/2")
     %cm_footer("ROOM STRAT MUST BE ACTIVE")
 
 ihstrat_superhud:
@@ -2348,6 +2357,15 @@ ihstrat_wasteland:
 
 ihstrat_moondance:
     %cm_jsl("Moondance", #action_select_room_strat, #$0015)
+
+ihstrat_GOTO_PAGE_ONE:
+    %cm_jsl(">GOTO PAGE ONE", ihmode_GOTO_PAGE_TWO_routine, #RoomStratMenu)
+
+ihstrat_GOTO_PAGE_TWO:
+    %cm_jsl(">GOTO PAGE TWO", .routine, #RoomStratMenu2)
+  .routine
+    JSL cm_go_back
+    %submenu_jump()
 
 action_select_room_strat:
 {
