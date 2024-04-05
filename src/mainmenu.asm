@@ -2219,7 +2219,7 @@ action_select_infohud_mode:
 ih_display_mode:
     dw !ACTION_CHOICE
     dl #!sram_display_mode
-    dw #init_print_segment_timer
+    dw #.routine
     db #$28, "Current Mode", #$FF
     db #$28, "   ENEMY HP", #$FF
     db #$28, " ROOM STRAT", #$FF
@@ -2246,6 +2246,8 @@ ih_display_mode:
     db #$28, " PUMP COUNT", #$FF
 ;    db #$28, "WIP D-BOOST", #$FF
     db #$FF
+  .routine
+    JML init_print_segment_timer
 
 ih_display_mode_reward:
     %cm_toggle("Strat Reward SFX", !sram_display_mode_reward, #$0001, #0)
