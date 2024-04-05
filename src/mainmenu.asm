@@ -2219,7 +2219,7 @@ action_select_infohud_mode:
 ih_display_mode:
     dw !ACTION_CHOICE
     dl #!sram_display_mode
-    dw #.routine
+    dw #init_print_segment_timer
     db #$28, "Current Mode", #$FF
     db #$28, "   ENEMY HP", #$FF
     db #$28, " ROOM STRAT", #$FF
@@ -2246,8 +2246,6 @@ ih_display_mode:
     db #$28, " PUMP COUNT", #$FF
 ;    db #$28, "WIP D-BOOST", #$FF
     db #$FF
-  .routine
-    JML init_print_segment_timer
 
 ih_display_mode_reward:
     %cm_toggle("Strat Reward SFX", !sram_display_mode_reward, #$0001, #0)
@@ -3996,27 +3994,6 @@ ctrl_reset_defaults:
     JSL init_sram_controller_shortcuts
     JML validate_sram_for_savestates
 
-init_wram_based_on_sram:
-{
-    JSL GameModeExtras
-    JSL init_print_segment_timer
-    JML validate_sram_for_savestates
-}
-
-init_print_segment_timer:
-{
-    ; Skip printing segment timer when shinetune or walljump enabled
-    LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BEQ .skipSegmentTimer
-    CMP #!IH_MODE_WALLJUMP_INDEX : BEQ .skipSegmentTimer
-    LDA #$0001
-    BRA .setSegmentTimer
-  .skipSegmentTimer
-    LDA #$0000
-  .setSegmentTimer
-    STA !ram_print_segment_timer
-    RTL
-}
-
 validate_sram_for_savestates:
 {
     ; check if required SRAM range is valid
@@ -4046,6 +4023,27 @@ endif
     LDA #$0000
     STA !sram_ctrl_save_state : STA !sram_ctrl_load_state
     RTL
+}
+
+init_print_segment_timer:
+{
+    ; Skip printing segment timer when shinetune or walljump enabled
+    LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BEQ .skip
+    CMP !IH_MODE_WALLJUMP_INDEX : BEQ .skip
+    ; print
+    LDA #$0001 : STA !ram_print_segment_timer
+    RTL
+
+  .skip
+    LDA #$0000 : STA !ram_print_segment_timer
+    RTL
+}
+
+init_wram_based_on_sram:
+{
+    JSL GameModeExtras
+    JSL init_print_segment_timer
+    JML validate_sram_for_savestates
 }
 
 

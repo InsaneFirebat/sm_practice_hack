@@ -1,7 +1,9 @@
 
 ## Changelog since v2.2.7
 
-* [2.6.1.4]  Fixed another crash on PAL version
+* [2.6.1.7]  Fixed segment timer draw when it shouldn't have
+* [2.6.1.6]  Added a page 2 for the fullscreen Room Strats list
+* [2.6.1.5]  Fixed another crash on PAL version
 * [2.6.1.4]  Fixed crash on PAL version
 * [2.6.1.3]  Fixed some occasionally corrupted numbers on the segment timer
 * [2.6.1.2]  Fixed a crash
