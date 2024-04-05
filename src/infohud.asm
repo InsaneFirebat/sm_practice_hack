@@ -907,8 +907,7 @@ ih_update_timers:
     ; Map visible, so draw map counter over item%
     LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BEQ .minimap_vanilla_infohud
     LDA !ram_map_counter : LDX #$0014 : JSR Draw3
-    LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BNE .minimap_roomtimer
-    BRL .pick_minimap_transition_time
+    LDA !ram_print_segment_timer : BNE .pick_minimap_transition_time
 
   .minimap_roomtimer
     STZ $4205
@@ -992,7 +991,7 @@ endif
     LDA !ram_last_room_lag : LDX #$0082 : JSR Draw3
 
     ; Skip door lag and segment timer when shinetune enabled
-    LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BEQ .end
+    LDA !ram_print_segment_timer : BNE .end
 
     ; Door lag / transition time
     LDA !sram_lag_counter_mode : BNE .transition_time_full
@@ -1023,7 +1022,7 @@ endif
     LDA !ram_last_room_lag : LDX #$007E : JSR Draw4
 
     ; Skip door lag and segment timer when shinetune enabled
-    LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BEQ .end
+    LDA !ram_print_segment_timer : BNE .end
 
     ; Door lag / transition time
     LDA !sram_lag_counter_mode : BNE .vanilla_infohud_transition_time_full
@@ -1037,6 +1036,7 @@ endif
     LDX #$00C2 : JSR Draw2
 
   .pick_segment_timer
+    LDA !ram_print_segment_timer : BNE .end
     LDA !sram_frame_counter_mode : BIT #$0001 : BNE .ingame_segment_timer
     LDA !IH_DECIMAL : STA !HUD_TILEMAP+$B4 : STA !HUD_TILEMAP+$BA
     LDA.w #!ram_seg_rt_frames : STA $00
