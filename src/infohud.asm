@@ -446,6 +446,7 @@ ih_before_room_transition:
     BPL .drawDoorLag
     EOR #$FF : INC
   .drawDoorLag
+    ; set DB to $00 ($80)
     PHB : PEA $0000 : PLB : PLB
     TAY
     LDX #$00C2
@@ -456,7 +457,6 @@ ih_before_room_transition:
     TYA : JSR Draw3
   .displayMode
     %a16()
-    PLB
 
     ; Overwrite Enemy HP only
     LDA !sram_display_mode : BNE .done
@@ -469,6 +469,7 @@ ih_before_room_transition:
     LDA !ENEMY_HP : STA !ram_enemy_hp
 
   .done
+    PLB
     CLC ; overwritten code
     RTL
 
