@@ -62,6 +62,7 @@ mc_paletteprofile:
     db #$28, "      MEMES", #$FF
     db #$28, "GRAPEDRINKZ", #$FF
     db #$28, "  PAPASCHMO", #$FF
+    db #$28, "    VESPHER", #$FF
     db #$FF
 
 mc_palette2custom:
@@ -487,6 +488,7 @@ PaletteProfileTables:
     dw #MemesProfileTable         ; 17
     dw #GrapedrinkzProfileTable   ; 18
     dw #PapaSchmoProfileTable     ; 19
+    dw #VespherProfileTable       ; 1A
     dw #$0000
 
 !PROFILE_CUSTOM       = #$0000
@@ -515,6 +517,7 @@ PaletteProfileTables:
 !PROFILE_Memes        = #$0017
 !PROFILE_Grapedrinkz  = #$0018
 !PROFILE_PapaSchmo    = #$0019
+!PROFILE_Vespher      = #$001A
 
 ; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
 TwitchProfileTable:
@@ -591,6 +594,9 @@ GrapedrinkzProfileTable:
 
 PapaSchmoProfileTable:
     dw $0005, $0005, $000B, $0001, $0009, $0000, $00F8, $0014, $0000, $0014, $0000
+
+VespherProfileTable:
+    dw $49FE, $4159, $7FFF, $0804, $0000, $7FFF, $5E80, $55FE, $0000, $0000, $761F
 }
 print pc, " menu PaletteProfileTables start"
 pullpc
