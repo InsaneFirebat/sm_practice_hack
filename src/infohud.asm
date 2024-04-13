@@ -446,25 +446,21 @@ ih_before_room_transition:
     BPL .drawDoorLag
     EOR #$FF : INC
   .drawDoorLag
-    ; set DB to $00 ($80)
-    PHB : PEA $0000 : PLB : PLB
-    TAY
+    TAY ; preserve A
+    PHB : LDA #$80 : PHA : PLB
     LDX #$00C2
     LDA !sram_top_display_mode : CMP.b !TOP_DISPLAY_VANILLA : BEQ .vanillaDoorLag
     LDA !ram_minimap : BEQ .draw3
     LDX #$0054
   .draw3
     TYA : JSR Draw3
-  .displayMode
-    %a16()
 
+  .displayMode
     ; Overwrite Enemy HP only
     LDA !sram_display_mode : BNE .done
     LDA !sram_door_display_mode : BEQ .done
-
     ASL : TAX
     JSR (.status_door_display_table,X)
-
     ; Suppress Enemy HP display
     LDA !ENEMY_HP : STA !ram_enemy_hp
 
@@ -661,7 +657,7 @@ ih_update_hud_code_before_transition:
     ; Bank 80
     PEA $8080 : PLB : PLB
 
-    LDA !sram_display_mode : CMP #!IH_MODE_ARMPUMP_INDEX : BNE .update_hud_code
+    LDA !sram_display_mode : CMP !IH_MODE_ARMPUMP_INDEX : BNE .update_hud_code
 
     ; Report armpump room totals
     LDA !ram_momentum_sum : CLC : ADC !ram_momentum_count : LDX #$0088 : JSR Draw4

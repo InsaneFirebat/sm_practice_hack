@@ -1,8 +1,9 @@
 
 ## Changelog since v2.2.7
 
-* [2.6.1.8]  Added Vespher menu palette profile
-* [2.6.1.8]  Fixed some corrupted graphics on door HUD modes
+* [2.6.1.9]  Fixed door frames not being drawn after a transition
+* [2.6.1.9]  Added Vespher menu palette profile
+* [2.6.1.9]  Fixed some corrupted graphics on door HUD modes
 * [2.6.1.8]  Fixed crash when changing HUD modes
 * [2.6.1.7]  Fixed segment timer draw when it shouldn't have
 * [2.6.1.6]  Added a page 2 for the fullscreen Room Strats list
