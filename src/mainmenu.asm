@@ -2176,11 +2176,11 @@ ihmode_vspeed:
 ihmode_quickdrop:
     %cm_jsl("Quickdrop Trainer", #action_select_infohud_mode, #$0010)
 
-!IH_MODE_WALLJUMP_INDEX = $0011
+!IH_MODE_WALLJUMP_INDEX = #$0011
 ihmode_walljump:
     %cm_jsl("Walljump Trainer", #action_select_infohud_mode, #$0011)
 
-!IH_MODE_ARMPUMP_INDEX = $0012
+!IH_MODE_ARMPUMP_INDEX = #$0012
 ihmode_armpump:
     %cm_jsl("Arm Pump Trainer", #action_select_infohud_mode, #$0012)
 
