@@ -479,7 +479,7 @@ ih_before_room_transition:
     dw status_door_vspeed
     dw status_chargetimer
     dw status_shinetimer
-    dw status_dashcounter
+    dw status_door_dashcounter
     dw status_door_xpos
     dw status_door_ypos
 }

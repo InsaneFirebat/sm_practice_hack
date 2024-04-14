@@ -179,6 +179,11 @@ status_door_vspeed:
     RTS
 }
 
+status_door_dashcounter:
+{
+    LDA !SAMUS_DASH_COUNTER : LDX #$0088 : JMP Draw4
+}
+
 status_door_xpos:
 {
     LDA !SAMUS_X : LDX #$0088 : JMP Draw4
