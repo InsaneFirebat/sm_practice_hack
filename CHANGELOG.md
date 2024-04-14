@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.6.1.9]  Fixed dash counter not drawing in door HUD mode
 * [2.6.1.9]  Fixed door frames not being drawn after a transition
 * [2.6.1.9]  Added Vespher menu palette profile
 * [2.6.1.9]  Fixed some corrupted graphics on door HUD modes
