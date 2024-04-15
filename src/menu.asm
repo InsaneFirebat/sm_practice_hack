@@ -1984,7 +1984,7 @@ cm_edit_decimal_digits:
     TXA : CLC : ADC #$002C : TAX
 
     ; is editing thousands digit allowed?
-    LDA #$2C00|'0'
+    LDA #$3C00|'0'
     LDY !DP_DigitMaximum : CPY #1000 : BMI +
 
     ; start with zero tiles
