@@ -1689,48 +1689,36 @@ ih_game_loop_code:
     LDA !ram_game_loop_extras : BEQ .handleinputs
 
     ; Optional features
-    LDA !ram_metronome : BEQ +
+    LDA !ram_metronome : BEQ .pants
     JSR metronome
 
-+   LDA !ram_magic_pants_enabled : XBA : ORA !ram_space_pants_enabled
-if !FEATURE_EXTRAS
-    BEQ .infiniteammo
-else
-+   BEQ .handleinputs
-endif
+  .pants
+    LDA !ram_magic_pants_enabled : XBA : ORA !ram_space_pants_enabled : BEQ .infiniteammo
     BIT #$00FF : BEQ .magicpants    ; if spacepants are disabled, handle magicpants
     BIT #$FF00 : BEQ .spacepants    ; if magicpants are disabled, handle spacepants
 
     ; both are enabled, check Samus movement type to decide
     LDA $0A1F : AND #$00FF : CMP #$0001 : BEQ .magicpants    ; check if running
-if !FEATURE_EXTRAS
     BRA .infiniteammo
-else
-    BRA .handleinputs
-endif
 
   .magicpants
     JSR magic_pants
-if !FEATURE_EXTRAS
     BRA .infiniteammo
-else
-    BRA .handleinputs
-endif
 
   .spacepants
     JSR space_pants
 
   .infiniteammo
-    LDA !ram_infinite_ammo : CMP !ram_infiniteammo_check : BMI .reset_ammo_check
-    BEQ .handleinputs
-    JSR infinite_ammo
+    LDA !ram_infinite_ammo : BEQ .handleinputs
+    CMP !ram_infiniteammo_check : BMI .resetAmmo
+    JSR InfiniteAmmo
     BRA .handleinputs
 
-  .reset_ammo_check
+  .resetAmmo
     LDA #$0000 : STA !ram_infiniteammo_check
-    LDA !ram_ammo_missiles : STA !SAMUS_MISSILES
-    LDA !ram_ammo_supers : STA !SAMUS_SUPERS
-    LDA !ram_ammo_powerbombs : STA !SAMUS_PBS
+    LDA !DEBUG_MISSILES : STA !SAMUS_MISSILES
+    LDA !DEBUG_SUPERS : STA !SAMUS_SUPERS
+    LDA !DEBUG_POWERBOMBS : STA !SAMUS_PBS
 
     ; standard features
   .handleinputs
@@ -1933,19 +1921,20 @@ space_pants:
     RTS
 }
 
-infinite_ammo:
+InfiniteAmmo:
 {
-    LDA !ram_infiniteammo_check : BNE + ; 0 if first time it's been run
+    LDA !ram_infiniteammo_check : BNE .setMaxAmmo
+    ; first runtime
     INC : STA !ram_infiniteammo_check
     ; preserve ammo counts
-    LDA !SAMUS_MISSILES : STA !ram_ammo_missiles
-    LDA !SAMUS_SUPERS : STA !ram_ammo_supers
-    LDA !SAMUS_PBS : STA !ram_ammo_powerbombs
+    LDA !SAMUS_MISSILES : STA !DEBUG_MISSILES
+    LDA !SAMUS_SUPERS : STA !DEBUG_SUPERS
+    LDA !SAMUS_PBS : STA !DEBUG_POWERBOMBS
 
-    ; lock ammo to specific values
-+   LDA #$03E7 : STA !SAMUS_MISSILES  ; 999 missiles
-    LDA #$0063 : STA !SAMUS_SUPERS  ; 99 supers
-    LDA #$0063 : STA !SAMUS_PBS  ; 99 pbs
+  .setMaxAmmo
+    LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES
+    LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS
+    LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS
     RTS
 }
 
