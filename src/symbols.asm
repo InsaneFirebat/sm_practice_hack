@@ -377,9 +377,6 @@ sram_custom_preset_names_tinystates = !sram_custom_preset_names_tinystates ; !SR
 ; ----------------------------------------------------------------------- ;
 
 ram_countdamage = !ram_countdamage ; $0B0C
-ram_ammo_missiles = !ram_ammo_missiles ; $05C9
-ram_ammo_supers = !ram_ammo_supers ; $05CB
-ram_ammo_powerbombs = !ram_ammo_powerbombs ; $05CD
 
 ram_HUD_top = !ram_HUD_top ; !CUSTOM_WRAM+$00
 ram_HUD_middle = !ram_HUD_middle ; !CUSTOM_WRAM+$02

@@ -7,7 +7,7 @@
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 6
 !VERSION_BUILD = 1
-!VERSION_REV = 10
+!VERSION_REV = 11
 
 
 ; ---------
@@ -299,6 +299,9 @@
 !NMI_REQUEST_FLAG = $05B4
 !FRAME_COUNTER_8BIT = $05B5
 !FRAME_COUNTER = $05B6
+!DEBUG_MISSILES = $05C9
+!DEBUG_SUPERS = $05CB
+!DEBUG_POWERBOMBS = $05CD
 !DEBUG_MODE_FLAG = $05D1
 !RANDOM_NUMBER = $05E5
 !DISABLE_SOUNDS = $05F5
@@ -617,9 +620,6 @@ endif
 ; ----------------------------------------------------------------------- ;
 
 !ram_countdamage = $0B0C
-!ram_ammo_missiles = $05C9
-!ram_ammo_supers = $05CB
-!ram_ammo_powerbombs = $05CD
 
 
 !CUSTOM_WRAM = $7EFB00

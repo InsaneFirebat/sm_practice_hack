@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.6.1.11] Fixed broken Infinite Ammo feature
 * [2.6.1.10] Fixed IGT room timers when Samus is locked
 * [2.6.1.9]  Fixed dash counter not drawing in door HUD mode
 * [2.6.1.9]  Fixed door frames not being drawn after a transition
