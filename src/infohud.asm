@@ -1698,7 +1698,7 @@ ih_game_loop_code:
     BIT #$FF00 : BEQ .spacepants    ; if magicpants are disabled, handle spacepants
 
     ; both are enabled, check Samus movement type to decide
-    LDA $0A1F : AND #$00FF : CMP #$0001 : BEQ .magicpants    ; check if running
+    LDA !SAMUS_MOVEMENT_TYPE : AND #$00FF : CMP #$0001 : BEQ .magicpants    ; check if running
     BRA .infiniteammo
 
   .magicpants
@@ -1833,13 +1833,13 @@ magic_pants:
 +   RTS
 
   .check
-    LDA $0A1F : AND #$00FF : CMP #$0001 : BEQ .flash
+    LDA !SAMUS_MOVEMENT_TYPE : AND #$00FF : CMP #$0001 : BEQ .flash
     RTS
 
   .flash
     LDA !ram_magic_pants_state : BNE +
 
-    ; if loudpants are enabled, click
+    ; if loudpants are enabled, play sfx
     LDA !ram_magic_pants_enabled : AND #$0002 : BEQ +
     LDA !sram_metronome_sfx : ASL : TAX
     LDA.l MetronomeSFX,X : JSL !SFX_LIB1
