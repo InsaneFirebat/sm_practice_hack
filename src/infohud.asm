@@ -2166,7 +2166,7 @@ TitleHeaderReplace:
   .upper
 table ../resources/tables/LargeUpperChar.tbl
 if !VERSION_REV
-    dw "  !VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV  "
+    dw "  !VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV   "
 else
     dw "   !VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD    "
 endif
@@ -2176,7 +2176,7 @@ if !VERSION_REV
 table ../resources/tables/SmallChar.tbl
     dw " V"
 table ../resources/tables/LargeLowerChar.tbl
-    dw "!VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV  "
+    dw "!VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV   "
 else
 table ../resources/tables/SmallChar.tbl
     dw "  V"
