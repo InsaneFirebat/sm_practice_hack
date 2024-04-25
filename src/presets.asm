@@ -19,7 +19,7 @@ preset_load:
     JSL preset_start_gameplay  ; Start gameplay
 
     ; Fix Wrecked Ship rooms with corrupted foreground (just Phantoon for now)
-    LDA !ROOM_ID : CMP #$A6CB : BNE +
+    LDA !ROOM_ID : CMP #$A6CB : BNE .doneBG2
     JSL preset_clear_BG2_tilemap
 
   .doneBG2
