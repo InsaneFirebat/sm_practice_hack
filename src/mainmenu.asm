@@ -82,7 +82,7 @@ preset_category_banks:
 
 MainMenu:
     dw #mm_goto_equipment
-;    dw #mm_goto_presets
+    dw #mm_goto_presets
     dw #mm_goto_presets_menu
     dw #mm_goto_teleport
     dw #mm_goto_events
@@ -103,7 +103,7 @@ endif
 
 MainMenuBanks:
     dw #EquipmentMenu>>16
-;    dw #preset_category_banks>>16 ; dummy
+    dw #preset_category_banks>>16 ; dummy
     dw #PresetsMenu>>16
     dw #TeleportMenu>>16
     dw #EventsMenu>>16
@@ -169,19 +169,19 @@ endif
 ; -------------------
 
 PresetsMenu:
-;    dw #presets_goto_select_preset_category
-;    dw #presets_current
-;    dw #$FFFF
+    dw #presets_goto_select_preset_category
+    dw #presets_current
+    dw #$FFFF
     dw #presets_custom_preset_slot
     dw #presets_save_custom_preset
     dw #presets_load_custom_preset
     dw #$FFFF
-;    dw #presets_reload_last
-;    dw #presets_load_random
-;if !FEATURE_DEV
-;    dw #presets_random_preset_rng
-;endif
-;    dw #$FFFF
+    dw #presets_reload_last
+    dw #presets_load_random
+if !FEATURE_DEV
+    dw #presets_random_preset_rng
+endif
+    dw #$FFFF
     dw #presets_open_blue_doors
     dw #presets_load_with_enemies
     dw #presets_clear_map_tiles
