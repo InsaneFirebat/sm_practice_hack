@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.6.1.14] Another fix for numfields in the menu
 * [2.6.1.13] Another fix for numfields in the menu
 * [2.6.1.12] Fixed corrupted tile in title menu version string
 * [2.6.1.12] Fixed number fields getting stuck if they max at 255

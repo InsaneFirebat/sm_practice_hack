@@ -2729,7 +2729,7 @@ execute_numfield:
     ; pressed right, inc
     LDA [!DP_Address] : AND #$00FF : CLC : ADC !DP_Increment
     CMP !DP_Maximum : BCS .set_to_min
-    STA [!DP_Address] : BRA .jsl
+    %a8() : STA [!DP_Address] : BRA .jsl
 
   .skip_inc
 ; unneeded while heldincrement is omitted
