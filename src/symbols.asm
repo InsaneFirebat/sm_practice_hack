@@ -201,6 +201,10 @@ ram_cm_custom_preset_labels = !ram_cm_custom_preset_labels ; !WRAM_MENU_START+$4
 ram_seed_X = !ram_seed_X ; !WRAM_MENU_START+$4E
 ram_seed_Y = !ram_seed_Y ; !WRAM_MENU_START+$50
 
+ram_cm_sfxlib1 = !ram_cm_sfxlib1 ; !WRAM_MENU_START+$52
+ram_cm_sfxlib2 = !ram_cm_sfxlib2 ; !WRAM_MENU_START+$54
+ram_cm_sfxlib3 = !ram_cm_sfxlib3 ; !WRAM_MENU_START+$56
+
 ; ^ FREE SPACE ^ up to +$76
 
 ram_cm_preserved_timers = !ram_cm_preserved_timers ; !WRAM_MENU_START+$78 ; 8 bytes
@@ -438,13 +442,6 @@ ram_palette_seltext = !ram_palette_seltext ; !CUSTOM_WRAM+$8E
 ram_palette_seltextbg = !ram_palette_seltextbg ; !CUSTOM_WRAM+$90
 ram_palette_numseloutline = !ram_palette_numseloutline ; !CUSTOM_WRAM+$92
 ram_palette_numsel = !ram_palette_numsel ; !CUSTOM_WRAM+$94
-
-;!ram_FREE_SPACE = !CUSTOM_WRAM+$96
-
-ram_soundtest_lib1 = !ram_soundtest_lib1 ; !CUSTOM_WRAM+$98
-ram_soundtest_lib2 = !ram_soundtest_lib2 ; !CUSTOM_WRAM+$9A
-ram_soundtest_lib3 = !ram_soundtest_lib3 ; !CUSTOM_WRAM+$9C
-ram_soundtest_music = !ram_soundtest_music ; !CUSTOM_WRAM+$9E
 
 ; FREE SPACE ^
 
