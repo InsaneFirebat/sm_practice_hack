@@ -101,7 +101,7 @@ init_nonzero_wram:
     LDA #$0258 : STA !ram_cm_brb_cycle_time
 
     LDA #$0001
-    STA !ram_soundtest_lib1 : STA !ram_soundtest_lib2 : STA !ram_soundtest_lib3
+    STA !ram_cm_sfxlib1 : STA !ram_cm_sfxlib2 : STA !ram_cm_sfxlib3
 
     RTL
 }

@@ -13,7 +13,6 @@ else
 endif
     dw #$FFFF
     dw #ifb_brb
-    dw #ifb_soundtest
     dw #ifb_presetrando
 if !FEATURE_EXTRAS
     dw #$FFFF
@@ -131,9 +130,6 @@ ifb_numbergfx_display:
 ifb_brb:
     %cm_submenu(">BRB Screen", #BRBMenu)
 
-ifb_soundtest:
-    %cm_submenu(">Sound Test", #SoundTestMenu)
-
 ifb_presetrando:
     %cm_submenu(">Preset Randomizer", #PresetRandoMenu)
 
@@ -194,7 +190,7 @@ BRBMenu:
     dw #$FFFF
     dw ifb_brb_scroll
     dw #$FFFF
-    dw #ifb_soundtest_goto_music
+;    dw #ifb_soundtest_goto_music ; moved to different bank
     dw #ifb_game_music_toggle
     dw #$0000
     %cm_header("BRB SCREEN MENU")
@@ -245,6 +241,29 @@ ifb_brb_palette_cycle:
 
 ifb_brb_scroll:
     %cm_toggle("Screen Scrolling", !ram_cm_scroll, #$0001, #0)
+
+ifb_game_music_toggle:
+    dw !ACTION_CHOICE
+    dl #!sram_music_toggle
+    dw .routine
+    db #$28, "Music", #$FF
+    db #$28, "        OFF", #$FF
+    db #$28, "         ON", #$FF
+    db #$28, "   FAST OFF", #$FF
+    db #$28, " PRESET OFF", #$FF
+    db #$FF
+  .routine
+    ; Clear music queue
+    STZ $0629 : STZ $062B : STZ $062D : STZ $062F
+    STZ $0631 : STZ $0633 : STZ $0635 : STZ $0637
+    STZ $0639 : STZ $063B : STZ $063D : STZ $063F
+    CMP #$0001 : BEQ .resume_music
+    STZ $2140
+    RTL
+  .resume_music
+    LDA !MUSIC_DATA : CLC : ADC #$FF00 : STZ !MUSIC_DATA : JSL !MUSIC_ROUTINE
+    LDA !MUSIC_TRACK : STZ !MUSIC_TRACK : JSL !MUSIC_ROUTINE
+    RTL
 
 print pc, " BRB start"
 incsrc BRBmenu.asm
@@ -303,247 +322,6 @@ presetrando_supers:
 
 presetrando_pbs: 
     %cm_numfield("Max Power Bomb Pickups", !sram_presetrando_max_pbs, 0, 50, 1, 5, #0)
-
-
-; ----------
-; Sound Test
-; ----------
-
-SoundTestMenu:
-    dw #ifb_soundtest_goto_music
-    dw #ifb_game_music_toggle
-    dw #$FFFF
-    dw #ifb_soundtest_lib1_sound
-    dw #ifb_soundtest_lib2_sound
-    dw #ifb_soundtest_lib3_sound
-    dw #ifb_soundtest_silence
-    dw #$0000
-    %cm_header("SOUND TEST MENU")
-    %cm_footer("PRESS Y TO PLAY SOUNDS")
-
-ifb_soundtest_lib1_sound:
-    %cm_numfield_sound("Library One Sound", !ram_soundtest_lib1, 1, 66, 1, .routine)
-  .routine
-    LDA !ram_soundtest_lib1 : JSL !SFX_LIB1
-    RTL
-
-ifb_soundtest_lib2_sound:
-    %cm_numfield_sound("Library Two Sound", !ram_soundtest_lib2, 1, 127, 1, .routine)
-  .routine
-    LDA !ram_soundtest_lib2 : JSL !SFX_LIB2
-    RTL
-
-ifb_soundtest_lib3_sound:
-    %cm_numfield_sound("Library Three Sound", !ram_soundtest_lib3, 1, 47, 1, .routine)
-  .routine
-    LDA !ram_soundtest_lib3 : JSL !SFX_LIB3
-    RTL
-
-ifb_soundtest_silence:
-    %cm_jsl("Silence Sound FX", .routine, #0)
-  .routine
-    JSL stop_all_sounds
-    RTL
-
-ifb_soundtest_goto_music:
-    %cm_submenu(">Music Selection", #MusicSelectMenu1)
-
-MusicSelectMenu1:
-    dw #ifb_soundtest_music_title1
-    dw #ifb_soundtest_music_title2
-    dw #ifb_soundtest_music_intro
-    dw #ifb_soundtest_music_ceres
-    dw #ifb_soundtest_music_escape
-    dw #ifb_soundtest_music_rainstorm
-    dw #ifb_soundtest_music_spacepirate
-    dw #ifb_soundtest_music_samustheme
-    dw #ifb_soundtest_music_greenbrinstar
-    dw #ifb_soundtest_music_redbrinstar
-    dw #ifb_soundtest_music_uppernorfair
-    dw #ifb_soundtest_music_lowernorfair
-    dw #ifb_soundtest_music_easternmaridia
-    dw #ifb_soundtest_music_westernmaridia
-    dw #ifb_soundtest_music_wreckedshipoff
-    dw #ifb_soundtest_music_wreckedshipon
-    dw #ifb_soundtest_music_hallway
-    dw #ifb_soundtest_music_goldenstatue
-    dw #ifb_soundtest_music_tourian
-    dw #$FFFF
-    dw #ifb_soundtest_music_goto_2
-    dw #$0000
-    %cm_header("PLAY MUSIC - PAGE ONE")
-
-ifb_soundtest_music_title1:
-    %cm_jsl("Title Theme Part 1", #action_soundtest_playmusic, #$0305)
-
-ifb_soundtest_music_title2:
-    %cm_jsl("Title Theme Part 2", #action_soundtest_playmusic, #$0306)
-
-ifb_soundtest_music_intro:
-    %cm_jsl("Intro", #action_soundtest_playmusic, #$3605)
-
-ifb_soundtest_music_ceres:
-    %cm_jsl("Ceres Station", #action_soundtest_playmusic, #$2D06)
-
-ifb_soundtest_music_escape:
-    %cm_jsl("Escape Sequence", #action_soundtest_playmusic, #$2407)
-
-ifb_soundtest_music_rainstorm:
-    %cm_jsl("Zebes Rainstorm", #action_soundtest_playmusic, #$0605)
-
-ifb_soundtest_music_spacepirate:
-    %cm_jsl("Space Pirate Theme", #action_soundtest_playmusic, #$0905)
-
-ifb_soundtest_music_samustheme:
-    %cm_jsl("Samus Theme", #action_soundtest_playmusic, #$0C05)
-
-ifb_soundtest_music_greenbrinstar:
-    %cm_jsl("Green Brinstar", #action_soundtest_playmusic, #$0F05)
-
-ifb_soundtest_music_redbrinstar:
-    %cm_jsl("Red Brinstar", #action_soundtest_playmusic, #$1205)
-
-ifb_soundtest_music_uppernorfair:
-    %cm_jsl("Upper Norfair", #action_soundtest_playmusic, #$1505)
-
-ifb_soundtest_music_lowernorfair:
-    %cm_jsl("Lower Norfair", #action_soundtest_playmusic, #$1805)
-
-ifb_soundtest_music_easternmaridia:
-    %cm_jsl("Eastern Maridia", #action_soundtest_playmusic, #$1B05)
-
-ifb_soundtest_music_westernmaridia:
-    %cm_jsl("Western Maridia", #action_soundtest_playmusic, #$1B06)
-
-ifb_soundtest_music_wreckedshipoff:
-    %cm_jsl("Wrecked Ship Unpowered", #action_soundtest_playmusic, #$3005)
-
-ifb_soundtest_music_wreckedshipon:
-    %cm_jsl("Wrecked Ship", #action_soundtest_playmusic, #$3006)
-
-ifb_soundtest_music_hallway:
-    %cm_jsl("Hallway to Statue", #action_soundtest_playmusic, #$0004)
-
-ifb_soundtest_music_goldenstatue:
-    %cm_jsl("Golden Statue", #action_soundtest_playmusic, #$0906)
-
-ifb_soundtest_music_tourian:
-    %cm_jsl("Tourian", #action_soundtest_playmusic, #$1E05)
-
-ifb_soundtest_music_goto_2:
-    %cm_jsl(">GOTO PAGE TWO", .routine, #MusicSelectMenu2)
-  .routine
-    JSL cm_go_back
-    %submenu_jump()
-
-MusicSelectMenu2:
-    dw #ifb_soundtest_music_preboss1
-    dw #ifb_soundtest_music_preboss2
-    dw #ifb_soundtest_music_miniboss
-    dw #ifb_soundtest_music_smallboss
-    dw #ifb_soundtest_music_bigboss
-    dw #ifb_soundtest_music_motherbrain
-    dw #ifb_soundtest_music_credits
-    dw #ifb_soundtest_music_itemroom
-    dw #ifb_soundtest_music_itemfanfare
-    dw #ifb_soundtest_music_spacecolony
-    dw #ifb_soundtest_music_zebesexplodes
-    dw #ifb_soundtest_music_loadsave
-    dw #ifb_soundtest_music_death
-    dw #ifb_soundtest_music_lastmetroid
-    dw #ifb_soundtest_music_galaxypeace
-    dw #$FFFF
-    dw #ifb_soundtest_music_goto_1
-    dw #$0000
-    %cm_header("PLAY MUSIC - PAGE TWO")
-
-ifb_soundtest_music_preboss1:
-    %cm_jsl("Chozo Statue Awakens", #action_soundtest_playmusic, #$2406)
-
-ifb_soundtest_music_preboss2:
-    %cm_jsl("Approaching Confrontation", #action_soundtest_playmusic, #$2706)
-
-ifb_soundtest_music_miniboss:
-    %cm_jsl("Miniboss Fight", #action_soundtest_playmusic, #$2A05)
-
-ifb_soundtest_music_smallboss:
-    %cm_jsl("Small Boss Confrontation", #action_soundtest_playmusic, #$2705)
-
-ifb_soundtest_music_bigboss:
-    %cm_jsl("Big Boss Confrontation", #action_soundtest_playmusic, #$2405)
-
-ifb_soundtest_music_motherbrain:
-    %cm_jsl("Mother Brain Fight", #action_soundtest_playmusic, #$2105)
-
-ifb_soundtest_music_credits:
-    %cm_jsl("Credits", #action_soundtest_playmusic, #$3C05)
-
-ifb_soundtest_music_itemroom:
-    %cm_jsl("Item - Elevator Room", #action_soundtest_playmusic, #$0003)
-
-ifb_soundtest_music_itemfanfare:
-    %cm_jsl("Item Fanfare", #action_soundtest_playmusic, #$0002)
-
-ifb_soundtest_music_spacecolony:
-    %cm_jsl("Arrival at Space Colony", #action_soundtest_playmusic, #$2D05)
-
-ifb_soundtest_music_zebesexplodes:
-    %cm_jsl("Zebes Explodes", #action_soundtest_playmusic, #$3305)
-
-ifb_soundtest_music_loadsave:
-    %cm_jsl("Samus Appears", #action_soundtest_playmusic, #$0001)
-
-ifb_soundtest_music_death:
-    %cm_jsl("Death", #action_soundtest_playmusic, #$3905)
-
-ifb_soundtest_music_lastmetroid:
-    %cm_jsl("Last Metroid in Captivity", #action_soundtest_playmusic, #$3F05)
-
-ifb_soundtest_music_galaxypeace:
-    %cm_jsl("The Galaxy is at Peace", #action_soundtest_playmusic, #$4205)
-
-ifb_soundtest_music_goto_1:
-    %cm_jsl(">GOTO PAGE ONE", .routine, #MusicSelectMenu1)
-  .routine
-    JSL cm_go_back
-    %submenu_jump()
-
-ifb_game_music_toggle:
-    dw !ACTION_CHOICE
-    dl #!sram_music_toggle
-    dw .routine
-    db #$28, "Music", #$FF
-    db #$28, "        OFF", #$FF
-    db #$28, "         ON", #$FF
-    db #$28, "   FAST OFF", #$FF
-    db #$28, " PRESET OFF", #$FF
-    db #$FF
-  .routine
-    ; Clear music queue
-    STZ $0629 : STZ $062B : STZ $062D : STZ $062F
-    STZ $0631 : STZ $0633 : STZ $0635 : STZ $0637
-    STZ $0639 : STZ $063B : STZ $063D : STZ $063F
-    CMP #$0001 : BEQ .resume_music
-    STZ $2140
-    RTL
-
-  .resume_music
-    LDA !MUSIC_DATA : CLC : ADC #$FF00 : STZ !MUSIC_DATA : JSL !MUSIC_ROUTINE
-    LDA !MUSIC_TRACK : STZ !MUSIC_TRACK : JSL !MUSIC_ROUTINE
-    RTL
-
-action_soundtest_playmusic:
-{
-    PHY
-    LDA #$0000 : JSL !MUSIC_ROUTINE                  ; always load silence first
-    PLY : TYA
-    %a8() : STA !ram_soundtest_music
-    XBA : %a16()
-    STA $07CB                                        ; store data index to the room
-    ORA #$FF00 : JSL !MUSIC_ROUTINE                  ; play from negative data index
-    LDA !ram_soundtest_music : JSL !MUSIC_ROUTINE    ; play from track index
-    RTL
-}
 
 
 ; ----------------

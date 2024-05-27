@@ -7,7 +7,7 @@
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 6
 !VERSION_BUILD = 1
-!VERSION_REV = 14
+!VERSION_REV = 15
 
 
 ; ---------
@@ -211,6 +211,10 @@
 !ram_seed_X = !WRAM_MENU_START+$4E
 !ram_seed_Y = !WRAM_MENU_START+$50
 
+!ram_cm_sfxlib1 = !WRAM_MENU_START+$52
+!ram_cm_sfxlib2 = !WRAM_MENU_START+$54
+!ram_cm_sfxlib3 = !WRAM_MENU_START+$56
+
 ; ^ FREE SPACE ^ up to +$76
 
 !ram_cm_preserved_timers = !WRAM_MENU_START+$78 ; 8 bytes
@@ -318,6 +322,7 @@
 !PREVIOUS_CRE_BITSET = $07B1
 !CRE_BITSET = $07B3
 !STATE_POINTER = $07BB
+!ROOM_MUSIC_DATA_INDEX = $07CB
 !MUSIC_DATA = $07F3
 !MUSIC_TRACK = $07F5
 !LAYER1_X = $0911
@@ -689,13 +694,6 @@ endif
 !ram_palette_seltextbg = !CUSTOM_WRAM+$90
 !ram_palette_numseloutline = !CUSTOM_WRAM+$92
 !ram_palette_numsel = !CUSTOM_WRAM+$94
-
-;!ram_FREE_SPACE = !CUSTOM_WRAM+$96
-
-!ram_soundtest_lib1 = !CUSTOM_WRAM+$98
-!ram_soundtest_lib2 = !CUSTOM_WRAM+$9A
-!ram_soundtest_lib3 = !CUSTOM_WRAM+$9C
-!ram_soundtest_music = !CUSTOM_WRAM+$9E
 
 ; FREE SPACE ^
 
