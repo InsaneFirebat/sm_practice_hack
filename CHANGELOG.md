@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.6.1.16] Fixed issue with segment timer not updating
 * [2.6.1.15] Added Audio Menu to the main menu
 * [2.6.1.14] Another fix for numfields in the menu
 * [2.6.1.13] Another fix for numfields in the menu
