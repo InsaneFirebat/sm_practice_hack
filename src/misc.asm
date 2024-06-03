@@ -26,11 +26,28 @@ org $8B92DE
 ;  (skip to Ceres)     LDA #$C100 (skip to Ceres)
 ;  (skip to Zebes)     LDA #$CDAF (skip to Zebes)
 ;                      LDA #Intro_Skip_to_Zebes
-org $82EEDF
-    LDA #$C100
+;org $82EEDF
+;    LDA #$BCA0
+
+org $8BA3B0
+    LDA #$BCA0 : STA $1F51 ; next cinematic function
+    LDA #$1004 : STA !SAMUS_ITEMS_COLLECTED
+    JMP $FFC0 ; Yfaster starting equipment setup
+
 
 org !ORG_MISC_BANK8B
 print pc, " misc bank8B start"
+Yintro:
+{
+    LDA #$BCA0 : STA $1F51 ; next cinematic function
+    LDA #$1004 : STA !SAMUS_ITEMS_COLLECTED
+    JMP $FFC0 ; Yfaster equipment setup
+
+    JSR $819B ; overwritten code
+    LDA #$1004 : STA !SAMUS_ITEMS_EQUIPPED
+    JMP $FFC0 ; Yfaster equipment setup
+}
+
 Intro_Skip_to_Zebes:
 {
     %a8()

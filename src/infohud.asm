@@ -37,7 +37,7 @@ org $9493FB      ; hijack, runs when Samus hits a door BTS
 org $82E764      ; hijack, runs when Samus is coming out of a room transition
     JSL ih_after_room_transition : RTS
 
-org $809B48      ; hijack, HUD routine (game timer by Quote58)
+org $809B4A      ; hijack, HUD routine (game timer by Quote58)
     JSL ih_hud_code
 
 org $8290F6      ; hijack, HUD routine while paused

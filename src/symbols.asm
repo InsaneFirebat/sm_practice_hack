@@ -18,8 +18,6 @@ incsrc wram_symbols.asm
 ;!ORG_MISC_TILE_GRAPHICS = $8BFA00 ; unused, $140
 ;!ORG_ROOMNAMES = $E70000 ; whole bank pointer style
 ;!ORG_CLEAR_ENEMIES = $E70000 ; whole bank pointer style
-;!ORG_CUSTOMIZEMENU = $AFEC00
-;!ORG_PALETTEPROFILES = $AEFD20
 
 ; ---------
 ; Work RAM

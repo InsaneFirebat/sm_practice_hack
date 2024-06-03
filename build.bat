@@ -1,7 +1,7 @@
 @echo off
 
-set HACK_NAME=HACK
-set HACK_BUILD_VERSION=2.6.0
+set HACK_NAME=Yfaster
+set HACK_BUILD_VERSION=2.6.0.1
 
 echo Building %HACK_NAME% Practice Hack
 if not exist build mkdir build

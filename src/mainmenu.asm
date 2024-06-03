@@ -99,7 +99,7 @@ if !FEATURE_CUSTOMIZE_MENU
     dw #mm_goto_customize
 endif
     dw #$0000
-    %cm_version_header("SM PRACTICE HACK")
+    %cm_version_header("YFASTER")
 
 MainMenuBanks:
     dw #EquipmentMenu>>16
@@ -1337,22 +1337,22 @@ TeleportMenu:
     %cm_header("TELEPORT TO SAVE STATION")
 
 tel_goto_crat:
-    %cm_submenu("Crateria", #TeleportCrateriaMenu)
+    %cm_submenu("Orangestar", #TeleportCrateriaMenu)
 
 tel_goto_brin:
-    %cm_submenu("Brinstar", #TeleportBrinstarMenu)
+    %cm_submenu("Goldstar", #TeleportBrinstarMenu)
 
 tel_goto_norf:
-    %cm_submenu("Norfair", #TeleportNorfairMenu)
+    %cm_submenu("Northstar", #TeleportNorfairMenu)
 
 tel_goto_ship:
-    %cm_submenu("Wrecked Ship", #TeleportWreckedShipMenu)
+    %cm_submenu("Darkstar", #TeleportWreckedShipMenu)
 
 tel_goto_mari:
-    %cm_submenu("Maridia", #TeleportMaridiaMenu)
+    %cm_submenu("Zaristar", #TeleportMaridiaMenu)
 
 tel_goto_tour:
-    %cm_submenu("Tourian", #TeleportTourianMenu)
+    %cm_submenu("Finalstar", #TeleportTourianMenu)
 
 tel_goto_debug:
     %cm_submenu("Debug Teleports", #DebugTeleportMenu)
@@ -1360,14 +1360,30 @@ tel_goto_debug:
 TeleportCrateriaMenu:
     dw #tel_crateriaship
     dw #tel_crateriaparlor
+    dw #tel_crateria02
+    dw #tel_crateria09
+    dw #tel_crateria0A
+    dw #tel_crateria11
     dw #$0000
-    %cm_header("CRATERIA SAVE STATIONS")
+    %cm_header("ORANGESTAR SAVE STATIONS")
 
 tel_crateriaship:
-    %cm_jsl("Crateria Ship", #action_teleport, #$0000)
+    %cm_jsl("Ship", #action_teleport, #$0000)
 
 tel_crateriaparlor:
-    %cm_jsl("Crateria Parlor", #action_teleport, #$0001)
+    %cm_jsl("West of Ship", #action_teleport, #$0001)
+
+tel_crateria02:
+    %cm_jsl("Elevator to Darkstar", #action_teleport, #$0002)
+
+tel_crateria09:
+    %cm_jsl("DEBUG First Missiles", #action_teleport, #$0009)
+
+tel_crateria0A:
+    %cm_jsl("Elevator to Northstar", #action_teleport, #$000A)
+
+tel_crateria11:
+    %cm_jsl("DEBUG 11", #action_teleport, #$0011)
 
 TeleportBrinstarMenu:
     dw #tel_brinstarpink
@@ -1376,22 +1392,22 @@ TeleportBrinstarMenu:
     dw #tel_brinstarkraid
     dw #tel_brinstarredtower
     dw #$0000
-    %cm_header("BRINSTAR SAVE STATIONS")
+    %cm_header("GOLDSTAR SAVE STATIONS")
 
 tel_brinstarpink:
-    %cm_jsl("Brinstar Pink Spospo", #action_teleport, #$0100)
+    %cm_jsl("Near Spore Spawn", #action_teleport, #$0101)
 
 tel_brinstargreenshaft:
-    %cm_jsl("Brinstar Green Shaft", #action_teleport, #$0101)
+    %cm_jsl("DEBUG Super Missiles", #action_teleport, #$0102)
 
 tel_brinstargreenetecoons:
-    %cm_jsl("Brinstar Green Etecoons", #action_teleport, #$0102)
+    %cm_jsl("DEBUG Kraid?", #action_teleport, #$0103)
 
 tel_brinstarkraid:
-    %cm_jsl("Brinstar Kraid", #action_teleport, #$0103)
+    %cm_jsl("Local Elevator", #action_teleport, #$0104)
 
 tel_brinstarredtower:
-    %cm_jsl("Brinstar Red Tower", #action_teleport, #$0104)
+    %cm_jsl("DEBUG 8", #action_teleport, #$0108)
 
 TeleportNorfairMenu:
     dw #tel_norfairgrapple
@@ -1404,30 +1420,33 @@ TeleportNorfairMenu:
     %cm_header("NORFAIR SAVE STATIONS")
 
 tel_norfairgrapple:
-    %cm_jsl("Norfair Grapple", #action_teleport, #$0200)
+    %cm_jsl("Red Pirates", #action_teleport, #$0200)
 
 tel_norfairbubble:
-    %cm_jsl("Norfair Bubble Mountain", #action_teleport, #$0201)
+    %cm_jsl("Post Ridley", #action_teleport, #$0201)
 
 tel_norfairtunnel:
-    %cm_jsl("Norfair Tunnel", #action_teleport, #$0202)
+    %cm_jsl("DEBUG Bubble Tower", #action_teleport, #$0202)
 
 tel_norfaircrocomire:
-    %cm_jsl("Norfair Crocomire", #action_teleport, #$0203)
+    %cm_jsl("Ridley", #action_teleport, #$0203)
 
 tel_norfairlnelevator:
-    %cm_jsl("Norfair LN Elevator", #action_teleport, #$0204)
+    %cm_jsl("DEBUG Orangestar Flashies", #action_teleport, #$0204)
 
 tel_norfairridley:
-    %cm_jsl("Norfair Ridley", #action_teleport, #$0205)
+    %cm_jsl("DEBUG Top of Bubble Tower", #action_teleport, #$0213)
+
+tel_norfair16:
+    %cm_jsl("DEBUG Golden Torizo", #action_teleport, #$0216)
 
 TeleportWreckedShipMenu:
     dw #tel_wreckedship
     dw #$0000
-    %cm_header("WRECKED SHIP SAVE STATIONS")
+    %cm_header("DARKSTAR SAVE STATIONS")
 
 tel_wreckedship:
-    %cm_jsl("Wrecked Ship", #action_teleport, #$0300)
+    %cm_jsl("Puyos", #action_teleport, #$0300)
 
 TeleportMaridiaMenu:
     dw #tel_maridiatube
@@ -1435,31 +1454,27 @@ TeleportMaridiaMenu:
     dw #tel_maridiaaqueduct
     dw #tel_maridiadraygon
     dw #$0000
-    %cm_header("MARIDIA SAVE STATIONS")
+    %cm_header("ZARISTAR SAVE STATIONS")
 
 tel_maridiatube:
-    %cm_jsl("Maridia Tube", #action_teleport, #$0400)
+    %cm_jsl("DEBUG Oum", #action_teleport, #$0400)
 
 tel_maridiaelevator:
-    %cm_jsl("Maridia Elevator", #action_teleport, #$0401)
+    %cm_jsl("Gravity Switch", #action_teleport, #$0401)
 
 tel_maridiaaqueduct:
-    %cm_jsl("Maridia Aqueduct", #action_teleport, #$0402)
+    %cm_jsl("Cac Tubes", #action_teleport, #$0402)
 
 tel_maridiadraygon:
-    %cm_jsl("Maridia Draygon", #action_teleport, #$0403)
+    %cm_jsl("DEBUG Draygon", #action_teleport, #$0403)
 
 TeleportTourianMenu:
     dw #tel_tourianentrance
-    dw #tel_tourianmb
     dw #$0000
-    %cm_header("TOURIAN SAVE STATIONS")
+    %cm_header("FINALSTAR SAVE STATIONS")
 
 tel_tourianentrance:
-    %cm_jsl("Tourian Entrance", #action_teleport, #$0501)
-
-tel_tourianmb:
-    %cm_jsl("Tourian MB", #action_teleport, #$0500)
+    %cm_jsl("Entrance", #action_teleport, #$0500)
 
 DebugTeleportMenu:
     dw #tel_debug_area
@@ -1473,12 +1488,12 @@ tel_debug_area:
     dl #!ram_tel_debug_area
     dw #$0000
     db #$28, "Select Area", #$FF
-        db #$28, "   CRATERIA", #$FF
-        db #$28, "   BRINSTAR", #$FF
-        db #$28, "    NORFAIR", #$FF
-        db #$28, "  REQT SHIP", #$FF
-        db #$28, "    MARIDIA", #$FF
-        db #$28, "    TOURIAN", #$FF
+        db #$28, " ORANGESTAR", #$FF
+        db #$28, "   GOLDSTAR", #$FF
+        db #$28, "  NORTHSTAR", #$FF
+        db #$28, "   DARKSTAR", #$FF
+        db #$28, "   ZARISTAR", #$FF
+        db #$28, "  FINALSTAR", #$FF
     db #$FF
 
 tel_debug_station:
