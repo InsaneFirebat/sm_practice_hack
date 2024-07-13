@@ -210,7 +210,7 @@ MainMenu:
     dw #mm_goto_infohud
     dw #mm_goto_sprites
     dw #mm_goto_gamemenu
-    dw #mm_goto_rngmenu
+    dw #rng_botwoon_rng ; just Botwoon
     dw #mm_goto_ctrlsmenu
     dw #$0000
     %cm_version_header("CONTAINMENT CHAMBER", !VERSION_MAJOR, !VERSION_MINOR, !VERSION_BUILD, !VERSION_REV_1, !VERSION_REV_2)
@@ -225,7 +225,7 @@ MainMenuBanks:
     dw #InfoHudMenu>>16
     dw #SpritesMenu>>16
     dw #GameMenu>>16
-    dw #RngMenu>>16
+    dw #RngMenu>>16 ; dummy
     dw #CtrlMenu>>16
 
 mm_goto_equipment:
