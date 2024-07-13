@@ -145,15 +145,15 @@ if !FEATURE_SD2SNES
   .skip_auto_save_state
 endif
 
-;    LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE .skip_load_last_preset
-;    AND !IH_CONTROLLER_PRI_NEW : BEQ .skip_load_last_preset
-;    JMP .load_last_preset
-;  .skip_load_last_preset
-;
-;    LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE .skip_random_preset
-;    AND !IH_CONTROLLER_PRI_NEW : BEQ .skip_random_preset
-;    JMP .random_preset
-;  .skip_random_preset
+    LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE .skip_load_last_preset
+    AND !IH_CONTROLLER_PRI_NEW : BEQ .skip_load_last_preset
+    JMP .load_last_preset
+  .skip_load_last_preset
+
+    LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE .skip_random_preset
+    AND !IH_CONTROLLER_PRI_NEW : BEQ .skip_random_preset
+    JMP .random_preset
+  .skip_random_preset
 
     LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_save_custom_preset : CMP !sram_ctrl_save_custom_preset : BNE .skip_save_custom_preset
     AND !IH_CONTROLLER_PRI_NEW : BEQ .skip_save_custom_preset
