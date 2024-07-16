@@ -293,7 +293,7 @@ db $28, "Alpha Power Bomb Room", $FF
 warnpc !ORG_ROOMNAMES+$A3C8
 
 org !ORG_ROOMNAMES+$A3DD
-db $28, "Bat Room", $FF
+db $28, "Skree Boost Room", $FF
 warnpc !ORG_ROOMNAMES+$A3F7
 
 org !ORG_ROOMNAMES+$A408

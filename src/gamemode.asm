@@ -192,6 +192,11 @@ endif
     CLC : RTS
   .check_shortcuts
 
+    LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE .skip_menu
+    AND !IH_CONTROLLER_PRI_NEW : BEQ .skip_menu
+    JMP .menu
+  .skip_menu
+
 if !FEATURE_SD2SNES
     LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_save_state : BNE .skip_save_state
     AND !IH_CONTROLLER_PRI_NEW : BEQ .skip_save_state
@@ -231,7 +236,7 @@ endif
 
     ; Check if any less common shortcuts are configured
     LDA !ram_game_mode_extras : BNE .check_less_common_shortcuts
-    JMP .check_menu
+    JMP .no_shortcuts
   .check_less_common_shortcuts
 
     LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_inc_custom_preset : CMP !sram_ctrl_inc_custom_preset : BNE .skip_next_preset_slot
@@ -274,12 +279,7 @@ endif
     JMP .update_timers
   .skip_update_timers
 
-  .check_menu
-    LDA !IH_CONTROLLER_PRI : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE .skip_check_menu
-    AND !IH_CONTROLLER_PRI_NEW : BEQ .skip_check_menu
-    JMP .menu
-  .skip_check_menu
-
+  .no_shortcuts
     ; No shortcuts matched, CLC so we won't skip normal gameplay
     CLC : RTS
 endif

@@ -193,7 +193,6 @@ hook_phantoon_1st_rng:
     LDY #$0257 : JSL ih_adjust_realtime
 
   .rng:
-    LDA !ram_phantoon_rng_round_1
     ; If set to all-on or all-off, don't mess with RNG.
     LDA !ram_phantoon_rng_round_1 : BEQ .no_manip
     CMP #$003F : BNE choose_phantoon_pattern

@@ -1731,9 +1731,10 @@ action_teleport:
     %a16()
 
     ; Clear flags
-    STZ $0795 ; door transition
+    STZ $0795 ; Clear door transition flag
     STZ $0727 ; Pause menu index
-    STZ $1C1F ; message box index
+    STZ $0E18 ; Set elevator to inactive
+    STZ $1C1F ; Clear message box index
     STZ $0280 ; metroid latched (Redesign)
     STZ $1F6B ; morph (Redesign)
 
@@ -2264,6 +2265,7 @@ ihmode_vspeed:
 ihmode_quickdrop:
     %cm_jsl("Quickdrop Trainer", #action_select_infohud_mode, #$0010)
 
+!IH_MODE_WALLJUMP_INDEX = $0011
 ihmode_walljump:
     %cm_jsl("Walljump Trainer", #action_select_infohud_mode, #$0011)
 
@@ -2284,13 +2286,14 @@ ihmode_ramwatch:
 action_select_infohud_mode:
 {
     TYA : STA !sram_display_mode
+    JSL init_print_segment_timer
     JML cm_previous_menu
 }
 
 ih_display_mode:
     dw !ACTION_CHOICE
     dl #!sram_display_mode
-    dw #$0000
+    dw #.routine
     db #$28, "Current Mode", #$FF
     db #$28, "   ENEMY HP", #$FF
     db #$28, "      MB HP", #$FF
@@ -2315,6 +2318,8 @@ ih_display_mode:
     db #$28, "GATE GLITCH", #$FF
     db #$28, "  RAM WATCH", #$FF
     db #$FF
+  .routine
+    JML init_print_segment_timer
 
 ih_goto_room_strat:
     %cm_submenu("Select Room Strat", #RoomStratMenu)
@@ -2393,6 +2398,7 @@ action_select_room_strat:
 {
     TYA : STA !sram_room_strat
     LDA #!IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
+    JSL init_print_segment_timer
     JML cm_previous_menu
 }
 
@@ -2420,8 +2426,8 @@ ih_room_strat:
     db #$28, "  TWO CRIES", #$FF
     db #$FF
   .routine
-    LDA #$0001 : STA !sram_display_mode
-    RTL
+    LDA #!IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
+    JML init_print_segment_timer
 
 ih_goto_timers:
     %cm_submenu("Timer Settings", #IHTimerMenu)
@@ -3611,7 +3617,27 @@ init_wram_based_on_sram:
 ; a pointer to this routine is used as the menu's RNG seed
 ; since it lives at the end of the menu data, it moves over time
 {
+    JSL init_print_segment_timer
+
     ; Check if any less common controller shortcuts are configured
     JML GameModeExtras
+}
+
+init_print_segment_timer:
+{
+if !INFOHUD_ALWAYS_SHOW_X_Y
+    TDC
+else
+    ; Skip printing segment timer when shinetune or walljump enabled
+    LDA !sram_display_mode : CMP #!IH_MODE_SHINETUNE_INDEX : BEQ .skipSegmentTimer
+    CMP #!IH_MODE_WALLJUMP_INDEX : BEQ .skipSegmentTimer
+    TDC : INC
+    BRA .setSegmentTimer
+  .skipSegmentTimer
+    TDC
+  .setSegmentTimer
+endif
+    STA !ram_print_segment_timer
+    RTL
 }
 

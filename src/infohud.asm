@@ -536,7 +536,8 @@ ih_update_hud_code:
     ; Map visible, so draw map counter over item%
     LDA !sram_top_display_mode : CMP !TOP_DISPLAY_VANILLA : BEQ .mmVanilla
     LDA !ram_map_counter : LDX #$0014 : JSR Draw3
-    LDA !sram_display_mode : CMP #!IH_MODE_SHINETUNE_INDEX : BNE .mmRoomTimer
+
+    LDA !ram_print_segment_timer : BNE .mmRoomTimer
     BRL .mmPickTransitionTime
 
   .mmRoomTimer
@@ -552,8 +553,7 @@ ih_update_hud_code:
     ; Divide time by 60 or 50 and draw seconds and frames
     STA $4204
     %a8()
-    LDA #$3C
-    STA $4206
+    LDA.b !FRAMERATE : STA $4206
     %a16()
     PEA $0000 : PLA ; wait for CPU math
     LDA $4216 : STA $C1
@@ -593,8 +593,7 @@ ih_update_hud_code:
     ; Divide time by 60 or 50 and draw seconds and frames
     STA $4204
     %a8()
-    LDA #$3C
-    STA $4206
+    LDA.b !FRAMERATE : STA $4206
     %a16()
     PEA $0000 : PLA ; wait for CPU math
     LDA $4216 : STA $C1
@@ -631,8 +630,7 @@ ih_update_hud_code:
     LDA !sram_top_display_mode : CMP !TOP_DISPLAY_VANILLA : BEQ .vanillaLagReserves
     LDA !ram_last_room_lag : LDX #$0080 : JSR Draw4
 
-    ; Skip door lag and segment timer when shinetune enabled
-    LDA !sram_display_mode : CMP #!IH_MODE_SHINETUNE_INDEX : BEQ .end
+    LDA !ram_print_segment_timer : BEQ .end
 
     ; Door lag / transition time
     LDA !sram_lag_counter_mode : BNE .fullTransitionTime
@@ -662,8 +660,7 @@ ih_update_hud_code:
   .vanillaDrawLag
     LDA !ram_last_room_lag : LDX #$007E : JSR Draw4
 
-    ; Skip door lag and segment timer when shinetune enabled
-    LDA !sram_display_mode : CMP #!IH_MODE_SHINETUNE_INDEX : BEQ .end
+    LDA !ram_print_segment_timer : BEQ .end
 
     ; Door lag / transition time
     LDA !sram_lag_counter_mode : BNE .vanillaFullTransitionTime
@@ -1362,8 +1359,8 @@ ih_game_loop_code:
   .inc_statusdisplay
     LDA !sram_display_mode : INC
     CMP #$0014 : BNE .set_displaymode
-    TDC : STA !sram_display_mode
-    BRA .update_status
+    TDC
+    BRA .set_displaymode
 
   .dec_statusdisplay
     LDA !sram_display_mode : DEC
@@ -1372,6 +1369,7 @@ ih_game_loop_code:
 
   .set_displaymode
     STA !sram_display_mode
+    JSL init_print_segment_timer
 
   .update_status
     LDA #$0000

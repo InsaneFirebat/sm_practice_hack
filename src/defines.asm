@@ -141,30 +141,41 @@
 !ram_shot_timer                     = !WRAM_START+$52
 !ram_shine_counter                  = !WRAM_START+$54
 !ram_dash_counter                   = !WRAM_START+$56
-!ram_shinetune_early_1              = !WRAM_START+$58
-!ram_shinetune_late_1               = !WRAM_START+$5A
-!ram_shinetune_early_2              = !WRAM_START+$5C
-!ram_shinetune_late_2               = !WRAM_START+$5E
-!ram_shinetune_early_3              = !WRAM_START+$60
-!ram_shinetune_late_3               = !WRAM_START+$62
-!ram_shinetune_early_4              = !WRAM_START+$64
-!ram_shinetune_late_4               = !WRAM_START+$66
-!ram_shine_dash_held_late           = !WRAM_START+$68
-!ram_xpos                           = !WRAM_START+$6A
-!ram_ypos                           = !WRAM_START+$6C
-!ram_subpixel_pos                   = !WRAM_START+$6E
-!ram_horizontal_speed               = !WRAM_START+$70
-!ram_vertical_speed                 = !WRAM_START+$72
-!ram_quickdrop_counter              = !WRAM_START+$74
-!ram_walljump_counter               = !WRAM_START+$76
-!ram_fail_sum                       = !WRAM_START+$78
-!ram_fail_count                     = !WRAM_START+$7A
 
-!ram_auto_save_state                = !WRAM_START+$7C
-!ram_lag_counter                    = !WRAM_START+$7E
-!ram_kraid_adjust_timer             = !WRAM_START+$80
+!ram_auto_save_state                = !WRAM_START+$58
+!ram_lag_counter                    = !WRAM_START+$5A
+!ram_kraid_adjust_timer             = !WRAM_START+$5C
+!ram_print_segment_timer            = !WRAM_START+$5E
 
-!WRAM_PERSIST_START = !ram_kraid_adjust_timer+$02
+; ^ FREE SPACE ^ up to +$6C
+
+; ----------------------------------------------------------
+; Shinetune uses several variables not used by other modes,
+; but also shinetune does not use many other variables,
+; so the following variables share the same WRAM
+
+!ram_xpos                           = !WRAM_START+$6E
+!ram_ypos                           = !WRAM_START+$70
+!ram_subpixel_pos                   = !WRAM_START+$72
+!ram_horizontal_speed               = !WRAM_START+$74
+!ram_vertical_speed                 = !WRAM_START+$76
+!ram_quickdrop_counter              = !WRAM_START+$78
+!ram_walljump_counter               = !WRAM_START+$7A
+!ram_fail_sum                       = !WRAM_START+$7C
+!ram_fail_count                     = !WRAM_START+$7E
+
+!ram_shine_dash_held_late           = !WRAM_START+$6E
+!ram_shinetune_early_1              = !WRAM_START+$70
+!ram_shinetune_late_1               = !WRAM_START+$72
+!ram_shinetune_early_2              = !WRAM_START+$74
+!ram_shinetune_late_2               = !WRAM_START+$76
+!ram_shinetune_early_3              = !WRAM_START+$78
+!ram_shinetune_late_3               = !WRAM_START+$7A
+!ram_shinetune_early_4              = !WRAM_START+$7C
+!ram_shinetune_late_4               = !WRAM_START+$7E
+
+
+!WRAM_PERSIST_START = !WRAM_START+$80
 ; ----------------------------------------------------------
 ; Variables below this point are PERSISTENT -- they maintain
 ; their value across savestates. Use this section for
@@ -221,7 +232,7 @@
 
 !ram_quickboot_spc_state            = !WRAM_PERSIST_START+$56
 
-; ^ FREE SPACE ^ up to +$7A (!WRAM_START+$FC - !WRAM_PERSIST_START)
+; ^ FREE SPACE ^ up to +$7C (!WRAM_START+$FC - !WRAM_PERSIST_START)
 
 ; -----------------------
 ; RAM (Bank 7E required)
@@ -278,6 +289,7 @@
 !ram_seed_X = !WRAM_MENU_START+$60
 !ram_seed_Y = !WRAM_MENU_START+$62
 !ram_timers_autoupdate = !WRAM_MENU_START+$64
+!ram_cm_suit_properties = !WRAM_MENU_START+$66
 
 !ram_cm_morphlock = !WRAM_MENU_START+$66
 !ram_cm_menu_active = !WRAM_MENU_START+$68
@@ -472,6 +484,28 @@ endif
 !MENU_BLANK = #$281F
 !MENU_SLASH = #$287F
 !MENU_ARROW_RIGHT = #$3880
+!IH_BLANK = #$2C0F
+!IH_PERCENT = #$0C0A
+!IH_DECIMAL = #$0CCB
+!IH_HYPHEN = #$0C55
+!IH_RESERVE_AUTO = #$0C0C
+!IH_RESERVE_EMPTY = #$0C0D
+!IH_HEALTHBOMB = #$085A
+!IH_LETTER_A = #$0C64
+!IH_LETTER_B = #$0C65
+!IH_LETTER_C = #$0C58
+!IH_LETTER_D = #$0C59
+!IH_LETTER_E = #$0C5A
+!IH_LETTER_F = #$0C5B
+!IH_LETTER_H = #$0C6C
+!IH_LETTER_L = #$0C68
+!IH_LETTER_N = #$0C56
+!IH_LETTER_R = #$0C69
+!IH_LETTER_X = #$0C66
+!IH_LETTER_Y = #$0C67
+!IH_NUMBER_ZERO = #$0C09
+!IH_ELEVATOR = #$1C0B
+!IH_SHINETIMER = #$0032
 
 !IH_PAUSE = #$0100 ; right
 !IH_SLOWDOWN = #$0400 ; down
@@ -569,6 +603,7 @@ incsrc HUDdefines.asm
 !IGT_SECONDS = $09DC
 !IGT_MINUTES = $09DE
 !IGT_HOURS = $09E0
+!PAL_DEBUG_MOVEMENT = $09E6
 !SAMUS_AUTO_CANCEL = $0A04
 !SAMUS_LAST_HP = $0A06
 !SAMUS_POSE = $0A1C
@@ -754,6 +789,9 @@ endif
 !ACTION_RAM_WATCH           = #$0024
 !ACTION_DYNAMIC             = #$0026
 !ACTION_MANAGE_PRESETS      = #$0028
+
+!SUIT_PROPERTIES_MASK = #$0007
+!SUIT_PROPRETIES_PAL_DEBUG_FLAG = #$0008
 
 !TOP_DISPLAY_VANILLA = #$0002
 
