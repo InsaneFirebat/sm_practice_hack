@@ -64,7 +64,9 @@ init_nonzero_wram:
     LDA !sram_seed_Y : STA !ram_seed_Y
 
     LDA #$0001 : STA !ram_cm_dummy_on
+    STA !ram_cm_sfxlib1 : STA !ram_cm_sfxlib2 : STA !ram_cm_sfxlib3
     JML init_wram_based_on_sram
+    RTL
 }
 
 init_sram:
@@ -96,6 +98,9 @@ init_sram:
     LDA #$0000 : STA !sram_ctrl_auto_save_state
     LDA #$0000 : STA !sram_custom_header
     LDA #$0000 : STA !sram_fanfare_timer_adjust
+    LDA #$0000 : STA !sram_door_display_mode
+    LDA #$0000 : STA !sram_display_mode_reward
+    LDA !CTRL_Y : STA !sram_cm_fast_scroll_button
 
     JSL init_menu_customization
 

@@ -5,13 +5,17 @@
 org $809AF3
     JSL mm_initialize_minimap
 
+; skip drawing auto reserve icon and normal energy numbers and tanks during HUD routine
 org $809B51
     JMP $9BFB
 
-org $82AEAF      ; routine to remove auto reserve icon on HUD from equip screen
+; routine to remove auto reserve icon on HUD from equip screen
+org $82AEAF
     JSR mm_refresh_reserves
 
 org $82AED9      ; routine to draw auto reserve icon on HUD from equip screen
+; routine to draw auto reserve icon on HUD from equip screen
+org $82AED9
     JSR mm_refresh_reserves
 
 org $90A91B
@@ -23,31 +27,37 @@ org $90A91B
 org $90A97E
     JMP mm_inc_tile_count_helper
 
-org $90A7EE      ; only clear minimap if it is visible
+ ; only clear minimap if it is visible
+org $90A7EE
     LDA !ram_minimap : BEQ .skip_minimap
     JMP mm_clear_boss_room_tiles_helper
 
-org $90A80A      ; normally runs after minimap grid has been drawn
+; normally runs after minimap grid has been drawn
+org $90A80A
     .skip_minimap
 
-org $8282E5      ; write and clear tiles to VRAM
-    JSR mm_write_and_clear_hud_tiles_helper
+; write and clear tiles to VRAM
+org $8282E5
+    JSR mm_write_and_clear_hud_tiles
     BRA .write_next_tiles
 
 org $828305
     .write_next_tiles
 
-org $828EB8      ; write and clear tiles to VRAM
-    JSR mm_write_and_clear_hud_tiles_helper
+; write and clear tiles to VRAM
+org $828EB8
+    JSR mm_write_and_clear_hud_tiles
     PLP
     RTL
 
-org $82E488      ; write tiles to VRAM
-    JMP mm_write_hud_tiles_during_transition
+; write tiles to VRAM
+org $82E488
+    JMP mm_write_hud_tiles_during_door
 
 
-org $9AB200      ; graphics for HUD
-;incbin ../resources/hudgfx.bin
+; graphics for HUD
+org $9AB200
+hudgfx_bin:
 incbin ../resources/Redesign_hudgfx.bin
 
 
@@ -128,9 +138,9 @@ mm_write_and_clear_hud_tiles:
 }
 
 org $82E675
-mm_write_hud_tiles_during_transition:
+mm_write_hud_tiles_during_door:
 {
-    LDA !ram_minimap : BNE .mm
+    LDA !ram_minimap : BNE .minimap_vram
 
     ; Load in normal vram
     JSR $E039
@@ -139,7 +149,7 @@ mm_write_hud_tiles_during_transition:
     dw $1000
     JMP $E492  ; resume logic
 
-  .mm
+  .minimap_vram
     JSR $E039
     dl mapgfx_bin
     dw $4000
@@ -228,9 +238,9 @@ mm_inc_tile_count:
 
     ; Set tile and increment counter
     STA $07F7,X
-    REP #$20
-    LDA !ram_map_counter : INC A : STA !ram_map_counter
-    SEP #$20
+    %a16()
+    LDA !ram_map_counter : INC : STA !ram_map_counter
+    %a8()
 
   .done
     JML $90A987  ; resume original logic

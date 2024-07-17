@@ -5,6 +5,8 @@
 org !ORG_PRESETS_CUSTOM
 print pc, " custompresets start"
 
+; Backward compatibility was promised. Just because it's unused, doesn't mean you can use it.
+
 if !FEATURE_TINYSTATES
 custom_preset_save:
 {
@@ -397,112 +399,68 @@ endif
     PLP
     RTL
 
-    ; -----------------------------------------
-    ; Ceres Fixes (Category and Custom Presets)
-    ; -----------------------------------------
-  .ceres_elevator
-    STZ $091E : STZ $0920
-    BRA .ceresdone
-
-  .ceres
-    STZ $5F            ; Initialize mode 7
-    CPX #$DF45 : BEQ .ceres_elevator
-    %a16() : STZ $78             ; Ceres Elevator room already does this
-    STZ $7A : STZ $7C            ; Other Ceres rooms should zero out the values
-    STZ $7E : STZ $80 : STZ $82
-    LDA #$0009 : STA $07EB
-    %a8()
-    LDA #$09 : STA $56
-    CPX #$DF8D : BEQ .ceres_falling_tiles
-    CPX #$DFD7 : BEQ .ceres_magnet_stairs
-    CPX #$E021 : BEQ .ceres_dead_scientists
-    CPX #$E06B : BEQ .ceres_58_escape
-    CPX #$E0B5 : BEQ .ceres_ridley
-
-  .ceresdone
-    PLB
-    PLP
-    RTL
-
-  .ceres_falling_tiles
-    LDA #$01 : STA $091E
-    LDA #$02 : STA $0920
-    BRA .ceresdone
-
-  .ceres_magnet_stairs
-    LDA #$03 : STA $091E
-    LDA #$02 : STA $0920
-    BRA .ceresdone
-
-  .ceres_dead_scientists
-    LDA #$04 : STA $091E
-    LDA #$03 : STA $0920
-    BRA .ceresdone
-
-  .ceres_58_escape
-    LDA #$06 : STA $091E
-    LDA #$03 : STA $0920
-    BRA .ceresdone
-
-  .ceres_ridley
-    LDA #$08 : STA $091E
-    LDA #$03 : STA $0920
-    BRA .ceresdone
-
-  .custom_presets
-    LDA !sram_custom_preset_slot
-if !FEATURE_TINYSTATES
-    XBA                          ; multiply by 100h (slot offset)
-    CLC : ADC #$30BD : TAX       ; X = Source
-else
-    ASL : XBA                    ; multiply by 200h (slot offset)
-    CLC : ADC #$31E9 : TAX       ; X = Source
-endif
-    LDY #$CD51 : LDA #$0031      ; Y = Destination, A = Size-1
-    MVP $F07E                    ; srcBank, destBank
-    TDC : STA !ram_custom_preset
-
-    %a8() : LDX !ROOM_ID         ; X = room ID
-    CPX #$DF45 : BMI .specialized_fixes
-    BRL .ceres                   ; For ceres, use same fixes as category presets
-
-    ; -----------------------------------------------
-    ; Specialized Fixes (Category and Custom Presets)
-    ; -----------------------------------------------
-  .specialized_parlor
-    LDY !SAMUS_Y : CPY #$00D0    ; no fix if Ypos > 208
-    BPL .specialdone
-    LDY !SAMUS_X : CPY #$0175    ; no fix if Xpos > 373
-    BPL .specialdone
-    %a16() : LDA #$00FF
-    STA $7F05C0 : STA $7F05C2
-    LDY !SAMUS_PBS_MAX           ; only clear bottom row if no power bombs
-    BEQ .specialdone
-    STA $7F0520 : STA $7F0522
-    STA $7F0480 : STA $7F0482
-    BRA .specialdone
-
-  .specialized_fixes
-;    CPX #$92FD : BEQ .specialized_parlor
-  .specialdone
-    PLB
-    PLP
-    RTL
-}
-
-preset_special_fixes:
+LoadRandomPreset:
 {
-    ; Grapple - Guardian Runback
-    LDA !ROOM_ID : CMP #$ACB3 : BNE +
-    LDA #$00FF
-    STA $7F0B08 : STA $7F0BC8
-    STA $7F0C88 : STA $7F0D48
-    STA $7F0E08 : STA $7F0EC8
-    STA $7F0F88 : STA $7F1048
+    PHY : PHX : PHB
+    PHK : PLB
+    LDA !ram_random_preset_rng : BEQ .seedrandom
+    LDA !ram_random_preset_value : STA $12
+    BRA .seedpicked
 
-+   RTL
+  .seedrandom
+    JSL MenuRNG : STA $12                      ; random number
+
+  .seedpicked
+    LDA.w #preset_category_banks>>16 : STA $18 ; bank of category list in $18
+    LDA !sram_preset_category : ASL : TAY      ; selected category index in Y
+    LDA.w #preset_category_submenus : STA $16  ; pointer to category list in $16
+    LDA [$16],Y : TAX                          ; pointer to submenu table in X
+    LDA.w #preset_category_banks : STA $16     ; bank of submenu table in $16
+    LDA [$16],Y : STA $18                      ; pointer to category grouping table in $18
+
+    STX $16 : LDY #$0000                       ; pointer to submenu table in $16, reset Y
+  .toploop                                     ; count number of preset groups in Y
+    INY #2
+    LDA [$16],Y : BNE .toploop
+    TYA : LSR : TAY                            ; Y = size of preset category submenu table
+
+    LDA $12 : XBA : AND #$00FF : STA $4204
+    %a8()
+    STY $4206                                  ; divide top half of random number by Y
+    %a16()
+    PEA $0000 : PLA : PEA $0000 : PLA
+    LDA $4216 : ASL : TAY                      ; randomly selected subcategory in Y
+    LDA [$16],Y : STA $16                      ; subcategory pointer in $16
+    LDY #$0004 : LDA [$16],Y : STA $16         ; increment four bytes to get the subcategory table
+
+    LDY #$0000
+  .subloop                                     ; count number of presets in the subcategory in Y
+    INY #2
+    LDA [$16],Y : BNE .subloop
+    TYA : LSR : TAY                            ; Y = size of subcategory table
+
+    LDA $12 : AND #$00FF : STA $4204
+    %a8()
+    STY $14 : STY $4206                        ; divide bottom half of random number by Y
+    %a16()
+    PEA $0000 : PLA : PEA $0000 : PLA
+    LDA $4216 : STA $12                        ; randomly selected preset
+
+    ASL : TAY
+    LDA [$16],Y : STA $16                      ; random preset macro pointer in $16
+    LDY #$0004 : LDA [$16],Y                   ; finally reached the pointer to the preset
+    STA !ram_load_preset
+
+    LDA !ram_random_preset_rng : BEQ .done
+    LDA !ram_random_preset_value : INC : STA !ram_random_preset_value
+    LDA $12 : INC : CMP $14 : BMI .done
+    LDA !ram_random_preset_value : XBA : INC : XBA
+    AND #$FF00 : STA !ram_random_preset_value
+
+  .done
+    PLB : PLX : PLY
+    RTL
 }
-warnpc $85F000
 
 print pc, " custompresets end"
 ;warnpc $83C000 ; layout.asm

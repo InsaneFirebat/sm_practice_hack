@@ -1,5 +1,5 @@
 
-org $E88800
+org !ORG_RAW_TILE_TABLES
 check bankcross off
 print pc, " raw tile tables crossbank start"
 
@@ -54,7 +54,7 @@ warnpc $EAE000 ; presets.asm
 check bankcross on
 
 
-org $F48000
+org !ORG_RAW_TILEGRAPHICS
 print pc, " tilegraphics start"
 
 ; 12K CRE tile graphics
@@ -254,7 +254,7 @@ preset_load_level:
 {
     ; Original logic from $82E7D3
     PHP : PHB
-    REP #$30
+    %ai16()
 
     ; More efficient method to clear level data
     PEA $7F00 : PLB : PLB
@@ -608,7 +608,7 @@ print pc, " tilegraphics end"
 warnpc $F4D800
 
 
-org $F4D800
+org !ORG_RAW_TILES
 check bankcross off
 print pc, " raw tiles crossbank start"
 

@@ -146,7 +146,7 @@ cm_init:
     %a16()
 
     JSL initialize_ppu_long   ; Initialise PPU for message boxes
-    JSR cm_transfer_custom_tileset
+    JSL cm_transfer_custom_tileset
     JSL cm_transfer_custom_cgram
 
     ; Set up menu state
@@ -166,8 +166,6 @@ cm_init:
 
     JSL cm_calculate_max
     JSL cm_set_etanks_and_reserve
-    LDA !sram_suit_properties : AND !SUIT_PROPERTIES_MASK
-    STA !ram_cm_suit_properties
     RTS
 }
 
@@ -225,7 +223,7 @@ cm_transfer_custom_tileset:
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
     LDA #$0F : STA $0F2100 ; disable forced blanking
     PLP
-    RTS
+    RTL
 
   .kraid_vram
     ; Load custom vram to kraid BG3 location
@@ -234,15 +232,15 @@ cm_transfer_custom_tileset:
     LDA #$02 : STA $210C ; BG3 starts at $2000 (4000 in vram)
     LDA #$80 : STA $2115 ; word-access, incr by 1
     LDX #$2000 : STX $2116 ; VRAM address (4000 in vram)
-    LDX.w #cm_hud_table : STX $4302 ; Source offset
-    LDA.b #cm_hud_table>>16 : STA $4304 ; Source bank
-    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX $C1 : STX $4302 ; Source offset
+    LDA $C3 : STA $4304 ; Source bank
+    LDX #$1000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
     LDA #$0F : STA $0F2100 ; disable forced blanking
     PLP
-    RTS
+    RTL
 }
 
 cm_transfer_original_tileset:
@@ -2522,6 +2520,8 @@ cm_calculate_max:
 
 cm_get_inputs:
 {
+    !input_held_delay = #$000C
+
     ; Make sure we don't read joysticks twice in the same frame
     LDA !FRAME_COUNTER : CMP !ram_cm_input_counter
     PHP : STA !ram_cm_input_counter : PLP : BNE .input_read
@@ -2531,9 +2531,16 @@ cm_get_inputs:
   .input_read
     LDA !IH_CONTROLLER_PRI_NEW : BEQ .check_holding
 
-    ; Initial delay of $0E frames
-    LDA #$000E : STA !ram_cm_input_timer
+    LDA !input_held_delay : STA !ram_cm_input_timer
 
+    ; Check if fast scroll button is held
+    LDA !IH_CONTROLLER_PRI : AND !sram_cm_fast_scroll_button : BEQ .return_input
+
+    ; Reduce delay to double the scroll delay
+    LDA !sram_cm_scroll_delay : ASL : CMP !input_held_delay : BPL .return_input
+    STA !ram_cm_input_timer
+
+  .return_input
     ; Return the new input
     LDA !IH_CONTROLLER_PRI_NEW
     RTS
@@ -2748,14 +2755,21 @@ execute_numfield:
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : AND #$00FF : STA !DP_Minimum
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : AND #$00FF : INC : STA !DP_Maximum ; INC for convenience
 
-    ; check for Y pressed to skip inc/dec
-    LDA !ram_cm_controller : BIT !CTRL_Y : BNE .skip_inc
+    ; check if fast scroll button pressed to skip inc/dec
+    LDA !ram_cm_controller : AND !sram_cm_fast_scroll_button : BNE .skip_inc
 
+    ; check if fast scroll button is held
+    LDA !IH_CONTROLLER_PRI : AND !sram_cm_fast_scroll_button : BEQ .check_held
+    ; grab normal increment multiplied by four and skip past both
+    LDA [!DP_CurrentMenu] : ASL : ASL : INC !DP_CurrentMenu : INC !DP_CurrentMenu
+    BRA .store_increment
+
+  .check_held
     ; check for held inputs
-    BIT !IH_INPUT_HELD : BNE .input_held
+    LDA !ram_cm_controller : BIT !IH_INPUT_HELD : BNE .input_held
     ; grab normal increment and skip past both
-    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : AND #$00FF : STA !DP_Increment
-    BRA .determine_direction
+    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu
+    BRA .store_increment
 
   .skip_inc
     ; skipping inc/dec and just playing sfx
@@ -2764,41 +2778,43 @@ execute_numfield:
 
   .input_held
     ; grab faster increment and skip past both
-    INC !DP_CurrentMenu : LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : AND #$00FF : STA !DP_Increment
+    INC !DP_CurrentMenu : LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu
 
-  .determine_direction
+  .store_increment
+    AND #$00FF : STA !DP_Increment
+
     ; determine dpad direction
     LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
     ; pressed right, inc
-    %a8() : LDA [!DP_Address] : CLC : ADC !DP_Increment
+    LDA [!DP_Address] : AND #$00FF : CLC : ADC !DP_Increment
     CMP !DP_Maximum : BCS .set_to_min
-    STA [!DP_Address] : BRA .jsl
+    %a8() : STA [!DP_Address] : BRA .jsl
 
   .pressed_left ; dec
-    %a8() : LDA [!DP_Address] : SEC : SBC !DP_Increment : BMI .set_to_max
+    LDA [!DP_Address] : AND #$00FF : SEC : SBC !DP_Increment : BMI .set_to_max
     CMP !DP_Minimum : BCC .set_to_max
-    STA [!DP_Address] : BRA .jsl
+    %a8() : STA [!DP_Address] : BRA .jsl
 
   .set_to_min
+    %a8()
     LDA !DP_Minimum : STA [!DP_Address] : BRA .jsl
 
   .set_to_max
+    %a8()
     LDA !DP_Maximum : DEC : STA [!DP_Address]
 
   .jsl
     %a16()
-    ; grab JSL pointer
-    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : STA !DP_JSLTarget
-
-    ; skip if JSL target is zero
-    LDA !DP_JSLTarget : BEQ .end
+    ; grab JSL pointer and skip if zero
+    LDA [!DP_CurrentMenu] : BEQ .end
+    STA !DP_JSLTarget
 
     ; Set return address for indirect JSL
     LDA !ram_cm_menu_bank : STA !DP_JSLTarget+2
     PHK : PEA .end-1
 
     ; addr in A
-    LDA [!DP_Address] : LDX #$0000
+    LDA [!DP_Address] : AND #$00FF : LDX #$0000
     JML.w [!DP_JSLTarget]
 
   .end
@@ -2817,23 +2833,41 @@ execute_numfield_word:
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : STA !DP_DigitAddress
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : STA !DP_DigitAddress+2
 
-    ; grab minimum (!DP_DigitMinimum) and maximum (!DP_DigitMaximum) values
+    ; grab minimum and maximum values
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : STA !DP_DigitMinimum
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : INC : STA !DP_DigitMaximum ; INC for convenience
 
-    ; grab normal increment
-    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : STA !DP_Increment
+    ; check if fast scroll button pressed to skip inc/dec
+    LDA !ram_cm_controller : AND !sram_cm_fast_scroll_button : BNE .skip_inc
 
-    ; check for held inputs
-    LDA !ram_cm_controller : BIT !IH_INPUT_HELD : BEQ .incPastFastValue
-    ; input held, grab faster increment
-    LDA [!DP_CurrentMenu] : AND #$00FF : STA !DP_Increment
-    ; keep normal increment and skip past fast value
-  .incPastFastValue
+    ; check if fast scroll button is held
+    LDA !IH_CONTROLLER_PRI : AND !sram_cm_fast_scroll_button : BEQ .check_held
+    ; grab normal increment multiplied by four and skip past both
+    LDA [!DP_CurrentMenu] : ASL : ASL : INC !DP_CurrentMenu : INC !DP_CurrentMenu
     INC !DP_CurrentMenu : INC !DP_CurrentMenu
+    BRA .store_increment
 
-    ; grab JSL address
-    LDA [!DP_CurrentMenu] : STA !DP_JSLTarget
+  .check_held
+    ; check for held inputs
+    LDA !ram_cm_controller : BIT !IH_INPUT_HELD : BNE .input_held
+    ; grab normal increment and skip past both
+    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu
+    INC !DP_CurrentMenu : INC !DP_CurrentMenu
+    BRA .store_increment
+
+  .skip_inc
+    ; skipping inc/dec and just playing sfx
+    INC !DP_CurrentMenu : INC !DP_CurrentMenu
+    INC !DP_CurrentMenu : INC !DP_CurrentMenu
+    BRA .jsl
+
+  .input_held
+    ; grab faster increment and skip past both
+    INC !DP_CurrentMenu : INC !DP_CurrentMenu
+    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu
+
+  .store_increment
+    STA !DP_Increment
 
     ; left/right = increment, A/X/Y = SDE mode
     LDA !ram_cm_controller : BIT !IH_INPUT_LEFTRIGHT : BEQ .singleDigitEditing
@@ -2849,17 +2883,20 @@ execute_numfield_word:
     LDA [!DP_DigitAddress] : SEC : SBC !DP_Increment
     CMP !DP_DigitMinimum : BMI .set_to_max
     CMP !DP_DigitMaximum : BCS .set_to_max
-    STA [!DP_DigitAddress] : BRA .jsl
+    STA [!DP_DigitAddress]
+    BRA .jsl
 
   .set_to_min
-    LDA !DP_DigitMinimum : STA [!DP_DigitAddress] : BRA .jsl
+    LDA !DP_DigitMinimum : STA [!DP_DigitAddress]
+    BRA .jsl
 
   .set_to_max
     LDA !DP_DigitMaximum : DEC : STA [!DP_DigitAddress]
 
   .jsl
-    ; skip if JSL target is zero
-    LDA !DP_JSLTarget : BEQ .end
+    ; grab JSL pointer and skip if zero
+    LDA [!DP_CurrentMenu] : BEQ .end
+    STA !DP_JSLTarget
 
     ; Set return address for indirect JSL
     LDA !ram_cm_menu_bank : STA !DP_JSLTarget+2
@@ -2876,6 +2913,7 @@ execute_numfield_word:
     LDA #$0002 : STA !ram_cm_horizontal_cursor
 
   .set_ctrl_mode
+    LDA [!DP_CurrentMenu] : STA !DP_JSLTarget
     LDA [!DP_DigitAddress] : STA !DP_DigitValue
     LDA #$8001 : STA !ram_cm_ctrl_mode
 
