@@ -1,6 +1,6 @@
 @echo off
 
-set HACK_NAME=HACK
+set HACK_NAME=TourOfItaly
 set HACK_BUILD_VERSION=2.6.2
 
 echo Building %HACK_NAME% Practice Hack

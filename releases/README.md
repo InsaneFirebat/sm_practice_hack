@@ -1,4 +1,10 @@
-# HACK
+# Tour Of Italy (Contest Version)
+
+https://metroidconstruction.com/hack.php?id=782
+
+## Known Issue
+
+The game will crash if Samus dies. You will need to reset the console/emulator to continue.
 
 ## Notes
 

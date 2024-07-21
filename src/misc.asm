@@ -26,8 +26,11 @@ org $8B92DE
 ;  (skip to Ceres)     LDA #$C100 (skip to Ceres)
 ;  (skip to Zebes)     LDA #$CDAF (skip to Zebes)
 ;                      LDA #Intro_Skip_to_Zebes
-org $82EEDF
-    LDA #$C100
+;org $82EEDF
+;    LDA #$B72F
+
+org $8BA592
+    LDA #$B72F
 
 org !ORG_MISC_BANK8B
 print pc, " misc bank8B start"
@@ -59,7 +62,7 @@ cutscenes_nintendo_logo_hijack:
     STA !ram_quickboot_spc_state    ; A is 0
     RTS
 
-.quickboot
+  .quickboot
     PLA ; pop return address
     PLB
     PLA ; saved processor status and 1 byte of next return address
@@ -363,56 +366,56 @@ stop_all_sounds:
 print pc, " misc end"
 
 
-if !FEATURE_MORPHLOCK
+;if !FEATURE_MORPHLOCK
 ; ----------
 ; Morph Lock
 ; ----------
 
-print pc, " misc morphlock start"
-; rewrite morph lock code to allow controller shortcuts and menu navigation
-org !ORG_MORPHLOCK
-    ; check for menu
-    LDA !ram_cm_menu_active : BEQ .branch
-    LDA $4218
-    RTS
-
-  .branch
-    ; gamemode.asm will use these
-    LDA $4218 : STA $CB
-    EOR $C7 : AND $CB : STA $CF
-
-    ; resume normal morph lock code
-    LDA $09A1 : BMI .gameMode
-    LDA $4218
-    RTS
-
-  .gameMode
-    ; checks for gamemodes where morph lock is allowed
-    LDA $0998 : CMP #$0008 : BEQ .morphLock
-    CMP #$000C : BEQ .morphLock
-    CMP #$0012 : BEQ .morphLock
-    CMP #$001A : BNE .noMorphLock
-    LDA $09A1 : AND #$7FFF : STA $09A1 ; reset flag if dead
-
-  .noMorphLock
-    LDA $4218
-    RTS
-
-  .morphLock
-    LDA $09A2 : AND #$0002 : BNE .springball
-    ; no springball, also filter jump
-    LDA #$FFFF : EOR $09B4 : AND $4218 ; removes jump input
-    BRA .noSpringball
-
-  .springball
-    ; springball equipped, allow jump
-    LDA $4218
-
-  .noSpringball
-    AND #$F7FF ; removes up input
-    RTS
-print pc, " misc morphlock end"
-endif
+;print pc, " misc morphlock start"
+;; rewrite morph lock code to allow controller shortcuts and menu navigation
+;org !ORG_MORPHLOCK
+;    ; check for menu
+;    LDA !ram_cm_menu_active : BEQ .branch
+;    LDA $4218
+;    RTS
+;
+;  .branch
+;    ; gamemode.asm will use these
+;    LDA $4218 : STA $CB
+;    EOR $C7 : AND $CB : STA $CF
+;
+;    ; resume normal morph lock code
+;    LDA $09A1 : BMI .gameMode
+;    LDA $4218
+;    RTS
+;
+;  .gameMode
+;    ; checks for gamemodes where morph lock is allowed
+;    LDA $0998 : CMP #$0008 : BEQ .morphLock
+;    CMP #$000C : BEQ .morphLock
+;    CMP #$0012 : BEQ .morphLock
+;    CMP #$001A : BNE .noMorphLock
+;    LDA $09A1 : AND #$7FFF : STA $09A1 ; reset flag if dead
+;
+;  .noMorphLock
+;    LDA $4218
+;    RTS
+;
+;  .morphLock
+;    LDA $09A2 : AND #$0002 : BNE .springball
+;    ; no springball, also filter jump
+;    LDA #$FFFF : EOR $09B4 : AND $4218 ; removes jump input
+;    BRA .noSpringball
+;
+;  .springball
+;    ; springball equipped, allow jump
+;    LDA $4218
+;
+;  .noSpringball
+;    AND #$F7FF ; removes up input
+;    RTS
+;print pc, " misc morphlock end"
+;endif
 
 ; general damage hijack
 org $A0A862

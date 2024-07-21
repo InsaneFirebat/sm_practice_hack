@@ -15,6 +15,7 @@ incsrc wram_symbols.asm
 ; ---------------
 
 ;!ORG_MENU_GFX = $F0D700 ; unused, $900, can be used to reduce menu code size
+;!ORG_MORPHLOCK = $80CD90 ; $5C, vanilla overwrite
 ;!ORG_MISC_TILE_GRAPHICS = $8BFA00 ; unused, $140
 ;!ORG_RAW_TILE_TABLES = $E88800
 ;!ORG_RAW_TILEGRAPHICS = $F48000

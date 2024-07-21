@@ -122,7 +122,7 @@ if !FEATURE_CUSTOMIZE_MENU
     dw #mm_goto_customize
 endif
     dw #$0000
-    %cm_version_header("SM PRACTICE HACK")
+    %cm_version_header("TOUR OF ITALY")
 
 MainMenuBanks:
     dw #EquipmentMenu>>16
@@ -1292,140 +1292,46 @@ action_glitched_beam:
 ; ---------------
 
 TeleportMenu:
-    dw #tel_goto_crat
-    dw #tel_goto_brin
-    dw #tel_goto_norf
-    dw #tel_goto_ship
-    dw #tel_goto_mari
-    dw #tel_goto_tour
+    dw #tel_sangennaroxi00
+    dw #tel_sangennaroxi01
+    dw #tel_sangennaroxi02
+    dw #tel_sangennaroxi03
+    dw #tel_sangennaroxi04
+    dw #tel_sangennaroxi05
+    dw #$FFFF
+    dw #tel_quarantine00
+    dw #tel_quarantine01
+    dw #$FFFF
     dw #tel_goto_debug
     dw #$0000
     %cm_header("TELEPORT TO SAVE STATION")
 
-tel_goto_crat:
-    %cm_submenu("Crateria", #TeleportCrateriaMenu)
+tel_sangennaroxi00:
+    %cm_jsl("Ship", #action_teleport, #$0000)
 
-tel_goto_brin:
-    %cm_submenu("Brinstar", #TeleportBrinstarMenu)
+tel_sangennaroxi01:
+    %cm_jsl("First Save", #action_teleport, #$0001)
 
-tel_goto_norf:
-    %cm_submenu("Norfair", #TeleportNorfairMenu)
+tel_sangennaroxi02:
+    %cm_jsl("North Save", #action_teleport, #$0002)
 
-tel_goto_ship:
-    %cm_submenu("Wrecked Ship", #TeleportWreckedShipMenu)
+tel_sangennaroxi03:
+    %cm_jsl("West Pistachio", #action_teleport, #$0003)
 
-tel_goto_mari:
-    %cm_submenu("Maridia", #TeleportMaridiaMenu)
+tel_sangennaroxi04:
+    %cm_jsl("Central", #action_teleport, #$0004)
 
-tel_goto_tour:
-    %cm_submenu("Tourian", #TeleportTourianMenu)
+tel_sangennaroxi05:
+    %cm_jsl("East Cherry", #action_teleport, #$0005)
+
+tel_quarantine00:
+    %cm_jsl("Quarantine Boss", #action_teleport, #$0000)
+
+tel_quarantine01:
+    %cm_jsl("Keys To The Station", #action_teleport, #$0001)
 
 tel_goto_debug:
     %cm_submenu("Debug Teleports", #DebugTeleportMenu)
-
-TeleportCrateriaMenu:
-    dw #tel_crateriaship
-    dw #tel_crateriaparlor
-    dw #$0000
-    %cm_header("CRATERIA SAVE STATIONS")
-
-tel_crateriaship:
-    %cm_jsl("Crateria Ship", #action_teleport, #$0000)
-
-tel_crateriaparlor:
-    %cm_jsl("Crateria Parlor", #action_teleport, #$0001)
-
-TeleportBrinstarMenu:
-    dw #tel_brinstarpink
-    dw #tel_brinstargreenshaft
-    dw #tel_brinstargreenetecoons
-    dw #tel_brinstarkraid
-    dw #tel_brinstarredtower
-    dw #$0000
-    %cm_header("BRINSTAR SAVE STATIONS")
-
-tel_brinstarpink:
-    %cm_jsl("Brinstar Pink Spospo", #action_teleport, #$0100)
-
-tel_brinstargreenshaft:
-    %cm_jsl("Brinstar Green Shaft", #action_teleport, #$0101)
-
-tel_brinstargreenetecoons:
-    %cm_jsl("Brinstar Green Etecoons", #action_teleport, #$0102)
-
-tel_brinstarkraid:
-    %cm_jsl("Brinstar Kraid", #action_teleport, #$0103)
-
-tel_brinstarredtower:
-    %cm_jsl("Brinstar Red Tower", #action_teleport, #$0104)
-
-TeleportNorfairMenu:
-    dw #tel_norfairgrapple
-    dw #tel_norfairbubble
-    dw #tel_norfairtunnel
-    dw #tel_norfaircrocomire
-    dw #tel_norfairlnelevator
-    dw #tel_norfairridley
-    dw #$0000
-    %cm_header("NORFAIR SAVE STATIONS")
-
-tel_norfairgrapple:
-    %cm_jsl("Norfair Grapple", #action_teleport, #$0200)
-
-tel_norfairbubble:
-    %cm_jsl("Norfair Bubble Mountain", #action_teleport, #$0201)
-
-tel_norfairtunnel:
-    %cm_jsl("Norfair Tunnel", #action_teleport, #$0202)
-
-tel_norfaircrocomire:
-    %cm_jsl("Norfair Crocomire", #action_teleport, #$0203)
-
-tel_norfairlnelevator:
-    %cm_jsl("Norfair LN Elevator", #action_teleport, #$0204)
-
-tel_norfairridley:
-    %cm_jsl("Norfair Ridley", #action_teleport, #$0205)
-
-TeleportWreckedShipMenu:
-    dw #tel_wreckedship
-    dw #$0000
-    %cm_header("WRECKED SHIP SAVE STATIONS")
-
-tel_wreckedship:
-    %cm_jsl("Wrecked Ship", #action_teleport, #$0300)
-
-TeleportMaridiaMenu:
-    dw #tel_maridiatube
-    dw #tel_maridiaelevator
-    dw #tel_maridiaaqueduct
-    dw #tel_maridiadraygon
-    dw #$0000
-    %cm_header("MARIDIA SAVE STATIONS")
-
-tel_maridiatube:
-    %cm_jsl("Maridia Tube", #action_teleport, #$0400)
-
-tel_maridiaelevator:
-    %cm_jsl("Maridia Elevator", #action_teleport, #$0401)
-
-tel_maridiaaqueduct:
-    %cm_jsl("Maridia Aqueduct", #action_teleport, #$0402)
-
-tel_maridiadraygon:
-    %cm_jsl("Maridia Draygon", #action_teleport, #$0403)
-
-TeleportTourianMenu:
-    dw #tel_tourianentrance
-    dw #tel_tourianmb
-    dw #$0000
-    %cm_header("TOURIAN SAVE STATIONS")
-
-tel_tourianentrance:
-    %cm_jsl("Tourian Entrance", #action_teleport, #$0501)
-
-tel_tourianmb:
-    %cm_jsl("Tourian MB", #action_teleport, #$0500)
 
 DebugTeleportMenu:
     dw #tel_debug_area
