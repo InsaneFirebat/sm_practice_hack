@@ -3060,9 +3060,9 @@ CutscenesMenu:
     dw #cutscenes_skip_ceres_arrival
     dw #cutscenes_skip_game_over
     dw #$FFFF
-    dw #kraid_skip_intro
+    dw #cutscenes_kraid_skip_intro
     dw #cutscenes_kraid_camera
-    dw #phan_skip_intro
+    dw #cutscenes_phan_skip_intro
     dw #cutscenes_fast_mb
     dw #$FFFF
     dw #cutscenes_fast_bowling
@@ -3082,14 +3082,21 @@ cutscenes_skip_ceres_arrival:
 cutscenes_skip_game_over:
     %cm_toggle_bit("Skip Game Over", !sram_cutscenes, !CUTSCENE_SKIP_GAMEOVER, #0)
 
-kraid_skip_intro:
+cutscenes_kraid_skip_intro:
     %cm_toggle("Skip Kraid Intro", !sram_kraid_intro, #$0001, #0)
 
 cutscenes_kraid_camera:
-    %cm_toggle_bit("Unlock Kraid Death Cam", !sram_cutscenes, !CUTSCENE_KRAID_DEATH_CAMERA, #0)
+    %cm_toggle_bit("Unlock Kraid Death Cam", !sram_cutscenes, !CUTSCENE_KRAID_DEATH_CAMERA, #.routine)
+  .routine
+    LDA !ROOM_ID : CMP #ROOM_Kraid : BNE +
+    LDA !ENEMY_HP : BNE +
+    ; unlock camera now
+    LDA #$0202 : STA $7ECD20
+    LDA #$0101 : STA $7ECD22
++   RTL
 
-phan_skip_intro:
-    %cm_toggle_bit("Skip Phantoon Intro", !sram_phantoon_intro, #$0001, 0)
+cutscenes_phan_skip_intro:
+    %cm_toggle_bit("Skip Phantoon Intro", !sram_phantoon_intro, #$0001, #0)
 
 cutscenes_fast_mb:
     %cm_toggle_bit("Fast Mother Brain", !sram_cutscenes, !CUTSCENE_FAST_MB, #0)
