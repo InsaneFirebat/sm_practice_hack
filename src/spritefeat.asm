@@ -77,12 +77,12 @@ update_sprite_tiles_loading:
     RTL
 
 upload_sprite_oob_tiles:
-    LDX $0330
+    LDX !VRAM_WRITE_STACK_POINTER
     LDA #$0400 : STA $D0,X
     LDA #(sprite_tiles+$200) : STA $D2,X
     LDA #((sprite_tiles+$200)>>8) : STA $D3,X
     LDA #$6D00 : STA $D5,X
-    TXA : CLC : ADC #$0007 : STA $0330
+    TXA : CLC : ADC #$0007 : STA !VRAM_WRITE_STACK_POINTER
     RTL
 
 update_sprite_oob:
@@ -397,7 +397,7 @@ update_extended_spritemap_hitbox:
 ; draw hitboxes around enemies that use extended spritemaps
 {
     ; Kraid has too many hitboxes and overflows the OAM stack
-    LDA !ROOM_ID : CMP #$A59F : BEQ .end ; check for Kraid's room
+    LDA !ROOM_ID : CMP.w #ROOM_Kraid : BEQ .end
 
     LDX #$0000 ; X = enemy index
     LDY !OAM_STACK_POINTER ; Y = OAM stack pointer
@@ -773,9 +773,9 @@ update_samusproj_sprite_hitbox:
 
 custom_sprite_hitbox:
 {
-    LDA !ROOM_ID : CMP #$DD58 : BEQ .mother_brain
-    LDA !ROOM_ID : CMP #$B32E : BEQ .ridley_bridge
-    LDA !ROOM_ID : CMP #$E0B5 : BNE .end
+    LDA !ROOM_ID : CMP.w #ROOM_MotherBrain : BEQ .mother_brain
+    CMP.w #ROOM_Ridley : BEQ .ridley_bridge
+    CMP.w #ROOM_CeresRidley : BNE .end
 
   .ridley_bridge
     JMP .ridley

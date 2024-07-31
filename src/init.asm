@@ -11,26 +11,25 @@ org $808455
 
 ; hijack when clearing bank 7E
 org $808490
+clear_bank:
     ; Save quickboot state since it needs to distinguish between a soft and hard reset
     LDY.w !ram_quickboot_spc_state
     LDX #$3FFE
-  .clear_bank_loop
+  .loop
     STZ $0000,X
     STZ $4000,X
     STZ $8000,X
     STZ $C000,X
-    DEX #2
-    BPL .clear_bank_loop
+    DEX #2 : BPL .loop
     JSL init_nonzero_wram
 
     STY.w !ram_quickboot_spc_state
-    BRA .end_clear_bank
-
+    BRA .end
 
 warnpc $8084AF
 
 org $8084AF
-  .end_clear_bank
+  .end
 
 org $80856E
     JML init_post_boot
@@ -86,8 +85,8 @@ init_nonzero_wram:
     JSL init_wram_based_on_sram
 
     ; RAM $7E0000 fluctuates so it is not a good default value
-    LDA #!ENEMY_HP : STA !ram_watch_left ; Enemy HP
-    LDA #!SAMUS_HP : STA !ram_watch_right ; Samus HP
+    LDA #!ENEMY_HP : STA !ram_watch_left
+    LDA #!SAMUS_HP : STA !ram_watch_right
     LDA #$007E : STA !ram_watch_bank
     LDA !sram_seed_X : STA !ram_seed_X
     LDA !sram_seed_Y : STA !ram_seed_Y

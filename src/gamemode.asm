@@ -186,7 +186,7 @@ endif
 
   .load_state
     ; check if a saved state exists
-    LDA !SRAM_SAVED_STATE : CMP #$5AFE : BNE .save_fail
+    LDA !SRAM_SAVED_STATE : CMP !SAFEWORD : BNE .save_fail
     JSL load_state
     ; SEC to skip normal gameplay for one frame after loading state
     SEC : RTS
@@ -233,7 +233,7 @@ endif
 +   LDA !SAMUS_SUPERS_MAX : CMP !SAMUS_SUPERS : BCC + : STA !SAMUS_SUPERS
 +   LDA !SAMUS_PBS_MAX : CMP !SAMUS_PBS : BCC + : STA !SAMUS_PBS
 +   LDA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY
-    STZ $0CD2  ; reset bomb counter
+    STZ !SAMUS_BOMB_COUNTER
     %sfxenergy() ; play sound effect
     ; CLC to continue normal gameplay after equipment refill
     CLC : RTS
@@ -259,7 +259,7 @@ endif
     ; check if slot is populated first
     LDA !sram_custom_preset_slot
     %presetslotsize()
-    LDA !PRESET_SLOTS,X : CMP #$5AFE : BNE .load_fail
+    LDA !PRESET_SLOTS,X : CMP !SAFEWORD : BNE .load_fail
     STA !ram_custom_preset
     JSL preset_load
     ; SEC to skip normal gameplay for one frame after loading preset
@@ -339,8 +339,8 @@ endif
 
   .menu
     ; Set IRQ vector
-    LDA $AB : PHA
-    LDA #$0004 : STA $AB
+    LDA !IRQ_CMD : PHA
+    LDA #$0004 : STA !IRQ_CMD
 
     JSR skip_pause
 
@@ -348,7 +348,7 @@ endif
     JSL cm_start
 
     ; Restore IRQ vector
-    PLA : STA $AB
+    PLA : STA !IRQ_CMD
 
     ; SEC to skip normal gameplay for one frame after handling the menu
     SEC : RTS
@@ -368,10 +368,10 @@ skip_pause:
     LDA #$0008 : STA !GAMEMODE
 
     ; clear screen fade delay/counter
-    STZ $0723 : STZ $0725
+    STZ !SCREEN_FADE_DELAY : STZ !SCREEN_FADE_COUNTER
 
     ; Brightness = $F (max)
-    LDA $51 : ORA #$000F : STA $51
+    LDA !REG_2100_BRIGHTNESS : ORA #$000F : STA !REG_2100_BRIGHTNESS
 
   .done
     PLP
@@ -385,15 +385,17 @@ gamemode_door_transition:
     LDA !IH_CONTROLLER_PRI : BEQ .checktransition
     CMP !sram_ctrl_load_state : BNE .checktransition
     ; check if a saved state exists
-    LDA !SRAM_SAVED_STATE : CMP #$5AFE : BNE .checktransition
+    LDA !SRAM_SAVED_STATE : CMP !SAFEWORD : BNE .checktransition
     PHB : PHK : PLB
     JML load_state
 
   .checktransition
-    LDA $0931 : BPL .checkloadstate
+    ; check if door is done scrolling
+    LDA !DOOR_FINISHED_SCROLLING : BPL .checkloadstate
     RTL
 }
 
+pushpc
 org $82F900
 print pc, " autosave bank $82 start"
 door_transition_autosave:
@@ -413,6 +415,7 @@ door_transition_autosave:
     JMP $E4A9 ; return to hijacked code
 }
 print pc, " autosave bank $82 end"
+pullpc
 endif
 
 print pc, " gamemode end"

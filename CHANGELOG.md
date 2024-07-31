@@ -1,6 +1,9 @@
 
 ## Changelog since v2.2.7
 
+* [2.6.2.1]  Fixed a crash on some demos
+* [2.6.2.1]  Fixed a common address in RAM Watch menu
+* [2.6.2]    Added moondance demo
 * [2.6.1.16] Fixed issue with segment timer not updating
 * [2.6.1.15] Added Audio Menu to the main menu
 * [2.6.1.14] Another fix for numfields in the menu

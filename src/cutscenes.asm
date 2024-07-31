@@ -40,7 +40,7 @@ cutscenes_nintendo_logo_hijack:
     STA !ram_quickboot_spc_state
     RTS
 
-.quickboot
+  .quickboot
     PLA ; pop return address
     PLB
     PLA ; saved processor status and 1 byte of next return address
@@ -62,8 +62,8 @@ if !FEATURE_PAL
 else
     LDA #$C100
 endif
-    STA $1F51
-    JMP ($1F51)
+    STA !CINEMATIC_FUNCTION_POINTER
+    JMP (!CINEMATIC_FUNCTION_POINTER)
 
   .keep_intro
 if !FEATURE_PAL
@@ -71,8 +71,8 @@ if !FEATURE_PAL
 else
     LDA #$A395
 endif
-    STA $1F51
-    JMP ($1F51)
+    STA !CINEMATIC_FUNCTION_POINTER
+    JMP (!CINEMATIC_FUNCTION_POINTER)
 
   .keep_ceres_arrival
 if !FEATURE_PAL
@@ -82,8 +82,8 @@ else
     JSR $BC08
     LDA #$B72F
 endif
-    STA $1F51
-    JMP ($1F51)
+    STA !CINEMATIC_FUNCTION_POINTER
+    JMP (!CINEMATIC_FUNCTION_POINTER)
 }
 
 cutscenes_load_ceres_arrival:
@@ -115,7 +115,7 @@ cutscenes_game_over:
     LDA !sram_cutscenes : BIT !CUTSCENE_SKIP_GAMEOVER : BEQ .game_over
 if !FEATURE_SD2SNES
     ; check if valid savestate
-    LDA !SRAM_SAVED_STATE : CMP #$5AFE : BNE .no_savestate
+    LDA !SRAM_SAVED_STATE : CMP !SAFEWORD : BNE .no_savestate
     JML gamemode_shortcuts_load_state
 endif
 
@@ -354,7 +354,7 @@ cutscenes_mb_fake_death_fast_init:
     ; If loading a preset, certain flags may already be set
     ; which allow MB to take damage, so setting value high,
     ; but also set below 18000 to avoid confusion with vanilla logic
-    LDA #$464F : STA $0FCC
+    LDA #$464F : STA !ENEMY_HP+$40
 
     ; If MB already defeated, reset health to full to simulate baby metroid refill
     LDA $7ED82D : BIT #$0002 : BEQ .end_refill
@@ -389,8 +389,8 @@ endif
 
 cutscenes_mb_fake_death_pause:
 {
-    LDA $0FCC : BEQ .continue
-    LDA #$0001 : STA $0FB2
+    LDA !ENEMY_HP+$40 : BEQ .continue
+    LDA #$0001 : STA !ENEMY_VAR_5
 
   .continue
 if !FEATURE_PAL
@@ -398,24 +398,24 @@ if !FEATURE_PAL
 else
     LDA #$8829
 endif
-    STA $0FA8
-    JMP ($0FA8)
+    STA !ENEMY_FUNCTION_POINTER
+    JMP (!ENEMY_FUNCTION_POINTER)
 }
 
 cutscenes_mb_fake_death_lock:
 {
-    LDA $0FCC : BEQ .continue
-    LDA #$0001 : STA $0FB2
+    LDA !ENEMY_HP+$40 : BEQ .continue
+    LDA #$0001 : STA !ENEMY_VAR_5
 
   .continue
     LDA #cutscenes_mb_fake_death_music
-    STA $0FA8
+    STA !ENEMY_FUNCTION_POINTER
     ; Fall through to next method
 }
 
 cutscenes_mb_fake_death_music:
 {
-    DEC $0FB2 : BPL .return
+    DEC !ENEMY_VAR_5 : BPL .return
 
     LDA #$0000 : JSL !MUSIC_ROUTINE
     LDA $7ED82D : BIT #$0002 : BEQ .phase2
@@ -438,14 +438,14 @@ if !FEATURE_PAL
 else
     LDA #$886C
 endif
-    STA $0FA8
+    STA !ENEMY_FUNCTION_POINTER
 
-    LDA #$000C : STA $0FB2
-    LDA $0FCC : BEQ .continue
-    LDA #$0002 : STA $0FB2
+    LDA #$000C : STA !ENEMY_VAR_5
+    LDA !ENEMY_HP+$40 : BEQ .continue
+    LDA #$0002 : STA !ENEMY_VAR_5
 
   .continue
-    JMP ($0FA8)
+    JMP (!ENEMY_FUNCTION_POINTER)
 
   .return
     RTS
@@ -453,8 +453,8 @@ endif
 
 cutscenes_mb_fake_death_unlock:
 {
-    LDA $0FCC : BEQ .continue
-    LDA #$0001 : STA $0FB2
+    LDA !ENEMY_HP+$40 : BEQ .continue
+    LDA #$0001 : STA !ENEMY_VAR_5
 
   .continue
 if !FEATURE_PAL
@@ -462,14 +462,14 @@ if !FEATURE_PAL
 else
     LDA #$8884
 endif
-    STA $0FA8
-    JMP ($0FA8)
+    STA !ENEMY_FUNCTION_POINTER
+    JMP (!ENEMY_FUNCTION_POINTER)
 }
 
 cutscenes_mb_clear_bottom_left_tube:
 {
-    LDA $0FCC : BEQ .continue
-    LDA #$0010 : STA $0FF2
+    LDA !ENEMY_HP+$40 : BEQ .continue
+    LDA #$0010 : STA !ENEMY_VAR_5+$40
 
   .continue
 if !FEATURE_PAL
@@ -477,14 +477,14 @@ if !FEATURE_PAL
 else
     LDA #$8983
 endif
-    STA $0FF0
-    JMP ($0FF0)
+    STA !ENEMY_VAR_4+$40
+    JMP (!ENEMY_VAR_4+$40)
 }
 
 cutscenes_mb_clear_ceiling_column_9:
 {
-    LDA $0FCC : BEQ .continue
-    LDA #$0010 : STA $0FF2
+    LDA !ENEMY_HP+$40 : BEQ .continue
+    LDA #$0010 : STA !ENEMY_VAR_5+$40
 
   .continue
 if !FEATURE_PAL
@@ -492,14 +492,14 @@ if !FEATURE_PAL
 else
     LDA #$89B5
 endif
-    STA $0FF0
-    JMP ($0FF0)
+    STA !ENEMY_VAR_4+$40
+    JMP (!ENEMY_VAR_4+$40)
 }
 
 cutscenes_mb_clear_ceiling_column_6:
 {
-    LDA $0FCC : BEQ .continue
-    LDA #$0010 : STA $0FF2
+    LDA !ENEMY_HP+$40 : BEQ .continue
+    LDA #$0010 : STA !ENEMY_VAR_5+$40
 
   .continue
 if !FEATURE_PAL
@@ -507,14 +507,14 @@ if !FEATURE_PAL
 else
     LDA #$89E7
 endif
-    STA $0FF0
-    JMP ($0FF0)
+    STA !ENEMY_VAR_4+$40
+    JMP (!ENEMY_VAR_4+$40)
 }
 
 cutscenes_mb_clear_bottom_right_tube:
 {
-    LDA $0FCC : BEQ .continue
-    LDA #$0010 : STA $0FF2
+    LDA !ENEMY_HP+$40 : BEQ .continue
+    LDA #$0010 : STA !ENEMY_VAR_5+$40
 
   .continue
 if !FEATURE_PAL
@@ -522,14 +522,14 @@ if !FEATURE_PAL
 else
     LDA #$8A0F
 endif
-    STA $0FF0
-    JMP ($0FF0)
+    STA !ENEMY_VAR_4+$40
+    JMP (!ENEMY_VAR_4+$40)
 }
 
 cutscenes_mb_clear_bottom_middle_left_tube:
 {
-    LDA $0FCC : BEQ .continue
-    LDA #$0010 : STA $0FF2
+    LDA !ENEMY_HP+$40 : BEQ .continue
+    LDA #$0010 : STA !ENEMY_VAR_5+$40
 
   .continue
 if !FEATURE_PAL
@@ -537,14 +537,14 @@ if !FEATURE_PAL
 else
     LDA #$8A37
 endif
-    STA $0FF0
-    JMP ($0FF0)
+    STA !ENEMY_VAR_4+$40
+    JMP (!ENEMY_VAR_4+$40)
 }
 
 cutscenes_mb_clear_ceiling_column_7:
 {
-    LDA $0FCC : BEQ .continue
-    LDA #$0010 : STA $0FF2
+    LDA !ENEMY_HP+$40 : BEQ .continue
+    LDA #$0010 : STA !ENEMY_VAR_5+$40
 
   .continue
 if !FEATURE_PAL
@@ -552,14 +552,14 @@ if !FEATURE_PAL
 else
     LDA #$8A69
 endif
-    STA $0FF0
-    JMP ($0FF0)
+    STA !ENEMY_VAR_4+$40
+    JMP (!ENEMY_VAR_4+$40)
 }
 
 cutscenes_mb_clear_ceiling_column_8:
 {
-    LDA $0FCC : BEQ .continue
-    LDA #$0010 : STA $0FF2
+    LDA !ENEMY_HP+$40 : BEQ .continue
+    LDA #$0010 : STA !ENEMY_VAR_5+$40
 
   .continue
 if !FEATURE_PAL
@@ -567,8 +567,8 @@ if !FEATURE_PAL
 else
     LDA #$8A9B
 endif
-    STA $0FF0
-    JMP ($0FF0)
+    STA !ENEMY_VAR_4+$40
+    JMP (!ENEMY_VAR_4+$40)
 }
 
 cutscenes_mb_fake_death_setup_mb_fight_or_escape:
@@ -590,12 +590,12 @@ endif
     LDA #$0002 : JSL $89AB02
 
   .fast_mb_enabled
-    LDA $0FCC : BEQ .init_health
-    LDA #$0000 : STA $0FB2 : STA $0FCC
+    LDA !ENEMY_HP+$40 : BEQ .init_health
+    LDA #$0000 : STA !ENEMY_VAR_5 : STA !ENEMY_HP+$40
     BRA .continue
 
   .init_health
-    LDA #$4650 : STA $0FCC
+    LDA #$4650 : STA !ENEMY_HP+$40
 
   .continue
 if !FEATURE_PAL
@@ -603,14 +603,14 @@ if !FEATURE_PAL
 else
     LDA #$8D79
 endif
-    STA $0FA8
-    JMP ($0FA8)
+    STA !ENEMY_FUNCTION_POINTER
+    JMP (!ENEMY_FUNCTION_POINTER)
 }
 
 cutscenes_mb_fake_death_pause_phase_2:
 {
-    LDA $0FCC : BNE .continue
-    LDA #$0000 : STA $0FB2
+    LDA !ENEMY_HP+$40 : BNE .continue
+    LDA #$0000 : STA !ENEMY_VAR_5
 
   .continue
 if !FEATURE_PAL
@@ -618,14 +618,14 @@ if !FEATURE_PAL
 else
     LDA #$8D8B
 endif
-    STA $0FA8
-    JMP ($0FA8)
+    STA !ENEMY_FUNCTION_POINTER
+    JMP (!ENEMY_FUNCTION_POINTER)
 }
 
 cutscenes_mb_fake_death_load_tiles_phase_2:
 {
-    LDA $0FCC : BNE .continue
-    LDA #$0000 : STA $0FB2
+    LDA !ENEMY_HP+$40 : BNE .continue
+    LDA #$0000 : STA !ENEMY_VAR_5
 
   .continue
 if !FEATURE_PAL
@@ -633,13 +633,13 @@ if !FEATURE_PAL
 else
     LDA #$8DC3
 endif
-    STA $0FA8
-    JMP ($0FA8)
+    STA !ENEMY_FUNCTION_POINTER
+    JMP (!ENEMY_FUNCTION_POINTER)
 }
 
 cutscenes_mb_fake_death_raise_mb:
 {
-    LDA $0FCC : BNE .continue
+    LDA !ENEMY_HP+$40 : BNE .continue
     LDA !FRAME_COUNTER : AND #$0001 : BNE .done
 if !FEATURE_PAL
     JMP $8E65
@@ -653,8 +653,8 @@ if !FEATURE_PAL
 else
     LDA #$8E4D
 endif
-    STA $0FA8
-    JMP ($0FA8)
+    STA !ENEMY_FUNCTION_POINTER
+    JMP (!ENEMY_FUNCTION_POINTER)
 
   .done
     RTS
@@ -668,10 +668,10 @@ cutscenes_mb_choose_phase_2_or_3:
     LDA #$0004 : STA $7E7800
 
     ; 36000 health
-    LDA #$8CA0 : STA $0FCC
+    LDA #$8CA0 : STA !ENEMY_HP+$40
 
     ; Enable health-based palette
-    TDC : STA $7E7860 : STA $7E7868
+    LDA #$0000 : STA $7E7860 : STA $7E7868
     INC : STA $7E7862
     INC : STA $7E783E
 
@@ -690,7 +690,7 @@ endif
     LDA #$0002 : STA $7E7800
 
     ; 18000 health
-    LDA #$4650 : STA $0FCC
+    LDA #$4650 : STA !ENEMY_HP+$40
 if !FEATURE_PAL
     JMP $8EE1
 else
@@ -701,7 +701,7 @@ endif
 cutscenes_mb_shaking_head:
 {
     LDA !sram_cutscenes : BIT !CUTSCENE_FAST_MB : BEQ .continue
-    LDA #$000A : STA $0FB2
+    LDA #$000A : STA !ENEMY_VAR_5
 
   .continue
 if !FEATURE_PAL
@@ -709,14 +709,14 @@ if !FEATURE_PAL
 else
     LDA #$8EF5
 endif
-    STA $0FA8
-    JMP ($0FA8)
+    STA !ENEMY_FUNCTION_POINTER
+    JMP (!ENEMY_FUNCTION_POINTER)
 }
 
 cutscenes_mb_bring_head_back_up:
 {
     LDA !sram_cutscenes : BIT !CUTSCENE_FAST_MB : BEQ .continue
-    LDA #$0060 : STA $0FB2
+    LDA #$0060 : STA !ENEMY_VAR_5
 
   .continue
 if !FEATURE_PAL
@@ -724,14 +724,14 @@ if !FEATURE_PAL
 else
     LDA #$8F14
 endif
-    STA $0FA8
-    JMP ($0FA8)
+    STA !ENEMY_FUNCTION_POINTER
+    JMP (!ENEMY_FUNCTION_POINTER)
 }
 
 cutscenes_mb_death_move_to_back_of_room:
 {
     LDA !sram_cutscenes : BIT !CUTSCENE_FAST_MB : BEQ .continue
-    LDA #$000A : STA $0FB2
+    LDA #$000A : STA !ENEMY_VAR_5
 
   .continue
 if !FEATURE_PAL
@@ -739,14 +739,14 @@ if !FEATURE_PAL
 else
     LDA #$AF12
 endif
-    STA $0FA8
-    JMP ($0FA8)
+    STA !ENEMY_FUNCTION_POINTER
+    JMP (!ENEMY_FUNCTION_POINTER)
 }
 
 cutscenes_mb_death_first_stumble:
 {
     LDA !sram_cutscenes : BIT !CUTSCENE_FAST_MB : BEQ .continue
-    LDA #$000A : STA $0FB2
+    LDA #$000A : STA !ENEMY_VAR_5
 
   .continue
 if !FEATURE_PAL
@@ -754,14 +754,14 @@ if !FEATURE_PAL
 else
     LDA #$AF54
 endif
-    STA $0FA8
-    JMP ($0FA8)
+    STA !ENEMY_FUNCTION_POINTER
+    JMP (!ENEMY_FUNCTION_POINTER)
 }
 
 cutscenes_mb_death_final_explosions:
 {
     LDA !sram_cutscenes : BIT !CUTSCENE_FAST_MB : BEQ .continue
-    LDA #$0000 : STA $0FB2
+    LDA #$0000 : STA !ENEMY_VAR_5
 
   .continue
 if !FEATURE_PAL
@@ -769,16 +769,16 @@ if !FEATURE_PAL
 else
     LDA #$B013
 endif
-    STA $0FA8
-    JMP ($0FA8)
+    STA !ENEMY_FUNCTION_POINTER
+    JMP (!ENEMY_FUNCTION_POINTER)
 }
 
 cutscenes_mb_death_brain_falling:
 {
     LDA !sram_cutscenes : BIT !CUTSCENE_FAST_MB : BEQ .continue
     LDA #cutscenes_mb_death_brain_falling_fast
-    STA $0FA8
-    JMP ($0FA8)
+    STA !ENEMY_FUNCTION_POINTER
+    JMP (!ENEMY_FUNCTION_POINTER)
 
   .continue
 if !FEATURE_PAL
@@ -786,15 +786,15 @@ if !FEATURE_PAL
 else
     LDA #$B12D
 endif
-    STA $0FA8
-    JMP ($0FA8)
+    STA !ENEMY_FUNCTION_POINTER
+    JMP (!ENEMY_FUNCTION_POINTER)
 }
 
 cutscenes_mb_death_brain_falling_fast:
 {
     ; Vanilla logic except add $40 instead of $20
-    LDA $0FB2 : CLC : ADC #$0040 : STA $0FB2
-    XBA : AND #$00FF : CLC : ADC $0FBE
+    LDA !ENEMY_VAR_5 : CLC : ADC #$0040 : STA !ENEMY_VAR_5
+    XBA : AND #$00FF : CLC : ADC !ENEMY_Y+$40
     CMP #$00C4 : BCC .still_falling
 
 if !FEATURE_PAL
@@ -804,14 +804,14 @@ else
 endif
 
   .still_falling
-    STA $0FBE
+    STA !ENEMY_Y+$40
     RTS
 }
 
 cutscenes_mb_death_load_corpse:
 {
     LDA !sram_cutscenes : BIT !CUTSCENE_FAST_MB : BEQ .continue
-    LDA #$0000 : STA $0FB2
+    LDA #$0000 : STA !ENEMY_VAR_5
 
   .continue
 if !FEATURE_PAL
@@ -819,14 +819,14 @@ if !FEATURE_PAL
 else
     LDA #$B173
 endif
-    STA $0FA8
-    JMP ($0FA8)
+    STA !ENEMY_FUNCTION_POINTER
+    JMP (!ENEMY_FUNCTION_POINTER)
 }
 
 cutscenes_mb_death_corpse_tips_over:
 {
     LDA !sram_cutscenes : BIT !CUTSCENE_FAST_MB : BEQ .continue
-    LDA #$0030 : STA $0FB2
+    LDA #$0030 : STA !ENEMY_VAR_5
 
   .continue
 if !FEATURE_PAL
@@ -834,8 +834,8 @@ if !FEATURE_PAL
 else
     LDA #$B1B8
 endif
-    STA $0FA8
-    JMP ($0FA8)
+    STA !ENEMY_FUNCTION_POINTER
+    JMP (!ENEMY_FUNCTION_POINTER)
 }
 
 print pc, " cutscenes MB end"

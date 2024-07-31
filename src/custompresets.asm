@@ -11,47 +11,47 @@ if !FEATURE_TINYSTATES
 custom_preset_save:
 {
     LDA !sram_custom_preset_slot
-    %presetslotsize()            ; multiply by 100h (slot offset)
-    LDA #$5AFE : STA $703000,X   ; mark this slot as "SAFE" to load
-    LDA #$00BE : STA $703002,X   ; record slot size for future compatibility
-    LDA $078D : STA $703004,X    ; DDB
-    LDA $079B : STA $703006,X    ; MDB
-    LDA $07F3 : STA $703008,X    ; Music Bank
-    LDA $07F5 : STA $70300A,X    ; Music Track
-    LDA $090F : STA $70300C,X    ; Screen subpixel X position
-    LDA $0911 : STA $70300E,X    ; Screen X position in pixels
-    LDA $0913 : STA $703010,X    ; Screen subpixel Y position
-    LDA $0915 : STA $703012,X    ; Screen Y position in pixels
-    LDA $0917 : STA $703014,X    ; Layer 2 X position
-    LDA $0919 : STA $703016,X    ; Layer 2 Y position
-    LDA $0921 : STA $703018,X    ; BG2 X offset
-    LDA $0923 : STA $70301A,X    ; BG2 Y offset
-    LDA $093F : STA $70301C,X    ; Ceres escape flag
-    LDA $09A2 : STA $70301E,X    ; Equipped Items
-    LDA $09A4 : STA $703020,X    ; Collected Items
-    LDA $09A6 : STA $703022,X    ; Beams
-    LDA $09A8 : STA $703024,X    ; Beams
-    LDA $09C0 : STA $703026,X    ; Manual/Auto reserve tank
-    LDA $09C2 : STA $703028,X    ; Health
-    LDA $09C4 : STA $70302A,X    ; Max health
-    LDA $09C6 : STA $70302C,X    ; Missiles
-    LDA $09C8 : STA $70302E,X    ; Max missiles
-    LDA $09CA : STA $703030,X    ; Supers
-    LDA $09CC : STA $703032,X    ; Max supers
-    LDA $09CE : STA $703034,X    ; Pbs
-    LDA $09D0 : STA $703036,X    ; Max pbs
-    LDA $09D2 : STA $703038,X    ; Currently selected item
-    LDA $09D4 : STA $70303A,X    ; Max reserves
-    LDA $09D6 : STA $70303C,X    ; Reserves
-    LDA $0A1C : STA $70303E,X    ; Samus position/state
-    LDA $0A1E : STA $703040,X    ; More position/state
-    LDA $0A68 : STA $703042,X    ; Flash suit
-    LDA $0A76 : STA $703044,X    ; Hyper beam
-    LDA $0AF6 : STA $703046,X    ; Samus X
-    LDA $0AF8 : STA $703048,X    ; Samus subpixel X
-    LDA $0AFA : STA $70304A,X    ; Samus Y
-    LDA $0AFC : STA $70304C,X    ; Samus subpixel Y
-    LDA $0B3F : STA $70304E,X    ; Blue suit
+    %presetslotsize() ; multiply by 100h (slot offset)
+    LDA !SAFEWORD : STA $703000,X ; mark this slot as "SAFE" to load
+    LDA #$00BE : STA $703002,X ; record slot size for future compatibility
+    LDA !DOOR_ID : STA $703004,X
+    LDA !ROOM_ID : STA $703006,X
+    LDA !MUSIC_DATA : STA $703008,X
+    LDA !MUSIC_TRACK : STA $70300A,X
+    LDA !LAYER1_SUB_X : STA $70300C,X
+    LDA !LAYER1_X : STA $70300E,X
+    LDA !LAYER1_SUB_Y : STA $703010,X
+    LDA !LAYER1_Y : STA $703012,X
+    LDA !LAYER2_X : STA $703014,X
+    LDA !LAYER2_Y : STA $703016,X
+    LDA !BG2_X_SCROLL : STA $703018,X
+    LDA !BG2_Y_SCROLL : STA $70301A,X
+    LDA !CERES_STATUS : STA $70301C,X
+    LDA !SAMUS_ITEMS_EQUIPPED : STA $70301E,X
+    LDA !SAMUS_ITEMS_COLLECTED : STA $703020,X
+    LDA !SAMUS_BEAMS_EQUIPPED : STA $703022,X
+    LDA !SAMUS_BEAMS_COLLECTED : STA $703024,X
+    LDA !SAMUS_RESERVE_MODE : STA $703026,X
+    LDA !SAMUS_HP : STA $703028,X
+    LDA !SAMUS_HP_MAX : STA $70302A,X
+    LDA !SAMUS_MISSILES : STA $70302C,X
+    LDA !SAMUS_MISSILES_MAX : STA $70302E,X
+    LDA !SAMUS_SUPERS : STA $703030,X
+    LDA !SAMUS_SUPERS_MAX : STA $703032,X
+    LDA !SAMUS_PBS : STA $703034,X
+    LDA !SAMUS_PBS_MAX : STA $703036,X
+    LDA !SAMUS_ITEM_SELECTED : STA $703038,X
+    LDA !SAMUS_RESERVE_MAX : STA $70303A,X
+    LDA !SAMUS_RESERVE_ENERGY : STA $70303C,X
+    LDA !SAMUS_POSE : STA $70303E,X
+    LDA !SAMUS_POSE_DIRECTION : STA $703040,X
+    LDA !SAMUS_SHINE_TIMER : STA $703042,X ; Flash suit
+    LDA !SAMUS_HYPER_BEAM : STA $703044,X
+    LDA !SAMUS_X : STA $703046,X
+    LDA !SAMUS_X_SUBPX : STA $703048,X
+    LDA !SAMUS_Y : STA $70304A,X
+    LDA !SAMUS_Y_SUBPX : STA $70304C,X
+    LDA !SAMUS_DASH_COUNTER : STA $70304E,X ; Blue suit
     LDA $7ED820 : STA $703050,X  ; Events
     LDA $7ED822 : STA $703052,X  ; Events
     LDA $7ED828 : STA $703054,X  ; Bosses
@@ -107,7 +107,7 @@ custom_preset_save:
     LDA $7ECD4C : STA $7030B8,X  ; Scrolls
     LDA $7ECD4E : STA $7030BA,X  ; Scrolls
     LDA $7ECD50 : STA $7030BC,X  ; Scrolls
-    LDA $079F : STA $7030BE,X    ; Region/Area
+    LDA !AREA_ID : STA $7030BE,X
     ; next available byte is $7030C0
     RTL
 }
@@ -115,80 +115,80 @@ custom_preset_save:
 custom_preset_load:
 {
     LDA !sram_custom_preset_slot
-    %presetslotsize()            ; multiply by 100h (slot offset)
-                                 ; skip past "5AFE" word
-                                 ; skip past size for now
-    LDA $703004,X : STA $078D    ; DDB
-    LDA $703006,X : STA $079B    ; MDB
-    LDA $703008,X : STA $07F3    ; Music Bank
-    LDA $70300A,X : STA $07F5    ; Music Track
-    LDA $70300C,X : STA $090F    ; Screen subpixel X position
-    LDA $70300E,X : STA $0911    ; Screen X position in pixels
-    LDA $703010,X : STA $0913    ; Screen subpixel Y position
-    LDA $703012,X : STA $0915    ; Screen Y position in pixels
-    LDA $703014,X : STA $0917    ; Layer 2 X position
-    LDA $703016,X : STA $0919    ; Layer 2 Y position
-    LDA $703018,X : STA $0921    ; BG2 X offset
-    LDA $70301A,X : STA $0923    ; BG2 Y offset
-    LDA $70301C,X : STA $093F    ; Ceres escape flag
-    LDA $70301E,X : STA $09A2    ; Equipped Items
-    LDA $703020,X : STA $09A4    ; Collected Items
-    LDA $703022,X : STA $09A6    ; Beams
-    LDA $703024,X : STA $09A8    ; Beams
-    LDA $703026,X : STA $09C0    ; Manual/Auto reserve tank
-    LDA $703028,X : STA $09C2    ; Health
-    LDA $70302A,X : STA $09C4    ; Max health
-    LDA $70302C,X : STA $09C6    ; Missiles
-    LDA $70302E,X : STA $09C8    ; Max missiles
-    LDA $703030,X : STA $09CA    ; Supers
-    LDA $703032,X : STA $09CC    ; Max supers
-    LDA $703034,X : STA $09CE    ; Pbs
-    LDA $703036,X : STA $09D0    ; Max pbs
-    LDA $703038,X : STA $09D2    ; Currently selected item
-    LDA $70303A,X : STA $09D4    ; Max reserves
-    LDA $70303C,X : STA $09D6    ; Reserves
-    LDA $70303E,X : STA $0A1C    ; Samus position/state
-    LDA $703040,X : STA $0A1E    ; More position/state
-    LDA $703042,X : STA $0A68    ; Flash suit
-    LDA $703044,X : STA $0A76    ; Hyper beam
-    LDA $703046,X : STA $0AF6    ; Samus X
-    LDA $703048,X : STA $0AF8    ; Samus subpixel X
-    LDA $70304A,X : STA $0AFA    ; Samus Y
-    LDA $70304C,X : STA $0AFC    ; Samus subpixel Y
-    LDA $70304E,X : STA $0B3F    ; Blue suit
-    LDA $703050,X : STA $7ED820  ; Events
-    LDA $703052,X : STA $7ED822  ; Events
-    LDA $703054,X : STA $7ED828  ; Bosses
-    LDA $703056,X : STA $7ED82A  ; Bosses
-    LDA $703058,X : STA $7ED82C  ; Bosses
-    LDA $70305A,X : STA $7ED82E  ; Bosses
-    LDA $70305C,X : STA $7ED870  ; Items
-    LDA $70305E,X : STA $7ED872  ; Items
-    LDA $703060,X : STA $7ED874  ; Items
-    LDA $703062,X : STA $7ED876  ; Items
-    LDA $703064,X : STA $7ED878  ; Items
-    LDA $703066,X : STA $7ED87A  ; Items
-    LDA $703068,X : STA $7ED87C  ; Items
-    LDA $70306A,X : STA $7ED87E  ; Items
-    LDA $70306C,X : STA $7ED880  ; Items
-    LDA $70306E,X : STA $7ED882  ; Items
-    LDA $703070,X : STA $7ED8B0  ; Doors
-    LDA $703072,X : STA $7ED8B2  ; Doors
-    LDA $703074,X : STA $7ED8B4  ; Doors
-    LDA $703076,X : STA $7ED8B6  ; Doors
-    LDA $703078,X : STA $7ED8B8  ; Doors
-    LDA $70307A,X : STA $7ED8BA  ; Doors
-    LDA $70307C,X : STA $7ED8BC  ; Doors
-    LDA $70307E,X : STA $7ED8BE  ; Doors
-    LDA $703080,X : STA $7ED8C0  ; Doors
-    LDA $703082,X : STA $7ED8C2  ; Doors
-    LDA $703084,X : STA $7ED8C4  ; Doors
-    LDA $703086,X : STA $7ED908  ; Map Stations
-    LDA $703088,X : STA $7ED90A  ; Map Stations
-    LDA $70308A,X : STA $7ED90C  ; Map Stations
-    LDA $7030BE,X : STA $079F    ; Region/Area
+    %presetslotsize() ; multiply by 100h (slot offset)
+    ; skip past "5AFE" word
+    ; skip past size for now
+    LDA $703004,X : STA !DOOR_ID
+    LDA $703006,X : STA !ROOM_ID
+    LDA $703008,X : STA !MUSIC_DATA
+    LDA $70300A,X : STA !MUSIC_TRACK
+    LDA $70300C,X : STA !LAYER1_SUB_X
+    LDA $70300E,X : STA !LAYER1_X
+    LDA $703010,X : STA !LAYER1_SUB_Y
+    LDA $703012,X : STA !LAYER1_Y
+    LDA $703014,X : STA !LAYER2_X
+    LDA $703016,X : STA !LAYER2_Y
+    LDA $703018,X : STA !BG2_X_SCROLL
+    LDA $70301A,X : STA !BG2_Y_SCROLL
+    LDA $70301C,X : STA !CERES_STATUS
+    LDA $70301E,X : STA !SAMUS_ITEMS_EQUIPPED
+    LDA $703020,X : STA !SAMUS_ITEMS_COLLECTED
+    LDA $703022,X : STA !SAMUS_BEAMS_EQUIPPED
+    LDA $703024,X : STA !SAMUS_BEAMS_COLLECTED
+    LDA $703026,X : STA !SAMUS_RESERVE_MODE
+    LDA $703028,X : STA !SAMUS_HP
+    LDA $70302A,X : STA !SAMUS_HP_MAX
+    LDA $70302C,X : STA !SAMUS_MISSILES
+    LDA $70302E,X : STA !SAMUS_MISSILES_MAX
+    LDA $703030,X : STA !SAMUS_SUPERS
+    LDA $703032,X : STA !SAMUS_SUPERS_MAX
+    LDA $703034,X : STA !SAMUS_PBS
+    LDA $703036,X : STA !SAMUS_PBS_MAX
+    LDA $703038,X : STA !SAMUS_ITEM_SELECTED
+    LDA $70303A,X : STA !SAMUS_RESERVE_MAX
+    LDA $70303C,X : STA !SAMUS_RESERVE_ENERGY
+    LDA $70303E,X : STA !SAMUS_POSE
+    LDA $703040,X : STA !SAMUS_POSE_DIRECTION
+    LDA $703042,X : STA !SAMUS_SHINE_TIMER ; Flash suit
+    LDA $703044,X : STA !SAMUS_HYPER_BEAM
+    LDA $703046,X : STA !SAMUS_X
+    LDA $703048,X : STA !SAMUS_X_SUBPX
+    LDA $70304A,X : STA !SAMUS_Y
+    LDA $70304C,X : STA !SAMUS_Y_SUBPX
+    LDA $70304E,X : STA !SAMUS_DASH_COUNTER ; Blue suit
+    LDA $703050,X : STA $7ED820 ; Events
+    LDA $703052,X : STA $7ED822 ; Events
+    LDA $703054,X : STA $7ED828 ; Bosses
+    LDA $703056,X : STA $7ED82A ; Bosses
+    LDA $703058,X : STA $7ED82C ; Bosses
+    LDA $70305A,X : STA $7ED82E ; Bosses
+    LDA $70305C,X : STA $7ED870 ; Items
+    LDA $70305E,X : STA $7ED872 ; Items
+    LDA $703060,X : STA $7ED874 ; Items
+    LDA $703062,X : STA $7ED876 ; Items
+    LDA $703064,X : STA $7ED878 ; Items
+    LDA $703066,X : STA $7ED87A ; Items
+    LDA $703068,X : STA $7ED87C ; Items
+    LDA $70306A,X : STA $7ED87E ; Items
+    LDA $70306C,X : STA $7ED880 ; Items
+    LDA $70306E,X : STA $7ED882 ; Items
+    LDA $703070,X : STA $7ED8B0 ; Doors
+    LDA $703072,X : STA $7ED8B2 ; Doors
+    LDA $703074,X : STA $7ED8B4 ; Doors
+    LDA $703076,X : STA $7ED8B6 ; Doors
+    LDA $703078,X : STA $7ED8B8 ; Doors
+    LDA $70307A,X : STA $7ED8BA ; Doors
+    LDA $70307C,X : STA $7ED8BC ; Doors
+    LDA $70307E,X : STA $7ED8BE ; Doors
+    LDA $703080,X : STA $7ED8C0 ; Doors
+    LDA $703082,X : STA $7ED8C2 ; Doors
+    LDA $703084,X : STA $7ED8C4 ; Doors
+    LDA $703086,X : STA $7ED908 ; Map Stations
+    LDA $703088,X : STA $7ED90A ; Map Stations
+    LDA $70308A,X : STA $7ED90C ; Map Stations
+    LDA $7030BE,X : STA !AREA_ID
     ; set flag to load scrolls later
-    LDA #$5AFE : STA !ram_custom_preset
+    LDA !SAFEWORD : STA !ram_custom_preset
     ; next available byte is $7030C0
     RTL
 }
@@ -196,47 +196,47 @@ else
 custom_preset_save:
 {
     LDA !sram_custom_preset_slot
-    %presetslotsize()            ; multiply by 200h (slot offset)
-    LDA #$5AFE : STA $703000,X   ; mark this slot as "SAFE" to load
-    LDA #$01EE : STA $703002,X   ; record slot size for future compatibility
-    LDA $078B : STA $703004,X    ; Elevator Index
-    LDA $078D : STA $703006,X    ; DDB
-    LDA $078F : STA $703008,X    ; DoorOut Index
-    LDA $079B : STA $70300A,X    ; MDB
-    LDA $079F : STA $70300C,X    ; Region
-    LDA $07C3 : STA $70300E,X    ; GFX Pointers
-    LDA $07C5 : STA $703010,X    ; GFX Pointers
-    LDA $07C7 : STA $703012,X    ; GFX Pointers
-    LDA $07F3 : STA $703014,X    ; Music Bank
-    LDA $07F5 : STA $703016,X    ; Music Track
-    LDA $090F : STA $703018,X    ; Screen subpixel X position
-    LDA $0911 : STA $70301A,X    ; Screen X position in pixels
-    LDA $0913 : STA $70301C,X    ; Screen subpixel Y position
-    LDA $0915 : STA $70301E,X    ; Screen Y position in pixels
-    LDA $093F : STA $703020,X    ; Ceres escape flag
-    LDA $09A2 : STA $703022,X    ; Equipped Items
-    LDA $09A4 : STA $703024,X    ; Collected Items
-    LDA $09A6 : STA $703026,X    ; Beams
-    LDA $09A8 : STA $703028,X    ; Beams
-    LDA $09C0 : STA $70302A,X    ; Manual/Auto reserve tank
-    LDA $09C2 : STA $70302C,X    ; Health
-    LDA $09C4 : STA $70302E,X    ; Max health
-    LDA $09C6 : STA $703030,X    ; Missiles
-    LDA $09C8 : STA $703032,X    ; Max missiles
-    LDA $09CA : STA $703034,X    ; Supers
-    LDA $09CC : STA $703036,X    ; Max supers
-    LDA $09CE : STA $703038,X    ; Pbs
-    LDA $09D0 : STA $70303A,X    ; Max pbs
-    LDA $09D2 : STA $70303C,X    ; Currently selected item
-    LDA $09D4 : STA $70303E,X    ; Max reserves
-    LDA $09D6 : STA $703040,X    ; Reserves
-    LDA $0A1C : STA $703042,X    ; Samus position/state
-    LDA $0A1E : STA $703044,X    ; More position/state
-    LDA $0A68 : STA $703046,X    ; Flash suit
-    LDA $0A76 : STA $703048,X    ; Hyper beam
-    LDA $0AF6 : STA $70304A,X    ; Samus X
-    LDA $0AFA : STA $70304C,X    ; Samus Y
-    LDA $0B3F : STA $70304E,X    ; Blue suit
+    %presetslotsize() ; multiply by 200h (slot offset)
+    LDA !SAFEWORD : STA $703000,X ; mark this slot as "SAFE" to load
+    LDA #$01EE : STA $703002,X ; record slot size for future compatibility
+    LDA !LOAD_STATION_INDEX : STA $703004,X
+    LDA !DOOR_ID : STA $703006,X
+    LDA !DOOR_BTS : STA $703008,X
+    LDA !ROOM_ID : STA $70300A,X
+    LDA !AREA_ID : STA $70300C,X
+    LDA $07C3 : STA $70300E,X ; GFX Pointers
+    LDA $07C5 : STA $703010,X ; GFX Pointers
+    LDA $07C7 : STA $703012,X ; GFX Pointers
+    LDA !MUSIC_DATA : STA $703014,X
+    LDA !MUSIC_TRACK : STA $703016,X
+    LDA !LAYER1_SUB_X : STA $703018,X
+    LDA !LAYER1_X : STA $70301A,X
+    LDA !LAYER1_SUB_Y : STA $70301C,X
+    LDA !LAYER1_Y : STA $70301E,X
+    LDA !CERES_STATUS : STA $703020,X
+    LDA !SAMUS_ITEMS_EQUIPPED : STA $703022,X
+    LDA !SAMUS_ITEMS_COLLECTED : STA $703024,X
+    LDA !SAMUS_BEAMS_EQUIPPED : STA $703026,X
+    LDA !SAMUS_BEAMS_COLLECTED : STA $703028,X
+    LDA !SAMUS_RESERVE_MODE : STA $70302A,X
+    LDA !SAMUS_HP : STA $70302C,X
+    LDA !SAMUS_HP_MAX : STA $70302E,X
+    LDA !SAMUS_MISSILES : STA $703030,X
+    LDA !SAMUS_MISSILES_MAX : STA $703032,X
+    LDA !SAMUS_SUPERS : STA $703034,X
+    LDA !SAMUS_SUPERS_MAX : STA $703036,X
+    LDA !SAMUS_PBS : STA $703038,X
+    LDA !SAMUS_PBS_MAX : STA $70303A,X
+    LDA !SAMUS_ITEM_SELECTED : STA $70303C,X
+    LDA !SAMUS_RESERVE_MAX : STA $70303E,X
+    LDA !SAMUS_RESERVE_ENERGY : STA $703040,X
+    LDA !SAMUS_POSE : STA $703042,X
+    LDA !SAMUS_POSE_DIRECTION : STA $703044,X
+    LDA !SAMUS_SHINE_TIMER : STA $703046,X ; Flash suit
+    LDA !SAMUS_HYPER_BEAM : STA $703048,X
+    LDA !SAMUS_X : STA $70304A,X
+    LDA !SAMUS_Y : STA $70304C,X
+    LDA !SAMUS_DASH_COUNTER : STA $70304E,X ; Blue suit
 
     ; Copy SRAM
     TXA : CLC : ADC #$005F : TAX
@@ -252,11 +252,11 @@ custom_preset_save:
     LDA $7ED820,X : PLX : STA !PRESET_SLOTS+$B0,X
     DEX : TXA : BIT #$0100 : BEQ .save_events_items_doors_loop
 
-    INX                                     ; Restore X for sanity
-    LDA $0917 : STA !PRESET_SLOTS+$1B0,X    ; Layer 2 X position
-    LDA $0919 : STA !PRESET_SLOTS+$1B2,X    ; Layer 2 Y position
-    LDA $0921 : STA !PRESET_SLOTS+$1B4,X    ; BG2 X offset
-    LDA $0923 : STA !PRESET_SLOTS+$1B6,X    ; BG2 Y offset
+    INX ; Restore X for sanity
+    LDA !LAYER2_X : STA !PRESET_SLOTS+$1B0,X
+    LDA !LAYER2_Y : STA !PRESET_SLOTS+$1B2,X
+    LDA !BG2_X_SCROLL : STA !PRESET_SLOTS+$1B4,X
+    LDA !BG2_Y_SCROLL : STA !PRESET_SLOTS+$1B6,X
 
     PHX : PHB
     TXA : CLC : ADC #$31B8 : TAY ; Y = Destination
@@ -264,8 +264,8 @@ custom_preset_save:
     MVN $7E70                    ; srcBank, destBank
     PLB : PLX
 
-    LDA $0AF8 : STA $7031EA,X    ; Samus subpixel X
-    LDA $0AFC : STA $7031EC,X    ; Samus subpixel Y
+    LDA !SAMUS_X_SUBPX : STA $7031EA,X
+    LDA !SAMUS_Y_SUBPX : STA $7031EC,X
     ; next available byte is $7031EE
 
     RTL
@@ -274,47 +274,47 @@ custom_preset_save:
 custom_preset_load:
 {
     LDA !sram_custom_preset_slot
-    %presetslotsize()            ; multiply by 200h
-                                 ; skip past "5AFE" word
-                                 ; skip past size for now
-    LDA !PRESET_SLOTS+$04,X : STA $078B    ; Elevator Index
-    LDA !PRESET_SLOTS+$06,X : STA $078D    ; DDB
-    LDA !PRESET_SLOTS+$08,X : STA $078F    ; DoorOut Index
-    LDA !PRESET_SLOTS+$0A,X : STA $079B    ; MDB
-    LDA !PRESET_SLOTS+$0C,X : STA $079F    ; Region
-    LDA !PRESET_SLOTS+$0E,X : STA $07C3    ; GFX Pointers
-    LDA !PRESET_SLOTS+$10,X : STA $07C5    ; GFX Pointers
-    LDA !PRESET_SLOTS+$12,X : STA $07C7    ; GFX Pointers
-    LDA !PRESET_SLOTS+$14,X : STA $07F3    ; Music Bank
-    LDA !PRESET_SLOTS+$16,X : STA $07F5    ; Music Track
-    LDA !PRESET_SLOTS+$18,X : STA $090F    ; Screen subpixel X position
-    LDA !PRESET_SLOTS+$1A,X : STA $0911    ; Screen X position in pixels
-    LDA !PRESET_SLOTS+$1C,X : STA $0913    ; Screen subpixel Y position
-    LDA !PRESET_SLOTS+$1E,X : STA $0915    ; Screen Y position in pixels
-    LDA !PRESET_SLOTS+$20,X : STA $093F    ; Ceres escape flag
-    LDA !PRESET_SLOTS+$22,X : STA $09A2    ; Equipped Items
-    LDA !PRESET_SLOTS+$24,X : STA $09A4    ; Collected Items
-    LDA !PRESET_SLOTS+$26,X : STA $09A6    ; Beams
-    LDA !PRESET_SLOTS+$28,X : STA $09A8    ; Beams
-    LDA !PRESET_SLOTS+$2A,X : STA $09C0    ; Manual/Auto reserve tank
-    LDA !PRESET_SLOTS+$2C,X : STA $09C2    ; Health
-    LDA !PRESET_SLOTS+$2E,X : STA $09C4    ; Max health
-    LDA !PRESET_SLOTS+$30,X : STA $09C6    ; Missiles
-    LDA !PRESET_SLOTS+$32,X : STA $09C8    ; Max missiles
-    LDA !PRESET_SLOTS+$34,X : STA $09CA    ; Supers
-    LDA !PRESET_SLOTS+$36,X : STA $09CC    ; Max supers
-    LDA !PRESET_SLOTS+$38,X : STA $09CE    ; Pbs
-    LDA !PRESET_SLOTS+$3A,X : STA $09D0    ; Max pbs
-    LDA !PRESET_SLOTS+$3C,X : STA $09D2    ; Currently selected item
-    LDA !PRESET_SLOTS+$3E,X : STA $09D4    ; Max reserves
-    LDA !PRESET_SLOTS+$40,X : STA $09D6    ; Reserves
-    LDA !PRESET_SLOTS+$42,X : STA $0A1C    ; Samus position/state
-    LDA !PRESET_SLOTS+$44,X : STA $0A1E    ; More position/state
-    LDA !PRESET_SLOTS+$46,X : STA $0A68    ; Flash suit
-    LDA !PRESET_SLOTS+$48,X : STA $0A76    ; Hyper beam
-    LDA !PRESET_SLOTS+$4A,X : STA $0AF6    ; Samus X
-    LDA !PRESET_SLOTS+$4C,X : STA $0AFA    ; Samus Y
-    LDA !PRESET_SLOTS+$4E,X : STA $0B3F    ; Blue suit
+    %presetslotsize() ; multiply by 200h
+    ; skip past "5AFE" word
+    ; skip past size for now
+    LDA !PRESET_SLOTS+$04,X : STA !LOAD_STATION_INDEX
+    LDA !PRESET_SLOTS+$06,X : STA !DOOR_ID
+    LDA !PRESET_SLOTS+$08,X : STA !DOOR_BTS
+    LDA !PRESET_SLOTS+$0A,X : STA !ROOM_ID
+    LDA !PRESET_SLOTS+$0C,X : STA !AREA_ID
+    LDA !PRESET_SLOTS+$0E,X : STA $07C3 ; GFX Pointers
+    LDA !PRESET_SLOTS+$10,X : STA $07C5 ; GFX Pointers
+    LDA !PRESET_SLOTS+$12,X : STA $07C7 ; GFX Pointers
+    LDA !PRESET_SLOTS+$14,X : STA !MUSIC_DATA
+    LDA !PRESET_SLOTS+$16,X : STA !MUSIC_TRACK
+    LDA !PRESET_SLOTS+$18,X : STA !LAYER1_SUB_X
+    LDA !PRESET_SLOTS+$1A,X : STA !LAYER1_X
+    LDA !PRESET_SLOTS+$1C,X : STA !LAYER1_SUB_Y
+    LDA !PRESET_SLOTS+$1E,X : STA !LAYER1_Y
+    LDA !PRESET_SLOTS+$20,X : STA !CERES_STATUS
+    LDA !PRESET_SLOTS+$22,X : STA !SAMUS_ITEMS_EQUIPPED
+    LDA !PRESET_SLOTS+$24,X : STA !SAMUS_ITEMS_COLLECTED
+    LDA !PRESET_SLOTS+$26,X : STA !SAMUS_BEAMS_EQUIPPED
+    LDA !PRESET_SLOTS+$28,X : STA !SAMUS_BEAMS_COLLECTED
+    LDA !PRESET_SLOTS+$2A,X : STA !SAMUS_RESERVE_MODE
+    LDA !PRESET_SLOTS+$2C,X : STA !SAMUS_HP
+    LDA !PRESET_SLOTS+$2E,X : STA !SAMUS_HP_MAX
+    LDA !PRESET_SLOTS+$30,X : STA !SAMUS_MISSILES
+    LDA !PRESET_SLOTS+$32,X : STA !SAMUS_MISSILES_MAX
+    LDA !PRESET_SLOTS+$34,X : STA !SAMUS_SUPERS
+    LDA !PRESET_SLOTS+$36,X : STA !SAMUS_SUPERS_MAX
+    LDA !PRESET_SLOTS+$38,X : STA !SAMUS_PBS
+    LDA !PRESET_SLOTS+$3A,X : STA !SAMUS_PBS_MAX
+    LDA !PRESET_SLOTS+$3C,X : STA !SAMUS_ITEM_SELECTED
+    LDA !PRESET_SLOTS+$3E,X : STA !SAMUS_RESERVE_MAX
+    LDA !PRESET_SLOTS+$40,X : STA !SAMUS_RESERVE_ENERGY
+    LDA !PRESET_SLOTS+$42,X : STA !SAMUS_POSE
+    LDA !PRESET_SLOTS+$44,X : STA !SAMUS_POSE_DIRECTION
+    LDA !PRESET_SLOTS+$46,X : STA !SAMUS_SHINE_TIMER ; Flash suit
+    LDA !PRESET_SLOTS+$48,X : STA !SAMUS_HYPER_BEAM
+    LDA !PRESET_SLOTS+$4A,X : STA !SAMUS_X
+    LDA !PRESET_SLOTS+$4C,X : STA !SAMUS_Y
+    LDA !PRESET_SLOTS+$4E,X : STA !SAMUS_DASH_COUNTER ; Blue suit
 
     ; Copy SRAM
     TXA : CLC : ADC #$005F : TAX
@@ -335,17 +335,17 @@ custom_preset_load:
     ; Restore X for sanity, then check if we have layer 2 values
     INX : LDA !PRESET_SLOTS+$02,X : CMP #$01B0 : BEQ .done_no_scrolls
 
-    LDA !PRESET_SLOTS+$1B0,X : STA $0917    ; Layer 2 X position
-    LDA !PRESET_SLOTS+$1B2,X : STA $0919    ; Layer 2 Y position
-    LDA !PRESET_SLOTS+$1B4,X : STA $0921    ; BG2 X offset
-    LDA !PRESET_SLOTS+$1B6,X : STA $0923    ; BG2 Y offset
+    LDA !PRESET_SLOTS+$1B0,X : STA !LAYER2_X
+    LDA !PRESET_SLOTS+$1B2,X : STA !LAYER2_Y
+    LDA !PRESET_SLOTS+$1B4,X : STA !BG2_X_SCROLL
+    LDA !PRESET_SLOTS+$1B6,X : STA !BG2_Y_SCROLL
 
     LDA !PRESET_SLOTS+$02,X : CMP #$01BA : BMI .done_no_scrolls
-    LDA #$5AFE : STA !ram_custom_preset
+    LDA !SAFEWORD : STA !ram_custom_preset
 
     LDA $703002,X : CMP #$01EC : BMI .done_with_scrolls
-    LDA $7031EA,X : STA $0AF8    ; Samus subpixel X
-    LDA $7031EC,X : STA $0AFC    ; Samus subpixel Y
+    LDA $7031EA,X : STA !SAMUS_X_SUBPX
+    LDA $7031EC,X : STA !SAMUS_Y_SUBPX
 
   .done_with_scrolls
     RTL
@@ -366,8 +366,8 @@ preset_scroll_fixes:
     PHP
     PHB
     %ai16()
-    STZ $0921 : STZ $0923
-    LDA !ram_custom_preset : CMP #$5AFE : BNE .category_presets
+    STZ !BG2_X_SCROLL : STZ !BG2_Y_SCROLL
+    LDA !ram_custom_preset : CMP !SAFEWORD : BNE .category_presets
     BRL .custom_presets
 
   .category_presets
@@ -430,17 +430,17 @@ preset_scroll_fixes:
     RTL
 
   .tophalf
-    CPX #$A75D : BPL .norfair
-    CPX #$92FD : BEQ .parlor
-    CPX #$9CB3 : BEQ .dachora
-    CPX #$9D19 : BEQ .big_pink
-    CPX #$9E11 : BEQ .big_pink_pbs
-    CPX #$9F64 : BEQ .taco_tank_room
-    CPX #$A011 : BEQ .etecoons_etank
-    CPX #$A253 : BEQ .red_tower
-    CPX #$A3AE : BEQ .alpha_pbs
-    CPX #$A408 : BEQ .below_spazer
-    CPX #$A6A1 : BEQ .warehouse_entrance
+    CPX.w #ROOM_IceBeamAcid : BPL .norfair
+    CPX.w #ROOM_Parlor : BEQ .parlor
+    CPX.w #ROOM_Dachora : BEQ .dachora
+    CPX.w #ROOM_BigPink : BEQ .big_pink
+    CPX.w #ROOM_PinkBrinstarPowerBombs : BEQ .big_pink_pbs
+    CPX.w #ROOM_BlueBrinstarETank : BEQ .taco_tank_room
+    CPX.w #ROOM_EtecoonETank : BEQ .etecoons_etank
+    CPX.w #ROOM_RedTower : BEQ .red_tower
+    CPX.w #ROOM_AlphaPowerBomb : BEQ .alpha_pbs
+    CPX.w #ROOM_BelowSpazer : BEQ .below_spazer
+    CPX.w #ROOM_WarehouseEntrance : BEQ .warehouse_entrance
     BRA .topdone
 
     ; -----------------------------------------
@@ -484,17 +484,17 @@ preset_scroll_fixes:
     BRA .norfairdone
 
   .norfair
-    CPX #$A815 : BEQ .ice_beam_gates
-    CPX #$A8B9 : BEQ .ice_snake_room
-    CPX #$A9E5 : BEQ .hjb_room
-    CPX #$AC83 : BEQ .green_bubble_missiles
-    CPX #$AE32 : BEQ .volcano_room
-    CPX #$B07A : BEQ .bat_cave
-    CPX #$B1E5 : BEQ .acid_chozo_room
-    CPX #$B283 : BEQ .golden_torizo
-    CPX #$B3A5 : BEQ .fast_pillars_setup
-    CPX #$B4AD : BEQ .worst_room
-    CPX #$B585 : BEQ .kihunter_stairs
+    CPX.w #ROOM_IceBeamGate : BEQ .ice_beam_gates
+    CPX.w #ROOM_IceBeamSnake : BEQ .ice_snake_room
+    CPX.w #ROOM_HiJumpBoots : BEQ .hjb_room
+    CPX.w #ROOM_GreenBubblesMissiles : BEQ .green_bubble_missiles
+    CPX.w #ROOM_Volcano : BEQ .volcano_room
+    CPX.w #ROOM_BatCave : BEQ .bat_cave
+    CPX.w #ROOM_AcidStatue : BEQ .acid_chozo_room
+    CPX.w #ROOM_GoldenTorizo : BEQ .golden_torizo
+    CPX.w #ROOM_FastPillarsSetup : BEQ .fast_pillars_setup
+    CPX.w #ROOM_WorstRoomInTheGame : BEQ .worst_room
+    CPX.w #ROOM_RedKihunterShaft : BEQ .kihunter_stairs
   .norfairdone
     PLB
     PLP
@@ -541,10 +541,10 @@ preset_scroll_fixes:
     ; Wrecked Ship Scroll Fixes (Category Presets)
     ; --------------------------------------------
   .bowling
-    STA $CD2D : STA $CD2E : STA $CD2F
-    STZ $CD26 : STZ $CD27
-    STZ $CD28 : STZ $CD29
-    STZ $CD2A : STZ $CD2B
+    STA $CD2D : STA $CD2F : STA $CD2F
+    %a16()
+    STZ $CD26 : STZ $CD28
+    STZ $CD2A
     BRA .halfwaydone
 
   .wrecked_ship_shaft
@@ -565,16 +565,16 @@ preset_scroll_fixes:
     BRA .halfwaydone
 
   .halfway
-    CPX #$DF45 : BPL .ceres
-    CPX #$C98E : BEQ .bowling
-    CPX #$CAF6 : BEQ .wrecked_ship_shaft
-    CPX #$CBD5 : BEQ .electric_death
-    CPX #$CC6F : BEQ .basement
-    CPX #$CEFB : BEQ .main_street
-    CPX #$D1A3 : BEQ .crab_shaft
-    CPX #$D21C : BEQ .crab_hole
-    CPX #$D48E : BEQ .oasis
-    CPX #$D69A : BEQ .pants_room
+    CPX.w #ROOM_CeresElev : BPL .ceres
+    CPX.w #ROOM_BowlingAlley : BEQ .bowling
+    CPX.w #ROOM_WreckedShipMainShaft : BEQ .wrecked_ship_shaft
+    CPX.w #ROOM_ElectricDeath : BEQ .electric_death
+    CPX.w #ROOM_Basement : BEQ .basement
+    CPX.w #ROOM_GlassTunnel : BEQ .main_street
+    CPX.w #ROOM_CrabShaft : BEQ .crab_shaft
+    CPX.w #ROOM_CrabHole : BEQ .crab_hole
+    CPX.w #ROOM_Oasis : BEQ .oasis
+    CPX.w #ROOM_EastPants : BEQ .pants_room
   .halfwaydone
     PLB
     PLP
@@ -612,50 +612,50 @@ preset_scroll_fixes:
     ; Ceres Fixes (Category and Custom Presets)
     ; -----------------------------------------
   .ceres_elevator
-    STZ $091E : STZ $0920
+    STZ !BG1_X_OFFSET+1 : STZ !BG1_Y_OFFSET+1
     BRA .ceresdone
 
   .ceres
-    STZ $5F                      ; Initialize mode 7
-    CPX #$DF45 : BEQ .ceres_elevator
-    %a16() : STZ $78             ; Ceres Elevator room already does this
-    STZ $7A : STZ $7C            ; Other Ceres rooms should zero out the values
+    STZ $5F ; Initialize mode 7
+    CPX.w #ROOM_CeresElev : BEQ .ceres_elevator
+    %a16() : STZ $78 ; Ceres Elevator room already does this
+    STZ $7A : STZ $7C ; Other Ceres rooms should zero out the values
     STZ $7E : STZ $80 : STZ $82
     LDA #$0009 : STA $07EB : %a8()
     LDA #$09 : STA $56
-    CPX #$DF8D : BEQ .ceres_falling_tiles
-    CPX #$DFD7 : BEQ .ceres_magnet_stairs
-    CPX #$E021 : BEQ .ceres_dead_scientists
-    CPX #$E06B : BEQ .ceres_58_escape
-    CPX #$E0B5 : BEQ .ceres_ridley
+    CPX.w #ROOM_FallingTile : BEQ .ceres_falling_tiles
+    CPX.w #ROOM_MagnetStairs : BEQ .ceres_magnet_stairs
+    CPX.w #ROOM_DeadScientist : BEQ .ceres_dead_scientists
+    CPX.w #ROOM_58Escape : BEQ .ceres_58_escape
+    CPX.w #ROOM_CeresRidley : BEQ .ceres_ridley
   .ceresdone
     PLB
     PLP
     RTL
 
   .ceres_falling_tiles
-    LDA #$01 : STA $091E
-    LDA #$02 : STA $0920
+    LDA #$01 : STA !BG1_X_OFFSET+1
+    LDA #$02 : STA !BG1_Y_OFFSET+1
     BRA .ceresdone
 
   .ceres_magnet_stairs
-    LDA #$03 : STA $091E
-    LDA #$02 : STA $0920
+    LDA #$03 : STA !BG1_X_OFFSET+1
+    LDA #$02 : STA !BG1_Y_OFFSET+1
     BRA .ceresdone
 
   .ceres_dead_scientists
-    LDA #$04 : STA $091E
-    LDA #$03 : STA $0920
+    LDA #$04 : STA !BG1_X_OFFSET+1
+    LDA #$03 : STA !BG1_Y_OFFSET+1
     BRA .ceresdone
 
   .ceres_58_escape
-    LDA #$06 : STA $091E
-    LDA #$03 : STA $0920
+    LDA #$06 : STA !BG1_X_OFFSET+1
+    LDA #$03 : STA !BG1_Y_OFFSET+1
     BRA .ceresdone
 
   .ceres_ridley
-    LDA #$08 : STA $091E
-    LDA #$03 : STA $0920
+    LDA #$08 : STA !BG1_X_OFFSET+1
+    LDA #$03 : STA !BG1_Y_OFFSET+1
     BRA .ceresdone
 
   .custom_presets
@@ -664,11 +664,11 @@ preset_scroll_fixes:
     CLC : ADC #$31E9 : TAX       ; X = Source
     LDY #$CD51 : LDA #$0031      ; Y = Destination, A = Size-1
     MVP $F07E                    ; srcBank, destBank
-    TDC : STA !ram_custom_preset
+    LDA #$0000 : STA !ram_custom_preset
 
     %a8()
     ; X = room ID
-    LDX !ROOM_ID : CPX #$DF45 : BMI .specialized_fixes
+    LDX !ROOM_ID : CPX.w #ROOM_CeresElev : BMI .specialized_fixes
     BRL .ceres ; For ceres, use same fixes as category presets
 
     ; -----------------------------------------------
@@ -704,11 +704,11 @@ preset_scroll_fixes:
     BRA .specialdone
 
   .specialized_fixes
-    CPX #$92FD : BEQ .specialized_parlor
-    CPX #$9D19 : BEQ .specialized_big_pink
-    CPX #$9F64 : BEQ .specialized_taco_tank_room
-    CPX #$A9E5 : BEQ .specialized_hjb_room
-    CPX #$B585 : BEQ .specialized_kihunter_stairs
+    CPX #ROOM_Parlor : BEQ .specialized_parlor
+    CPX #ROOM_BigPink : BEQ .specialized_big_pink
+    CPX #ROOM_BlueBrinstarETank : BEQ .specialized_taco_tank_room
+    CPX #ROOM_HiJumpBoots : BEQ .specialized_hjb_room
+    CPX #ROOM_RedKihunterShaft : BEQ .specialized_kihunter_stairs
 
   .specialdone
     PLB
@@ -760,7 +760,7 @@ preset_special_fixes:
     LDA #$00FF : LDY !ROOM_ID
 
     ; Big Pink Power Bomb blocks before Mission Impossible
-    CPY #$9D19 : BNE +
+    CPY.w #ROOM_BigPink : BNE +
     LDX !SAMUS_Y : CPX #$02C0 : BMI +
     CPX #$03C9 : BPL +
     STA $7F2208 : STA $7F220A : STA $7F22A8 : STA $7F22AA
@@ -768,20 +768,20 @@ preset_special_fixes:
     BRA .done
 
     ; Leaving Hi-Jump Boots when left of column
-+   CPY #$A9E5 : BNE +
++   CPY.w #ROOM_HiJumpBoots : BNE +
     LDX !SAMUS_X : CPX #$0095 : BPL +
     STA $7F0052 : STA $7F0072 : STA $7F0092
     BRA .done
 
     ; Top of Kihunter Stairs before Firefleas
-+   CPY #$B585 : BNE +
++   CPY.w #ROOM_RedKihunterShaft : BNE +
     LDX !SAMUS_Y : CPX #$00F0 : BPL +
     STA $7F036E : STA $7F0370 : STA $7F0374 : STA $7F0376
     STA $7F03D4 : STA $7F0610 : STA $7F0612
     BRA .done
 
     ; Power Bomb blocks at Blue Brinstar E-tank
-+   CPY #$9F64 : BNE +
++   CPY.w #ROOM_BlueBrinstarETank : BNE +
     LDX !SAMUS_X : CPX #$022B : BMI +
     LDX !SAMUS_PBS_MAX : BEQ +
     LDX #$0000
@@ -820,9 +820,9 @@ LoadRandomPreset:
     TYA : LSR : TAY
 
     LDA $12 : XBA : AND #$00FF : STA $4204     ; divide random number...
-    %a8()
+    %i8()
     STY $4206                                  ; by number of preset groups
-    %a16()
+    %i16()
     PEA $0000 : PLA
     LDA $4216 : ASL : TAY                      ; random preset group index in Y
     LDA [$16],Y : STA $16                      ; random preset group macro pointer in $16
@@ -835,10 +835,10 @@ LoadRandomPreset:
     TYA : LSR : TAY
 
     LDA $12 : AND #$00FF : STA $4204           ; divide random number...
-    %a8()
-    STY $14 : STY $4206                        ; divide bottom half of random number by Y
-    %a16()
-    PEA $0000 : PLA
+    %i8()
+    STY $4206 : STY $14                        ; divide bottom half of random number by Y
+    %i16()
+    CMP ($01,S),Y                              ; burn 8 CPU cycles
     LDA $4216 : STA $12                        ; randomly selected preset
 
     ASL : TAY
@@ -846,6 +846,7 @@ LoadRandomPreset:
     LDY #$0004 : LDA [$16],Y                   ; finally reached the pointer to the preset
     STA !ram_load_preset
 
+    ; !FEATURE_DEV for crawling through preset categories in order
     LDA !ram_random_preset_rng : BEQ .done
     LDA !ram_random_preset_value : INC : STA !ram_random_preset_value
     LDA $12 : INC : CMP $14 : BMI .done

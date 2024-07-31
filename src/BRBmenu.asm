@@ -546,7 +546,7 @@ cm_crop_mode:
     
   .draw
     ; wait for lag frame
--   LDX $05B8 : CPX $05B8 : BEQ -
+-   LDX !NMI_COUNTER : CPX !NMI_COUNTER : BEQ -
 
     ; draw around the border or fill the screen?
     LDA !ram_crop_mode : BNE .fill
@@ -563,7 +563,7 @@ cm_crop_mode:
   .loop
     ; Make sure we don't read joysticks twice in the same frame
     ; wait for lag frame
--   LDX $05B8 : CPX $05B8 : BEQ -
+-   LDX !NMI_COUNTER : CPX !NMI_COUNTER : BEQ -
     LDA !FRAME_COUNTER : CMP !ram_cm_input_counter : PHP
     STA !ram_cm_input_counter
     PLP : BNE +

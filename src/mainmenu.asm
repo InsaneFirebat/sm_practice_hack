@@ -234,6 +234,7 @@ PresetsMenu:
     dw #presets_enemies
     dw #presets_map_tiles
     dw #presets_auto_segment
+    dw #presets_presetrando
 ;    dw #presets_ship_landing
 if !RAW_TILE_GRAPHICS
     dw #$FFFF
@@ -307,7 +308,7 @@ presets_load_custom_preset:
     ; check if slot is populated first
     LDA !sram_custom_preset_slot
     %presetslotsize()
-    LDA !PRESET_SLOTS,X : CMP #$5AFE : BEQ .safe
+    LDA !PRESET_SLOTS,X : CMP !SAFEWORD : BEQ .safe
     %sfxfail()
     RTL
 
@@ -315,6 +316,9 @@ presets_load_custom_preset:
     STA !ram_custom_preset
     LDA #$0001 : STA !ram_cm_leave
     RTL
+
+presets_presetrando:
+    %cm_submenu(">Preset Randomizer", #PresetRandoMenu)
 
 presets_open_doors:
     %cm_toggle("Auto-Open Blue Doors", !sram_preset_open_doors, #$0001, #0)
@@ -491,6 +495,60 @@ action_load_preset:
     LDA #$0001 : STA !ram_cm_leave
     RTL
 }
+
+
+; ------------
+; Preset Rando
+; ------------
+
+PresetRandoMenu:
+    dw #presetrando_enable
+    dw #$FFFF
+    dw #presetrando_morph
+    dw #presetrando_charge
+    dw #presetrando_beampref
+    dw #$FFFF
+    dw #presetrando_etanks
+    dw #presetrando_reserves
+    dw #presetrando_missiles
+    dw #presetrando_supers
+    dw #presetrando_pbs
+    dw #$0000
+    %cm_header("RANDOMIZE PRESET EQUIP")
+
+presetrando_enable: 
+    %cm_toggle("Equipment Rando", !sram_presetrando, #$0001, #0)
+
+presetrando_morph:
+    %cm_toggle("Force Morph Ball", !sram_presetrando_morph, #$0001, #0)
+
+presetrando_charge:
+    %cm_toggle("Force Charge Beam", !sram_presetrando_charge, #$0001, #0)
+
+presetrando_beampref:
+    dw !ACTION_CHOICE
+    dl #!sram_presetrando_beampref
+    dw #$0000
+    db #$28, "Beam Preference", #$FF
+    db #$28, "     RANDOM", #$FF
+    db #$28, "     SPAZER", #$FF
+    db #$28, "     PLASMA", #$FF
+    db #$FF
+
+presetrando_etanks: 
+    %cm_numfield("Max Energy Tanks", !sram_presetrando_max_etanks, 0, 14, 1, 2, #0)
+
+presetrando_reserves: 
+    %cm_numfield("Max Reserve Tanks", !sram_presetrando_max_reserves, 0, 4, 1, 1, #0)
+
+presetrando_missiles: 
+    %cm_numfield("Max Missile Pickups", !sram_presetrando_max_missiles, 0, 50, 1, 5, #0)
+
+presetrando_supers: 
+    %cm_numfield("Max Super Pickups", !sram_presetrando_max_supers, 0, 50, 1, 5, #0)
+
+presetrando_pbs: 
+    %cm_numfield("Max Power Bomb Pickups", !sram_presetrando_max_pbs, 0, 50, 1, 5, #0)
 
 
 ; -------------------
@@ -842,7 +900,7 @@ eq_refill:
 +   LDA !SAMUS_SUPERS_MAX : CMP !SAMUS_SUPERS : BCC + : STA !SAMUS_SUPERS
 +   LDA !SAMUS_PBS_MAX : CMP !SAMUS_PBS : BCC + : STA !SAMUS_PBS
 +   LDA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY
-    STZ $0CD2  ; bomb counter
+    STZ !SAMUS_BOMB_COUNTER  ; bomb counter
     %sfxenergy()
     RTL
 
@@ -1652,13 +1710,11 @@ action_teleport:
 
     ; Make sure we can teleport to Zebes from Ceres
     %a8()
-    LDA #$05 : STA $7ED914
+    LDA #$05 : STA !LOADING_GAME_STATE
     %a16()
 
-    STZ $0727 ; Clear pause menu index
-    STZ $0795 ; Clear door transition flag
-    STZ $0E18 ; Set elevator to inactive
-    STZ $1C1F ; Clear message box index
+    STZ !PAUSE_MENU_INDEX : STZ !MESSAGE_BOX_INDEX
+    STZ !DOOR_FLAG_ELEV : STZ !ELEVATOR_STATUS
 
     LDA !SAMUS_HP_MAX : BNE +
     LDA #$001F : STA !SAMUS_HP
@@ -1727,9 +1783,8 @@ endif
   .FXobjects
     LDX #$000E
 
-    LDX #$000E
   .loopFXobjects
-    ; find Hyper Beam palette FX object the index
+    ; find Hyper Beam palette FX object index
     LDA $1E7D,X : CMP #$E1F0 : BEQ .found
     DEX #2 : BPL .loopFXobjects
 
@@ -1796,8 +1851,8 @@ misc_killenemies:
     %cm_jsl("Kill Enemies", .kill_loop, #0)
   .kill_loop
     ; 8000 = solid to Samus, 0400 = Ignore Samus projectiles
-    TAX : LDA $0F86,X : BIT #$8400 : BNE +
-    ORA #$0200 : STA $0F86,X
+    TAX : LDA !ENEMY_PROPERTIES,X : BIT #$8400 : BNE +
+    ORA #$0200 : STA !ENEMY_PROPERTIES,X
 +   TXA : CLC : ADC #$0040 : CMP #$0800 : BNE .kill_loop
     %sfxconfirm()
     RTL
@@ -1813,7 +1868,7 @@ misc_forcestand:
 misc_magnetstairs:
     %cm_toggle("Magnet Stairs Fix", !sram_magnetstairs, #$0001, #.routine)
   .routine
-    LDA !ROOM_ID : CMP #$DFD7 : BNE .done
+    LDA !ROOM_ID : CMP.w #ROOM_MagnetStairs : BNE .done
     LDA !sram_magnetstairs : BEQ .broken
     ; change tile type and BTS
     %a8()
@@ -2974,13 +3029,12 @@ game_minimap:
     %cm_toggle("Minimap", !ram_minimap, #$0001, #0)
 
 game_clear_minimap:
-    %cm_jsl("Clear Minimap", .clear_minimap, #$0000)
-
-  .clear_minimap
+    %cm_jsl("Clear Minimap", .routine, #$0000)
+  .routine
     LDA #$0000 : STA !ram_map_counter : STA $7E0789
     STA $7ED908 : STA $7ED90A : STA $7ED90C : STA $7ED90E
     LDX #$00FE
-  .clear_minimap_loop
+  .loop
     STA $7ECD52,X : STA $7ECE52,X
     STA $7ECF52,X : STA $7ED052,X
     STA $7ED152,X : STA $7ED252,X
@@ -2988,7 +3042,7 @@ game_clear_minimap:
     STA $7ED91C,X : STA $7EDA1C,X
     STA $7EDB1C,X : STA $7EDC1C,X
     STA $7EDD1C,X : STA $7E07F7,X
-    DEX #2 : BPL .clear_minimap_loop
+    DEX #2 : BPL .loop
     %sfxquake()
     RTL
 
@@ -3047,7 +3101,7 @@ cutscenes_g4_skip:
     %cm_toggle_bit("Skip G4", !sram_cutscenes, !CUTSCENE_SKIP_G4, #.routine)
   .routine
     BIT !CUTSCENE_SKIP_G4 : BEQ .off
-    LDA !ROOM_ID : CMP #$A5ED : BNE .done
+    LDA !ROOM_ID : CMP.w #ROOM_StatuesHallway : BNE .done
     ; Verify all four G4 bosses killed
     LDA $7ED828 : BIT #$0100 : BEQ .done
     LDA $7ED82C : BIT #$0001 : BEQ .done
@@ -3056,7 +3110,7 @@ cutscenes_g4_skip:
     LDA $7ED820 : ORA #$0400 : STA $7ED820
     BRA .done
   .off
-    LDA !ROOM_ID : CMP #$A5ED : BNE .done
+    LDA !ROOM_ID : CMP.w #ROOM_StatuesHallway : BNE .done
     LDA $7ED820 : AND #$FBFF : STA $7ED820
   .done
     RTL
@@ -3193,49 +3247,48 @@ action_assign_input:
 
 check_duplicate_inputs:
 {
-    ; ram_cm_ctrl_assign = word address of input being assigned
-    ; ram_cm_ctrl_swap = previous input bitmask being moved
-    ; X / $C2 = word address of new input
-    ; Y / $C4 = new input bitmask
-
-    LDA #$09B2 : CMP $C2 : BEQ .check_jump      ; check if we just assigned shot
-    LDA $09B2 : BEQ +                           ; check if shot is unassigned
-    CMP $C4 : BNE .check_jump                   ; skip to check_jump if not a duplicate assignment
-+   JMP .shot                                   ; swap with shot
+; ram_cm_ctrl_assign = word address of input being assigned
+; ram_cm_ctrl_swap = previous input bitmask being moved
+; X / $C2 = word address of new input
+; Y / $C4 = new input bitmask
+    LDA #!CTRL_BINDING_SHOT : CMP $C2 : BEQ .check_jump ; check if we just assigned shot
+    LDA !CTRL_BINDING_SHOT : BEQ +                      ; check if shot is unassigned
+    CMP $C4 : BNE .check_jump                           ; skip to check_jump if not a duplicate assignment
++   JMP .shot                                           ; swap with shot
 
   .check_jump
-    LDA #$09B4 : CMP $C2 : BEQ .check_dash
-    LDA $09B4 : BEQ +
+    LDA #!CTRL_BINDING_JUMP : CMP $C2 : BEQ .check_dash
+    LDA !CTRL_BINDING_JUMP : BEQ +
     CMP $C4 : BNE .check_dash
 +   JMP .jump
 
   .check_dash
-    LDA #$09B6 : CMP $C2 : BEQ .check_cancel
-    LDA $09B6 : BEQ +
+    LDA #!CTRL_BINDING_DASH : CMP $C2 : BEQ .check_cancel
+    LDA !CTRL_BINDING_DASH : BEQ +
     CMP $C4 : BNE .check_cancel
 +   JMP .dash
 
   .check_cancel
-    LDA #$09B8 : CMP $C2 : BEQ .check_select
-    LDA $09B8 : BEQ +
+    LDA #!CTRL_BINDING_CANCEL : CMP $C2 : BEQ .check_select
+    LDA !CTRL_BINDING_CANCEL : BEQ +
     CMP $C4 : BNE .check_select
 +   JMP .cancel
 
   .check_select
-    LDA #$09BA : CMP $C2 : BEQ .check_up
-    LDA $09BA : BEQ +
+    LDA #!CTRL_BINDING_SELECT : CMP $C2 : BEQ .check_up
+    LDA !CTRL_BINDING_SELECT : BEQ +
     CMP $C4 : BNE .check_up
 +   JMP .select
 
   .check_up
-    LDA #$09BE : CMP $C2 : BEQ .check_down
-    LDA $09BE : BEQ +
+    LDA #!CTRL_BINDING_ANGLEUP : CMP $C2 : BEQ .check_down
+    LDA !CTRL_BINDING_ANGLEUP : BEQ +
     CMP $C4 : BNE .check_down
 +   JMP .up
 
   .check_down
-    LDA #$09BC : CMP $C2 : BEQ .not_detected
-    LDA $09BC : BEQ +
+    LDA #!CTRL_BINDING_ANGLEDOWN : CMP $C2 : BEQ .not_detected
+    LDA !CTRL_BINDING_ANGLEDOWN : BEQ +
     CMP $C4 : BNE .not_detected
 +   JMP .down
 
@@ -3244,72 +3297,72 @@ check_duplicate_inputs:
     RTL
 
   .shot
-    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +  ; check if old input is L or R
-    LDA #$0000 : STA $09B2                      ; unassign input
+    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +     ; check if old input is L or R
+    LDA #$0000 : STA !CTRL_BINDING_SHOT            ; unassign input
     RTL
-+   LDA !ram_cm_ctrl_swap : STA $09B2           ; input is safe to be assigned
++   LDA !ram_cm_ctrl_swap : STA !CTRL_BINDING_SHOT ; input is safe to be assigned
     RTL
 
   .jump
     LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +
-    LDA #$0000 : STA $09B4
+    LDA #$0000 : STA !CTRL_BINDING_JUMP
     RTL
-+   LDA !ram_cm_ctrl_swap : STA $09B4
++   LDA !ram_cm_ctrl_swap : STA !CTRL_BINDING_JUMP
     RTL
 
   .dash
     LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +
-    LDA #$0000 : STA $09B6
+    LDA #$0000 : STA !CTRL_BINDING_DASH
     RTL
-+   LDA !ram_cm_ctrl_swap : STA $09B6
++   LDA !ram_cm_ctrl_swap : STA !CTRL_BINDING_DASH
     RTL
 
   .cancel
     LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +
-    LDA #$0000 : STA $09B8
+    LDA #$0000 : STA !CTRL_BINDING_CANCEL
     RTL
-+   LDA !ram_cm_ctrl_swap : STA $09B8
++   LDA !ram_cm_ctrl_swap : STA !CTRL_BINDING_CANCEL
     RTL
 
   .select
     LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ +
-    LDA #$0000 : STA $09BA
+    LDA #$0000 : STA !CTRL_BINDING_SELECT
     RTL
-+   LDA !ram_cm_ctrl_swap : STA $09BA
++   LDA !ram_cm_ctrl_swap : STA !CTRL_BINDING_SELECT
     RTL
 
   .up
     LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ .unbind_up  ; check if input is L or R, unbind if not
-    LDA !ram_cm_ctrl_swap : STA $09BE                    ; safe to assign input
-    CMP $09BC : BEQ .swap_down                           ; check if input matches angle down
+    LDA !ram_cm_ctrl_swap : STA !CTRL_BINDING_ANGLEUP    ; safe to assign input
+    CMP !CTRL_BINDING_ANGLEDOWN : BEQ .swap_down         ; check if input matches angle down
     RTL
 
   .unbind_up
-    STA $09BE               ; unassign up
+    STA !CTRL_BINDING_ANGLEUP
     RTL
 
   .swap_down
-    CMP #$0020 : BNE +      ; check if angle up is assigned to L
-    LDA #$0010 : STA $09BC  ; assign R to angle down
+    CMP #$0020 : BNE +                       ; check if angle up is assigned to L
+    LDA #$0010 : STA !CTRL_BINDING_ANGLEDOWN ; assign R to angle down
     RTL
-+   LDA #$0020 : STA $09BC  ; assign L to angle down
++   LDA #$0020 : STA !CTRL_BINDING_ANGLEDOWN ; assign L to angle down
     RTL
 
   .down
     LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ .unbind_down
-    LDA !ram_cm_ctrl_swap : STA $09BC
-    CMP $09BE : BEQ .swap_up
+    LDA !ram_cm_ctrl_swap : STA !CTRL_BINDING_ANGLEDOWN
+    CMP !CTRL_BINDING_ANGLEUP : BEQ .swap_up
     RTL
 
   .unbind_down
-    STA $09BC               ; unassign down
+    STA !CTRL_BINDING_ANGLEDOWN
     RTL
 
   .swap_up
     CMP #$0020 : BNE +
-    LDA #$0010 : STA $09BE
+    LDA #$0010 : STA !CTRL_BINDING_ANGLEUP
     RTL
-+   LDA #$0020 : STA $09BE
++   LDA #$0020 : STA !CTRL_BINDING_ANGLEUP
     RTL
 }
 
@@ -3982,9 +4035,9 @@ audio_music_toggle:
     db #$FF
   .routine
     ; Clear music queue
-    STZ $0629 : STZ $062B : STZ $062D : STZ $062F
-    STZ $0631 : STZ $0633 : STZ $0635 : STZ $0637
-    STZ $0639 : STZ $063B : STZ $063D : STZ $063F
+    STZ !MUSIC_QUEUE_TIMERS : STZ !MUSIC_QUEUE_TIMERS+$2 : STZ !MUSIC_QUEUE_TIMERS+$4 : STZ !MUSIC_QUEUE_TIMERS+$6
+    STZ !MUSIC_QUEUE_TIMERS+$8 : STZ !MUSIC_QUEUE_TIMERS+$A : STZ !MUSIC_QUEUE_TIMERS+$C : STZ !MUSIC_QUEUE_TIMERS+$E
+    STZ !MUSIC_QUEUE_NEXT : STZ !MUSIC_QUEUE_START : STZ !MUSIC_ENTRY : STZ !MUSIC_TIMER
     CMP #$0001 : BEQ .resume_music
     STZ $2140
     RTL

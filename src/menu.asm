@@ -72,7 +72,7 @@ cm_boot:
     ; Disable sounds until we boot the SPC
     LDA #$0001 : STA !DISABLE_SOUNDS
 
-.skip_spc
+  .skip_spc
     %a8()
     LDA #$5A : STA $2109 ; BG3 tilemap base address
     LDA #$04 : STA $212C ; Enable BG3; disable all else
@@ -224,10 +224,10 @@ cm_wait_for_lag_frame:
     PHP : %ai16()
     LDA !ram_quickboot_spc_state : TAX
 
-    LDA $05B8   ; lag frame counter
-                ; (it's only 8 bits, but it's OK if we mix it up with the variable after)
+    LDA !NMI_COUNTER   ; lag frame counter
+    ; (it's only 8 bits, but it's OK if we mix it up with the variable after)
   .loop
-    CMP $05B8
+    CMP !NMI_COUNTER
     BNE .done
 
     CPX #$0000 : BPL .loop
@@ -266,7 +266,7 @@ cm_transfer_custom_tileset:
     LDA.w #cm_hud_table2>>16 : STA $C3
 
   .room_check
-    LDA !ROOM_ID : CMP #$A59F : BEQ .kraid_vram
+    LDA !ROOM_ID : CMP.w #ROOM_Kraid : BEQ .kraid_vram
 
     ; Load custom vram to normal location
     %a8()
@@ -305,7 +305,7 @@ cm_transfer_custom_tileset:
 cm_transfer_original_tileset:
 {
     PHP : %ai16()
-    LDA !ROOM_ID : CMP #$A59F : BEQ .kraid_vram
+    LDA !ROOM_ID : CMP.w #ROOM_Kraid : BEQ .kraid_vram
 
     %a8()
     LDA !ram_minimap : CMP #$00 : BNE .minimap_vram
@@ -391,7 +391,7 @@ cm_transfer_custom_cgram:
     LDA !ram_palette_border : STA $7EC00A
     LDA !ram_palette_headeroutline : STA $7EC012
     LDA !ram_palette_text : STA $7EC014
-    LDA !ram_palette_background : STA $7EC016 : STA $7EC00E : STA $7EC01E
+    LDA !ram_palette_background : STA $7EC00E : STA $7EC016 : STA $7EC01E
     LDA !ram_palette_numoutline : STA $7EC01A
     LDA !ram_palette_numfill : STA $7EC01C
     LDA !ram_palette_toggleon : STA $7EC032
@@ -431,8 +431,7 @@ cm_transfer_original_cgram:
 
 cm_draw:
 {
-    PHP
-    %ai16()
+    PHP : %ai16()
     JSR cm_tilemap_bg
     JSR cm_tilemap_menu
     JSR cm_tilemap_transfer
@@ -476,7 +475,8 @@ cm_tilemap_bg:
     LDA !sram_menu_background : BNE .fill_interior
 
     ; fill if paused, $C-11
-    LDA !GAMEMODE : CMP #$000C : BMI .check_ceres : BEQ .fill_interior
+    LDA !GAMEMODE : CMP #$000C : BMI .check_ceres
+    BEQ .fill_interior
     CMP #$0012 : BMI .fill_interior
 
     ; fill if game over
@@ -683,6 +683,7 @@ cm_draw_action_table:
     dw draw_ram_watch
     dw draw_dynamic
     dw draw_manage_presets
+}
 
 draw_toggle:
 {
@@ -1198,7 +1199,7 @@ draw_custom_preset:
     STX !DP_Address
 
     ; check if slot has valid data
-    LDA $703000,X : CMP #$5AFE : BEQ .validPreset
+    LDA $703000,X : CMP !SAFEWORD : BEQ .validPreset
     ; slot is EMPTY, fix bank and exit
     LDA !DP_MenuIndices+2 : STA !DP_CurrentMenu+2
     RTS
@@ -1209,7 +1210,7 @@ draw_custom_preset:
 
     ; check if custom preset name exists
     LDA !DP_ToggleValue : ASL : TAX
-    LDA !sram_custom_preset_safewords,X : CMP #$5AFE : BNE .drawRoomName
+    LDA !sram_custom_preset_safewords,X : CMP !SAFEWORD : BNE .drawRoomName
 
     ; preset slot * $18 = name offset
     TXA : ASL #2 : STA !DP_Temp
@@ -1595,7 +1596,20 @@ menu_ctrl_input_display:
 ; X = pointer to tilemap area (STA !ram_tilemap_buffer,X)
 ; A = Controller word
 {
-    JSR menu_ctrl_clear_input_display
+    PHA
+
+    ; clear out tilemap area
+    LDA !MENU_BLANK
+    STA !ram_tilemap_buffer+0,X
+    STA !ram_tilemap_buffer+2,X
+    STA !ram_tilemap_buffer+4,X
+    STA !ram_tilemap_buffer+6,X
+    STA !ram_tilemap_buffer+8,X
+    STA !ram_tilemap_buffer+10,X
+    STA !ram_tilemap_buffer+12,X
+    STA !ram_tilemap_buffer+14,X
+    STA !ram_tilemap_buffer+16,X
+    PLA
 
     XBA
     LDY #$0000
@@ -1612,25 +1626,6 @@ menu_ctrl_input_display:
     INY : LSR : BNE .loop
 
   .done
-    RTS
-}
-
-
-menu_ctrl_clear_input_display:
-{
-    ; X = pointer to tilemap area
-    PHA
-    LDA !MENU_BLANK
-    STA !ram_tilemap_buffer+0,X
-    STA !ram_tilemap_buffer+2,X
-    STA !ram_tilemap_buffer+4,X
-    STA !ram_tilemap_buffer+6,X
-    STA !ram_tilemap_buffer+8,X
-    STA !ram_tilemap_buffer+10,X
-    STA !ram_tilemap_buffer+12,X
-    STA !ram_tilemap_buffer+14,X
-    STA !ram_tilemap_buffer+16,X
-    PLA
     RTS
 }
 
@@ -2064,7 +2059,7 @@ kb_ctrl_mode:
     STA !DP_DigitValue : STA !DP_KB_Shift
     LDA #$0001 : STA !ram_cm_ctrl_mode
 
-    LDA !DP_KB_Control : CMP #$5AFE : BEQ .countChars
+    LDA !DP_KB_Control : CMP !SAFEWORD : BEQ .countChars
     ; write attribute and terminator bytes
     LDA #$FF28 : STA !ram_cm_keyboard_buffer
 
@@ -2159,7 +2154,7 @@ kb_handle_inputs:
 
   .input_X
     ; check if X held for 60 frames
-    LDA $A3 : DEC : CMP #$FFC4 : BCS .return
+    LDA !CONTROLLER_1_AUTOPRESS : DEC : CMP #$FFC4 : BCS .return
     BRL .clear
 
   .input_backspace
@@ -3112,7 +3107,7 @@ execute_custom_preset:
     LDA.w #!sram_custom_preset_names>>16 : STA !DP_Address+2
 
     ; check if custom preset name exists
-    LDX !DP_CtrlInput : LDA !sram_custom_preset_safewords,X : CMP #$5AFE : BNE .keyboardMode
+    LDX !DP_CtrlInput : LDA !sram_custom_preset_safewords,X : CMP !SAFEWORD : BNE .keyboardMode
     ; store SAFE word to indicate a name already exists
     STA !DP_KB_Control
     ; load existing name
@@ -3125,7 +3120,7 @@ execute_custom_preset:
     ; launch keyboard mode
     JSL kb_ctrl_mode : BCC .redrawScreen
     ; mark preset slot as having a custom name
-    LDX !DP_CtrlInput : LDA #$5AFE : STA !sram_custom_preset_safewords,X
+    LDX !DP_CtrlInput : LDA !SAFEWORD : STA !sram_custom_preset_safewords,X
     BRA .redrawScreen
 
   .toggleDisplay
@@ -3214,7 +3209,7 @@ endif
     ; check if preset exists
     LDA [!DP_CurrentMenu] : AND #$00FF : STA !ram_cm_selected_slot
     %presetslotsize()
-    LDA !PRESET_SLOTS,X : CMP #$5AFE : BNE .failSFX
+    LDA !PRESET_SLOTS,X : CMP !SAFEWORD : BNE .failSFX
     ; open confirmation screen before deleting preset
     LDY.w #ManagePresetsConfirm
     ; set bank for manual submenu jump
@@ -3427,7 +3422,8 @@ cm_spc_init:
     ; wait for SPC to be ready
     LDA #$BBAA : CMP $2140 : BNE .return
 
-    LDA #$FFFF : STA $0617   ; disable soft rest
+    ; disable soft reset
+    LDA #$FFFF : STA !UPLOADING_TO_APU
 
     %a8()
     LDA #$CC : STA !cm_spc_index
@@ -3499,7 +3495,7 @@ cm_spc_next_block_wait:
 
   .eof
     LDA #$0000 : STA !ram_quickboot_spc_state
-    STZ !DISABLE_SOUNDS : STZ $0617
+    STZ !DISABLE_SOUNDS : STZ !UPLOADING_TO_APU
 
   .return
     RTS

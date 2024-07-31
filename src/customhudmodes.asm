@@ -46,11 +46,11 @@ status_dboost:
     RTS
 
   .failedHoldingLeft
-    LDA #$0000 : CMP $0A54 : BEQ .failedCheckJumpInput
+    LDA #$0000 : CMP !SAMUS_KNOCKBACK_DIRECTION : BEQ .failedCheckJumpInput
     RTS
 
   .failedHoldingRight
-    LDA #$0001 : CMP $0A54 : BEQ .failedCheckJumpInput
+    LDA #$0001 : CMP !SAMUS_KNOCKBACK_DIRECTION : BEQ .failedCheckJumpInput
     RTS
 
   .failedCheckJumpInput
@@ -86,11 +86,11 @@ status_dboost:
     ; no directional input code here
     
   .holdingLeft
-    LDA #$0000 : CMP $0A54 : BEQ .checkJumpInput
+    LDA #$0000 : CMP !SAMUS_KNOCKBACK_DIRECTION : BEQ .checkJumpInput
     ; directional input does not match knockback direction
     
   .holdingRight
-    LDA #$0001 : CMP $0A54 : BEQ .checkJumpInput
+    LDA #$0001 : CMP !SAMUS_KNOCKBACK_DIRECTION : BEQ .checkJumpInput
     ; directional input does not match knockback direction
     
   .checkJumpInput
@@ -495,8 +495,8 @@ middleHUD_shottimer:
 
 status_kihuntermanip:
 {
-    LDA !ROOM_ID : CMP #$B585 : BEQ .roomStairs
-    LDA !ROOM_ID : CMP #$B656 : BEQ .jumpMusketeers
+    LDA !ROOM_ID : CMP.w #ROOM_RedKihunterShaft : BEQ .roomStairs
+    CMP.w #ROOM_ThreeMusketeers : BEQ .jumpMusketeers
     JMP .done
   .jumpMusketeers
     JMP .roomMusketeers
@@ -699,15 +699,15 @@ status_kihuntermanip:
 
 status_kraidradar:
 {
-    LDA !ROOM_ID : CMP #$A59F : BNE .skip              ; check for Kraid's room
+    LDA !ROOM_ID : CMP.w #ROOM_Kraid : BNE .skip
     LDA !ENEMY_HP : CMP #$03E8 : BEQ .setup             ; stop tracking when Kraid takes damage
 
   .skip
     RTS
 
   .setup
-    LDA !SAMUS_HP : STA !ram_last_hp                    ; suppress Samus HP
-    LDA !IH_BLANK : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A       ; clear space on HUD
+    LDA !SAMUS_HP : STA !ram_last_hp ; suppress Samus HP
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$88 : STA !HUD_TILEMAP+$8A ; clear space on HUD
     STA !HUD_TILEMAP+$8C : STA !HUD_TILEMAP+$8E : STA !HUD_TILEMAP+$90
     STA !HUD_TILEMAP+$92 : STA !HUD_TILEMAP+$94 : STA !HUD_TILEMAP+$96
     STA !HUD_TILEMAP+$98
@@ -715,7 +715,7 @@ status_kraidradar:
 ; Detect and draw Samus first
 
     ; check if sweet spot (2 missile KQK)
-    LDY $0AF6 : CPY #$004B : BEQ .greenSamus ; just the popular bomb setup atm
+    LDY !SAMUS_X : CPY #$004B : BEQ .greenSamus ; just the popular bomb setup atm
     LDA #$00C9 : BRA .checkSamusX
 
   .greenSamus
@@ -918,8 +918,7 @@ status_ceresridley:
 
 status_zebskip:
 {
-    ; check if MB room, $DD58
-    LDA !ROOM_ID : CMP #$DD58 : BNE .end
+    LDA !ROOM_ID : CMP.w #ROOM_MotherBrain : BNE .end
 
     ; check if first zeb dead, $7ED821 : AND #$0008
     LDA $7ED820 : AND #$0008 : BNE .secondZeb
@@ -962,7 +961,7 @@ status_zebskip:
 
 status_pitdoor:
 {
-    LDA !ROOM_ID : CMP #$975C : BNE .done
+    LDA !ROOM_ID : CMP.w #ROOM_Pit : BNE .done
     LDA $7EDE64 : BNE .draw_N
     LDA !IH_LETTER_Y : STA !HUD_TILEMAP+$8E
     LDA !sram_display_mode_reward : BEQ .done
@@ -979,10 +978,10 @@ status_pitdoor:
 status_draygonai:
 {
     ; check if Draygon's room
-    LDA !ROOM_ID : CMP #$DA60 : BNE .enemyhp
+    LDA !ROOM_ID : CMP.w #ROOM_Draygon : BNE .enemyhp
 
     ; load AI pointer and check if it matches the HUD
-    LDA $0FA8 : CMP !ram_HUD_check : BNE .update_HUD
+    LDA !ENEMY_FUNCTION_POINTER : CMP !ram_HUD_check : BNE .update_HUD
 
   .enemyhp
     ; update enemy HP on idle frames
@@ -997,7 +996,7 @@ status_draygonai:
     TAX : LDA.l DraygonAI_prefix_table,X : TAX
     %a16()
 
-    LDA $0FA8 ; reload AI pointer
+    LDA !ENEMY_FUNCTION_POINTER ; reload AI pointer
   .loop_pointers
     ; search table starting from prefix offset
     CMP.l DraygonAI_pointers,X : BEQ .found
