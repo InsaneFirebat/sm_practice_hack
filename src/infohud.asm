@@ -599,6 +599,9 @@ ih_shinespark_segment:
     ; runs when shinespark bonk sound plays
     JSL $80914D ; overwritten code
 
+    ; skip printing remaining spark frames if Vanilla HUD mode
+    LDA !sram_top_display_mode : CMP !TOP_DISPLAY_VANILLA : BEQ +
+
     PHB
     ; set index to $7C and DB to $00
     LDX #$007C : PHX : PLB : PLB
@@ -607,7 +610,7 @@ ih_shinespark_segment:
     LDA #$0000 : STA !ram_activated_shine_duration
     PLB
 
-    JML ih_update_hud_early
++   JML ih_update_hud_early
 }
 
 ih_drops_segment:
