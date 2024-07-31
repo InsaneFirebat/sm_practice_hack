@@ -334,6 +334,7 @@ endif
     BRA .done
 
   .frozen
+    ; request a lag frame
     %a8() : LDA #$01 : STA !NMI_REQUEST_FLAG : %a16()
     BRA .done
 
@@ -372,7 +373,7 @@ ih_after_room_transition:
     ; Check if MBHP needs to be disabled
     LDA !sram_display_mode : CMP !IH_MODE_ROOMSTRAT_INDEX : BNE .check_reset_segment_timer
     LDA !sram_room_strat : CMP !IH_STRAT_MBHP_INDEX : BNE .check_reset_segment_timer
-    LDA !ROOM_ID : CMP #$DD58 : BEQ .check_reset_segment_timer
+    LDA !ROOM_ID : CMP.w #ROOM_MotherBrain : BEQ .check_reset_segment_timer
     LDA #$0000 : STA !sram_display_mode
 
   .check_reset_segment_timer
@@ -495,7 +496,7 @@ ceres_start_timers:
     ; overwritten code
     STZ !SCREEN_FADE_DELAY : STZ !SCREEN_FADE_COUNTER
 if !FEATURE_VANILLAHUD
-else   
+else
     JML ceres_start_timers_return
 endif
 }
@@ -536,7 +537,7 @@ ih_elevator_activation:
 
   .done
     PLA
-    STZ $0A56
+    STZ !SAMUS_BOMB_JUMP_DIRECTION
     SEC
     RTL
 }
@@ -568,10 +569,10 @@ ih_mb2_segment_1:
     JSL ih_update_hud_early
     ; overwritten code
 if !FEATURE_PAL
-    LDA #$B938 : STA $0FA8
+    LDA #$B938 : STA !ENEMY_FUNCTION_POINTER
     JML $A9B938
 else
-    LDA #$B8EB : STA $0FA8
+    LDA #$B8EB : STA !ENEMY_FUNCTION_POINTER
     JML $A9B8EB
 endif
 }
@@ -703,8 +704,7 @@ ih_update_hud_code:
     ; Divide time by 60 or 50 and draw seconds and frames
     STA $4204
     %a8()
-    LDA.b !FRAMERATE
-    STA $4206
+    LDA.b !FRAMERATE : STA $4206
     %a16()
     PEA $0000 : PLA ; wait for CPU math
     LDA $4216 : STA $C1
@@ -746,8 +746,7 @@ ih_update_hud_code:
     ; Divide time by 60 or 50 and draw seconds and frames
     STA $4204
     %a8()
-    LDA.b !FRAMERATE
-    STA $4206
+    LDA.b !FRAMERATE : STA $4206
     %a16()
     PEA $0000 : PLA ; wait for CPU math
     LDA $4216 : STA $C1
@@ -831,27 +830,27 @@ ih_update_hud_code:
 
   .pick_segment_timer
     LDA !sram_frame_counter_mode : BIT #$0001 : BNE .ingame_segment_timer
-    LDA.w #!ram_seg_rt_frames : STA $00
-    LDA.w #!WRAM_BANK : STA $02
+    LDA.w #!ram_seg_rt_frames : STA $C1
+    LDA.w #!WRAM_BANK : STA $C3
     BRA .draw_segment_timer
 
   .ingame_segment_timer
-    LDA.w #!IGT_FRAMES : STA $00
-    LDA.w #!WRAM_BANK : STA $02
+    LDA.w #!IGT_FRAMES : STA $C1
+    LDA.w #!WRAM_BANK : STA $C3
 
   .draw_segment_timer
     ; Frames
-    LDA [$00] : INC $00 : INC $00 : ASL : TAX
+    LDA [$C1] : INC $C1 : INC $C1 : ASL : TAX
     LDA HexToNumberGFX1,X : STA !HUD_TILEMAP+$BC
     LDA HexToNumberGFX2,X : STA !HUD_TILEMAP+$BE
 
     ; Seconds
-    LDA [$00] : INC $00 : INC $00 : ASL : TAX
+    LDA [$C1] : INC $C1 : INC $C1 : ASL : TAX
     LDA HexToNumberGFX1,X : STA !HUD_TILEMAP+$B6
     LDA HexToNumberGFX2,X : STA !HUD_TILEMAP+$B8
 
     ; Minutes
-    LDA [$00] : LDX #$00AE : JSR Draw3
+    LDA [$C1] : LDX #$00AE : JSR Draw3
 
     ; Draw decimal/hyphen seperators
     LDA !sram_frame_counter_mode : BIT #$0001 : BNE .ingame_separators
@@ -1291,7 +1290,7 @@ ih_hud_code:
     PHX : LDA FramesHeldTable2,X : TAX
     LDA #$0000 : STA !ram_frames_held_timers,X : PLX
   .clearCountersNext
-    DEX : DEX : BNE .clearCountersLoop
+    DEX #2 : BNE .clearCountersLoop
 
     LDA !IH_CONTROLLER_PRI : TAY : LDX #$000C
   .drawFramesHeldLoop
@@ -1313,7 +1312,7 @@ ih_hud_code:
     LDA !IH_BLANK
   .drawFramesHeldRow2
     STA !HUD_TILEMAP+$46,X
-    DEX : DEX : BNE .drawFramesHeldLoop
+    DEX #2 : BNE .drawFramesHeldLoop
     BRL .status_display
 
   .useFramesHeldRow1
@@ -2043,13 +2042,13 @@ ih_fix_scroll_offsets:
 {
     LDA !ram_fix_scroll_offsets : BEQ .done
     %a8()
-    LDA $0911 : STA $B1 : STA $B5
-    LDA $0915 : STA $B3 : STA $B7
+    LDA !LAYER1_X : STA !REG_210D_BG1_X : STA !REG_210F_BG2_X
+    LDA !LAYER1_Y : STA !REG_210E_BG1_Y : STA !REG_2110_BG2_Y
     %a16()
 
   .done
     ; overwritten code
-    LDA $B1 : SEC
+    LDA !REG_210D_BG1_X : SEC
     RTS
 }
 

@@ -130,8 +130,7 @@ raw_tile_graphics_table:
 
 load_raw_tile_graphics:
 {
-    ; Elevator properties
-    STZ $0E16
+    STZ !ELEVATOR_PROPERTIES
 
     ; Update graphics index for our 4-byte table
     TYA : ASL : PHX : TAX
@@ -161,14 +160,14 @@ load_raw_tile_graphics:
   .tile_decompression
     ; Slower method from $82E78C
     LDA #$0080 : STA $2115
-    LDA #$B900 : STA $48
-    LDA #$8000 : STA $47
-    LDA #$5000 : STA $4C
+    LDA #$B900 : STA !DECOMP_SRC+1
+    LDA #$8000 : STA !DECOMP_SRC
+    LDA #$5000 : STA !DECOMP_DEST
     LSR : STA $2116
     JSL $80B271
-    LDA $07C4 : STA $48
-    LDA $07C3 : STA $47
-    STZ $2116 : STZ $4C
+    LDA $07C4 : STA !DECOMP_SRC+1
+    LDA $07C3 : STA !DECOMP_SRC
+    STZ $2116 : STZ !DECOMP_DEST
     JSL $80B271
     %a8()
     BRL .tileset_palette
@@ -180,66 +179,66 @@ load_raw_tile_graphics:
     ; The tile graphics are crossing a bank, so split into two DMAs
     ; We now have the length of the second DMA
     ; Store that and calculate the length of the first one
-    STA $4C : LDA #$48 : SEC : SBC $4C : STA $47
+    STA !DECOMP_DEST
+    LDA #$48 : SEC : SBC !DECOMP_DEST : STA !DECOMP_SRC
 
     ; Load first section of tile graphics into VRAM
-    LDA #$80 : STA $2115            ; word-access, incr by 1
-    LDY #$0000 : STY $2116          ; VRAM address
-    LDA #$00 : STA $4302            ; Source offset (low byte)
-    LDA.l raw_tile_graphics_table,X
-    STA $4303                       ; Source offset (high byte)
-    INX : LDA.l raw_tile_graphics_table,X
-    STA $4304                       ; Source bank
-    LDA #$00 : STA $4305            ; size (low byte)
-    LDA $47 : STA $4306             ; size (high byte)
-    LDA #$01 : STA $4300            ; word, normal increment (DMA MODE)
-    LDA #$18 : STA $4301            ; destination (VRAM write)
-    LDA #$01 : STA $420B            ; initiate DMA (channel 1)
+    LDA #$80 : STA $2115                        ; word-access, incr by 1
+    LDY #$0000 : STY $2116                      ; VRAM address
+    LDA #$00 : STA $4302                        ; Source offset (low byte)
+    LDA.l raw_tile_graphics_table,X : STA $4303 ; Source offset (high byte)
+    INX
+    LDA.l raw_tile_graphics_table,X : STA $4304 ; Source bank
+    LDA #$00 : STA $4305                        ; size (low byte)
+    LDA !DECOMP_SRC : STA $4306                 ; size (high byte)
+    LDA #$18 : STA $4301                        ; destination (VRAM write)
+    LDA #$01 : STA $4300                        ; word, normal increment (DMA MODE)
+    LDA #$01 : STA $420B                        ; initiate DMA (channel 1)
 
     ; Load second section of tile graphics into VRAM
-    LDA #$80 : STA $2115            ; word-access, incr by 1
-    LDA #$00 : STA $2116            ; VRAM address (low byte)
-    LDA $47 : LSR : STA $2117       ; VRAM address (high byte)
-    LDY #$8000 : STY $4302          ; Source offset
+    LDA #$80 : STA $2115              ; word-access, incr by 1
+    LDA #$00 : STA $2116              ; VRAM address (low byte)
+    LDA !DECOMP_SRC : LSR : STA $2117 ; VRAM address (high byte)
+    LDY #$8000 : STY $4302            ; Source offset
     LDA.l raw_tile_graphics_table,X
-    INC : STA $4304                 ; Source bank
-    LDA #$00 : STA $4305            ; size (low byte)
-    LDA $4C : STA $4306             ; size (high byte)
-    LDA #$01 : STA $4300            ; word, normal increment (DMA MODE)
-    LDA #$18 : STA $4301            ; destination (VRAM write)
-    LDA #$01 : STA $420B            ; initiate DMA (channel 1)
+    INC : STA $4304                   ; Source bank
+    LDA #$00 : STA $4305              ; size (low byte)
+    LDA !DECOMP_DEST : STA $4306      ; size (high byte)
+    LDA #$01 : STA $4300              ; word, normal increment (DMA MODE)
+    LDA #$18 : STA $4301              ; destination (VRAM write)
+    LDA #$01 : STA $420B              ; initiate DMA (channel 1)
     BRA .cre_dma
 
   .simple_dmas
     ; Load tile graphics into VRAM
-    LDA #$80 : STA $2115            ; word-access, incr by 1
-    LDY #$0000 : STY $2116          ; VRAM address
-    LDA #$00 : STA $4302            ; Source offset (low byte)
+    LDA #$80 : STA $2115                   ; word-access, incr by 1
+    LDY #$0000 : STY $2116                 ; VRAM address
+    LDA #$00 : STA $4302                   ; Source offset (low byte)
     LDA.l raw_tile_graphics_table,X
-    STA $4303                       ; Source offset (high byte)
+    STA $4303                              ; Source offset (high byte)
     INX : LDA.l raw_tile_graphics_table,X
-    STA $4304                       ; Source bank
-    LDY #$4800 : STY $4305          ; size
-    LDA #$01 : STA $4300            ; word, normal increment (DMA MODE)
-    LDA #$18 : STA $4301            ; destination (VRAM write)
-    LDA #$01 : STA $420B            ; initiate DMA (channel 1)
+    STA $4304                              ; Source bank
+    LDY #$4800 : STY $4305                 ; size
+    LDA #$01 : STA $4300                   ; word, normal increment (DMA MODE)
+    LDA #$18 : STA $4301                   ; destination (VRAM write)
+    LDA #$01 : STA $420B                   ; initiate DMA (channel 1)
 
   .cre_dma
     ; Load CRE tiles into VRAM
-    LDA #$80 : STA $2115            ; word-access, incr by 1
-    LDY #$2800 : STY $2116          ; VRAM address
-    LDY #tiles_cre : STY $4302      ; Source offset
-    LDA #tiles_cre>>16 : STA $4304  ; Source bank
-    LDY #$3000 : STY $4305          ; size
-    LDA #$01 : STA $4300            ; word, normal increment (DMA MODE)
-    LDA #$18 : STA $4301            ; destination (VRAM write)
-    LDA #$01 : STA $420B            ; initiate DMA (channel 1)
+    LDA #$80 : STA $2115           ; word-access, incr by 1
+    LDY #$2800 : STY $2116         ; VRAM address
+    LDY #tiles_cre : STY $4302     ; Source offset
+    LDA #tiles_cre>>16 : STA $4304 ; Source bank
+    LDY #$3000 : STY $4305         ; size
+    LDA #$01 : STA $4300           ; word, normal increment (DMA MODE)
+    LDA #$18 : STA $4301           ; destination (VRAM write)
+    LDA #$01 : STA $420B           ; initiate DMA (channel 1)
 
   .tileset_palette
     LDA !sram_compressed_graphics : BIT.b !PRESETS_COMPRESSED_PALETTES : BNE .palette_decompression
 
     ; Copy tileset palette to $7EC200
-    PLX : LDY #$C200 : TDC : DEC
+    PLX : LDY #$C200 : LDA #$FF
     MVN $F47E
 
     PLX : PLB : PLP
@@ -276,11 +275,11 @@ preset_load_level_tile_tables_scrolls_plms_and_execute_asm:
     DEX #2 : BPL .clear_level_data_loop
 
     ; Decompress level data
-    LDA $7E07BE : STA $48
-    LDA #$7F00 : STA $4D
+    LDA $7E07BE : STA !DECOMP_SRC+1
+    LDA #$7F00 : STA !DECOMP_DEST+1
     %a8()
-    LDA $7E07BD : STA $47
-    STZ $4C
+    LDA $7E07BD : STA !DECOMP_SRC
+    STZ !DECOMP_DEST
     JSL optimized_decompression
 
     ; Mirror background data
@@ -301,7 +300,7 @@ preset_load_level_tile_tables_scrolls_plms_and_execute_asm:
     LDA !sram_compressed_graphics : BIT !PRESETS_COMPRESSED_GRAPHICS : BNE .tile_table_decompression
 
     ; Jump to routine based on graphics set
-    LDX $07BB : LDA $0003,X : AND #$00FF
+    LDX !STATE_POINTER : LDA $0003,X : AND #$00FF
     ASL : TAX : PHB
     JSR (load_tile_tables_jump_table,X)
 
@@ -310,23 +309,23 @@ preset_load_level_tile_tables_scrolls_plms_and_execute_asm:
     JML $82E870
 
   .tile_table_decompression
-    LDA $079F : CMP #$0006 : BEQ .ceres
+    LDA !AREA_ID : CMP #$0006 : BEQ .ceres
 
     ; Decompress CRE tile table to $7EA000
-    LDA #$B9A0 : STA $48
-    LDA #$7EA0 : STA $4D
+    LDA #$B9A0 : STA !DECOMP_SRC+1
+    LDA #$7EA0 : STA !DECOMP_DEST+1
     %a8()
-    LDA #$9D : STA $47
-    STZ $4C
+    LDA #$9D : STA !DECOMP_SRC
+    STZ !DECOMP_DEST
     JSL optimized_decompression
 
     ; Decompress tileset tile table to $7EA800
     %a16()
-    LDA $07C1 : STA $48
-    LDA #$7EA8 : STA $4D
+    LDA $07C1 : STA !DECOMP_SRC+1
+    LDA #$7EA8 : STA !DECOMP_DEST+1
     %a8()
-    LDA $07C0 : STA $47
-    STZ $4C
+    LDA $07C0 : STA !DECOMP_SRC
+    STZ !DECOMP_DEST
     JSL optimized_decompression
 
     ; Jump back to vanilla method
@@ -336,11 +335,11 @@ preset_load_level_tile_tables_scrolls_plms_and_execute_asm:
   .ceres
     ; Ceres does not use the CRE tile table
     ; Decompress tileset tile table to $7EA000
-    LDA $07C1 : STA $48
-    LDA #$7EA0 : STA $4D
+    LDA $07C1 : STA !DECOMP_SRC+1
+    LDA #$7EA0 : STA !DECOMP_DEST+1
     %a8()
-    LDA $07C0 : STA $47
-    STZ $4C
+    LDA $07C0 : STA !DECOMP_SRC
+    STZ !DECOMP_DEST
     JSL optimized_decompression
 
     ; Jump back to vanilla method
@@ -533,8 +532,9 @@ load_tile_table_28_draygon:
 ; Load correct section of VRAM for scrolling sky rooms
 preset_load_library_transfer_to_vram:
 {
-    PHX : LDA !ROOM_ID : CMP #$91F8 : BEQ .landing_site
-    CMP #$93FE : BEQ .west_ocean : CMP #$94FD : BEQ .east_ocean
+    PHX : LDA !ROOM_ID : CMP.w #ROOM_LandingSite : BEQ .landing_site
+    CMP.w #ROOM_WestOcean : BEQ .west_ocean
+    CMP.w #ROOM_EastOcean : BEQ .east_ocean
 
     ; Normal room, return to vanilla method
     PLX : JML $82E9E7
@@ -676,4 +676,3 @@ incbin ../resources/gfx/tiles_26_kraid.bin
 print pc, " raw tiles crossbank end"
 warnpc $FF8000
 check bankcross on
-

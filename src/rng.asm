@@ -272,7 +272,7 @@ hook_phantoon_init:
 {
     ; skip cutscene flag
     LDA !sram_phantoon_intro : BNE .skip_cutscene
-    DEC $0FB0,X
+    DEC !ENEMY_VAR_4,X
     RTL
 
 .skip_cutscene:
@@ -322,7 +322,6 @@ hook_phantoon_1st_rng:
 
   .rng
     ; If set to all-on or all-off, don't mess with RNG
-    ; If set to all-on or all-off, don't mess with RNG.
     LDA !ram_phantoon_rng_round_1 : BEQ .no_manip
     CMP #$003F : BNE choose_phantoon_pattern
 
@@ -334,7 +333,7 @@ if !FEATURE_PAL
 else
     LDA $CD53,Y
 endif
-    STA $0FE8
+    STA !ENEMY_FUNCTION_POINTER+$40
     JSL $808111
     BIT #$0001
     RTL
@@ -364,7 +363,7 @@ if !FEATURE_PAL
 else
     LDA $CD53,Y
 endif
-    STA $0FE8    ; Intentional fallthrough to invert logic
+    STA !ENEMY_FUNCTION_POINTER+$40    ; Intentional fallthrough to invert logic
 }
 
 hook_phantoon_invert:
@@ -410,8 +409,7 @@ choose_phantoon_pattern:
 
   .loop
     DEY
-    LSR
-    BCC .skip
+    LSR : BCC .skip
 
     ; Pattern index Y is enabled
     DEX : BMI .done ; is this the last one?
@@ -430,7 +428,7 @@ choose_phantoon_pattern:
     PLX ; pop enemy index
 
     ; Check if Phantoon is in the round 2 AI state
-    LDY $0FB2
+    LDY !ENEMY_VAR_5
 if !FEATURE_PAL
     CPY #$D716
 else
@@ -439,7 +437,7 @@ endif
     BNE .round1
     ; Save the pattern timer, check the direction, and
     ; set Phantoon's starting point and pattern index.
-    LSR : STA $0FE8 : BCS .round2left
+    LSR : STA !ENEMY_FUNCTION_POINTER+$40 : BCS .round2left
 
     ; Right pattern
     LDA #$0088 : LDY #$00D0
@@ -449,23 +447,22 @@ endif
     LDA #$018F : LDY #$0030
 
   .round2done
-    STA $0FA8  ; Index into figure-8 movement table
-    STY $0F7A  ; X position
-    LDA #$0060 : STA $0F7E  ; Y position
+    STA !ENEMY_FUNCTION_POINTER  ; Index into figure-8 movement table
+    STY !ENEMY_X  ; X position
+    LDA #$0060 : STA !ENEMY_Y  ; Y position
     BRA hook_phantoon_invert
 
   .round1
     ; Save the pattern timer and check the direction
-    LSR
-    STA $0FE8
+    LSR : STA !ENEMY_FUNCTION_POINTER+$40
     BCS .round1left
 
     ; Round 1 right pattern
-    SEP #$02
+    SEP #$02 ; set zero flag
     RTL
 
   .round1left
-    REP #$02
+    REP #$02 ; clear zero flag
     RTL
 }
 
@@ -509,7 +506,7 @@ else
 endif
 
   .no_manip
-    LDA $05B6 : BIT #$0001 : BNE +
+    LDA !FRAME_COUNTER : BIT #$0001 : BNE +
 if !FEATURE_PAL
     LDA #$0099 : RTL ; right
 +   LDA #$FF67 : RTL ; left
@@ -633,7 +630,7 @@ org $A6A0FC
 endif
     LSR : BCC $0F
     CPX #$0006 : BEQ $0A
-    LDA $0F86
+    LDA !ENEMY_PROPERTIES
 
 if !FEATURE_PAL
 org $A6A302
@@ -665,7 +662,7 @@ org $A6F641
 else
 org $A6F66A
 endif
-    LDA $0943 : BEQ $F6
+    LDA !TIMER_STATUS : BEQ $F6
     LDA $7ED82E
 
 
@@ -674,7 +671,7 @@ print pc, " ridley rng start"
 
 ridley_init_hook:
 {
-    LDA $079B : CMP #$E0B5 : BNE .continue
+    LDA !ROOM_ID : CMP.w #ROOM_CeresRidley : BNE .continue
     LDA $7ED82E : BIT #$0001 : BEQ .continue
 
     ; Ceres Ridley is already dead, so skip to the escape
@@ -683,11 +680,11 @@ ridley_init_hook:
     AND #$FFFE : STA $7ED82E
 
     ; Clear out the room main asm so it doesn't also trigger the escape
-    STZ $07DF
+    STZ !ROOM_MAIN_ASM_POINTER
 
     ; Set up the escape timer routine
-    LDA #$0001 : STA $093F
-    LDA #$E0E6 : STA $0A5A
+    LDA #$0001 : STA !CERES_STATUS
+    LDA #$E0E6 : STA !SAMUS_TIMER_HACK_HANDLER
 
     ; Jump to the escape
 if !FEATURE_PAL
@@ -695,8 +692,8 @@ if !FEATURE_PAL
 else
     LDA #$AB37
 endif
-    STA $0FA8
-    JMP ($0FA8)
+    STA !ENEMY_FUNCTION_POINTER
+    JMP (!ENEMY_FUNCTION_POINTER)
 
   .continue
 if !FEATURE_PAL
@@ -704,14 +701,14 @@ if !FEATURE_PAL
 else
     LDA #$A377
 endif
-    STA $0FA8
-    JMP ($0FA8)
+    STA !ENEMY_FUNCTION_POINTER
+    JMP (!ENEMY_FUNCTION_POINTER)
 }
 
 ceres_ridley_draw_metroid:
 {
     LDA $7ED82E : BIT #$0001 : BNE .end
-    LDA $093F : BNE .end
+    LDA !CERES_STATUS : BNE .end
 if !FEATURE_PAL
     JSR $BF2A
 else
@@ -798,11 +795,11 @@ endif
 
   .enabled
     ; fake the fade in so it takes the same number of frames
-    LDA $0FEE : INC : CMP $0FF0 : BCS +
-    STZ $0FF0
+    LDA !ENEMY_VAR_3+$40 : INC : CMP !ENEMY_VAR_4+$40 : BCS +
+    STZ !ENEMY_VAR_4+$40
     SEC : RTS
 
-+   INC $0FF0
++   INC !ENEMY_VAR_4+$40
     CLC : RTS
 }
 
@@ -826,7 +823,7 @@ else
 endif
 
   .no_manip
-    LDA $05E5 ; overwritten code
+    LDA !RANDOM_NUMBER ; overwritten code
 if !FEATURE_PAL
     JMP $F21E
 else
@@ -834,4 +831,3 @@ else
 endif
 }
 print pc, " baby rng end"
-

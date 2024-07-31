@@ -130,7 +130,7 @@ org $90E874
 else
 org $90E877
 endif
-    LDA $07F5
+    LDA !MUSIC_TRACK
     JSL $808FC1 ; queue room music track
     BRA $18
 
@@ -153,7 +153,7 @@ misc_debug_brightness:
 
     ; For efficiency, re-implement the debug brightness logic here
     LDA $0DF4 : BEQ .skipDebugBrightness
-    %a8() : LDA $51 : AND #$F0 : ORA #$05 : STA $2100 : %a16()
+    %a8() : LDA !REG_2100_BRIGHTNESS : AND #$F0 : ORA #$05 : STA $2100 : %a16()
     BRA .skipDebugBrightness
 warnpc .skipDebugBrightness
 
@@ -233,7 +233,7 @@ hook_set_music_track:
 ; $80:8F24 9C F6 07    STZ $07F6  [$7E:07F6]  ;/
 ; $80:8F27 8D 40 21    STA $2140  [$7E:2140]  ; APU IO 0 = [music track]
 {
-    STZ $07F6
+    STZ !MUSIC_TRACK+1
     PHA
     LDA !sram_music_toggle : CMP #$01 : BNE .music_off
 
@@ -254,7 +254,7 @@ hook_set_music_track:
 
 hook_set_music_data:
 {
-    STA $07F3 : TAX ; overwritten code
+    STA !MUSIC_DATA : TAX ; overwritten code
     LDA !sram_music_toggle : CMP #$0002 : BEQ .fast_no_music
     JML $808F69
 
@@ -283,7 +283,7 @@ else
 endif
 
     ; If minimap is disabled or shown, we ignore artificial lag
-    LDA $05F7 : BNE .endlag
+    LDA !DISABLE_MINIMAP : BNE .endlag
     LDA !ram_minimap : BNE .endlag
 
     ; Ignore artifical lag if sprite features are active
@@ -447,8 +447,7 @@ if !FEATURE_PAL
 else
     JSL $90F084
 endif
-    LDA.w #locked_samus_speedup_movement_handler
-    STA $0A42
+    LDA.w #locked_samus_speedup_movement_handler : STA !SAMUS_LOCKED_HANDLER
     RTL
 }
 
@@ -500,12 +499,13 @@ endif
 
 
 healthalarm_enable:
+{
     ; Do not sound alarm until below 30 combined health
     LDA !SAMUS_HP : CLC : ADC !SAMUS_RESERVE_ENERGY : CMP #$001E : BPL .done
 
   .pb_fix
     ; Do not sound alarm if it won't play due to power bomb explosion
-    LDA $0592 : BMI .done
+    LDA !PB_EXPLOSION_STATUS : BMI .done
 
   .vanilla
     LDA #$0002 : JSL $80914D
@@ -530,10 +530,12 @@ endif
     dw healthalarm_enable_vanilla
     dw healthalarm_enable_pb_fix
     dw healthalarm_enable ; improved
+}
 
 healthalarm_disable:
+{
     ; Do not stop alarm if it won't stop due to power bomb explosion
-    LDA $0592 : BMI .done
+    LDA !PB_EXPLOSION_STATUS : BMI .done
 
   .vanilla
     LDA #$0001 : JSL $80914D
@@ -549,7 +551,7 @@ healthalarm_disable:
     dw healthalarm_disable_vanilla
     dw healthalarm_disable ; pb fix
     dw healthalarm_disable ; improved
-
+}
 
 if !PRESERVE_WRAM_DURING_SPACETIME
 original_load_beam_palette:
@@ -561,10 +563,9 @@ original_load_beam_palette:
     LDX #$0000
 
   .original_load_palette_loop
-    LDA [$00],Y
-    STA $7EC1C0,X
-    INX : INX : INY : INY
-    CPY #$0020 : BMI .original_load_palette_loop
+    LDA [$00],Y : STA $7EC1C0,X
+    INX #2
+    INY #2 : CPY #$0020 : BMI .original_load_palette_loop
     RTS
 }
 
@@ -572,7 +573,7 @@ spacetime_routine:
 {
     ; The normal routine shouldn't come here, but sanity check just in case
     ; Also skips out if spacetime but Y value is positive
-    INY : INY : CPY #$0000 : BPL .normal_load_palette
+    INY #2 : CPY #$0000 : BPL .normal_load_palette
 
     ; Sanity check that X is 0 (if not then do the original routine)
     CPX #$0000 : BNE .normal_load_palette
@@ -581,12 +582,11 @@ spacetime_routine:
     TYA : CLC : ADC #($7EC608-$7EC1E2) : CMP #$0000 : BPL .normal_load_palette
 
     ; We will reach infohud, so run our own loop
-    INX : INX
+    INX #2
   .loop_before_infohud
-    LDA [$00],Y
-    STA $7EC1C0,X
-    INX : INX : INY : INY
-    CPX #($7EC608-$7EC1C0) : BMI .loop_before_infohud
+    LDA [$00],Y : STA $7EC1C0,X
+    INY #2
+    INX #2 : CPX #($7EC608-$7EC1C0) : BMI .loop_before_infohud
 
     ; Check if we should skip over infohud
     LDA !ram_spacetime_infohud : BEQ .overwrite_infohud
@@ -596,8 +596,8 @@ spacetime_routine:
   .loop_skip_infohud
     LDA $7EC1C0,X
     LDA [$00],Y
-    INX : INX : INY : INY
-    CPX #($7EC6C8-$7EC1C0) : BMI .loop_skip_infohud
+    INY #2
+    INX #2 : CPX #($7EC6C8-$7EC1C0) : BMI .loop_skip_infohud
 
     ; Check if we finished spacetime while skipping over infohud
     CPY #$0020 : BMI .check_sprite_object_ram
@@ -608,12 +608,10 @@ spacetime_routine:
     TYA : CLC : ADC #($7EEF78-$7EC628) : CMP #$0000 : BMI .loop_before_sprite_object_ram
 
   .normal_load_loop
-    LDA [$00],Y
-    STA $7EC1C0,X
-    INY : INY
+    LDA [$00],Y : STA $7EC1C0,X
+    INY #2
   .normal_load_palette
-    INX : INX
-    CPY #$0020 : BMI .normal_load_loop
+    INX #2 : CPY #$0020 : BMI .normal_load_loop
     RTS
 
   .check_sprite_object_ram
@@ -622,10 +620,9 @@ spacetime_routine:
 
     ; We will reach sprite object ram, so run our own loop
   .loop_before_sprite_object_ram
-    LDA [$00],Y
-    STA $7EC1C0,X
-    INX : INX : INY : INY
-    CPX #($7EEF78-$7EC1C0) : BMI .loop_before_sprite_object_ram
+    LDA [$00],Y : STA $7EC1C0,X
+    INY #2
+    INX #2 : CPX #($7EEF78-$7EC1C0) : BMI .loop_before_sprite_object_ram
 
     ; Check if we are copying from unmapped memory ($004500-$007FFF range)
     ; If not then overwrite sprite object ram
@@ -637,26 +634,25 @@ spacetime_routine:
   .loop_skip_sprite_object_ram
     LDA $7EC1C0,X
     LDA [$00],Y
-    INX : INX : INY : INY
-    CPX #($7EF378-$7EC1C0) : BMI .loop_skip_sprite_object_ram
+    INY #2
+    INX #2 : CPX #($7EF378-$7EC1C0) : BMI .loop_skip_sprite_object_ram
 
     ; Check if Y will cause us to reach WRAM
     TYA : CLC : ADC #(!WRAM_START-$7EF398) : CMP #$0000 : BPL .normal_load_loop
 
     ; It will, so run our own loop
   .loop_before_wram
-    LDA [$00],Y
-    STA $7EC1C0,X
-    INX : INX : INY : INY
-    CPX #(!WRAM_START-$7EC1C0) : BMI .loop_before_wram
+    LDA [$00],Y : STA $7EC1C0,X
+    INY #2
+    INX #2 : CPX #(!WRAM_START-$7EC1C0) : BMI .loop_before_wram
 
     ; Skip over WRAM
     ; Instead of load and store, load and load
   .loop_skip_wram
     LDA $7EC1C0,X
     LDA [$00],Y
-    INX : INX : INY : INY
-    CPX #(!WRAM_END-$7EC1C0) : BMI .loop_skip_wram
+    INY #2
+    INX #2 : CPX #(!WRAM_END-$7EC1C0) : BMI .loop_skip_wram
 
     ; Check if we finished spacetime while skipping over WRAM
     CPY #$0020 : BMI .normal_load_loop
@@ -683,7 +679,7 @@ ih_shinespark_activation:
 preserve_escape_timer:
 {
     ; check if timer is active
-    LDA $0943 : BEQ .done
+    LDA !TIMER_STATUS : BEQ .done
     JSL $809F6C ; Draw timer
 
   .done
@@ -697,7 +693,7 @@ endif
 clear_escape_timer:
 {
     ; clear timer status
-    STZ $0943
+    STZ !TIMER_STATUS
 
     ; overwritten code
 if !FEATURE_PAL
@@ -705,7 +701,7 @@ if !FEATURE_PAL
 else
     LDA #$AC1B
 endif
-    STA $0FB2,X
+    STA !ENEMY_VAR_5,X
     STZ $0DEC
     RTL
 }
@@ -764,35 +760,36 @@ optimized_decompression:
 {
     PHP : %a8() : %i16()
     ; Set bank
-    PHB : LDA $49 : PHA : PLB
+    PHB : LDA !DECOMP_SRC+2 : PHA : PLB
 
-    STZ $50 : LDY #$0000
+    STZ !DECOMP_DICTCOPY_INV+1 : LDY #$0000
 
   .next_byte
-    LDA ($47)
-    INC $47 : BNE .read_command_skip_inc
-    INC $48 : BNE .read_command_skip_inc
+    LDA (!DECOMP_SRC)
+    INC !DECOMP_SRC : BNE .read_command_skip_inc
+    INC !DECOMP_SRC+1 : BNE .read_command_skip_inc
     JSR decompression_increment_bank
   .read_command_skip_inc
-    STA $4A
+    STA !DECOMP_VAR
     CMP #$FF : BEQ optimized_decompression_end
     CMP #$E0 : BCC .one_byte_size
 
     ; Two byte size
-    ASL : ASL : ASL
+    ASL #3
     AND #$E0 : PHA
-    LDA $4A : AND #$03 : XBA
+    LDA !DECOMP_VAR : AND #$03 : XBA
 
-    LDA ($47)
-    INC $47 : BNE .read_extended_size_skip_inc
-    INC $48 : BNE .read_extended_size_skip_inc
+    LDA (!DECOMP_SRC)
+    INC !DECOMP_SRC : BNE .read_extended_size_skip_inc
+    INC !DECOMP_SRC+1 : BNE .read_extended_size_skip_inc
     JSR decompression_increment_bank
   .read_extended_size_skip_inc
     BRA .data_read
 
   .one_byte_size
     AND #$E0 : PHA
-    TDC : LDA $4A : AND #$1F
+    LDA #$00 : XBA ; clear high byte
+    LDA !DECOMP_VAR : AND #$1F
 
   .data_read
     TAX : INX : PLA
@@ -803,116 +800,123 @@ optimized_decompression:
 
   .option0:
     ; Option X = 0: Directly copy Y bytes
-    LDA ($47)
-    INC $47 : BNE .option0_read_skip_inc
-    INC $48 : BNE .option0_read_skip_inc
+    LDA (!DECOMP_SRC)
+    INC !DECOMP_SRC : BNE .option0_read_skip_inc
+    INC !DECOMP_SRC+1 : BNE .option0_read_skip_inc
     JSR decompression_increment_bank
   .option0_read_skip_inc
-    STA [$4C],Y
-    INY : DEX : BNE .option0
+    STA [!DECOMP_DEST],Y
+    INY
+    DEX : BNE .option0
     BRL .next_byte
 
   .option1:
     ; Option X = 1: Copy the next byte Y times
-    LDA ($47)
-    INC $47 : BNE .option1_read_skip_inc
-    INC $48 : BNE .option1_read_skip_inc
+    LDA (!DECOMP_SRC)
+    INC !DECOMP_SRC : BNE .option1_read_skip_inc
+    INC !DECOMP_SRC+1 : BNE .option1_read_skip_inc
     JSR decompression_increment_bank
   .option1_read_skip_inc
-    STA [$4C],Y
-    INY : DEX : BNE .option1_read_skip_inc
+    STA [!DECOMP_DEST],Y
+    INY
+    DEX : BNE .option1_read_skip_inc
     BRL .next_byte
 
   .option2:
     ; Option X = 2: Copy the next two bytes, one at a time, for the next Y bytes
     ; Apply PJ's fix to divide X by 2 and set carry if X was odd
-    REP #$20 : TXA : LSR : TAX : SEP #$20
-    LDA ($47)
-    INC $47 : BNE .option2_lsb_read_skip_inc
-    INC $48 : BNE .option2_lsb_read_skip_inc
+    %a16() : TXA : LSR : TAX : %a8()
+    LDA (!DECOMP_SRC)
+    INC !DECOMP_SRC : BNE .option2_lsb_read_skip_inc
+    INC !DECOMP_SRC+1 : BNE .option2_lsb_read_skip_inc
     JSR decompression_increment_bank
   .option2_lsb_read_skip_inc
-    XBA : LDA ($47)
-    INC $47 : BNE .option2_msb_read_skip_inc
-    INC $48 : BNE .option2_msb_read_skip_inc
+    XBA : LDA (!DECOMP_SRC)
+    INC !DECOMP_SRC : BNE .option2_msb_read_skip_inc
+    INC !DECOMP_SRC+1 : BNE .option2_msb_read_skip_inc
     JSR decompression_increment_bank
   .option2_msb_read_skip_inc
     XBA
     ; Apply Maddo's fix accounting for single copy (X = 1 before divide by 2)
-    INX : DEX : BEQ .option2_single_copy
-    REP #$20
+    INX
+    DEX : BEQ .option2_single_copy
+    %a16()
   .option2_loop
-    STA [$4C],Y
-    INY : INY : DEX : BNE .option2_loop
+    STA [!DECOMP_DEST],Y
+    INY
+    INY : DEX : BNE .option2_loop
     ; PJ's fix to account for case where X was odd
-    SEP #$20
+    %a8()
   .option2_single_copy
     BCC .option2_end
-    STA [$4C],Y : INY
+    STA [!DECOMP_DEST],Y : INY
   .option2_end
     BRL .next_byte
 
   .option4567:
-    CMP #$C0 : AND #$20 : STA $4F : BCS .option67
+    CMP #$C0 : AND #$20 : STA !DECOMP_DICTCOPY_INV : BCS .option67
 
     ; Option X = 4: Copy Y bytes starting from a given address in the decompressed data
     ; Option X = 5: Copy and invert (EOR #$FF) Y bytes starting from a given address in the decompressed data
-    LDA ($47)
-    INC $47 : BNE .option45_lsb_read_skip_inc
-    INC $48 : BNE .option45_lsb_read_skip_inc
+    LDA (!DECOMP_SRC)
+    INC !DECOMP_SRC : BNE .option45_lsb_read_skip_inc
+    INC !DECOMP_SRC+1 : BNE .option45_lsb_read_skip_inc
     JSR decompression_increment_bank
   .option45_lsb_read_skip_inc
-    XBA : LDA ($47)
-    INC $47 : BNE .option45_msb_read_skip_inc
-    INC $48 : BNE .option45_msb_read_skip_inc
+    XBA : LDA (!DECOMP_SRC)
+    INC !DECOMP_SRC : BNE .option45_msb_read_skip_inc
+    INC !DECOMP_SRC+1 : BNE .option45_msb_read_skip_inc
     JSR decompression_increment_bank
   .option45_msb_read_skip_inc
-    XBA : REP #$21
-    ADC $4C : STY $44 : SEC
+    XBA : REP #$21 ; %a16 + set carry
+
+    ADC !DECOMP_DEST : STY !DECOMP_44 : SEC
 
   .option_dictionary
-    SBC $44 : STA $44
-    SEP #$20
-    LDA $4E : BCS .skip_carry_subtraction
+    SBC !DECOMP_44 : STA !DECOMP_44
+    %a8()
+    LDA !DECOMP_DEST+2 : BCS .skip_carry_subtraction
     DEC
   .skip_carry_subtraction
-    STA $46
-    LDA $4F : BNE .option5_loop
+    STA !DECOMP_44+2
+    LDA !DECOMP_DICTCOPY_INV : BNE .option5_loop
 
   .option4_loop
-    LDA [$44],Y
-    STA [$4C],Y
-    INY : DEX : BNE .option4_loop
+    LDA [!DECOMP_44],Y : STA [!DECOMP_DEST],Y
+    INY
+    DEX : BNE .option4_loop
     BRL .next_byte
 
   .option5_loop
-    LDA [$44],Y
-    EOR #$FF
-    STA [$4C],Y
-    INY : DEX : BNE .option5_loop
+    LDA [!DECOMP_44],Y : EOR #$FF : STA [!DECOMP_DEST],Y
+    INY
+    DEX : BNE .option5_loop
     BRL .next_byte
 
   .option67
     ; Option X = 6: Copy Y bytes starting from a given number of bytes ago in the decompressed data
     ; Option X = 7: Copy and invert (EOR #$FF) Y bytes starting from a given number of bytes ago in the decompressed data
-    TDC : LDA ($47)
-    INC $47 : BNE .option67_read_skip_inc
-    INC $48 : BNE .option67_read_skip_inc
+    LDA #$00 : XBA
+    LDA (!DECOMP_SRC)
+    INC !DECOMP_SRC : BNE .option67_read_skip_inc
+    INC !DECOMP_SRC+1 : BNE .option67_read_skip_inc
     JSR decompression_increment_bank
   .option67_read_skip_inc
-    REP #$20
-    STA $44 : LDA $4C
+    %a16()
+    STA !DECOMP_44
+    LDA !DECOMP_DEST
     BRA .option_dictionary
 
   .option3
     ; Option X = 3: Incrementing fill Y bytes starting with next byte
-    LDA ($47)
-    INC $47 : BNE .option3_read_skip_inc
-    INC $48 : BNE .option3_read_skip_inc
+    LDA (!DECOMP_SRC)
+    INC !DECOMP_SRC : BNE .option3_read_skip_inc
+    INC !DECOMP_SRC+1 : BNE .option3_read_skip_inc
     JSR decompression_increment_bank
   .option3_read_skip_inc
-    STA [$4C],Y
-    INC : INY : DEX : BNE .option3_read_skip_inc
+    STA [!DECOMP_DEST],Y
+    INC : INY
+    DEX : BNE .option3_read_skip_inc
     BRL .next_byte
 }
 
@@ -922,9 +926,8 @@ decompression_increment_bank:
     PHB : PLA
     INC
     PHA : PLB
-    LDA #$80 : STA $48
+    LDA #$80 : STA !DECOMP_SRC+1
     PLA
     RTS
 }
 print pc, " misc bank8B end"
-

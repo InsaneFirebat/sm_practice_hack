@@ -187,7 +187,7 @@ mm_update_minimap:
 {
     PHP
     %ai16()
-    LDA $05F7 : BNE .skip_minimap
+    LDA !DISABLE_MINIMAP : BNE .skip_minimap
     JMP $A925  ; minimap is enabled
 
   .skip_minimap
@@ -198,12 +198,9 @@ mm_update_minimap:
 mm_inc_tile_count:
 {
     ; Check if tile is already set
-    LDA $07F7,X
-    ORA $AC04,Y
-    CMP $07F7,X : BEQ .done
-
+    LDA !MAP_TILES_EXPLORED,X : ORA $AC04,Y : CMP !MAP_TILES_EXPLORED,X : BEQ .done
     ; Set tile and increment counter
-    STA $07F7,X
+    STA !MAP_TILES_EXPLORED,X
     %a16()
     LDA !ram_map_counter : INC : STA !ram_map_counter
     %a8()
@@ -217,13 +214,10 @@ mm_clear_boss_room_tiles:
     LDA #$2C1F
     LDX #$0000
   .loop
-    STA $7EC63C,X
-    STA $7EC67C,X
-    STA $7EC6BC,X
-    INX : INX : CPX #$000A : BMI .loop
+    STA !HUD_TILEMAP+$3C,X : STA !HUD_TILEMAP+$7C,X : STA !HUD_TILEMAP+$BC,X
+    INX #2 : CPX #$000A : BMI .loop
     JMP $A80A
 }
 
 print pc, " minimap bank90 end"
 warnpc $90F800
-

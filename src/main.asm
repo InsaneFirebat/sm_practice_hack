@@ -20,6 +20,7 @@ endif
 
 incsrc printdebug.asm
 
+incsrc init.asm
 incsrc gamemode.asm
 incsrc minimap.asm
 incsrc menu.asm
@@ -31,7 +32,6 @@ incsrc custompresets.asm
 incsrc misc.asm
 incsrc layout.asm
 incsrc cutscenes.asm
-incsrc init.asm
 incsrc fanfare.asm
 incsrc spriteprio.asm
 incsrc spritefeat.asm

@@ -146,18 +146,21 @@ kill_enemies:
 {
     LDA #$0000
   .kill_loop
-    TAX : LDA $0F86,X : ORA #$0200 : STA $0F86,X
+    TAX : LDA !ENEMY_PROPERTIES,X : ORA #$0200 : STA !ENEMY_PROPERTIES,X
     TXA : CLC : ADC #$0040 : CMP #$0400 : BNE .kill_loop
 
 if !ORIGINAL_MESSAGE_TEXT
     RTL
 else
     JSL prepare_fanfare_from_non_plm
+    ; Play room music track after 360 frames
     LDA #$0168 : JSL $82E118
 
     ; Open message box
-    LDA !ROOM_ID : CMP #$DD58 : BEQ .kill_mb
-    CMP #$CD13 : BEQ .kill_phantoon : CMP #$91F8 : BEQ .kill_ship
+    LDA !ROOM_ID : CMP.w #ROOM_MotherBrain : BEQ .kill_mb
+    CMP.w #ROOM_Phantoon : BEQ .kill_phantoon
+    CMP.w #ROOM_LandingSite : BEQ .kill_ship
+
     LDA #$001E : JML $858080
   .kill_mb
     LDA #$001F : JML $858080
@@ -221,8 +224,8 @@ hook_resume_room_music:
   .resume
     LDA #$0000       ; original logic to queue room music after fanfare
     JSL $808FF7
-    LDA $07F5
-    JSL $808FC1
+    LDA !MUSIC_TRACK
+    JSL !MUSIC_ROUTINE
     RTL
 }
 

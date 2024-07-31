@@ -186,7 +186,7 @@ mc_customheader:
     ; check if custom header exists
     LDA !sram_custom_header : AND #$00FF : CMP #$0028 : BNE .keyboardMode
     ; store SAFE word to indicate a name already exists
-    LDA #$5AFE : STA !DP_KB_Control
+    LDA !SAFEWORD : STA !DP_KB_Control
     ; load existing name
     LDX #$0016 : TXY
   .loopExistingName

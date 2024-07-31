@@ -104,7 +104,7 @@ org $90E851
 endif
 EndOfIntroDemo:
 
-
+; see misc.asm
 ;; Reduce time to start demos
 ;if !FEATURE_PAL
 ;org $8B9B2B
@@ -494,7 +494,7 @@ LoadDemoRoomData:
     PHP : %ai16()
     STZ !DOOR_ID
     LDA !DEMO_CURRENT_SCENE
-    ASL : ASL : ASL
+    ASL #3
     ; Multiply by 10h instead of 12h by skipping ADC $1F57
     ASL : STA $12
     LDA !DEMO_CURRENT_SET : ASL : TAX
@@ -517,12 +517,12 @@ LoadDemoRoomData:
     %a16()
     PLB
 
-    STZ $B1 : STZ $B3
+    STZ !REG_210D_BG1_X : STZ !REG_210E_BG1_Y
     INC !DEMO_CURRENT_SCENE
 
     ; set event bits in time for room state checks
     LDX #$0008
-    TDC
+    LDA #$0000
 
   .shortLoop
     DEC ; $FFFF
@@ -539,15 +539,14 @@ LoadDemoRoomData:
 
     ; continue vanilla logic from $82872D
   .midLoop
-    TDC ; $0000
-    STA $7ED8B0,X
+    LDA #$0000 : STA $7ED8B0,X
 
     DEC ; $FFFF
     STA $7ED830,X : STA $7ED870,X
 
     INX #2 : CPX #$0040 : BMI .midLoop
 
-    TDC : TAX
+    LDA #$0000 : TAX
   .mapTileLoop
     STA $7ECD52,X
     INX #2 : CPX #$0600 : BMI .mapTileLoop
@@ -555,7 +554,7 @@ LoadDemoRoomData:
     STA !SAMUS_RESERVE_MAX
     STA !SAMUS_RESERVE_ENERGY
     STA !SAMUS_RESERVE_MODE
-    STA $7ED914 ; Loading game state = 0 (intro)
+    STA !LOADING_GAME_STATE ; 0 = intro
     STA !DISABLE_MINIMAP ; Enable mini-map
 
     ; Jump back to vanilla where there is a PLP : RTS
@@ -707,7 +706,7 @@ DRC_LandingSite:
 DRC_Kraid:
 {
     ; suspense timer = 60 frames
-    LDA #$003C : STA $0FB2
+    LDA #$003C : STA !ENEMY_VAR_5
     RTS
 }
 
@@ -723,7 +722,7 @@ endif
 warnpc $82893D
 
 
-org $87C964 ; $918ACE ; repoint to any bank with WRAM access
+org $83D000 ; $918ACE ; repoint to any bank with WRAM access
 print pc, " demos start"
 DemoInputInstructionLists:
 ; Order of demos does not matter

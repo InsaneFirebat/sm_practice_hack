@@ -65,9 +65,9 @@ if !FEATURE_EXTRAS
 SteamCollision:
 {
     LDA !ram_steamcollision : BEQ .originalcode
-    PLA : LDA $0F86,X : JMP $F13B
+    PLA : LDA !ENEMY_PROPERTIES,X : JMP $F13B
   .originalcode
-    LDA $0F86,X : RTS
+    LDA !ENEMY_PROPERTIES,X : RTS
 }
 endif
 print pc, " misc bankA6 end"
@@ -79,7 +79,7 @@ ResetCountDamagePhan:
 {
     PHA
     LDA #$0000
-    STA $0F90,X     ;we overwrote this instruction to get here
+    STA !ENEMY_TIMER,X     ;we overwrote this instruction to get here
     STA !ram_countdamage : STA !sram_countdamage
     PLA
     RTS
@@ -95,7 +95,7 @@ CountDamage:
     LDA !ram_pacifist : BNE .no_damage
     CLC : LDA !ram_countdamage : ADC $187A
     STA !sram_countdamage : STA !ram_countdamage
-    LDA $0F8C,X ; original code
+    LDA !ENEMY_HP,X ; original code
     RTS
 
   .no_damage
@@ -113,7 +113,7 @@ CountDamageShinespark:
     LDA !ram_pacifist : BNE .no_damage
     LDA !ram_countdamage : CLC : ADC $12
     STA !sram_countdamage : STA !ram_countdamage
-    LDA $0F8C,X ; original code
+    LDA !ENEMY_HP,X ; original code
     RTS
 
   .no_damage
@@ -131,7 +131,7 @@ EnemyDamagePowerBomb:
     LDA !ram_pacifist : BNE .no_damage
     LDA !ram_countdamage : CLC : ADC $12
     STA !sram_countdamage : STA !ram_countdamage
-    LDA $0F8C,X ; original code
+    LDA !ENEMY_HP,X ; original code
     RTS
 
   .no_damage

@@ -30,7 +30,7 @@ oam_add_samus_sprite_with_prio:
 +   LDA $0000,Y : BEQ .end ; terminator
     STA $18 ; size
     INY #2
-    LDX $0590 ; OAM data index
+    LDX !OAM_STACK_POINTER ; OAM data index
     CLC
 
   .loop
@@ -73,7 +73,7 @@ oam_add_samus_sprite_with_prio:
 
     ; If not processed all sprite map entries: next!
     DEC $18 : BNE .loop
-    STX $0590 ; OAM index
+    STX !OAM_STACK_POINTER ; OAM index
 
   .end
     RTL

@@ -59,12 +59,13 @@ layout_asm_mbhp:
 
 layout_asm_ceres_ridley_room_state_check:
 {
-    LDA $0943 : BEQ .no_timer
+    LDA !TIMER_STATUS : BEQ .no_timer
     LDA $0001,X : TAX
     JMP $E5E6
+
   .no_timer
-    STZ $093F
-    INX : INX : INX
+    STZ !CERES_STATUS
+    INX #3
     RTS
 }
 

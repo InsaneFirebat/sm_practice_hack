@@ -175,7 +175,7 @@ CrashViewer:
     PHK : PLB
     %a8()
     STZ $420C
-    LDA #$80 : STA $2100  ; Force blank on, zero brightness
+    LDA #$80 : STA $802100  ; Force blank on, zero brightness
     LDA #$A1 : STA $4200  ; NMI, V-blank IRQ, and auto-joypad read on
     LDA #$09 : STA $2105  ; BG3 priority on, BG Mode 1
     LDA #$58 : STA $2109  ; BG3 address, 32x32 size
@@ -185,7 +185,7 @@ CrashViewer:
     LDA #$33 : STA $2131  ; Enable color math on backgrounds and OAM
     STZ $2111 : STZ $2111 ; BG3 X scroll, write twice
     STZ $2112 : STZ $2112 ; BG3 Y scroll, write twice
-    LDA #$0F : STA $2100  ; Force blank off, max brightness
+    LDA #$0F : STA $0F2100  ; Force blank off, max brightness
 
     %ai16()
     JSL crash_next_frame
@@ -225,14 +225,14 @@ CrashLoop:
     ; check for soft reset shortcut (Select+Start+L+R)
     LDA !ram_crash_input : AND #$3030 : CMP #$3030 : BNE +
     AND !ram_crash_input_new : BEQ +
-    STZ $05F5   ; Enable sounds
+    STZ !DISABLE_SOUNDS ; Enable sounds
     JML $808462 ; Soft Reset
 
 if !FEATURE_SD2SNES
     ; check for load state shortcut
 +   LDA !ram_crash_input : CMP !sram_ctrl_load_state : BNE +
     AND !ram_crash_input_new : BEQ +
-    LDA !SRAM_SAVED_STATE : CMP #$5AFE : BNE +
+    LDA !SRAM_SAVED_STATE : CMP !SAFEWORD : BNE +
     ; prepare to jump to load_state
     %a8()
     LDA #gamemode_start>>16 : PHA : PLB
@@ -916,7 +916,7 @@ crash_cgram_transfer:
 crash_toggle_bg:
 {
     %a8()
-    LDA #$80 : STA $2100 ; enable forced blanking
+    LDA #$80 : STA $802100 ; enable forced blanking
     LDA !ram_crash_bg : BEQ .enableBG
     ; disable BG1/2 and sprites on main/sub screen
     LDA #$04 : STA $212C : STA $212D
@@ -927,7 +927,7 @@ crash_toggle_bg:
     LDA #$17 : STA $212C : STA $212D
 
   .done
-    LDA #$0F : STA $2100 ; disable forced blanking
+    LDA #$0F : STA $0F2100 ; disable forced blanking
     LDA !ram_crash_bg : EOR #$01 : STA !ram_crash_bg
     %a16()
     RTS
@@ -952,9 +952,9 @@ crash_tilemap_transfer:
 crash_next_frame:
 {
     PHP : %a8()
-    LDA $05B8 : PHA
--   CMP $05B8 : BEQ -
-    PLA : STA $05B8
+    LDA !NMI_COUNTER : PHA
+-   CMP !NMI_COUNTER : BEQ -
+    PLA : STA !NMI_COUNTER
     PLP
     RTL
 }

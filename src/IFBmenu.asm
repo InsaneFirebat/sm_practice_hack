@@ -13,7 +13,6 @@ else
 endif
     dw #$FFFF
     dw #ifb_brb
-    dw #ifb_presetrando
 if !FEATURE_EXTRAS
     dw #$FFFF
     dw #ifb_noclip
@@ -96,7 +95,6 @@ ifb_customizehud:
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
 
-    %ai16()
     PLB
     RTL
 
@@ -129,9 +127,6 @@ ifb_numbergfx_display:
 
 ifb_brb:
     %cm_submenu(">BRB Screen", #BRBMenu)
-
-ifb_presetrando:
-    %cm_submenu(">Preset Randomizer", #PresetRandoMenu)
 
 if !FEATURE_EXTRAS
 ifb_noclip:
@@ -169,7 +164,7 @@ ifb_emu_test:
     LDA #$BADD
     LDX #$F00D
     LDY #$DEAD
-    BRK #$9F
+    BRK #$FB
 endif
 
 
@@ -254,9 +249,9 @@ ifb_game_music_toggle:
     db #$FF
   .routine
     ; Clear music queue
-    STZ $0629 : STZ $062B : STZ $062D : STZ $062F
-    STZ $0631 : STZ $0633 : STZ $0635 : STZ $0637
-    STZ $0639 : STZ $063B : STZ $063D : STZ $063F
+    STZ !MUSIC_QUEUE_TIMERS : STZ !MUSIC_QUEUE_TIMERS+$2 : STZ !MUSIC_QUEUE_TIMERS+$4 : STZ !MUSIC_QUEUE_TIMERS+$6
+    STZ !MUSIC_QUEUE_TIMERS+$8 : STZ !MUSIC_QUEUE_TIMERS+$A : STZ !MUSIC_QUEUE_TIMERS+$C : STZ !MUSIC_QUEUE_TIMERS+$E
+    STZ !MUSIC_QUEUE_NEXT : STZ !MUSIC_QUEUE_START : STZ !MUSIC_ENTRY : STZ !MUSIC_TIMER
     CMP #$0001 : BEQ .resume_music
     STZ $2140
     RTL
@@ -268,60 +263,6 @@ ifb_game_music_toggle:
 print pc, " BRB start"
 incsrc BRBmenu.asm
 print pc, " BRB end"
-
-
-; ------------
-; Preset Rando
-; ------------
-
-PresetRandoMenu:
-    dw #presetrando_enable
-    dw #$FFFF
-    dw #presetrando_morph
-    dw #presetrando_charge
-    dw #presetrando_beampref
-    dw #$FFFF
-    dw #presetrando_etanks
-    dw #presetrando_reserves
-    dw #presetrando_missiles
-    dw #presetrando_supers
-    dw #presetrando_pbs
-    dw #$0000
-    %cm_header("RANDOMIZE PRESET EQUIP")
-
-presetrando_enable: 
-    %cm_toggle("Equipment Rando", !sram_presetrando, #$0001, #0)
-
-presetrando_morph:
-    %cm_toggle("Force Morph Ball", !sram_presetrando_morph, #$0001, #0)
-
-presetrando_charge:
-    %cm_toggle("Force Charge Beam", !sram_presetrando_charge, #$0001, #0)
-
-presetrando_beampref:
-    dw !ACTION_CHOICE
-    dl #!sram_presetrando_beampref
-    dw #$0000
-    db #$28, "Beam Preference", #$FF
-    db #$28, "     RANDOM", #$FF
-    db #$28, "     SPAZER", #$FF
-    db #$28, "     PLASMA", #$FF
-    db #$FF
-
-presetrando_etanks: 
-    %cm_numfield("Max Energy Tanks", !sram_presetrando_max_etanks, 0, 14, 1, 2, #0)
-
-presetrando_reserves: 
-    %cm_numfield("Max Reserve Tanks", !sram_presetrando_max_reserves, 0, 4, 1, 1, #0)
-
-presetrando_missiles: 
-    %cm_numfield("Max Missile Pickups", !sram_presetrando_max_missiles, 0, 50, 1, 5, #0)
-
-presetrando_supers: 
-    %cm_numfield("Max Super Pickups", !sram_presetrando_max_supers, 0, 50, 1, 5, #0)
-
-presetrando_pbs: 
-    %cm_numfield("Max Power Bomb Pickups", !sram_presetrando_max_pbs, 0, 50, 1, 5, #0)
 
 
 ; ----------------
@@ -392,6 +333,7 @@ ifb_factory_reset_delete_presets:
 -   STA !PRESET_SLOTS,X ; overwrite "5AFE" words
     ; inc and multiply Y by $200/$100 for next slot index
     INY : TYA : %presetslotsize()
+    LDA #$0000
     CPY !TOTAL_PRESET_SLOTS : BNE -
     ; continue into action_factory_reset
 
@@ -407,12 +349,23 @@ action_factory_reset:
 -   STA !SRAM_START+$100,X
     DEX #2 : BPL -
 
-    ; Mark practice hack SRAM as outdated
-    LDA #$FFFF : STA !sram_initialized
+    ; Mark practice hack SRAM as invalid
+    LDA !SRAM_VERSION+1 : STA !sram_initialized
+
+    ; silence audio, except it doesn't work :(
+    LDA #$0000 : JSL !MUSIC_ROUTINE
+    JSL stop_all_sounds
+
+    ; wait for music queue to clear
+    STZ !MUSIC_TIMER : STZ !MUSIC_QUEUE_TIMERS : STZ !MUSIC_QUEUE_TIMERS+$2
+    STZ !MUSIC_QUEUE_TIMERS+$4 : STZ !MUSIC_QUEUE_TIMERS+$6 : STZ !MUSIC_QUEUE_TIMERS+$8
+    STZ !MUSIC_QUEUE_TIMERS+$A : STZ !MUSIC_QUEUE_TIMERS+$C : STZ !MUSIC_QUEUE_TIMERS+$E
+-   JSL $808EF4 : BCC +
+    JSL $808338 ; wait for NMI
+    BRA -
 
     ; Reboot
-    ; I'd like to silence audio before doing this, but there isn't enough time
-    JML $80841C
++   JML $80841C
 }
 
 print pc, " mainmenuu IFBmenu end"
