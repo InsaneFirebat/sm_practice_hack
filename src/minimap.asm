@@ -4,16 +4,16 @@
 
 if !FEATURE_VANILLAHUD
 ; Vanilla HUD build only needs this label
-org $9AB200      ; graphics for HUD
+org $9AB200 ; graphics for HUD
 hudgfx_bin:
 else
 org $809B51
-    JMP $9BFB    ; skip drawing auto reserve icon and normal energy numbers and tanks during HUD routine
+    JMP $9BFB ; skip drawing auto reserve icon and normal energy numbers and tanks during HUD routine
 
-org $82AED9      ; routine to draw auto reserve icon on HUD from equip screen
+org $82AED9 ; routine to draw auto reserve icon on HUD from equip screen
     JSR mm_refresh_reserves
 
-org $82AEAF      ; routine to remove auto reserve icon on HUD from equip screen
+org $82AEAF ; routine to remove auto reserve icon on HUD from equip screen
     JSR mm_refresh_reserves
 
 org $809AF3
@@ -28,14 +28,14 @@ org $90A91B
 org $90A97E
     JMP mm_inc_tile_count
 
-org $90A7EE      ; only clear minimap if it is visible
+org $90A7EE ; only clear minimap if it is visible
     LDA !ram_minimap : BEQ .skip_minimap
     JMP mm_clear_boss_room_tiles
 
-org $90A80A      ; normally runs after minimap grid has been drawn
+org $90A80A ; normally runs after minimap grid has been drawn
     .skip_minimap
 
-org $8282E5      ; write and clear tiles to VRAM
+org $8282E5 ; write and clear tiles to VRAM
     JSR mm_write_and_clear_hud_tiles
     JSL overwrite_HUD_numbers
     BRA .write_next_tiles
@@ -43,16 +43,16 @@ org $8282E5      ; write and clear tiles to VRAM
 org $828305
     .write_next_tiles
 
-org $828EB8      ; write and clear tiles to VRAM
+org $828EB8 ; write and clear tiles to VRAM
     JSR mm_write_and_clear_hud_tiles
     PLP
     RTL
 
-org $82E488      ; write tiles to VRAM
+org $82E488 ; write tiles to VRAM
     JMP mm_write_hud_tiles_during_door_transition
 
 
-org $9AB200      ; graphics for HUD
+org $9AB200 ; graphics for HUD
 hudgfx_bin:
 incbin ../resources/gfx/hudgfx.bin
 endif
@@ -73,13 +73,13 @@ print pc, " minimap bankDF end"
 if !FEATURE_VANILLAHUD
 else
 ; The default HUD minimap should be cleared
-org $8098FF    ; row 1
+org $8098FF ; row 1
     dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
 
-org $80993F    ; row 2
+org $80993F ; row 2
     dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
 
-org $80997F    ; row 3
+org $80997F ; row 3
     dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
 
 ; The default energy 0 text should be cleared
@@ -130,13 +130,13 @@ mm_write_hud_tiles_during_door_transition:
     JSR $E039
     dl hudgfx_bin : dw $4000, $1000
     JSL overwrite_HUD_numbers
-    JMP $E492  ; resume logic
+    JMP $E492 ; resume logic
 
   .minimap_vram
     JSR $E039
     dl mapgfx_bin : dw $4000, $1000
     JSL overwrite_HUD_numbers
-    JMP $E492  ; resume logic
+    JMP $E492 ; resume logic
 }
 
 mm_refresh_reserves:
@@ -177,7 +177,7 @@ mm_initialize_minimap:
 
   .init_minimap
     LDA !ram_minimap : BEQ .skip_minimap
-    JMP $A8EF  ; resume original logic
+    JMP $A8EF ; resume original logic
 
   .skip_minimap
     RTL
@@ -188,7 +188,7 @@ mm_update_minimap:
     PHP
     %ai16()
     LDA !DISABLE_MINIMAP : BNE .skip_minimap
-    JMP $A925  ; minimap is enabled
+    JMP $A925 ; minimap is enabled
 
   .skip_minimap
     PLP
@@ -206,7 +206,7 @@ mm_inc_tile_count:
     %a8()
 
   .done
-    JMP $A987  ; resume original logic
+    JMP $A987 ; resume original logic
 }
 
 mm_clear_boss_room_tiles:
