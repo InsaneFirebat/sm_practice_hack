@@ -73,22 +73,20 @@ endif
 print pc, " misc bankA6 end"
 
 
-org $A7FF82         ; free space
+org $A7FF82
 print pc, " misc bankA7 start"
 ResetCountDamagePhan:
 {
-    PHA
-    LDA #$0000
-    STA !ENEMY_TIMER,X     ;we overwrote this instruction to get here
+    STZ !ENEMY_TIMER,X ; overwritten code
+    DEC ; #$0000
     STA !ram_countdamage : STA !sram_countdamage
-    PLA
     RTS
 }
 print pc, " misc bankA7 end"
 warnpc hook_kraid_claw_rng ; rng.asm
 
 
-org $A0FFA0         ; count damage in free space at end of bank
+org $A0FFA0 ; count damage in free space at end of bank
 print pc, " misc bankA0 start"
 CountDamage:
 {

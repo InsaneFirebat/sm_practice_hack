@@ -224,7 +224,7 @@ cm_wait_for_lag_frame:
     PHP : %ai16()
     LDA !ram_quickboot_spc_state : TAX
 
-    LDA !NMI_COUNTER   ; lag frame counter
+    LDA !NMI_COUNTER
     ; (it's only 8 bits, but it's OK if we mix it up with the variable after)
   .loop
     CMP !NMI_COUNTER
