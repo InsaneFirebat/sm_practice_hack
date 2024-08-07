@@ -294,7 +294,7 @@ save_state:
     INX
     INY : CPY #$000B : BNE .save_dma_regs
     CPX #$007B : BEQ .save_dma_regs_done
-    TXA : CLC : ADC #$0005 : TAX
+    TXA : CLC : ADC #$05 : TAX
     LDY #$0000
     BRA .save_dma_regs
 
@@ -449,7 +449,7 @@ load_return:
     INX
     INY : CPY #$000B : BNE .load_dma_regs
     CPX #$007B : BEQ .load_dma_regs_done
-    TXA : CLC : ADC #$0005 : TAX
+    TXA : CLC : ADC #$05 : TAX
     LDY #$0000
     BRA .load_dma_regs
 
