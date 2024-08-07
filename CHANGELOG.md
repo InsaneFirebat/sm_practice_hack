@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.6.2.2]  Fixed a crash with savestates
 * [2.6.2.2]  Small optimization on reset damage hijack
 * [2.6.2.1]  Fixed a crash on some demos
 * [2.6.2.1]  Fixed a common address in RAM Watch menu
