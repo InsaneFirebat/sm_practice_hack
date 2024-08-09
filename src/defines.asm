@@ -1040,6 +1040,34 @@ endif
 !CUTSCENE_FAST_BOWLING = #$2000
 !CUTSCENE_KRAID_DEATH_CAMERA = #$4000
 
+!PROFILE_CUSTOM       = #$0000
+!PROFILE_Twitch       = #$0001
+!PROFILE_Default      = #$0002
+!PROFILE_Firebat      = #$0003
+!PROFILE_wardrinker   = #$0004
+!PROFILE_mm2          = #$0005
+!PROFILE_ptoil        = #$0006
+!PROFILE_Zohdin       = #$0007
+!PROFILE_DarkXoa      = #$0008
+!PROFILE_Melonax      = #$0009
+!PROFILE_TopsyTurvy   = #$000A
+!PROFILE_OST          = #$000B
+!PROFILE_JRP          = #$000C
+!PROFILE_Layrus       = #$000D
+!PROFILE_Dayne        = #$000E
+!PROFILE_DreamCowboy  = #$000F
+!PROFILE_Zeni         = #$0010
+!PROFILE_Dyce         = #$0011
+!PROFILE_Forever      = #$0012
+!PROFILE_Grey         = #$0013
+!PROFILE_Red          = #$0014
+!PROFILE_Purple       = #$0015
+!PROFILE_HUD          = #$0016
+!PROFILE_Memes        = #$0017
+!PROFILE_Grapedrinkz  = #$0018
+!PROFILE_PapaSchmo    = #$0019
+!PROFILE_Vespher      = #$001A
+
 !BRB_METROID = #$287F
 !BRB_HEART = #$2899
 
