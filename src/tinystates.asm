@@ -283,24 +283,24 @@ register_restore_return:
 
 save_state:
 {
-    %a8()
+    %ai8()
     LDA #$00 : PHA : PLB
 
-    ; Store DMA registers to SRAM
-    LDY #$0000 : TYX
-
+    TAX : TXY
   .save_dma_regs
+    ; Store DMA registers to SRAM
     LDA $4300,X : STA !SRAM_DMA_BANK,X
     INX
-    INY : CPY #$000B : BNE .save_dma_regs
-    CPX #$007B : BEQ .save_dma_regs_done
+    INY : CPY #$0B : BNE .save_dma_regs
+    CPX #$7B : BEQ .save_dma_regs_done
     TXA : CLC : ADC #$05 : TAX
-    LDY #$0000
+    LDY #$00
     BRA .save_dma_regs
 
   .save_dma_regs_done
     %ai16()
     LDX #save_write_table
+    ; fallthrough to run_vm
 }
 
 run_vm:
@@ -441,20 +441,20 @@ load_return:
     JSL tinystates_load_paused
 
   .not_paused
-    %a8()
-    LDX #$0000 : TXY
-
+    %ai8()
+    LDX #$00 : TXY
   .load_dma_regs
+    ; Load DMA registers from SRAM
     LDA !SRAM_DMA_BANK,X : STA $4300,X
     INX
-    INY : CPY #$000B : BNE .load_dma_regs
-    CPX #$007B : BEQ .load_dma_regs_done
+    INY : CPY #$0B : BNE .load_dma_regs
+    CPX #$7B : BEQ .load_dma_regs_done
     TXA : CLC : ADC #$05 : TAX
-    LDY #$0000
+    LDY #$00
     BRA .load_dma_regs
 
   .load_dma_regs_done
-    ; Restore registers and return.
+    ; Restore registers and return
     %ai16()
     JSR post_load_state
     JMP register_restore_return
