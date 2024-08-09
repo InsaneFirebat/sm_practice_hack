@@ -181,25 +181,24 @@ register_restore_return:
 
 save_state:
 {
-    %a8()
+    %ai8()
     LDA #$00 : PHA : PLB
 
-    ; Store DMA registers to SRAM
-    LDY #$0000 : TYX
-
+    TAX : TXY
   .save_dma_regs
+    ; Store DMA registers to SRAM
     LDA $4300,X : STA !SRAM_DMA_BANK,X
     INX
-    INY : CPY #$000B : BNE .save_dma_regs
-    CPX #$007B : BEQ .done
+    INY : CPY #$0B : BNE .save_dma_regs
+    CPX #$7B : BEQ .done
     TXA : CLC : ADC #$05 : TAX
-    LDY #$0000
+    LDY #$00
     BRA .save_dma_regs
 
   .done
     %ai16()
     LDX #save_write_table
-    ; fallthrough
+    ; fallthrough to run_vm
 }
 
 run_vm:
@@ -373,17 +372,18 @@ load_return:
     STA !ram_frames_held_timers+$C8 : STA !ram_frames_held_timers+$CA
     STA !ram_frames_held_timers+$CC : STA !ram_frames_held_timers+$CE
 
-    %a8()
+    %ai8()
     LDA #$00 : PHA : PLB
-    LDX #$0000 : TXY
 
+    TAX : TXY
   .load_dma_regs
+    ; Load DMA registers from SRAM
     LDA !SRAM_DMA_BANK,X : STA $4300,X
-    INX : INY
-    CPY #$000B : BNE .load_dma_regs
-    CPX #$007B : BEQ .load_dma_regs_done
+    INX
+    INY : CPY #$0B : BNE .load_dma_regs
+    CPX #$7B : BEQ .load_dma_regs_done
     TXA : CLC : ADC #$05 : TAX
-    LDY #$0000
+    LDY #$00
     BRA .load_dma_regs
 
   .load_dma_regs_done
