@@ -63,6 +63,7 @@ mc_paletteprofile:
     db #$28, "GRAPEDRINKZ", #$FF
     db #$28, "  PAPASCHMO", #$FF
     db #$28, "    VESPHER", #$FF
+    db #$28, "      EXAKT", #$FF
     db #$FF
 
 mc_palette2custom:
@@ -489,6 +490,7 @@ PaletteProfileTables:
     dw #GrapedrinkzProfileTable   ; 18
     dw #PapaSchmoProfileTable     ; 19
     dw #VespherProfileTable       ; 1A
+    dw #EXAKTProfileTable         ; 1B
     dw #$0000
 
 ; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
@@ -569,6 +571,9 @@ PapaSchmoProfileTable:
 
 VespherProfileTable:
     dw $49FE, $4159, $7FFF, $0804, $0000, $7FFF, $5E80, $55FE, $0000, $0000, $761F
+
+EXAKTProfileTable:
+    dw $2DC6, $5F65, $3A42, $18A1, $2982, $4F0A, $6F08, $4EC9, $18A1, $2DE6, $63CC
 }
 print pc, " menu PaletteProfileTables start"
 pullpc
