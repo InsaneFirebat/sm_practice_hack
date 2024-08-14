@@ -1067,6 +1067,7 @@ endif
 !PROFILE_Grapedrinkz  = #$0018
 !PROFILE_PapaSchmo    = #$0019
 !PROFILE_Vespher      = #$001A
+!PROFILE_EXAKT        = #$001B
 
 !BRB_METROID = #$287F
 !BRB_HEART = #$2899
