@@ -94,6 +94,7 @@ ifb_customizehud:
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
+    %a16()
 
     PLB
     RTL
