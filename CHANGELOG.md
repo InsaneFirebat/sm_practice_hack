@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.6.2.4]  Fixed a crash with HUD font customization
 * [2.6.2.3]  Added EXAKT menu palette profile
 * [2.6.2.2]  Fixed a crash with savestates
 * [2.6.2.2]  Small optimization on reset damage hijack
