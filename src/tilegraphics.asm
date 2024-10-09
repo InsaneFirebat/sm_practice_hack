@@ -1,5 +1,5 @@
 
-org $E88800
+org !ORG_RAW_TILE_TABLES
 check bankcross off
 print pc, " raw tile tables crossbank start"
 
@@ -54,7 +54,7 @@ warnpc $EAE000 ; presets.asm
 check bankcross on
 
 
-org $F48000
+org !ORG_RAW_TILEGRAPHICS
 print pc, " tilegraphics start"
 
 ; 12K CRE tile graphics
@@ -236,7 +236,7 @@ load_raw_tile_graphics:
     LDA #$01 : STA $420B            ; initiate DMA (channel 1)
 
   .tileset_palette
-    LDA !sram_preset_options : BIT !PRESETS_COMPRESSED_PALETTES_8BIT : BNE .palette_decompression
+    LDA !sram_preset_options : BIT.b !PRESETS_COMPRESSED_PALETTES : BNE .palette_decompression
 
     ; Copy tileset palette to $7EC200
     PLX : LDY #$C200 : TDC : DEC
@@ -250,11 +250,11 @@ load_raw_tile_graphics:
     JML $82E7BF
 }
 
-preset_load_level_tile_tables_scrolls_plms_and_execute_asm:
+preset_load_level:
 {
     ; Original logic from $82E7D3
     PHP : PHB
-    REP #$30
+    %ai16()
 
     ; More efficient method to clear level data
     PEA $7F00 : PLB : PLB
@@ -287,11 +287,12 @@ preset_load_level_tile_tables_scrolls_plms_and_execute_asm:
     LDA $0000 : LSR : CLC : ADC #$6401 : TAY
     SBC #$6401 : MVP $7F7F
 
+  .level_data_done
     PEA $8F00 : PLB : PLB
     LDA !sram_preset_options : BIT !PRESETS_COMPRESSED_GRAPHICS : BNE .tile_table_decompression
 
     ; Jump to routine based on graphics set
-    LDX $07BB : LDA $0003,X : AND #$00FF
+    LDX !STATE_POINTER : LDA $0003,X : AND #$00FF
     ASL : TAX : PHB
     JSR (load_tile_tables_jump_table,X)
 
@@ -520,173 +521,8 @@ load_tile_table_28_draygon:
     RTS
 }
 
-; Decompression optimization adapted from Kejardon
-; Compression format: One byte (XXX YYYYY) or two byte (111 XXX YY-YYYYYYYY) headers
-; XXX = instruction, YYYYYYYYYY = counter
-optimized_decompression_end:
-{
-    PLB
-    RTL
-}
-
-optimized_decompression:
-{
-    ; Set bank
-    PHB : LDA $49 : PHA : PLB
-
-    STZ $50 : LDY #$0000
-
-  .next_byte
-    LDA ($47)
-    INC $47 : BNE .read_command_skip_inc
-    INC $48 : BNE .read_command_skip_inc
-    JSR decompression_increment_bank
-  .read_command_skip_inc
-    STA $4A
-    CMP #$FF : BEQ optimized_decompression_end
-    CMP #$E0 : BCC .one_byte_size
-
-    ; Two byte size
-    ASL : ASL : ASL
-    AND #$E0 : PHA
-    LDA $4A : AND #$03 : XBA
-
-    LDA ($47)
-    INC $47 : BNE .read_extended_size_skip_inc
-    INC $48 : BNE .read_extended_size_skip_inc
-    JSR decompression_increment_bank
-  .read_extended_size_skip_inc
-    BRA .data_read
-
-  .one_byte_size
-    AND #$E0 : PHA
-    TDC : LDA $4A : AND #$1F
-
-  .data_read
-    TAX : INX : PLA
-    BMI .option4567 : BEQ .option0
-    CMP #$20 : BEQ .option1
-    CMP #$40 : BEQ .option2
-
-    ; Option X = 3: Incrementing fill Y bytes starting with next byte
-    LDA ($47)
-    INC $47 : BNE .option3_read_skip_inc
-    INC $48 : BNE .option3_read_skip_inc
-    JSR decompression_increment_bank
-  .option3_read_skip_inc
-    STA [$4C],Y
-    INC : INY : DEX : BNE .option3_read_skip_inc
-    BRL .next_byte
-
-  .option0:
-    ; Option X = 0: Directly copy Y bytes
-    LDA ($47)
-    INC $47 : BNE .option0_read_skip_inc
-    INC $48 : BNE .option0_read_skip_inc
-    JSR decompression_increment_bank
-  .option0_read_skip_inc
-    STA [$4C],Y
-    INY : DEX : BNE .option0
-    BRL .next_byte
-
-  .option1:
-    ; Option X = 1: Copy the next byte Y times
-    LDA ($47)
-    INC $47 : BNE .option1_read_skip_inc
-    INC $48 : BNE .option1_read_skip_inc
-    JSR decompression_increment_bank
-  .option1_read_skip_inc
-    STA [$4C],Y
-    INY : DEX : BNE .option1_read_skip_inc
-    BRL .next_byte
-
-  .option2:
-    ; Option X = 2: Copy the next two bytes, one at a time, for the next Y bytes
-    LDA ($47)
-    INC $47 : BNE .option2_lsb_read_skip_inc
-    INC $48 : BNE .option2_lsb_read_skip_inc
-    JSR decompression_increment_bank
-  .option2_lsb_read_skip_inc
-    XBA : LDA ($47)
-    INC $47 : BNE .option2_msb_read_skip_inc
-    INC $48 : BNE .option2_msb_read_skip_inc
-    JSR decompression_increment_bank
-  .option2_msb_read_skip_inc
-    XBA : REP #$20
-  .option2_loop
-    STA [$4C],Y
-    INY : DEX : BEQ .option2_end
-    INY : DEX : BNE .option2_loop
-  .option2_end
-    SEP #$20
-    BRL .next_byte
-
-  .option4567:
-    CMP #$C0 : AND #$20 : STA $4F : BCS .option67
-
-    ; Option X = 4: Copy Y bytes starting from a given address in the decompressed data
-    ; Option X = 5: Copy and invert (EOR #$FF) Y bytes starting from a given address in the decompressed data
-    LDA ($47)
-    INC $47 : BNE .option45_lsb_read_skip_inc
-    INC $48 : BNE .option45_lsb_read_skip_inc
-    JSR decompression_increment_bank
-  .option45_lsb_read_skip_inc
-    XBA : LDA ($47)
-    INC $47 : BNE .option45_msb_read_skip_inc
-    INC $48 : BNE .option45_msb_read_skip_inc
-    JSR decompression_increment_bank
-  .option45_msb_read_skip_inc
-    XBA : REP #$21
-    ADC $4C : STY $44 : SEC
-
-  .option_dictionary
-    SBC $44 : STA $44
-    SEP #$20
-    LDA $4E : BCS .skip_carry_subtraction
-    DEC
-  .skip_carry_subtraction
-    STA $46
-    LDA $4F : BNE .option5_loop
-
-  .option4_loop
-    LDA [$44],Y
-    STA [$4C],Y
-    INY : DEX : BNE .option4_loop
-    BRL .next_byte
-
-  .option5_loop
-    LDA [$44],Y
-    EOR #$FF
-    STA [$4C],Y
-    INY : DEX : BNE .option5_loop
-    BRL .next_byte
-
-  .option67
-    ; Option X = 6: Copy Y bytes starting from a given number of bytes ago in the decompressed data
-    ; Option X = 7: Copy and invert (EOR #$FF) Y bytes starting from a given number of bytes ago in the decompressed data
-    TDC : LDA ($47)
-    INC $47 : BNE .option67_read_skip_inc
-    INC $48 : BNE .option67_read_skip_inc
-    JSR decompression_increment_bank
-  .option67_read_skip_inc
-    REP #$20
-    STA $44 : LDA $4C
-    BRA .option_dictionary
-}
-
-decompression_increment_bank:
-{
-    PHA
-    PHB : PLA
-    INC
-    PHA : PLB
-    LDA #$80 : STA $48
-    PLA
-    RTS
-}
-
 ; Load correct section of VRAM for scrolling sky rooms
-preset_load_library_transfer_to_vram:
+preset_transfer_to_vram:
 {
     PHX : LDA !ROOM_ID : CMP #$91F8 : BEQ .landing_site
     CMP #$93FE : BEQ .west_ocean : CMP #$94FD : BEQ .east_ocean
@@ -696,23 +532,23 @@ preset_load_library_transfer_to_vram:
 
   .landing_site
     LDA !SAMUS_Y : ASL : ASL : ASL : XBA : AND #$003C
-    BIT #$0020 : BNE .landing_site_floor
-    CLC : ADC #preset_load_library_landing_site_params : TAX
+    BIT #$0020 : BNE .landing_floor
+    CLC : ADC #preset_vram_landing_site_params : TAX
     BRA .transfer
 
   .west_ocean
     LDA !SAMUS_Y : ASL : ASL : ASL : XBA : AND #$003C
     ; The bottom of west ocean is the same as east ocean
     CMP #$0028 : BPL .east_ocean
-    CLC : ADC #preset_load_library_west_ocean_params : TAX
+    CLC : ADC #preset_vram_west_ocean_params : TAX
     BRA .transfer
 
   .east_ocean
-    LDX #preset_load_library_east_ocean_params
+    LDX #preset_vram_east_ocean_params
     BRA .transfer
 
-  .landing_site_floor
-    LDX #preset_load_library_landing_site_floor_params
+  .landing_floor
+    LDX #preset_vram_landing_site_floor_params
 
   .transfer
     LDA #$4800 : STA $2116
@@ -736,13 +572,13 @@ preset_load_library_transfer_to_vram:
 
   .done
     PLX : SEC
-    JML preset_load_library_end_transfer_to_vram
+    JML preset_end_transfer_to_vram
 }
 
 ; DMA transfer from $8Axx80 to VRAM $4800 of $xx00 bytes
 ; Optional second DMA transfer from $8Axx80 of $xx00 bytes
 ; Each xx is a byte in these tables
-preset_load_library_west_ocean_params:
+preset_vram_west_ocean_params:
     db $B1, $10, $00, $00    ; Y = 0.0-0.5
     db $B1, $10, $00, $00    ; Y = 0.5-1.0
     db $C1, $02, $B3, $0E    ; Y = 1.0-1.5
@@ -753,10 +589,10 @@ preset_load_library_west_ocean_params:
     db $D9, $06, $C7, $0A    ; Y = 3.5-4.0
     db $D9, $0A, $CB, $06    ; Y = 4.0-4.5
     db $D9, $0E, $CF, $02    ; Y = 4.5-5.0
-preset_load_library_east_ocean_params:
+preset_vram_east_ocean_params:
     db $D9, $10, $00, $00    ; Y = 5.0+
 
-preset_load_library_landing_site_params:
+preset_vram_landing_site_params:
     db $B1, $10, $00, $00    ; Y = 0.0-0.5
     db $B1, $10, $00, $00    ; Y = 0.5-1.0
     db $C1, $02, $B3, $0E    ; Y = 1.0-1.5
@@ -765,14 +601,14 @@ preset_load_library_landing_site_params:
     db $C1, $0E, $BF, $02    ; Y = 2.5-3.0
     db $D1, $02, $C3, $0E    ; Y = 3.0-3.5
     db $D1, $06, $C7, $0A    ; Y = 3.5-4.0
-preset_load_library_landing_site_floor_params:
+preset_vram_landing_site_floor_params:
     db $D1, $08, $C9, $08    ; Y = 4.0+
 
 print pc, " tilegraphics end"
 warnpc $F4D800
 
 
-org $F4D800
+org !ORG_RAW_TILES
 check bankcross off
 print pc, " raw tiles crossbank start"
 

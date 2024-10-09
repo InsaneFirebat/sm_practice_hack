@@ -1,3 +1,4 @@
+
 ; ----------------
 ; Phantoon hijacks
 ; ----------------
@@ -25,6 +26,11 @@ org $A7D064
     ; Phantoon flame pattern
 org $A7CFD6
     JSL hook_phantoon_flame_pattern
+
+    ; Phantoon flame direction
+org $8699EB
+    JSL hook_phantoon_flame_direction
+    BRA $05
 }
 
 
@@ -34,7 +40,10 @@ org $A7CFD6
 {
 org $B39943
     ; $B3:9943 22 11 81 80 JSL $808111[$80:8111]
-    JSL hook_botwoon_rng
+    JSL hook_botwoon_move
+
+org $B398C1
+    JSL hook_botwoon_spit
 }
 
 
@@ -63,12 +72,23 @@ org $A48753
 ; Kraid hijacks
 ; -------------
 {
-org $A7BDBF
-    JSR hook_kraid_rng
+org $A786A7
+KraidWaitTable:
+    ; Overwrite unused palette
+    dw #$0080, #$0040, #$0080, #$00C0, #$0100, #$0140, #$0180, #$01C0
 
 org $A7AA69
-    JMP kraid_intro_skip
-kraid_intro_skip_return:
+    JSR kraid_intro_skip
+
+org $A7AE0D
+    LDA !ram_kraid_wait_rng : BNE kraid_wait_load_delay
+    LDA !CACHED_RANDOM_NUMBER : AND #$0007
+kraid_wait_load_delay:
+    ASL : TAX : LDA.w KraidWaitTable,X
+warnpc $A7AE1E
+
+org $A7BDBF
+    JSR hook_kraid_claw_rng
 }
 
 
@@ -86,13 +106,13 @@ org $A3AB12
     ; $A2:B58B 8D E5 05    STA $05E5  [$7E:05E5]
 org $A2B588
     JSL hook_lavarocks_set_rng
-    NOP #2
+    NOP : NOP
 
     ; $A8:B798 A9 17 00    LDA #$0017
     ; $A8:B79B 8D E5 05    STA $05E5  [$7E:05E5]
 org $A8B798
     JSL hook_beetom_set_rng
-    NOP #2
+    NOP : NOP
 }
 
 
@@ -100,7 +120,7 @@ org $A8B798
 ; Hooks
 ; -----
 
-org $83B000
+org !ORG_RNG_BANK83
 print pc, " rng start"
 
 hook_hopper_set_rng:
@@ -135,7 +155,7 @@ hook_phantoon_init:
     DEC $0FB0,X
     RTL
 
-.skip_cutscene:
+  .skip_cutscene
     ; get rid of the return address
     PLA     ; pop 2 bytes
     PHP     ; push 1
@@ -169,11 +189,18 @@ phan_pattern_table:
 ; $A7:D5B9 89 01 00    BIT #$0001               ; Sets Z for left pattern, !Z for right
 hook_phantoon_1st_rng:
 {
+    ; If fast Phantoon is on, adjust the timer by the cutscene time
+    ; (we can't do that while we skip the cutscene since that code
+    ;  happens during the door transition)
+    LDA !sram_cutscenes : AND !CUTSCENE_FAST_PHANTOON : BEQ .rng
+    LDY #$0257 : JSL ih_adjust_realtime
+
+  .rng:
     ; If set to all-on or all-off, don't mess with RNG.
     LDA !ram_phantoon_rng_round_1 : BEQ .no_manip
     CMP #$003F : BNE choose_phantoon_pattern
 
-.no_manip:
+  .no_manip
     LDA !FRAME_COUNTER
     LSR : AND #$0003 : ASL : TAY
     LDA $CD53,Y : STA $0FE8
@@ -198,7 +225,7 @@ hook_phantoon_2nd_rng:
     LDA !ram_phantoon_rng_round_2 : BEQ .no_manip
     CMP #$003F : BNE choose_phantoon_pattern
 
-.no_manip:
+  .no_manip
     JSL $808111
     AND #$0007 : ASL : TAY
     LDA $CD53,Y : STA $0FE8
@@ -242,10 +269,10 @@ choose_phantoon_pattern:
     ; X = number of enabled patterns to find before stopping
     ; Y = index in phan_pattern_table of pattern currently being checked
     ; A = bitmask of enabled patterns
-.reload:
+  .reload
     LDA $01,S   ; reload pattern mask
     LDY #$0006  ; number of patterns (decremented immediately to index of last pattern)
-.loop:
+  .loop
     DEY
     LSR
     BCC .skip
@@ -255,13 +282,12 @@ choose_phantoon_pattern:
     BMI .done
     BRA .loop   ; no, keep looping
 
-.skip:
+  .skip
     ; Pattern Y is not enabled, try the next pattern
     BEQ .reload ; if we've tried all the patterns, start over
     BRA .loop
 
-.done:
-
+  .done
     ; We've found the pattern to use.
     PLA ; we don't need the pattern mask anymore
     TYA : ASL : TAX
@@ -284,18 +310,18 @@ choose_phantoon_pattern:
     LDY #$00D0
     BRA .round2done
 
-.round2left
+  .round2left
     LDA #$018F
     LDY #$0030
 
-.round2done
+  .round2done
     STA $0FA8  ; Index into figure-8 movement table
     STY $0F7A  ; X position
     LDA #$0060
     STA $0F7E  ; Y position
     BRA hook_phantoon_invert
 
-.round1
+  .round1
     ; Save the pattern timer and check the direction
     LSR
     STA $0FE8
@@ -305,7 +331,7 @@ choose_phantoon_pattern:
     SEP #$02
     RTL
 
-.round1left:
+  .round1left:
     REP #$02
     RTL
 }
@@ -337,24 +363,79 @@ hook_phantoon_flame_pattern:
     RTL
 }
 
-hook_botwoon_rng:
+hook_phantoon_flame_direction:
 {
-    JSL $808111 ; Trying to preserve the number of RNG calls being done in the frame
+    LDA !ram_phantoon_flame_direction : BEQ .no_manip
+    DEC : BEQ .left
 
-    LDA !ram_botwoon_rng : BEQ .no_manip
+  .right
+    LDA #$0080
     RTL
 
   .no_manip
-    LDA !CACHED_RANDOM_NUMBER
+    LDA $05B6 : BIT #$0001 : BEQ .right
+
+  .left
+    LDA #$FF80
     RTL
 }
 
+hook_botwoon_move:
+{
+    LDA !ram_botwoon_rng : BEQ .no_manip
+    ; 0 = head visible, 1 = behind wall
+    LDA $7E8026 : BNE .hidden
+    ; check if first round, $7E8022 unused by Botwoon
+    LDA $7E8022 : BEQ .first_round
+
+    ; preserve number of RNG calls in the frame
+    JSL $808111
+    ; return chosen pattern
+    LDA !ram_botwoon_second
+    RTL
+
+  .first_round
+    ; preserve number of RNG calls in the frame
+    JSL $808111
+    ; mark first round complete
+    LDA #$0001 : STA $7E8022
+    ; return chosen pattern
+    LDA !ram_botwoon_first
+    RTL
+
+  .hidden
+    LDA !ram_botwoon_hidden : BEQ .no_manip
+    ; preserve number of RNG calls in the frame
+    JSL $808111
+    ; return chosen pattern
+    LDA !ram_botwoon_hidden
+    RTL
+
+  .no_manip
+    ; return random pattern
+    JML $808111
+}
+
+hook_botwoon_spit:
+{
+    LDA !ram_botwoon_spit : BEQ .no_manip
+    ; preserve number of RNG calls in the frame
+    JSL $808111
+    ; return chosen pattern
+    LDA !ram_botwoon_spit
+    RTL
+
+  .no_manip
+    ; return random pattern
+    JML $808111
+}
+
 print pc, " rng end"
-warnpc $83B400 ; custompresets.asm
+;warnpc $83B400 ; custompresets.asm
 
 
 ;org $A4F700
-org $A4FFA0
+org !ORG_RNG_BANKA4
 print pc, " crocomire rng start"
 
 hook_crocomire_rng:
@@ -376,7 +457,7 @@ print pc, " crocomire rng end"
 
 
 ;org $A5FA00
-org $A5FD50
+org !ORG_RNG_BANKA5
 print pc, " draygon rng start"
 
 hook_draygon_rng_left:
@@ -413,11 +494,12 @@ org $A6A0FC
 org $A6A2F2
     JMP ceres_ridley_draw_metroid
 
-org $A6A361
-    dw ridley_init_hook
+org $A6A360
+    LDA #ridley_init_hook
 
 ; Fix ceres ridley door instruction list to keep door visible when skipping ridley fight
 org $A6F55C
+hook_ceres_ridley_door_instructions:
     dw $F678, ridley_ceres_door_original_instructions
     dw $80ED, ridley_ceres_door_escape_instructions
 
@@ -427,7 +509,7 @@ org $A6F66A
     LDA $7ED82E
 
 
-org $A6FEC0
+org !ORG_RNG_BANKA6
 print pc, " ridley rng start"
 
 ridley_init_hook:
@@ -484,12 +566,12 @@ ridley_ceres_door_escape_instructions:
 print pc, " ridley rng end"
 
 
-org $A7FFB6
+org !ORG_RNG_BANKA7
 print pc, " kraid rng start"
 
-hook_kraid_rng:
+hook_kraid_claw_rng:
 {
-    LDA !ram_kraid_rng : BEQ .no_manip
+    LDA !ram_kraid_claw_rng : BEQ .no_manip
     DEC : DEC     ; return -1 (laggy) or 0 (laggier)
     RTS
 
@@ -499,13 +581,18 @@ hook_kraid_rng:
 }
 
 kraid_intro_skip:
+{
     LDA !sram_cutscenes : AND !CUTSCENE_FAST_KRAID : BEQ .noSkip
-    LDA #$0001
-    JMP kraid_intro_skip_return
+    ; We can't adjust the timer here, because we're in a door transition and it will be 
+    ; considered part of the previous room. Instead, set a flag to adjust the timer at 
+    ; the end of the door transition.
+    LDA #$0001 : STA !ram_kraid_adjust_timer
+    RTS
 
   .noSkip
     LDA #$012C
-    JMP kraid_intro_skip_return
+    RTS
+}
 
 print pc, " kraid rng end"
 

@@ -6,7 +6,7 @@ Always use the UNHEADERED (UH) version of the hack for the practice rom.
 
 ## Which Download?
 
-The patch file with "Savestates" in the filename is only intended for SD2SNES, FXPAK, and Super NTs (with "jailbreak" firmware). It may cause crashes or serious graphical errors if used with emulators or Everdrives.
+The patch file with "Savestates" in the filename is only intended for SD2SNES, FXPAK, and Super NTs (with "jailbreak" firmware). It may cause crashes or serious graphical errors if used with emulators or Everdrives. "Tinystates" is a lighter version of savestate that is compatible with nearly all platforms EXCEPT those developed/published by Nintendo, such as SNES Classic or Wii VC.
 
 ## How to Patch
 
