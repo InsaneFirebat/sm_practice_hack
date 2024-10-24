@@ -1,7 +1,7 @@
 @echo off
 
 set HACK_NAME=KaizoPossible
-set HACK_BUILD_VERSION=2.6.2
+set HACK_BUILD_VERSION=2.6.2.1
 
 echo Building %HACK_NAME% Practice Hack
 if not exist build mkdir build
