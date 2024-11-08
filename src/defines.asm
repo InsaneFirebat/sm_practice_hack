@@ -5,6 +5,7 @@
 
 !FEATURE_SD2SNES ?= 1
 !FEATURE_TINYSTATES ?= 0
+!FEATURE_MAPSTATES ?= 0
 !FEATURE_MORPHLOCK ?= 0
 !FEATURE_DEV ?= 0
 !RAW_TILE_GRAPHICS ?= 0
@@ -14,7 +15,7 @@
 
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 6
-!VERSION_BUILD = 2
+!VERSION_BUILD = 3
 !VERSION_REV = 0
 
 
@@ -29,7 +30,8 @@
 !ORG_INIT = $81FA00 ; $237
 !ORG_MENU_BANK85 = $85FD00 ; $28, bank $85
 !ORG_MENU_BANK89 = $89B000 ; $361D
-;!ORG_MENU_GFX = $F0D700 ; unused, $900, can be used to reduce menu code size
+;!ORG_MENU_GFX = $F0D700 ; unused, $1000, can be used to reduce menu code size
+;!ORG_MENU_GFX2 = $B5F000 ; $1000
 !ORG_MAINMENU = $B88000 ; $34FE
 !ORG_GAMEMODE = $85F800 ; $3B7
 !ORG_PRESETS_BANK82 = $82FA00 ; $2C1, bank $82
@@ -63,7 +65,7 @@
 ;!ORG_RAW_TILE_TABLES = $E88800
 ;!ORG_RAW_TILEGRAPHICS = $F48000
 ;!ORG_RAW_TILES = $F4D800
-;!ORG_ROOMNAMES = $E70000 ; whole bank pointer style
+!ORG_ROOMNAMES = $E70000 ; whole bank pointer style
 ;!ORG_CLEAR_ENEMIES = $E70000 ; whole bank pointer style
 ;!ORG_CUSTOMIZEMENU = $AFEC00
 ;!ORG_PALETTEPROFILES = $AEFD20
@@ -119,7 +121,7 @@
 
 !ram_metronome_counter              = !WRAM_START+$30
 !ram_armed_shine_duration           = !WRAM_START+$32
-!ram_map_counter                    = !WRAM_START+$34
+!ram_auto_save_state                = !WRAM_START+$34
 !ram_vcounter_data                  = !WRAM_START+$36
 !ram_custom_preset                  = !WRAM_START+$38
 
@@ -142,10 +144,9 @@
 !ram_shine_counter                  = !WRAM_START+$54
 !ram_dash_counter                   = !WRAM_START+$56
 
-!ram_auto_save_state                = !WRAM_START+$58
-!ram_lag_counter                    = !WRAM_START+$5A
-!ram_kraid_adjust_timer             = !WRAM_START+$5C
-!ram_print_segment_timer            = !WRAM_START+$5E
+!ram_lag_counter                    = !WRAM_START+$58
+!ram_kraid_adjust_timer             = !WRAM_START+$5A
+!ram_print_segment_timer            = !WRAM_START+$5C
 
 ; ^ FREE SPACE ^ up to +$6C
 
@@ -290,12 +291,11 @@
 !ram_seed_Y = !WRAM_MENU_START+$62
 
 !ram_timers_autoupdate = !WRAM_MENU_START+$64
-;!ram_cm_suit_properties = !WRAM_MENU_START+$66
+!ram_cm_fast_scroll_menu_selection = !WRAM_MENU_START+$66
 
 !ram_cm_sfxlib1 = !WRAM_MENU_START+$68
 !ram_cm_sfxlib2 = !WRAM_MENU_START+$6A
 !ram_cm_sfxlib3 = !WRAM_MENU_START+$6C
-!ram_cm_fast_scroll_menu_selection = !WRAM_MENU_START+$6E
 
 ; ^ FREE SPACE ^ up to +$7A
 
@@ -577,12 +577,16 @@ incsrc HUDdefines.asm
 !DISABLE_SOUNDS = $05F5
 !DISABLE_MINIMAP = $05F7
 !SOUND_TIMER = $0686
+!AREA_MAP_COLLECTED = $0789
 !LOAD_STATION_INDEX = $078B
 !DOOR_ID = $078D
 !DOOR_DIRECTION = $0791
 !ROOM_ID = $079B
 !AREA_ID = $079F
+!ROOM_MAP_X_COORDINATE = $07A1
+!ROOM_MAP_Y_COORDINATE = $07A3
 !ROOM_WIDTH_BLOCKS = $07A5
+!ROOM_HEIGHT_BLOCKS = $07A7
 !ROOM_WIDTH_SCROLLS = $07A9
 !PREVIOUS_CRE_BITSET = $07B1
 !CRE_BITSET = $07B3
@@ -596,8 +600,8 @@ incsrc HUDdefines.asm
 !LAYER2_Y = $0919
 !BG1_X_OFFSET = $091D
 !BG1_Y_OFFSET = $091F
-!BG2_X_SCROLL = $0921
-!BG2_Y_SCROLL = $0923
+!BG2_X_OFFSET = $0921
+!BG2_Y_OFFSET = $0923
 !SAMUS_DOOR_SUBSPEED = $092B
 !SAMUS_DOOR_SPEED = $092D
 !CURRENT_SAVE_FILE = $0952
@@ -732,6 +736,8 @@ incsrc HUDdefines.asm
 
 !HUD_TILEMAP = $7EC600
 
+!MAP_COUNTER = $7ECAE8 ; Not used in vanilla
+
 
 ; --------------------
 ; Aliases and Bitmasks
@@ -797,9 +803,6 @@ endif
 !ACTION_DYNAMIC             = #$0026
 !ACTION_MANAGE_PRESETS      = #$0028
 
-;!SUIT_PROPERTIES_MASK = #$0007
-;!SUIT_PROPRETIES_PAL_DEBUG_FLAG = #$0008
-
 !TOP_DISPLAY_VANILLA = #$0002
 
 !CUTSCENE_FAST_PHANTOON = #$0200
@@ -819,6 +822,21 @@ endif
 !PRESET_EQUIP_RANDO_FORCE_CHARGE = #$0004
 !PRESET_EQUIP_RANDO_INIT = #$0006
 
+if !FEATURE_MAPSTATES
+if !FEATURE_TINYSTATES
+!TOTAL_PRESET_SLOTS = #$0001
+else
+!TOTAL_PRESET_SLOTS = #$0009
+endif
+!PRESET_SLOT_SIZE = #$0800
+!PRESET_SLOTS_ROOM = $703000+$06
+!PRESET_SLOTS_ENERGY = $703000+$28
+!PRESET_SLOTS_MAXENERGY = $703000+$2A
+!PRESET_SLOTS_RESERVES = $703000+$3C
+!PRESET_SLOTS_MISSILES = $703000+$2C
+!PRESET_SLOTS_SUPERS = $703000+$30
+!PRESET_SLOTS_PBS = $703000+$34
+else
 if !FEATURE_TINYSTATES
 !TOTAL_PRESET_SLOTS = #$000F
 !PRESET_SLOT_SIZE = #$0100
@@ -839,6 +857,7 @@ else
 !PRESET_SLOTS_MISSILES = $703000+$30
 !PRESET_SLOTS_SUPERS = $703000+$34
 !PRESET_SLOTS_PBS = $703000+$38
+endif
 endif
 
 !SPRITE_SAMUS_HITBOX = #$0001
@@ -865,7 +884,6 @@ if !FEATURE_TINYSTATES
 !SRAM_SAVED_RNG = $737F80
 !SRAM_SAVED_FRAME_COUNTER = $737F82
 !SRAM_TINYSTATE_ROOM = $737F84
-!SRAM_TINYSTATE_FAST = $737F86
 !SRAM_SEG_TIMER_F = $737F88
 !SRAM_SEG_TIMER_S = $737F8A
 !SRAM_SEG_TIMER_M = $737F8C

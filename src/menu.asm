@@ -59,6 +59,7 @@ cm_start:
     STZ !SAMUS_HEALTH_WARNING
 
     JSL cm_transfer_original_tileset
+    JSL overwrite_HUD_numbers
     JSL cm_transfer_original_cgram
 
     ; Update HUD (in case we added missiles etc.)
@@ -98,7 +99,7 @@ cm_boot:
 
     ; Disable sounds until we boot the SPC
     LDA #$0001 : STA !DISABLE_SOUNDS
-.skip_spc
+  .skip_spc
 
     %a8()
     LDA #$5A : STA $2109 ; BG3 tilemap base address
@@ -196,7 +197,25 @@ cm_transfer_custom_tileset:
 {
     PHP
     %a16()
-    LDA !ROOM_ID : CMP #$A59F : BEQ .kraid_vram
+
+if !FEATURE_CUSTOMIZE_MENU
+    ; Choose font
+    LDA !sram_cm_font : BNE .font2
+    LDA.w #cm_hud_table : STA $C1
+    LDA.w #cm_hud_table>>16 : STA $C3
+    BRA .room_check
+
+  .font2
+    LDA.w #cm_hud_table2 : STA $C1
+    LDA.w #cm_hud_table2>>16 : STA $C3
+
+  .room_check
+else
+    LDA.w #cm_hud_table : STA $C1
+    LDA.w #cm_hud_table>>16 : STA $C3
+endif
+
+    LDA !ROOM_ID : CMP #ROOM_KraidRoom : BEQ .kraid_vram
 
     ; Load custom vram to normal BG3 location
     %a8()
@@ -204,9 +223,9 @@ cm_transfer_custom_tileset:
     LDA #$04 : STA $210C ; BG3 starts at $4000 (8000 in vram)
     LDA #$80 : STA $2115 ; word-access, incr by 1
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
-    LDX.w #cm_hud_table : STX $4302 ; Source offset
-    LDA.b #cm_hud_table>>16 : STA $4304 ; Source bank
-    LDX #$0A00 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX $C1 : STX $4302 ; Source offset
+    LDA $C3 : STA $4304 ; Source bank
+    LDX #$1000 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
@@ -236,7 +255,7 @@ cm_transfer_original_tileset:
 {
     PHP
     %a16()
-    LDA !ROOM_ID : CMP #$A59F : BEQ .kraid_vram
+    LDA !ROOM_ID : CMP #ROOM_KraidRoom : BEQ .kraid_vram
 
     %a8()
     LDA !ram_minimap : CMP #$00 : BEQ .normal_vram
@@ -442,8 +461,7 @@ cm_tilemap_bg:
     ; Game over, $1A
     CMP #$001A : BEQ .fillInterior
   .checkCeres
-    ; Ceres elevator room, $DF45
-    LDA !ROOM_ID : CMP #$DF45 : BNE .done
+    LDA !ROOM_ID : CMP #ROOM_CeresElevatorRoom : BNE .done
 
   .fillInterior
     LDX #$0000
@@ -1181,7 +1199,7 @@ draw_custom_preset:
     STX !DP_Address
 
     ; check if slot has valid data
-    LDA $703000,X : CMP #$5AFE : BEQ .validPreset
+    LDA !PRESET_SLOTS,X : CMP #$5AFE : BEQ .validPreset
     ; slot is EMPTY, fix bank and exit
     LDA !DP_MenuIndices+2 : STA !DP_CurrentMenu+2
     RTS
@@ -3289,6 +3307,9 @@ execute_custom_preset:
     RTS
 
   .flipPage
+if !FEATURE_MAPSTATES
+    ; Mapstates only has one page
+else
 if !FEATURE_TINYSTATES
     ; TinyStates only has one page
 else
@@ -3312,12 +3333,16 @@ else
     JSL cm_previous_menu
     JSL action_submenu
 endif
+endif
     RTS
 }
 
 execute_manage_presets:
 {
     LDA !IH_CONTROLLER_PRI : BIT !IH_INPUT_LEFTRIGHT : BEQ .manageSlots
+if !FEATURE_MAPSTATES
+    ; Mapstates only has one page
+else
 if !FEATURE_TINYSTATES
     ; TinyStates only has one page
 else
@@ -3340,6 +3365,7 @@ else
     JSL cm_previous_menu
     JSL action_submenu
 endif
+endif
     RTS
 
   .manageSlots
@@ -3348,7 +3374,7 @@ endif
     ; check if preset exists
     LDA [!DP_CurrentMenu] : AND #$00FF : STA !ram_cm_selected_slot
     %presetslotsize()
-    LDA $703000,X : CMP #$5AFE : BNE .failSFX
+    LDA !PRESET_SLOTS,X : CMP #$5AFE : BNE .failSFX
     ; open confirmation screen before deleting preset
     LDY.w #ManagePresetsConfirm
     ; set bank for manual submenu jump
@@ -3727,18 +3753,30 @@ cm_spc_transfer:
 ; Resources
 ; ----------
 
-;pushpc
-;org !ORG_MENU_GFX
-;print pc, " menu gfx start"
-cm_hud_table:
-    incbin ../resources/cm_gfx.bin
-;print pc, " menu gfx end"
-;pullpc
-
 HexMenuGFXTable:
     dw $2C70, $2C71, $2C72, $2C73, $2C74, $2C75, $2C76, $2C77, $2C78, $2C79, $2C50, $2C51, $2C52, $2C53, $2C54, $2C55
 
 print pc, " menu end"
+
+
+;pushpc
+;org !ORG_MENU_GFX
+print pc, " menu gfx start"
+cm_hud_table:
+    incbin ../resources/cm_gfx.bin
+print pc, " menu gfx end"
+;pullpc
+
+
+if !FEATURE_CUSTOMIZE_MENU
+pushpc
+org !ORG_MENU_GFX2
+print pc, " menu gfx2 start"
+cm_hud_table2:
+    incbin ../resources/cm_gfx2.bin
+print pc, " menu gfx2 end"
+pullpc
+endif
 
 
 ; -------------
@@ -3763,13 +3801,5 @@ print pc, " mainmenu end"
 
 if !FEATURE_CUSTOMIZE_MENU
 incsrc customizemenu.asm
-endif
-
-if !FEATURE_ROOM_NAMES
-incsrc roomnames.asm
-endif
-
-if !FEATURE_CLEAR_ENEMIES
-incsrc clearenemies.asm
 endif
 

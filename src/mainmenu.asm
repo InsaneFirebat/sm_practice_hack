@@ -207,8 +207,9 @@ PresetsMenu:
 ;    dw #presets_load_random
 ;if !FEATURE_DEV
 ;    dw #presets_random_preset_rng
-;endif
+;else
 ;    dw #$FFFF
+;endif
     dw #presets_open_blue_doors
     dw #presets_load_with_enemies
     dw #presets_clear_map_tiles
@@ -246,8 +247,12 @@ presets_custom_preset_slot:
   .skipzero
     STA !sram_custom_preset_slot
     ; determine which page to load
+if !FEATURE_MAPSTATES
+    ; Mapstates only has slots 00-01 or 00-09
+    LDY.w #CustomPresetsMenu
+else
 if !FEATURE_TINYSTATES
-    ; Tinystates only has slots $00-15
+    ; Tinystates only has slots 00-15
     LDY.w #CustomPresetsMenu
 else
     CMP #$0010 : BPL .page2
@@ -258,6 +263,7 @@ else
   .page3
     LDY.w #CustomPresetsMenu3
   .done
+endif
 endif
     %setmenubank()
     JML action_submenu
@@ -286,7 +292,7 @@ presets_load_custom_preset:
     ; check if slot is populated first
     LDA !sram_custom_preset_slot
     %presetslotsize()
-    LDA $703000,X : CMP #$5AFE : BEQ .safe
+    LDA !PRESET_SLOTS,X : CMP #$5AFE : BEQ .safe
     %sfxfail()
     RTL
 
@@ -384,6 +390,22 @@ action_load_preset:
 CustomPresetsMenu:
     dw #custompreset_00
     dw #custompreset_01
+if !FEATURE_MAPSTATES
+    ; Mapstates only has slots 00-01 or 00-09
+if !FEATURE_TINYSTATES
+else
+    dw #custompreset_02
+    dw #custompreset_03
+    dw #custompreset_04
+    dw #custompreset_05
+    dw #custompreset_06
+    dw #custompreset_07
+    dw #custompreset_08
+    dw #custompreset_09
+endif
+    dw #$FFFF
+    dw #custompreset_manage
+else
     dw #custompreset_02
     dw #custompreset_03
     dw #custompreset_04
@@ -398,13 +420,14 @@ CustomPresetsMenu:
     dw #custompreset_13
     dw #custompreset_14
     dw #custompreset_15
-if !FEATURE_TINYSTATES
-; Tinystates only has slots $00-15
-else
     dw #$FFFF
     dw #custompreset_manage
+if !FEATURE_TINYSTATES
+    ; Tinystates only has slots 00-15
+else
     dw #custompreset_goto_page2
     dw #custompreset_goto_page3
+endif
 endif
     dw #$0000
     %cm_header("PRESS X TO NAME PRESETS")
@@ -414,6 +437,20 @@ endif
 
     %cm_custompreset(00)
     %cm_custompreset(01)
+if !FEATURE_MAPSTATES
+    ; Mapstates only has slots 00-01 or 00-09
+if !FEATURE_TINYSTATES
+else
+    %cm_custompreset(02)
+    %cm_custompreset(03)
+    %cm_custompreset(04)
+    %cm_custompreset(05)
+    %cm_custompreset(06)
+    %cm_custompreset(07)
+    %cm_custompreset(08)
+    %cm_custompreset(09)
+endif
+else
     %cm_custompreset(02)
     %cm_custompreset(03)
     %cm_custompreset(04)
@@ -430,7 +467,7 @@ endif
     %cm_custompreset(15)
 
 if !FEATURE_TINYSTATES
-; Tinystates only has slots $00-15
+    ; Tinystates only has slots 00-15
 else
 CustomPresetsMenu2:
     dw #custompreset_16
@@ -512,12 +549,18 @@ endif
     %cm_custompreset(38)
     %cm_custompreset(39)
 endif
+endif
 
 custompreset_manage:
     %cm_jsl("Manage Preset Slots", .routine, #$0000)
   .routine
     LDA #$0000 : STA !ram_cm_manage_slots
+if !FEATURE_MAPSTATES
+    ; Mapstates only has slots 00-01 or 00-09
+    LDY.w #ManagePresetsMenu
+else
 if !FEATURE_TINYSTATES
+    ; Tinystates only has slots 00-15
     LDY.w #ManagePresetsMenu
 else
     ; determine which page is currently loaded
@@ -532,6 +575,7 @@ else
     LDY.w #ManagePresetsMenu3
   .done
 endif
+endif
     JSL cm_previous_menu
     %setmenubank()
     JML action_submenu
@@ -539,6 +583,20 @@ endif
 ManagePresetsMenu:
     dw #managepreset_00
     dw #managepreset_01
+if !FEATURE_MAPSTATES
+    ; Mapstates only has slots 00-01 or 00-09
+if !FEATURE_TINYSTATES
+else
+    dw #managepreset_02
+    dw #managepreset_03
+    dw #managepreset_04
+    dw #managepreset_05
+    dw #managepreset_06
+    dw #managepreset_07
+    dw #managepreset_08
+    dw #managepreset_09
+endif
+else
     dw #managepreset_02
     dw #managepreset_03
     dw #managepreset_04
@@ -554,12 +612,13 @@ ManagePresetsMenu:
     dw #managepreset_14
     dw #managepreset_15
 if !FEATURE_TINYSTATES
-; Tinystates only has slots $00-15
+    ; Tinystates only has slots 00-15
 else
     dw #$FFFF
     dw #$FFFF
     dw #managepreset_goto_page2
     dw #managepreset_goto_page3
+endif
 endif
     dw #$0000
     %cm_header("PRESS A TO SWAP PRESETS")
@@ -567,6 +626,20 @@ endif
 
     %cm_managepreset(00)
     %cm_managepreset(01)
+if !FEATURE_MAPSTATES
+    ; Mapstates only has slots 00-01 or 00-09
+if !FEATURE_TINYSTATES
+else
+    %cm_managepreset(02)
+    %cm_managepreset(03)
+    %cm_managepreset(04)
+    %cm_managepreset(05)
+    %cm_managepreset(06)
+    %cm_managepreset(07)
+    %cm_managepreset(08)
+    %cm_managepreset(09)
+endif
+else
     %cm_managepreset(02)
     %cm_managepreset(03)
     %cm_managepreset(04)
@@ -583,7 +656,7 @@ endif
     %cm_managepreset(15)
 
 if !FEATURE_TINYSTATES
-; Tinystates only has slots $00-15
+    ; Tinystates only has slots 00-15
 else
 ManagePresetsMenu2:
     dw #managepreset_16
@@ -683,6 +756,7 @@ managepreset_goto_page2:
 managepreset_goto_page3:
     %cm_jsl("GOTO PAGE THREE", managepreset_goto_page1_routine, #ManagePresetsMenu3)
 endif
+endif
 
 ManagePresetsConfirm:
     dw #managepreset_abort
@@ -701,7 +775,7 @@ managepreset_confirm:
   .routine
     LDA !ram_cm_selected_slot
     %presetslotsize()
-    LDA #$DEAD : STA $703000,X
+    LDA #$DEAD : STA !PRESET_SLOTS,X
     LDA !ram_cm_selected_slot : ASL : TAX
     LDA #$DEAD : STA !sram_custom_preset_safewords,X
     JML cm_previous_menu
@@ -1287,37 +1361,37 @@ action_glitched_beam:
 }
 
 
-; ---------------
+; -------------
 ; Teleport menu
-; ---------------
+; -------------
 
 TeleportMenu:
-    dw #tel_goto_crat
-    dw #tel_goto_brin
-    dw #tel_goto_norf
-    dw #tel_goto_ship
-    dw #tel_goto_mari
-    dw #tel_goto_tour
+    dw #tel_goto_crateria
+    dw #tel_goto_brinstar
+    dw #tel_goto_norfair
+    dw #tel_goto_wreckedship
+    dw #tel_goto_maridia
+    dw #tel_goto_tourian
     dw #tel_goto_debug
     dw #$0000
     %cm_header("TELEPORT TO SAVE STATION")
 
-tel_goto_crat:
+tel_goto_crateria:
     %cm_submenu("Crateria", #TeleportCrateriaMenu)
 
-tel_goto_brin:
+tel_goto_brinstar:
     %cm_submenu("Brinstar", #TeleportBrinstarMenu)
 
-tel_goto_norf:
+tel_goto_norfair:
     %cm_submenu("Norfair", #TeleportNorfairMenu)
 
-tel_goto_ship:
+tel_goto_wreckedship:
     %cm_submenu("Wrecked Ship", #TeleportWreckedShipMenu)
 
-tel_goto_mari:
+tel_goto_maridia:
     %cm_submenu("Maridia", #TeleportMaridiaMenu)
 
-tel_goto_tour:
+tel_goto_tourian:
     %cm_submenu("Tourian", #TeleportTourianMenu)
 
 tel_goto_debug:
@@ -1326,14 +1400,43 @@ tel_goto_debug:
 TeleportCrateriaMenu:
     dw #tel_crateriaship
     dw #tel_crateriaparlor
+    dw #$FFFF
+    dw #tel_crateria08
+    dw #tel_crateria09
+    dw #tel_crateria0A
+    dw #tel_crateria0B
+    dw #tel_crateria0C
+    dw #tel_crateria11
+    dw #tel_craterialanding
     dw #$0000
     %cm_header("CRATERIA SAVE STATIONS")
 
 tel_crateriaship:
-    %cm_jsl("Crateria Ship", #action_teleport, #$0000)
+    %cm_jsl("Ship", #action_teleport, #$0000)
 
 tel_crateriaparlor:
-    %cm_jsl("Crateria Parlor", #action_teleport, #$0001)
+    %cm_jsl("Parlor", #action_teleport, #$0001)
+
+tel_crateria08:
+    %cm_jsl("DEBUG Forgotten Hwy Elev", #action_teleport, #$0008)
+
+tel_crateria09:
+    %cm_jsl("DEBUG Red Brinstar Elev", #action_teleport, #$0009)
+
+tel_crateria0A:
+    %cm_jsl("DEBUG Blue Brinstar Elev", #action_teleport, #$000A)
+
+tel_crateria0B:
+    %cm_jsl("DEBUG Green Brinstar Elev", #action_teleport, #$000B)
+
+tel_crateria0C:
+    %cm_jsl("DEBUG Tourian Elevator", #action_teleport, #$000C)
+
+tel_crateria11:
+    %cm_jsl("DEBUG Forgotten Highway", #action_teleport, #$0011)
+
+tel_craterialanding:
+    %cm_jsl("Gunship Landing", #action_teleport, #$0012)
 
 TeleportBrinstarMenu:
     dw #tel_brinstarpink
@@ -1341,23 +1444,48 @@ TeleportBrinstarMenu:
     dw #tel_brinstargreenetecoons
     dw #tel_brinstarkraid
     dw #tel_brinstarredtower
+    dw #$FFFF
+    dw #tel_brinstar08
+    dw #tel_brinstar09
+    dw #tel_brinstar0A
+    dw #tel_brinstar0B
+    dw #tel_brinstar11
+    dw #tel_brinstar12
     dw #$0000
     %cm_header("BRINSTAR SAVE STATIONS")
 
 tel_brinstarpink:
-    %cm_jsl("Brinstar Pink Spospo", #action_teleport, #$0100)
+    %cm_jsl("Pink Spospo", #action_teleport, #$0100)
 
 tel_brinstargreenshaft:
-    %cm_jsl("Brinstar Green Shaft", #action_teleport, #$0101)
+    %cm_jsl("Green Shaft", #action_teleport, #$0101)
 
 tel_brinstargreenetecoons:
-    %cm_jsl("Brinstar Green Etecoons", #action_teleport, #$0102)
+    %cm_jsl("Green Etecoons", #action_teleport, #$0102)
 
 tel_brinstarkraid:
-    %cm_jsl("Brinstar Kraid", #action_teleport, #$0103)
+    %cm_jsl("Kraid", #action_teleport, #$0103)
 
 tel_brinstarredtower:
-    %cm_jsl("Brinstar Red Tower", #action_teleport, #$0104)
+    %cm_jsl("Red Tower", #action_teleport, #$0104)
+
+tel_brinstar08:
+    %cm_jsl("DEBUG West Crateria Elev", #action_teleport, #$0108)
+
+tel_brinstar09:
+    %cm_jsl("DEBUG Old Tourian Elevator", #action_teleport, #$0109)
+
+tel_brinstar0A:
+    %cm_jsl("DEBUG Crateria Elevator", #action_teleport, #$010A)
+
+tel_brinstar0B:
+    %cm_jsl("DEBUG Norfair Elevator", #action_teleport, #$010B)
+
+tel_brinstar11:
+    %cm_jsl("DEBUG Kraid Gadora Room", #action_teleport, #$0111)
+
+tel_brinstar12:
+    %cm_jsl("DEBUG Big Pink", #action_teleport, #$0112)
 
 TeleportNorfairMenu:
     dw #tel_norfairgrapple
@@ -1366,66 +1494,142 @@ TeleportNorfairMenu:
     dw #tel_norfaircrocomire
     dw #tel_norfairlnelevator
     dw #tel_norfairridley
+    dw #$FFFF
+    dw #tel_norfair08
+    dw #tel_norfair09
+    dw #tel_norfair0A
+    dw #tel_norfair11
+    dw #tel_norfair12
+    dw #tel_norfair13
+    dw #tel_norfair15
+    dw #tel_norfair16
     dw #$0000
     %cm_header("NORFAIR SAVE STATIONS")
 
 tel_norfairgrapple:
-    %cm_jsl("Norfair Grapple", #action_teleport, #$0200)
+    %cm_jsl("Grapple", #action_teleport, #$0200)
 
 tel_norfairbubble:
-    %cm_jsl("Norfair Bubble Mountain", #action_teleport, #$0201)
+    %cm_jsl("Bubble Mountain", #action_teleport, #$0201)
 
 tel_norfairtunnel:
-    %cm_jsl("Norfair Tunnel", #action_teleport, #$0202)
+    %cm_jsl("Tunnel", #action_teleport, #$0202)
 
 tel_norfaircrocomire:
-    %cm_jsl("Norfair Crocomire", #action_teleport, #$0203)
+    %cm_jsl("Crocomire", #action_teleport, #$0203)
 
 tel_norfairlnelevator:
-    %cm_jsl("Norfair LN Elevator", #action_teleport, #$0204)
+    %cm_jsl("LN Elevator", #action_teleport, #$0204)
 
 tel_norfairridley:
-    %cm_jsl("Norfair Ridley", #action_teleport, #$0205)
+    %cm_jsl("Ridley", #action_teleport, #$0205)
+
+tel_norfair08:
+    %cm_jsl("DEBUG Brinstar Elevator", #action_teleport, #$0208)
+
+tel_norfair09:
+    %cm_jsl("DEBUG Lower Norfair Elev", #action_teleport, #$0209)
+
+tel_norfair0A:
+    %cm_jsl("DEBUG Upper Norfair Elev", #action_teleport, #$020A)
+
+tel_norfair11:
+    %cm_jsl("DEBUG Crocomire Speedway", #action_teleport, #$0211)
+
+tel_norfair12:
+    %cm_jsl("DEBUG Ridley Farming Room", #action_teleport, #$0212)
+
+tel_norfair13:
+    %cm_jsl("DEBUG Post-Croc Farming", #action_teleport, #$0213)
+
+tel_norfair15:
+    %cm_jsl("DEBUG OoB Screw Attack", #action_teleport, #$0215)
+
+tel_norfair16:
+    %cm_jsl("DEBUG Golden Torizo Room", #action_teleport, #$0216)
 
 TeleportWreckedShipMenu:
     dw #tel_wreckedship
+    dw #$FFFF
+    dw #tel_wreckedship10
+    dw #tel_wreckedship11
     dw #$0000
     %cm_header("WRECKED SHIP SAVE STATIONS")
 
 tel_wreckedship:
     %cm_jsl("Wrecked Ship", #action_teleport, #$0300)
 
+tel_wreckedship10:
+    %cm_jsl("DEBUG Entrance", #action_teleport, #$0310)
+
+tel_wreckedship11:
+    %cm_jsl("DEBUG Basement", #action_teleport, #$0311)
+
 TeleportMaridiaMenu:
     dw #tel_maridiatube
     dw #tel_maridiaelevator
     dw #tel_maridiaaqueduct
     dw #tel_maridiadraygon
+    dw #$FFFF
+    dw #tel_maridia08
+    dw #tel_maridia10
+    dw #tel_maridia11
+    dw #tel_maridia12
+    dw #tel_maridia13
     dw #$0000
     %cm_header("MARIDIA SAVE STATIONS")
 
 tel_maridiatube:
-    %cm_jsl("Maridia Tube", #action_teleport, #$0400)
+    %cm_jsl("Tube", #action_teleport, #$0400)
 
 tel_maridiaelevator:
-    %cm_jsl("Maridia Elevator", #action_teleport, #$0401)
+    %cm_jsl("Elevator", #action_teleport, #$0401)
 
 tel_maridiaaqueduct:
-    %cm_jsl("Maridia Aqueduct", #action_teleport, #$0402)
+    %cm_jsl("Aqueduct", #action_teleport, #$0402)
 
 tel_maridiadraygon:
-    %cm_jsl("Maridia Draygon", #action_teleport, #$0403)
+    %cm_jsl("Draygon", #action_teleport, #$0403)
+
+tel_maridia08:
+    %cm_jsl("DEBUG East Crateria Elev", #action_teleport, #$0408)
+
+tel_maridia10:
+    %cm_jsl("DEBUG Pseudo Plasma Spark", #action_teleport, #$0410)
+
+tel_maridia11:
+    %cm_jsl("DEBUG Precious Room", #action_teleport, #$0411)
+
+tel_maridia12:
+    %cm_jsl("DEBUG Botwoon Hallway", #action_teleport, #$0412)
+
+tel_maridia13:
+    %cm_jsl("DEBUG Oasis", #action_teleport, #$0413)
 
 TeleportTourianMenu:
-    dw #tel_tourianentrance
     dw #tel_tourianmb
+    dw #tel_tourianentrance
+    dw #$FFFF
+    dw #tel_tourian08
+    dw #tel_tourian10
+    dw #tel_tourian11
     dw #$0000
     %cm_header("TOURIAN SAVE STATIONS")
 
-tel_tourianentrance:
-    %cm_jsl("Tourian Entrance", #action_teleport, #$0501)
-
 tel_tourianmb:
-    %cm_jsl("Tourian MB", #action_teleport, #$0500)
+    %cm_jsl("Mother Brain", #action_teleport, #$0500)
+
+tel_tourianentrance:
+    %cm_jsl("Entrance", #action_teleport, #$0501)
+
+tel_tourian08:
+    %cm_jsl("DEBUG Crateria Elevator", #action_teleport, #$0508)
+
+tel_tourian10:
+    %cm_jsl("DEBUG Rinka Shaft", #action_teleport, #$0510)
+
+tel_tourian11:
+    %cm_jsl("DEBUG Dustin Torizo", #action_teleport, #$0511)
 
 DebugTeleportMenu:
     dw #tel_debug_area
@@ -1618,8 +1822,8 @@ misc_killenemies:
     %cm_jsl("Kill Enemies", .kill_loop, #0)
   .kill_loop
     ; 8000 = solid to Samus, 0400 = Ignore Samus projectiles, 0100 = Invisible
-    TAX : LDA $0F86,X : BIT #$8500 : BNE .next_enemy
-    ORA #$0200 : STA $0F86,X
+    TAX : LDA !ENEMY_PROPERTIES,X : BIT #$8500 : BNE .next_enemy
+    ORA #$0200 : STA !ENEMY_PROPERTIES,X
   .next_enemy
     TXA : CLC : ADC #$0040 : CMP #$0800 : BNE .kill_loop
     LDA #$0009 : JSL !SFX_LIB2 ; enemy killed
@@ -1694,6 +1898,9 @@ EventsMenu:
     dw #events_resetdoors
     dw #events_resetitems
     dw #$FFFF
+    dw #events_setdoors
+    dw #events_setitems
+    dw #$FFFF
     dw #events_goto_bosses
     dw #$FFFF
     dw #events_zebesawake
@@ -1738,6 +1945,32 @@ events_resetitems:
     PHP : %ai8()
     LDX #$70
     LDA #$00
+  .loop
+    STA $7ED800,X
+    INX : CPX #$90 : BNE .loop
+    PLP
+    %sfxreset()
+    RTL
+
+events_setdoors:
+    %cm_jsl("Set All Doors", .routine, #$0000)
+  .routine
+    PHP : %ai8()
+    LDX #$B0
+    LDA #$FF
+  .loop
+    STA $7ED800,X
+    INX : CPX #$D0 : BNE .loop
+    PLP
+    %sfxreset()
+    RTL
+
+events_setitems:
+    %cm_jsl("Set All Items", .routine, #$0000)
+  .routine
+    PHP : %ai8()
+    LDX #$70
+    LDA #$FF
   .loop
     STA $7ED800,X
     INX : CPX #$90 : BNE .loop
@@ -2323,7 +2556,7 @@ game_clear_minimap:
     %cm_jsl("Clear Minimap", .clear_minimap, #$0000)
 
   .clear_minimap
-    LDA #$0000 : STA !ram_map_counter : STA $7E0789
+    LDA #$0000 : STA !MAP_COUNTER : STA $7E0789
     STA $7ED908 : STA $7ED90A : STA $7ED90C : STA $7ED90E
     LDX #$00FE
   .clear_minimap_loop
@@ -3522,6 +3755,8 @@ audio_playmusic:
     RTL
 }
 
+init_wram_based_on_sram:
+    JSL init_print_segment_timer
 
 GameModeExtras:
 {
@@ -3540,16 +3775,6 @@ GameModeExtras:
   .enabled
     STA !ram_game_mode_extras
     RTL
-}
-
-init_wram_based_on_sram:
-; a pointer to this routine is used as the menu's RNG seed
-; since it lives at the end of the menu data, it moves over time
-{
-    JSL init_print_segment_timer
-
-    ; Check if any less common controller shortcuts are configured
-    JML GameModeExtras
 }
 
 init_print_segment_timer:

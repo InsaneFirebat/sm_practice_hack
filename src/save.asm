@@ -1,4 +1,3 @@
-
 ; SD2SNES Savestate code
 ; by acmlm, total, Myria
 ;
@@ -86,6 +85,9 @@ post_load_state:
   .disableMinimap
     LDA !IH_BLANK : STA !HUD_TILEMAP+$7C : STA !HUD_TILEMAP+$7E
   .minimapDone
+
+    ; Reload custom HUD number GFX
+    JSL overwrite_HUD_numbers
 
     LDA !SRAM_SLOWDOWN_MODE : CMP #$FFFF : BEQ .rng
     AND #$00FF : STA !ram_slowdown_mode

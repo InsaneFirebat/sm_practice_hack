@@ -19,16 +19,18 @@ preset_load:
     JSL preset_start_gameplay  ; Start gameplay
 
     ; Fix Phantoon and Draygon rooms
-    LDA !ROOM_ID : CMP #$CD13 : BEQ .fixBG2
-    CMP #$DA60 : BNE .doneBG2
+    LDA !ROOM_ID : CMP #ROOM_PhantoonRoom : BEQ .fixBG2
+    CMP #ROOM_DraygonRoom : BNE .doneBG2
   .fixBG2
     JSL preset_clear_BG2_tilemap
 
   .doneBG2
     JSL $809A79  ; HUD routine when game is loading
+    JSL $809B44  ; Handle HUD tilemap
+    JSL ih_update_hud_code
     JSL $90AD22  ; Reset projectile data
 
-    TDC : TAX
+    LDX #$0000
     LDY #$0020
   .paletteLoop
     ; Target Samus' palette = [Samus' palette]
@@ -88,10 +90,10 @@ preset_load:
 
   .clear_enemies
     ; Clear enemies if not in BT or MB rooms
-    LDA !ROOM_ID : CMP #$9804 : BEQ .done_clearing_enemies
-    CMP #$DD58 : BEQ .set_mb_state
+    LDA !ROOM_ID : CMP #ROOM_BombTorizoRoom : BEQ .done_clearing_enemies
+    CMP #ROOM_MotherBrainRoom : BEQ .set_mb_state
     LDA !sram_preset_options : BIT !PRESETS_PRESERVE_ENEMIES : BNE .done_clearing_enemies
-    JSR clear_all_enemies
+    JSL clear_all_enemies
 
   .done_clearing_enemies
     PLP
@@ -109,29 +111,6 @@ preset_load:
     BRA .done_clearing_enemies
 }
 
-clear_all_enemies:
-{
-if !FEATURE_CLEAR_ENEMIES
-    LDA.w #ClearEnemiesTable>>16 : STA $C3
-    LDA #$0000
-  .loop
-    TAX : LDA !ENEMY_ID,X
-    SEC : ROR : ROR : STA $C1
-    LDA [$C1] : BEQ .done_clearing
-    LDA !ENEMY_PROPERTIES : ORA #$0200 : STA !ENEMY_PROPERTIES,X
-else
-    ; Clear enemies (8000 = solid to Samus, 0400 = Ignore Samus projectiles, 0100 = Invisible)
-    LDA #$0000
-  .loop
-    TAX : LDA $0F86,X : BIT #$8500 : BNE .done_clearing
-    ORA #$0200 : STA $0F86,X
-endif
-  .done_clearing
-    TXA : CLC : ADC #$0040 : CMP #$0800 : BNE .loop
-    STZ $0E52 ; unlock grey doors that require killing enemies
-    RTS
-}
-
 preset_load_destination_state_and_tiles:
 {
     ; Original logic from $82E76B
@@ -143,6 +122,11 @@ preset_load_destination_state_and_tiles:
     JSR $DE12  ; Load door header
     JSR $DE6F  ; Load room header
     JSR $DEF2  ; Load state header
+
+    ; Initialize area map collected
+    LDX !AREA_ID : LDA $7ED908,X
+    AND #$00FF : STA !AREA_MAP_COLLECTED
+
 if !RAW_TILE_GRAPHICS
     JML load_raw_tile_graphics
 else
@@ -193,30 +177,6 @@ preset_end_transfer_to_vram:
     RTS
 endif
 
-reset_all_counters:
-{
-    LDA #$0000
-    STA !ram_room_has_set_rng
-    STA !IGT_FRAMES : STA !IGT_SECONDS : STA !IGT_MINUTES : STA !IGT_HOURS
-    STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds : STA !ram_seg_rt_minutes
-    STA !ram_realtime_room : STA !ram_last_realtime_room
-    STA !ram_gametime_room : STA !ram_last_gametime_room
-    STA !ram_last_room_lag : STA !ram_last_door_lag_frames : STA !ram_transition_counter
-    RTL
-}
-
-startgame_seg_timer:
-{
-    ; seg timer will be 1:50 (1 second, 50 frames) behind by the time it appears
-    ; 20 frames more if the file was new
-    ; initializing to 1:50 for now
-    LDA #$0032 : STA !ram_seg_rt_frames
-    LDA #$0001 : STA !ram_seg_rt_seconds
-    LDA #$0000 : STA !ram_seg_rt_minutes
-    JSL $808924    ; overwritten code
-    RTL
-}
-
 preset_load_preset:
 {
     PHB
@@ -235,7 +195,6 @@ preset_load_preset:
   .custom_preset
     JSL custom_preset_load
     LDA #$5AFE : STA !sram_last_preset
-    LDA #$0000 : STA !ram_load_preset
     BRA .done
 
   .category_preset
@@ -258,7 +217,6 @@ category_preset_load:
 
     ; Get preset address to load into $C3
     LDA !ram_load_preset : STA !sram_last_preset : STA $C3 : STA $7F0002
-    LDA #$0000 : STA !ram_load_preset
 
     ; Get start of preset data into $C1
     LDA.l category_preset_data_table,X : LDX #$0000 : STA $C1
@@ -406,7 +364,7 @@ preset_start_gameplay:
     ; Set loading game state for Zebes
     LDA #$0005 : STA $7ED914
     LDA !SAMUS_POSE : BNE .end_load_game_state
-    LDA !ROOM_ID : CMP #$91F8 : BNE .end_load_game_state
+    LDA !ROOM_ID : CMP #ROOM_LandingSite : BNE .end_load_game_state
     ; If default pose at landing site then assume we are arriving on Zebes
     LDA #$0022 : STA $7ED914
     LDA #$E8CD : STA !SAMUS_LOCKED_HANDLER   ; Lock Samus
@@ -455,20 +413,25 @@ endif
     PLA ; Pull other layer 2 value but do not use it
     JSR $A2F9 ; Calculate layer 2 X position
     JSR $A33A ; Calculate layer 2 Y position
-    LDA !LAYER2_X : STA !BG2_X_SCROLL ; BG2 X scroll = layer 2 X scroll position
-    LDA !LAYER2_Y : STA !BG2_Y_SCROLL ; BG2 Y scroll = layer 2 Y scroll position
+    LDA !LAYER2_X : STA !BG2_X_OFFSET ; BG2 X scroll = layer 2 X scroll position
+    LDA !LAYER2_Y : STA !BG2_Y_OFFSET ; BG2 Y scroll = layer 2 Y scroll position
 
   .layer_2_loaded
+    LDA !ROOM_ID : CMP #ROOM_CeresElevatorRoom : BPL .bg1_offsets_set
+    TDC : STA !BG1_X_OFFSET : STA !BG1_Y_OFFSET
+
+  .bg1_offsets_set
     JSR $A37B    ; Calculate BG positions
 
     ; Fix BG2 Y offsets for rooms with scrolling sky
-    LDA !ROOM_ID : CMP #$91F8 : BEQ .bgOffsetsScrollingSky
-    CMP #$93FE : BEQ .bgOffsetsScrollingSky
-    CMP #$94FD : BNE .bgOffsetsCalculated
+    ; Also fix rooms that need to be handled before door scroll
+    LDA !ROOM_ID : CMP #ROOM_LandingSite : BEQ .bgOffsetsScrollingSky
+    CMP #ROOM_WestOcean : BEQ .bgOffsetsScrollingSky
+    CMP #ROOM_EastOcean : BNE .bgOffsetsCalculated
 
   .bgOffsetsScrollingSky
     LDA !LAYER1_Y : STA !LAYER2_Y : STA $B7
-    STZ !BG2_Y_SCROLL
+    STZ !BG2_Y_OFFSET
 
   .bgOffsetsCalculated
     JSL $80A176  ; Display the viewable part of the room
@@ -729,7 +692,7 @@ transfer_cgram_long:
 ;}
 
 print pc, " presets bank80 end"
-;warnpc $80F600 ; save.asm or tinystates.asm
+;warnpc $80F500 ; save.asm or tinystates.asm
 
 
 ; $80:9AB1: Add x-ray and grapple HUD items if necessary

@@ -17,11 +17,8 @@ org $808490
     DEX : DEX
     BPL .clear_bank_loop
     JSL init_nonzero_wram
-
     STY.w !ram_quickboot_spc_state
     BRA .end_clear_bank
-
-
 warnpc $8084AF
 
 org $8084AF
@@ -66,8 +63,8 @@ init_nonzero_wram:
 
     LDA #$0001 : STA !ram_cm_dummy_on
     STA !ram_cm_sfxlib1 : STA !ram_cm_sfxlib2 : STA !ram_cm_sfxlib3
+
     JML init_wram_based_on_sram
-    RTL
 }
 
 init_sram:
@@ -100,6 +97,7 @@ init_sram:
     LDA #$0000 : STA !sram_custom_header
     LDA #$0000 : STA !sram_fanfare_timer_adjust
     LDA #$0000 : STA !sram_door_display_mode
+    LDA #$0000 : STA !sram_cm_font
     LDA #$0000 : STA !sram_display_mode_reward
     LDA !CTRL_Y : STA !sram_cm_fast_scroll_button
 
@@ -156,15 +154,15 @@ init_menu_customization:
 }
 
 init_post_boot:
-; Load the last selected file slot (so that the user's controller
-; bindings will apply if they load a preset without loading a save file)
 {
-    ; Selected save slot
-    LDA $701FEC : STA !CURRENT_SAVE_FILE
+    ; Load the last selected file slot (so that the user's controller
+    ; bindings will apply if they load a preset without loading a save file)
+    LDA $701FEC     ; Selected save slot
+    STA !CURRENT_SAVE_FILE
     CMP #$0003 : BCC .valid_index
     LDA #$0000
   .valid_index
-    JSL $818085 ; Load save file
+    JSL $818085     ; Load save file
     BCC .check_quickboot
 
     ; No valid save; load a new file (for default controller bindings)
@@ -178,8 +176,8 @@ init_post_boot:
     JML cm_boot
 
   .done
-    JML $82893D ; hijacked code: start main game loop
+    JML $82893D     ; hijacked code: start main game loop
 }
 
 print pc, " init end"
-;warnpc $81FF00 ;;; $FF00: Thanks Genji! ;;;
+;warnpc $81FF00 ; Special thanks

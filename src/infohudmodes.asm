@@ -1203,9 +1203,9 @@ status_walljump:
     BRL .lavadivecheck
 
   .walljump
-    LDA !ROOM_ID : CMP #$B4AD : BEQ .writg
-    CMP #$AF14 : BEQ .lavadive
-    CMP #$ACB3 : BEQ .bubble
+    LDA !ROOM_ID : CMP #ROOM_WorstRoomInTheGame : BEQ .writg
+    CMP #ROOM_LavaDiveRoom : BEQ .lavadive
+    CMP #ROOM_BubbleMountain : BEQ .bubble
     BRL .clear
 
   .checkleftright
@@ -1252,7 +1252,6 @@ status_walljump:
   .reset
     TDC : STA !ram_walljump_counter
     RTS
-
 
   .checklow0
     CPY #$0000 : BEQ .printlow0
@@ -1355,7 +1354,7 @@ status_walljump:
 
   .bonkroomcheck
     ASL : TAX
-    LDA !ROOM_ID : CMP #$B4AD : BEQ .printbonk
+    LDA !ROOM_ID : CMP #ROOM_WorstRoomInTheGame : BEQ .printbonk
     BRL .printhigh
 
   .printbonk
@@ -1913,8 +1912,8 @@ status_tacotank:
 
 status_moondance:
 {
-    LDA !ROOM_ID : CMP #$9CB3 : BEQ .moondance
-    CMP #$9AD9 : BEQ .tasdance
+    LDA !ROOM_ID : CMP #ROOM_DachoraRoom : BEQ .moondance
+    CMP #ROOM_GreenBrinMainShaft : BEQ .tasdance
     RTS
 
   .tasdance
@@ -2520,9 +2519,13 @@ status_gateglitch:
 
   .roomcheck
     ; The gate location is hard-coded depending on the room
-    LDA !ROOM_ID : CMP #$9E52 : BEQ .greenhills : CMP #$AB64 : BEQ .grappletutorial
-    CMP #$ADAD : BEQ .doublechamber : CMP #$AE74 : BEQ .kronic
-    CMP #$AF72 : BEQ .unfarm : CMP #$B2DA : BEQ .fastripper : CMP #$D08A : BEQ .crabtunnel
+    LDA !ROOM_ID : CMP #ROOM_GreenHillZone : BEQ .greenhills
+    CMP #ROOM_GrappleTutorialRoom3 : BEQ .grappletutorial
+    CMP #ROOM_DoubleChamber : BEQ .doublechamber
+    CMP #ROOM_KronicBoostRoom : BEQ .kronic
+    CMP #ROOM_UpperNorfFarmingRoom : BEQ .unfarm
+    CMP #ROOM_FastRipperRoom : BEQ .fastripper
+    CMP #ROOM_CrabTunnel : BEQ .crabtunnel
     BRA .done
 
   .unfarm
@@ -2827,9 +2830,13 @@ status_elevatorcf:
     RTS
 
   .roomcheck
-    LDA !ROOM_ID : CMP #$94CC : BEQ .forgotten : CMP #$962A : BEQ .redbrin
-    CMP #$97B5 : BEQ .morph : CMP #$9938 : BEQ .greenbrin : CMP #$9CB3 : BEQ .dachora
-    CMP #$AF3F : BEQ .lowernorfair : CMP #$A6A1 : BEQ .warehouse
+    LDA !ROOM_ID : CMP #ROOM_ForgottenHighwayElev : BEQ .forgotten
+    CMP #ROOM_RedBrinstarElevRoom : BEQ .redbrin
+    CMP #ROOM_ElevToBlueBrinstar : BEQ .morph
+    CMP #ROOM_GreenBrinElevRoom : BEQ .greenbrin
+    CMP #ROOM_DachoraRoom : BEQ .dachora
+    CMP #ROOM_LowerNorfairElevator : BEQ .lowernorfair
+    CMP #ROOM_WarehouseEntrance : BEQ .warehouse
     LDA !IH_BLANK : STA !HUD_TILEMAP+$88
     BRL .setpb
 
@@ -3085,7 +3092,7 @@ status_wasteland:
     RTS
 
   .start
-    LDA !ROOM_ID : CMP #$B5D5 : BNE .reset
+    LDA !ROOM_ID : CMP #ROOM_Wasteland : BNE .reset
     LDA !SAMUS_X : CMP #$0564 : BNE .badstart
     LDA !SAMUS_Y : CMP #$0065 : BNE .badstart
     LDA !SAMUS_POSE : CMP #$0032 : BEQ .init
@@ -3232,7 +3239,7 @@ status_mbhp:
 status_ridleyai:
 {
     ; check if Ridley's room
-    LDA !ROOM_ID : CMP #$B32E : BNE .enemyhp
+    LDA !ROOM_ID : CMP #ROOM_RidleyRoom : BNE .enemyhp
 
     ; load AI pointer and check if it matches the HUD
     LDA $0FA8 : CMP !ram_HUD_check : BNE .update_HUD
@@ -3394,7 +3401,7 @@ table ../resources/normal.tbl
 status_draygonai:
 {
     ; check if Draygon's room
-    LDA !ROOM_ID : CMP #$DA60 : BNE .enemyhp
+    LDA !ROOM_ID : CMP #ROOM_DraygonRoom : BNE .enemyhp
 
     ; load AI pointer and check if it matches the HUD
     LDA $0FA8 : CMP !ram_HUD_check : BNE .update_HUD

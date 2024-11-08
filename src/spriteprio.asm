@@ -1,4 +1,3 @@
-
 ; hooks
 
 ; $90:861C 22 AE 89 81 JSL $8189AE[$81:89AE]  ; Add Samus spritemap to OAM
@@ -84,4 +83,5 @@ oam_add_samus_sprite_with_prio:
 }
 
 print pc, " spriteprio end"
-;warnpc $81FA00 ; init.asm
+;warnpc $81F000 ; init.asm
+

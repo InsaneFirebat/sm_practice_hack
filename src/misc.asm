@@ -486,8 +486,9 @@ clear_escape_timer:
     STZ $0DEC
     RTL
 }
-warnpc $908EA9 ; overwrites unused vanilla routine
+
 print pc, " misc bank90 end"
+warnpc $908EA9 ; overwrites unused vanilla routine
 
 
 if !RAW_TILE_GRAPHICS

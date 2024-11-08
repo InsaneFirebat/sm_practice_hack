@@ -16,6 +16,8 @@ CustomizeMenu:
     dw #$FFFF
     dw #mc_customsfx
     dw #$FFFF
+    dw #mc_customfont
+    dw #$FFFF
     dw #mc_menuscroll_button
     dw #mc_menuscroll_delay
     dw #$FFFF
@@ -172,8 +174,10 @@ paletterando_confirm:
 mc_customsfx:
     %cm_submenu("Customize Menu Sounds", #CustomMenuSFXMenu)
 
-mc_scroll_delay:
-    %cm_numfield("Menu Scroll Delay", !sram_cm_scroll_delay, 1, 10, 1, 2, #0)
+mc_customfont:
+    %cm_numfield("Select Font", !sram_cm_font, 0, 1, 1, 1, .routine)
+  .routine
+    JML cm_transfer_custom_tileset
 
 mc_customheader:
     %cm_jsl("Customize Menu Header", #.routine, #$0000)
@@ -426,8 +430,8 @@ PrepMenuPalette:
     LDA !sram_custompalette_profile : BEQ .customPalette
 
     ; load palettes from profile table
-    PHP : %i8()
-    PHB
+    PHP : PHB
+    %i8()
     LDY.b #PaletteProfileTables>>16 : PHY : PLB ; set bank of tables
     ASL : TAX
     LDA.w PaletteProfileTables,X : STA $C1
@@ -715,6 +719,7 @@ print pc, " menu customization end"
 ;org $AEFD20
 org !ORG_PALETTEPROFILES
 print pc, " menu PaletteProfileTables start"
+
 ; These tables can live anywhere
 PaletteProfileTables:
 {
@@ -825,5 +830,6 @@ PapaSchmoProfileTable:
 VespherProfileTable:
     dw $49FE, $4159, $7FFF, $0804, $0000, $7FFF, $5E80, $55FE, $0000, $0000, $761F
 }
+
 print pc, " menu PaletteProfileTables end"
 pullpc

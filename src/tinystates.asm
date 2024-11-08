@@ -90,21 +90,6 @@ endif
     ; If we're in the same room, we don't need to reload the level
     PLA : CMP !ROOM_ID : BEQ .skip_load_level
 
-    ; These rooms are very large and need to have BG2 reloaded from compressed data
-    LDA !ROOM_ID : CMP #$A322 : BEQ .slow ; caterpillers room (red brin elev)
-    CMP #$C98E : BEQ .slow ; bowling alley
-    CMP #$CFC9 : BEQ .slow ; main street maridia
-    CMP #$D0B9 : BEQ .slow ; mt everest
-
-if !RAW_TILE_GRAPHICS
-    ; Load from pre-decompressed graphics to go faster
-    JSL preset_load_level
-    JSL tinystates_preload_bg_data
-    LDA #$0001 : STA !SRAM_TINYSTATE_FAST
-    RTS
-endif
-
-  .slow
     ; Load from compressed graphics to avoid BG3 issues
 if !RAW_TILE_GRAPHICS
     JSL preset_load_level
@@ -114,17 +99,11 @@ endif
 
   .skip_load_level
     JSL tinystates_preload_bg_data
-    LDA #$0000 : STA !SRAM_TINYSTATE_FAST
     RTS
 }
 
 post_load_state:
 {
-    ; Skip if loading from compressed graphics
-    LDA !SRAM_TINYSTATE_FAST : BEQ .doneMirrorBgData
-    JSL tinystates_mirror_bg_data
-  .doneMirrorBgData
-
     JSR post_load_music
 
     ; Reload OOB tile viewer if enabled
@@ -145,6 +124,9 @@ post_load_state:
   .disableMinimap
     LDA !IH_BLANK : STA !HUD_TILEMAP+$7C : STA !HUD_TILEMAP+$7E
   .minimapDone
+
+    ; Reload custom HUD number GFX
+    JSL overwrite_HUD_numbers
 
     LDA !SRAM_SLOWDOWN_MODE : CMP #$FFFF : BEQ .rng
     AND #$00FF : STA !ram_slowdown_mode
@@ -536,21 +518,6 @@ print pc, " tinysave bank82 start"
 tinystates_preload_bg_data:
     JSR $82E2 ; Re-load BG3 tiles
     RTL
-
-tinystates_mirror_bg_data:
-{
-    PHB : PEA $7F00 : PLB : PLB
-    TDC : TAX
-    LSR : ADC $0000 : ADC $0000 : TAY
-    BRA .startLoop
-  .loop
-    LDA $0002,Y : STA $9602,X
-  .startLoop
-    DEY : DEY
-    DEX : DEX : BPL .loop
-    PLB
-    RTL
-}
 
 tinystates_load_kraid:
 {

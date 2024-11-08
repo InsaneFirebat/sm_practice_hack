@@ -1,4 +1,4 @@
-
+;
 ; Features using sprites to draw information
 ;
 
@@ -71,8 +71,7 @@ update_sprite_features:
     PLP : PLY : PLX : PLA
 
   .done
-    JSL $A0884D
-    RTL
+    JML $A0884D
 }
 
 ; When loading into a game, do we need to update any sprite tiles?
@@ -81,8 +80,7 @@ update_sprite_tiles_loading:
     LDA !ram_sprite_feature_flags : BIT !SPRITE_OOB_WATCH : BEQ .skip
     JSL upload_sprite_oob_tiles
   .skip
-    JSL $80894D
-    RTL
+    JML $80894D
 }
 
 upload_sprite_oob_tiles:
@@ -417,7 +415,7 @@ draw_enemy_hitbox:
 draw_ext_spritemap_hitbox:
 {
     ; Kraid has too many hitboxes and overflows the OAM stack
-    LDA !ROOM_ID : CMP #$A59F : BEQ .end ; check for Kraid's room
+    LDA !ROOM_ID : CMP #ROOM_KraidRoom : BEQ .end ; check for Kraid's room
 
     LDX #$0000 ; X = enemy index
     LDY !OAM_STACK_POINTER ; Y = OAM stack pointer
@@ -793,9 +791,9 @@ draw_samusproj_hitbox:
 
 draw_custom_boss_hitbox:
 {
-    LDA !ROOM_ID : CMP #$DD58 : BEQ .mother_brain
-    LDA !ROOM_ID : CMP #$B32E : BEQ .ridley_bridge
-    LDA !ROOM_ID : CMP #$E0B5 : BNE .end
+    LDA !ROOM_ID : CMP #ROOM_MotherBrainRoom : BEQ .mother_brain
+    CMP #ROOM_RidleyRoom : BEQ .ridley_bridge
+    CMP #ROOM_CeresRidleyRoom : BNE .end
 
   .ridley_bridge
     JMP .ridley

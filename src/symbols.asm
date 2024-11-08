@@ -14,12 +14,12 @@ incsrc wram_symbols.asm
 ; Freespace ORGs
 ; ---------------
 
-;!ORG_MENU_GFX = $F0D700 ; unused, $900, can be used to reduce menu code size
+;!ORG_MENU_GFX = $F0D700 ; unused, $1000, can be used to reduce menu code size
+;!ORG_MENU_GFX2 = $B5F000 ; $1000
 ;!ORG_MISC_TILE_GRAPHICS = $8BFA00 ; unused, $140
 ;!ORG_RAW_TILE_TABLES = $E88800
 ;!ORG_RAW_TILEGRAPHICS = $F48000
 ;!ORG_RAW_TILES = $F4D800
-;!ORG_ROOMNAMES = $E70000 ; whole bank pointer style
 ;!ORG_CLEAR_ENEMIES = $E70000 ; whole bank pointer style
 ;!ORG_CUSTOMIZEMENU = $AFEC00
 ;!ORG_PALETTEPROFILES = $AEFD20
@@ -67,7 +67,7 @@ ram_reserves_last = !ram_reserves_last ; !WRAM_START+$2E
 
 ram_metronome_counter = !ram_metronome_counter ; !WRAM_START+$30
 ram_armed_shine_duration = !ram_armed_shine_duration ; !WRAM_START+$32
-ram_map_counter = !ram_map_counter ; !WRAM_START+$34
+ram_auto_save_state = !ram_auto_save_state ; !WRAM_START+$34
 ram_vcounter_data = !ram_vcounter_data ; !WRAM_START+$36
 ram_custom_preset = !ram_custom_preset ; !WRAM_START+$38
 
@@ -90,10 +90,9 @@ ram_shot_timer = !ram_shot_timer ; !WRAM_START+$52
 ram_shine_counter = !ram_shine_counter ; !WRAM_START+$54
 ram_dash_counter = !ram_dash_counter ; !WRAM_START+$56
 
-ram_auto_save_state = !ram_auto_save_state ; !WRAM_START+$58
-ram_lag_counter = !ram_lag_counter ; !WRAM_START+$5A
-ram_kraid_adjust_timer = !ram_kraid_adjust_timer ; !WRAM_START+$5C
-ram_print_segment_timer = !ram_print_segment_timer ; !WRAM_START+$5E
+ram_lag_counter = !ram_lag_counter ; !WRAM_START+$58
+ram_kraid_adjust_timer = !ram_kraid_adjust_timer ; !WRAM_START+$5A
+ram_print_segment_timer = !ram_print_segment_timer ; !WRAM_START+$5C
 
 ; ^ FREE SPACE ^ up to +$6C
 
@@ -234,12 +233,11 @@ ram_seed_X = !ram_seed_X ; !WRAM_MENU_START+$60
 ram_seed_Y = !ram_seed_Y ; !WRAM_MENU_START+$62
 
 ram_timers_autoupdate = !ram_timers_autoupdate ; !WRAM_MENU_START+$64
-;!ram_cm_suit_properties = !WRAM_MENU_START+$66
+ram_cm_fast_scroll_menu_selection = !ram_cm_fast_scroll_menu_selection ; !WRAM_MENU_START+$66
 
 ram_cm_sfxlib1 = !ram_cm_sfxlib1 ; !WRAM_MENU_START+$68
 ram_cm_sfxlib2 = !ram_cm_sfxlib2 ; !WRAM_MENU_START+$6A
 ram_cm_sfxlib3 = !ram_cm_sfxlib3 ; !WRAM_MENU_START+$6C
-ram_cm_fast_scroll_menu_selection = !ram_cm_fast_scroll_menu_selection ; !WRAM_MENU_START+$6E
 
 ; ^ FREE SPACE ^ up to +$7A
 
