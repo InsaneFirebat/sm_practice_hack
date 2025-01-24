@@ -1,5 +1,7 @@
 # InsaneFirebat's Custom Practice ROM
 
+This branch is no longer maintain. Check out https://smpractice.speedga.me to get the official version of the practice hack, or download the last custom version here.
+
 ## Notes
 
 Always use an UNHEADERED (UH) rom for patching the practice hack.
