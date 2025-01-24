@@ -76,6 +76,7 @@ ram_mb_hp = !ram_mb_hp ; !WRAM_START+$64
 ram_shot_timer = !ram_shot_timer ; !WRAM_START+$66
 ram_shine_counter = !ram_shine_counter ; !WRAM_START+$68
 ram_dash_counter = !ram_dash_counter ; !WRAM_START+$6A
+ram_loadstate_rando_enable = !ram_loadstate_rando_enable ; !WRAM_START+$6C
 
 ; ----------------------------------------------------------
 ; Shinetune uses several variables not used by other modes,
@@ -543,6 +544,12 @@ sram_custompalette_blue = !sram_custompalette_blue ; !SRAM_START+$2A2
 sram_custompalette_green = !sram_custompalette_green ; !SRAM_START+$2A4
 sram_custompalette_red = !sram_custompalette_red ; !SRAM_START+$2A6
 sram_custompalette = !sram_custompalette ; !SRAM_START+$2A8
+
+sram_loadstate_rando_energy = !sram_loadstate_rando_energy ; !SRAM_START+$2AA
+sram_loadstate_rando_reserves = !sram_loadstate_rando_reserves ; !SRAM_START+$2AC
+sram_loadstate_rando_missiles = !sram_loadstate_rando_missiles ; !SRAM_START+$2AE
+sram_loadstate_rando_supers = !sram_loadstate_rando_supers ; !SRAM_START+$2B0
+sram_loadstate_rando_powerbombs = !sram_loadstate_rando_powerbombs ; !SRAM_START+$2B2
 
 ; FREE SPACE ^
 

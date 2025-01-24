@@ -358,7 +358,6 @@ GameModeExtras:
     LDA !sram_ctrl_toggle_tileviewer : BNE .enabled
     LDA !sram_ctrl_force_stand : BNE .enabled
     LDA !sram_ctrl_update_timers : BNE .enabled
-    RTL
 
   .enabled
     STA !ram_game_mode_extras
@@ -382,6 +381,273 @@ PreserveHyperBeam:
     ; flag set by NG+ Hyper presets
     LDA !ram_hyper_beam : STA !SAMUS_HYPER_BEAM
     JML $80C437 ; overwritten code
+}
+
+RandomizeOnLoad:
+; Allows users to configure a range of variation in energy/ammo
+{
+    ; randomize energy on loadstate
+    LDA !sram_loadstate_rando_energy : BEQ .reserves
+    %a8()
+    ; treat low byte of seed as a signed value
+    LDA !ram_seed_X : BMI .subEnergy
+  .loopAddEnergy
+    ; check if it's within the chosen range
+    CMP !sram_loadstate_rando_energy : BEQ + : BCS .OoBAddEnergy
+    ; within range, add it to energy
++   %a16() ; assuming high byte is clean from flag check
+    CLC : ADC !SAMUS_HP : STA !SAMUS_HP
+    BRA .doneEnergy
+  .OoBAddEnergy
+    ; subtract chosen range from seed and try again
+    SBC !sram_loadstate_rando_energy ; carry was already set
+    BRA .loopAddEnergy
+
+  .subEnergy
+    ; seed was negative, invert it to positive
+    EOR #$FF : INC
+  .loopSubEnergy
+    ; check if it's within the chosen range
+    CMP !sram_loadstate_rando_energy : BEQ + : BCS .OoBSubEnergy
+    ; within range, subtract it from energy
++   %a16()
+    STA $C1
+    LDA !SAMUS_HP : SEC : SBC $C1 : STA !SAMUS_HP
+    BRA .doneEnergy
+  .OoBSubEnergy
+    ; subtract chosen range from seed and try again
+    SBC !sram_loadstate_rando_energy ; carry was already set
+    BRA .loopSubEnergy
+
+  .dontDie
+    ; minimum of 1 energy
+    LDA #$0001 : STA !SAMUS_HP
+
+  .doneEnergy
+    ; check if energy is negative
+    LDA !SAMUS_HP : BMI .dontDie
+    ; check if energy exceeded max
+    CMP !SAMUS_HP_MAX : BCC ..rerandomize
+    LDA !SAMUS_HP_MAX : STA !SAMUS_HP
+  ..rerandomize
+    ; this normally only runs while the menu is open
+    JSL MenuRNG
+
+  .reserves
+    ; skip if no reserve tanks
+    LDA !SAMUS_RESERVE_MAX : BEQ .missiles
+    LDA !sram_loadstate_rando_reserves : BEQ .missiles
+    ; feature enabled
+    %a8()
+    ; treat low byte of seed as a signed value
+    LDA !ram_seed_X : BMI .subReserves
+  .loopAddReserves
+    ; check if it's within the chosen range
+    CMP !sram_loadstate_rando_reserves : BEQ + : BCS .OoBAddReserves
+    ; within range, add it to reserves
++   %a16() ; assuming high byte is clean from flag check
+    CLC : ADC !SAMUS_RESERVE_ENERGY : STA !SAMUS_RESERVE_ENERGY
+    BRA .doneReserves
+  .OoBAddReserves
+    ; subtract chosen range from seed and try again
+    SBC !sram_loadstate_rando_reserves ; carry was already set
+    BRA .loopAddReserves
+
+  .subReserves
+    ; seed was negative, invert it to positive
+    EOR #$FF : INC
+  .loopSubReserves
+    ; check if it's within the chosen range
+    CMP !sram_loadstate_rando_reserves : BEQ + : BCS .OoBSubReserves
+    ; within range, subtract it from reserves
++   %a16()
+    STA $C1
+    LDA !SAMUS_RESERVE_ENERGY : SEC : SBC $C1 : STA !SAMUS_RESERVE_ENERGY
+    BRA .doneReserves
+  .OoBSubReserves
+    ; subtract chosen range from seed and try again
+    SBC !sram_loadstate_rando_reserves ; carry was already set
+    BRA .loopSubReserves
+
+  .minReserves
+    ; minimum of 0 reserves
+    STZ !SAMUS_RESERVE_ENERGY
+
+  .doneReserves
+    ; check if reserves is negative
+    LDA !SAMUS_RESERVE_ENERGY : BMI .minReserves
+    ; check if reserves exceeded max
+    CMP !SAMUS_RESERVE_MAX : BCC ..rerandomize
+    LDA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY
+  ..rerandomize
+    ; this normally only runs while the menu is open
+    JSL MenuRNG
+
+  .missiles
+    ; skip if no missile tanks
+    LDA !SAMUS_MISSILES_MAX : BEQ .supers
+    LDA !sram_loadstate_rando_missiles : BEQ .supers
+    ; feature enabled
+    %a8()
+    ; treat low byte of seed as a signed value
+    LDA !ram_seed_X : BMI .subMissiles
+  .loopAddMissiles
+    ; check if it's within the chosen range
+    CMP !sram_loadstate_rando_missiles : BEQ + : BCS .OoBAddMissiles
+    ; within range, add it to missiles
++   %a16() ; assuming high byte is clean from flag check
+    CLC : ADC !SAMUS_MISSILES : STA !SAMUS_MISSILES
+    BRA .doneMissiles
+  .OoBAddMissiles
+    ; subtract chosen range from seed and try again
+    SBC !sram_loadstate_rando_missiles ; carry was already set
+    BRA .loopAddMissiles
+
+  .subMissiles
+    ; seed was negative, invert it to positive
+    EOR #$FF : INC
+  .loopSubMissiles
+    ; check if it's within the chosen range
+    CMP !sram_loadstate_rando_missiles : BEQ + : BCS .OoBSubMissiles
+    ; within range, subtract it from missiles
++   %a16()
+    STA $C1
+    LDA !SAMUS_MISSILES : SEC : SBC $C1 : STA !SAMUS_MISSILES
+    BRA .doneMissiles
+  .OoBSubMissiles
+    ; subtract chosen range from seed and try again
+    SBC !sram_loadstate_rando_missiles ; carry was already set
+    BRA .loopSubMissiles
+
+  .minMissiles
+    ; minimum of 0 missiles
+    STZ !SAMUS_MISSILES
+
+  .doneMissiles
+    ; check if missiles is negative
+    LDA !SAMUS_MISSILES : BMI .minMissiles
+    ; check if missiles exceeded max
+    CMP !SAMUS_MISSILES_MAX : BCC ..rerandomize
+    LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES
+  ..rerandomize
+    ; this normally only runs while the menu is open
+    JSL MenuRNG
+
+ .supers
+    ; skip if no super missile tanks
+    LDA !SAMUS_SUPERS_MAX : BEQ .powerbombs
+    LDA !sram_loadstate_rando_supers : BEQ .powerbombs
+    ; feature enabled
+    %a8()
+    ; treat low byte of seed as a signed value
+    LDA !ram_seed_X : BMI .subSupers
+  .loopAddSupers
+    ; check if it's within the chosen range
+    CMP !sram_loadstate_rando_supers : BEQ + : BCS .OoBAddSupers
+    ; within range, add it to supers
++   %a16() ; assuming high byte is clean from flag check
+    CLC : ADC !SAMUS_SUPERS : STA !SAMUS_SUPERS
+    BRA .doneSupers
+  .OoBAddSupers
+    ; subtract chosen range from seed and try again
+    SBC !sram_loadstate_rando_supers ; carry was already set
+    BRA .loopAddSupers
+
+  .subSupers
+    ; seed was negative, invert it to positive
+    EOR #$FF : INC
+  .loopSubSupers
+    ; check if it's within the chosen range
+    CMP !sram_loadstate_rando_supers : BEQ + : BCS .OoBSubSupers
+    ; within range, subtract it from supers
++   %a16()
+    STA $C1
+    LDA !SAMUS_SUPERS : SEC : SBC $C1 : STA !SAMUS_SUPERS
+    BRA .doneSupers
+  .OoBSubSupers
+    ; subtract chosen range from seed and try again
+    SBC !sram_loadstate_rando_supers ; carry was already set
+    BRA .loopSubSupers
+
+  .minSupers
+    ; minimum of 0 supers
+    STZ !SAMUS_SUPERS
+
+  .doneSupers
+    ; check if supers is negative
+    LDA !SAMUS_SUPERS : BMI .minSupers
+    ; check if supers exceeded max
+    CMP !SAMUS_SUPERS_MAX : BCC ..rerandomize
+    LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS
+  ..rerandomize
+    ; this normally only runs while the menu is open
+    JSL MenuRNG
+
+  .powerbombs
+    ; skip if no power bomb tanks
+    LDA !SAMUS_PBS_MAX : BEQ .exit
+    LDA !sram_loadstate_rando_powerbombs : BEQ .exit
+    ; feature enabled
+    %a8()
+    ; treat low byte of seed as a signed value
+    LDA !ram_seed_X : BMI .subPBs
+  .loopAddPBs
+    ; check if it's within the chosen range
+    CMP !sram_loadstate_rando_powerbombs : BEQ + : BCS .OoBAddPBs
+    ; within range, add it to power bombs
++   %a16() ; assuming high byte is clean from flag check
+    CLC : ADC !SAMUS_PBS : STA !SAMUS_PBS
+    BRA .donePBs
+  .OoBAddPBs
+    ; subtract chosen range from seed and try again
+    SBC !sram_loadstate_rando_powerbombs ; carry was already set
+    BRA .loopAddPBs
+
+  .subPBs
+    ; seed was negative, invert it to positive
+    EOR #$FF : INC
+  .loopSubPBs
+    ; check if it's within the chosen range
+    CMP !sram_loadstate_rando_powerbombs : BEQ + : BCS .OoBSubPBs
+    ; within range, subtract it from power bombs
++   %a16()
+    STA $C1
+    LDA !SAMUS_PBS : SEC : SBC $C1 : STA !SAMUS_PBS
+    BRA .donePBs
+  .OoBSubPBs
+    ; subtract chosen range from seed and try again
+    SBC !sram_loadstate_rando_powerbombs ; carry was already set
+    BRA .loopSubPBs
+
+  .minPBs
+    ; minimum of 0 power bombs
+    STZ !SAMUS_PBS
+
+  .donePBs
+    ; check if power bombs is negative
+    LDA !SAMUS_PBS : BMI .minPBs
+    ; check if power bombs exceeded max
+    CMP !SAMUS_PBS_MAX : BCC ..rerandomize
+    LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS
+  ..rerandomize
+    ; this normally only runs while the menu is open
+    JSL MenuRNG
+
+  .exit
+    RTL
+}
+
+RandomizeOnLoad_Flag:
+{
+    LDA !sram_loadstate_rando_energy : BNE .enable
+    LDA !sram_loadstate_rando_reserves : BNE .enable
+    LDA !sram_loadstate_rando_missiles : BNE .enable
+    LDA !sram_loadstate_rando_supers : BNE .enable
+    LDA !sram_loadstate_rando_powerbombs : BNE .enable
+
+  .enable
+    STA !ram_loadstate_rando_enable
+    RTL
 }
 print pc, " misc end"
 

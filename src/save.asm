@@ -29,6 +29,8 @@ pre_load_state:
 
 post_load_state:
 {
+    JSL init_wram_based_on_sram
+
     JSR post_load_music
 
     ; Reload OOB tile viewer if enabled
@@ -54,6 +56,10 @@ post_load_state:
     LDA !SRAM_SLOWDOWN_MODE : CMP #$FFFF : BEQ +
     AND #$00FF : STA !ram_slowdown_mode
 
+    ; Randomize energy/ammo?
++   LDA !ram_loadstate_rando_enable : BEQ +
+    JSL RandomizeOnLoad
+
     ; Rerandomize
 +   LDA !sram_save_has_set_rng : BNE .done
     LDA !sram_rerandomize : AND #$00FF : BEQ .done
@@ -64,8 +70,6 @@ post_load_state:
     JSL MenuRNG ; rerandomize hack RNG
 
   .done
-    JSL init_wram_based_on_sram
-
     ; Freeze inputs if necessary
     LDA !ram_freeze_on_load : BEQ .return
     LDA !ram_slowdown_mode : BNE .return
