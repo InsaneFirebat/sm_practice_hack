@@ -156,6 +156,11 @@ init_sram:
     LDA #$0384 : STA !sram_demo_timer
 
     LDA #$0000 : STA !sram_custom_header
+    LDA #$0000 : STA !sram_loadstate_rando_energy
+    LDA #$0000 : STA !sram_loadstate_rando_reserves
+    LDA #$0000 : STA !sram_loadstate_rando_missiles
+    LDA #$0000 : STA !sram_loadstate_rando_supers
+    LDA #$0000 : STA !sram_loadstate_rando_powerbombs
 
     LDA #$0001 : STA !sram_custompalette_profile ; 1 - Twitch
     LDA #$7277 : STA !sram_palette_border

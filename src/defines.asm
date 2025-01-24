@@ -7,7 +7,7 @@
 !VERSION_MAJOR = 2
 !VERSION_MINOR = 6
 !VERSION_BUILD = 2
-!VERSION_REV = 2
+!VERSION_REV = 5
 
 
 ; ---------
@@ -83,6 +83,7 @@
 !ram_shot_timer = !WRAM_START+$66
 !ram_shine_counter = !WRAM_START+$68
 !ram_dash_counter = !WRAM_START+$6A
+!ram_loadstate_rando_enable = !WRAM_START+$6C
 
 ; ----------------------------------------------------------
 ; Shinetune uses several variables not used by other modes,
@@ -882,6 +883,12 @@ endif
 !sram_custompalette_green = !SRAM_START+$2A4
 !sram_custompalette_red = !SRAM_START+$2A6
 !sram_custompalette = !SRAM_START+$2A8
+
+!sram_loadstate_rando_energy = !SRAM_START+$2AA
+!sram_loadstate_rando_reserves = !SRAM_START+$2AC
+!sram_loadstate_rando_missiles = !SRAM_START+$2AE
+!sram_loadstate_rando_supers = !SRAM_START+$2B0
+!sram_loadstate_rando_powerbombs = !SRAM_START+$2B2
 
 ; FREE SPACE ^
 

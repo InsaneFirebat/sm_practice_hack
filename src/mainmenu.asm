@@ -3826,6 +3826,12 @@ SavestateMenu:
     dw #save_freeze
     dw #save_middoorsave
     dw #save_alwayssave
+    dw #$FFFF
+    dw #save_rando_energy
+    dw #save_rando_reserves
+    dw #save_rando_missiles
+    dw #save_rando_supers
+    dw #save_rando_powerbombs
 if !FEATURE_DEV
     dw #$FFFF
     dw #save_delete
@@ -3851,6 +3857,26 @@ save_delete:
     TYA : STA !SRAM_SAVED_STATE
     %sfxconfirm()
     RTL
+
+save_rando_energy:
+    %cm_numfield("Energy Variance", !sram_loadstate_rando_energy, 0, 255, 1, 4, #save_rando_enable)
+
+save_rando_reserves:
+    %cm_numfield("Reserve Variance", !sram_loadstate_rando_reserves, 0, 255, 1, 4, #save_rando_enable)
+
+save_rando_missiles:
+    %cm_numfield("Missile Variance", !sram_loadstate_rando_missiles, 0, 230, 1, 4, #save_rando_enable)
+
+save_rando_supers:
+    %cm_numfield("Super Missile Variance", !sram_loadstate_rando_supers, 0, 50, 1, 2, #save_rando_enable)
+
+save_rando_powerbombs:
+    %cm_numfield("Power Bomb Variance", !sram_loadstate_rando_powerbombs, 0, 50, 1, 2, #save_rando_enable)
+
+save_rando_enable:
+{
+    JML RandomizeOnLoad_Flag
+}
 
 
 ; -------------
@@ -4330,6 +4356,7 @@ init_print_segment_timer:
 init_wram_based_on_sram:
 {
     JSL GameModeExtras
+    JSL RandomizeOnLoad_Flag
     JSL init_print_segment_timer
     JML validate_sram_for_savestates
 }

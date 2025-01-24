@@ -240,7 +240,6 @@ MenuRNG2:
     RTL
 }
 
-
 hook_hopper_set_rng:
 {
     LDA #$0001 : STA !ram_room_has_set_rng

@@ -126,6 +126,8 @@ post_load_state:
     LDA !SRAM_TINYSTATE_FAST : BEQ +
     JSL tinystates_mirror_bg_data
 
++   JSL init_wram_based_on_sram
+
 +   JSR post_load_music
 
     ; Reload OOB tile viewer if enabled
@@ -151,6 +153,10 @@ post_load_state:
     LDA !SRAM_SLOWDOWN_MODE : CMP #$FFFF : BEQ +
     AND #$00FF : STA !ram_slowdown_mode
 
+    ; Randomize energy/ammo?
++   LDA !ram_loadstate_rando_enable : BEQ +
+    JSL RandomizeOnLoad
+
     ; Rerandomize
 +   LDA !sram_save_has_set_rng : BNE +
     LDA !sram_rerandomize : AND #$00FF : BEQ +
@@ -160,10 +166,8 @@ post_load_state:
     LDA !sram_seed_Y : STA !ram_seed_Y
     JSL MenuRNG ; rerandomize hack RNG
 
-+   JSL init_wram_based_on_sram
-
     ; Freeze inputs if necessary
-    LDA !ram_freeze_on_load : BEQ .return
++   LDA !ram_freeze_on_load : BEQ .return
     LDA !ram_slowdown_mode : BNE .return
     LDA #$FFFF : STA !ram_slowdown_mode
     INC : STA !ram_slowdown_controller_1 : STA !ram_slowdown_controller_2
