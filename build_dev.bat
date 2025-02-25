@@ -36,3 +36,4 @@ copy "build\Super Metroid NTSC.sfc" build\smhack20_sd2snes_dev.sfc
 "tools\Lunar IPS.exe" -ApplyIPS build\smhack20_sd2snes_dev.ips build\smhack20_sd2snes_dev.sfc
 :end_patch_dev
 
+PAUSE

@@ -1357,7 +1357,12 @@ SpritesMenu:
     dw #sprites_show_samusproj_hitbox
     dw #sprites_show_enemyproj_hitbox
     dw #sprites_show_proj_as_32x32
+    dw #$FFFF
     dw #sprites_oob_viewer
+    dw #sprites_oob_enemy_viewer
+    dw #sprites_oob_width
+    dw #sprites_oob_height
+    dw #sprites_oob_enemy_index
     dw #$0000
     %cm_header("SPRITE FEATURES")
 
@@ -1386,12 +1391,29 @@ sprites_show_proj_as_32x32:
     %cm_toggle_bit("32x32 Projectile Boxes", !ram_sprite_feature_flags, !SPRITE_32x32_PROJ, #0)
 
 sprites_oob_viewer:
-    %cm_toggle_bit("OoB Tile Viewer", !ram_sprite_feature_flags, !SPRITE_OOB_WATCH, .routine)
-  .routine
-    LDA !ram_sprite_feature_flags : BIT !SPRITE_OOB_WATCH : BEQ .skip_oob
-    JML upload_sprite_oob_tiles
-  .skip_oob
+    %cm_toggle_bit("OoB Tile Viewer", !ram_sprite_feature_flags, !SPRITE_OOB_WATCH, sprites_load_oob_tiles)
+
+sprites_oob_enemy_viewer:
+    %cm_toggle_bit("Off-Screen Enemy Follower", !ram_sprite_feature_flags, !SPRITE_OOB_ENEMY, sprites_load_oob_tiles)
+
+sprites_oob_width:
+    %cm_numfield("OoB Viewer Width", !ram_oob_width, 6, 16, 1, 2, #0)
+
+sprites_oob_height:
+    %cm_numfield("OoB Viewer Height", !ram_oob_height, 4, 16, 1, 2, #0)
+
+sprites_oob_enemy_index:
+    %cm_numfield("Off-Screen Enemy Index", !ram_oob_enemy_index, 0, 30, 1, 2, #0)
+
+sprites_load_oob_tiles:
+{
+    LDA !ram_sprite_feature_flags : BIT !SPRITE_OOB_WATCH : BNE .upload
+    BIT !SPRITE_OOB_ENEMY : BNE .upload
     RTL
+
+  .upload
+    JML upload_sprite_oob_tiles
+}
 
 
 ; --------------

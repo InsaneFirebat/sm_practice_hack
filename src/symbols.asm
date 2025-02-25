@@ -169,6 +169,9 @@ ram_frames_held = !ram_frames_held ; !WRAM_PERSIST_START+$64
 ram_baby_rng = !ram_baby_rng ; !WRAM_PERSIST_START+$66
 
 ram_quickboot_spc_state = !ram_quickboot_spc_state ; !WRAM_PERSIST_START+$68
+ram_oob_enemy_index = !ram_oob_enemy_index ; !WRAM_PERSIST_START+$6A
+ram_oob_width = !ram_oob_width ; !WRAM_PERSIST_START+$6C
+ram_oob_height = !ram_oob_height ; !WRAM_PERSIST_START+$6E
 
 ; ^ FREE SPACE ^ up to +$7C (!WRAM_START+$FC - !WRAM_PERSIST_START)
 

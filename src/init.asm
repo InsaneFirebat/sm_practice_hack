@@ -65,6 +65,8 @@ init_nonzero_wram:
     LDA #$007E : STA !ram_watch_bank
     LDA !sram_seed_X : STA !ram_seed_X
     LDA !sram_seed_Y : STA !ram_seed_Y
+    LDA #$000D : STA !ram_oob_width
+    LDA #$0009 : STA !ram_oob_height
 
     TDC
     STA !ram_watch_left_index : STA !ram_watch_right_index

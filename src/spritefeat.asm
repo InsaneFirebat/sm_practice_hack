@@ -38,6 +38,11 @@ update_sprite_features:
     JSR draw_sprite_oob
   .skip_oob
 
+    ; Draw OoB viewer around enemy if activated
+    LDA !ram_sprite_feature_flags : BIT !SPRITE_OOB_ENEMY : BEQ .skip_oob_enemy
+    JSR draw_enemy_oob
+  .skip_oob_enemy
+
     ; Draw Samus hitbox if activated
     LDA !ram_sprite_feature_flags : BIT !SPRITE_SAMUS_HITBOX : BEQ .skip_samus
     JSR draw_samus_hitbox
@@ -99,9 +104,9 @@ upload_sprite_oob_tiles:
 }
 
 draw_sprite_oob:
+!oob_width = $000D
+!oob_height = $0009
 {
-    !oob_width = $000D
-    !oob_height = $0009
     LDA !OAM_STACK_POINTER : STA $C8
 
     ; Samus X - (oob_width*8)
@@ -217,6 +222,7 @@ block_gfx:
 
     ;  air, slope, air (trick xray), treadmill, ??,       h-extend,  ??,  ??,  solid, door, spike, crumble, shot, v-xtend, grapple, bomb
     db $D0, $DE,   $D0,              $DC,       $D0,      $D0,       $D0, $D0, $D6,   $D4,  $DC,   $DC,     $D2,  $D0,     $DA,     $DC
+}
 
 ; draw hitbox around samus for the oob viewer (static position on the screen)
 draw_oob_samus_hitbox:
@@ -302,10 +308,215 @@ draw_oob_samus_hitbox:
     %ai16()
     TYA : CLC : ADC #$0010 : STA !OAM_STACK_POINTER
     RTS
-}
 
 spr_clr_flags:
     dw %1111111111111100, %1111111111110011, %1111111111001111, %1111111100111111
+}
+
+draw_enemy_oob:
+;!oob_width = $000D
+;!oob_height = $0009
+{
+    LDA !OAM_STACK_POINTER : STA $C8
+    ; width * 8
+    LDA !ram_oob_width : STA $CC
+    ASL #3 : STA $3E
+    ; (height - 2) * 8
+    LDA !ram_oob_height : STA $CE
+    DEC #2 : ASL #3 : STA $40
+
+    LDA !ram_oob_enemy_index : TAX
+
+    ; Samus X - (oob_width*8)
+    LDA !ENEMY_X,X : SEC : SBC $3E : STA $12
+    AND #$000F : STA $C4
+
+    ; [Samus X - (oob_width*8)] / 16
+    LDA $12 : LSR #4 : STA $22
+
+    ; Samus Y - (oob_height*8)
+    LDA !ENEMY_Y,X : SEC : SBC $40 : STA $14
+    AND #$000F : STA $C6
+
+    ; [Samus Y - (oob_height*8)] / 16
+    LDA $14 : LSR #4 : STA $24
+
+    LDA !ROOM_WIDTH_BLOCKS : STA $16
+
+    LDY #$0000
+  .loop_y
+    LDX #$0000
+    %a8()
+    LDA $16 : STA $4202
+    TYA : CLC : ADC $24 : STA $4203
+    NOP #2 ; wait for CPU math
+    %ai16()
+    ; room_width_blocks * (Y + [Samus Y - (oob_height*8)] / 16)
+    LDA $4216 : STA $18
+
+  .loop_x
+    PHY : PHX
+    %a16()
+    STX $C0 : STY $C2
+
+    ; X + [Samus X - (oob_width*8)] / 16
+    TXA : CLC : ADC $22 : AND #$0FFF
+
+    ; a = (width * bit.lrshift(bit.band(cameraY+y*16, 0xFFF), 4)) + bit.lrshift(bit.band(cameraX+x*16, 0xFFFF), 4)
+    CLC : ADC $18
+    ; a = a * 2
+    ASL : TAX
+    ; Load clipdata of block
+    LDA !LEVEL_DATA+1,X : AND #$00FF : LSR #4 : TAX
+    ; Get sprite ID for this BTS
+    LDA.l block_gfx,X : AND #$00FF : CMP #$00D0 : BEQ .next
+
+    ; Set sprite ID
+    %a8()
+    LDY !OAM_STACK_POINTER : STA $0372,Y
+
+    ; Get X coord
+    LDA $C0 : CLC : ADC #$02 : ASL #4 : SEC : SBC $C4
+    STA $0370,Y
+
+    ; Get Y coord
+    LDA $C2 : CLC : ADC #$04 : ASL #4 : SEC : SBC $C6
+    STA $0371,Y
+
+    ; Sprite Attributes - xxxxxxxx yyyyyyyy YXPPpppt tttttttt
+    ; x=X pos, y=Y pos (low nibbles only), Y=Y flip, X=X flip
+    ; P=Priority, p=Palette, t=Tile number
+    ; Priority bits set, palette = 101
+    LDA #%00111010 : STA $0373,Y
+
+    %a16()
+
+    INY #4
+    STY !OAM_STACK_POINTER
+
+  .next
+    PLX : PLY
+
+    ; $3E = width
+    INX : CPX $CC : BEQ .end_x
+    JMP .loop_x
+
+  .end_x
+    ; $40 = height
+    INY : CPY $CE : BEQ .end_y
+    JMP .loop_y
+
+  .end_y
+    LDA !OAM_STACK_POINTER : BEQ .drawEnemy
+    LSR #4 : INC : STA $CA
+    LDA $C8 : LSR #4 : STA $C8
+
+    %a8()
+    LDX $C8
+
+  .copy_loop
+    ; $0570..8F: High OAM. 2 bit entries
+    ; ddccbbsx
+    ; x: X position (upper 1 bit)
+    ; s: Size
+    ; b: sx for sprite 4n+1
+    ; c: sx for sprite 4n+2
+    ; d: sx for sprite 4n+3
+    LDA #%10101010 : STA $0570,X
+    INX : CPX $CA : BNE .copy_loop
+    %ai16()
+
+  .drawEnemy
+;    JSR draw_oob_samus_hitbox
+;    RTS
+;}
+;
+;; draw hitbox around selected enemy for the oob viewer (static position on the screen)
+;draw_oob_samus_hitbox:
+;{
+    ; LDA !SAMUS_Y : SEC : SBC !LAYER1_Y : PHA ; top edge
+    ; LDA !SAMUS_SPRITEMAP_X : PHA ; left edge
+
+    LDA.w #(137-16) : PHA
+    LDA.w #136 : PHA
+
+    LDA !ram_oob_enemy_index : XBA : LSR #2 : TAX
+    LDA #$0000
+    %a8()
+    LDY !OAM_STACK_POINTER
+    PLA ; X coord
+    SEC : SBC !ENEMY_X_RADIUS,X
+    STA $0370,Y : STA $0378,Y
+    CLC : ADC !ENEMY_X_RADIUS,X : ADC !ENEMY_X_RADIUS,X : SEC : SBC #$08
+    STA $0374,Y : STA $037C,Y
+    PLA ; discard high byte
+
+    PLA : DEC ; Y coord
+    SEC : SBC !ENEMY_Y_RADIUS,X
+    STA $0371,Y : STA $0375,Y
+    CLC : ADC !ENEMY_Y_RADIUS,X : ADC !ENEMY_Y_RADIUS,X : SEC : SBC #$08
+    STA $0379,Y : STA $037D,Y
+    PLA ; discard high byte
+
+    LDA #%00111010
+    STA $0373,Y ; Sprite 1 ATTR
+    STA $0377,Y ; Sprite 2 ATTR
+    STA $037B,Y ; Sprite 3 ATTR
+    STA $037F,Y ; Sprite 4 ATTR
+
+    LDA #$DC : STA $0372,Y
+    LDA #$DD : STA $0376,Y
+    LDA #$EC : STA $037A,Y
+    LDA #$ED : STA $037E,Y
+
+    ; Normally the high sprite bits are cleared to zero so this shouldn't be needed for 8x8 sprites,
+    ; but the hitbox drawing code will overwrite 1-3 extra sprite bits to gain speed so instead we
+    ; compensate for it here to just have to do it once
+
+    %ai16()
+    PHY
+    ; Sprite number
+    TYA : LSR #2 : TAX : PHX
+    ; Table offset
+    LSR #2 : TAY
+    TXA : AND #$0003 : ASL : TAX
+
+    ; Mask off bits to clear high sprite offset
+    LDA $0570,Y : AND.l spr_clr_flags,X : STA $0570,Y
+
+    ; Sprite number
+    PLX : INX : TXA : PHX
+    ; Table offset
+    LSR #2 : TAY
+    TXA : AND #$0003 : ASL : TAX
+
+    ; Mask off bits to clear high sprite offset
+    LDA $0570,Y : AND.l spr_clr_flags,X : STA $0570,Y
+
+    ; Sprite number
+    PLX : INX : TXA : PHX
+    ; Table offset
+    LSR #2 : TAY
+    TXA : AND #$0003 : ASL : TAX
+
+    ; Mask off bits to clear high sprite offset
+    LDA $0570,Y : AND.l spr_clr_flags,X : STA $0570,Y
+
+    ; Sprite number
+    PLX : INX : TXA : PHX
+    ; Table offset
+    LSR #2 : TAY
+    TXA : AND #$0003 : ASL : TAX
+
+    ; Mask off bits to clear high sprite offset
+    LDA $0570,Y : AND.l spr_clr_flags,X : STA $0570,Y
+    PLX : PLY
+
+    ; Inc OAM stack
+    %ai16()
+    TYA : CLC : ADC #$0010 : STA !OAM_STACK_POINTER
+    RTS
+}
 
 ; draw hitbox around samus
 draw_samus_hitbox:

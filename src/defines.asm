@@ -171,6 +171,9 @@
 !ram_baby_rng                       = !WRAM_PERSIST_START+$66
 
 !ram_quickboot_spc_state            = !WRAM_PERSIST_START+$68
+!ram_oob_enemy_index                = !WRAM_PERSIST_START+$6A
+!ram_oob_width                      = !WRAM_PERSIST_START+$6C
+!ram_oob_height                     = !WRAM_PERSIST_START+$6E
     ; 0: SPC load completed/not requested
     ; 1: SPC load requested
     ; ROM address: routine to perform next initialization step
@@ -1016,6 +1019,7 @@ endif
 !SPRITE_ENEMY_PROJ = #$0020
 !SPRITE_32x32_PROJ = #$0040
 !SPRITE_OOB_WATCH = #$0080
+!SPRITE_OOB_ENEMY = #$0100
 
 !CUTSCENE_SKIP_INTRO = #$0001
 !CUTSCENE_SKIP_CERES_ARRIVAL = #$0002
