@@ -3042,7 +3042,20 @@ game_paldebug:
     %cm_toggle_inverted("Debug Samus Movement", !PAL_DEBUG_MOVEMENT, #$0001, #0)
 
 game_debugplms:
-    %cm_toggle_bit_inverted("Pseudo G-Mode", $7E1C23, #$8000, #0)
+    %cm_toggle_bit("Pseudo G-Mode", !ram_cm_gmode, #$0001, #.routine)
+  .routine
+    CMP #$0000 : BNE .enable
+    ; disable
+    LDA #$8000
+    STA !PALETTE_FX_ENABLE
+    STA !PLM_ENABLE
+    STA !ENEMY_PROJ_ENABLE
+    RTL
+  .enable
+    STZ !PALETTE_FX_ENABLE
+    STZ !PLM_ENABLE
+    STZ !ENEMY_PROJ_ENABLE
+    RTL
 
 game_debugprojectiles:
     %cm_toggle_bit("Enable Projectiles", $7E198D, #$8000, #0)

@@ -208,17 +208,18 @@
 !ram_cm_botwoon_second = !WRAM_MENU_START+$48
 !ram_cm_botwoon_spit = !WRAM_MENU_START+$4A
 !ram_cm_custom_preset_labels = !WRAM_MENU_START+$4C
+!ram_cm_gmode = !WRAM_MENU_START+$4E
 
-!ram_seed_X = !WRAM_MENU_START+$4E
-!ram_seed_Y = !WRAM_MENU_START+$50
+!ram_seed_X = !WRAM_MENU_START+$50
+!ram_seed_Y = !WRAM_MENU_START+$52
 
-!ram_cm_sfxlib1 = !WRAM_MENU_START+$52
-!ram_cm_sfxlib2 = !WRAM_MENU_START+$54
-!ram_cm_sfxlib3 = !WRAM_MENU_START+$56
+!ram_cm_sfxlib1 = !WRAM_MENU_START+$54
+!ram_cm_sfxlib2 = !WRAM_MENU_START+$56
+!ram_cm_sfxlib3 = !WRAM_MENU_START+$58
 
 ; ^ FREE SPACE ^ up to +$76
 
-!ram_cm_preserved_timers = !WRAM_MENU_START+$78 ; 8 bytes
+!ram_cm_preserved_timers = !WRAM_MENU_START+$88 ; 8 bytes
 
 ; ------------------
 ; Reusable RAM Menu
@@ -237,15 +238,15 @@
 !ram_cm_watch_enemy_side = !WRAM_MENU_START+$84
 !ram_cm_watch_common_address = !WRAM_MENU_START+$86
 
-!ram_cm_preset_elevator = !WRAM_MENU_START+$80
+!ram_cm_preset_elevator = !WRAM_MENU_START+$90
 
 !ram_cm_phan_first_phase = !WRAM_MENU_START+$80
 !ram_cm_phan_second_phase = !WRAM_MENU_START+$82
 
-!ram_cm_keyboard_buffer = !WRAM_MENU_START+$80 ; $18 bytes
+!ram_cm_keyboard_buffer = !WRAM_MENU_START+$90 ; $18 bytes
 
-!ram_cm_manage_slots = !WRAM_MENU_START+$80
-!ram_cm_selected_slot = !WRAM_MENU_START+$82
+!ram_cm_manage_slots = !WRAM_MENU_START+$90
+!ram_cm_selected_slot = !WRAM_MENU_START+$92
 
 ; ^ FREE SPACE ^ up to +$CE
 
@@ -447,6 +448,7 @@
 !SAMUS_CONTACT_DAMAGE_INDEX = $0A6E
 !SAMUS_WATER_PHYSICS = $0A70  ; Not used in vanilla
 !SAMUS_HYPER_BEAM = $0A76
+!TIME_IS_FROZEN = $0A78
 !DEMO_PREINSTRUCTION_POINTER = $0A7A
 !DEMO_INSTRUCTION_TIMER = $0A7C
 !DEMO_INSTRUCTION_POINTER = $0A7E
@@ -523,6 +525,9 @@
 !ENEMY_VAR_5 = $0FB2
 !SAMUS_IFRAME_TIMER = $18A8
 !SAMUS_KNOCKBACK_TIMER = $18AA
+!LAVA_ACID_Y = $1962
+!FX_BASE_Y = $1978
+!ENEMY_PROJ_ENABLE = $198D
 !ENEMY_PROJ_ID = $1997
 !ENEMY_PROJ_X_SUBPX = $1A27
 !ENEMY_PROJ_X = $1A4B
@@ -533,8 +538,18 @@
 !ENEMY_PROJ_RADIUS = $1BB3
 !ENEMY_PROJ_PROPERTIES = $1BD7
 !MESSAGE_BOX_INDEX = $1C1F
+!PLM_ENABLE = $1C23
+!PLM_GFX_INDEX = $1C2D
 !PLM_ID = $1C37
 !SAVE_STATION_LOCKOUT = $1E75
+!PALETTE_FX_ENABLE = $1E79
+!PALETTE_FX_ID = $1E7D
+!PALETTE_FX_COLOR_INDICES = $1E8D
+!PALETTE_FX_VARIABLE = $1E9D
+!PALETTE_FX_PREINSTRUCTION = $1EAD
+!PALETTE_FX_INSTRUCTION_POINTER = $1EBD
+!PALETTE_FX_INSTRUCTION_TIMER = $1ECD
+!PALETTE_FX_TIMER = $1EDD
 !CINEMATIC_FUNCTION_POINTER = $1F51
 !DEMO_TIMER = $1F53
 !DEMO_CURRENT_SET = $1F55
