@@ -333,7 +333,7 @@ category_preset_load:
 category_preset_data_table:
     dl presets_redesign_crateria_ceres_elevator
 
-warnpc $81F780 ; Axeil/Redesign code?
+;warnpc $81F780 ; Axeil/Redesign code?
 print pc, " presets bank81 end"
 
 
@@ -430,7 +430,6 @@ preset_start_gameplay:
     LDA #$0022 : STA $7ED914
     LDA #$E8CD : STA !SAMUS_LOCKED_HANDLER   ; Lock Samus
     LDA #$E8DC : STA !SAMUS_MOVEMENT_HANDLER ; Lock Samus
-  .end_load_game_state
 
   .end_load_game_state
     ; Preserve layer 2 values we may have loaded from presets
@@ -464,10 +463,6 @@ if !RAW_TILE_GRAPHICS
 else
     JSL $82E97C  ; Load library background
 endif
-
-    ; Special fixes for specific presets
-    LDA !PRESET_SPECIAL : BEQ +
-    JSL preset_special_fixes
 
     ; Pull layer 2 values, and use them if they are valid
     PLA : CMP #$5AFE : BEQ .calculate_layer_2
@@ -766,5 +761,4 @@ org !ORG_PRESETS_MENU
 print pc, " Redesign any% menu start"
 incsrc presets/redesign_menu.asm
 print pc, " Redesign any% menu end"
-warnpc $F4EFFF
 

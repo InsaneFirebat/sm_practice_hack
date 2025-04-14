@@ -84,4 +84,4 @@ oam_add_samus_sprite_with_prio:
 }
 
 print pc, " spriteprio end"
-warnpc $81F4CF
+;warnpc $81F4CF

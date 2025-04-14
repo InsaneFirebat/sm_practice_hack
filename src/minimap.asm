@@ -38,7 +38,7 @@ org $90A80A
 
 ; write and clear tiles to VRAM
 org $8282E5
-    JSR mm_write_and_clear_hud_tiles
+    JSR mm_write_and_clear_hud_tiles_helper
     BRA .write_next_tiles
 
 org $828305
@@ -46,7 +46,7 @@ org $828305
 
 ; write and clear tiles to VRAM
 org $828EB8
-    JSR mm_write_and_clear_hud_tiles
+    JSR mm_write_and_clear_hud_tiles_helper
     PLP
     RTL
 
@@ -106,7 +106,7 @@ mm_write_and_clear_hud_tiles_helper:
     RTS
 }
 
-org $81F200
+org !ORG_MINIMAP_BANK81
 mm_write_and_clear_hud_tiles:
 {
     %i16()

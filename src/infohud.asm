@@ -1349,7 +1349,7 @@ ih_game_loop_code:
     BRA .checkinputs
 
   .springpants
-    LDA !ram_magic_pants_enabled : AND #$0008 : BEQ .handleinputs
+    LDA !ram_spring_pants_enabled : BEQ .handleinputs
     JSR spring_pants
 
   .handleinputs
@@ -1581,17 +1581,12 @@ spring_pants:
     RTS
 
   .flash
-    LDA !ram_magic_pants_state : BNE ++
+    LDA !ram_magic_pants_state : BNE +
 
-    ; if loudpants are enabled, click
-    LDA !ram_magic_pants_enabled : AND #$0004 : BEQ +
-    LDA !sram_metronome_sfx : ASL : TAX
-    LDA.l MetronomeSFX,X : JSL !SFX_LIB1
-
-+   LDA $7EC194 : STA !ram_magic_pants_pal1
+    LDA $7EC194 : STA !ram_magic_pants_pal1
     LDA $7EC196 : STA !ram_magic_pants_pal2
     LDA $7EC19E : STA !ram_magic_pants_pal3
-++  LDA #$FFFF
++   LDA #$FFFF
     STA $7EC194 : STA $7EC196 : STA $7EC19E
     STA !ram_magic_pants_state
     RTS
@@ -1744,7 +1739,7 @@ HexToNumberGFX2:
     dw $0C00|!HUD_0, $0C00|!HUD_1, $0C00|!HUD_2, $0C00|!HUD_3, $0C00|!HUD_4, $0C00|!HUD_5, $0C00|!HUD_6, $0C00|!HUD_7, $0C00|!HUD_8, $0C00|!HUD_9
 
 print pc, " infohud bank80 end"
-warnpc $80E7F0
+;warnpc $80E7F0
 
 ;org $9AB200      ; graphics for HUD
 ;incbin ../resources/hudgfx.bin

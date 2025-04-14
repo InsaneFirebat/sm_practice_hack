@@ -517,4 +517,3 @@ gamemode_door_transtion_load_sprites:
 endif
 
 print pc, " gamemode end"
-warnpc $85B000

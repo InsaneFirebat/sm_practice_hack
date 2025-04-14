@@ -366,7 +366,18 @@ preset_scroll_fixes:
     %ai16()
     STZ $0921 : STZ $0923
     LDA !ram_custom_preset : CMP #$5AFE : BNE .category_presets
-    BRL .custom_presets
+
+    ; custom presets
+    LDA !sram_custom_preset_slot
+    ASL : XBA                    ; multiply by 200h (slot offset)
+    CLC : ADC #$31E9 : TAX       ; X = Source
+    LDY #$CD51 : LDA #$0031      ; Y = Destination, A = Size-1
+    MVP $F07E                    ; srcBank, destBank
+    LDA #$0000 : STA !ram_custom_preset
+
+    PLB
+    PLP
+    RTL
 
   .category_presets
     PEA $7E7E : PLB : PLB
@@ -398,6 +409,7 @@ endif
 +   PLB
     PLP
     RTL
+}
 
 LoadRandomPreset:
 {

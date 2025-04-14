@@ -181,4 +181,4 @@ init_post_boot:
 }
 
 print pc, " init end"
-warnpc $81F1FF
+;warnpc $81F1FF
