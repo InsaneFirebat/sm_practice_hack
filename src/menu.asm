@@ -3765,7 +3765,7 @@ incsrc crash.asm
 
 ;org $B88000
 org !ORG_MAINMENU
-org $89AF00
+;org $89AF00
 print pc, " mainmenu start"
 incsrc mainmenu.asm
 print pc, " mainmenu end"

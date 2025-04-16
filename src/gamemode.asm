@@ -89,93 +89,93 @@ gamemode_start:
     BRA .skip_load
 }
 
-if !FEATURE_REDESIGN
-
-gamemode_shortcuts:
-{
-if !FEATURE_SD2SNES
-    ; Check for auto-save mid-transition
-    LDA !ram_auto_save_state : BEQ +
-    LDA !DOOR_FUNCTION_POINTER : CMP #$E4A9 : BNE +
-    LDA #$0000 : STA !ram_auto_save_state
-    JMP .save_state
-endif
-
-  + LDA !IH_CONTROLLER_ML_NEW : BNE +
-
-    ; No shortcuts configured, CLC so we won't skip normal gameplay
-    CLC : RTS
-
-    if !FEATURE_SD2SNES
-  + LDA !IH_CONTROLLER_ML : CMP !sram_ctrl_save_state : BNE +
-    AND !IH_CONTROLLER_ML_NEW : BEQ +
-    JMP .save_state
-
-  + LDA !IH_CONTROLLER_ML : CMP !sram_ctrl_load_state : BNE +
-    AND !IH_CONTROLLER_ML_NEW : BEQ +
-    JMP .load_state
-    endif
-
-  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
-    AND !IH_CONTROLLER_ML_NEW : BEQ +
-    JMP .load_last_preset
-
-  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
-    AND !IH_CONTROLLER_ML_NEW : BEQ +
-    JMP .random_preset
-
-  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_save_custom_preset : CMP !sram_ctrl_save_custom_preset : BNE +
-    AND !IH_CONTROLLER_ML_NEW : BEQ +
-    JMP .save_custom_preset
-
-  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_load_custom_preset : CMP !sram_ctrl_load_custom_preset : BNE +
-    AND !IH_CONTROLLER_ML_NEW : BEQ +
-    JMP .load_custom_preset
-
-    ; Check if any less common shortcuts are configured
-  + LDA !ram_game_mode_extras : BNE +
-    JMP .check_menu
-
-  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_inc_custom_preset : CMP !sram_ctrl_inc_custom_preset : BNE +
-    AND !IH_CONTROLLER_ML_NEW : BEQ +
-    JMP .next_preset_slot
-
-  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_dec_custom_preset : CMP !sram_ctrl_dec_custom_preset : BNE +
-    AND !IH_CONTROLLER_ML_NEW : BEQ +
-    JMP .prev_preset_slot
-
-  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_kill_enemies : CMP !sram_ctrl_kill_enemies : BNE +
-    AND !IH_CONTROLLER_ML_NEW : BEQ +
-    JMP .kill_enemies
-
-  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_reset_segment_timer : CMP !sram_ctrl_reset_segment_timer : BNE +
-    AND !IH_CONTROLLER_ML_NEW : BEQ +
-    JMP .reset_segment_timer
-
-  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_reset_segment_later : CMP !sram_ctrl_reset_segment_later : BNE +
-    AND !IH_CONTROLLER_ML_NEW : BEQ +
-    JMP .reset_segment_later
-
-  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_full_equipment : CMP !sram_ctrl_full_equipment : BNE +
-    AND !IH_CONTROLLER_ML_NEW : BEQ +
-    JMP .full_equipment
-
-  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_toggle_tileviewer : CMP !sram_ctrl_toggle_tileviewer : BNE +
-    AND !IH_CONTROLLER_ML_NEW : BEQ +
-    JMP .toggle_tileviewer
-
-  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_update_timers : CMP !sram_ctrl_update_timers : BNE +
-    AND !IH_CONTROLLER_ML_NEW : BEQ +
-    JMP .update_timers
-
-  .check_menu
-  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
-    AND !IH_CONTROLLER_ML_NEW : BEQ +
-    JMP .menu
-
-    ; No shortcuts matched, CLC so we won't skip normal gameplay
-  + CLC : RTS
-else
+;if !FEATURE_REDESIGN
+;
+;gamemode_shortcuts:
+;{
+;if !FEATURE_SD2SNES
+;    ; Check for auto-save mid-transition
+;    LDA !ram_auto_save_state : BEQ +
+;    LDA !DOOR_FUNCTION_POINTER : CMP #$E4A9 : BNE +
+;    LDA #$0000 : STA !ram_auto_save_state
+;    JMP .save_state
+;endif
+;
+;  + LDA !IH_CONTROLLER_ML_NEW : BNE +
+;
+;    ; No shortcuts configured, CLC so we won't skip normal gameplay
+;    CLC : RTS
+;
+;    if !FEATURE_SD2SNES
+;  + LDA !IH_CONTROLLER_ML : CMP !sram_ctrl_save_state : BNE +
+;    AND !IH_CONTROLLER_ML_NEW : BEQ +
+;    JMP .save_state
+;
+;  + LDA !IH_CONTROLLER_ML : CMP !sram_ctrl_load_state : BNE +
+;    AND !IH_CONTROLLER_ML_NEW : BEQ +
+;    JMP .load_state
+;    endif
+;
+;  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_load_last_preset : CMP !sram_ctrl_load_last_preset : BNE +
+;    AND !IH_CONTROLLER_ML_NEW : BEQ +
+;    JMP .load_last_preset
+;
+;  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_random_preset : CMP !sram_ctrl_random_preset : BNE +
+;    AND !IH_CONTROLLER_ML_NEW : BEQ +
+;    JMP .random_preset
+;
+;  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_save_custom_preset : CMP !sram_ctrl_save_custom_preset : BNE +
+;    AND !IH_CONTROLLER_ML_NEW : BEQ +
+;    JMP .save_custom_preset
+;
+;  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_load_custom_preset : CMP !sram_ctrl_load_custom_preset : BNE +
+;    AND !IH_CONTROLLER_ML_NEW : BEQ +
+;    JMP .load_custom_preset
+;
+;    ; Check if any less common shortcuts are configured
+;  + LDA !ram_game_mode_extras : BNE +
+;    JMP .check_menu
+;
+;  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_inc_custom_preset : CMP !sram_ctrl_inc_custom_preset : BNE +
+;    AND !IH_CONTROLLER_ML_NEW : BEQ +
+;    JMP .next_preset_slot
+;
+;  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_dec_custom_preset : CMP !sram_ctrl_dec_custom_preset : BNE +
+;    AND !IH_CONTROLLER_ML_NEW : BEQ +
+;    JMP .prev_preset_slot
+;
+;  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_kill_enemies : CMP !sram_ctrl_kill_enemies : BNE +
+;    AND !IH_CONTROLLER_ML_NEW : BEQ +
+;    JMP .kill_enemies
+;
+;  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_reset_segment_timer : CMP !sram_ctrl_reset_segment_timer : BNE +
+;    AND !IH_CONTROLLER_ML_NEW : BEQ +
+;    JMP .reset_segment_timer
+;
+;  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_reset_segment_later : CMP !sram_ctrl_reset_segment_later : BNE +
+;    AND !IH_CONTROLLER_ML_NEW : BEQ +
+;    JMP .reset_segment_later
+;
+;  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_full_equipment : CMP !sram_ctrl_full_equipment : BNE +
+;    AND !IH_CONTROLLER_ML_NEW : BEQ +
+;    JMP .full_equipment
+;
+;  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_toggle_tileviewer : CMP !sram_ctrl_toggle_tileviewer : BNE +
+;    AND !IH_CONTROLLER_ML_NEW : BEQ +
+;    JMP .toggle_tileviewer
+;
+;  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_update_timers : CMP !sram_ctrl_update_timers : BNE +
+;    AND !IH_CONTROLLER_ML_NEW : BEQ +
+;    JMP .update_timers
+;
+;  .check_menu
+;  + LDA !IH_CONTROLLER_ML : AND !sram_ctrl_menu : CMP !sram_ctrl_menu : BNE +
+;    AND !IH_CONTROLLER_ML_NEW : BEQ +
+;    JMP .menu
+;
+;    ; No shortcuts matched, CLC so we won't skip normal gameplay
+;  + CLC : RTS
+;else
 gamemode_shortcuts:
 {
 
@@ -282,7 +282,7 @@ endif
   .no_shortcuts
     ; No shortcuts matched, CLC so we won't skip normal gameplay
     CLC : RTS
-endif
+;endif
 
 if !FEATURE_SD2SNES
   .save_state
