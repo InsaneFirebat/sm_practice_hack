@@ -372,36 +372,36 @@ print pc, " misc morphlock start"
 ; rewrite morph lock code to allow controller shortcuts and menu navigation
 org !ORG_MORPHLOCK
     ; check for menu
-    LDA !ram_cm_menu_active : BEQ .branch
+    LDA !ram_cm_menu_active : BEQ +
     LDA $4218
     RTS
 
-  .branch
     ; gamemode.asm will use these
-    LDA $4218 : STA $CB
-    EOR $C7 : AND $CB : STA $CF
++   LDA $4218 : STA !IH_CONTROLLER_PRI
+    EOR !IH_CONTROLLER_PRI_PREV : AND !IH_CONTROLLER_PRI : STA !IH_CONTROLLER_PRI_NEW
 
     ; resume normal morph lock code
-    LDA $09A1 : BMI .gameMode
+    LDA !SAMUS_ITEMS_EQUIPPED-1 : BMI .gameMode
     LDA $4218
     RTS
 
   .gameMode
     ; checks for gamemodes where morph lock is allowed
-    LDA $0998 : CMP #$0008 : BEQ .morphLock
+    LDA !GAMEMODE : CMP #$0008 : BEQ .morphLock
     CMP #$000C : BEQ .morphLock
     CMP #$0012 : BEQ .morphLock
     CMP #$001A : BNE .noMorphLock
-    LDA $09A1 : AND #$7FFF : STA $09A1 ; reset flag if dead
+    ; reset flag if dead
+    LDA !SAMUS_ITEMS_EQUIPPED-1 : AND #$7FFF : STA !SAMUS_ITEMS_EQUIPPED-1
 
   .noMorphLock
     LDA $4218
     RTS
 
   .morphLock
-    LDA $09A2 : AND #$0002 : BNE .springball
+    LDA !SAMUS_ITEMS_EQUIPPED : AND #$0002 : BNE .springball
     ; no springball, also filter jump
-    LDA #$FFFF : EOR $09B4 : AND $4218 ; removes jump input
+    LDA #$FFFF : EOR.w !IH_INPUT_JUMP : AND $4218 ; removes jump input
     BRA .noSpringball
 
   .springball
@@ -409,7 +409,7 @@ org !ORG_MORPHLOCK
     LDA $4218
 
   .noSpringball
-    AND #$F7FF ; removes up input
+    AND #$F7FF ; only removes up input
     RTS
 print pc, " misc morphlock end"
 endif

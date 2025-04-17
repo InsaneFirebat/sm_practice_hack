@@ -1,7 +1,7 @@
 #!/bin/bash
 
-set HACK_NAME=HACK
-set HACK_BUILD_VERSION=2.6.0
+set HACK_NAME=Redesign
+set HACK_BUILD_VERSION=2.6.2
 
 # Return an error if any command fails
 success=0

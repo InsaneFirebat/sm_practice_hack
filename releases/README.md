@@ -1,4 +1,10 @@
-# HACK
+# Redesign
+
+Redesign: https://metroidconstruction.com/hack.php?id=34
+
+## Special Thanks
+
+Thanks to Osse for making the Redesign presets, reporting bugs, and testing throughout the process.
 
 ## Notes
 
