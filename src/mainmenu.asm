@@ -83,13 +83,13 @@ endif
 
 preset_category_submenus:
 {
-    dw #PresetsMenuPrkd
+    dw #PresetsMenuRedesign
     dw #$0000
 }
 
 preset_category_banks:
 {
-    dw #PresetsMenuPrkd>>16
+    dw #PresetsMenuRedesign>>16
     dw #$0000
 }
 
@@ -104,7 +104,7 @@ preset_category_banks:
 
 MainMenu:
     dw #mm_goto_equipment
-;    dw #mm_goto_presets
+    dw #mm_goto_presets
     dw #mm_goto_presets_menu
     dw #mm_goto_teleport
     dw #mm_goto_events
@@ -122,11 +122,11 @@ if !FEATURE_CUSTOMIZE_MENU
     dw #mm_goto_customize
 endif
     dw #$0000
-    %cm_version_header("SM PRACTICE HACK")
+    %cm_version_header("REDESIGN INFOHUD")
 
 MainMenuBanks:
     dw #EquipmentMenu>>16
-;    dw #preset_category_banks>>16 ; dummy
+    dw #preset_category_banks>>16 ; dummy
     dw #PresetsMenu>>16
     dw #TeleportMenu>>16
     dw #EventsMenu>>16
@@ -196,19 +196,19 @@ endif
 ; -------------------
 
 PresetsMenu:
-;    dw #presets_goto_select_preset_category
-;    dw #presets_current
-;    dw #$FFFF
+    dw #presets_goto_select_preset_category
+    dw #presets_current
+    dw #$FFFF
     dw #presets_custom_preset_slot
     dw #presets_save_custom_preset
     dw #presets_load_custom_preset
     dw #$FFFF
-;    dw #presets_reload_last
-;    dw #presets_load_random
-;if !FEATURE_DEV
-;    dw #presets_random_preset_rng
-;endif
-;    dw #$FFFF
+    dw #presets_reload_last
+    dw #presets_load_random
+if !FEATURE_DEV
+    dw #presets_random_preset_rng
+endif
+    dw #$FFFF
     dw #presets_open_blue_doors
     dw #presets_load_with_enemies
     dw #presets_clear_map_tiles
@@ -339,7 +339,7 @@ endif
 SelectPresetCategoryMenu:
     dw #presets_current
     dw #$FFFF
-    dw #precat_prkd
+    dw #precat_Redesign
     dw #$0000
     %cm_header("SELECT PRESET CATEGORY")
 
@@ -348,14 +348,14 @@ presets_current:
     dl #!sram_preset_category
     dw #.routine
     db #$28, "CURRENT PRESET", #$FF
-    db #$28, "       PRKD", #$FF
+    db #$28, "       ANY%", #$FF
     db #$FF
   .routine
     LDA #$0000 : STA !sram_last_preset
     RTL
 
-precat_prkd:
-    %cm_jsl("Any% PRKD", #action_select_preset_category, #$0000)
+precat_Redesign:
+    %cm_jsl("Any%", #action_select_preset_category, #$0000)
 
 action_select_preset_category:
 {

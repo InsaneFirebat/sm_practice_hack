@@ -58,14 +58,14 @@ org $82E488
  ; graphics for HUD
 org $9AB200
 hudgfx_bin:
-incbin ../resources/hudgfx.bin
+incbin ../resources/Redesign_hudgfx.bin
 
 
 ; Place minimap graphics in bank FD
 org !ORG_MINIMAP_BANKFD
 print pc, " minimap bankFD start"
 mapgfx_bin:
-incbin ../resources/mapgfx.bin
+incbin ../resources/Redesign_mapgfx.bin
 
 ; Next block needs to be all zeros to clear a tilemap
 fillbyte $00
