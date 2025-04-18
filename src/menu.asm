@@ -58,6 +58,11 @@ cm_start:
     ; Makes the game check Samus' health again, to see if we need annoying sound
     STZ !SAMUS_HEALTH_WARNING
 
+    %a8()
+    STA !ram_cm_morphlock : STA $09A1 ; restore morph lock flag
+    %a16()
+    LDA #$0000 : STA !ram_cm_menu_active ; for morph lock in Redesign
+
     JSL cm_transfer_original_tileset
     JSL cm_transfer_original_cgram
 
@@ -152,6 +157,8 @@ cm_init:
     LDA !FRAME_COUNTER : STA !ram_cm_input_counter
     LDA.w #MainMenu : STA !ram_cm_menu_stack
     LDA.w #MainMenu>>16 : STA !ram_cm_menu_bank
+
+    STA !ram_cm_menu_active ; for morph lock in Redesign
 
     JSL cm_calculate_max
     JSL cm_set_etanks_and_reserve
