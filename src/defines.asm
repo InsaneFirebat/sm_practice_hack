@@ -38,7 +38,7 @@
 !ORG_PRESETS_DATA = $FE8000 ; $20C0
 !ORG_PRESETS_MENU = $FEE000 ; $108F
 !ORG_PRESETS_CUSTOM = $83C540 ; $7EF
-!ORG_MORPHLOCK = $80CDA0 ; $5C, vanilla overwrite
+!ORG_MORPHLOCK = $80D000 ; $5C, Redesign overwrite
 !ORG_MISC_BANKA0 = $A0FFD0 ; $2A, bank $A0
 !ORG_MISC_BANK90 = $908E75 ; $1C, bank $90, overwrites vanilla unused
 !ORG_MISC_BANK86 = $86F500 ; $75, bank $86
@@ -238,6 +238,7 @@
 ; RAM (Bank 7E required)
 ; -----------------------
 
+!PRESET_SPECIAL = $7EFDFC
 !ram_slowdown_mode = $7EFDFE
 
 ; ---------
@@ -297,8 +298,10 @@
 !ram_cm_sfxlib3 = !WRAM_MENU_START+$6C
 !ram_cm_fast_scroll_menu_selection = !WRAM_MENU_START+$6E
 
-; ^ FREE SPACE ^ up to +$7A
+; ^ FREE SPACE ^ up to +$76
 
+!ram_cm_morphlock = !WRAM_MENU_START+$78
+!ram_cm_menu_active = !WRAM_MENU_START+$7A
 !ram_tel_debug_area = !WRAM_MENU_START+$7C
 !ram_tel_debug_station = !WRAM_MENU_START+$7E
 

@@ -372,12 +372,14 @@ print pc, " misc morphlock start"
 ; rewrite morph lock code to allow controller shortcuts and menu navigation
 org !ORG_MORPHLOCK
     ; check for menu
-    LDA !ram_cm_menu_active : BEQ +
-    LDA $4218
-    RTS
+;    LDA !ram_cm_menu_active : BEQ +
+;    LDA $4218
+;    RTS
+
++   LDA !IH_CONTROLLER_PRI : STA !IH_CONTROLLER_PRI_PREV
 
     ; gamemode.asm will use these
-+   LDA $4218 : STA !IH_CONTROLLER_PRI
+    LDA $4218 : STA !IH_CONTROLLER_PRI
     EOR !IH_CONTROLLER_PRI_PREV : AND !IH_CONTROLLER_PRI : STA !IH_CONTROLLER_PRI_NEW
 
     ; resume normal morph lock code
@@ -413,6 +415,29 @@ org !ORG_MORPHLOCK
     RTS
 print pc, " misc morphlock end"
 endif
+
+
+; Next 4 org's spread out the bomb graphics on the HUD
+;org $80E2C9
+;    STA $7EC6AE : STA $7EC6B4 : STA $7EC6BA
+
+org $90F876
+    BEQ .jump_AC1C
+
+org $90F889
+    LDX #$000C ; was 8
+
+org $90F88F
+-   DEY : BNE +
+    SBC #$03FF
++   STA $7EC6AE,X
+    DEX #6 : BPL - ; was 4
+    PLX
+    PLY
+  .jump_AC1C
+    JMP $AC1C
+warnpc $90F8B0
+
 
 ; general damage hijack
 org $A0A862

@@ -2499,20 +2499,20 @@ status_gateglitch:
     INC : STA !ram_roomstrat_counter
     BRA .roomcheck
 
-  .greenhills
-    LDA #$0654 : STA !ram_xpos
+  .morphmaze
+;    LDA #$054B : STA !ram_xpos
+;    BRA .checkglitch
+
+  .crabbyGGG
+    LDA #$0334 : STA !ram_xpos
     BRA .checkglitch
 
-  .grappletutorial
-    LDA #$02B4 : STA !ram_xpos
+  .hijumpredgate
+    LDA #$0A14 : STA !ram_xpos
     BRA .checkglitch
 
-  .doublechamber
-    LDA #$01B4 : STA !ram_xpos
-    BRA .checkglitch
-
-  .kronic
-    LDA #$0084 : STA !ram_xpos
+  .beamcombo
+    LDA #$0254 : STA !ram_xpos
     BRA .checkglitch
 
   .clearstate
@@ -2520,22 +2520,22 @@ status_gateglitch:
 
   .roomcheck
     ; The gate location is hard-coded depending on the room
-    LDA !ROOM_ID : CMP #$9E52 : BEQ .greenhills : CMP #$AB64 : BEQ .grappletutorial
-    CMP #$ADAD : BEQ .doublechamber : CMP #$AE74 : BEQ .kronic
-    CMP #$AF72 : BEQ .unfarm : CMP #$B2DA : BEQ .fastripper : CMP #$D08A : BEQ .crabtunnel
+    LDA !ROOM_ID : CMP #$D461 : BEQ .crabbyGGG ;: CMP #$CE40 : BEQ .morphmaze
+    CMP #$9D9C : BEQ .hijumpredgate : CMP #$D913 : BEQ .beamcombo
+    CMP #$D4C2 : BEQ .twinredgates : CMP #$B40A : BEQ .ripperibj : CMP #$D08A : BEQ .crabtunnel
     BRA .done
 
-  .unfarm
-    LDA #$0074 : STA !ram_xpos
+  .twinredgates
+    LDA #$02F4 : STA !ram_xpos
     BRA .checkglitch
 
-  .fastripper
-    LDA #$0354 : STA !ram_xpos
+  .ripperibj
+    LDA #$06B5 : STA !ram_xpos
     BRA .checkglitch
 
   .crabtunnel
-    LDA #$00F4 : STA !ram_xpos
-    BRA .checkglitch
+;    LDA #$00F4 : STA !ram_xpos
+;    BRA .checkglitch
 
   .checkglitch
     ; If we are left of the gate, or if facing right, then no chance to glitch
