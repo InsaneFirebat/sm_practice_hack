@@ -2740,6 +2740,8 @@ RngMenu:
     dw #$FFFF
     dw #rng_kraid_claw_rng
     dw #rng_kraid_wait_rng
+    dw #$FFFF
+    dw #rng_baby_rng
     dw #$0000
     %cm_header("BOSS RNG CONTROL")
 
@@ -2893,6 +2895,16 @@ rng_kraid_wait_rng:
     db #$28, "        320", #$FF
     db #$28, "        384", #$FF
     db #$28, "        448", #$FF
+    db #$FF
+
+rng_baby_rng:
+    dw !ACTION_CHOICE
+    dl #!ram_baby_rng
+    dw #$0000
+    db #$28, "Baby Skip RNG", #$FF
+    db #$28, "     RANDOM", #$FF
+    db #$28, "   NO LUNGE", #$FF
+    db #$28, "      LUNGE", #$FF
     db #$FF
 
 
@@ -3129,6 +3141,12 @@ SavestateMenu:
     dw #save_freeze
     dw #save_middoorsave
     dw #save_alwayssave
+    dw #$FFFF
+    dw #save_rando_energy
+    dw #save_rando_reserves
+    dw #save_rando_missiles
+    dw #save_rando_supers
+    dw #save_rando_powerbombs
 if !FEATURE_DEV
     dw #$FFFF
     dw #save_delete
@@ -3154,6 +3172,26 @@ save_delete:
     TYA : STA !SRAM_SAVED_STATE
     %sfxconfirm()
     RTL
+
+save_rando_energy:
+    %cm_numfield("Energy Variance", !sram_loadstate_rando_energy, 0, 255, 1, 4, #save_rando_enable)
+
+save_rando_reserves:
+    %cm_numfield("Reserve Variance", !sram_loadstate_rando_reserves, 0, 255, 1, 4, #save_rando_enable)
+
+save_rando_missiles:
+    %cm_numfield("Missile Variance", !sram_loadstate_rando_missiles, 0, 230, 1, 4, #save_rando_enable)
+
+save_rando_supers:
+    %cm_numfield("Super Missile Variance", !sram_loadstate_rando_supers, 0, 50, 1, 2, #save_rando_enable)
+
+save_rando_powerbombs:
+    %cm_numfield("Power Bomb Variance", !sram_loadstate_rando_powerbombs, 0, 50, 1, 2, #save_rando_enable)
+
+save_rando_enable:
+{
+    JML RandomizeOnLoad_Flag
+}
 endif
 
 
@@ -3546,6 +3584,7 @@ init_wram_based_on_sram:
 ; a pointer to this routine is used as the menu's RNG seed
 ; since it lives at the end of the menu data, it moves over time
 {
+    JSL RandomizeOnLoad_Flag
     JSL init_print_segment_timer
 
     ; Check if any less common controller shortcuts are configured

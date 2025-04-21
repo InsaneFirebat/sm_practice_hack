@@ -1658,10 +1658,10 @@ ControllerTable2:
     dw $0000, $0200, $0400, $0100, $8000, $0080, $1000
 ControllerGfx1:
       ;         L      ^      R      Y      X      Sl
-    dw $0000, $0C68, $0C61, $0C69, $0C67, $0C66, $0C6A
+    dw $0000, $0C0B, $0CD5, $0C0C, $0CDB, $0CDA, $0C0D
 ControllerGfx2:
       ;         <      v      >      B      A      St
-    dw $0000, $0C60, $0C63, $0C62, $0C65, $0C64, $0C6B
+    dw $0000, $0CD4, $0CD7, $0CD6, $0CD9, $0CD8, $0C6B
 FramesHeldTable1:
     dw $0000, $00BA, $00C6, $00B8, $00CC, $00BC, $00CA
 FramesHeldTable2:

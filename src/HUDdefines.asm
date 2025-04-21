@@ -69,7 +69,7 @@
 !HUD_65 = $D2
 !HUD_A  = $D8
 !HUD_B  = $D9
-!HUD_C  = $E2
+!HUD_C  = $47
 !HUD_D  = $59
 !HUD_E  = $5A
 !HUD_F  = $5B
@@ -89,7 +89,7 @@
 !IH_LETTER_D = #$0C00|!HUD_D
 !IH_LETTER_E = #$0C00|!HUD_E
 !IH_LETTER_F = #$0C00|!HUD_F
-!IH_LETTER_H = #$0CCA
+!IH_LETTER_H = #$0C6C
 !IH_LETTER_L = #$0C0B
 !IH_LETTER_N = #$0CB8
 !IH_LETTER_R = #$0C0C

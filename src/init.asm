@@ -123,6 +123,11 @@ init_sram:
     LDA #$0000 : STA !sram_ctrl_toggle_tileviewer
     LDA #$0000 : STA !sram_ctrl_update_timers
     LDA #$0000 : STA !sram_ctrl_auto_save_state
+    LDA #$0000 : STA !sram_loadstate_rando_energy
+    LDA #$0000 : STA !sram_loadstate_rando_reserves
+    LDA #$0000 : STA !sram_loadstate_rando_missiles
+    LDA #$0000 : STA !sram_loadstate_rando_supers
+    LDA #$0000 : STA !sram_loadstate_rando_powerbombs
 
     LDA #!SRAM_VERSION : STA !sram_initialized
     RTL

@@ -14,15 +14,12 @@ incsrc wram_symbols.asm
 ; Freespace ORGs
 ; ---------------
 
-;!ORG_MENU_GFX = $F0D700 ; unused, $900, can be used to reduce menu code size
 ;!ORG_MISC_TILE_GRAPHICS = $8BFA00 ; unused, $140
 ;!ORG_RAW_TILE_TABLES = $E88800
 ;!ORG_RAW_TILEGRAPHICS = $F48000
 ;!ORG_RAW_TILES = $F4D800
 ;!ORG_ROOMNAMES = $E70000 ; whole bank pointer style
 ;!ORG_CLEAR_ENEMIES = $E70000 ; whole bank pointer style
-;!ORG_CUSTOMIZEMENU = $AFEC00
-;!ORG_PALETTEPROFILES = $AEFD20
 
 ; ---------
 ; Work RAM
@@ -154,6 +151,7 @@ ram_phantoon_rng_next_flames = !ram_phantoon_rng_next_flames ; !WRAM_PERSIST_STA
 ram_phantoon_flame_direction = !ram_phantoon_flame_direction ; !WRAM_PERSIST_START+$2A
 ram_draygon_rng_left = !ram_draygon_rng_left ; !WRAM_PERSIST_START+$2C
 ram_draygon_rng_right = !ram_draygon_rng_right ; !WRAM_PERSIST_START+$2E
+ram_baby_rng = !ram_baby_rng ; !WRAM_PERSIST_START+$30
 
 ; ^ FREE SPACE ^ up to +$34
 
@@ -177,6 +175,7 @@ ram_sprite_feature_flags = !ram_sprite_feature_flags ; !WRAM_PERSIST_START+$52
 ram_frames_held = !ram_frames_held ; !WRAM_PERSIST_START+$54
 
 ram_quickboot_spc_state = !ram_quickboot_spc_state ; !WRAM_PERSIST_START+$56
+ram_loadstate_rando_enable = !ram_loadstate_rando_enable ; !WRAM_PERSIST_START+$58
 
 ; ^ FREE SPACE ^ up to +$7C (!WRAM_START+$FC - !WRAM_PERSIST_START)
 
@@ -241,8 +240,10 @@ ram_cm_sfxlib2 = !ram_cm_sfxlib2 ; !WRAM_MENU_START+$6A
 ram_cm_sfxlib3 = !ram_cm_sfxlib3 ; !WRAM_MENU_START+$6C
 ram_cm_fast_scroll_menu_selection = !ram_cm_fast_scroll_menu_selection ; !WRAM_MENU_START+$6E
 
-; ^ FREE SPACE ^ up to +$7A
+; ^ FREE SPACE ^ up to +$76
 
+ram_cm_morphlock = !ram_cm_morphlock ; !WRAM_MENU_START+$78
+ram_cm_menu_active = !ram_cm_menu_active ; !WRAM_MENU_START+$7A
 ram_tel_debug_area = !ram_tel_debug_area ; !WRAM_MENU_START+$7C
 ram_tel_debug_station = !ram_tel_debug_station ; !WRAM_MENU_START+$7E
 
@@ -388,6 +389,11 @@ sram_cm_font = !sram_cm_font ; !SRAM_START+$8C
 ;!sram_presetequiprando_max_supers = !SRAM_START+$10A
 ;!sram_presetequiprando_max_pbs = !SRAM_START+$10C
 sram_display_mode_reward = !sram_display_mode_reward ; !SRAM_START+$10E
+sram_loadstate_rando_energy = !sram_loadstate_rando_energy ; !SRAM_START+$110
+sram_loadstate_rando_reserves = !sram_loadstate_rando_reserves ; !SRAM_START+$112
+sram_loadstate_rando_missiles = !sram_loadstate_rando_missiles ; !SRAM_START+$114
+sram_loadstate_rando_supers = !sram_loadstate_rando_supers ; !SRAM_START+$116
+sram_loadstate_rando_powerbombs = !sram_loadstate_rando_powerbombs ; !SRAM_START+$118
 
 ; ^ FREE SPACE ^ up to +$BA6
 

@@ -92,13 +92,17 @@ post_load_state:
 
   .rng
     ; Rerandomize
-    LDA !sram_save_has_set_rng : BNE .done
-    LDA !sram_rerandomize : AND #$00FF : BEQ .done
+    LDA !sram_save_has_set_rng : BNE +
+    LDA !sram_rerandomize : AND #$00FF : BEQ +
     LDA !SRAM_SAVED_RNG : STA !CACHED_RANDOM_NUMBER
     LDA !SRAM_SAVED_FRAME_COUNTER : STA !FRAME_COUNTER
     LDA !sram_seed_X : STA !ram_seed_X
     LDA !sram_seed_Y : STA !ram_seed_Y
     JSL MenuRNG ; rerandomize hack RNG
+
+    ; Randomize energy/ammo?
++   LDA !ram_loadstate_rando_enable : BEQ .done
+    JSL RandomizeOnLoad
 
   .done
     JSL init_wram_based_on_sram
