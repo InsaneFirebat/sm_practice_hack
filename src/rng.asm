@@ -92,6 +92,15 @@ org $A7BDBF
 }
 
 
+; -----------
+; Baby hijack
+; -----------
+
+; Baby skip rng
+org $A9F1CE
+    JMP hook_baby_skip_rng
+
+
 ; -----------------
 ; "Set rng" hijacks
 ; -----------------
@@ -595,4 +604,23 @@ kraid_intro_skip:
 }
 
 print pc, " kraid rng end"
+
+
+org !ORG_RNG_BANKA9
+print pc, " baby rng start"
+hook_baby_skip_rng:
+{
+    LDA !ram_baby_rng : BEQ .no_manip
+    DEC : BEQ .rng_set
+    ; lunge
+    LDA #$0020 : STA $7E7802,X
+
+  .rng_set
+    JMP $F1E0
+
+  .no_manip
+    LDA !CACHED_RANDOM_NUMBER ; overwritten code
+    JMP $F1D1
+}
+print pc, " baby rng end"
 

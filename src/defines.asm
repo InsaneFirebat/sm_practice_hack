@@ -42,7 +42,7 @@
 !ORG_MISC_BANKA0 = $A0FFD0 ; $2A, bank $A0
 !ORG_MISC_BANK90 = $908E75 ; $1C, bank $90, overwrites vanilla unused
 !ORG_MISC_BANK86 = $86F500 ; $75, bank $86
-!ORG_MISC_BANK87 = $87FF00 ; $95, bank $87
+!ORG_MISC_BANK87 = $87D000 ; $95, bank $87
 ;!ORG_MISC_TILE_GRAPHICS = $8BFA00 ; unused, $140
 !ORG_MISC_BANK8B = $8BFF00 ; $4D, bank $8B
 !ORG_MISC_BANK8F = $8FFFBC ; $26 bank $8F
@@ -55,6 +55,7 @@
 !ORG_RNG_BANKA5 = $A5FD50 ; $18, bank $A5
 !ORG_RNG_BANKA6 = $A6FF00 ; $6B, bank $A6
 !ORG_RNG_BANKA7 = $A7FFB6 ; $22, bank $A7
+!ORG_RNG_BANKA9 = $A9FB7C ; $19, bank $A9
 !ORG_FANFARE_BANK84 = $84FF6D ; $11
 !ORG_FANFARE_BANK85 = $85FF00 ; $69
 !ORG_CRASH = $80E000 ; $151, bank $80
@@ -208,6 +209,7 @@
 !ram_phantoon_flame_direction       = !WRAM_PERSIST_START+$2A
 !ram_draygon_rng_left               = !WRAM_PERSIST_START+$2C
 !ram_draygon_rng_right              = !WRAM_PERSIST_START+$2E
+!ram_baby_rng                       = !WRAM_PERSIST_START+$30
 
 ; ^ FREE SPACE ^ up to +$34
 
@@ -231,6 +233,7 @@
 !ram_frames_held                    = !WRAM_PERSIST_START+$54
 
 !ram_quickboot_spc_state            = !WRAM_PERSIST_START+$56
+!ram_loadstate_rando_enable         = !WRAM_PERSIST_START+$58
 
 ; ^ FREE SPACE ^ up to +$7C (!WRAM_START+$FC - !WRAM_PERSIST_START)
 
@@ -457,6 +460,11 @@ endif
 ;!sram_presetequiprando_max_supers = !SRAM_START+$10A
 ;!sram_presetequiprando_max_pbs = !SRAM_START+$10C
 !sram_display_mode_reward = !SRAM_START+$10E
+!sram_loadstate_rando_energy = !SRAM_START+$110
+!sram_loadstate_rando_reserves = !SRAM_START+$112
+!sram_loadstate_rando_missiles = !SRAM_START+$114
+!sram_loadstate_rando_supers = !SRAM_START+$116
+!sram_loadstate_rando_powerbombs = !SRAM_START+$118
 
 ; ^ FREE SPACE ^ up to +$BA6
 
