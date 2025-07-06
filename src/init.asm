@@ -44,6 +44,7 @@ init_code:
 
     ; Initialize RAM (Bank 7E required)
     LDA #$0000 : STA !ram_slowdown_mode
+    JSL validate_sram
 
     ; Check if we should initialize SRAM
     LDA !sram_initialized : CMP !SRAM_VERSION : BEQ .sram_initialized
