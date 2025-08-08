@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set HACK_NAME=HACK
+set HACK_NAME=SMBIHY
 set HACK_BUILD_VERSION=2.6.0
 
 # Return an error if any command fails

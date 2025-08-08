@@ -38,7 +38,7 @@ org $90A80A
 
 ; write and clear tiles to VRAM
 org $8282E5
-    JSR mm_write_and_clear_hud_tiles
+    JSL mm_write_and_clear_hud_tiles
     BRA .write_next_tiles
 
 org $828305
@@ -46,7 +46,7 @@ org $828305
 
 ; write and clear tiles to VRAM
 org $828EB8
-    JSR mm_write_and_clear_hud_tiles
+    JSL mm_write_and_clear_hud_tiles
     PLP
     RTL
 
@@ -111,7 +111,7 @@ mm_write_and_clear_hud_tiles:
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
     %i8()
-    RTS
+    RTL
 
   .minimap_vram
     LDA #$80 : STA $2115 ; word-access, incr by 1
@@ -123,7 +123,7 @@ mm_write_and_clear_hud_tiles:
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
     %i8()
-    RTS
+    RTL
 }
 
 mm_write_hud_tiles_during_door:

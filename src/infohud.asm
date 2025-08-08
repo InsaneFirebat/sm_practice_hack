@@ -1574,8 +1574,8 @@ print pc, " infohud end"
 
 
 ; Stuff that needs to be placed in bank 80
-org !ORG_INFOHUD_BANK80
-print pc, " infohud bank80 start"
+org !ORG_INFOHUD_BANK80_PART1
+print pc, " infohud bank80 part1 start"
 
 ih_fix_scroll_offsets:
 {
@@ -1638,6 +1638,12 @@ ih_hud_code_paused:
     LDA $7E09C0 ; overwritten code
     JMP $9B51
 }
+print pc, " infohud bank80 part1 end"
+warnpc $8083F6 ; vanilla code
+
+
+org !ORG_INFOHUD_BANK80_PART2
+print pc, " infohud bank80 part 2 start"
 
 NumberGFXTable:
     dw $0C00|!HUD_0,  $0C00|!HUD_1,  $0C00|!HUD_2,  $0C00|!HUD_3,  $0C00|!HUD_4,  $0C00|!HUD_5,  $0C00|!HUD_6,  $0C00|!HUD_7,  $0C00|!HUD_8,  $0C00|!HUD_9
@@ -1683,6 +1689,6 @@ HexToNumberGFX2:
     dw $0C00|!HUD_0, $0C00|!HUD_1, $0C00|!HUD_2, $0C00|!HUD_3, $0C00|!HUD_4, $0C00|!HUD_5, $0C00|!HUD_6, $0C00|!HUD_7, $0C00|!HUD_8, $0C00|!HUD_9
     dw $0C00|!HUD_0, $0C00|!HUD_1, $0C00|!HUD_2, $0C00|!HUD_3, $0C00|!HUD_4, $0C00|!HUD_5, $0C00|!HUD_6, $0C00|!HUD_7, $0C00|!HUD_8, $0C00|!HUD_9
 
-print pc, " infohud bank80 end"
+print pc, " infohud bank80 part2 end"
 ;warnpc $80FF80 ; cutscenes.asm door transition code
 

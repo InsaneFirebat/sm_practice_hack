@@ -91,7 +91,7 @@ preset_load:
     LDA !ROOM_ID : CMP #$9804 : BEQ .done_clearing_enemies
     CMP #$DD58 : BEQ .set_mb_state
     LDA !sram_preset_options : BIT !PRESETS_PRESERVE_ENEMIES : BNE .done_clearing_enemies
-    JSR clear_all_enemies
+    JSL clear_all_enemies
 
   .done_clearing_enemies
     PLP
@@ -107,29 +107,6 @@ preset_load:
     STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds
     STA !ram_seg_rt_minutes
     BRA .done_clearing_enemies
-}
-
-clear_all_enemies:
-{
-if !FEATURE_CLEAR_ENEMIES
-    LDA.w #ClearEnemiesTable>>16 : STA $C3
-    LDA #$0000
-  .loop
-    TAX : LDA !ENEMY_ID,X
-    SEC : ROR : ROR : STA $C1
-    LDA [$C1] : BEQ .done_clearing
-    LDA !ENEMY_PROPERTIES : ORA #$0200 : STA !ENEMY_PROPERTIES,X
-else
-    ; Clear enemies (8000 = solid to Samus, 0400 = Ignore Samus projectiles, 0100 = Invisible)
-    LDA #$0000
-  .loop
-    TAX : LDA $0F86,X : BIT #$8500 : BNE .done_clearing
-    ORA #$0200 : STA $0F86,X
-endif
-  .done_clearing
-    TXA : CLC : ADC #$0040 : CMP #$0800 : BNE .loop
-    STZ $0E52 ; unlock grey doors that require killing enemies
-    RTS
 }
 
 preset_load_destination_state_and_tiles:
@@ -192,30 +169,6 @@ preset_start_transfer_to_vram:
 preset_end_transfer_to_vram:
     RTS
 endif
-
-reset_all_counters:
-{
-    LDA #$0000
-    STA !ram_room_has_set_rng
-    STA !IGT_FRAMES : STA !IGT_SECONDS : STA !IGT_MINUTES : STA !IGT_HOURS
-    STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds : STA !ram_seg_rt_minutes
-    STA !ram_realtime_room : STA !ram_last_realtime_room
-    STA !ram_gametime_room : STA !ram_last_gametime_room
-    STA !ram_last_room_lag : STA !ram_last_door_lag_frames : STA !ram_transition_counter
-    RTL
-}
-
-startgame_seg_timer:
-{
-    ; seg timer will be 1:50 (1 second, 50 frames) behind by the time it appears
-    ; 20 frames more if the file was new
-    ; initializing to 1:50 for now
-    LDA #$0032 : STA !ram_seg_rt_frames
-    LDA #$0001 : STA !ram_seg_rt_seconds
-    LDA #$0000 : STA !ram_seg_rt_minutes
-    JSL $808924    ; overwritten code
-    RTL
-}
 
 preset_load_preset:
 {
@@ -453,13 +406,15 @@ endif
 
   .calculate_layer_2
     PLA ; Pull other layer 2 value but do not use it
-    JSR $A2F9 ; Calculate layer 2 X position
-    JSR $A33A ; Calculate layer 2 Y position
+    JSL CalculateLayer2Positions_long
+;    JSR $A2F9 ; Calculate layer 2 X position
+;    JSR $A33A ; Calculate layer 2 Y position
     LDA !LAYER2_X : STA !BG2_X_SCROLL ; BG2 X scroll = layer 2 X scroll position
     LDA !LAYER2_Y : STA !BG2_Y_SCROLL ; BG2 Y scroll = layer 2 Y scroll position
 
   .layer_2_loaded
-    JSR $A37B    ; Calculate BG positions
+    JSL CalculateBGPositions_long
+;    JSR $A37B    ; Calculate BG positions
 
     ; Fix BG2 Y offsets for rooms with scrolling sky
     LDA !ROOM_ID : CMP #$91F8 : BEQ .bgOffsetsScrollingSky
@@ -706,6 +661,19 @@ endif
   .end
     PLB : PLP : RTL
 }
+print pc, " presets bank80 end"
+
+
+org !ORG_PRESETS_BRIDGE_BANK80
+print pc, " presets bank80 bridge start"
+CalculateLayer2Positions_long:
+    JSR $A2F9 ; Calculate layer 2 X position
+    JSR $A33A ; Calculate layer 2 Y position
+    RTL
+
+CalculateBGPositions_long:
+    JSR $A37B    ; Calculate BG positions
+    RTL
 
 transfer_cgram_long:
 {
@@ -717,32 +685,58 @@ transfer_cgram_long:
     PLP
     RTL
 }
-
-;add_grapple_and_xray_to_hud:
-;{
-;    ; Copied from $809AB1 to $809AC9
-;    LDA $09A2 : BIT #$8000 : BEQ $04
-;    JSL $809A3E            ; Add x-ray to HUD tilemap
-;    LDA $09A2 : BIT #$4000 : BEQ $04
-;    JSL $809A2E            ; Add grapple to HUD tilemap
-;    JMP resume_infohud_icon_initialization
-;}
-
-print pc, " presets bank80 end"
-;warnpc $80F600 ; save.asm or tinystates.asm
+print pc, " presets bank80 bridge end"
 
 
-; $80:9AB1: Add x-ray and grapple HUD items if necessary
-;org $809AB1
-;    ; Skip x-ray and grapple if max HP is a multiple of 4,
-;    ; which is only possible if GT code was used
-;    LDA !SAMUS_HP_MAX : AND #$0003 : BEQ resume_infohud_icon_initialization
-;    JMP add_grapple_and_xray_to_hud
-;warnpc $809AC9
+org !ORG_PRESETS_MOVED
+print pc, " presets moved start"
+clear_all_enemies:
+{
+if !FEATURE_CLEAR_ENEMIES
+    LDA.w #ClearEnemiesTable>>16 : STA $C3
+    LDA #$0000
+  .loop
+    TAX : LDA !ENEMY_ID,X
+    SEC : ROR : ROR : STA $C1
+    LDA [$C1] : BEQ .done_clearing
+    LDA !ENEMY_PROPERTIES : ORA #$0200 : STA !ENEMY_PROPERTIES,X
+else
+    ; Clear enemies (8000 = solid to Samus, 0400 = Ignore Samus projectiles, 0100 = Invisible)
+    LDA #$0000
+  .loop
+    TAX : LDA $0F86,X : BIT #$8500 : BNE .done_clearing
+    ORA #$0200 : STA $0F86,X
+endif
+  .done_clearing
+    TXA : CLC : ADC #$0040 : CMP #$0800 : BNE .loop
+    STZ $0E52 ; unlock grey doors that require killing enemies
+    RTL
+}
 
-; $80:9AC9: Resume original logic
-;org $809AC9
-;resume_infohud_icon_initialization:
+reset_all_counters:
+{
+    LDA #$0000
+    STA !ram_room_has_set_rng
+    STA !IGT_FRAMES : STA !IGT_SECONDS : STA !IGT_MINUTES : STA !IGT_HOURS
+    STA !ram_seg_rt_frames : STA !ram_seg_rt_seconds : STA !ram_seg_rt_minutes
+    STA !ram_realtime_room : STA !ram_last_realtime_room
+    STA !ram_gametime_room : STA !ram_last_gametime_room
+    STA !ram_last_room_lag : STA !ram_last_door_lag_frames : STA !ram_transition_counter
+    RTL
+}
+
+startgame_seg_timer:
+{
+    ; seg timer will be 1:50 (1 second, 50 frames) behind by the time it appears
+    ; 20 frames more if the file was new
+    ; initializing to 1:50 for now
+    LDA #$0032 : STA !ram_seg_rt_frames
+    LDA #$0001 : STA !ram_seg_rt_seconds
+    LDA #$0000 : STA !ram_seg_rt_minutes
+    JSL $808924    ; overwritten code
+    RTL
+}
+print pc, " presets moved end"
 
 
 ; -------------------
