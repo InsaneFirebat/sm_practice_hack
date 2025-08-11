@@ -9,11 +9,11 @@ org $8094DF
     PLP          ; patch out resetting of controller 2 buttons and enable debug mode
     RTL
 
-org $80ADB5      ; fix for scroll offset misalignment when going down through door
-    JSR ih_fix_scroll_down_offsets
-
-org $80AE29      ; fix for scroll offset misalignment
-    JSR ih_fix_scroll_offsets
+;org $80ADB5      ; fix for scroll offset misalignment when going down through door
+;    JSR ih_fix_scroll_down_offsets
+;
+;org $80AE29      ; fix for scroll offset misalignment
+;    JSR ih_fix_scroll_offsets
 
 org $828B4B      ; disable debug functions
     JML ih_debug_routine
@@ -1577,43 +1577,43 @@ print pc, " infohud end"
 org !ORG_INFOHUD_BANK80_PART1
 print pc, " infohud bank80 part1 start"
 
-ih_fix_scroll_offsets:
-{
-    ; Custom doors are defined for incompatible door alignment,
-    ; which sometimes breakings the scroll offsets
-    ; Per layout.asm, these door definitions begin at 83:C000,
-    ; so BIT #$4000 can be used to detect them
-    LDA !DOOR_ID : BIT #$4000 : BNE .fix
-    LDA !ram_fix_scroll_offsets : BEQ .nofix
-
-  .fix
-    LDA $B3 : AND #$FF00 : STA $B3
-    LDA $B1 : AND #$FF00
-    SEC
-    RTS
-
-  .nofix
-    LDA $B1 : SEC
-    RTS
-}
-
-ih_fix_scroll_down_offsets:
-{
-    ; Same fix as above, except $B3 must end in #$20
-    LDA !DOOR_ID : BIT #$4000 : BNE .fix
-    LDA !ram_fix_scroll_offsets : BEQ .nofix
-
-  .fix
-    LDA $B3 : AND #$FF00 : ORA #$0020 : STA $B3
-    LDA $B1 : AND #$FF00
-    SEC
-    ; From here, we need to jump into the AE29 method
-    JMP $AE2C
-
-  .nofix
-    LDA $B1 : SEC
-    JMP $AE2C
-}
+;ih_fix_scroll_offsets:
+;{
+;    ; Custom doors are defined for incompatible door alignment,
+;    ; which sometimes breakings the scroll offsets
+;    ; Per layout.asm, these door definitions begin at 83:C000,
+;    ; so BIT #$4000 can be used to detect them
+;    LDA !DOOR_ID : BIT #$4000 : BNE .fix
+;    LDA !ram_fix_scroll_offsets : BEQ .nofix
+;
+;  .fix
+;    LDA $B3 : AND #$FF00 : STA $B3
+;    LDA $B1 : AND #$FF00
+;    SEC
+;    RTS
+;
+;  .nofix
+;    LDA $B1 : SEC
+;    RTS
+;}
+;
+;ih_fix_scroll_down_offsets:
+;{
+;    ; Same fix as above, except $B3 must end in #$20
+;    LDA !DOOR_ID : BIT #$4000 : BNE .fix
+;    LDA !ram_fix_scroll_offsets : BEQ .nofix
+;
+;  .fix
+;    LDA $B3 : AND #$FF00 : ORA #$0020 : STA $B3
+;    LDA $B1 : AND #$FF00
+;    SEC
+;    ; From here, we need to jump into the AE29 method
+;    JMP $AE2C
+;
+;  .nofix
+;    LDA $B1 : SEC
+;    JMP $AE2C
+;}
 
 ih_hud_code_paused:
 {
@@ -1625,21 +1625,21 @@ ih_hud_code_paused:
     %ai16()
 
     ; Update Samus' HP and reserves
-    LDA $7E09C2 : CMP !ram_last_hp : BEQ .check_reserves : STA !ram_last_hp
+    LDA $09C2 : CMP !ram_last_hp : BEQ .check_reserves : STA !ram_last_hp
     BRA .draw_health
   .check_reserves
-    LDA $7E09D6 : CMP !ram_reserves_last : BEQ .end
+    LDA $09D6 : CMP !ram_reserves_last : BEQ .end
   .draw_health
     PHY : PHX
     LDX #$0092 : JSL DrawHealthPaused
     PLX : PLY
 
   .end
-    LDA $7E09C0 ; overwritten code
+    LDA $09C0 ; overwritten code
     JMP $9B51
 }
 print pc, " infohud bank80 part1 end"
-warnpc $8083F6 ; vanilla code
+;warnpc $8083F6 ; vanilla code
 
 
 org !ORG_INFOHUD_BANK80_PART2

@@ -63,8 +63,8 @@ org $A5899D
 ; Crocomire hijack
 ; ----------------
 {
-org $A48753
-    JSR hook_crocomire_rng
+org $A48752
+    JML hook_crocomire_rng
 }
 
 
@@ -78,7 +78,8 @@ KraidWaitTable:
     dw #$0080, #$0040, #$0080, #$00C0, #$0100, #$0140, #$0180, #$01C0
 
 org $A7AA69
-    JSR kraid_intro_skip
+    JSL kraid_intro_skip
+    NOP #2
 
 org $A7AE0D
     LDA !ram_kraid_wait_rng : BNE kraid_wait_load_delay
@@ -88,7 +89,8 @@ kraid_wait_load_delay:
 warnpc $A7AE1E
 
 org $A7BDBF
-    JSR hook_kraid_claw_rng
+    JSL hook_kraid_claw_rng
+    NOP #2
 }
 
 
@@ -430,30 +432,93 @@ hook_botwoon_spit:
     JML $808111
 }
 
-print pc, " rng end"
-;warnpc $83B400 ; custompresets.asm
-
-
-;org $A4F700
-org !ORG_RNG_BANKA4
-print pc, " crocomire rng start"
-
 hook_crocomire_rng:
 {
+    PHX
     LDA !ram_crocomire_rng : BEQ .no_manip
     DEC : BEQ .step
     LDA #$0000    ; return with <400 for swipe
-    RTS
+    JML $A48756 ; return
 
   .step
     LDA #$0400    ; return with 400+ for step
-    RTS
+    JML $A48756 ; return
 
   .no_manip
     LDA !CACHED_RANDOM_NUMBER
-    RTS
+    JML $A48756 ; return
 }
-print pc, " crocomire rng end"
+
+ridley_init_hook:
+{
+    LDA $079B : CMP #$E0B5 : BNE .continue
+    LDA $7ED82E : BIT #$0001 : BEQ .continue
+
+    ; Ceres Ridley is already dead, so skip to the escape
+    ; We do need to mark Ceres Ridley alive
+    ; to keep the door locked until the timer starts
+    AND #$FFFE : STA $7ED82E
+
+    ; Clear out the room main asm so it doesn't also trigger the escape
+    STZ $07DF
+
+    ; Set up the escape timer routine
+    LDA #$0001 : STA $093F
+    LDA #$E0E6 : STA $0A5A
+
+    ; Jump to the escape
+    LDA #$AB37
+    STA $0FA8
+    JML ridley_init_hook_jump
+;    JMP ($0FA8)
+
+  .continue
+    LDA #$A377
+    STA $0FA8
+    JML ridley_init_hook_jump
+;    JMP ($0FA8)
+}
+
+ceres_ridley_draw_metroid:
+{
+    LDA $7ED82E : BIT #$0001 : BNE .end
+    LDA $093F : BNE .end
+    JML ceres_ridley_draw_metroid_jump
+;    JSR $BF1A
+
+  .end
+    JML ceres_ridley_draw_metroid_jump_end
+;    JMP $A2FA
+}
+
+hook_kraid_claw_rng:
+{
+    LDA !ram_kraid_claw_rng : BEQ .no_manip
+    DEC #2 ; return -1 (laggy) or 0 (laggier)
+    BIT #$0001
+    RTL
+
+  .no_manip
+    LDA !CACHED_RANDOM_NUMBER : BIT #$0001
+    RTL
+}
+
+kraid_intro_skip:
+{
+    LDA !sram_cutscenes : AND !CUTSCENE_FAST_KRAID : BEQ .noSkip
+    ; We can't adjust the timer here, because we're in a door transition and it will be 
+    ; considered part of the previous room. Instead, set a flag to adjust the timer at 
+    ; the end of the door transition.
+    LDA #$0001 : STA !ram_kraid_adjust_timer
+    RTL
+
+  .noSkip
+    LDA #$012C
+    RTL
+}
+
+print pc, " rng end"
+;warnpc $83B400 ; custompresets.asm
 
 
 ;org $A5FA00
@@ -492,10 +557,10 @@ org $A6A0FC
     LDA $0F86
 
 org $A6A2F2
-    JMP ceres_ridley_draw_metroid
+    JML ceres_ridley_draw_metroid
 
 org $A6A360
-    LDA #ridley_init_hook
+    LDA #ridley_init_hook_bridge
 
 ; Fix ceres ridley door instruction list to keep door visible when skipping ridley fight
 org $A6F55C
@@ -512,87 +577,33 @@ org $A6F66A
 org !ORG_RNG_BANKA6
 print pc, " ridley rng start"
 
-ridley_init_hook:
-{
-    LDA $079B : CMP #$E0B5 : BNE .continue
-    LDA $7ED82E : BIT #$0001 : BEQ .continue
-
-    ; Ceres Ridley is already dead, so skip to the escape
-    ; We do need to mark Ceres Ridley alive
-    ; to keep the door locked until the timer starts
-    AND #$FFFE : STA $7ED82E
-
-    ; Clear out the room main asm so it doesn't also trigger the escape
-    STZ $07DF
-
-    ; Set up the escape timer routine
-    LDA #$0001 : STA $093F
-    LDA #$E0E6 : STA $0A5A
-
-    ; Jump to the escape
-    LDA #$AB37
-    STA $0FA8
+ridley_init_hook_jump:
     JMP ($0FA8)
 
-  .continue
-    LDA #$A377
-    STA $0FA8
-    JMP ($0FA8)
-}
-
-ceres_ridley_draw_metroid:
-{
-    LDA $7ED82E : BIT #$0001 : BNE .end
-    LDA $093F : BNE .end
+ceres_ridley_draw_metroid_jump:
     JSR $BF1A
-
   .end
     JMP $A2FA
-}
 
+ridley_init_hook_bridge:
+    JML ridley_init_hook
+
+print pc, " ridley rng start"
+
+org !ORG_RNG_BANKA6_TABLES
+print pc, " ridley rng tables start"
 ridley_ceres_door_original_instructions:
     dw $F6A6
-    dw #$0002, $FA13
+    dw $0002, $FA13
     dw $F66A, $F55C
     dw $F6B0
     dw $80ED, $F598
 
 ridley_ceres_door_escape_instructions:
     dw $F6B0
-    dw #$0002, $FA13
+    dw $0002, $FA13
     dw $F66A, $F55C
     dw $80ED, $F598
 
-print pc, " ridley rng end"
-
-
-org !ORG_RNG_BANKA7
-print pc, " kraid rng start"
-
-hook_kraid_claw_rng:
-{
-    LDA !ram_kraid_claw_rng : BEQ .no_manip
-    DEC : DEC     ; return -1 (laggy) or 0 (laggier)
-    RTS
-
-  .no_manip
-    LDA !CACHED_RANDOM_NUMBER
-    RTS
-}
-
-kraid_intro_skip:
-{
-    LDA !sram_cutscenes : AND !CUTSCENE_FAST_KRAID : BEQ .noSkip
-    ; We can't adjust the timer here, because we're in a door transition and it will be 
-    ; considered part of the previous room. Instead, set a flag to adjust the timer at 
-    ; the end of the door transition.
-    LDA #$0001 : STA !ram_kraid_adjust_timer
-    RTS
-
-  .noSkip
-    LDA #$012C
-    RTS
-}
-
-print pc, " kraid rng end"
+print pc, " ridley rng tables end"
 

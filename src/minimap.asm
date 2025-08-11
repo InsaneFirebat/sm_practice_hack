@@ -22,15 +22,15 @@ org $90A91B
     LDA !ram_minimap : BNE .update_minimap
     RTL
   .update_minimap
-    JMP mm_update_minimap
+    JML mm_update_minimap
 
 org $90A97E
-    JMP mm_inc_tile_count
+    JML mm_inc_tile_count
 
  ; only clear minimap if it is visible
 org $90A7EE
     LDA !ram_minimap : BEQ .skip_minimap
-    JMP mm_clear_boss_room_tiles
+    JML mm_clear_boss_room_tiles
 
 ; normally runs after minimap grid has been drawn
 org $90A80A
@@ -159,6 +159,22 @@ print pc, " minimap bank82 end"
 org !ORG_MINIMAP_BANK90
 print pc, " minimap bank90 start"
 
+mm_initialize_minimap_init_minimap_jump:
+    JMP $A8EF
+
+mm_update_minimap_jump:
+    JMP $A925
+
+mm_inc_tile_count_jump:
+    JMP $A987
+
+mm_clear_boss_room_tiles_loop_jump:
+    JMP $A80A
+print pc, " minimap bank90 end"
+
+
+org !ORG_MINIMAP_BANK90_MOVED
+print pc, " minimap bank90 moved start"
 mm_initialize_minimap:
 {
     ; If we just left Ceres, increment segment timer
@@ -183,7 +199,8 @@ mm_initialize_minimap:
 
   .init_minimap
     LDA !ram_minimap : BEQ .skip_minimap
-    JMP $A8EF  ; resume original logic
+    JML mm_initialize_minimap_init_minimap_jump
+;    JMP $A8EF  ; resume original logic
 
   .skip_minimap
     RTL
@@ -194,7 +211,8 @@ mm_update_minimap:
     PHP
     %ai16()
     LDA $05F7 : BNE .skip_minimap
-    JMP $A925  ; minimap is enabled
+    JML mm_update_minimap_jump
+;    JMP $A925 ; minimap is enabled
 
   .skip_minimap
     PLP
@@ -215,7 +233,8 @@ mm_inc_tile_count:
     %a8()
 
   .done
-    JMP $A987  ; resume original logic
+    JML mm_inc_tile_count_jump
+;    JMP $A987  ; resume original logic
 }
 
 mm_clear_boss_room_tiles:
@@ -227,8 +246,9 @@ mm_clear_boss_room_tiles:
     STA !HUD_TILEMAP+$7C,X
     STA !HUD_TILEMAP+$BC,X
     INX : INX : CPX #$000A : BMI .loop
-    JMP $A80A
+    JML mm_clear_boss_room_tiles_loop_jump
+;    JMP $A80A
 }
 
-print pc, " minimap bank90 end"
+print pc, " minimap bank90 moved end"
 
