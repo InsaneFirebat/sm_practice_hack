@@ -33,7 +33,7 @@ incsrc custompresets.asm
 incsrc presets.asm
 incsrc misc.asm
 incsrc init.asm
-incsrc fanfare.asm
+;incsrc fanfare.asm
 incsrc spriteprio.asm
 incsrc spritefeat.asm
 if !RAW_TILE_GRAPHICS

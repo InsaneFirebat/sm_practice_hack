@@ -58,7 +58,7 @@ org $82E488
  ; graphics for HUD
 org $9AB200
 hudgfx_bin:
-incbin ../resources/hudgfx.bin
+incbin ../resources/SMBIHY_hudgfx.bin
 
 
 ; Place minimap graphics in bank FD
@@ -90,6 +90,19 @@ mm_default_HUD_row_3:
 org $80994D
 mm_default_HUD_energy:
     dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
+
+; Clear default minimap borders
+org $8098BF
+    dw #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F, #$2C0F
+
+org $809909
+    dw #$2C0F
+
+org $809949
+    dw #$2C0F
+
+org $809989
+    dw #$2C0F
 
 
 ; Placed in bank 82 so that the jumps work

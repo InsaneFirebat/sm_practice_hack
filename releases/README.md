@@ -1,4 +1,4 @@
-# HACK
+# Super Metroid But I Hate You
 
 ## Notes
 

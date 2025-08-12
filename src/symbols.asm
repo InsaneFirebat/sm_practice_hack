@@ -14,6 +14,9 @@ incsrc wram_symbols.asm
 ; Freespace ORGs
 ; ---------------
 
+;!ORG_RNG_BANKA4 = $A4FFA0 ; $15, bank $A4
+;!ORG_RNG_BANKA7 = $A7FFB6 ; $22, bank $A7
+
 ;!ORG_MENU_GFX = $F0D700 ; unused, $900, can be used to reduce menu code size
 ;!ORG_MISC_TILE_GRAPHICS = $8BFA00 ; unused, $140
 ;!ORG_RAW_TILE_TABLES = $E88800
@@ -21,8 +24,6 @@ incsrc wram_symbols.asm
 ;!ORG_RAW_TILES = $F4D800
 ;!ORG_ROOMNAMES = $E70000 ; whole bank pointer style
 ;!ORG_CLEAR_ENEMIES = $E70000 ; whole bank pointer style
-;!ORG_CUSTOMIZEMENU = $AFEC00
-;!ORG_PALETTEPROFILES = $AEFD20
 
 ; ---------
 ; Work RAM

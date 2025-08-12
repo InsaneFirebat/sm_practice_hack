@@ -46,3 +46,5 @@ rm 00.sfc ff.sfc ../build/00.sfc ../build/ff.sfc ../build/symbols.sym
 cd ..
 
 exit $success
+
+PAUSE

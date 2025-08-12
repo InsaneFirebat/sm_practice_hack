@@ -47,3 +47,4 @@ python create_ips.py ..\build\00.sfc ..\build\ff.sfc ..\build\%HACK_NAME%_InfoHU
 del 00.sfc ff.sfc ..\build\00.sfc ..\build\ff.sfc ..\build\symbols.sym
 cd ..
 
+PAUSE
