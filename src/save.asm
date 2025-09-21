@@ -21,6 +21,7 @@ pre_load_state:
     LDA !sram_rerandomize : AND #$00FF : BEQ .done
     LDA !RANDOM_NUMBER : STA !SRAM_SAVED_RNG
     LDA !FRAME_COUNTER : STA !SRAM_SAVED_FRAME_COUNTER
+    LDA !ENEMY_MAIN_LOOP_COUNTER : STA !SRAM_SAVED_ENEMY_COUNTER
     LDA !ram_seed_X : STA !sram_seed_X
     LDA !ram_seed_Y : STA !sram_seed_Y
 
@@ -66,6 +67,7 @@ post_load_state:
     LDA !sram_rerandomize : AND #$00FF : BEQ .done
     LDA !SRAM_SAVED_RNG : STA !RANDOM_NUMBER
     LDA !SRAM_SAVED_FRAME_COUNTER : STA !FRAME_COUNTER
+    LDA !SRAM_SAVED_ENEMY_COUNTER : STA !ENEMY_MAIN_LOOP_COUNTER
     LDA !sram_seed_X : STA !ram_seed_X
     LDA !sram_seed_Y : STA !ram_seed_Y
     JSL MenuRNG ; rerandomize hack RNG
