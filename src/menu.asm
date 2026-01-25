@@ -2821,7 +2821,7 @@ execute_numfield_word:
     PHK : PEA .end-1
 
     ; addr in A
-    LDA [!DP_Address] : LDX #$0000
+    LDA [!DP_DigitAddress] : LDX #$0000
     JML.w [!DP_JSLTarget]
 
   .singleDigitEditing
