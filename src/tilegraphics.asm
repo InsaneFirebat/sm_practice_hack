@@ -138,21 +138,22 @@ load_raw_tile_graphics:
     CLC : ADC #tileset_palettes
 
     ; Save that for later and prepare for DMA
-    PHA : LDA !sram_compressed_graphics : BIT !PRESETS_COMPRESSED_GRAPHICS : BNE .tile_decompression
+    PHA
+    LDA !sram_compressed_graphics : BNE .tile_decompression
     %a8() : LDA.l raw_tile_graphics_table,X : BPL .separate_dmas
 
     ; A few tilesets also include the CRE and can be done in one DMA
-    LDA #$80 : STA $2115            ; word-access, incr by 1
-    LDY #$0000 : STY $2116          ; VRAM address
-    LDA #$00 : STA $4302            ; Source offset (low byte)
-    INX #2 : LDA.l raw_tile_graphics_table,X
-    STA $4303                       ; Source offset (high byte)
-    INX : LDA.l raw_tile_graphics_table,X
-    STA $4304                       ; Source bank
-    LDY #$8000 : STY $4305          ; size
-    LDA #$01 : STA $4300            ; word, normal increment (DMA MODE)
-    LDA #$18 : STA $4301            ; destination (VRAM write)
-    LDA #$01 : STA $420B            ; initiate DMA (channel 1)
+    LDA #$80 : STA $2115 ; word-access, incr by 1
+    LDY #$0000 : STY $2116 ; VRAM address
+    LDA #$00 : STA $4302 ; Source offset (low byte)
+    INX #2
+    LDA.l raw_tile_graphics_table,X : STA $4303 ; Source offset (high byte)
+    INX
+    LDA.l raw_tile_graphics_table,X : STA $4304 ; Source bank
+    LDY #$8000 : STY $4305 ; size
+    LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
+    LDA #$18 : STA $4301 ; destination (VRAM write)
+    LDA #$01 : STA $420B ; initiate DMA (channel 1)
     BRL .tileset_palette
 
   .tile_decompression
@@ -233,7 +234,7 @@ load_raw_tile_graphics:
     LDA #$01 : STA $420B           ; initiate DMA (channel 1)
 
   .tileset_palette
-    LDA !sram_compressed_graphics : BIT.b !PRESETS_COMPRESSED_PALETTES : BNE .palette_decompression
+    LDA !sram_compressed_graphics : BNE .palette_decompression
 
     ; Copy tileset palette to $7EC200
     PLX : LDY #$C200 : LDA #$FF
@@ -295,7 +296,7 @@ preset_load_level_tile_tables_scrolls_plms_and_execute_asm:
 
   .level_data_done
     PEA $8F00 : PLB : PLB
-    LDA !sram_compressed_graphics : BIT !PRESETS_COMPRESSED_GRAPHICS : BNE .tile_table_decompression
+    LDA !sram_compressed_graphics : BNE .tile_table_decompression
 
     ; Jump to routine based on graphics set
     LDX !STATE_POINTER : LDA $0003,X : AND #$00FF
