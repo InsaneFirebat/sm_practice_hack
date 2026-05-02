@@ -1908,6 +1908,7 @@ GameLoopExtras:
 
 SpritesMenu:
     dw #sprites_samus_prio
+    dw #$FFFF
     dw #sprites_show_samus_hitbox
     dw #sprites_show_enemy_hitbox
     dw #sprites_show_extended_spritemap_hitbox
@@ -1915,6 +1916,7 @@ SpritesMenu:
     dw #sprites_show_samusproj_hitbox
     dw #sprites_show_enemyproj_hitbox
     dw #sprites_show_proj_as_32x32
+    dw #$FFFF
     dw #sprites_oob_viewer
     dw #$0000
     %cm_header("SPRITE FEATURES")
@@ -2167,7 +2169,6 @@ if !PRESERVE_WRAM_DURING_SPACETIME
     dw #ih_spacetime_infohud
 endif
     dw #ih_status_icons
-    dw #ih_lag
     dw #$FFFF
     dw #ih_ram_watch
     dw #$0000
@@ -3922,6 +3923,8 @@ save_rando_enable:
 SlowdownMenu:
     dw #slowdown_mode
     dw #slowdown_frames
+    dw #$FFFF
+    dw #slowdown_artifial_lag
     dw #$0000
     %cm_header("SLOWDOWN MODE")
     %cm_footer("PAUSE IS STILL WIP")
@@ -3938,6 +3941,9 @@ slowdown_mode:
 
 slowdown_frames:
     %cm_numfield("Slowdown (Lag) Frames", !ram_cm_slowdown_frames, 0, 120, 1, 4, #0)
+
+slowdown_artifial_lag:
+    %cm_numfield("Artificial Lag", !sram_artificial_lag, 0, 64, 1, 4, #0)
 
 
 ; ----------
