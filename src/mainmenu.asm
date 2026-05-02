@@ -251,7 +251,7 @@ endif
     dw #$0000
     %cm_header("PRESET OPTIONS MENU")
 if !RAW_TILE_GRAPHICS
-    %cm_footer("COMPRESSED OFF IS FASTER")
+    %cm_footer("SAMUS SKIN OFF IS FASTER")
 endif
 
 presets_goto_select_preset_category:
@@ -338,17 +338,8 @@ presets_ship_landing:
     %cm_toggle("Ship Landing Sequence", !sram_preset_ship_landing, #$0001, #0)
 
 if !RAW_TILE_GRAPHICS
-!PRESETS_COMPRESSED_GRAPHICS = #$0001
-presets_compressed_graphics:
-    %cm_toggle_bit("Compressed Graphics", !sram_compressed_graphics, !PRESETS_COMPRESSED_GRAPHICS, #0)
-
-!PRESETS_COMPRESSED_PALETTES = #$0002
-presets_compressed_palettes:
-    %cm_toggle_bit("Compressed Palettes", !sram_compressed_graphics, !PRESETS_COMPRESSED_PALETTES, #0)
-
-!PRESETS_COMPRESSED_TABLES = #$0004
-presets_compressed_tables:
-    %cm_toggle_bit("Compressed Tables", !sram_compressed_graphics, !PRESETS_COMPRESSED_TABLES, #0)
+presets_compressed_data:
+    %cm_toggle_bit("Custom Samus Skin", !sram_preset_options, #$0001, #0)
 endif
 
 if !FEATURE_DEV
