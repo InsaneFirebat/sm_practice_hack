@@ -110,28 +110,58 @@ cm_tilemap_brb:
     JSR cm_transfer_brb_cgram
 
   .draw_brb_stuff
-    ; Drawing whatever manually
     LDA !ram_cm_brb_timer : INC : STA !ram_cm_brb_timer
+
+    ; Drawing some randomly placed metroids
+    ; Some metroids may be lost to the text
+    ; Metroids that spawn outside the border live forever
     LDA !ram_seed_X : AND #$07FE : TAX
-    LDA !BRB_METROID : STA !ram_tilemap_buffer,X
+    LDA !BRB_METROID : TAY : STA !ram_tilemap_buffer,X
 
     LDA !ram_seed_X : XBA : AND #$07FE : TAX
-    LDA !BRB_METROID : STA !ram_tilemap_buffer,X
+    TYA : STA !ram_tilemap_buffer,X
 
     LDA !ram_seed_Y : AND #$07FE : TAX
-    LDA !BRB_METROID : STA !ram_tilemap_buffer,X
+    TYA : STA !ram_tilemap_buffer,X
 
     LDA !ram_seed_Y : XBA : AND #$07FE : TAX
-    LDA !BRB_METROID : STA !ram_tilemap_buffer,X
+    TYA : STA !ram_tilemap_buffer,X
 
-  .draw_text
     ; Same bank for all of the BRB text
     PHK : PHK : PLA : STA !DP_CurrentMenu+2
 
+    ; Check if streamer name is customized
+    LDA !sram_streamer_name : BEQ .default_name
+    PEI (!DP_CurrentMenu+2)
+    LDA.w #!sram_streamer_name : STA !DP_CurrentMenu
+    LDA.w #!sram_streamer_name>>16 : STA !DP_CurrentMenu+2
+
+    ; Count characters in name
+    STX !DP_Temp
+    ; skip to second character, first cannot be terminator
+    LDX #$0002 : LDY #$0016+2+1
+    %a8()
+  .loop_offset
+    LDA !sram_streamer_name,X : CMP #$FF : BEQ .found_offset
+    INX : DEY
+    BRA .loop_offset
+  .found_offset
+    %a16()
+    ; Bias to the right, even for tilemap indexing
+    TYA : INC : AND #$001E
+    ; Offset the tilemap index to center the name
+    CLC : ADC #$01C6 : TAX
+
+    JSR cm_draw_brb_text
+    PLA : STA !DP_CurrentMenu+2
+    BRA .draw_line2
+
+  .default_name
     LDA.w #BRB_common_1 : STA !DP_CurrentMenu
     LDX #$01C6
     JSR cm_draw_brb_text
 
+  .draw_line2
     LDA.w #BRB_common_2 : STA !DP_CurrentMenu
     LDX #$0286
     JSR cm_draw_brb_text
@@ -157,15 +187,18 @@ cm_tilemap_brb:
     LDA.l TimerNumberGFX2,X : STA !ram_tilemap_buffer+$35C
 
     ; Draw colon seperator
-    LDX #$035E
-    LDA #$2849 : STA !ram_tilemap_buffer+0,X
+    LDA #$2800|':' : STA !ram_tilemap_buffer+$35E
 
     ; Draw +/- after countdown expires
+table ../resources/header.tbl
     LDA !ram_cm_brb_timer_mode : BEQ .draw_cycling_text
-    DEC : BEQ +
-    LDA #$286C : STA !ram_tilemap_buffer+$358
+    DEC : BEQ .draw_countup
+    LDA #$2800|'-' : STA !ram_tilemap_buffer+$358
     BRA .draw_cycling_text
-+   LDA #$288B : STA !ram_tilemap_buffer+$358
+
+  .draw_countup
+    LDA #$2800|'+' : STA !ram_tilemap_buffer+$358
+%table(normal)
 
   .draw_cycling_text
     ; Draw cycling text
@@ -231,10 +264,9 @@ cm_draw_brb_text:
     ; !DP_CurrentMenu[0x3] = address
   %a8()
     LDY #$0000
-    ; terminator
+    ; get tile attributes, if not terminator
     LDA [!DP_CurrentMenu],Y : INY : CMP #$FF : BEQ .end
-    ; ORA with palette info
-    ORA !DP_Palette : STA !DP_Palette
+    STA !DP_Palette
 
   .loop
     LDA [!DP_CurrentMenu],Y : CMP #$FF : BEQ .end       ; terminator
@@ -389,8 +421,8 @@ BRB_screen_01:
 BRB_screen_02:
     db #$28, "Find the practice hack at", #$FF
 
-BRB_screen_03:
-    db #$28, "  Control Schemes for SM", #$FF
+BRB_screen_04:
+    db #$28, " Community Control Schemes", #$FF
 
 BRB_screen_04:
     db #$28, "   SM Speedrunning Wiki", #$FF
