@@ -187,6 +187,8 @@ BRBMenu:
     dw #$FFFF
 ;    dw #ifb_soundtest_goto_music ; moved to different bank
     dw #ifb_game_music_toggle
+    dw #$FFFF
+    dw #brb_streamer_name
     dw #$0000
     %cm_header("BRB SCREEN MENU")
     %cm_footer("CONTACT IFB TO CUSTOMIZE")
@@ -258,6 +260,33 @@ ifb_game_music_toggle:
   .resume_music
     LDA !MUSIC_DATA : CLC : ADC #$FF00 : STZ !MUSIC_DATA : JSL !MUSIC_ROUTINE
     LDA !MUSIC_TRACK : STZ !MUSIC_TRACK : JSL !MUSIC_ROUTINE
+    RTL
+
+brb_streamer_name:
+    %cm_jsl("Set Streamer Name", #.routine, #!sram_streamer_name)
+  .routine
+    ; enter keyboard editing mode
+    STY !DP_Address
+    LDA.w #!sram_streamer_name>>16 : STA !DP_Address+2
+    ; check if streamer name exists
+    LDA !sram_streamer_name : AND #$00FF : CMP #$0028 : BNE .keyboardMode
+    ; store SAFE word to indicate a name already exists
+    LDA !SAFEWORD : STA !DP_KB_Control
+    ; load existing name
+    LDX #$0016 : TXY
+  .loopExistingName
+    LDA [!DP_Address],Y : STA !ram_cm_keyboard_buffer,X
+    DEX #2
+    DEY #2 : BPL .loopExistingName
+  .keyboardMode
+    JSL kb_ctrl_mode : BCC .done
+    ; check if "nothing" was saved
+    LDA !sram_streamer_name : CMP #$FF28 : BEQ .blank
+    JML ConvertNormal2Header
+  .blank
+    ; restore default name
+    TDC : STA !sram_custom_header
+  .done
     RTL
 
 

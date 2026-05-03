@@ -220,8 +220,8 @@ ih_get_item_code:
     LDA !ram_realtime_room : STA !ram_last_realtime_room
 
     ; save temp variables
-    LDA $12 : PHA
-    LDA $14 : PHA
+    PEI ($12)
+    PEI ($14)
 
     ; check if segment timer should be reset
     LDA !ram_reset_segment_later : BPL +
@@ -425,8 +425,8 @@ ih_before_room_transition:
     LDA #$0001 : STA !ram_transition_flag : STA !ram_lag_counter_HUD
 
     ; Save temp variables
-    LDA $12 : PHA
-    LDA $14 : PHA
+    PEI ($12)
+    PEI ($14)
 
     ; Update HUD
     JSL ih_update_hud_code_before_transition
@@ -879,8 +879,8 @@ ih_update_hud_early:
     LDA !ram_realtime_room : STA !ram_last_realtime_room
 
     ; update HUD
-    LDA $12 : PHA
-    LDA $14 : PHA
+    PEI ($12)
+    PEI ($14)
 
     JSL ih_update_timers
 

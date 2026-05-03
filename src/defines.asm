@@ -932,9 +932,13 @@ endif
 
 ; this is moved here to prevent symbols.asm from having duplicate labels
 if !FEATURE_TINYSTATES
+!sram_streamer_name = !SRAM_START+$E00 ; $18 bytes
+!sram_custom_header = !SRAM_START+$E18 ; $18 bytes
 !sram_custom_preset_safewords = !SRAM_START+$E60 ; $20 bytes
 !sram_custom_preset_names = !SRAM_START+$E80 ; $180 bytes
 else
+!sram_streamer_name = !SRAM_START+$B90 ; $18 bytes
+!sram_custom_header = !SRAM_START+$BA8 ; $18 bytes
 !sram_custom_preset_safewords = !SRAM_START+$BF0 ; $50 bytes
 !sram_custom_preset_names = !SRAM_START+$C40 ; $3C0 bytes
 endif
