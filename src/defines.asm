@@ -1118,6 +1118,7 @@ endif
 !PROFILE_PapaSchmo    = #$0019
 !PROFILE_Vespher      = #$001A
 !PROFILE_EXAKT        = #$001B
+!PROFILE_Bastion      = #$001C
 
 !BRB_TOTAL_SCREENS = #(BRBTilemapAddress_end-BRBTilemapAddress)/2
 !BRB_METROID = #$287F
