@@ -1123,6 +1123,7 @@ endif
 !PROFILE_Vespher      = #$001A
 !PROFILE_EXAKT        = #$001B
 !PROFILE_Bastion      = #$001C
+!PROFILE_D9Killdozer  = #$001D
 
 !BRB_TOTAL_SCREENS = #(BRBTilemapAddress_end-BRBTilemapAddress)/2
 !BRB_METROID = #$287F
