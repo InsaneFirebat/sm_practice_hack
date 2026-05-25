@@ -84,43 +84,45 @@ upload_sprite_oob_tiles:
     TXA : CLC : ADC #$0007 : STA !VRAM_WRITE_STACK_POINTER
     RTL
 
-update_sprite_oob:
-!oob_width = $000D
-!oob_height = $0009
-    LDA !OAM_STACK_POINTER : STA $C8
+draw_sprite_oob:
+{
+    !oob_width = $000D
+    !oob_height = $0009
+    LDA !OAM_STACK_POINTER : STA $C9
 
-    ; cameraX - (oob_width*8)
+    ; Samus X - (oob_width*8)
     LDA !SAMUS_X : SEC : SBC #(!oob_width*8) : STA $12
-    AND #$000F : STA $C4
+    AND #$000F : STA $C5
 
-    ; cameraX - (oob_width*8) / 16
+    ; [Samus X - (oob_width*8)] / 16
     LDA $12 : LSR #4 : STA $22
 
-    ; cameraY - (oob_height*8)
+    ; Samus Y - (oob_height*8)
     LDA !SAMUS_Y : SEC : SBC #((!oob_height-2)*8) : STA $14
-    AND #$000F : STA $C6
+    AND #$000F : STA $C7
 
-    ; cameraY - (oob_height*8) / 16
+    ; [Samus Y - (oob_height*8)] / 16
     LDA $14 : LSR #4 : STA $24
 
     LDA !ROOM_WIDTH_BLOCKS : STA $16
 
     LDY #$0000
   .loop_y
-    LDX #$0000
     %a8()
+    LDX #$0000
     LDA $16 : STA $4202
     TYA : CLC : ADC $24 : STA $4203
     NOP #2 ; wait for CPU math
     %ai16()
+    ; room_width_blocks * (Y + [Samus Y - (oob_height*8)] / 16)
     LDA $4216 : STA $18
 
   .loop_x
     PHY : PHX
     %a16()
-    STX $C0 : STY $C2
+    STX $C1 : STY $C3
 
-    ; cameraX + (x * 16)
+    ; X + [Samus X - (oob_width*8)] / 16
     TXA : CLC : ADC $22 : AND #$0FFF
 
     ; a = (width * bit.lrshift(bit.band(cameraY+y*16, 0xFFF), 4)) + bit.lrshift(bit.band(cameraX+x*16, 0xFFFF), 4)
@@ -128,28 +130,58 @@ update_sprite_oob:
     ; a = a * 2
     ASL : TAX
     ; Load clipdata of block
-    LDA.l $7F0003,X : AND #$00FF : LSR #4 : TAX
-    ; Get sprite ID for this BTS
-    LDA.l block_gfx,X : AND #$00FF : CMP #$00D0 : BEQ .next
+    LDA !LEVEL_DATA+1,X : AND #$00F0 : CMP #$00D0 : BEQ .vertical
+    CMP #$0050 : BNE .get_sprite_id
+
+  .horizontal
+    ; Horizontal extension, try once to resolve it
+    TXA : LSR : TAX
+    LDA !LEVEL_BTS,X : AND #$00FF : BEQ .next
+    BIT #$0080 : BEQ .horizontal_addition
+    ORA #$FF00
+  .horizontal_addition
+    PHX : CLC : ADC $01,S : PLX
+    BRA .extension_block
+
+  .vertical
+    ; Vertical extension, try once to resolve it
+    TXA : LSR : TAX
+    LDA !LEVEL_BTS,X : AND #$00FF : BEQ .next
+    PHX
+    BIT #$0080 : BNE .negative_vertical
+    TAX
+    PLA
+  .loop_positive_vertical
+    CLC : ADC !ROOM_WIDTH_BLOCKS
+    DEX : BNE .loop_positive_vertical
+
+  .extension_block
+    ASL : TAX
+    LDA !LEVEL_DATA+1,X : AND #$00F0
+
+  .get_sprite_id
+    ; Get sprite ID for this block type
+    CMP #$0030 : BEQ .check_scroll
+    LSR #3 : TAX
+  .get_block_gfx
+    LDA.l block_gfx,X : BEQ .next
 
     ; Set sprite ID
     %a8()
-    LDY !OAM_STACK_POINTER : STA $0372,Y    
+    LDY !OAM_STACK_POINTER
+    STA $0372,Y
 
     ; Get X coord
-    LDA $C0 : INC #2 : ASL #4 : SEC : SBC $C4
-    STA $0370,Y
+    LDA $C1 : INC #2 : ASL #4 : SEC : SBC $C5 : STA $0370,Y
 
     ; Get Y coord
-    LDA $C2 : CLC : ADC #$04 : ASL #4 : SEC : SBC $C6
-    STA $0371,Y
+    LDA $C3 : CLC : ADC #$04 : ASL #4 : SEC : SBC $C7 : STA $0371,Y
 
     ; Sprite Attributes - xxxxxxxx yyyyyyyy YXPPpppt tttttttt
     ; x=X pos, y=Y pos (low nibbles only), Y=Y flip, X=X flip
     ; P=Priority, p=Palette, t=Tile number
     ; Priority bits set, palette = 101
     LDA #%00111010 : STA $0373,Y
-
     %a16()
 
     INY #4
@@ -158,19 +190,42 @@ update_sprite_oob:
   .next
     PLX : PLY
 
-    INX : CPX #!oob_width : BEQ +
+    INX : CPX #!oob_width : BEQ .end_x
     JMP .loop_x
 
-+   INY : CPY #!oob_height : BEQ +
+  .negative_vertical
+    ORA #$FF00 : TAX
+    PLA
+  .loop_negative_vertical
+    SEC : SBC !ROOM_WIDTH_BLOCKS
+    INX : BNE .loop_negative_vertical
+
+    ; For negative vertical extension into horizontal extension,
+    ; allow one more attempt (handles 2x2 blocks)
+    ASL : TAX
+    LDA !LEVEL_DATA+1,X : AND #$00F0
+    CMP #$0050 : BNE .get_sprite_id
+    JMP .horizontal
+
+  .check_scroll
+    TXA : LSR : TAX
+    LDA !LEVEL_BTS,X : AND #$00FF : CMP #$0046 : BEQ .next
+    LDX #$0006
+    BRA .get_block_gfx
+
+  .end_x
+    INY : CPY #!oob_height : BEQ .end_y
     JMP .loop_y
 
-+   LDA !OAM_STACK_POINTER : BEQ .end
-    LSR #4 : INC : STA $CA
-    LDA $C8 : LSR #4 : STA $C8
+  .end_y
+    LDA !OAM_STACK_POINTER : BEQ .end
+    LSR #4 : INC : STA $CB
+    LDA $C9 : LSR #4 : STA $C9
 
     %a8()
-    LDX $C8
+    LDX $C9
 
+  .copy_loop
     ; $0570..8F: High OAM. 2 bit entries
     ; ddccbbsx
     ; x: X position (upper 1 bit)
@@ -178,16 +233,16 @@ update_sprite_oob:
     ; b: sx for sprite 4n+1
     ; c: sx for sprite 4n+2
     ; d: sx for sprite 4n+3
--   LDA #%10101010 : STA $0570,X
-    INX : CPX $CA : BNE -
+    LDA #%10101010 : STA $0570,X
+    INX : CPX $CB : BNE .copy_loop
     %ai16()
 
   .end
-    JSR sprite_draw_oob_samus_hitbox
+    JSR draw_oob_samus_hitbox
     RTS
 
 block_gfx:
-    ; D0 = transparent
+    ; 00 = transparent
     ; D2 = white
     ; D4 = yellow
     ; D6 = brown
@@ -196,8 +251,8 @@ block_gfx:
     ; DC = blue
     ; DE = mint
 
-    ;  air, slope, air (trick xray), treadmill, ?? ,      h-extend,  ??,  ??,  solid, door, spike, crumble, shot, v-xtend, grapple, bomb
-    db $D0, $DE,   $D0,              $DC,       $D0,      $D0,       $D0, $D0, $D6,   $D4,  $DC,   $DC,     $D2,  $D0,     $DA,     $DC
+    ;  air,   slope, air (trick), treadmill, ??,    h-extend, ??,    ??,    solid, door,  spike, crumble, shot,  v-xtend, grapple, bomb
+    dw $0000, $00DE, $0000,       $00D8,     $0000, $0000,    $0000, $0000, $00D6, $00D4, $00DC, $00DC,   $00D2, $0000,   $00DA,   $00DC
 
 ; draw hitbox around samus for the oob viewer (static position on the screen)
 sprite_draw_oob_samus_hitbox:
