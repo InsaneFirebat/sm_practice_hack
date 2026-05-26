@@ -679,6 +679,8 @@ endif
 !sram_seed_X = !SRAM_START+$82
 !sram_seed_Y = !SRAM_START+$84
 
+!sram_fast_teleport = !SRAM_START+$86
+
 ; ^ FREE SPACE ^ up to $F02BEE
 
 !sram_custom_header = !SRAM_START+$BD8 ; $18 bytes
