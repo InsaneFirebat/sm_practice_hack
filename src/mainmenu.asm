@@ -3095,6 +3095,7 @@ CutscenesMenu:
     dw #cutscenes_quickboot
     dw #cutscenes_skip_intro
     dw #cutscenes_skip_ceres_arrival
+    dw #cutscenes_fast_teleport
     dw #cutscenes_skip_game_over
     dw #$FFFF
     dw #kraid_skip_intro
@@ -3115,6 +3116,9 @@ cutscenes_skip_intro:
 
 cutscenes_skip_ceres_arrival:
     %cm_toggle_bit("Skip Ceres Arrival", !sram_cutscenes, !CUTSCENE_SKIP_CERES_ARRIVAL, #0)
+
+cutscenes_fast_teleport:
+    %cm_toggle("Fast Teleport", !sram_fast_teleport, #$01, #0)
 
 cutscenes_skip_game_over:
     %cm_toggle_bit("Skip Game Over", !sram_cutscenes, !CUTSCENE_SKIP_GAMEOVER, #0)
