@@ -1918,6 +1918,7 @@ SpritesMenu:
     dw #sprites_show_proj_as_32x32
     dw #$FFFF
     dw #sprites_oob_viewer
+    dw #sprites_oob_show_x_wrap
     dw #$0000
     %cm_header("SPRITE FEATURES")
 
@@ -1951,6 +1952,9 @@ sprites_oob_viewer:
     LDA !ram_sprite_feature_flags : BIT !SPRITE_OOB_WATCH : BEQ +
     JML upload_sprite_oob_tiles
 +   RTL
+
+sprites_oob_show_x_wrap:
+    %cm_toggle_bit("OoB Show X Wraparound", !ram_sprite_feature_flags, !SPRITE_OOB_X_WRAP, #0)
 
 
 ; -----------
