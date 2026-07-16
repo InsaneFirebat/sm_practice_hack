@@ -98,9 +98,11 @@ BRKHandler:
   .setBank
     PHP : PHB
     %ai16()
-
-    ; store CPU registers
     STA !ram_crash_a
+    LDA #$0000 : STA $004200 ; disable NMI
+
+  .registers
+    ; store remaining CPU registers
     TXA : STA !ram_crash_x
     TYA : STA !ram_crash_y
     PLA : STA !ram_crash_dbp
@@ -132,9 +134,11 @@ COPHandler:
   .setBank
     PHP : PHB
     %ai16()
-
-    ; store CPU registers
     STA !ram_crash_a
+    LDA #$0000 : STA $004200 ; disable NMI
+
+  .registers
+    ; store remaining CPU registers
     TXA : STA !ram_crash_x
     TYA : STA !ram_crash_y
     PLA : STA !ram_crash_dbp
@@ -172,7 +176,6 @@ CrashViewer:
     %a8()
     STZ $420C
     LDA #$80 : STA $802100  ; Force blank on, zero brightness
-    LDA #$A1 : STA $4200  ; NMI, V-blank IRQ, and auto-joypad read on
     LDA #$09 : STA $2105  ; BG3 priority on, BG Mode 1
     LDA #$58 : STA $2109  ; BG3 address, 32x32 size
     LDA #$17 : STA $212C  ; Enable BG3 on main screen
@@ -181,6 +184,7 @@ CrashViewer:
     LDA #$33 : STA $2131  ; Enable color math on backgrounds and OAM
     STZ $2111 : STZ $2111 ; BG3 X scroll, write twice
     STZ $2112 : STZ $2112 ; BG3 Y scroll, write twice
+    LDA #$A1 : STA $4200  ; NMI, V-blank IRQ, and auto-joypad read on
     LDA #$0F : STA $0F2100  ; Force blank off, max brightness
 
     %ai16()
