@@ -356,12 +356,12 @@ cm_scroll_BG3:
 ; -------------
 
 BRB_common_1:
-table ../resources/tables/header.tbl
+%table(header)
     db #$28, "       The Streamer", #$FF
 
 BRB_common_2:
     db #$28, "    Will Be Right Back", #$FF
-table ../resources/tables/normal.tbl
+%table(normal)
 
 BRBTilemapAddress:
     dw #BRB_screen_01

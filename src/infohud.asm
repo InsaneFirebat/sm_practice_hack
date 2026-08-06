@@ -2199,7 +2199,7 @@ org $8EDCC0
 
 org $8EDC70
     dw "  SM"
-table ../resources/tables/normal.tbl
+%table(normal)
 
 org $8EDCB0
     ;           レ      ン     シ      ュ      ウ    top half of "renshuu"

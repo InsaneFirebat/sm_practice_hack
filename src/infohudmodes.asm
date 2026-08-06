@@ -3481,7 +3481,7 @@ table ../resources/tables/HUDfont.tbl
   .C538 : db "DEAD MOVE"    : db $FF
   .C588 : db "EXPLODE"      : db $FF
   .DEAD : db "END"          : db $FF
-table ../resources/tables/normal.tbl
+%table(normal)
 }
 
 status_downbackzeb:

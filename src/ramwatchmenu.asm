@@ -632,8 +632,8 @@ action_HUD_ramwatch:
 
 ramwatch_display:
     dw !ACTION_RAM_WATCH ; menu action index
-table ../resources/tables/header.tbl
+%table(header)
     db #$28, "      LEFT      RIGHT", #$FF
-table ../resources/tables/normal.tbl
+%table(normal)
 
 %endfree(85)

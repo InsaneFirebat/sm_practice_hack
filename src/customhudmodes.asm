@@ -1123,7 +1123,7 @@ table ../resources/tables/HUDfont.tbl
   .92AB : db "SINK N FLOOR" : db $FF
   .94A9 : db "HOLD SAMUS"   : db $FF
   .UNKN : db "UNKNOWN"      : db $FF
-table ../resources/tables/normal.tbl
+%table(normal)
 }
 
 status_pumpcounter:
