@@ -1,6 +1,9 @@
+
 ;=======================================================
 ;InfoHUD modes and room strats
 ;=======================================================
+
+%startfree(F0)
 
 ; When adding or removing infohud modes,
 ; also update infohud.asm: inc_statusdisplay and dec_statusdisplay
@@ -3785,5 +3788,4 @@ status_twocries_nosb:
     LDA !IH_LETTER_E : STA !HUD_TILEMAP+$8C
     BRA .donechecking
 }
-
-incsrc customhudmodes.asm
+%endfree(F0)

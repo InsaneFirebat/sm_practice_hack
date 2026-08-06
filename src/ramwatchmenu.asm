@@ -3,6 +3,8 @@
 ; RAM Watch Menus
 ; ---------------
 
+%startfree(85)
+
 ih_prepare_ram_watch_menu:
 {
     LDA #$0000 : STA !ram_cm_watch_enemy_property : STA !ram_cm_watch_enemy_index
@@ -634,3 +636,4 @@ table ../resources/tables/header.tbl
     db #$28, "      LEFT      RIGHT", #$FF
 table ../resources/tables/normal.tbl
 
+%endfree(85)

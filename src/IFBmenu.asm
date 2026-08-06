@@ -258,16 +258,12 @@ ifb_game_music_toggle:
     LDA !MUSIC_DATA : CLC : ADC #$FF00 : STZ !MUSIC_DATA : JSL !MUSIC_ROUTINE
     LDA !MUSIC_TRACK : STZ !MUSIC_TRACK : JSL !MUSIC_ROUTINE
     RTL
-%endfree(85)
-
-incsrc BRBmenu.asm
 
 
 ; ----------------
 ; Capture Cropping
 ; ----------------
 
-%startfree(85)
 CaptureCroppingMenu:
     dw #ifb_launch_crop_mode
     dw #$FFFF

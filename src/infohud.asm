@@ -1351,7 +1351,6 @@ ih_hud_code:
     BRA .drawFramesHeldRow2
 }
 
-incsrc infohudmodes.asm
 
 ;---SUBROUTINES---
 Draw2:

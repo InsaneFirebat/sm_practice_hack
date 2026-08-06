@@ -2920,8 +2920,6 @@ ih_spacetime_infohud:
 ih_ram_watch:
     %cm_jsl(">Customize RAM Watch", #ih_prepare_ram_watch_menu, #RAMWatchMenu)
 
-incsrc ramwatchmenu.asm
-
 %endfree(85)
 
 
@@ -4355,19 +4353,3 @@ init_wram_based_on_sram:
     JML validate_sram_for_savestates
 }
 %endfree(B8)
-
-
-; ------------------
-; Menu Customization
-; ------------------
-
-incsrc customizemenu.asm
-
-
-
-; ----------
-; Firebat Menu   IFBMenu:
-; ----------
-
-incsrc IFBmenu.asm
-
