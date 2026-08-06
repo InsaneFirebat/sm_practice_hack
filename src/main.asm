@@ -14,6 +14,7 @@ table ../resources/tables/normal.tbl
 
 incsrc macros.asm
 incsrc defines.asm
+incsrc freespace.asm
 if !FEATURE_DEV
 incsrc symbols.asm
 endif
@@ -21,6 +22,7 @@ endif
 incsrc printdebug.asm
 
 incsrc init.asm
+incsrc crash.asm
 incsrc gamemode.asm
 incsrc minimap.asm
 incsrc menu.asm
@@ -35,11 +37,15 @@ incsrc cutscenes.asm
 incsrc fanfare.asm
 incsrc spriteprio.asm
 incsrc spritefeat.asm
+incsrc demos.asm
 if !RAW_TILE_GRAPHICS
 incsrc tilegraphics.asm
 endif
 
+incsrc roomnames.asm
+
 ; Make sure the ROM expands to 4MB
 org $FFFFFF : db $FF
 
+%printfreespace()
 print "Assembly complete. Total bytes written: ", bytes

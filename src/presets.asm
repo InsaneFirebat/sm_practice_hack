@@ -1,6 +1,5 @@
 
-org $82FA00
-print pc, " presets bank82 start"
+%startfree(82)
 
 preset_load:
 {
@@ -366,15 +365,13 @@ EnsureSamusIsDrawn_long:
     RTL
 }
 
-print pc, " presets bank82 end"
-warnpc $82FE00
+%endfree(82)
 
 org $82E8D9
     JSL preset_room_setup_asm_fixes
 
 
-org $80F000
-print pc, " presets bank80 start"
+%startfree(80)
 
 ; This method is very similar to $80A07B (start gameplay)
 preset_start_gameplay:
@@ -813,24 +810,23 @@ add_grapple_and_xray_to_hud:
     JSL $809A3E ; Add x-ray to HUD tilemap
     LDA !SAMUS_ITEMS_EQUIPPED : BIT #$4000 : BEQ $04
     JSL $809A2E ; Add grapple to HUD tilemap
-    JMP .resume_infohud_icon_initialization
+    JMP GrappleXrayHUD_resume
 }
 
-print pc, " presets bank80 end"
-warnpc $80F600 ; save.asm / tinystates.asm
+%endfree(80)
 
 
 ; $80:9AB1: Add x-ray and grapple HUD items if necessary
 org $809AB1
     ; Skip x-ray and grapple if max HP is a multiple of 4,
     ; which is only possible if GT code was used
-    LDA !SAMUS_HP_MAX : AND #$0003 : BEQ .resume_infohud_icon_initialization
+    LDA !SAMUS_HP_MAX : AND #$0003 : BEQ GrappleXrayHUD_resume
     JMP add_grapple_and_xray_to_hud
-warnpc $809AC9
+warnpc GrappleXrayHUD_resume
 
 ; $80:9AC9: Resume original logic
 org $809AC9
-  .resume_infohud_icon_initialization
+GrappleXrayHUD_resume:
 
 
 
@@ -894,6 +890,6 @@ incsrc presets/allbossprkd_data.asm ; 136Ch bytes
 incsrc presets/nghyper_data.asm ; E88h bytes
 incsrc presets/ngplasma_data.asm ; EA4h bytes
 incsrc presets/suitless_data.asm ; 3DF0h bytes
-warnpc $F08000 ; infohud.asm
+warnpc START_FREESPACE_F0
 check bankcross on
-print pc, " crossbank preset_data.asm end"
+print pc, " crossbank preset_data.asm $E8..end"

@@ -17,8 +17,7 @@ org $82E526
 endif
 
 
-org $85F800
-print pc, " gamemode start"
+%startfree(85)
 
 gamemode_start:
 {
@@ -394,10 +393,9 @@ gamemode_door_transition:
     LDA !DOOR_FINISHED_SCROLLING : BPL .checkloadstate
     RTL
 }
+%endfree(85)
 
-pushpc
-org $82F900
-print pc, " autosave bank $82 start"
+%startfree(82)
 door_transition_autosave:
 {
     ; Check for auto-save mid-transition
@@ -414,9 +412,5 @@ door_transition_autosave:
   .done
     JMP $E4A9 ; return to hijacked code
 }
-print pc, " autosave bank $82 end"
-pullpc
 endif
-
-print pc, " gamemode end"
-warnpc $85FD00
+%endfree(82)

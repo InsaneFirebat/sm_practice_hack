@@ -7,8 +7,6 @@
 ; This resource adds a crash handler to dump data to SRAM
 ; whenever one of these "crash vectors" is triggered
 
-pushpc
-
 ; Hijack generic crash handler
 org $808573
     JML CrashHandler
@@ -21,8 +19,7 @@ org $00FFE4
 org $00FFE6
     dw BRKHandler
 
-org $80E000
-print pc, " crash handler bank80 start"
+%startfree(80)
 
 ; This routine (or a bridge to it) must live in bank $80
 CrashHandler:
@@ -163,11 +160,10 @@ COPHandler:
     JMP CrashHandler_fixStack
 }
 
-print pc, " crash handler bank80 end"
-warnpc $80F000 ; presets.asm
+%endfree(80)
 
-pullpc
-print pc, " crash handler bank89 start"
+
+%startfree(89)
 
 CrashViewer:
 {
@@ -1088,6 +1084,6 @@ CrashTextInfo11:
 ; Press LRSlSt to soft reset
     db "Press ", #$8D, #$8C, #$85, #$84, " to soft reset", #$FF
 
-print pc, " crash handler bank89 end"
+%endfree(89)
 table ../resources/tables/normal.tbl
 

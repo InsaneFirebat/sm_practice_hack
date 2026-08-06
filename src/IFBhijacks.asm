@@ -12,11 +12,11 @@ endif
     JSR ResetCountDamageRid
 
 if !FEATURE_PAL
-org $A7CE98
+org $A7CEAB
 else             ; Phantoon AI init
-org $A7CE64
+org $A7CE77
 endif
-    JSR ResetCountDamagePhan
+    JSL ResetCountDamagePhan
 
 if !FEATURE_PAL
 org $A0A872
@@ -49,8 +49,7 @@ org $A6F135
 endif
 
 
-org $A6FFE0      ; free space
-print pc, " misc bankA6 start"
+%startfree(A6)
 ResetCountDamageRid:
 {
     PHA
@@ -70,24 +69,23 @@ SteamCollision:
     LDA !ENEMY_PROPERTIES,X : RTS
 }
 endif
-print pc, " misc bankA6 end"
 
 
-org $A7FF82
-print pc, " misc bankA7 start"
 ResetCountDamagePhan:
 {
-    STZ !ENEMY_TIMER,X ; overwritten code
-    DEC ; #$0000
-    STA !ram_countdamage : STA !sram_countdamage
-    RTS
+    TAY ; overwritten code
+    LDA #$0000 : STA !ram_countdamage : STA !sram_countdamage
+if !FEATURE_PAL
+    LDA $CEC2,Y
+else ; overwritten code
+    LDA $CE8E,Y
+endif
+    RTL
 }
-print pc, " misc bankA7 end"
-warnpc hook_kraid_claw_rng ; rng.asm
+%endfree(A6)
 
 
-org $A0FFA0 ; count damage in free space at end of bank
-print pc, " misc bankA0 start"
+%startfree(A0)
 CountDamage:
 {
     LDA !ram_pacifist : BNE .no_damage
@@ -139,12 +137,11 @@ if !FEATURE_PAL
 else
     JMP $A63C
 endif
-print pc, " misc bankA0 end"
+%endfree(A0)
 
 
 if !FEATURE_EXTRAS
-org $94DC00
-print pc, " EXTRAS=1 misc bank94 start"
+%startfree(94)
 NoClip:
 {
     LDA !ram_noclip : BEQ .originalcode
@@ -154,7 +151,5 @@ NoClip:
     JMP $8F4D
 }
 endif
-print pc, " EXTRAS=1 misc bank94 end"
+%endfree(94)
 
-
-incsrc demos.asm

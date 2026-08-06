@@ -28,8 +28,7 @@ org $838C5C
     dw #layout_asm_cutscene_g4skip
 
 
-org $8FEA00
-print pc, " layout start"
+%startfree(8F)
 
 layout_asm_cutscene_g4skip:
 {
@@ -106,5 +105,5 @@ layout_asm_baby_rng:
     RTS
 }
 
-print pc, " layout end"
+%endfree(8F)
 

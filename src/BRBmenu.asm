@@ -1,6 +1,5 @@
-pushpc
-org $8EE600
 
+%startfree(8E)
 
 cm_brb_loop:
 {
@@ -372,6 +371,7 @@ BRBTilemapAddress:
     dw #BRB_screen_05
     dw #BRB_screen_06
     dw #BRB_screen_07
+  .end
 
 BRB_screen_01:
     db #$28, "   SM Speedrunning Wiki", #$FF
@@ -425,20 +425,20 @@ BRB_screen2_06:
 BRB_screen2_07:
     db #$28, "     by InsaneFirebat", #$FF
 
+%endfree(8E)
+
 
 ; --------
 ; BRB Data
 ; --------
 
-pushpc
-org $B0F000
+%startfree(B0)
 cm_brb_table:
 ; 1000h bytes transferred
 incbin ../resources/gfx/cm_brb_gfx.bin
-pullpc
+%endfree(B0)
 
-org MenuResources
-
+%startfree(89)
 TimerNumberGFX1:
     dw #$2870, #$2870, #$2870, #$2870, #$2870, #$2870, #$2870, #$2870, #$2870, #$2870
     dw #$2871, #$2871, #$2871, #$2871, #$2871, #$2871, #$2871, #$2871, #$2871, #$2871
@@ -454,12 +454,14 @@ TimerNumberGFX2:
     dw #$2870, #$2871, #$2872, #$2873, #$2874, #$2875, #$2876, #$2877, #$2878, #$2879
     dw #$2870, #$2871, #$2872, #$2873, #$2874, #$2875, #$2876, #$2877, #$2878, #$2879
     dw #$2870, #$2871, #$2872, #$2873, #$2874, #$2875, #$2876, #$2877, #$2878, #$2879
+%endfree(89)
 
 
 ; ----------------
 ; Capture Cropping
 ; ----------------
 
+%startfree(8E)
 cm_crop_mode:
 {
     PHP : %a16() : %i8()
@@ -584,6 +586,4 @@ cm_crop_fill:
     PLP
     RTS
 }
-
-print pc, " brb menu end"
-pullpc
+%endfree(8E)

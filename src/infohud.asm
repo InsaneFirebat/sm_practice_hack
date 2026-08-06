@@ -202,8 +202,7 @@ endif ; !FEATURE_VANILLAHUD
 
 
 ; Main bank stuff
-org $F08000
-print pc, " infohud start"
+%startfree(F0)
 
 ; List this first since it affects bank $84 where we are trying to minimize change
 ih_get_item_code:
@@ -2032,14 +2031,11 @@ overwrite_HUD_numbers:
     PLB : PLP
     RTL
 }
-
-print pc, " infohud end"
-warnpc $F0EC00 ; spritefeat.asm
+%endfree(F0)
 
 
 ; Stuff that needs to be placed in bank 80
-org $80FD00
-print pc, " infohud bank80 start"
+%startfree(80)
 
 ih_fix_scroll_offsets:
 {
@@ -2129,8 +2125,7 @@ ControllerLayoutTable:
     dw !CTRL_Y, !CTRL_B, !CTRL_A, !CTRL_SELECT, !CTRL_X,      !CTRL_L, !CTRL_R ; MMX Style (D4)
     dw !CTRL_X, !CTRL_B, !CTRL_Y, !CTRL_SELECT, !CTRL_A,      !CTRL_L, !CTRL_R ; SMW Style (D5)
 
-print pc, " infohud bank80 end"
-warnpc $80FFB0 ; header
+%endfree(80)
 
 
 ; Main Menu Tilemap edits
@@ -2146,8 +2141,7 @@ org $82EFD7
 endif
     JSR TitleTilemapHijack
 
-org $82F9A0
-print pc, " infohud bank82 start"
+%startfree(82)
 TitleTilemapHijack:
 {
     PHA : PHX
@@ -2185,8 +2179,7 @@ table ../resources/tables/SmallChar.tbl
 table ../resources/tables/LargeLowerChar.tbl
     dw "!VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD    "
 endif
-print pc, " infohud bank82 end"
-warnpc $82FA00 ; presets.asm
+%endfree(82)
 }
 
 org $81B40A

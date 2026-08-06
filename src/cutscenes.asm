@@ -29,8 +29,7 @@ endif
     JSL cutscenes_kraid_death_camera
 
 
-org $8BF800
-print pc, " cutscenes start"
+%startfree(8B)
 
 cutscenes_nintendo_logo_hijack:
 {
@@ -152,8 +151,7 @@ cutscenes_kraid_death_camera:
     RTL
 }
 
-print pc, " cutscenes end"
-warnpc $8BFA00 ; misc.asm
+%endfree(8B)
 
 
 if !FEATURE_PAL
@@ -345,8 +343,7 @@ endif
     ORA #$0500
 
 
-org $A9FBC0
-print pc, " cutscenes MB start"
+%startfree(A9)
 
 cutscenes_mb_fake_death_fast_init:
 {
@@ -838,5 +835,5 @@ endif
     JMP (!ENEMY_FUNCTION_POINTER)
 }
 
-print pc, " cutscenes MB end"
+%endfree(A9)
 

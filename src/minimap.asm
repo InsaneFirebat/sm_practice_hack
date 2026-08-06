@@ -59,15 +59,14 @@ endif
 
 
 ; Place minimap graphics in bank DF
-org $DFD500
-print pc, " minimap bankDF start"
+%startfree(DF)
 mapgfx_bin:
 incbin ../resources/gfx/mapgfx.bin
 
 ; Next block needs to be all zeros to clear a tilemap
 fillbyte $00
 fill 4096
-print pc, " minimap bankDF end"
+%endfree(DF)
 
 
 if !FEATURE_VANILLAHUD
@@ -89,8 +88,7 @@ endif
 
 
 ; Placed in bank 82 so that the jumps work
-org $82F70F
-print pc, " minimap bank82 start"
+%startfree(82)
 
 mm_write_and_clear_hud_tiles:
 {
@@ -145,13 +143,11 @@ mm_refresh_reserves:
     RTS
 }
 
-print pc, " minimap bank82 end"
-warnpc $82F800
+%endfree(82)
 
 
 ; Placed in bank 90 so that the jumps work
-org $90F640
-print pc, " minimap bank90 start"
+%startfree(90)
 
 mm_initialize_minimap:
 {
@@ -219,5 +215,4 @@ mm_clear_boss_room_tiles:
     JMP $A80A
 }
 
-print pc, " minimap bank90 end"
-warnpc $90F800
+%endfree(90)
