@@ -1,7 +1,6 @@
 pushpc
 org $8EE600
 
-!BRB_TOTAL_SCREENS = #$0007
 
 cm_brb_loop:
 {
@@ -69,7 +68,7 @@ cm_brb_loop:
 
   .forceIncScreen
     LDA !ram_cm_brb_screen : INC : STA !ram_cm_brb_screen
-    CMP !BRB_TOTAL_SCREENS : BMI .loop
+    CMP.w !BRB_TOTAL_SCREENS : BMI .loop
     LDA #$0000
     STA !ram_cm_brb_screen : STA !ram_cm_brb_timer
     JMP .loop
@@ -98,7 +97,7 @@ cm_tilemap_brb:
 
     ; Cycle screen text
     LDA !ram_cm_brb_screen : INC : STA !ram_cm_brb_screen
-    CMP !BRB_TOTAL_SCREENS : BMI +
+    CMP.w !BRB_TOTAL_SCREENS : BMI +
     LDA #$0000 : STA !ram_cm_brb_screen
 
     ; Cycle menu palette
