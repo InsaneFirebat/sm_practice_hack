@@ -377,7 +377,16 @@ macro palettemenu(title, label, addr)
     dw <label>_hex_word
     %examplemenu()
     dw #$0000
-    %cm_header("<title>")
+;    %cm_header("<title>")
+; manual header that removes submenu icon from <title>
+  .dm_header
+table ../resources/tables/header.tbl
+    db "<title>", #$FF
+pushpc
+org .dm_header
+    db #$28
+pullpc
+table ../resources/tables/normal.tbl
     %cm_footer("THREE WAYS TO EDIT COLORS")
 
 <label>_hex_word:
