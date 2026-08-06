@@ -993,13 +993,13 @@ crash_read_inputs:
 ; ------------
 
 CrashTextHeader:
-table ../resources/tables/header.tbl
+%table(header)
 if !VERSION_REV
     db "CRASH HANDLER v!VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV", #$FF
 else
     db "CRASH HANDLER v!VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD", #$FF
 endif
-table ../resources/tables/normal.tbl
+%table(normal)
 
 CrashTextFooter1:
 ; Navigate pages with A or B
@@ -1022,9 +1022,9 @@ CrashTextStack4:
     db "Stack OVERFLOW!!!", #$FF
 
 CrashTextHeader2:
-table ../resources/tables/header.tbl
+%table(header)
     db "CRASH MEMORY VIEWER", #$FF
-table ../resources/tables/normal.tbl
+%table(normal)
 ;table ../resources/tables/thinfont.tbl
 
 CrashTextMemAddress:
@@ -1043,9 +1043,9 @@ CrashTextMemSelectLow:
     db "Select Address Low   $", #$FF
 
 CrashTextHeader3:
-table ../resources/tables/header.tbl
+%table(header)
     db "BUT WHAT DOES IT ALL MEAN?", #$FF
-table ../resources/tables/normal.tbl
+%table(normal)
 ;table ../resources/tables/thinfont.tbl
 
 CrashTextInfo1:
@@ -1085,5 +1085,5 @@ CrashTextInfo11:
     db "Press ", #$8D, #$8C, #$85, #$84, " to soft reset", #$FF
 
 %endfree(89)
-table ../resources/tables/normal.tbl
+%table(normal)
 

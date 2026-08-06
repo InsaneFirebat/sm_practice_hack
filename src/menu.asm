@@ -2412,7 +2412,7 @@ Row5Spacebar:
     db "          "
 
 KeyboardTilemap:
-table ../resources/tables/header.tbl
+%table(header)
   .header
     db $28, "   CHOOSE A CUSTOM NAME   ", $FF
   .footer1
@@ -2425,7 +2425,7 @@ table ../resources/tables/header.tbl
     db $28, "HOLD X TO CLEAR SELECTION ", $FF
   .footer5
     db $28, "  PRESS SELECT TO CANCEL  ", $FF
-table ../resources/tables/normal.tbl
+%table(normal)
   .blanks
     db $28, "  ______________________  ", $FF
   .row1

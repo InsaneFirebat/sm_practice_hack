@@ -357,12 +357,13 @@ cm_scroll_BG3:
 ; -------------
 
 BRB_common_1:
-table ../resources/tables/customfont.tbl
+%table(customfont)
     db #$28, "      InsaneFirebat", #$FF
-table ../resources/tables/normal.tbl
+%table(header)
 
 BRB_common_2:
     db #$28, "    Will Be Right Back", #$FF
+%table(normal)
 
 BRBTilemapAddress:
     dw #BRB_screen_01

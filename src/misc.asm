@@ -67,7 +67,7 @@ if !VERSION_REV
 endif
 endif
     db $00
-table ../resources/tables/normal.tbl
+%table(normal)
 %endfree(8B)
 
 
