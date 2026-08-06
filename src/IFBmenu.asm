@@ -1,10 +1,9 @@
+
 ; ------------
 ; Firebat Menu
 ; ------------
 
-pushpc
-org $85D000
-print pc, " mainmenuu IFBmenu start"
+%startfree(85)
 
 IFBMenu:
 if !FEATURE_VANILLAHUD
@@ -259,16 +258,16 @@ ifb_game_music_toggle:
     LDA !MUSIC_DATA : CLC : ADC #$FF00 : STZ !MUSIC_DATA : JSL !MUSIC_ROUTINE
     LDA !MUSIC_TRACK : STZ !MUSIC_TRACK : JSL !MUSIC_ROUTINE
     RTL
+%endfree(85)
 
-print pc, " BRB start"
 incsrc BRBmenu.asm
-print pc, " BRB end"
 
 
 ; ----------------
 ; Capture Cropping
 ; ----------------
 
+%startfree(85)
 CaptureCroppingMenu:
     dw #ifb_launch_crop_mode
     dw #$FFFF
@@ -368,6 +367,4 @@ action_factory_reset:
 +   JML $80841C
 }
 
-print pc, " mainmenuu IFBmenu end"
-warnpc $85F800 ; gamemode.asm
-pullpc
+%endfree(85)

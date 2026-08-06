@@ -3,6 +3,7 @@
 ; Menu Helpers
 ; ------------
 
+%startfree(B8)
 action_mainmenu:
 {
     ; Set bank of new menu
@@ -2107,15 +2108,14 @@ boss_ridley:
 
 boss_mb:
     %cm_toggle_bit("Mother Brain", #$7ED82C, #$0200, #0)
+%endfree(B8)
 
 
 ; --------------
 ; Infohud menu
 ; --------------
 
-pushpc
-org $85A000
-print pc, " mainmenu InfoHUD start"
+%startfree(85)
 
 InfoHudMenu:
     dw #ih_goto_display_mode
@@ -2468,7 +2468,6 @@ ih_room_strat:
     LDA !IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
     JML init_print_segment_timer
 
-print pc, " superhud menu end"
 ih_superhud:
     %cm_submenu(">Configure Super HUD", #SuperHUDMenu)
 
@@ -2763,7 +2762,6 @@ action_select_superhud_top:
     TYA : STA !sram_superhud_top
     JML cm_previous_menu
 }
-print pc, " superhud menu end"
 
 ih_door_display_mode:
     dw !ACTION_CHOICE
@@ -2924,18 +2922,14 @@ ih_ram_watch:
 
 incsrc ramwatchmenu.asm
 
-print pc, " mainmenu InfoHUD end"
-warnpc $85D000 ; IFBmenu.asm
-pullpc
+%endfree(85)
 
 
 ; ----------
 ; Game menu
 ; ----------
 
-pushpc
-org $B3F000
-print pc, " mainmenu GameMenu start"
+%startfree(B3)
 
 GameMenu:
     dw #game_alternatetext
@@ -3412,14 +3406,14 @@ action_set_common_controls:
     JML cm_previous_menu
 }
 
-print pc, " mainmenu GameMenu start"
-pullpc
+%endfree(B3)
 
 
 ; ----------
 ; RNG menu
 ; ----------
 
+%startfree(B8)
 RngMenu:
     dw #rng_goto_phanmenu
     dw #$FFFF
@@ -4360,6 +4354,7 @@ init_wram_based_on_sram:
     JSL init_print_segment_timer
     JML validate_sram_for_savestates
 }
+%endfree(B8)
 
 
 ; ------------------

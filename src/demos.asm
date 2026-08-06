@@ -142,7 +142,7 @@ org $9187FE
     LDA.w DemoSamusSetup,X
 
 
-org $918885
+%startfree(91)
 DemoSamusData:
 {
     dw DemoSamusData_set1, DemoSamusData_set2, DemoSamusData_set3, DemoSamusData_set4
@@ -655,7 +655,7 @@ else
 endif
     dw $FFFF
 }
-%warnpc($919EE2, $919E3A) ; space freed up from repointing input data
+%endfree(91)
 
 
 ; Vanilla game uses 12h for demo data because it includes the door slot
@@ -730,8 +730,7 @@ endif
 warnpc $82893D
 
 
-org $83D000 ; $918ACE ; repoint to any bank with WRAM access
-print pc, " demos start"
+%startfree(83) ; repoint to any bank with WRAM access
 DemoInputInstructionLists:
 ; Order of demos does not matter
 ; Input data:
@@ -2945,5 +2944,5 @@ DemoInput_tasdance:
     dw DemoInstruction_Delete
 } ; tasdance
 endif
-print pc, " demos end"
+%endfree(83)
 

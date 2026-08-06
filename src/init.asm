@@ -35,8 +35,7 @@ org $80856E
     JML init_post_boot
 
 
-org $81F000
-print pc, " init start"
+%startfree(81)
 
 init_code:
 {
@@ -274,5 +273,4 @@ init_post_boot:
     JML $82893D ; hijacked code: start main game loop
 }
 
-print pc, " init end"
-warnpc $81FF00
+%endfree(81)

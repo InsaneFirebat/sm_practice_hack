@@ -1,3 +1,4 @@
+
 ; Patch out copy protection
 org $008000
     db $FF
@@ -40,11 +41,8 @@ org $8B8774
 org $8B8764 ; center version string
     db $68, $70, $78, $80, $88, $90, $98, $A0, $A8, $B0, $B8, $C0, $C8, $D0, $D8, $E0
 
-if !FEATURE_PAL
-org $8BF6DC
-else
-org $8BF754
-endif
+
+%startfree(8B)
 cleartable ; ASCII
 if !VERSION_MAJOR > 9
     db ' ', $30+(!VERSION_MAJOR/10), $30+(!VERSION_MAJOR%10)
@@ -70,7 +68,7 @@ endif
 endif
     db $00
 table ../resources/tables/normal.tbl
-warnpc $8BF800 ; cutscenes.asm
+%endfree(8B)
 
 
 ; Fix Zebes planet tiling error
@@ -157,11 +155,13 @@ misc_debug_brightness:
     BRA .skipDebugBrightness
 warnpc .skipDebugBrightness
 
-org $828ADD       ; Resume original logic
+; Resume original logic
+org $828ADD
   .skipDebugBrightness
 
 
-org $CF8BBF       ; Set map scroll beep to high priority
+; Set map scroll beep to high priority
+org $CF8BBF
     dw $2A97
 
 
@@ -184,7 +184,8 @@ endif
     NOP
 
 
-org $90D000       ; hijack, runs when a shinespark is activated
+; hijack, runs when a shinespark is activated
+org $90D000
     JMP ih_shinespark_activation
 
 
@@ -227,8 +228,7 @@ org $90E753
 endif
 
 
-org $87D000
-print pc, " misc start"
+%startfree(87)
 hook_set_music_track:
 ; $80:8F24 9C F6 07    STZ $07F6  [$7E:07F6]  ;/
 ; $80:8F27 8D 40 21    STA $2140  [$7E:2140]  ; APU IO 0 = [music track]
@@ -649,14 +649,13 @@ RandomizeOnLoad_Flag:
     STA !ram_loadstate_rando_enable
     RTL
 }
-print pc, " misc end"
+%endfree(87)
 
 
 org $869D59
     JSR move_kraid_rocks_horizontally
 
-org $86F500
-print pc, " misc bank86 start"
+%startfree(86)
 ; Copied from $8688B6 but optimized for Kraid rocks using a hard-coded radius
 ; This is intended to offset extra practice rom lag in Kraid's room
 move_kraid_rocks_horizontally:
@@ -690,11 +689,10 @@ move_kraid_rocks_horizontally:
     STA $22 : LSR #4 : CLC : ADC $4216 : ASL : TAX
     JMP $8930
 }
-print pc, " misc bank86 end"
+%endfree(86)
 
 
-org $90F800
-print pc, " misc bank90 start"
+%startfree(90)
 
 lock_samus_bowling:
 {
@@ -984,7 +982,7 @@ DebugSamusMovement:
   .debugMovement
     JMP $E759
 }
-print pc, " misc bank90 end"
+%endfree(90)
 
 
 if !FEATURE_PAL
@@ -1002,8 +1000,7 @@ endif
     JSR DemoWaitTimer
 
 
-org $8BFA00
-print pc, " misc bank8B start"
+%startfree(8B)
 
 DemoWaitTimer:
 {
@@ -1196,4 +1193,4 @@ decompression_increment_bank:
     PLA
     RTS
 }
-print pc, " misc bank8B end"
+%endfree(8B)

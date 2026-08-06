@@ -1,6 +1,5 @@
 
-org $85FD00
-print pc, " menu bank85 start"
+%startfree(85)
 
 initialize_ppu_long:
     PHP : %a16()
@@ -24,12 +23,10 @@ maybe_trigger_pause_long:
     JSR $80FA
     RTL
 
-print pc, " menu bank85 end"
-warnpc $85FE00
+%endfree(85)
 
 
-org $89B000
-print pc, " menu start"
+%startfree(89)
 
 cm_start:
 {
@@ -1341,10 +1338,6 @@ draw_custom_preset:
 
   .done
     RTS
-
-pushpc
-incsrc roomnames.asm
-pullpc
 }
 
 draw_manage_presets:
@@ -3553,20 +3546,9 @@ cm_spc_transfer:
 }
 
 
-; -------------
-; Crash handler
-; -------------
-
-incsrc crash.asm
-
-
 ; ----------
 ; Resources
 ; ----------
-
-cm_hud_table:
-    ; 1000h bytes
-incbin ../resources/gfx/cm_gfx.bin
 
 HexMenuGFXTable:
     dw $2C70, $2C71, $2C72, $2C73, $2C74, $2C75, $2C76, $2C77, $2C78, $2C79, $2C50, $2C51, $2C52, $2C53, $2C54, $2C55
@@ -3574,23 +3556,22 @@ HexMenuGFXTable:
 DecMenuGFXTable:
     dw $2C20, $2C21, $2C22, $2C23, $2C24, $2C25, $2C26, $2C27, $2C28, $2C29
 
-MenuResources:
-; for BRBmenu.asm
-
-print pc, " menu end"
+%endfree(89)
 
 
-org $FF8000
+%startfree(DF)
+cm_hud_table:
+; 1000h bytes
+incbin ../resources/gfx/cm_gfx.bin
+
 cm_hud_table2:
-    ; 1000h bytes
+; 1000h bytes
 incbin ../resources/gfx/cm_gfx2.bin
+%endfree(DF)
 
 
 ; -----------
 ; Main menu
 ; -----------
 
-org $B88000
-print pc, " mainmenu start"
 incsrc mainmenu.asm
-print pc, " mainmenu end"

@@ -2,8 +2,7 @@
 ; Custom Presets
 ; --------------
 
-org $83B400
-print pc, " custompresets start"
+%startfree(83)
 
 ; Backward compatibility was promised. Just because it's unused, doesn't mean you can use it.
 
@@ -1023,5 +1022,4 @@ PresetRandoETankTable:
     dw #$0063, #$00C7, #$012B, #$018F, #$01F3, #$0257, #$02BB, #$031F, #$0383, #$03E7, #$044B, #$04AF, #$0513, #$0517, #$05DB
 }
 
-warnpc $B3C000 ; mainmenu.asm
-print pc, " custom presets end"
+%endfree(83)

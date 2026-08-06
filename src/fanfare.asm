@@ -35,6 +35,7 @@ org $858749
     dw #$8436, #$8289, EndFanfareText
 
 org $859643
+; Custom fanfare text immediately follows vanilla text
 print pc, " fanfare message start"
 
 ;;; Message text must be listed in order
@@ -110,12 +111,11 @@ SpecialButtonTilemapOffsets:
     dw #$0000  ; 26h: Reserved
 
 print pc, " fanfare message end"
-warnpc $85F800
+warnpc !START_FREESPACE_85
 endif
 
 
-org $85FE00
-print pc, " fanfare start"
+%startfree(85)
 
 ; List this first since it affects bank $84 where we are trying to minimize change
 play_or_skip_fanfare:
@@ -229,5 +229,5 @@ hook_resume_room_music:
     RTL
 }
 
-print pc, " fanfare end"
+%endfree(85)
 

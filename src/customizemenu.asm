@@ -1,7 +1,5 @@
 
-pushpc
-org $AFEC00
-print pc, " menu customization bankAF start"
+%startfree(AF)
 
 ; -----------------------
 ; Customize Practice Menu
@@ -455,129 +453,6 @@ PrepMenuPalette:
     RTL
 }
 
-
-pushpc
-org $AEFD20
-print pc, " menu PaletteProfileTables start"
-; These tables can live anywhere
-
-PaletteProfileTables:
-{
-    dw #$0000 ; dummy for custom profiles
-    dw #TwitchProfileTable        ; 1
-    dw #DefaultProfileTable       ; 2
-    dw #FirebatProfileTable       ; 3
-    dw #wardrinkerProfileTable    ; 4
-    dw #mm2ProfileTable           ; 5
-    dw #ptoilProfileTable         ; 6
-    dw #ZohdinProfileTable        ; 7
-    dw #DarkXoaProfileTable       ; 8
-    dw #MelonaxProfileTable       ; 9
-    dw #TopsyTurveProfileTable    ; A
-    dw #OSTProfileTable           ; B
-    dw #JRPProfileTable           ; C
-    dw #LayrusProfileTable        ; D
-    dw #DayneProfileTable         ; E
-    dw #DreamCowboyProfileTable   ; F
-    dw #ZeniProfileTable          ; 10
-    dw #DyceProfileTable          ; 11
-    dw #ForeverProfileTable       ; 12
-    dw #GreyProfileTable          ; 13
-    dw #RedProfileTable           ; 14
-    dw #PurpleProfileTable        ; 15
-    dw #HUDProfileTable           ; 16
-    dw #MemesProfileTable         ; 17
-    dw #GrapedrinkzProfileTable   ; 18
-    dw #PapaSchmoProfileTable     ; 19
-    dw #VespherProfileTable       ; 1A
-    dw #EXAKTProfileTable         ; 1B
-    dw #$0000
-
-; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
-TwitchProfileTable:
-    dw $550D, $550D, $7FFF, $0000, $0000, $7FFF, $550D, $550D, $0000, $550D, $7FFF
-
-DefaultProfileTable:
-    dw $7277, $48F3, $7FFF, $0000, $0000, $7FFF, $4376, $761F, $0000, $0000, $761F
-
-FirebatProfileTable:
-    dw $000E, $000E, $0A20, $0000, $0A20, $0002, $0680, $000F, $0005, $0A20, $000F
-
-wardrinkerProfileTable:
-    dw $7277, $7FFF, $7A02, $0000, $0000, $9200, $7277, $7F29, $0000, $0000, $7F29
-
-mm2ProfileTable:
-    dw $0539, $7F44, $7C80, $0000, $5442, $7F44, $03E0, $0B7E, $0000, $0539, $0F7E
-
-ptoilProfileTable:
-    dw $5CAA, $14A5, $01EF, $0000, $0000, $5294, $4376, $03FF, $0000, $0000, $7FFF
-
-ZohdinProfileTable:
-    dw $7BFF, $0402, $0300, $0060, $0100, $9700, $7B64, $7BFF, $94A6, $2051, $09BF
-
-DarkXoaProfileTable:
-    dw $24C4, $45A8, $24C4, $0000, $0000, $24C4, $45A8, $45A8, $0000, $1505, $45A8
-
-MelonaxProfileTable:
-    dw $7FFF, $0000, $3DEF, $0C63, $0000, $7FFF, $266B, $3DFE, $0C63, $0000, $266B
-
-TopsyTurveProfileTable:
-    dw $7264, $7264, $7FFF, $0000, $0000, $7FFF, $7264, $7264, $0000, $0000, $7264
-
-OSTProfileTable:
-    dw $7FFF, $7FFF, $0010, $0000, $0010, $7FFF, $001F, $001E, $0000, $7FFF, $001E
-
-JRPProfileTable:
-    dw $7976, $384B, $66D1, $484A, $E54F, $7B97, $7B7B, $6B5E, $70F0, $654F, $7B97
-
-LayrusProfileTable:
-    dw $2D5B, $3005, $1E9D, $0C00, $1C03, $059F, $2ADF, $4E5F, $4088, $6969, $77EE
-
-DayneProfileTable:
-    dw $2959, $4086, $0294, $1044, $1044, $35AD, $2B2A, $3ACE, $1C87, $20C8, $3ACE
-
-DreamCowboyProfileTable:
-    dw $35B2, $35B2, $6B5A, $7FFF, $35B2, $7FFF, $35B2, $35B2, $7FFF, $35B2, $6B5A
-
-ZeniProfileTable:
-    dw $7D40, $3900, $7F00, $0000, $0000, $7FE0, $7EA0, $7FE0, $0000, $0000, $7E00
-
-DyceProfileTable:
-    dw $5DC0, $5DC0, $77BD, $2060, $0000, $7FFF, $7FFF, $7FFF, $5DC0, $5DC0, $7FFF
-
-ForeverProfileTable:
-    dw $650D, $0000, $01F9, $0000, $0000, $22DC, $79EA, $650D, $0000, $650D, $7FFF
-
-GreyProfileTable:
-    dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $0012, $0C63, $1CE7, $3DEF
-
-RedProfileTable:
-    dw $0010, $0000, $0010, $0000, $0010, $0000, $001F, $001F, $0000, $001F, $0010
-
-PurpleProfileTable:
-    dw $602F, $0000, $602F, $0000, $0000, $602F, $0338, $0338, $0000, $602F, $0338
-
-HUDProfileTable:
-    dw $3D46, $48FB, $7FFF, $0000, $44E5, $7FFF, $4A52, $318C, $0000, $02DF, $001F
-
-MemesProfileTable:
-    dw $0014, $7FFF, $281E, $0000, $5000, $7BC0, $03C0, $37C0, $0000, $2940, $37C0
-
-GrapedrinkzProfileTable:
-    dw $56B5, $4010, $56B5, $1400, $0000, $56B5, $02E0, $02E0, $4010, $4010, $02E0
-
-PapaSchmoProfileTable:
-    dw $0005, $0005, $000B, $0001, $0009, $0000, $00F8, $0014, $0000, $0014, $0000
-
-VespherProfileTable:
-    dw $49FE, $4159, $7FFF, $0804, $0000, $7FFF, $5E80, $55FE, $0000, $0000, $761F
-
-EXAKTProfileTable:
-    dw $2DC6, $5F65, $3A42, $18A1, $2982, $4F0A, $6F08, $4EC9, $18A1, $2DE6, $63CC
-}
-print pc, " menu PaletteProfileTables start"
-pullpc
-
 refresh_custom_palettes:
 {
     PHP
@@ -826,5 +701,124 @@ ConvertNormal2Header:
     %norm2head("%")
 }
 
-print pc, " menu customization bankAF end"
-pullpc
+%endfree(AF)
+
+
+%startfree(AE)
+; These tables can live anywhere
+
+PaletteProfileTables:
+{
+    dw #$0000 ; dummy for custom profiles
+    dw #TwitchProfileTable        ; 1
+    dw #DefaultProfileTable       ; 2
+    dw #FirebatProfileTable       ; 3
+    dw #wardrinkerProfileTable    ; 4
+    dw #mm2ProfileTable           ; 5
+    dw #ptoilProfileTable         ; 6
+    dw #ZohdinProfileTable        ; 7
+    dw #DarkXoaProfileTable       ; 8
+    dw #MelonaxProfileTable       ; 9
+    dw #TopsyTurveProfileTable    ; A
+    dw #OSTProfileTable           ; B
+    dw #JRPProfileTable           ; C
+    dw #LayrusProfileTable        ; D
+    dw #DayneProfileTable         ; E
+    dw #DreamCowboyProfileTable   ; F
+    dw #ZeniProfileTable          ; 10
+    dw #DyceProfileTable          ; 11
+    dw #ForeverProfileTable       ; 12
+    dw #GreyProfileTable          ; 13
+    dw #RedProfileTable           ; 14
+    dw #PurpleProfileTable        ; 15
+    dw #HUDProfileTable           ; 16
+    dw #MemesProfileTable         ; 17
+    dw #GrapedrinkzProfileTable   ; 18
+    dw #PapaSchmoProfileTable     ; 19
+    dw #VespherProfileTable       ; 1A
+    dw #EXAKTProfileTable         ; 1B
+    dw #$0000
+
+; border, headeroutline, text, background, numoutline, numfill, toggleon, seltext, seltextbg, numseloutline, numsel
+TwitchProfileTable:
+    dw $550D, $550D, $7FFF, $0000, $0000, $7FFF, $550D, $550D, $0000, $550D, $7FFF
+
+DefaultProfileTable:
+    dw $7277, $48F3, $7FFF, $0000, $0000, $7FFF, $4376, $761F, $0000, $0000, $761F
+
+FirebatProfileTable:
+    dw $000E, $000E, $0A20, $0000, $0A20, $0002, $0680, $000F, $0005, $0A20, $000F
+
+wardrinkerProfileTable:
+    dw $7277, $7FFF, $7A02, $0000, $0000, $9200, $7277, $7F29, $0000, $0000, $7F29
+
+mm2ProfileTable:
+    dw $0539, $7F44, $7C80, $0000, $5442, $7F44, $03E0, $0B7E, $0000, $0539, $0F7E
+
+ptoilProfileTable:
+    dw $5CAA, $14A5, $01EF, $0000, $0000, $5294, $4376, $03FF, $0000, $0000, $7FFF
+
+ZohdinProfileTable:
+    dw $7BFF, $0402, $0300, $0060, $0100, $9700, $7B64, $7BFF, $94A6, $2051, $09BF
+
+DarkXoaProfileTable:
+    dw $24C4, $45A8, $24C4, $0000, $0000, $24C4, $45A8, $45A8, $0000, $1505, $45A8
+
+MelonaxProfileTable:
+    dw $7FFF, $0000, $3DEF, $0C63, $0000, $7FFF, $266B, $3DFE, $0C63, $0000, $266B
+
+TopsyTurveProfileTable:
+    dw $7264, $7264, $7FFF, $0000, $0000, $7FFF, $7264, $7264, $0000, $0000, $7264
+
+OSTProfileTable:
+    dw $7FFF, $7FFF, $0010, $0000, $0010, $7FFF, $001F, $001E, $0000, $7FFF, $001E
+
+JRPProfileTable:
+    dw $7976, $384B, $66D1, $484A, $E54F, $7B97, $7B7B, $6B5E, $70F0, $654F, $7B97
+
+LayrusProfileTable:
+    dw $2D5B, $3005, $1E9D, $0C00, $1C03, $059F, $2ADF, $4E5F, $4088, $6969, $77EE
+
+DayneProfileTable:
+    dw $2959, $4086, $0294, $1044, $1044, $35AD, $2B2A, $3ACE, $1C87, $20C8, $3ACE
+
+DreamCowboyProfileTable:
+    dw $35B2, $35B2, $6B5A, $7FFF, $35B2, $7FFF, $35B2, $35B2, $7FFF, $35B2, $6B5A
+
+ZeniProfileTable:
+    dw $7D40, $3900, $7F00, $0000, $0000, $7FE0, $7EA0, $7FE0, $0000, $0000, $7E00
+
+DyceProfileTable:
+    dw $5DC0, $5DC0, $77BD, $2060, $0000, $7FFF, $7FFF, $7FFF, $5DC0, $5DC0, $7FFF
+
+ForeverProfileTable:
+    dw $650D, $0000, $01F9, $0000, $0000, $22DC, $79EA, $650D, $0000, $650D, $7FFF
+
+GreyProfileTable:
+    dw $0012, $1CE7, $3DEF, $0C63, $1CE7, $3DEF, $0EE3, $0012, $0C63, $1CE7, $3DEF
+
+RedProfileTable:
+    dw $0010, $0000, $0010, $0000, $0010, $0000, $001F, $001F, $0000, $001F, $0010
+
+PurpleProfileTable:
+    dw $602F, $0000, $602F, $0000, $0000, $602F, $0338, $0338, $0000, $602F, $0338
+
+HUDProfileTable:
+    dw $3D46, $48FB, $7FFF, $0000, $44E5, $7FFF, $4A52, $318C, $0000, $02DF, $001F
+
+MemesProfileTable:
+    dw $0014, $7FFF, $281E, $0000, $5000, $7BC0, $03C0, $37C0, $0000, $2940, $37C0
+
+GrapedrinkzProfileTable:
+    dw $56B5, $4010, $56B5, $1400, $0000, $56B5, $02E0, $02E0, $4010, $4010, $02E0
+
+PapaSchmoProfileTable:
+    dw $0005, $0005, $000B, $0001, $0009, $0000, $00F8, $0014, $0000, $0014, $0000
+
+VespherProfileTable:
+    dw $49FE, $4159, $7FFF, $0804, $0000, $7FFF, $5E80, $55FE, $0000, $0000, $761F
+
+EXAKTProfileTable:
+    dw $2DC6, $5F65, $3A42, $18A1, $2982, $4F0A, $6F08, $4EC9, $18A1, $2DE6, $63CC
+}
+%endfree(AE)
