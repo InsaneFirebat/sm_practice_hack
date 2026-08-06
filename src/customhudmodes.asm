@@ -1,6 +1,9 @@
+
 ; ====================================
 ; Custom InfoHUD modes and room strats
 ; ====================================
+
+%startfree(F0)
 
 ; When adding or removing infohud modes,
 ; also update infohud.asm: inc_statusdisplay and dec_statusdisplay
@@ -1164,14 +1167,4 @@ status_pumpcounter:
     RTS
 }
 
-
-
-
-
-
-
-
-
-
-
-
+%endfree(F0)

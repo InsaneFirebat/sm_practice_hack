@@ -15,34 +15,39 @@ table ../resources/tables/normal.tbl
 incsrc macros.asm
 incsrc defines.asm
 incsrc freespace.asm
-if !FEATURE_DEV
 incsrc symbols.asm
-endif
+incsrc roomnames.asm
 
-incsrc printdebug.asm
+incsrc printdebug.asm ; includes savestates
 
 incsrc init.asm
-incsrc crash.asm
 incsrc gamemode.asm
 incsrc minimap.asm
-incsrc menu.asm
 incsrc infohud.asm
-incsrc IFBhijacks.asm
-incsrc rng.asm
+incsrc infohudmodes.asm
+incsrc customhudmodes.asm
+incsrc menu.asm
+incsrc ramwatchmenu.asm
+incsrc customizemenu.asm
+incsrc BRBmenu.asm
+incsrc IFBmenu.asm
 incsrc presets.asm
 incsrc custompresets.asm
+incsrc rng.asm
+incsrc spritefeat.asm
+incsrc crash.asm
 incsrc misc.asm
 incsrc layout.asm
 incsrc cutscenes.asm
 incsrc fanfare.asm
 incsrc spriteprio.asm
-incsrc spritefeat.asm
 incsrc demos.asm
+incsrc IFBhijacks.asm
+
 if !RAW_TILE_GRAPHICS
 incsrc tilegraphics.asm
 endif
 
-incsrc roomnames.asm
 
 ; Make sure the ROM expands to 4MB
 org $FFFFFF : db $FF
