@@ -68,7 +68,7 @@ cm_brb_loop:
   .forceIncScreen
     LDA #$0000 : STA !ram_cm_brb_timer
     LDA !ram_cm_brb_screen : INC : STA !ram_cm_brb_screen
-    CMP #$000F : BMI .loop ; total screens
+    CMP.w !BRB_TOTAL_SCREENS : BMI .loop
     LDA #$0000
     STA !ram_cm_brb_screen : STA !ram_cm_brb_timer
     JMP .loop
@@ -97,7 +97,7 @@ cm_tilemap_brb:
 
     ; Cycle screen text
     LDA !ram_cm_brb_screen : INC : STA !ram_cm_brb_screen
-    CMP #$000F : BMI + ; total screens
+    CMP.w !BRB_TOTAL_SCREENS : BMI +
     LDA #$0000 : STA !ram_cm_brb_screen
 
     ; Cycle menu palette

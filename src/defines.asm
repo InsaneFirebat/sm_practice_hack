@@ -1076,6 +1076,7 @@ endif
 !PROFILE_Vespher      = #$001A
 !PROFILE_EXAKT        = #$001B
 
+!BRB_TOTAL_SCREENS = #(BRBTilemapAddress_end-BRBTilemapAddress)/2
 !BRB_METROID = #$287F
 !BRB_HEART = #$2899
 
