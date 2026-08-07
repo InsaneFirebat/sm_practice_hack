@@ -320,7 +320,7 @@ category_preset_load:
 
   .prepare_traverse_list_loop
     ; Set bank to read data from
-    STZ $00 : %a8() : LDA $C5 : PHA : PLB
+    STZ $00 : %a8() : PEI ($C5) : PLB
     ; Set bank to store data to
     LDA #$7E : STA $C5 : %a16()
 

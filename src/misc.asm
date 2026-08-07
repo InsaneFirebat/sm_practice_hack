@@ -1054,7 +1054,7 @@ optimized_decompression:
 {
     PHP : %a8() : %i16()
     ; Set bank
-    PHB : LDA !DECOMP_SRC+2 : PHA : PLB
+    PHB : PEI (!DECOMP_SRC+2) : PLB
 
     STZ !DECOMP_DICTCOPY_INV+1 : LDY #$0000
 

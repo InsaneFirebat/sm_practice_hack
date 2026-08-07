@@ -186,7 +186,7 @@ CrashViewer:
     %ai16()
     JSL crash_next_frame
     JSL crash_cgram_transfer
-    LDA $C1 : PHA : LDA $C3 : PHA
+    PEI ($C1) : PEI ($C3)
     JSL cm_transfer_custom_tileset
     PLA : STA $C3 : PLA : STA $C1
 
@@ -412,7 +412,7 @@ endif
     ; -- Detect and Draw COP/BRK --
     LDA !ram_crash_type : AND #$0003 : BEQ .drawStack_bridge
     LDA !ram_crash_type : AND #$C000 : BNE .corruptBRKCOP
-    LDA $C1 : PHA : LDA $C3 : PHA
+    PEI ($C1) : PEI ($C3)
 
     %a8()
     LDA !ram_crash_stack : STA !ram_crash_draw_value
@@ -655,7 +655,7 @@ CrashMemViewer:
     ; draw the current value and nearby bytes
     LDA !ram_crash_mem_viewer : BMI .bridge_drawUpperHalf
     %a16()
-    LDA $C1 : PHA : LDA $C3 : PHA
+    PEI ($C1) : PEI ($C3)
     LDA !ram_crash_mem_viewer_bank : STA $C3
     LDA !ram_crash_mem_viewer : STA $C1 : STA !ram_crash_temp
     LDA [$C1] : STA !ram_crash_draw_value
@@ -706,7 +706,7 @@ CrashMemViewer:
 
   .drawUpperHalf
     %a16()
-    LDA $41 : PHA : LDA $43 : PHA
+    PEI ($41) : PEI ($43)
     LDA !ram_crash_mem_viewer_bank : STA $43
     LDA !ram_crash_mem_viewer : STA $41 : STA !ram_crash_temp
     LDA [$41] : STA !ram_crash_draw_value
@@ -826,7 +826,7 @@ endif
 crash_draw_text:
 {
     ; X = pointer to tilemap area (STA !ram_tilemap_buffer,X)
-    LDA $C5 : PHA : LDA $C7 : PHA
+    PEI ($C5) : PEI ($C7)
     LDA !ram_crash_text_bank : STA $C7
     LDA !ram_crash_text : STA $C5
     %a8()
