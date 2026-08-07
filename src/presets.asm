@@ -890,6 +890,6 @@ incsrc presets/allbossprkd_data.asm ; 136Ch bytes
 incsrc presets/nghyper_data.asm ; E88h bytes
 incsrc presets/ngplasma_data.asm ; EA4h bytes
 incsrc presets/suitless_data.asm ; 3DF0h bytes
-warnpc START_FREESPACE_F0
+warnpc !START_FREESPACE_F0
 check bankcross on
 print pc, " crossbank preset_data.asm $E8..end"

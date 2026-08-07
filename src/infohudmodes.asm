@@ -7,7 +7,7 @@
 
 ; When adding or removing infohud modes,
 ; also update infohud.asm: inc_statusdisplay and dec_statusdisplay
-.status_display_table
+InfoHUDModeTable:
     dw status_enemyhp
     dw status_roomstrat
     dw status_chargetimer
