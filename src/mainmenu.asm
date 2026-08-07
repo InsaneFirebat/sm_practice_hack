@@ -2147,12 +2147,14 @@ ih_goto_display_mode:
 
 DisplayModeMenu:
     dw ihmode_enemyhp
+  .roomstrat
     dw ihmode_roomstrat
     dw ihmode_chargetimer
     dw ihmode_xfactor
     dw ihmode_cooldowncounter
     dw ihmode_shinetimer
     dw ihmode_dashcounter
+  .shinetune
     dw ihmode_shinetune
     dw ihmode_iframecounter
     dw ihmode_spikesuit
@@ -2161,11 +2163,15 @@ DisplayModeMenu:
     dw ihmode_xpos
     dw ihmode_ypos
     dw ihmode_hspeed
+  .vspeed
     dw ihmode_vspeed
     dw ihmode_quickdrop
+  .walljump
     dw ihmode_walljump
+  .armpump
     dw ihmode_armpump
     dw ihmode_shottimer
+  .ramwatch
     dw ihmode_ramwatch
     dw #$FFFF
     dw ihmode_GOTO_PAGE_TWO
@@ -2186,7 +2192,6 @@ ihmode_enemyhp:
     %cm_jsl("Enemy HP", #action_select_infohud_mode, #$0000)
 
 ihmode_roomstrat:
-!IH_MODE_ROOMSTRAT_INDEX = #$0001
     %cm_jsl("Room Strat", #action_select_infohud_mode, #$0001)
 
 ihmode_chargetimer:
@@ -2205,7 +2210,6 @@ ihmode_dashcounter:
     %cm_jsl("Dash Counter", #action_select_infohud_mode, #$0006)
 
 ihmode_shinetune:
-!IH_MODE_SHINETUNE_INDEX = #$0007
     %cm_jsl("Shine Tune", #action_select_infohud_mode, #$0007)
 
 ihmode_iframecounter:
@@ -2229,18 +2233,15 @@ ihmode_ypos:
 ihmode_hspeed:
     %cm_jsl("Horizontal Speed", #action_select_infohud_mode, #$000E)
 
-!IH_MODE_VSPEED_INDEX = #$000F
 ihmode_vspeed:
     %cm_jsl("Vertical Speed", #action_select_infohud_mode, #$000F)
 
 ihmode_quickdrop:
     %cm_jsl("Quickdrop Trainer", #action_select_infohud_mode, #$0010)
 
-!IH_MODE_WALLJUMP_INDEX = #$0011
 ihmode_walljump:
     %cm_jsl("Walljump Trainer", #action_select_infohud_mode, #$0011)
 
-!IH_MODE_ARMPUMP_INDEX = #$0012
 ihmode_armpump:
     %cm_jsl("Arm Pump Trainer", #action_select_infohud_mode, #$0012)
 
@@ -2250,7 +2251,6 @@ ihmode_shottimer:
 ihmode_countdamage:
     %cm_jsl("Boss Damage Counter", #action_select_infohud_mode, #$0014)
 
-!IH_MODE_RAMWATCH_INDEX = #$0015
 ihmode_ramwatch:
     %cm_jsl("Custom RAM Watch", #action_select_infohud_mode, #$0015)
 
@@ -2317,6 +2317,7 @@ ih_goto_room_strat:
 
 RoomStratMenu:
     dw ihstrat_superhud
+  .mbhp
     dw ihstrat_mbhp
     dw ihstrat_moatcwj
     dw ihstrat_gateglitch
@@ -2355,7 +2356,6 @@ ihstrat_superhud:
     %cm_jsl("Super HUD", #action_select_room_strat, #$0000)
 
 ihstrat_mbhp:
-!IH_STRAT_MBHP_INDEX = #$0001
     %cm_jsl("Mother Brain HP", #action_select_room_strat, #$0001)
 
 ihstrat_moatcwj:
@@ -2431,7 +2431,7 @@ action_select_room_strat:
 {
     TYA : STA !sram_room_strat
     ; enable ROOM STRAT mode
-    LDA !IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
+    LDA.w !IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
     JSL init_print_segment_timer
     JML cm_previous_menu
 }
@@ -2465,7 +2465,7 @@ ih_room_strat:
     db #$28, "  MOONDANCE", #$FF
     db #$FF
   .routine
-    LDA !IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
+    LDA.w !IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
     JML init_print_segment_timer
 
 ih_superhud:
@@ -2797,11 +2797,12 @@ ih_room_counter:
     dl #!sram_frame_counter_mode
     dw #$0000
     db #$28, "Frame Counters", #$FF
+  .start
     db #$28, "   REALTIME", #$FF
     db #$28, "     INGAME", #$FF
+  .adjust
     db #$28, "   SPEEDRUN", #$FF
     db #$FF
-!FRAME_COUNTER_ADJUST_REALTIME = #$0002
 
 ih_lag_counter:
     dw !ACTION_CHOICE
@@ -2831,14 +2832,16 @@ ih_status_icons:
 ih_lag:
     %cm_numfield("Artificial Lag", !sram_artificial_lag, 0, 64, 1, 4, #0)
 
-!TOP_DISPLAY_VANILLA = #$0002
 ih_top_HUD_mode:
     dw !ACTION_CHOICE
     dl #!sram_top_display_mode
     dw #$0000
     db #$28, "Top-Left Displa", #$FF
+  .start
     db #$28, "y    ITEM %", #$FF
+  .reserves
     db #$28, "y  RESERVES", #$FF
+  .vanilla
     db #$28, "y   VANILLA", #$FF
     db #$FF
 
@@ -2904,9 +2907,6 @@ ih_frames_held_up:
 
 ih_frames_held_down:
     %cm_toggle_bit("Down", !ram_frames_held, !IH_INPUT_DOWN, #0)
-
-!TOP_HUD_RESERVES_INDEX = #$0001
-!TOP_HUD_VANILLA_INDEX = #$0002
 
 ih_spacetime_infohud:
     dw !ACTION_CHOICE
@@ -4334,8 +4334,8 @@ endif
 init_print_segment_timer:
 {
     ; Skip printing segment timer when shinetune or walljump enabled
-    LDA !sram_display_mode : CMP !IH_MODE_SHINETUNE_INDEX : BEQ .skip
-    CMP !IH_MODE_WALLJUMP_INDEX : BEQ .skip
+    LDA !sram_display_mode : CMP.w !IH_MODE_SHINETUNE_INDEX : BEQ .skip
+    CMP.w !IH_MODE_WALLJUMP_INDEX : BEQ .skip
     ; print
     LDA #$0001 : STA !ram_print_segment_timer
     RTL

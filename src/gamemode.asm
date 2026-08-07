@@ -412,5 +412,5 @@ door_transition_autosave:
   .done
     JMP $E4A9 ; return to hijacked code
 }
-endif
 %endfree(82)
+endif
