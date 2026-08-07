@@ -237,6 +237,7 @@ PresetsMenu:
     dw #presets_auto_segment
     dw #presets_presetrando
 ;    dw #presets_ship_landing
+    dw #presets_elevator
 if !RAW_TILE_GRAPHICS
     dw #$FFFF
     dw #presets_compressed_graphics
@@ -354,6 +355,16 @@ if !FEATURE_DEV
 presets_random_preset_rng:
     %cm_toggle("Presets in Order", !ram_random_preset_rng, #$0001, #0)
 endif
+
+presets_elevator:
+    dw !ACTION_CHOICE
+    dl #!sram_preset_elevator
+    dw #$0000
+    db #$28, "Elevator Entry", #$FF
+    db #$28, "        OFF", #$FF
+    db #$28, "      SHORT", #$FF
+    db #$28, "       LONG", #$FF
+    db #$FF
 
 SelectPresetCategoryMenu:
     dw #presets_current

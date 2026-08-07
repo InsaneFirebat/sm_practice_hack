@@ -346,8 +346,8 @@ Layer2_X_Position = $0917
 Layer2_Y_Position = $0919
 Layer2_Scroll_X = $091B
 Layer2_Scroll_Y = $091C
-BG1_X_Offset = $091D
-BG1_Y_Offset = $091F
+BG1_X_SCROLL = $091D
+BG1_Y_SCROLL = $091F
 BG2_X_Offset = $0921
 BG2_Y_Offset = $0923
 
