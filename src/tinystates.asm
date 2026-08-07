@@ -1,7 +1,9 @@
+
 ; SD2SNES Savestate code
 ; by acmlm, total, Myria
-;
+; modified to fit in 128k
 
+if !FEATURE_TINYSTATES
 
 macro wram_to_sram(wram_addr, size, sram_addr)
     dw $0000|$4312, <sram_addr>&$FFFF                            ; VRAM address >> 1.
@@ -648,3 +650,4 @@ tinystates_load_kraid:
 }
 
 %endfree(82)
+endif

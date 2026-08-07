@@ -1,7 +1,11 @@
+
 lorom
 
 !FEATURE_SD2SNES ?= 0
 !FEATURE_TINYSTATES ?= 0
+if !FEATURE_TINYSTATES
+!FEATURE_SD2SNES = 1
+endif
 !FEATURE_PAL ?= 0
 !FEATURE_EXTRAS ?= 0
 !FEATURE_VANILLAHUD ?= 0
@@ -18,10 +22,12 @@ incsrc freespace.asm
 incsrc symbols.asm
 incsrc roomnames.asm
 
-incsrc printdebug.asm ; includes savestates
+incsrc printdebug.asm
 
 incsrc init.asm
 incsrc gamemode.asm
+incsrc save.asm
+incsrc tinystates.asm
 incsrc minimap.asm
 incsrc infohud.asm
 incsrc infohudmodes.asm
