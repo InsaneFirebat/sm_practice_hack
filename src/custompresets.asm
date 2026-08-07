@@ -734,7 +734,7 @@ preset_scroll_fixes:
     ; Ceres Fixes (Category and Custom Presets)
     ; -----------------------------------------
   .ceres_elevator
-    STZ !BG1_X_OFFSET+1 : STZ !BG1_Y_OFFSET+1
+    STZ !BG1_X_SCROLL+1 : STZ !BG1_Y_SCROLL+1
     BRA .ceresdone
 
   .ceresbegin
@@ -756,28 +756,28 @@ preset_scroll_fixes:
     RTL
 
   .ceres_falling_tiles
-    LDA #$01 : STA !BG1_X_OFFSET+1
-    LDA #$02 : STA !BG1_Y_OFFSET+1
+    LDA #$01 : STA !BG1_X_SCROLL+1
+    LDA #$02 : STA !BG1_Y_SCROLL+1
     BRA .ceresdone
 
   .ceres_magnet_stairs
-    LDA #$03 : STA !BG1_X_OFFSET+1
-    LDA #$02 : STA !BG1_Y_OFFSET+1
+    LDA #$03 : STA !BG1_X_SCROLL+1
+    LDA #$02 : STA !BG1_Y_SCROLL+1
     BRA .ceresdone
 
   .ceres_dead_scientists
-    LDA #$04 : STA !BG1_X_OFFSET+1
-    LDA #$03 : STA !BG1_Y_OFFSET+1
+    LDA #$04 : STA !BG1_X_SCROLL+1
+    LDA #$03 : STA !BG1_Y_SCROLL+1
     BRA .ceresdone
 
   .ceres_58_escape
-    LDA #$06 : STA !BG1_X_OFFSET+1
-    LDA #$03 : STA !BG1_Y_OFFSET+1
+    LDA #$06 : STA !BG1_X_SCROLL+1
+    LDA #$03 : STA !BG1_Y_SCROLL+1
     BRA .ceresdone
 
   .ceres_ridley
-    LDA #$08 : STA !BG1_X_OFFSET+1
-    LDA #$03 : STA !BG1_Y_OFFSET+1
+    LDA #$08 : STA !BG1_X_SCROLL+1
+    LDA #$03 : STA !BG1_Y_SCROLL+1
     BRA .ceresdone
 
   .custom_presets

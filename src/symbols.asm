@@ -227,6 +227,8 @@ ram_cm_watch_enemy_index = !ram_cm_watch_enemy_index ; !WRAM_MENU_START+$82
 ram_cm_watch_enemy_side = !ram_cm_watch_enemy_side ; !WRAM_MENU_START+$84
 ram_cm_watch_common_address = !ram_cm_watch_common_address ; !WRAM_MENU_START+$86
 
+ram_cm_preset_elevator = !ram_cm_preset_elevator ; !WRAM_MENU_START+$80
+
 ram_cm_phan_first_phase = !ram_cm_phan_first_phase ; !WRAM_MENU_START+$80
 ram_cm_phan_second_phase = !ram_cm_phan_second_phase ; !WRAM_MENU_START+$82
 
@@ -513,7 +515,7 @@ sram_preset_open_doors = !sram_preset_open_doors ; !SRAM_START+$226
 sram_preset_ship_landing = !sram_preset_ship_landing ; !SRAM_START+$228
 sram_preset_enemies = !sram_preset_enemies ; !SRAM_START+$22A
 sram_demo_timer = !sram_demo_timer ; !SRAM_START+$22C
-;!sram_fanfare_timer_adjust = !SRAM_START+$22E
+sram_preset_elevator = !sram_preset_elevator ; !SRAM_START+$22E
 sram_preset_map_tiles = !sram_preset_map_tiles ; !SRAM_START+$230
 sram_preset_auto_segment = !sram_preset_auto_segment ; !SRAM_START+$232
 sram_random_bubble_sfx = !sram_random_bubble_sfx ; !SRAM_START+$234

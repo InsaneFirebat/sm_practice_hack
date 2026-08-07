@@ -130,8 +130,6 @@ raw_tile_graphics_table:
 
 load_raw_tile_graphics:
 {
-    STZ !ELEVATOR_PROPERTIES
-
     ; Update graphics index for our 4-byte table
     TYA : ASL : PHX : TAX
 
