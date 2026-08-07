@@ -1177,7 +1177,7 @@ draw_custom_preset:
     STX !DP_Address
 
     ; check if slot has valid data
-    LDA $703000,X : CMP !SAFEWORD : BEQ .validPreset
+    LDA !PRESET_SLOTS,X : CMP !SAFEWORD : BEQ .validPreset
     ; slot is EMPTY, fix bank and exit
     LDA !DP_MenuIndices+2 : STA !DP_CurrentMenu+2
     RTS
