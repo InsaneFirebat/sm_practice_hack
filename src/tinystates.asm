@@ -386,7 +386,7 @@ load_write_table:
     dw $0000|$4310, $8000  ; direction = A->B, B addr = $2180
 
 
-    ; Copy WRAM segments, uses $703000-$726B02
+    ; Copy WRAM segments, uses $704000-$726B02
     %sram_to_wram($7E0000, $2000, $704000)
     %sram_to_wram($7E7000, $1000, $706000)
     %sram_to_wram($7E3300, $0200, $707000)

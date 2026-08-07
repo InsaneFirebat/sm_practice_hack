@@ -1055,16 +1055,16 @@ CrashTextInfo2:
     db "You can report this crash", #$FF
 
 CrashTextInfo3:
-    db "on GitHub, or in Discord's", #$FF
+    db "on GitHub, or directly to", #$FF
 
 CrashTextInfo4:
-    db "#practice-hack channel.", #$FF
+    db "InsaneFirebat on Discord.", #$FF
 
 CrashTextInfo5:
     db "Take a screenshot of the", #$FF
 
 CrashTextInfo6:
-    db "first page to help us", #$FF
+    db "first page to help me", #$FF
 
 CrashTextInfo7:
     db "diagnose the issue.", #$FF

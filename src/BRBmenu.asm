@@ -186,7 +186,7 @@ cm_tilemap_brb:
 
 BRB_handle_countup_timer:
 {
-    LDA !ram_cm_brb_frames : INC : STA !ram_cm_brb_frames : CMP #$003C : BNE +
+    LDA !ram_cm_brb_frames : INC : STA !ram_cm_brb_frames : CMP !FRAMERATE : BNE +
     LDA #$0000 : STA !ram_cm_brb_frames
     LDA !ram_cm_brb_secs : INC : STA !ram_cm_brb_secs : CMP #$003C : BNE +
     LDA #$0000 : STA !ram_cm_brb_secs
@@ -197,7 +197,7 @@ BRB_handle_countup_timer:
 BRB_handle_countdown_timer:
 {
     LDA !ram_cm_brb_frames : DEC : STA !ram_cm_brb_frames : BPL +
-    LDA #$003B : STA !ram_cm_brb_frames
+    LDA !FRAMERATE-1 : STA !ram_cm_brb_frames
     LDA !ram_cm_brb_secs : DEC : STA !ram_cm_brb_secs : BPL +
     LDA #$003B : STA !ram_cm_brb_secs
     LDA !ram_cm_brb_mins : DEC : STA !ram_cm_brb_mins : BPL +
@@ -345,7 +345,7 @@ cm_scroll_BG3:
     %a8()
     STA $2112 : XBA : STA $2112
 
-    LDA #$0F : STA $2100
+    LDA #$0F : STA $0F2100
 
     PLP
     RTL
@@ -497,11 +497,11 @@ BRB_screen2_0F:
 ; BRB Data
 ; --------
 
-%startfree(B0)
+%startfree(DF)
 cm_brb_table:
 ; 1000h bytes transferred
 incbin ../resources/gfx/cm_brb_gfx.bin
-%endfree(B0)
+%endfree(DF)
 
 %startfree(89)
 TimerNumberGFX1:
