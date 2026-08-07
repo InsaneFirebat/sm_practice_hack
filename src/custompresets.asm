@@ -264,9 +264,9 @@ custom_preset_save:
     MVN $7E70                    ; srcBank, destBank
     PLB : PLX
 
-    LDA !SAMUS_X_SUBPX : STA $7031EA,X
-    LDA !SAMUS_Y_SUBPX : STA $7031EC,X
-    ; next available byte is $7031EE
+    LDA !SAMUS_X_SUBPX : STA !PRESET_SLOTS+$1EA,X
+    LDA !SAMUS_Y_SUBPX : STA !PRESET_SLOTS+$1EC,X
+    ; next available byte is !PRESET_SLOTS+$1EE
 
     RTL
 }
@@ -344,13 +344,13 @@ custom_preset_load:
     LDA !SAFEWORD : STA !ram_custom_preset
 
     LDA !PRESET_SLOTS+$02,X : CMP #$01EC : BMI .done_with_scrolls
-    LDA $7031EA,X : STA !SAMUS_X_SUBPX
-    LDA $7031EC,X : STA !SAMUS_Y_SUBPX
+    LDA !PRESET_SLOTS+$1EA,X : STA !SAMUS_X_SUBPX
+    LDA !PRESET_SLOTS+$1EC,X : STA !SAMUS_Y_SUBPX
 
   .done_with_scrolls
     RTL
 
-    ; next available byte is $7031EE
+    ; next available byte is !PRESET_SLOTS+$1EE
 
   .done_no_scrolls
     LDA #$0000 : STA !ram_custom_preset
@@ -366,72 +366,79 @@ preset_scroll_fixes:
     PHP
     PHB
     %ai16()
-    STZ !BG2_X_SCROLL : STZ !BG2_Y_SCROLL
+    STZ !BG2_X_OFFSET : STZ !BG2_Y_OFFSET
     LDA !ram_custom_preset : CMP !SAFEWORD : BNE .category_presets
     BRL .custom_presets
 
   .category_presets
+    ; organized by room ID for efficiency
     PEA $7E7E : PLB : PLB
     %a8()
-    LDA #$01 : LDX !ROOM_ID      ; X = room ID
-    CPX #$C000 : BMI .tophalf    ; organized by room ID for efficiency
-    BRL .halfway
+    LDA #$01
+    LDX !ROOM_ID : CPX.w #ROOM_BowlingAlley : BMI .tophalf
+    JMP .halfway
 
     ; -------------------------------------------------
     ; Crateria/Brinstar Scroll Fixes (Category Presets)
     ; -------------------------------------------------
   .parlor
-    LDY !SAMUS_Y : CPY #$00D0    ; fix varies depending on Y position
-    BPL .parlor_lower
+    ; fix varies depending on Y position
+    LDY !SAMUS_Y : CPY #$00D0 : BPL .parlor_lower
     STA $CD24
-    BRL .specialized_parlor
+    JMP .specialized_parlor
   .parlor_lower
     INC : STA $CD26 : STA $CD28
-    BRL .specialized_parlor
+    JMP .specialized_parlor
 
-  .dachora
-    LDY !SAMUS_X : CPY #$0405    ; no fix if Xpos < 1029
-    BMI .topdone
-    STA $CD24
+  .crateria_kihunters
+    ; no fix if Ypos >= 208
+    LDY !SAMUS_Y : CPY #$00D0 : BPL .topdone
+    STA $CD21
+    DEC : STA $CD24
     BRA .topdone
 
   .big_pink
-    BRL .specialized_big_pink
+    ; fix varies depending on X position
+    LDY !SAMUS_X : CPY #$0400 : BPL .big_pink_spospo
+    INC : STA $CD3C
+    LDA #$00 : STA $CD3D
+    LDY !SAMUS_X : CPY #$0200 : BMI .big_pink_left
+    ; specific fix for Ypos = 1675
+    LDY !SAMUS_Y : CPY #$068B : BNE .big_pink_done
+    LDA #$02 : STA $CD45 : STA $CD46
+    BRA .big_pink_done
+  .big_pink_spospo
+    STA $CD3D
+    LDA #$00 : STA $CD3C
+    BRA .big_pink_done
+  .big_pink_left
+    LDA #$02
+    ; fix varies depending on Y position
+    LDY !SAMUS_Y : CPY #$0100 : BMI .big_pink_top_left
+    STA $CD44 : STA $CD45
+    BRA .big_pink_done
+  .big_pink_top_left
+    STA $CD21
+  .big_pink_done
+    JMP .specialized_big_pink
 
-  .big_pink_pbs
-    BRL .specialized_big_pink_pbs
+  .tophalf
+    CPX #ROOM_Parlor : BEQ .parlor
+    CPX #ROOM_IceBeamAcid : BMI .topquarter
+    JMP .norfair
 
-  .taco_tank_room
-    BRL .specialized_taco_tank_room
-
-  .etecoons_etank
-    STA $CD25 : STA $CD26
-    BRA .topdone
-
-  .red_tower
-    LDY !SAMUS_Y : CPY #$06A0    ; no fix if Ypos < 1696
-    BMI .topdone
-    STA $CD27
-    BRA .topdone
-
-  .alpha_pbs
-    LDY !SAMUS_X : CPY #$0100    ; no fix if Xpos > 255
-    BPL .topdone
-    STA $CD20
-    BRA .topdone
-
-  .below_spazer
-    LDY !SAMUS_Y : CPY #$00B0    ; no fix if Ypos > 176
-    BPL .topdone
-    INC : STA $CD20 : STA $CD21
+  .climb
+    STA $CD39
   .topdone
     PLB
     PLP
     RTL
 
-  .tophalf
-    CPX.w #ROOM_IceBeamAcid : BPL .norfair
-    CPX.w #ROOM_Parlor : BEQ .parlor
+  .topquarter
+    CPX.w #ROOM_CrateriaKihunter : BEQ .crateria_kihunters
+    CPX.w #ROOM_GauntletETank : BEQ .gauntlet_etank
+    CPX.w #ROOM_Climb : BEQ .climb
+    CPX.w #ROOM_GreenBrinstarMainShaft : BEQ .green_brin_main_shaft
     CPX.w #ROOM_Dachora : BEQ .dachora
     CPX.w #ROOM_BigPink : BEQ .big_pink
     CPX.w #ROOM_PinkBrinstarPowerBombs : BEQ .big_pink_pbs
@@ -441,18 +448,80 @@ preset_scroll_fixes:
     CPX.w #ROOM_AlphaPowerBomb : BEQ .alpha_pbs
     CPX.w #ROOM_BelowSpazer : BEQ .below_spazer
     CPX.w #ROOM_WarehouseEntrance : BEQ .warehouse_entrance
+    CPX.w #ROOM_Caterpillar : BNE .topdone
+    BRA .caterpillar
+
+  .gauntlet_etank
+    ; no fix if Xpos >= 1296
+    LDY !SAMUS_X : CPY #$0510 : BPL .topdone
+    STA $CD24
     BRA .topdone
 
-    ; -----------------------------------------
-    ; Warehouse Scroll Fixes (Category Presets)
-    ; -----------------------------------------
-  .warehouse_entrance
+  .green_brin_main_shaft
+    ; no fix if Ypos < 1792
+    LDY !SAMUS_Y : CPY #$0700 : BMI .topdone
+    ; no fix if Xpos >= 256
+    LDY !SAMUS_X : CPY #$0100 : BPL .topdone
+    INC : STA $CD3C
+    BRA .topdone
+
+  .dachora
+    ; no fix if Xpos < 1029
+    LDY !SAMUS_X : CPY #$0405 : BMI .topdone
+    STA $CD24
+    BRA .topdone
+
+  .big_pink_pbs
+    ; no fix if Ypos >= 310
+    LDY !SAMUS_Y : CPY #$0136 : BMI .big_pink_pbs_done
+    STZ $CD21
+    STA $CD22 : STA $CD23
+  .big_pink_pbs_done
+    JMP .topdone
+
+  .taco_tank_room
+    JMP .specialized_taco_tank_room
+
+  .etecoons_etank
+    STA $CD25 : STA $CD26
+    JMP .topdone
+
+    ; --------------------------------------------------------
+    ; Red Brinstar / Warehouse Scroll Fixes (Category Presets)
+    ; --------------------------------------------------------
+  .red_tower
+    ; no fix if Ypos < 1696
+    LDY !SAMUS_Y : CPY #$06A0 : BMI .red_tower_done
+    STA $CD27
+  .red_tower_done
+    JMP .topdone
+
+  .alpha_pbs
+    ; no fix if Xpos >= 256
+    LDY !SAMUS_X : CPY #$0100 : BPL .alpha_pbs_done
     STA $CD20
-    BRA .topdone
+  .alpha_pbs_done
+    JMP .topdone
 
-    ; ---------------------------------------------
-    ; Upper Norfair Scroll Fixes (Category Presets)
-    ; ---------------------------------------------
+  .below_spazer
+    ; no fix if Ypos >= 176
+    LDY !SAMUS_Y : CPY #$00B0 : BPL .below_spazer_done
+    INC
+  .warehouse_entrance
+    STA $CD20 : STA $CD21
+  .below_spazer_done
+    JMP .topdone
+
+  .caterpillar
+    ; no fix if Ypos < 1500
+    LDY !SAMUS_Y : CPY #$05DC : BMI .caterpillar_done
+    INC : STA $CD2F : STA $CD32
+  .caterpillar_done
+    JMP .topdone
+
+    ; --------------------------------------------------
+    ; West Upper Norfair Scroll Fixes (Category Presets)
+    ; --------------------------------------------------
   .ice_beam_gates
     ; skip if Ypos < 720
     LDY !SAMUS_Y : CPY #$02D0 : BMI .norfairdone
@@ -460,28 +529,18 @@ preset_scroll_fixes:
     BRA .norfairdone
 
   .ice_snake_room
-    LDY !SAMUS_X : CPY #$0100    ; fix varies depending on X position
-    BPL .ice_snake_room_hidden
-    INC : STA $CD22 : STZ $CD23
+    ; fix varies depending on X position
+    LDY !SAMUS_X : CPY #$0100 : BPL .ice_snake_room_hidden
+    INC : STA $CD22
+    STZ $CD23
     BRA .norfairdone
   .ice_snake_room_hidden
-    INC : STA $CD23 : STZ $CD22
+    INC : STA $CD23
+    STZ $CD22
     BRA .norfairdone
 
   .hjb_room
-    BRL .specialized_hjb_room
-
-  .green_bubble_missiles
-    STA $CD20
-    BRA .norfairdone
-
-  .volcano_room
-    STA $CD26
-    BRA .norfairdone
-
-  .bat_cave
-    INC : STA $CD20
-    BRA .norfairdone
+    JMP .specialized_hjb_room
 
   .norfair
     CPX.w #ROOM_IceBeamGate : BEQ .ice_beam_gates
@@ -489,16 +548,41 @@ preset_scroll_fixes:
     CPX.w #ROOM_HiJumpBoots : BEQ .hjb_room
     CPX.w #ROOM_GreenBubblesMissiles : BEQ .green_bubble_missiles
     CPX.w #ROOM_Volcano : BEQ .volcano_room
+    CPX.w #ROOM_KronicBoost : BEQ .kronic_boost
+    CPX.w #ROOM_PurpleShaft : BEQ .purple_shaft
     CPX.w #ROOM_BatCave : BEQ .bat_cave
     CPX.w #ROOM_AcidStatue : BEQ .acid_chozo_room
     CPX.w #ROOM_GoldenTorizo : BEQ .golden_torizo
     CPX.w #ROOM_FastPillarsSetup : BEQ .fast_pillars_setup
     CPX.w #ROOM_WorstRoomInTheGame : BEQ .worst_room
     CPX.w #ROOM_RedKihunterShaft : BEQ .kihunter_stairs
+    CPX.w #ROOM_Wasteland : BEQ .wasteland
+    BRA .norfairdone
+
+    ; --------------------------------------------------
+    ; East Upper Norfair Scroll Fixes (Category Presets)
+    ; --------------------------------------------------
+  .green_bubble_missiles
+    STA $CD20
   .norfairdone
     PLB
     PLP
     RTL
+
+  .volcano_room
+    STA $CD26 : STA $CD27
+    BRA .norfairdone
+
+  .kronic_boost
+    BRA .kronic_boost_check
+
+  .purple_shaft
+    INC : STA $CD20 : STA $CD21
+    BRA .norfairdone
+
+  .bat_cave
+    INC : STA $CD20
+    BRA .norfairdone
 
     ; ---------------------------------------------
     ; Lower Norfair Scroll Fixes (Category Presets)
@@ -509,16 +593,17 @@ preset_scroll_fixes:
     BRA .norfairdone
 
   .golden_torizo
-    LDY !SAMUS_Y : CPY #$00D0    ; no fix if Ypos < 208
-    BMI .norfairdone
+    ; no fix if Ypos < 208
+    LDY !SAMUS_Y : CPY #$00D0 : BMI .norfairdone
     STA $CD22 : STA $CD23
     INC : STA $CD20 : STA $CD21
     BRA .norfairdone
 
   .fast_pillars_setup
-    LDY !SAMUS_Y : CPY #$0199    ; fix varies depending on Y position
-    BMI .above_pillars
-    STA $CD22 : STA $CD24
+    ; fix varies depending on Y position
+    LDY !SAMUS_Y : CPY #$0199 : BMI .above_pillars
+    STA $CD24
+    INC : STA $CD22
     STZ $CD21
     BRA .norfairdone
   .above_pillars
@@ -530,26 +615,43 @@ preset_scroll_fixes:
     BRA .norfairdone
 
   .kihunter_stairs
-    LDY !SAMUS_Y : CPY #$008C    ; no fix if Ypos > 140
-    BPL .kihunter_stairs_done
     INC : STA $CD20
-    STZ $CD23
+    ; fix varies depending on Y position
+    LDY !SAMUS_Y : CPY #$008C : BPL .kihunter_stairs_done
+    LDA #$00
   .kihunter_stairs_done
-    BRL .specialized_kihunter_stairs
+    STA $CD23
+    JMP .specialized_kihunter_stairs
+
+  .wasteland
+    ; no fix if Ypos < 208
+    LDY !SAMUS_Y : CPY #$00D0 : BMI .norfairdone
+    INC : STA $CD21 : STA $CD27
+    JMP .norfairdone
+
+  .kronic_boost_check
+    ; fix varies depending on X position
+    LDY !SAMUS_X : CPY #$0100 : BMI .hidden_kronic_boost
+    INC : STA $CD23
+    LDA #$00 : STA $CD22
+    JMP .norfairdone
+  .hidden_kronic_boost
+    STA $CD22
+    LDA #$00 : STA $CD23
+    JMP .norfairdone
 
     ; --------------------------------------------
     ; Wrecked Ship Scroll Fixes (Category Presets)
     ; --------------------------------------------
   .bowling
-    STA $CD2D : STA $CD2F : STA $CD2F
+    STA $CD2D : STA $CD2E : STA $CD2F
     %a16()
-    STZ $CD26 : STZ $CD28
-    STZ $CD2A
+    STZ $CD26 : STZ $CD28 : STZ $CD2A
     BRA .halfwaydone
 
   .wrecked_ship_shaft
-    LDY !SAMUS_X : CPY #$05A0    ; fix varies depending on X position
-    BMI .lower_ws_shaft
+    ; fix varies depending on X position
+    LDY !SAMUS_X : CPY #$05A0 : BMI .lower_ws_shaft
     STA $CD49
     BRA .halfwaydone
   .lower_ws_shaft
@@ -561,7 +663,7 @@ preset_scroll_fixes:
     BRA .halfwaydone
 
   .basement
-    STA $CD24
+    STA $CD23 : STA $CD24
     BRA .halfwaydone
 
   .halfway
@@ -571,33 +673,46 @@ preset_scroll_fixes:
     CPX.w #ROOM_ElectricDeath : BEQ .electric_death
     CPX.w #ROOM_Basement : BEQ .basement
     CPX.w #ROOM_GlassTunnel : BEQ .main_street
+    CPX.w #ROOM_RedFish : BEQ .red_fish
     CPX.w #ROOM_CrabShaft : BEQ .crab_shaft
     CPX.w #ROOM_CrabHole : BEQ .crab_hole
     CPX.w #ROOM_Oasis : BEQ .oasis
     CPX.w #ROOM_EastPants : BEQ .pants_room
+    CPX.w #ROOM_ThePrecious : BEQ .precious
   .halfwaydone
     PLB
     PLP
     RTL
 
+  .ceres
+    BRA .ceresbegin
+
     ; -----------------------------------------------
     ; Maridia/Tourian Scroll Fixes (Category Presets)
     ; -----------------------------------------------
+  .main_street
+    INC : STA $CD20
+    BRA .halfwaydone
+
+  .red_fish
+    ; no fix if Ypos >= 520
+    LDY !SAMUS_Y : CPY #$0208 : BPL .halfwaydone
+    STA $CD21
+    BRA .halfwaydone
+
   .crab_shaft
-    STA $CD26 : INC : STA $CD24
+    STA $CD26
+    INC : STA $CD24
     BRA .halfwaydone
 
   .crab_hole
-    LDY !SAMUS_Y : CPY #$00D0    ; fix varies depending on Y position
-    BPL .lower_crab_hole
+    ; fix varies depending on Y position
+    LDY !SAMUS_Y : CPY #$00D0 : BPL .lower_crab_hole
     INC : STA $CD20
     BRA .halfwaydone
   .lower_crab_hole
-    STA $CD21 : STZ $CD20
-    BRA .halfwaydone
-
-  .main_street
-    INC : STA $CD20
+    STA $CD21
+    STZ $CD20
     BRA .halfwaydone
 
   .oasis
@@ -605,7 +720,14 @@ preset_scroll_fixes:
     BRA .halfwaydone
 
   .pants_room
-    STA $CD21 : STZ $CD22
+    STA $CD21
+    STZ $CD22
+    BRA .halfwaydone
+
+  .precious
+    ; no fix if Ypos < 208
+    LDY !SAMUS_Y : CPY #$00D0 : BMI .halfwaydone
+    INC : STA $CD20 : STA $CD22
     BRA .halfwaydone
 
     ; -----------------------------------------
@@ -615,7 +737,7 @@ preset_scroll_fixes:
     STZ !BG1_X_OFFSET+1 : STZ !BG1_Y_OFFSET+1
     BRA .ceresdone
 
-  .ceres
+  .ceresbegin
     STZ $5F ; Initialize mode 7
     CPX.w #ROOM_CeresElev : BEQ .ceres_elevator
     %a16() : STZ $78 ; Ceres Elevator room already does this
@@ -660,99 +782,86 @@ preset_scroll_fixes:
 
   .custom_presets
     LDA !sram_custom_preset_slot
-    ASL : XBA
-    CLC : ADC #$31E9 : TAX       ; X = Source
+if !FEATURE_TINYSTATES
+    XBA : CLC                        ; multiply by 100h (slot offset)
+    ADC #(!PRESET_SLOTS+$BD) : TAX   ; X = Source
+else
+    ASL : XBA : CLC                  ; multiply by 200h (slot offset)
+    ADC #(!PRESET_SLOTS+$1E9) : TAX  ; X = Source
+endif
     LDY #$CD51 : LDA #$0031      ; Y = Destination, A = Size-1
-    MVP $F07E                    ; srcBank, destBank
-    LDA #$0000 : STA !ram_custom_preset
+    MVP $707E                    ; srcBank, destBank
+    LDA #$00 : STA !ram_custom_preset
 
     %a8()
     ; X = room ID
     LDX !ROOM_ID : CPX.w #ROOM_CeresElev : BMI .specialized_fixes
-    BRL .ceres ; For ceres, use same fixes as category presets
+    JMP .ceres ; For ceres, use same fixes as category presets
 
     ; -----------------------------------------------
     ; Specialized Fixes (Category and Custom Presets)
     ; -----------------------------------------------
   .specialized_parlor
-    ; no fix if Ypos > 208
-    LDY !SAMUS_Y : CPY #$00D0 : BPL .BRLspecialdone
-    ; no fix if Xpos > 373
+    ; no fix if Ypos >= 208
+    LDY !SAMUS_Y : CPY #$00D0 : BPL .specialdone
+    ; no fix if Xpos >= 373
     LDY !SAMUS_X : CPY #$0175 : BPL .specialdone
     %a16()
-    LDA #$00FF
-    STA $7F05C0 : STA $7F05C2
+    LDA #$00FF : STA $7F05C0 : STA $7F05C2
     ; only clear bottom row if no power bombs
-    LDY !SAMUS_PBS_MAX
-    BEQ .specialdone
+    LDY !SAMUS_PBS_MAX : BEQ .specialdone
     STA $7F0520 : STA $7F0522
     STA $7F0480 : STA $7F0482
-
-  .BRLspecialdone
     BRA .specialdone
 
   .specialized_big_pink
-    ; spore spawn skip if Xpos > 1040
-    LDY !SAMUS_X : CPY #$0410 : BPL .spore_spawn_skip
     ; no fix if Ypos < 704
     LDY !SAMUS_Y : CPY #$02C0 : BMI .specialdone
-    ; no fix if Ypos > 969
+    ; no fix if Ypos >= 969
     CPY #$03C9 : BPL .specialdone
-    %a16() : LDA #$00FF
+    %a16()
+    LDA #$00FF
     STA $7F2208 : STA $7F220A : STA $7F22A8 : STA $7F22AA
     STA $7F2348 : STA $7F234A : STA $7F23E8 : STA $7F23EA
     BRA .specialdone
 
   .specialized_fixes
-    CPX #ROOM_Parlor : BEQ .specialized_parlor
-    CPX #ROOM_BigPink : BEQ .specialized_big_pink
-    CPX #ROOM_BlueBrinstarETank : BEQ .specialized_taco_tank_room
-    CPX #ROOM_HiJumpBoots : BEQ .specialized_hjb_room
-    CPX #ROOM_RedKihunterShaft : BEQ .specialized_kihunter_stairs
-
+    CPX.w #ROOM_Parlor : BEQ .specialized_parlor
+    CPX.w #ROOM_BigPink : BEQ .specialized_big_pink
+    CPX.w #ROOM_BlueBrinstarETank : BEQ .specialized_taco_tank_room
+    CPX.w #ROOM_HiJumpBoots : BEQ .specialized_hjb_room
+    CPX.w #ROOM_RedKihunterShaft : BEQ .specialized_kihunter_stairs
   .specialdone
     PLB
     PLP
     RTL
-
-  .spore_spawn_skip
-    STA $CD3C : STA $CD3D
-    BRA .specialdone
-
-  .specialized_big_pink_pbs
-    ; no fix if Ypos > 310
-    LDY !SAMUS_Y : CPY #$0136 : BMI .specialdone
-    STZ $CD21
-    STA $CD22 : STA $CD23
-    BRA .specialdone
 
   .specialized_taco_tank_room
     ; no fix if Xpos < 555
     LDY !SAMUS_X : CPY #$022B : BMI .specialdone
     ; no fix if no power bombs
     LDY !SAMUS_PBS_MAX : BEQ .specialdone
-    %a16()
-    LDA #$00FF : LDX #$0000
--   STA $7F1008,X : STA $7F1068,X
-    INX #2 : CPX #$0011 : BMI -
+    %a16() : LDA #$00FF
+    LDX #$0000
+  .specialized_taco_tank_loop
+    STA $7F1008,X : STA $7F1068,X
+    INX #2 : CPX #$0011 : BMI .specialized_taco_tank_loop
     BRA .specialdone
 
   .specialized_hjb_room
-    ; no fix if Xpos > 149
+    ; no fix if Xpos >= 149
     LDY !SAMUS_X : CPY #$0095 : BPL .specialdone
     %a16()
-    LDA #$00FF
-    STA $7F0052 : STA $7F0072 : STA $7F0092
+    LDA #$00FF : STA $7F0052 : STA $7F0072 : STA $7F0092
     BRA .specialdone
 
   .specialized_kihunter_stairs
-    ; no fix if Ypos > 240
+    ; no fix if Ypos >= 240
     LDY !SAMUS_Y : CPY #$00F0 : BPL .specialdone
     %a16()
-    LDA #$00FF
-    STA $7F036E : STA $7F0370 : STA $7F0374 : STA $7F0376
-    STA $7F03D4 : STA $7F0610 : STA $7F0612
-    BRL .specialdone
+    LDA #$00FF : STA $7F036E : STA $7F0370 : STA $7F0374
+    STA $7F0376 : STA $7F03D4 : STA $7F0610 : STA $7F0612
+    BRA .specialdone
 }
 
 preset_special_fixes:
