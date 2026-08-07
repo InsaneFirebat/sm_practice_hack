@@ -458,6 +458,7 @@ ih_before_room_transition:
 
   .displayMode
     ; Overwrite Enemy HP only
+    %ai16()
     LDA !sram_display_mode : BNE .done
     LDA !sram_door_display_mode : BEQ .done
     ASL : TAX
