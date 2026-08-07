@@ -8,32 +8,18 @@ else
 print "[NTSC] / PAL REGION"
 endif
 
-if !FEATURE_SD2SNES
-print "SAVESTATES ENABLED"
-incsrc save.asm
-else
-print "SAVESTATES DISABLED"
-endif
-
-if !FEATURE_TINYSTATES
-print "TINYSTATES ENABLED"
-incsrc tinystates.asm
-; Set to enable savestate features
-!FEATURE_SD2SNES = 1
-endif
-
 if !FEATURE_TINYSTATES
 print "SAVESTATES / [TINYSTATES] / NO SAVES"
-elseif !FEATURE_SAVESTATES
+elseif !FEATURE_SD2SNES
 print "[SAVESTATES] / TINYSTATES / NO SAVES"
 else
 print "SAVESTATES / TINYSTATES / [NO SAVES]"
 endif
 
 if !FEATURE_VANILLAHUD
-print " INFOHUD / [VANILLA HUD]"
+print "INFOHUD / [VANILLA HUD]"
 else
-print " [INFOHUD] / VANILLA HUD"
+print "[INFOHUD] / VANILLA HUD"
 endif
 
 if !FEATURE_EXTRAS

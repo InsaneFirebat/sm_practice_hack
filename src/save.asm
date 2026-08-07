@@ -1,7 +1,9 @@
+
 ; SD2SNES Savestate code
 ; by acmlm, total, Myria
 ;
 
+if !FEATURE_SD2SNES && !FEATURE_TINYSTATES == 0
 %startfree(80)
 
 ; These can be modified to do game-specific things before and after saving and loading
@@ -435,3 +437,4 @@ vm:
 }
 
 %endfree(80)
+endif
