@@ -296,7 +296,7 @@ endif
 
     ; To account for various changes, we may need to tack on more clock cycles
     ; These can be removed as code is added to maintain CPU parity during normal gameplay
-    LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_display_lag_loop
+    LDA !sram_top_display_mode : CMP.w !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_display_lag_loop
     LDA !ram_frames_held : BNE .vanilla_display_lag_loop
     LDA !sram_artificial_lag
     ASL #4

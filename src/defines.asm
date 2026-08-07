@@ -1029,6 +1029,17 @@ endif
 !CTRL_L = #$0020
 !CTRL_R = #$0010
 
+!IH_MODE_ROOMSTRAT_INDEX = #(DisplayModeMenu_roomstrat-DisplayModeMenu)/2
+!IH_MODE_SHINETUNE_INDEX = #(DisplayModeMenu_shinetune-DisplayModeMenu)/2
+!IH_MODE_VSPEED_INDEX = #(DisplayModeMenu_vspeed-DisplayModeMenu)/2
+!IH_MODE_WALLJUMP_INDEX = #(DisplayModeMenu_walljump-DisplayModeMenu)/2
+!IH_MODE_ARMPUMP_INDEX = #(DisplayModeMenu_armpump-DisplayModeMenu)/2
+!IH_MODE_RAMWATCH_INDEX = #(DisplayModeMenu_ramwatch-DisplayModeMenu)/2
+!IH_STRAT_MBHP_INDEX = #(RoomStratMenu_mbhp-RoomStratMenu)/2
+!TOP_HUD_RESERVES_INDEX = #(ih_top_HUD_mode_reserves-ih_top_HUD_mode_start)/$D
+!TOP_HUD_VANILLA_INDEX = #(ih_top_HUD_mode_vanilla-ih_top_HUD_mode_start)/$D
+!FRAME_COUNTER_ADJUST_REALTIME = #(ih_room_counter_adjust-ih_room_counter_start)/$D
+
 !SPRITE_SAMUS_HITBOX = #$0001
 !SPRITE_ENEMY_HITBOX = #$0002
 !SPRITE_EXTENDED_HITBOX = #$0004

@@ -371,8 +371,8 @@ ih_after_room_transition:
     STA !REALTIME_LAG_COUNTER ; for lagcounter HUD mode
 
     ; Check if MBHP needs to be disabled
-    LDA !sram_display_mode : CMP !IH_MODE_ROOMSTRAT_INDEX : BNE .check_reset_segment_timer
-    LDA !sram_room_strat : CMP !IH_STRAT_MBHP_INDEX : BNE .check_reset_segment_timer
+    LDA !sram_display_mode : CMP.w !IH_MODE_ROOMSTRAT_INDEX : BNE .check_reset_segment_timer
+    LDA !sram_room_strat : CMP.w !IH_STRAT_MBHP_INDEX : BNE .check_reset_segment_timer
     LDA !ROOM_ID : CMP.w #ROOM_MotherBrain : BEQ .check_reset_segment_timer
     LDA #$0000 : STA !sram_display_mode
 
@@ -450,7 +450,7 @@ ih_before_room_transition:
     TAY ; preserve A
     PHB : LDA #$80 : PHA : PLB
     LDX #$00C2
-    LDA !sram_top_display_mode : CMP.b !TOP_DISPLAY_VANILLA : BEQ .vanillaDoorLag
+    LDA !sram_top_display_mode : CMP.b !TOP_HUD_VANILLA_INDEX : BEQ .vanillaDoorLag
     LDA !ram_minimap : BEQ .draw3
     LDX #$0054
   .draw3
@@ -600,7 +600,7 @@ ih_shinespark_segment:
     JSL $80914D ; overwritten code
 
     ; skip printing remaining spark frames if Vanilla HUD mode
-    LDA !sram_top_display_mode : CMP !TOP_DISPLAY_VANILLA : BEQ +
+    LDA !sram_top_display_mode : CMP.w !TOP_HUD_VANILLA_INDEX : BEQ +
 
     PHB
     ; set index to $7C and DB to $00
@@ -661,7 +661,7 @@ ih_update_hud_code_before_transition:
     ; Bank 80
     PEA $8080 : PLB : PLB
 
-    LDA !sram_display_mode : CMP !IH_MODE_ARMPUMP_INDEX : BNE .update_hud_code
+    LDA !sram_display_mode : CMP.w !IH_MODE_ARMPUMP_INDEX : BNE .update_hud_code
 
     ; Report armpump room totals
     LDA !ram_momentum_sum : CLC : ADC !ram_momentum_count : LDX #$0088 : JSR Draw4
@@ -687,7 +687,7 @@ ih_update_hud_code:
 
   .minimap_hud
     ; Map visible, so draw map counter over item%
-    LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BEQ .minimap_vanilla_infohud
+    LDA !sram_top_display_mode : CMP.w !TOP_HUD_VANILLA_INDEX : BEQ .minimap_vanilla_infohud
     LDA !ram_map_counter : LDX #$0014 : JSR Draw3
     LDA !ram_print_segment_timer : BEQ .minimap_roomtimer
     BRL .pick_minimap_transition_time
@@ -731,7 +731,7 @@ ih_update_hud_code:
 
     ; Determine starting point of time display
     LDX #$003C
-    LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BNE .pick_roomtimer
+    LDA !sram_top_display_mode : CMP.w !TOP_HUD_VANILLA_INDEX : BNE .pick_roomtimer
     LDX #$003A
 
   .pick_roomtimer
@@ -760,7 +760,7 @@ ih_update_hud_code:
 
     ; 3 tiles between input display and missile icon
     ; skip item% if display mode = vspeed
-    LDA !sram_display_mode : CMP !IH_MODE_VSPEED_INDEX : BEQ .skipToLag
+    LDA !sram_display_mode : CMP.w !IH_MODE_VSPEED_INDEX : BEQ .skipToLag
     LDA !sram_top_display_mode : BNE .skipToLag
 
     ; Draw Item percent
@@ -783,7 +783,7 @@ ih_update_hud_code:
     LDA !IH_PERCENT : STA !HUD_TILEMAP+$18
 
   .skipToLag
-    LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_infohud_draw_lag_and_reserves
+    LDA !sram_top_display_mode : CMP.w !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_infohud_draw_lag_and_reserves
     LDA !ram_last_room_lag : LDX #$0082 : JSR Draw3
 
     ; Skip door lag and segment timer when certain HUD modes enabled
@@ -904,7 +904,7 @@ ih_update_timers:
 
   .minimap_hud
     ; Map visible, so draw map counter over item%
-    LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BEQ .minimap_vanilla_infohud
+    LDA !sram_top_display_mode : CMP.w !TOP_HUD_VANILLA_INDEX : BEQ .minimap_vanilla_infohud
     LDA !ram_map_counter : LDX #$0014 : JSR Draw3
     LDA !ram_print_segment_timer : BNE .pick_minimap_transition_time
 
@@ -953,7 +953,7 @@ endif
 
     ; Determine starting point of time display
     LDX #$003C
-    LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BNE .pick_roomtimer
+    LDA !sram_top_display_mode : CMP.w !TOP_HUD_VANILLA_INDEX : BNE .pick_roomtimer
     LDX #$003A
 
   .pick_roomtimer
@@ -986,7 +986,7 @@ endif
     LDA.w HexToNumberGFX2,Y : STA !HUD_TILEMAP+4,X
 
     ; Lag counter
-    LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_infohud_draw_lag_and_reserves
+    LDA !sram_top_display_mode : CMP.w !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_infohud_draw_lag_and_reserves
     LDA !ram_last_room_lag : LDX #$0082 : JSR Draw3
 
     ; Skip door lag and segment timer when shinetune enabled
@@ -1132,7 +1132,7 @@ ih_hud_code:
     STZ $02
     %ai16()
 
-    LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_infohud
+    LDA !sram_top_display_mode : CMP.w !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_infohud
 
 ; -- input display --
     ; -- check if we want to update --
@@ -1171,11 +1171,11 @@ ih_hud_code:
 
   .status_display
     LDA !sram_display_mode : ASL : TAX
-    JSR (.status_display_table,X)
+    JSR (InfoHUDModeTable,X)
 
 ; Samus' HP
     LDA !SAMUS_HP : CMP !ram_last_hp : BEQ .reserves : STA !ram_last_hp
-    LDA !sram_top_display_mode : CMP !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_draw_health
+    LDA !sram_top_display_mode : CMP.w !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_draw_health
     LDA !SAMUS_HP : LDX #$0092 : JSR Draw4
     LDA !IH_BLANK : STA !HUD_TILEMAP+$90 : STA !HUD_TILEMAP+$9A
     BRA .reserves
@@ -1198,7 +1198,7 @@ ih_hud_code:
 ; Reserve energy counter
   .reserves
     LDA !sram_top_display_mode : BEQ .statusIcons
-    CMP !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_check_health
+    CMP.w !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_check_health
 
     LDA !SAMUS_RESERVE_MAX : BEQ .noReserves
     LDA !SAMUS_RESERVE_ENERGY : CMP !ram_reserves_last : BEQ .checkAuto
@@ -1230,7 +1230,7 @@ ih_hud_code:
     RTL
 
     ; check for Super HUD
-+   LDA !sram_display_mode : CMP !IH_MODE_ROOMSTRAT_INDEX : BNE +
++   LDA !sram_display_mode : CMP.w !IH_MODE_ROOMSTRAT_INDEX : BNE +
     LDA !sram_room_strat : BNE +
     RTL
     
@@ -1494,7 +1494,7 @@ Draw4:
 DrawHealthPaused:
 {
     LDA !sram_top_display_mode : BEQ .draw_health
-    CMP !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_draw_health
+    CMP.w !TOP_HUD_VANILLA_INDEX : BEQ .vanilla_draw_health
 
     LDA !SAMUS_RESERVE_MAX : BEQ .noReserves
     LDA !SAMUS_RESERVE_ENERGY : STA !ram_reserves_last
