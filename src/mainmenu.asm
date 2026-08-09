@@ -240,9 +240,7 @@ PresetsMenu:
     dw #presets_elevator
 if !RAW_TILE_GRAPHICS
     dw #$FFFF
-    dw #presets_compressed_graphics
-    dw #presets_compressed_palettes
-    dw #presets_compressed_tables
+    dw #presets_compressed_data
 endif
 if !FEATURE_DEV
     dw #$FFFF
@@ -339,7 +337,7 @@ presets_ship_landing:
 
 if !RAW_TILE_GRAPHICS
 presets_compressed_data:
-    %cm_toggle_bit("Custom Samus Skin", !sram_preset_options, #$0001, #0)
+    %cm_toggle_bit("Custom Samus Skin", !sram_compressed_graphics, #$0001, #0)
 endif
 
 if !FEATURE_DEV
@@ -1867,7 +1865,6 @@ misc_forcestand:
     %sfxconfirm()
     RTL
 
-!ROOM_LAYOUT_MAGNET_STAIRS = #$0001
 misc_magnetstairs:
     %cm_toggle("Magnet Stairs Fix", !sram_magnetstairs, #$0001, #.routine)
   .routine
@@ -1973,8 +1970,8 @@ EventsMenu:
     dw #$FFFF
     dw #events_zebesawake
     dw #events_maridiatubebroken
-    dw #events_chozoacid
     dw #events_shaktool
+    dw #events_chozoacid
     dw #events_tourian
     dw #events_metroid1
     dw #events_metroid2
@@ -2029,7 +2026,7 @@ events_setdoors:
     STA $7ED800,X
     INX : CPX #$D0 : BNE .loop
     PLP
-    %sfxreset()
+    %sfxquake()
     RTL
 
 events_setitems:
@@ -2042,7 +2039,7 @@ events_setitems:
     STA $7ED800,X
     INX : CPX #$90 : BNE .loop
     PLP
-    %sfxreset()
+    %sfxquake()
     RTL
 
 events_goto_bosses:

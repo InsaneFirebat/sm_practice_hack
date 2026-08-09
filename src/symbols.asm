@@ -198,17 +198,18 @@ ram_cm_botwoon_hidden = !ram_cm_botwoon_hidden ; !WRAM_MENU_START+$46
 ram_cm_botwoon_second = !ram_cm_botwoon_second ; !WRAM_MENU_START+$48
 ram_cm_botwoon_spit = !ram_cm_botwoon_spit ; !WRAM_MENU_START+$4A
 ram_cm_custom_preset_labels = !ram_cm_custom_preset_labels ; !WRAM_MENU_START+$4C
+ram_cm_gmode = !ram_cm_gmode ; !WRAM_MENU_START+$4E
 
-ram_seed_X = !ram_seed_X ; !WRAM_MENU_START+$4E
-ram_seed_Y = !ram_seed_Y ; !WRAM_MENU_START+$50
+ram_seed_X = !ram_seed_X ; !WRAM_MENU_START+$50
+ram_seed_Y = !ram_seed_Y ; !WRAM_MENU_START+$52
 
-ram_cm_sfxlib1 = !ram_cm_sfxlib1 ; !WRAM_MENU_START+$52
-ram_cm_sfxlib2 = !ram_cm_sfxlib2 ; !WRAM_MENU_START+$54
-ram_cm_sfxlib3 = !ram_cm_sfxlib3 ; !WRAM_MENU_START+$56
+ram_cm_sfxlib1 = !ram_cm_sfxlib1 ; !WRAM_MENU_START+$54
+ram_cm_sfxlib2 = !ram_cm_sfxlib2 ; !WRAM_MENU_START+$56
+ram_cm_sfxlib3 = !ram_cm_sfxlib3 ; !WRAM_MENU_START+$58
 
 ; ^ FREE SPACE ^ up to +$76
 
-ram_cm_preserved_timers = !ram_cm_preserved_timers ; !WRAM_MENU_START+$78 ; 8 bytes
+ram_cm_preserved_timers = !ram_cm_preserved_timers ; !WRAM_MENU_START+$88 ; 8 bytes
 
 ; ------------------
 ; Reusable RAM Menu
@@ -227,15 +228,15 @@ ram_cm_watch_enemy_index = !ram_cm_watch_enemy_index ; !WRAM_MENU_START+$82
 ram_cm_watch_enemy_side = !ram_cm_watch_enemy_side ; !WRAM_MENU_START+$84
 ram_cm_watch_common_address = !ram_cm_watch_common_address ; !WRAM_MENU_START+$86
 
-ram_cm_preset_elevator = !ram_cm_preset_elevator ; !WRAM_MENU_START+$80
+ram_cm_preset_elevator = !ram_cm_preset_elevator ; !WRAM_MENU_START+$90
 
 ram_cm_phan_first_phase = !ram_cm_phan_first_phase ; !WRAM_MENU_START+$80
 ram_cm_phan_second_phase = !ram_cm_phan_second_phase ; !WRAM_MENU_START+$82
 
-ram_cm_keyboard_buffer = !ram_cm_keyboard_buffer ; !WRAM_MENU_START+$80 ; $18 bytes
+ram_cm_keyboard_buffer = !ram_cm_keyboard_buffer ; !WRAM_MENU_START+$90 ; $18 bytes
 
-ram_cm_manage_slots = !ram_cm_manage_slots ; !WRAM_MENU_START+$80
-ram_cm_selected_slot = !ram_cm_selected_slot ; !WRAM_MENU_START+$82
+ram_cm_manage_slots = !ram_cm_manage_slots ; !WRAM_MENU_START+$90
+ram_cm_selected_slot = !ram_cm_selected_slot ; !WRAM_MENU_START+$92
 
 ; ^ FREE SPACE ^ up to +$CE
 
@@ -358,6 +359,8 @@ sram_customsfx_goback = !sram_customsfx_goback ; !SRAM_START+$80
 
 sram_seed_X = !sram_seed_X ; !SRAM_START+$82
 sram_seed_Y = !sram_seed_Y ; !SRAM_START+$84
+
+sram_fast_teleport = !sram_fast_teleport ; !SRAM_START+$86
 
 ; ^ FREE SPACE ^ up to $F02BEE
 

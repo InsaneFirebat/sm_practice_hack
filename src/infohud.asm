@@ -495,10 +495,7 @@ ceres_start_timers:
 
     ; overwritten code
     STZ !SCREEN_FADE_DELAY : STZ !SCREEN_FADE_COUNTER
-if !FEATURE_VANILLAHUD
-else
     JML ceres_start_timers_return
-endif
 }
 
 ih_unpause:

@@ -84,7 +84,7 @@ upload_sprite_oob_tiles:
     TXA : CLC : ADC #$0007 : STA !VRAM_WRITE_STACK_POINTER
     RTL
 
-draw_sprite_oob:
+update_sprite_oob:
 {
     !oob_width = $000D
     !oob_height = $0009
@@ -242,7 +242,7 @@ draw_sprite_oob:
     %a16()
 
   .end
-    JSR draw_oob_samus_hitbox
+    JSR sprite_draw_oob_samus_hitbox
     RTS
 }
 
@@ -358,7 +358,7 @@ draw_sprite_x_wrap:
     JMP .loop
 
   .end
-    JMP draw_sprite_oob_copy_stack
+    JMP update_sprite_oob_copy_stack
 
   .negative_vertical
     ORA #$FF00 : TAX
@@ -948,7 +948,7 @@ update_samusproj_sprite_hitbox:
 
   .check32x32
     ; Only show beams, missiles, and super missiles
-    LDA !SAMUS_PROJ_PROPERTIES,X : AND #$0F00 : CMP #$0300 : BPL .skip32x32
+    LDA !SAMUS_PROJ_PROPERTIES,X : AND #$0F00 : CMP #$0300 : BPL .skipProjectile32x32
 
     LDA !SAMUS_PROJ_X,X : CMP !LAYER1_X : BMI .skipProjectile32x32
     LDA !LAYER1_X : CLC : ADC #$0100 : CMP !SAMUS_PROJ_X,X : BMI .skipProjectile32x32

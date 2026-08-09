@@ -302,22 +302,22 @@ endif
     INX #2
 %table(header)
 if !FEATURE_TINYSTATES
-    LDA.w #$2800|'T' : STA !CRASHDUMP_TILEMAP_BUFFER,X
+    LDA.w #$2800|'T' : STA !ram_tilemap_buffer,X
     INX #2
 elseif !FEATURE_SD2SNES
-    LDA.w #$2800|'S' : STA !CRASHDUMP_TILEMAP_BUFFER,X
+    LDA.w #$2800|'S' : STA !ram_tilemap_buffer,X
     INX #2
 endif
 if !FEATURE_PAL
-    LDA.w #$2800|'P' : STA !CRASHDUMP_TILEMAP_BUFFER,X
+    LDA.w #$2800|'P' : STA !ram_tilemap_buffer,X
     INX #2
 endif
 if !FEATURE_VANILLAHUD
-    LDA.w #$2800|'V' : STA !CRASHDUMP_TILEMAP_BUFFER,X
+    LDA.w #$2800|'V' : STA !ram_tilemap_buffer,X
     INX #2
 endif
 if !FEATURE_DEV
-    LDA.w #$2800|'D' : STA !CRASHDUMP_TILEMAP_BUFFER,X
+    LDA.w #$2800|'D' : STA !ram_tilemap_buffer,X
 endif
 %table(normal)
 

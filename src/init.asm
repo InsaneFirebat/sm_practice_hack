@@ -44,15 +44,13 @@ init_code:
 
     ; Initialize RAM (Bank 7E required)
     LDA #$0000 : STA !ram_slowdown_mode
-    JSL validate_sram
+    JSL validate_sram_for_savestates
 
     ; Check if we should initialize SRAM
     LDA !sram_initialized : CMP !SRAM_VERSION : BEQ .sram_initialized
     JSL init_sram
 
   .sram_initialized
-    JSL validate_sram_for_savestates
-
 if !PRESERVE_WRAM_DURING_SPACETIME
     ; WRAM located in bank 7E, clear it later
 else

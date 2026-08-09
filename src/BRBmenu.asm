@@ -188,7 +188,7 @@ cm_tilemap_brb:
     LDA #$2800|':' : STA !ram_tilemap_buffer+$35E
 
     ; Draw +/- after countdown expires
-table ../resources/header.tbl
+%table(header)
     LDA !ram_cm_brb_timer_mode : BEQ .draw_cycling_text
     DEC : BEQ .draw_countup
     LDA #$2800|'-' : STA !ram_tilemap_buffer+$358

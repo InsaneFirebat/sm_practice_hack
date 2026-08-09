@@ -42,7 +42,12 @@ org $8B8764 ; center version string
     db $68, $70, $78, $80, $88, $90, $98, $A0, $A8, $B0, $B8, $C0, $C8, $D0, $D8, $E0
 
 
-%startfree(8B)
+if !FEATURE_PAL
+org $8BF6DC
+else
+org $8BF754
+endif
+VersionString:
 cleartable ; ASCII
 if !VERSION_MAJOR > 9
     db ' ', $30+(!VERSION_MAJOR/10), $30+(!VERSION_MAJOR%10)
@@ -68,7 +73,6 @@ endif
 endif
     db $00
 %table(normal)
-%endfree(8B)
 
 
 ; Fix Zebes planet tiling error
@@ -1054,7 +1058,7 @@ optimized_decompression:
 {
     PHP : %a8() : %i16()
     ; Set bank
-    PHB : PEI (!DECOMP_SRC+2) : PLB
+    PHB : LDA !DECOMP_SRC+2 : PHA : PLB
 
     STZ !DECOMP_DICTCOPY_INV+1 : LDY #$0000
 

@@ -24,8 +24,8 @@ custom_preset_save:
     LDA !LAYER1_Y : STA !PRESET_SLOTS+$12,X
     LDA !LAYER2_X : STA !PRESET_SLOTS+$14,X
     LDA !LAYER2_Y : STA !PRESET_SLOTS+$16,X
-    LDA !BG2_X_SCROLL : STA !PRESET_SLOTS+$18,X
-    LDA !BG2_Y_SCROLL : STA !PRESET_SLOTS+$1A,X
+    LDA !BG2_X_OFFSET : STA !PRESET_SLOTS+$18,X
+    LDA !BG2_Y_OFFSET : STA !PRESET_SLOTS+$1A,X
     LDA !CERES_STATUS : STA !PRESET_SLOTS+$1C,X
     LDA !SAMUS_ITEMS_EQUIPPED : STA !PRESET_SLOTS+$1E,X
     LDA !SAMUS_ITEMS_COLLECTED : STA !PRESET_SLOTS+$20,X
@@ -128,8 +128,8 @@ custom_preset_load:
     LDA !PRESET_SLOTS+$12,X : STA !LAYER1_Y
     LDA !PRESET_SLOTS+$14,X : STA !LAYER2_X
     LDA !PRESET_SLOTS+$16,X : STA !LAYER2_Y
-    LDA !PRESET_SLOTS+$18,X : STA !BG2_X_SCROLL
-    LDA !PRESET_SLOTS+$1A,X : STA !BG2_Y_SCROLL
+    LDA !PRESET_SLOTS+$18,X : STA !BG2_X_OFFSET
+    LDA !PRESET_SLOTS+$1A,X : STA !BG2_Y_OFFSET
     LDA !PRESET_SLOTS+$1C,X : STA !CERES_STATUS
     LDA !PRESET_SLOTS+$1E,X : STA !SAMUS_ITEMS_EQUIPPED
     LDA !PRESET_SLOTS+$20,X : STA !SAMUS_ITEMS_COLLECTED
@@ -255,8 +255,8 @@ custom_preset_save:
     INX ; Restore X for sanity
     LDA !LAYER2_X : STA !PRESET_SLOTS+$1B0,X
     LDA !LAYER2_Y : STA !PRESET_SLOTS+$1B2,X
-    LDA !BG2_X_SCROLL : STA !PRESET_SLOTS+$1B4,X
-    LDA !BG2_Y_SCROLL : STA !PRESET_SLOTS+$1B6,X
+    LDA !BG2_X_OFFSET : STA !PRESET_SLOTS+$1B4,X
+    LDA !BG2_Y_OFFSET : STA !PRESET_SLOTS+$1B6,X
 
     PHX : PHB
     TXA : CLC : ADC #$31B8 : TAY ; Y = Destination
@@ -337,8 +337,8 @@ custom_preset_load:
 
     LDA !PRESET_SLOTS+$1B0,X : STA !LAYER2_X
     LDA !PRESET_SLOTS+$1B2,X : STA !LAYER2_Y
-    LDA !PRESET_SLOTS+$1B4,X : STA !BG2_X_SCROLL
-    LDA !PRESET_SLOTS+$1B6,X : STA !BG2_Y_SCROLL
+    LDA !PRESET_SLOTS+$1B4,X : STA !BG2_X_OFFSET
+    LDA !PRESET_SLOTS+$1B6,X : STA !BG2_Y_OFFSET
 
     LDA !PRESET_SLOTS+$02,X : CMP #$01BA : BMI .done_no_scrolls
     LDA !SAFEWORD : STA !ram_custom_preset
@@ -734,7 +734,7 @@ preset_scroll_fixes:
     ; Ceres Fixes (Category and Custom Presets)
     ; -----------------------------------------
   .ceres_elevator
-    STZ !BG1_X_SCROLL+1 : STZ !BG1_Y_SCROLL+1
+    STZ !BG1_X_OFFSET+1 : STZ !BG1_Y_OFFSET+1
     BRA .ceresdone
 
   .ceresbegin
@@ -756,28 +756,28 @@ preset_scroll_fixes:
     RTL
 
   .ceres_falling_tiles
-    LDA #$01 : STA !BG1_X_SCROLL+1
-    LDA #$02 : STA !BG1_Y_SCROLL+1
+    LDA #$01 : STA !BG1_X_OFFSET+1
+    LDA #$02 : STA !BG1_Y_OFFSET+1
     BRA .ceresdone
 
   .ceres_magnet_stairs
-    LDA #$03 : STA !BG1_X_SCROLL+1
-    LDA #$02 : STA !BG1_Y_SCROLL+1
+    LDA #$03 : STA !BG1_X_OFFSET+1
+    LDA #$02 : STA !BG1_Y_OFFSET+1
     BRA .ceresdone
 
   .ceres_dead_scientists
-    LDA #$04 : STA !BG1_X_SCROLL+1
-    LDA #$03 : STA !BG1_Y_SCROLL+1
+    LDA #$04 : STA !BG1_X_OFFSET+1
+    LDA #$03 : STA !BG1_Y_OFFSET+1
     BRA .ceresdone
 
   .ceres_58_escape
-    LDA #$06 : STA !BG1_X_SCROLL+1
-    LDA #$03 : STA !BG1_Y_SCROLL+1
+    LDA #$06 : STA !BG1_X_OFFSET+1
+    LDA #$03 : STA !BG1_Y_OFFSET+1
     BRA .ceresdone
 
   .ceres_ridley
-    LDA #$08 : STA !BG1_X_SCROLL+1
-    LDA #$03 : STA !BG1_Y_SCROLL+1
+    LDA #$08 : STA !BG1_X_OFFSET+1
+    LDA #$03 : STA !BG1_Y_OFFSET+1
     BRA .ceresdone
 
   .custom_presets
