@@ -549,14 +549,18 @@ cm_crop_mode:
     LDA !ram_crash_palette : BNE +
     LDA #$0008
 +   DEC : STA !ram_crash_palette
-    JSL crash_cgram_transfer
+    %i16()
+    JSL crash_cycle_palettes
+    JSL transfer_cgram_long
     BRA .loop
 
   .incPalette
     LDA !ram_crash_palette : CMP #$0007 : BMI +
     LDA #$FFFF
 +   INC : STA !ram_crash_palette
-    JSL crash_cgram_transfer
+    %i16()
+    JSL crash_cycle_palettes
+    JSL transfer_cgram_long
     BRA .loop
 
   .end
