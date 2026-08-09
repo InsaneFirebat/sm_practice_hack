@@ -156,6 +156,7 @@ init_sram:
     LDA #$0384 : STA !sram_demo_timer
 
     LDA #$0000 : STA !sram_custom_header
+    LDA #$0000 : STA !sram_streamer_name
     LDA #$0000 : STA !sram_loadstate_rando_energy
     LDA #$0000 : STA !sram_loadstate_rando_reserves
     LDA #$0000 : STA !sram_loadstate_rando_missiles
