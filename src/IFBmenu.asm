@@ -186,7 +186,7 @@ BRBMenu:
     dw ifb_brb_scroll
     dw #$FFFF
 ;    dw #ifb_soundtest_goto_music ; moved to different bank
-    dw #ifb_game_music_toggle
+    dw #ifb_music_toggle
     dw #$FFFF
     dw #brb_streamer_name
     dw #$0000
@@ -239,28 +239,8 @@ ifb_brb_palette_cycle:
 ifb_brb_scroll:
     %cm_toggle("Screen Scrolling", !ram_cm_scroll, #$0001, #0)
 
-ifb_game_music_toggle:
-    dw !ACTION_CHOICE
-    dl #!sram_music_toggle
-    dw .routine
-    db #$28, "Music", #$FF
-    db #$28, "        OFF", #$FF
-    db #$28, "         ON", #$FF
-    db #$28, "   FAST OFF", #$FF
-    db #$28, " PRESET OFF", #$FF
-    db #$FF
-  .routine
-    ; Clear music queue
-    STZ !MUSIC_QUEUE_TIMERS : STZ !MUSIC_QUEUE_TIMERS+$2 : STZ !MUSIC_QUEUE_TIMERS+$4 : STZ !MUSIC_QUEUE_TIMERS+$6
-    STZ !MUSIC_QUEUE_TIMERS+$8 : STZ !MUSIC_QUEUE_TIMERS+$A : STZ !MUSIC_QUEUE_TIMERS+$C : STZ !MUSIC_QUEUE_TIMERS+$E
-    STZ !MUSIC_QUEUE_NEXT : STZ !MUSIC_QUEUE_START : STZ !MUSIC_ENTRY : STZ !MUSIC_TIMER
-    CMP #$0001 : BEQ .resume_music
-    STZ $2140
-    RTL
-  .resume_music
-    LDA !MUSIC_DATA : CLC : ADC #$FF00 : STZ !MUSIC_DATA : JSL !MUSIC_ROUTINE
-    LDA !MUSIC_TRACK : STZ !MUSIC_TRACK : JSL !MUSIC_ROUTINE
-    RTL
+ifb_music_toggle:
+    %cm_music_toggle()
 
 brb_streamer_name:
     %cm_jsl("Set Streamer Name", #.routine, #!sram_streamer_name)
