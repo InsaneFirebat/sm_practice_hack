@@ -284,7 +284,7 @@ brb_streamer_name:
     JML ConvertNormal2Header
   .blank
     ; restore default name
-    TDC : STA !sram_custom_header
+    LDA #$0000 : STA !sram_streamer_name
   .done
     RTL
 

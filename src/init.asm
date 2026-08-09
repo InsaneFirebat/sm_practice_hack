@@ -169,6 +169,7 @@ init_sram:
     LDA #$000E : STA !sram_palette_border
     LDA #$0000 : STA !sram_palette_background
     LDA #$0000 : STA !sram_custom_header
+    LDA #$0000 : STA !sram_streamer_name
     LDA #$0000 : STA !sram_loadstate_rando_energy
     LDA #$0000 : STA !sram_loadstate_rando_reserves
     LDA #$0000 : STA !sram_loadstate_rando_missiles
