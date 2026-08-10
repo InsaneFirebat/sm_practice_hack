@@ -49,8 +49,8 @@ layout_asm_cutscene_g4skip:
 layout_asm_mbhp:
 {
     LDA !sram_display_mode : BNE .done
-    LDA.w !IH_MODE_ROOMSTRAT_INDEX : STA !sram_display_mode
-    LDA.w !IH_STRAT_MBHP_INDEX : STA !sram_room_strat
+    LDA.w !IH_MODE_INDEX_ROOMSTRAT : STA !sram_display_mode
+    LDA.w !IH_STRAT_INDEX_MBHP : STA !sram_room_strat
 
   .done
     RTS

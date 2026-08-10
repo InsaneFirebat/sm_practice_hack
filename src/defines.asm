@@ -798,6 +798,8 @@ endif
 !ram_enemy8_last_ypos = !CUSTOM_WRAM+$62
 !ram_radar1 = !CUSTOM_WRAM+$64
 !ram_radar2 = !CUSTOM_WRAM+$66
+!ram_radar6 = !CUSTOM_WRAM+$68
+!ram_radar7 = !CUSTOM_WRAM+$6A
 
 ; FREE SPACE ^
 
@@ -1011,6 +1013,7 @@ else
 !FRAMERATE = #$003C
 endif
 
+; menu tiles
 !KB_SHIFT1 = $9A
 !KB_SHIFT2 = $9B
 !KB_DEL1 = $9C
@@ -1019,6 +1022,8 @@ endif
 !MENU_BLANK = #$281F
 !MENU_SLASH = #$289F
 !MENU_ARROW_RIGHT = #$3880
+
+; HUD tiles
 !IH_BLANK = #$2C0F
 !IH_PERCENT = #$0C0A
 !IH_DECIMAL = #$0CCB
@@ -1045,6 +1050,14 @@ endif
 !IH_ARROW_UP = #$0C61
 !IH_ARROW_RIGHT = #$0C62
 !IH_ARROW_DOWN = #$0C63
+!IH_MORPH_BALL_YELLOW = #$00C9
+!IH_MORPH_BALL_GREEN = #$10C9
+!IH_ARROW_UP_PINK_OUTLINE = #$0861
+!IH_ARROW_DOWN_PINK_OUTLINE = #$0863
+!IH_ARROW_UP_RED = #$1C61
+!IH_ARROW_UP_GREY = #$1461
+!IH_ARROW_DOWN_RED = #$1C63
+!IH_ARROW_DOWN_GREY = #$1463
 
 !IH_PAUSE = #$0100 ; right
 !IH_SLOWDOWN = #$0400 ; down
@@ -1070,13 +1083,142 @@ endif
 !CTRL_L = #$0020
 !CTRL_R = #$0010
 
-!IH_MODE_ROOMSTRAT_INDEX = #(DisplayModeMenu_roomstrat-DisplayModeMenu)/2
-!IH_MODE_SHINETUNE_INDEX = #(DisplayModeMenu_shinetune-DisplayModeMenu)/2
-!IH_MODE_VSPEED_INDEX = #(DisplayModeMenu_vspeed-DisplayModeMenu)/2
-!IH_MODE_WALLJUMP_INDEX = #(DisplayModeMenu_walljump-DisplayModeMenu)/2
-!IH_MODE_ARMPUMP_INDEX = #(DisplayModeMenu_armpump-DisplayModeMenu)/2
-!IH_MODE_RAMWATCH_INDEX = #(DisplayModeMenu_ramwatch-DisplayModeMenu)/2
-!IH_STRAT_MBHP_INDEX = #(RoomStratMenu_mbhp-RoomStratMenu)/2
+!IH_MODE_INDEX_ENEMYHP = (InfoHUDModeTable_enemyhp-InfoHUDModeTable)/2
+!IH_MODE_INDEX_ROOMSTRAT = (InfoHUDModeTable_roomstrat-InfoHUDModeTable)/2
+!IH_MODE_INDEX_CHARGETIMER = (InfoHUDModeTable_chargetimer-InfoHUDModeTable)/2
+!IH_MODE_INDEX_XFACTOR = (InfoHUDModeTable_xfactor-InfoHUDModeTable)/2
+!IH_MODE_INDEX_COOLDOWN = (InfoHUDModeTable_cooldown-InfoHUDModeTable)/2
+!IH_MODE_INDEX_SHINETIMER = (InfoHUDModeTable_shinetimer-InfoHUDModeTable)/2
+!IH_MODE_INDEX_DASHCOUNTER = (InfoHUDModeTable_dashcounter-InfoHUDModeTable)/2
+!IH_MODE_INDEX_SHINETUNE = (InfoHUDModeTable_shinetune-InfoHUDModeTable)/2
+!IH_MODE_INDEX_IFRAMECOUNTER = (InfoHUDModeTable_iframecounter-InfoHUDModeTable)/2
+!IH_MODE_INDEX_SPIKESUIT = (InfoHUDModeTable_spikesuit-InfoHUDModeTable)/2
+!IH_MODE_INDEX_LAGCOUNTER = (InfoHUDModeTable_lagcounter-InfoHUDModeTable)/2
+!IH_MODE_INDEX_CPUUSAGE = (InfoHUDModeTable_cpuusage-InfoHUDModeTable)/2
+!IH_MODE_INDEX_HSPEED = (InfoHUDModeTable_hspeed-InfoHUDModeTable)/2
+!IH_MODE_INDEX_DASHSPEED = (InfoHUDModeTable_dashspeed-InfoHUDModeTable)/2
+!IH_MODE_INDEX_VSPEED = (InfoHUDModeTable_vspeed-InfoHUDModeTable)/2
+!IH_MODE_INDEX_QUICKDROP = (InfoHUDModeTable_quickdrop-InfoHUDModeTable)/2
+!IH_MODE_INDEX_WALLJUMP = (InfoHUDModeTable_walljump-InfoHUDModeTable)/2
+!IH_MODE_INDEX_DOUBLESBJ = (InfoHUDModeTable_doublesbj-InfoHUDModeTable)/2
+!IH_MODE_INDEX_COUNTDAMAGE = (InfoHUDModeTable_countdamage-InfoHUDModeTable)/2
+!IH_MODE_INDEX_ARMPUMP = (InfoHUDModeTable_armpump-InfoHUDModeTable)/2
+!IH_MODE_INDEX_PUMPCOUNTER = (InfoHUDModeTable_pumpcounter-InfoHUDModeTable)/2
+!IH_MODE_INDEX_XPOS = (InfoHUDModeTable_xpos-InfoHUDModeTable)/2
+!IH_MODE_INDEX_YPOS = (InfoHUDModeTable_ypos-InfoHUDModeTable)/2
+!IH_MODE_INDEX_CAMERAPOS = (InfoHUDModeTable_camerapos-InfoHUDModeTable)/2
+!IH_MODE_INDEX_SHOTTIMER = (InfoHUDModeTable_shottimer-InfoHUDModeTable)/2
+!IH_MODE_INDEX_RAMWATCH = (InfoHUDModeTable_ramwatch-InfoHUDModeTable)/2
+!IH_MODE_COUNT = (InfoHUDModeTable_end-InfoHUDModeTable)/2
+
+!IH_STRAT_INDEX_SUPERHUD = (status_room_table_superhud-status_room_table)/2
+!IH_STRAT_INDEX_CERESRIDLEY = (status_room_table_ceresridley-status_room_table)/2
+!IH_STRAT_INDEX_DOORSKIP = (status_room_table_doorskip-status_room_table)/2
+!IH_STRAT_INDEX_TACOTANK = (status_room_table_tacotank-status_room_table)/2
+!IH_STRAT_INDEX_PITDOOR = (status_room_table_pitdoor-status_room_table)/2
+!IH_STRAT_INDEX_MOONDANCE = (status_room_table_moondance-status_room_table)/2
+!IH_STRAT_INDEX_KRAIDRADAR = (status_room_table_kraidradar-status_room_table)/2
+!IH_STRAT_INDEX_GATEGLITCH = (status_room_table_gateglitch-status_room_table)/2
+!IH_STRAT_INDEX_MOATCWJ = (status_room_table_moatcwj-status_room_table)/2
+!IH_STRAT_INDEX_ROBOTFLUSH = (status_room_table_robotflush-status_room_table)/2
+!IH_STRAT_INDEX_SHINETOPB = (status_room_table_shinetopb-status_room_table)/2
+!IH_STRAT_INDEX_ELEVATORCF = (status_room_table_elevatorcf-status_room_table)/2
+!IH_STRAT_INDEX_BOTWOONCF = (status_room_table_botwooncf-status_room_table)/2
+!IH_STRAT_INDEX_DRAYGONAI = (status_room_table_draygonai-status_room_table)/2
+!IH_STRAT_INDEX_SNAILCLIP = (status_room_table_snailclip-status_room_table)/2
+!IH_STRAT_INDEX_WASTELAND = (status_room_table_wasteland-status_room_table)/2
+!IH_STRAT_INDEX_RIDLEYAI = (status_room_table_ridleyai-status_room_table)/2
+!IH_STRAT_INDEX_KIHUNTERMANIP = (status_room_table_kihuntermanip-status_room_table)/2
+!IH_STRAT_INDEX_DOWNBACKZEB = (status_room_table_downbackzeb-status_room_table)/2
+!IH_STRAT_INDEX_ZEBSKIP = (status_room_table_zebskip-status_room_table)/2
+!IH_STRAT_INDEX_MBHP = (status_room_table_mbhp-status_room_table)/2
+!IH_STRAT_INDEX_TWOCRIES = (status_room_table_twocries-status_room_table)/2
+!IH_STRAT_COUNT = (status_room_table_end-status_room_table)/2
+
+!IH_SUPERHUD_BOTTOM_INDEX_ENEMYHP = (superhud_bottom_table_enemyhp-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_CHARGETIMER = (superhud_bottom_table_chargetimer-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_XFACTOR = (superhud_bottom_table_xfactor-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_COOLDOWN = (superhud_bottom_table_cooldown-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_SHINETIMER = (superhud_bottom_table_shinetimer-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_DASHCOUNTER = (superhud_bottom_table_dashcounter-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_SHINETUNE = (superhud_bottom_table_shinetune-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_IFRAMECOUNTER = (superhud_bottom_table_iframecounter-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_SPIKESUIT = (superhud_bottom_table_spikesuit-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_LAGCOUNTER = (superhud_bottom_table_lagcounter-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_CPUUSAGE = (superhud_bottom_table_cpuusage-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_HSPEED = (superhud_bottom_table_hspeed-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_DASHSPEED = (superhud_bottom_table_dashspeed-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_VSPEED = (superhud_bottom_table_vspeed-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_QUICKDROP = (superhud_bottom_table_quickdrop-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_WALLJUMP = (superhud_bottom_table_walljump-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_DOUBLESBJ = (superhud_bottom_table_doublesbj-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_COUNTDAMAGE = (superhud_bottom_table_countdamage-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_ARMPUMP = (superhud_bottom_table_armpump-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_PUMPCOUNTER = (superhud_bottom_table_pumpcounter-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_XPOS = (superhud_bottom_table_xpos-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_YPOS = (superhud_bottom_table_ypos-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_CAMERAPOS = (superhud_bottom_table_camerapos-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_SHOTTIMER = (superhud_bottom_table_shottimer-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_RAMWATCH = (superhud_bottom_table_ramwatch-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_CERESRIDLEY = (superhud_bottom_table_ceresridley-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_DOORSKIP = (superhud_bottom_table_doorskip-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_TACOTANK = (superhud_bottom_table_tacotank-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_PITDOOR = (superhud_bottom_table_pitdoor-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_MOONDANCE = (superhud_bottom_table_moondance-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_KRAIDRADAR = (superhud_bottom_table_kraidradar-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_GATEGLITCH = (superhud_bottom_table_gateglitch-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_MOATCWJ = (superhud_bottom_table_moatcwj-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_ROBOTFLUSH = (superhud_bottom_table_robotflush-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_SHINETOPB = (superhud_bottom_table_shinetopb-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_ELEVATORCF = (superhud_bottom_table_elevatorcf-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_BOTWOONCF = (superhud_bottom_table_botwooncf-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_DRAYGONAI = (superhud_bottom_table_draygonai-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_SNAILCLIP = (superhud_bottom_table_snailclip-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_WASTELAND = (superhud_bottom_table_wasteland-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_RIDLEYAI = (superhud_bottom_table_ridleyai-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_KIHUNTERMANIP = (superhud_bottom_table_kihuntermanip-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_DOWNBACKZEB = (superhud_bottom_table_downbackzeb-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_ZEBSKIP = (superhud_bottom_table_zebskip-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_MBHP = (superhud_bottom_table_mbhp-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_INDEX_TWOCRIES = (superhud_bottom_table_twocries-superhud_bottom_table)/2
+!IH_SUPERHUD_BOTTOM_COUNT = (superhud_bottom_table_end-superhud_bottom_table)/2
+
+!IH_SUPERHUD_MIDDLE_INDEX_OFF = (superhud_middle_table_off-superhud_middle_table)/2
+!IH_SUPERHUD_MIDDLE_INDEX_CHARGETIMER = (superhud_middle_table_chargetimer-superhud_middle_table)/2
+!IH_SUPERHUD_MIDDLE_INDEX_XFACTOR = (superhud_middle_table_xfactor-superhud_middle_table)/2
+!IH_SUPERHUD_MIDDLE_INDEX_COOLDOWN = (superhud_middle_table_cooldown-superhud_middle_table)/2
+!IH_SUPERHUD_MIDDLE_INDEX_SHINETIMER = (superhud_middle_table_shinetimer-superhud_middle_table)/2
+!IH_SUPERHUD_MIDDLE_INDEX_DASHCOUNTER = (superhud_middle_table_dashcounter-superhud_middle_table)/2
+!IH_SUPERHUD_MIDDLE_INDEX_IFRAMECOUNTER = (superhud_middle_table_iframecounter-superhud_middle_table)/2
+!IH_SUPERHUD_MIDDLE_INDEX_LAGCOUNTER = (superhud_middle_table_lagcounter-superhud_middle_table)/2
+!IH_SUPERHUD_MIDDLE_INDEX_CPUUSAGE = (superhud_middle_table_cpuusage-superhud_middle_table)/2
+!IH_SUPERHUD_MIDDLE_INDEX_HSPEED = (superhud_middle_table_hspeed-superhud_middle_table)/2
+!IH_SUPERHUD_MIDDLE_INDEX_DASHSPEED = (superhud_middle_table_dashspeed-superhud_middle_table)/2
+!IH_SUPERHUD_MIDDLE_INDEX_SHOTTIMER = (superhud_middle_table_shottimer-superhud_middle_table)/2
+!IH_SUPERHUD_MIDDLE_INDEX_ITEMPERCENT = (superhud_middle_table_itempercent-superhud_middle_table)/2
+!IH_SUPERHUD_MIDDLE_INDEX_RESERVES = (superhud_middle_table_reserves-superhud_middle_table)/2
+!IH_SUPERHUD_MIDDLE_INDEX_STATUSICONS = (superhud_middle_table_statusicons-superhud_middle_table)/2
+!IH_SUPERHUD_MIDDLE_INDEX_TILECOUNTER = (superhud_middle_table_tilecounter-superhud_middle_table)/2
+!IH_SUPERHUD_MIDDLE_COUNT = (superhud_middle_table_-superhud_middle_table)/2
+
+!IH_SUPERHUD_TOP_INDEX_OFF = (superhud_top_table_off-superhud_top_table)/2
+!IH_SUPERHUD_TOP_INDEX_CHARGETIMER = (superhud_top_table_chargetimer-superhud_top_table)/2
+!IH_SUPERHUD_TOP_INDEX_XFACTOR = (superhud_top_table_xfactor-superhud_top_table)/2
+!IH_SUPERHUD_TOP_INDEX_COOLDOWN = (superhud_top_table_cooldown-superhud_top_table)/2
+!IH_SUPERHUD_TOP_INDEX_SHINETIMER = (superhud_top_table_shinetimer-superhud_top_table)/2
+!IH_SUPERHUD_TOP_INDEX_DASHCOUNTER = (superhud_top_table_dashcounter-superhud_top_table)/2
+!IH_SUPERHUD_TOP_INDEX_IFRAMECOUNTER = (superhud_top_table_iframecounter-superhud_top_table)/2
+!IH_SUPERHUD_TOP_INDEX_LAGCOUNTER = (superhud_top_table_lagcounter-superhud_top_table)/2
+!IH_SUPERHUD_TOP_INDEX_CPUUSAGE = (superhud_top_table_cpuusage-superhud_top_table)/2
+!IH_SUPERHUD_TOP_INDEX_HSPEED = (superhud_top_table_hspeed-superhud_top_table)/2
+!IH_SUPERHUD_TOP_INDEX_DASHSPEED = (superhud_top_table_dashspeed-superhud_top_table)/2
+!IH_SUPERHUD_TOP_INDEX_SHOTTIMER = (superhud_top_table_shottimer-superhud_top_table)/2
+!IH_SUPERHUD_TOP_INDEX_ITEMPERCENT = (superhud_top_table_itempercent-superhud_top_table)/2
+!IH_SUPERHUD_TOP_INDEX_RESERVES = (superhud_top_table_reserves-superhud_top_table)/2
+!IH_SUPERHUD_TOP_INDEX_STATUSICONS = (superhud_top_table_statusicons-superhud_top_table)/2
+!IH_SUPERHUD_TOP_INDEX_TILECOUNTER = (superhud_top_table_tilecounter-superhud_top_table)/2
+!IH_SUPERHUD_TOP_COUNT = (superhud_top_table_end-superhud_top_table)/2
+
 !TOP_HUD_RESERVES_INDEX = #(ih_top_HUD_mode_reserves-ih_top_HUD_mode_start)/$D
 !TOP_HUD_VANILLA_INDEX = #(ih_top_HUD_mode_vanilla-ih_top_HUD_mode_start)/$D
 !FRAME_COUNTER_ADJUST_REALTIME = #(ih_room_counter_adjust-ih_room_counter_start)/$D

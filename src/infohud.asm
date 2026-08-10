@@ -370,8 +370,8 @@ ih_after_room_transition:
     STA !REALTIME_LAG_COUNTER ; for lagcounter HUD mode
 
     ; Check if MBHP needs to be disabled
-    LDA !sram_display_mode : CMP.w !IH_MODE_ROOMSTRAT_INDEX : BNE .check_reset_segment_timer
-    LDA !sram_room_strat : CMP.w !IH_STRAT_MBHP_INDEX : BNE .check_reset_segment_timer
+    LDA !sram_display_mode : CMP.w !IH_MODE_INDEX_ROOMSTRAT : BNE .check_reset_segment_timer
+    LDA !sram_room_strat : CMP.w !IH_STRAT_INDEX_MBHP : BNE .check_reset_segment_timer
     LDA !ROOM_ID : CMP.w #ROOM_MotherBrain : BEQ .check_reset_segment_timer
     LDA #$0000 : STA !sram_display_mode
 
@@ -479,7 +479,7 @@ ih_before_room_transition:
     dw #$0000 ; off/dummy
     dw status_door_hspeed
     dw status_door_vspeed
-    dw status_chargetimer
+    dw status_door_chargetimer
     dw status_shinetimer
     dw status_door_dashcounter
     dw status_door_xpos
@@ -658,7 +658,7 @@ ih_update_hud_code_before_transition:
     ; Bank 80
     PEA $8080 : PLB : PLB
 
-    LDA !sram_display_mode : CMP.w !IH_MODE_ARMPUMP_INDEX : BNE .update_hud_code
+    LDA !sram_display_mode : CMP.w !IH_MODE_INDEX_ARMPUMP : BNE .update_hud_code
 
     ; Report armpump room totals
     LDA !ram_momentum_sum : CLC : ADC !ram_momentum_count : LDX #$0088 : JSR Draw4
@@ -757,7 +757,7 @@ ih_update_hud_code:
 
     ; 3 tiles between input display and missile icon
     ; skip item% if display mode = vspeed
-    LDA !sram_display_mode : CMP.w !IH_MODE_VSPEED_INDEX : BEQ .skipToLag
+    LDA !sram_display_mode : CMP.w !IH_MODE_INDEX_VSPEED : BEQ .skipToLag
     LDA !sram_top_display_mode : BNE .skipToLag
 
     ; Draw Item percent
@@ -1227,7 +1227,7 @@ ih_hud_code:
     RTL
 
     ; check for Super HUD
-+   LDA !sram_display_mode : CMP.w !IH_MODE_ROOMSTRAT_INDEX : BNE +
++   LDA !sram_display_mode : CMP.w !IH_MODE_INDEX_ROOMSTRAT : BNE +
     LDA !sram_room_strat : BNE +
     RTL
     
