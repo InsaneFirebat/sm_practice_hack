@@ -1185,8 +1185,10 @@ DrawMBHitbox:
     TYA : CLC : ADC #$0010 : STA !OAM_STACK_POINTER : TAY
     RTS
 }
+%endfree(F0)
 
+%startfree(DF)
 sprite_tiles:
 incbin "../resources/gfx/spritegfx.bin":0-600
+%endfree(DF)
 
-%endfree(F0)

@@ -280,32 +280,32 @@
 !END_FREESPACE_E2 = $E20000+$10000
 !END_FREESPACE_E3 = $E30000+$10000
 !END_FREESPACE_E4 = $E40000+$10000
-!END_FREESPACE_E5 = $E50000+$10000
-!END_FREESPACE_E6 = $E68000 ; tilegraphics.asm
-!END_FREESPACE_E7 = $E78000 ; tilegraphics.asm
-!END_FREESPACE_E8 = $E88000 ; tilegraphics.asm + presets.asm
-!END_FREESPACE_E9 = $E98000 ; presets.asm
-!END_FREESPACE_EA = $EA8000 ; presets.asm
-!END_FREESPACE_EB = $EB8000 ; presets.asm
-!END_FREESPACE_EC = $EC8000 ; presets.asm
-!END_FREESPACE_ED = $ED8000 ; presets.asm
-!END_FREESPACE_EE = $EE8000 ; presets.asm
-!END_FREESPACE_EF = $EF0000+$10000
+!END_FREESPACE_E5 = $E58000 ; Reserved for roomnames.asm
+!END_FREESPACE_E6 = $E68000 ; Reserved for tilegraphics.asm
+!END_FREESPACE_E7 = $E78000 ; Reserved for tilegraphics.asm
+!END_FREESPACE_E8 = $E88000 ; Reserved for tilegraphics.asm + presets.asm
+!END_FREESPACE_E9 = $E98000 ; Reserved for presets.asm
+!END_FREESPACE_EA = $EA8000 ; Reserved for presets.asm
+!END_FREESPACE_EB = $EB8000 ; Reserved for presets.asm
+!END_FREESPACE_EC = $EC8000 ; Reserved for presets.asm
+!END_FREESPACE_ED = $ED8000 ; Reserved for presets.asm
+!END_FREESPACE_EE = $EE8000 ; Reserved for presets.asm
+!END_FREESPACE_EF = $EF8000 ; Reserved for presets.asm
 !END_FREESPACE_F0 = $F00000+$10000
 !END_FREESPACE_F1 = $F10000+$10000
 !END_FREESPACE_F2 = $F20000+$10000
 !END_FREESPACE_F3 = $F30000+$10000
-!END_FREESPACE_F4 = $F4D800 ; tilegraphics.asm
-!END_FREESPACE_F5 = $F58000 ; tilegraphics.asm
-!END_FREESPACE_F6 = $F68000 ; tilegraphics.asm
-!END_FREESPACE_F7 = $F78000 ; tilegraphics.asm
-!END_FREESPACE_F8 = $F88000 ; tilegraphics.asm
-!END_FREESPACE_F9 = $F98000 ; tilegraphics.asm
-!END_FREESPACE_FA = $FA8000 ; tilegraphics.asm
-!END_FREESPACE_FB = $FB8000 ; tilegraphics.asm
-!END_FREESPACE_FC = $FC8000 ; tilegraphics.asm
-!END_FREESPACE_FD = $FD8000 ; tilegraphics.asm
-!END_FREESPACE_FE = $FE8000 ; tilegraphics.asm
+!END_FREESPACE_F4 = $F48000 ; Reserved for tilegraphics.asm
+!END_FREESPACE_F5 = $F58000 ; Reserved for tilegraphics.asm
+!END_FREESPACE_F6 = $F68000 ; Reserved for tilegraphics.asm
+!END_FREESPACE_F7 = $F78000 ; Reserved for tilegraphics.asm
+!END_FREESPACE_F8 = $F88000 ; Reserved for tilegraphics.asm
+!END_FREESPACE_F9 = $F98000 ; Reserved for tilegraphics.asm
+!END_FREESPACE_FA = $FA8000 ; Reserved for tilegraphics.asm
+!END_FREESPACE_FB = $FB8000 ; Reserved for tilegraphics.asm
+!END_FREESPACE_FC = $FC8000 ; Reserved for tilegraphics.asm
+!END_FREESPACE_FD = $FD8000 ; Reserved for tilegraphics.asm
+!END_FREESPACE_FE = $FE8000 ; Reserved for tilegraphics.asm
 !END_FREESPACE_FF = $FF8000 ; Used by SpriteSomething
 
 ; Allows us to setup warnings for mishandled macros
@@ -335,7 +335,8 @@ macro printfreespacebank(bank)
 org !FREESPACE_<bank>
 !FREESPACE_COUNTER_<bank> ?= 0
 if !FREESPACE_COUNTER_<bank>
-print "Bank $<bank> ended at $", pc, " with $", hex(!END_FREESPACE_<bank>-!FREESPACE_<bank>), " bytes remaining"
+;print "Bank $<bank> ended at $", pc, " with $", hex(!END_FREESPACE_<bank>-!FREESPACE_<bank>), " bytes remaining, $", hex(!FREESPACE_<bank>-!START_FREESPACE_<bank>), "/$", hex(!END_FREESPACE_<bank>-!START_FREESPACE_<bank>), " bytes used"
+print "Bank $<bank> ended at $", pc, " with $", hex(!FREESPACE_<bank>-!START_FREESPACE_<bank>), "/$", hex(!END_FREESPACE_<bank>-!START_FREESPACE_<bank>), " bytes used, $", hex(!END_FREESPACE_<bank>-!FREESPACE_<bank>), " bytes remaining"
 endif
 endmacro
 

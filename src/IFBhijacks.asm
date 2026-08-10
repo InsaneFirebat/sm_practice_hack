@@ -140,8 +140,8 @@ endif
 %endfree(A0)
 
 
-if !FEATURE_EXTRAS
 %startfree(94)
+if !FEATURE_EXTRAS
 NoClip:
 {
     LDA !ram_noclip : BEQ .originalcode

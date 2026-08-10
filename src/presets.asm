@@ -951,7 +951,7 @@ GrappleXrayHUD_resume:
 ; Category Menus/Data
 ; -------------------
 
-org $F18000    ; 76EBh bytes used / 915h bytes free
+%startfree(F1)
 incsrc presets/prkd_menu.asm   ; E6Ah bytes
 incsrc presets/prkd15_menu.asm   ; ~E6Ah bytes
 incsrc presets/pkrd_menu.asm   ; E6Ah bytes
@@ -961,9 +961,9 @@ incsrc presets/spazer_menu.asm   ; ~F91h bytes
 incsrc presets/kpdr25_menu.asm   ; 69Fh bytes
 incsrc presets/14ice_menu.asm   ; 7C6h bytes
 incsrc presets/14speed_menu.asm   ; 7EBh bytes
-print pc, " preset_menu.asm bankF1 end"
+%endfree(F1)
 
-org $F28000    ; 718Bh bytes used / E75h bytes free
+%startfree(F2)
 incsrc presets/hundo_menu.asm   ; 1220h bytes
 incsrc presets/100early_menu.asm   ; 1320h bytes
 incsrc presets/100map_menu.asm   ; 1670h bytes
@@ -971,20 +971,21 @@ incsrc presets/gtclassic_menu.asm   ; D7Ch bytes
 incsrc presets/gtmax_menu.asm   ; 1378h bytes
 incsrc presets/rbo_menu.asm   ; D97h bytes
 incsrc presets/nintendopower_menu.asm   ; 70Ch bytes
-print pc, " preset_menu.asm bankF2 end"
+%endfree(F2)
 
-org $F38000    ; 48FFh bytes used / 3701h bytes free
+%startfree(F3)
 incsrc presets/allbosskpdr_menu.asm   ; 942h bytes
 incsrc presets/allbosspkdr_menu.asm   ; 9B0h bytes
 incsrc presets/allbossprkd_menu.asm   ; 9BEh bytes
 incsrc presets/ngplasma_menu.asm   ; 85Ch bytes
 incsrc presets/nghyper_menu.asm   ; 864h bytes
 incsrc presets/suitless_menu.asm   ; 1B43h bytes
-print pc, " preset_menu.asm bankF3 end"
+%endfree(F3)
 
 
-org $E8E000
+org $E8D800
 check bankcross off
+print pc, " crossbank preset_data.asm start"
 incsrc presets/prkd_data.asm ; 2234h bytes
 incsrc presets/prkd15_data.asm ; 23F4h bytes
 incsrc presets/pkrd_data.asm ; 1A14h bytes
@@ -1009,4 +1010,4 @@ incsrc presets/ngplasma_data.asm ; EA4h bytes
 incsrc presets/suitless_data.asm ; 3DF0h bytes
 warnpc !START_FREESPACE_F0
 check bankcross on
-print pc, " crossbank preset_data.asm $E8..end"
+print pc, " crossbank preset_data.asm end"
