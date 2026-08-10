@@ -560,7 +560,7 @@ ramwatch_common_back:
     RTL
 
 ramwatch_enable:
-    %cm_jsl("Turn On RAM Watch", .routine, !IH_MODE_RAMWATCH_INDEX)
+    %cm_jsl("Turn On RAM Watch", .routine, !IH_MODE_INDEX_RAMWATCH)
   .routine
     TYA : STA !sram_display_mode
     %sfxconfirm()
@@ -605,7 +605,7 @@ ramwatch_execute_left:
     %a8()
 +   LDA !ram_watch_edit_left : STA [$C1]
     %a16()
-    LDA.w !IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
+    LDA.w !IH_MODE_INDEX_RAMWATCH : STA !sram_display_mode
     %sfxgrapple()
     JML init_print_segment_timer
 
@@ -618,7 +618,7 @@ ramwatch_execute_right:
     %a8()
 +   LDA !ram_watch_edit_right : STA [$C1]
     %a16()
-    LDA.w !IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
+    LDA.w !IH_MODE_INDEX_RAMWATCH : STA !sram_display_mode
     %sfxgrapple()
     JML init_print_segment_timer
 
@@ -630,7 +630,7 @@ ramwatch_lock_right:
 
 action_HUD_ramwatch:
 {
-    LDA.w !IH_MODE_RAMWATCH_INDEX : STA !sram_display_mode
+    LDA.w !IH_MODE_INDEX_RAMWATCH : STA !sram_display_mode
     JML init_print_segment_timer
 }
 

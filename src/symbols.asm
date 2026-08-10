@@ -429,6 +429,8 @@ ram_enemy8_last_xpos = !ram_enemy8_last_xpos ; !CUSTOM_WRAM+$60
 ram_enemy8_last_ypos = !ram_enemy8_last_ypos ; !CUSTOM_WRAM+$62
 ram_radar1 = !ram_radar1 ; !CUSTOM_WRAM+$64
 ram_radar2 = !ram_radar2 ; !CUSTOM_WRAM+$66
+ram_radar6 = !ram_radar6 ; !CUSTOM_WRAM+$68
+ram_radar7 = !ram_radar7 ; !CUSTOM_WRAM+$6A
 
 ; FREE SPACE ^
 
