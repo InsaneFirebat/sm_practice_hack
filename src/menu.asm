@@ -3567,6 +3567,9 @@ incbin ../resources/gfx/cm_gfx.bin
 cm_hud_table2:
 ; 1000h bytes
 incbin ../resources/gfx/cm_gfx2.bin
+
+NumberGFXChoice:
+incbin ../resources/gfx/num_gfx_choice.bin
 %endfree(DF)
 
 

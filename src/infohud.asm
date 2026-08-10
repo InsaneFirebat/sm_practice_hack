@@ -1973,9 +1973,6 @@ ih_adjust_realtime:
     RTL
 }
 
-NumberGFXChoice:
-incbin ../resources/gfx/num_gfx_choice.bin
-
 overwrite_HUD_numbers:
 {
 ; runs after cm_transfer_original_tileset

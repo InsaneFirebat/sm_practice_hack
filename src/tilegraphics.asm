@@ -1,5 +1,5 @@
 
-org $E68800
+org $E68000
 check bankcross off
 print pc, " raw tile tables crossbank start"
 
@@ -50,7 +50,7 @@ tile_table_28_draygon:
 incbin ../resources/gfx/tile_table_28_draygon.bin
 
 print pc, " raw tile tables crossbank end"
-warnpc $E8E000 ; presets.asm
+warnpc $E8D800 ; presets.asm
 check bankcross on
 
 
@@ -613,10 +613,7 @@ preset_load_library_landing_site_floor_params:
     db $D1, $08, $C9, $08    ; Y = 4.0+
 
 print pc, " tilegraphics end"
-warnpc $F4D800
 
-
-org $F4D800
 check bankcross off
 print pc, " raw tiles crossbank start"
 
