@@ -2356,25 +2356,23 @@ ih_goto_room_strat:
 
 RoomStratMenu:
     dw ihstrat_superhud
-  .mbhp
-    dw ihstrat_mbhp
-    dw ihstrat_moatcwj
-    dw ihstrat_gateglitch
+    dw ihstrat_ceresridley
+    dw ihstrat_doorskip
     dw ihstrat_tacotank
+    dw ihstrat_pitdoor
+    dw ihstrat_moondance
+    dw ihstrat_kraidradar
+    dw ihstrat_gateglitch
+    dw ihstrat_moatcwj
     dw ihstrat_robotflush
     dw ihstrat_shinetopb
     dw ihstrat_elevatorcf
     dw ihstrat_botwooncf
-    dw ihstrat_doorskip
-    dw ihstrat_snailclip
-    dw ihstrat_kihuntermanip
-    dw ihstrat_kraidradar
-    dw ihstrat_zebskip
-    dw ihstrat_pitdoor
-    dw ihstrat_ridleyai
-    dw ihstrat_ceresridley
     dw ihstrat_draygonai
-    dw ihstrat_downbackzeb
+    dw ihstrat_snailclip
+    dw ihstrat_wasteland
+    dw ihstrat_ridleyai
+    dw ihstrat_kihuntermanip
     dw $FFFF
     dw ihstrat_GOTO_PAGE_TWO
     dw $0000
@@ -2382,9 +2380,10 @@ RoomStratMenu:
     %cm_footer("ROOM STRAT MUST BE ACTIVE")
 
 RoomStratMenu2:
+    dw ihstrat_downbackzeb
+    dw ihstrat_zebskip
+    dw ihstrat_mbhp
     dw ihstrat_twocries
-    dw ihstrat_wasteland
-    dw ihstrat_moondance
     dw $FFFF
     dw ihstrat_GOTO_PAGE_ONE
     dw $0000
