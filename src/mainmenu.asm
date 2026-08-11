@@ -2316,7 +2316,7 @@ ih_display_mode:
     dw !ACTION_CHOICE
     dl #!sram_display_mode
     dw #.routine
-    db #$28, "Current Mode", #$FF
+    db #$28, ">Current Mode", #$FF
     db #$28, "   ENEMY HP", #$FF
     db #$28, " ROOM STRAT", #$FF
     db #$28, "   COOLDOWN", #$FF
@@ -2346,7 +2346,19 @@ ih_display_mode:
 ;    db #$28, "WIP D-BOOST", #$FF
     db #$FF
   .routine
-    JML init_print_segment_timer
+    JSL init_print_segment_timer
+    ; check for A or Y input
+    LDA !IH_CONTROLLER_PRI_NEW : BIT #$4080 : BEQ .done
+    ; jump to appropriate submenu page
+    LDA !sram_superhud_bottom : CMP.w !IH_MODE_INDEX_COUNTDAMAGE : BMI .p1
+    LDY.w #DisplayModeMenu2
+    BRA .jump
+  .p1
+    LDY.w #DisplayModeMenu
+  .jump
+    %submenu_jump()
+  .done
+    RTL
 
 ih_display_mode_reward:
     %cm_toggle("Strat Reward SFX", !sram_display_mode_reward, #$0001, #0)
@@ -2478,7 +2490,7 @@ ih_room_strat:
     dw !ACTION_CHOICE
     dl #!sram_room_strat
     dw #.routine
-    db #$28, "Current Strat", #$FF
+    db #$28, ">Current Strat", #$FF
     db #$28, "  SUPER HUD", #$FF
     db #$28, " CERES HITS", #$FF
     db #$28, "  DOOR SKIP", #$FF
@@ -2504,7 +2516,19 @@ ih_room_strat:
     db #$FF
   .routine
     LDA.w !IH_MODE_INDEX_ROOMSTRAT : STA !sram_display_mode
-    JML init_print_segment_timer
+    JSL init_print_segment_timer
+    ; check for A or Y input
+    LDA !IH_CONTROLLER_PRI_NEW : BIT #$4080 : BEQ .done
+    ; jump to appropriate submenu page
+    LDA !sram_superhud_bottom : CMP.w !IH_STRAT_INDEX_DOWNBACKZEB : BMI .p1
+    LDY.w #RoomStratMenu2
+    BRA .jump
+  .p1
+    LDY.w #RoomStratMenu
+  .jump
+    %submenu_jump()
+  .done
+    RTL
 
 ih_superhud:
     %cm_submenu(">Configure Super HUD", #SuperHUDMenu)
@@ -2526,8 +2550,8 @@ SuperHUDMenu:
 ih_superhud_bottom_selector:
     dw !ACTION_CHOICE
     dl #!sram_superhud_bottom
-    dw #$0000
-    db #$28, "Current Bottom", #$FF
+    dw #.routine
+    db #$28, ">Super Bottom", #$FF
     db #$28, "   ENEMY HP", #$FF
     db #$28, "     CHARGE", #$FF
     db #$28, " SHOT TIMER", #$FF
@@ -2575,6 +2599,23 @@ ih_superhud_bottom_selector:
     db #$28, "  TWO CRIES", #$FF
     db #$28, "  RAM WATCH", #$FF
     db #$FF
+  .routine
+    ; check for A or Y input
+    LDA !IH_CONTROLLER_PRI_NEW : BIT #$4080 : BEQ .done
+    ; jump to appropriate submenu page
+    LDA !sram_superhud_bottom : CMP.w !IH_SUPERHUD_BOTTOM_INDEX_WALLJUMP : BMI .p1
+    LDA !sram_superhud_bottom : CMP.w !IH_SUPERHUD_BOTTOM_INDEX_WASTELAND : BMI .p2
+    LDY.w #SuperHUDBottomMenu3
+    BRA .jump
+  .p2
+    LDY.w #SuperHUDBottomMenu2
+    BRA .jump
+  .p1
+    LDY.w #SuperHUDBottomMenu
+  .jump
+    %submenu_jump()
+  .done
+    RTL
 
 ih_superhud_bottom_submenu:
         %cm_submenu(">Bottom HUD List", #SuperHUDBottomMenu)
@@ -2807,8 +2848,8 @@ action_select_superhud_bottom:
 ih_superhud_middle_selector:
     dw !ACTION_CHOICE
     dl #!sram_superhud_middle
-    dw #$0000
-    db #$28, "Current Middle", #$FF
+    dw #.routine
+    db #$28, ">Super Middle", #$FF
     db #$28, "        OFF", #$FF
     db #$28, "     CHARGE", #$FF
     db #$28, " SHOT TIMER", #$FF
@@ -2826,6 +2867,14 @@ ih_superhud_middle_selector:
     db #$28, "STATUS ICON", #$FF
     db #$28, "  MAP TILES", #$FF
     db #$FF
+  .routine
+    ; check for A or Y input
+    LDA !IH_CONTROLLER_PRI_NEW : BIT #$4080 : BEQ .done
+    ; jump to submenu
+    LDY.w #SuperHUDMiddleMenu
+    %submenu_jump()
+  .done
+    RTL
 
 ih_superhud_middle_submenu:
     %cm_submenu(">Middle HUD List", #SuperHUDMiddleMenu)
@@ -2907,8 +2956,8 @@ action_select_superhud_middle:
 ih_superhud_top_selector:
     dw !ACTION_CHOICE
     dl #!sram_superhud_top
-    dw #$0000
-    db #$28, "Current TopHUD", #$FF
+    dw #.routine
+    db #$28, ">Super TopHUD", #$FF
     db #$28, "        OFF", #$FF
     db #$28, "     CHARGE", #$FF
     db #$28, " SHOT TIMER", #$FF
@@ -2926,6 +2975,14 @@ ih_superhud_top_selector:
     db #$28, "STATUS ICON", #$FF
     db #$28, "  MAP TILES", #$FF
     db #$FF
+  .routine
+    ; check for A or Y input
+    LDA !IH_CONTROLLER_PRI_NEW : BIT #$4080 : BEQ .done
+    ; jump to submenu
+    LDY.w #SuperHUDTopMenu
+    %submenu_jump()
+  .done
+    RTL
 
 ih_superhud_top_submenu:
     %cm_submenu(">Top HUD List", #SuperHUDTopMenu)
@@ -3016,7 +3073,7 @@ ih_door_display_mode:
     dw !ACTION_CHOICE
     dl #!sram_door_display_mode
     dw #.routine
-    db #$28, "Door HUD Mode", #$FF
+    db #$28, ">Door HUD Mode", #$FF
     db #$28, "        OFF", #$FF
     db #$28, "HORIZ SPEED", #$FF
     db #$28, " VERT SPEED", #$FF
@@ -3031,7 +3088,6 @@ ih_door_display_mode:
     LDA !IH_CONTROLLER_PRI_NEW : BIT #$4080 : BEQ .done
     ; jump to submenu
     LDY.w #DoorDisplayModeMenu
-    JSL cm_go_back
     %submenu_jump()
   .done
     RTL
@@ -3073,7 +3129,6 @@ action_select_door_display_mode:
     TYA : STA !sram_door_display_mode
     JML cm_previous_menu
 }
-    
 
 ih_goto_timer_settings:
     %cm_submenu(">Timer Settings", #TimerSettingsMenu)
