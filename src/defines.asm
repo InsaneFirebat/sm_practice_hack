@@ -1219,6 +1219,14 @@ endif
 !IH_SUPERHUD_TOP_INDEX_TILECOUNTER = (superhud_top_table_tilecounter-superhud_top_table)/2
 !IH_SUPERHUD_TOP_COUNT = (superhud_top_table_end-superhud_top_table)/2
 
+!IH_DOOR_INDEX_HSPEED = (status_door_display_table_hspeed-status_door_display_table)/2
+!IH_DOOR_INDEX_VSPEED = (status_door_display_table_vspeed-status_door_display_table)/2
+!IH_DOOR_INDEX_CHARGETIMER = (status_door_display_table_chargetimer-status_door_display_table)/2
+!IH_DOOR_INDEX_SHINETIMER = (status_door_display_table_shinetimer-status_door_display_table)/2
+!IH_DOOR_INDEX_DASHCOUNTER = (status_door_display_table_dashcounter-status_door_display_table)/2
+!IH_DOOR_INDEX_XPOS = (status_door_display_table_xpos-status_door_display_table)/2
+!IH_DOOR_INDEX_YPOS = (status_door_display_table_ypos-status_door_display_table)/2
+
 !TOP_HUD_RESERVES_INDEX = #(ih_top_HUD_mode_reserves-ih_top_HUD_mode_start)/$D
 !TOP_HUD_VANILLA_INDEX = #(ih_top_HUD_mode_vanilla-ih_top_HUD_mode_start)/$D
 !FRAME_COUNTER_ADJUST_REALTIME = #(ih_room_counter_adjust-ih_room_counter_start)/$D
