@@ -174,6 +174,7 @@ if !FEATURE_TINYSTATES
     CMP #$001C : BPL .save_fail
 endif
   .save
+    LDA !sram_read_only_locks+5 : AND #$00FF : BNE .save_fail
     JSL save_state
     %ai16()
     LDA !ram_auto_save_state : BMI .clc
@@ -192,6 +193,7 @@ endif
 
   .save_fail
     ; CLC to continue normal gameplay
+    %sfxfail()
     CLC : JMP skip_pause
 
   .auto_save_state
@@ -249,6 +251,9 @@ endif
     CLC : RTS
 
   .save_custom_preset
+    LDA !sram_custom_preset_slot
+    JSL $808192 ; change bit index to byte index
+    LDA !sram_read_only_locks,X : BIT $05E7 : BNE .load_fail
     JSL custom_preset_save
     ; CLC to continue normal gameplay after saving preset
     %sfxconfirm()
@@ -404,6 +409,7 @@ door_transition_autosave:
     LDA #$0000 : STA !ram_auto_save_state
 
   .auto_save
+    LDA !sram_read_only_locks+5 : AND #$00FF : BNE .done
     PHP : PHB
     PHK : PLB
     JSL save_state
