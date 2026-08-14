@@ -1,7 +1,7 @@
 ; increment least significant bits when
 ; allocating to SRAM on the master branch
 ; decrement most significant bits for custom branches
-!SRAM_VERSION = #$0013
+!SRAM_VERSION = #$0021
 
 
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values
@@ -201,6 +201,8 @@ init_sram:
     LDA #$0005 : STA !sram_presetrando_max_supers
     LDA #$0002 : STA !sram_presetrando_max_pbs
     LDA #$0000 : STA !sram_presetrando_beampref
+
+    LDA #$0000 : STA !sram_read_only_locks : STA !sram_read_only_locks+2 : STA !sram_read_only_locks+4
 
     LDA #$0001 : STA !sram_dummy_on
     LDA #$0000 : STA !sram_dummy_off

@@ -936,11 +936,13 @@ endif
 
 ; this is moved here to prevent symbols.asm from having duplicate labels
 if !FEATURE_TINYSTATES
+!sram_read_only_locks = !SRAM_START+$DFA ; $6 bytes
 !sram_streamer_name = !SRAM_START+$E00 ; $18 bytes
 !sram_custom_header = !SRAM_START+$E18 ; $18 bytes
 !sram_custom_preset_safewords = !SRAM_START+$E60 ; $20 bytes
 !sram_custom_preset_names = !SRAM_START+$E80 ; $180 bytes
 else
+!sram_read_only_locks = !SRAM_START+$B8A ; $6 bytes
 !sram_streamer_name = !SRAM_START+$B90 ; $18 bytes
 !sram_custom_header = !SRAM_START+$BA8 ; $18 bytes
 !sram_custom_preset_safewords = !SRAM_START+$BF0 ; $50 bytes
@@ -1016,6 +1018,7 @@ endif
 !MENU_BLANK = #$281F
 !MENU_SLASH = #$289F
 !MENU_ARROW_RIGHT = #$3880
+!MENU_LOCK = #$2895
 
 ; HUD tiles
 !IH_BLANK = #$2C0F
