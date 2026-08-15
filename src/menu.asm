@@ -1203,7 +1203,7 @@ draw_custom_preset:
 
   .validPreset
     ; check if read-only lock exists
-    LDA !DP_ToggleValue : AND #$003F
+    LDA !DP_ToggleValue
     JSL $808192 ; change bit index to byte index
     LDA !sram_read_only_locks,X : BIT $05E7 : BEQ .whatToDraw
     ; draw lock
@@ -3213,7 +3213,7 @@ endif
     %presetslotsize()
     LDA !PRESET_SLOTS,X : CMP !SAFEWORD : BNE .failSFX
     ; check for read-only lock
-    LDA !ram_cm_selected_slot : AND #$003F
+    LDA !ram_cm_selected_slot
     JSL $808192 ; change bit index to byte index
     LDA !sram_read_only_locks,X : BIT $05E7 : BNE .failSFX
     ; open confirmation screen before deleting preset
@@ -3235,7 +3235,7 @@ endif
     LDA !PRESET_SLOTS,X : CMP !SAFEWORD : BNE .failSFX
     
     ; toggle read-only lock
-    LDA !ram_cm_selected_slot : AND #$003F
+    LDA !ram_cm_selected_slot
     JSL $808192 ; change bit index to byte index
     LDA !sram_read_only_locks,X : EOR $05E7 : STA !sram_read_only_locks,X
     RTS
@@ -3311,20 +3311,20 @@ endif
 
     ; swap read-only locks
     ; get slot 1 data
-    LDA !ram_cm_selected_slot : AND #$003F
+    LDA !ram_cm_selected_slot
     JSL $808192 ; change bit index to byte index
     STX !DP_JSLTarget
     LDA $05E7 : STA !DP_Temp
     LDA !sram_read_only_locks,X : AND !DP_Temp : STA !DP_CtrlInput
 
     ; get slot 2 data
-    LDA !DP_Palette : AND #$003F
+    LDA !DP_Palette
     JSL $808192 ; change bit index to byte index
     STX !DP_JSLTarget+2
     LDA !sram_read_only_locks,X : AND $05E7 : STA !DP_CtrlInput+2
 
     ; check if locks need swapping
-    LDA !DP_CtrlInput+2 : ORA !DP_CtrlInput : BEQ .finalizeSwap
+    ORA !DP_CtrlInput : BEQ .finalizeSwap
 
     ; check which slot is locked
     ; if both locked, no swap needed
