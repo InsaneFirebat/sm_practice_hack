@@ -398,8 +398,10 @@ gamemode_door_transition:
     LDA !DOOR_FINISHED_SCROLLING : BPL .checkloadstate
     RTL
 }
+endif
 %endfree(85)
 
+if !FEATURE_SD2SNES
 %startfree(82)
 door_transition_autosave:
 {
