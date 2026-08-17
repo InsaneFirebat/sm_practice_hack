@@ -281,7 +281,7 @@
 !END_FREESPACE_E3 = $E30000+$10000
 !END_FREESPACE_E4 = $E40000+$10000
 !END_FREESPACE_E5 = $E58000 ; Reserved for roomnames.asm
-!END_FREESPACE_E6 = $E68000 ; Reserved for tilegraphics.asm
+!END_FREESPACE_E6 = $E68800
 !END_FREESPACE_E7 = $E78000 ; Reserved for tilegraphics.asm
 !END_FREESPACE_E8 = $E88000 ; Reserved for tilegraphics.asm + presets.asm
 !END_FREESPACE_E9 = $E98000 ; Reserved for presets.asm

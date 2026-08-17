@@ -89,13 +89,15 @@ else
     LDY #$A387 : JSL $868027
     LDY #$A395 : JSL $868027
 endif
-  .doneCeresProjectiles
 
+  .doneCeresProjectiles
     ; Set gamemode
     LDA #$0008 : STA !GAMEMODE
 
     ; Set full brightness and forced blank off
-    %a8() : LDA #$0F : STA !REG_2100_BRIGHTNESS : %ai16()
+    %a8()
+    LDA #$0F : STA !REG_2100_BRIGHTNESS
+    %ai16()
 
     LDY #$0200 : LDX #$0000
   .paletteLoop2
@@ -983,7 +985,7 @@ incsrc presets/suitless_menu.asm   ; 1B43h bytes
 %endfree(F3)
 
 
-org $E8D800
+org $E8E000
 check bankcross off
 print pc, " crossbank preset_data.asm start"
 incsrc presets/prkd_data.asm ; 2234h bytes
