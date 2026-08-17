@@ -1,5 +1,5 @@
 
-org $E68000
+org $E68800
 check bankcross off
 print pc, " raw tile tables crossbank start"
 
@@ -50,7 +50,7 @@ tile_table_28_draygon:
 incbin ../resources/gfx/tile_table_28_draygon.bin
 
 print pc, " raw tile tables crossbank end"
-warnpc $E8D800 ; presets.asm
+warnpc $E8E000 ; presets.asm
 check bankcross on
 
 
@@ -136,11 +136,12 @@ load_raw_tile_graphics:
     ; Determine tileset palette location
     LDA.l raw_tile_graphics_table,X : AND #$FF00
     CLC : ADC #tileset_palettes
+    PHA ; save that for later
 
-    ; Save that for later and prepare for DMA
-    PHA
+    ; Prepare for DMA
     LDA !sram_compressed_graphics : BNE .tile_decompression
-    %a8() : LDA.l raw_tile_graphics_table,X : BPL .separate_dmas
+    %a8()
+    LDA.l raw_tile_graphics_table,X : BPL .separate_dmas
 
     ; A few tilesets also include the CRE and can be done in one DMA
     LDA #$80 : STA $2115 ; word-access, incr by 1
@@ -613,7 +614,9 @@ preset_load_library_landing_site_floor_params:
     db $D1, $08, $C9, $08    ; Y = 4.0+
 
 print pc, " tilegraphics end"
+warnpc $F4D800
 
+org $F4D800
 check bankcross off
 print pc, " raw tiles crossbank start"
 
