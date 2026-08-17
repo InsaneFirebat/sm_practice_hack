@@ -2980,6 +2980,7 @@ DemoInput_tasdance:
     dw $004E, $8040 ; .......BX...
     dw DemoInstruction_Delete
 } ; tasdance
+endif
 
 IntroDemoInput_jumpleft:
 {
@@ -3033,6 +3034,5 @@ IntroDemoInput_oldmbfight:
     dw DemoInstruction_EndDemoFacingLeft
     dw DemoInstruction_Delete
 }
-endif
 %endfree(83)
 
