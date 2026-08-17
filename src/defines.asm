@@ -681,18 +681,6 @@ endif
 
 !sram_fast_teleport = !SRAM_START+$86
 
-; ^ FREE SPACE ^ up to $F02BEE
-
-!sram_custom_header = !SRAM_START+$BD8 ; $18 bytes
-
-!sram_custom_header_normal = !SRAM_START+$BA8 ; $18 bytes
-!sram_custom_preset_safewords_normal = !SRAM_START+$BC0 ; $50 bytes
-!sram_custom_preset_names_normal = !SRAM_START+$C10 ; $3C0 bytes
-
-!sram_custom_header_tinystates = !SRAM_START+$E18 ; $18 bytes
-!sram_custom_preset_safewords_tinystates = !SRAM_START+$E30 ; $20 bytes
-!sram_custom_preset_names_tinystates = !SRAM_START+$E50 ; $180 bytes
-
 
 ; ----------
 ; Save/Load
@@ -767,8 +755,8 @@ endif
 ; FREE SPACE ^
 
 if !FEATURE_EXTRAS
-    !ram_noclip = !CUSTOM_WRAM+$30
-    !ram_steamcollision = !CUSTOM_WRAM+$32
+!ram_noclip = !CUSTOM_WRAM+$30
+!ram_steamcollision = !CUSTOM_WRAM+$32
 ; FREE SPACE ^
 endif
 
@@ -929,12 +917,8 @@ endif
 !sram_dummy_off = !SRAM_START+$2FC
 !sram_dummy_num = !SRAM_START+$2FE
 
+; FREE SPACE ^
 
-; ---------
-; Pointers
-; ---------
-
-; this is moved here to prevent symbols.asm from having duplicate labels
 if !FEATURE_TINYSTATES
 !sram_read_only_locks = !SRAM_START+$DFA ; $6 bytes
 !sram_streamer_name = !SRAM_START+$E00 ; $18 bytes
@@ -948,6 +932,11 @@ else
 !sram_custom_preset_safewords = !SRAM_START+$BF0 ; $50 bytes
 !sram_custom_preset_names = !SRAM_START+$C40 ; $3C0 bytes
 endif
+
+
+; ---------
+; Pointers
+; ---------
 
 !IH_CONTROLLER_PRI = $8B
 !IH_CONTROLLER_PRI_NEW = $8F
