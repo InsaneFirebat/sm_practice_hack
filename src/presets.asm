@@ -954,34 +954,34 @@ GrappleXrayHUD_resume:
 ; -------------------
 
 %startfree(F1)
-incsrc presets/prkd_menu.asm   ; E6Ah bytes
-incsrc presets/prkd15_menu.asm   ; ~E6Ah bytes
-incsrc presets/pkrd_menu.asm   ; E6Ah bytes
-incsrc presets/kpdr21_menu.asm   ; F91h bytes
-incsrc presets/kpdr22_menu.asm   ; ~F91h bytes
-incsrc presets/spazer_menu.asm   ; ~F91h bytes
-incsrc presets/kpdr25_menu.asm   ; 69Fh bytes
-incsrc presets/14ice_menu.asm   ; 7C6h bytes
-incsrc presets/14speed_menu.asm   ; 7EBh bytes
+incsrc presets/prkd_menu.asm
+incsrc presets/prkd15_menu.asm
+incsrc presets/pkrd_menu.asm
+incsrc presets/kpdr21_menu.asm
+incsrc presets/kpdr22_menu.asm
+incsrc presets/spazer_menu.asm
+incsrc presets/kpdr25_menu.asm
+incsrc presets/14ice_menu.asm
+incsrc presets/14speed_menu.asm
 %endfree(F1)
 
 %startfree(F2)
-incsrc presets/hundo_menu.asm   ; 1220h bytes
-incsrc presets/100early_menu.asm   ; 1320h bytes
-incsrc presets/100map_menu.asm   ; 1670h bytes
-incsrc presets/gtclassic_menu.asm   ; D7Ch bytes
-incsrc presets/gtmax_menu.asm   ; 1378h bytes
-incsrc presets/rbo_menu.asm   ; D97h bytes
-incsrc presets/nintendopower_menu.asm   ; 70Ch bytes
+incsrc presets/hundo_menu.asm
+incsrc presets/100early_menu.asm
+incsrc presets/100map_menu.asm
+incsrc presets/gtclassic_menu.asm
+incsrc presets/gtmax_menu.asm
+incsrc presets/rbo_menu.asm
+incsrc presets/nintendopower_menu.asm
 %endfree(F2)
 
 %startfree(F3)
-incsrc presets/allbosskpdr_menu.asm   ; 942h bytes
-incsrc presets/allbosspkdr_menu.asm   ; 9B0h bytes
-incsrc presets/allbossprkd_menu.asm   ; 9BEh bytes
-incsrc presets/ngplasma_menu.asm   ; 85Ch bytes
-incsrc presets/nghyper_menu.asm   ; 864h bytes
-incsrc presets/suitless_menu.asm   ; 1B43h bytes
+incsrc presets/allbosskpdr_menu.asm
+incsrc presets/allbosspkdr_menu.asm
+incsrc presets/allbossprkd_menu.asm
+incsrc presets/ngplasma_menu.asm
+incsrc presets/nghyper_menu.asm
+incsrc presets/suitless_menu.asm
 %endfree(F3)
 
 
