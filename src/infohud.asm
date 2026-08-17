@@ -506,6 +506,7 @@ ceres_start_timers:
     ; overwritten code
     STZ !SCREEN_FADE_DELAY : STZ !SCREEN_FADE_COUNTER
 if !FEATURE_VANILLAHUD
+; prevents assembler error on missing label
 else
     JML ceres_start_timers_return
 endif
