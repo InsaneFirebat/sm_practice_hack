@@ -283,6 +283,10 @@ ram_crash_input_timer = !ram_crash_input_timer ; !CRASHDUMP+$66
 ; Vanilla Defines
 ; ---------------
 
+if !FEATURE_TINYSTATES
+else
+endif
+
 ; -----
 ; SRAM
 ; -----
@@ -363,21 +367,13 @@ sram_seed_Y = !sram_seed_Y ; !SRAM_START+$84
 
 sram_fast_teleport = !sram_fast_teleport ; !SRAM_START+$86
 
-; ^ FREE SPACE ^ up to $F02BEE
-
-sram_custom_header = !sram_custom_header ; !SRAM_START+$BD8 ; $18 bytes
-
-sram_custom_header_normal = !sram_custom_header_normal ; !SRAM_START+$BA8 ; $18 bytes
-sram_custom_preset_safewords_normal = !sram_custom_preset_safewords_normal ; !SRAM_START+$BC0 ; $50 bytes
-sram_custom_preset_names_normal = !sram_custom_preset_names_normal ; !SRAM_START+$C10 ; $3C0 bytes
-
-sram_custom_header_tinystates = !sram_custom_header_tinystates ; !SRAM_START+$E18 ; $18 bytes
-sram_custom_preset_safewords_tinystates = !sram_custom_preset_safewords_tinystates ; !SRAM_START+$E30 ; $20 bytes
-sram_custom_preset_names_tinystates = !sram_custom_preset_names_tinystates ; !SRAM_START+$E50 ; $180 bytes
-
 ; ----------
 ; Save/Load
 ; ----------
+
+if !FEATURE_TINYSTATES
+else
+endif
 
 ; SM specific things
 
@@ -411,7 +407,11 @@ ram_hyper_beam = !ram_hyper_beam ; !CUSTOM_WRAM+$28
 
 ; FREE SPACE ^
 
+if !FEATURE_EXTRAS
+ram_noclip = !ram_noclip ; !CUSTOM_WRAM+$30
+ram_steamcollision = !ram_steamcollision ; !CUSTOM_WRAM+$32
 ; FREE SPACE ^
+endif
 
 ram_enemy0_last_xpos = !ram_enemy0_last_xpos ; !CUSTOM_WRAM+$40
 ram_enemy0_last_ypos = !ram_enemy0_last_ypos ; !CUSTOM_WRAM+$42
@@ -564,5 +564,21 @@ sram_loadstate_rando_powerbombs = !sram_loadstate_rando_powerbombs ; !SRAM_START
 sram_dummy_on = !sram_dummy_on ; !SRAM_START+$2FA
 sram_dummy_off = !sram_dummy_off ; !SRAM_START+$2FC
 sram_dummy_num = !sram_dummy_num ; !SRAM_START+$2FE
+
+; FREE SPACE ^
+
+if !FEATURE_TINYSTATES
+sram_read_only_locks = !sram_read_only_locks ; !SRAM_START+$DFA ; $6 bytes
+sram_streamer_name = !sram_streamer_name ; !SRAM_START+$E00 ; $18 bytes
+sram_custom_header = !sram_custom_header ; !SRAM_START+$E18 ; $18 bytes
+sram_custom_preset_safewords = !sram_custom_preset_safewords ; !SRAM_START+$E60 ; $20 bytes
+sram_custom_preset_names = !sram_custom_preset_names ; !SRAM_START+$E80 ; $180 bytes
+else
+sram_read_only_locks = !sram_read_only_locks ; !SRAM_START+$B8A ; $6 bytes
+sram_streamer_name = !sram_streamer_name ; !SRAM_START+$B90 ; $18 bytes
+sram_custom_header = !sram_custom_header ; !SRAM_START+$BA8 ; $18 bytes
+sram_custom_preset_safewords = !sram_custom_preset_safewords ; !SRAM_START+$BF0 ; $50 bytes
+sram_custom_preset_names = !sram_custom_preset_names ; !SRAM_START+$C40 ; $3C0 bytes
+endif
 
 ; ---------
