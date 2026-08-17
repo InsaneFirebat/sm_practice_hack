@@ -322,9 +322,12 @@ category_preset_load:
 
   .prepare_traverse_list_loop
     ; Set bank to read data from
-    STZ $00 : %a8() : PEI ($C5) : PLB
+    STZ $00
+    %a8()
+    LDA $C5 : PHA : PLB
     ; Set bank to store data to
-    LDA #$7E : STA $C5 : %a16()
+    LDA #$7E : STA $C5
+    %a16()
 
   .traverse_list_loop_with_bank_check
     ; Now traverse from the first preset until the last one
