@@ -2,8 +2,7 @@
 
 echo Building Custom SM Practice Hack
 
-cd build
 echo Building and pre-patching tinystates version
-copy sm_orig.sfc Custom_InfoHUD_TinyStates_2.7.X.sfc && cd ..\src && ..\tools\asar\asar.exe --no-title-check -DFEATURE_TINYSTATES=1 main.asm ..\build\Custom_InfoHUD_TinyStates_2.7.X.sfc && cd ..
+copy resources\sm_orig.sfc build\Custom_InfoHUD_TinyStates_2.7.X.sfc && tools\asar\asar.exe --no-title-check -DFEATURE_TINYSTATES=1 src\main.asm build\Custom_InfoHUD_TinyStates_2.7.X.sfc
 
 PAUSE
