@@ -644,8 +644,8 @@ endif
     PLA ; Pull other layer 2 value but do not use it
     JSR $A2F9 ; Calculate layer 2 X position
     JSR $A33A ; Calculate layer 2 Y position
-    LDA !LAYER2_X : STA !BG2_X_SCROLL ; BG2 X scroll = layer 2 X scroll position
-    LDA !LAYER2_Y : STA !BG2_Y_SCROLL ; BG2 Y scroll = layer 2 Y scroll position
+    LDA !LAYER2_X : STA !BG2_X_OFFSET ; BG2 X scroll = layer 2 X scroll position
+    LDA !LAYER2_Y : STA !BG2_Y_OFFSET ; BG2 Y scroll = layer 2 Y scroll position
 
   .layer_2_loaded
     JSR $A37B ; Calculate BG positions
@@ -658,7 +658,7 @@ endif
 
   .bg_offsets_scrolling_sky
     LDA !LAYER1_Y : STA !LAYER2_Y : STA !REG_2110_BG2_Y
-    STZ !BG2_Y_SCROLL
+    STZ !BG2_Y_OFFSET
 
   .bg_offsets_calculated
     JSL $80A176 ; Display the viewable part of the room

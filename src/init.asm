@@ -44,15 +44,13 @@ init_code:
 
     ; Initialize RAM (Bank 7E required)
     LDA #$0000 : STA !ram_slowdown_mode
-    JSL validate_sram
+    JSL validate_sram_for_savestates
 
     ; Check if we should initialize SRAM
     LDA !sram_initialized : CMP !SRAM_VERSION : BEQ .sram_initialized
     JSL init_sram
 
   .sram_initialized
-    JSL validate_sram_for_savestates
-
 if !PRESERVE_WRAM_DURING_SPACETIME
     ; WRAM located in bank 7E, clear it later
 else
@@ -127,7 +125,6 @@ init_sram:
     LDA #$0000 : STA !sram_room_strat
     LDA #$0000 : STA !sram_sprite_prio_flag
     LDA #$0001 : STA !sram_status_icons ; 1 - On
-    LDA #$0000 : STA !sram_suit_properties
     LDA #$0001 : STA !sram_healthalarm
     LDA #$0000 : STA !sram_magnetstairs
     LDA #$1003 : STA !sram_cutscenes ; skip game over ($1000)
@@ -251,6 +248,37 @@ init_sram:
 init_sram_long:
 {
     JSR init_sram
+    RTL
+}
+
+validate_sram_for_savestates:
+{
+    ; check if required SRAM range is valid
+    ; writes to SRAM will mirror in other banks if not valid
+if !FEATURE_TINYSTATES
+    LDA $737FFE : INC : STA $707FFE
+    CMP $737FFE : BEQ .double_check
+else
+    LDA $777FFE : INC : STA $707FFE
+    CMP $777FFE : BEQ .double_check
+endif
+    RTL
+
+  .double_check
+    ; double check
+if !FEATURE_TINYSTATES
+    LDA $732FFE : INC : STA $702FFE
+    CMP $732FFE : BEQ .fail
+else
+    LDA $772FFE : INC : STA $702FFE
+    CMP $772FFE : BEQ .fail
+endif
+    RTL
+
+  .fail
+    ; disable savestate controls
+    LDA #$0000
+    STA !sram_ctrl_save_state : STA !sram_ctrl_load_state
     RTL
 }
 

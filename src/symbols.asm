@@ -198,17 +198,18 @@ ram_cm_botwoon_hidden = !ram_cm_botwoon_hidden ; !WRAM_MENU_START+$46
 ram_cm_botwoon_second = !ram_cm_botwoon_second ; !WRAM_MENU_START+$48
 ram_cm_botwoon_spit = !ram_cm_botwoon_spit ; !WRAM_MENU_START+$4A
 ram_cm_custom_preset_labels = !ram_cm_custom_preset_labels ; !WRAM_MENU_START+$4C
+ram_cm_gmode = !ram_cm_gmode ; !WRAM_MENU_START+$4E
 
-ram_seed_X = !ram_seed_X ; !WRAM_MENU_START+$4E
-ram_seed_Y = !ram_seed_Y ; !WRAM_MENU_START+$50
+ram_seed_X = !ram_seed_X ; !WRAM_MENU_START+$50
+ram_seed_Y = !ram_seed_Y ; !WRAM_MENU_START+$52
 
-ram_cm_sfxlib1 = !ram_cm_sfxlib1 ; !WRAM_MENU_START+$52
-ram_cm_sfxlib2 = !ram_cm_sfxlib2 ; !WRAM_MENU_START+$54
-ram_cm_sfxlib3 = !ram_cm_sfxlib3 ; !WRAM_MENU_START+$56
+ram_cm_sfxlib1 = !ram_cm_sfxlib1 ; !WRAM_MENU_START+$54
+ram_cm_sfxlib2 = !ram_cm_sfxlib2 ; !WRAM_MENU_START+$56
+ram_cm_sfxlib3 = !ram_cm_sfxlib3 ; !WRAM_MENU_START+$58
 
 ; ^ FREE SPACE ^ up to +$76
 
-ram_cm_preserved_timers = !ram_cm_preserved_timers ; !WRAM_MENU_START+$78 ; 8 bytes
+ram_cm_preserved_timers = !ram_cm_preserved_timers ; !WRAM_MENU_START+$88 ; 8 bytes
 
 ; ------------------
 ; Reusable RAM Menu
@@ -227,15 +228,15 @@ ram_cm_watch_enemy_index = !ram_cm_watch_enemy_index ; !WRAM_MENU_START+$82
 ram_cm_watch_enemy_side = !ram_cm_watch_enemy_side ; !WRAM_MENU_START+$84
 ram_cm_watch_common_address = !ram_cm_watch_common_address ; !WRAM_MENU_START+$86
 
-ram_cm_preset_elevator = !ram_cm_preset_elevator ; !WRAM_MENU_START+$80
+ram_cm_preset_elevator = !ram_cm_preset_elevator ; !WRAM_MENU_START+$90
 
 ram_cm_phan_first_phase = !ram_cm_phan_first_phase ; !WRAM_MENU_START+$80
 ram_cm_phan_second_phase = !ram_cm_phan_second_phase ; !WRAM_MENU_START+$82
 
-ram_cm_keyboard_buffer = !ram_cm_keyboard_buffer ; !WRAM_MENU_START+$80 ; $18 bytes
+ram_cm_keyboard_buffer = !ram_cm_keyboard_buffer ; !WRAM_MENU_START+$90 ; $18 bytes
 
-ram_cm_manage_slots = !ram_cm_manage_slots ; !WRAM_MENU_START+$80
-ram_cm_selected_slot = !ram_cm_selected_slot ; !WRAM_MENU_START+$82
+ram_cm_manage_slots = !ram_cm_manage_slots ; !WRAM_MENU_START+$90
+ram_cm_selected_slot = !ram_cm_selected_slot ; !WRAM_MENU_START+$92
 
 ; ^ FREE SPACE ^ up to +$CE
 
@@ -281,6 +282,10 @@ ram_crash_input_timer = !ram_crash_input_timer ; !CRASHDUMP+$66
 ; Vanilla Defines
 ; ---------------
 
+if !FEATURE_TINYSTATES
+else
+endif
+
 ; -----
 ; SRAM
 ; -----
@@ -318,7 +323,7 @@ sram_sprite_prio_flag = !sram_sprite_prio_flag ; !SRAM_START+$36
 sram_metronome_tickrate = !sram_metronome_tickrate ; !SRAM_START+$38
 sram_metronome_sfx = !sram_metronome_sfx ; !SRAM_START+$3A
 sram_status_icons = !sram_status_icons ; !SRAM_START+$3C
-sram_suit_properties = !sram_suit_properties ; !SRAM_START+$3E
+;!sram_suit_properties = !SRAM_START+$3E
 sram_top_display_mode = !sram_top_display_mode ; !SRAM_START+$40
 sram_healthalarm = !sram_healthalarm ; !SRAM_START+$42
 sram_magnetstairs = !sram_magnetstairs ; !SRAM_START+$44
@@ -359,21 +364,15 @@ sram_customsfx_goback = !sram_customsfx_goback ; !SRAM_START+$80
 sram_seed_X = !sram_seed_X ; !SRAM_START+$82
 sram_seed_Y = !sram_seed_Y ; !SRAM_START+$84
 
-; ^ FREE SPACE ^ up to $F02BEE
-
-sram_custom_header = !sram_custom_header ; !SRAM_START+$BD8 ; $18 bytes
-
-sram_custom_header_normal = !sram_custom_header_normal ; !SRAM_START+$BA8 ; $18 bytes
-sram_custom_preset_safewords_normal = !sram_custom_preset_safewords_normal ; !SRAM_START+$BC0 ; $50 bytes
-sram_custom_preset_names_normal = !sram_custom_preset_names_normal ; !SRAM_START+$C10 ; $3C0 bytes
-
-sram_custom_header_tinystates = !sram_custom_header_tinystates ; !SRAM_START+$E18 ; $18 bytes
-sram_custom_preset_safewords_tinystates = !sram_custom_preset_safewords_tinystates ; !SRAM_START+$E30 ; $20 bytes
-sram_custom_preset_names_tinystates = !sram_custom_preset_names_tinystates ; !SRAM_START+$E50 ; $180 bytes
+sram_fast_teleport = !sram_fast_teleport ; !SRAM_START+$86
 
 ; ----------
 ; Save/Load
 ; ----------
+
+if !FEATURE_TINYSTATES
+else
+endif
 
 ; SM specific things
 
@@ -407,7 +406,11 @@ ram_hyper_beam = !ram_hyper_beam ; !CUSTOM_WRAM+$28
 
 ; FREE SPACE ^
 
+if !FEATURE_EXTRAS
+ram_noclip = !ram_noclip ; !CUSTOM_WRAM+$30
+ram_steamcollision = !ram_steamcollision ; !CUSTOM_WRAM+$32
 ; FREE SPACE ^
+endif
 
 ram_enemy0_last_xpos = !ram_enemy0_last_xpos ; !CUSTOM_WRAM+$40
 ram_enemy0_last_ypos = !ram_enemy0_last_ypos ; !CUSTOM_WRAM+$42
@@ -560,5 +563,21 @@ sram_loadstate_rando_powerbombs = !sram_loadstate_rando_powerbombs ; !SRAM_START
 sram_dummy_on = !sram_dummy_on ; !SRAM_START+$2FA
 sram_dummy_off = !sram_dummy_off ; !SRAM_START+$2FC
 sram_dummy_num = !sram_dummy_num ; !SRAM_START+$2FE
+
+; FREE SPACE ^
+
+if !FEATURE_TINYSTATES
+sram_read_only_locks = !sram_read_only_locks ; !SRAM_START+$DFA ; $6 bytes
+sram_streamer_name = !sram_streamer_name ; !SRAM_START+$E00 ; $18 bytes
+sram_custom_header = !sram_custom_header ; !SRAM_START+$E18 ; $18 bytes
+sram_custom_preset_safewords = !sram_custom_preset_safewords ; !SRAM_START+$E60 ; $20 bytes
+sram_custom_preset_names = !sram_custom_preset_names ; !SRAM_START+$E80 ; $180 bytes
+else
+sram_read_only_locks = !sram_read_only_locks ; !SRAM_START+$B8A ; $6 bytes
+sram_streamer_name = !sram_streamer_name ; !SRAM_START+$B90 ; $18 bytes
+sram_custom_header = !sram_custom_header ; !SRAM_START+$BA8 ; $18 bytes
+sram_custom_preset_safewords = !sram_custom_preset_safewords ; !SRAM_START+$BF0 ; $50 bytes
+sram_custom_preset_names = !sram_custom_preset_names ; !SRAM_START+$C40 ; $3C0 bytes
+endif
 
 ; ---------

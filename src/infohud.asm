@@ -246,7 +246,7 @@ ih_get_item_code:
 
 ih_debug_patch:
 {
-    LDA !DEBUG_MODE_FLAG : BNE .enabled
+    LDA !DEBUG_MODE : BNE .enabled
     JML $828B54 ; return past debug handler
 
   .enabled

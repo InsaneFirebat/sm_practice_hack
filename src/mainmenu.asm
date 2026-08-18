@@ -240,9 +240,7 @@ PresetsMenu:
     dw #presets_elevator
 if !RAW_TILE_GRAPHICS
     dw #$FFFF
-    dw #presets_compressed_graphics
-    dw #presets_compressed_palettes
-    dw #presets_compressed_tables
+    dw #presets_compressed_data
 endif
 if !FEATURE_DEV
     dw #$FFFF
@@ -352,7 +350,7 @@ presets_ship_landing:
 
 if !RAW_TILE_GRAPHICS
 presets_compressed_data:
-    %cm_toggle_bit("Custom Samus Skin", !sram_preset_options, #$0001, #0)
+    %cm_toggle_bit("Custom Samus Skin", !sram_compressed_graphics, #$0001, #0)
 endif
 
 if !FEATURE_DEV
@@ -2042,7 +2040,7 @@ events_setdoors:
     STA $7ED800,X
     INX : CPX #$D0 : BNE .loop
     PLP
-    %sfxreset()
+    %sfxquake()
     RTL
 
 events_setitems:
@@ -2055,7 +2053,7 @@ events_setitems:
     STA $7ED800,X
     INX : CPX #$90 : BNE .loop
     PLP
-    %sfxreset()
+    %sfxquake()
     RTL
 
 events_goto_bosses:
@@ -3347,7 +3345,7 @@ DebugMenu:
     %cm_header("DEBUG SETTINGS")
 
 game_debugmode:
-    %cm_toggle("Debug Mode", !DEBUG_MODE_FLAG, #$0001, #0)
+    %cm_toggle("Debug Mode", !DEBUG_MODE, #$0001, #0)
 
 game_invincibility:
     %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
@@ -4672,38 +4670,6 @@ audio_playmusic:
     ORA #$FF00 : JSL !MUSIC_ROUTINE
     ; play from track index
     LDA $C1 : JSL !MUSIC_ROUTINE
-    RTL
-}
-
-
-validate_sram_for_savestates:
-{
-    ; check if required SRAM range is valid
-    ; writes to SRAM will mirror in other banks if not valid
-if !FEATURE_TINYSTATES
-    LDA $737FFE : INC : STA $707FFE
-    CMP $737FFE : BEQ .double_check
-else
-    LDA $777FFE : INC : STA $707FFE
-    CMP $777FFE : BEQ .double_check
-endif
-    RTL
-
-  .double_check
-    ; double check
-if !FEATURE_TINYSTATES
-    LDA $732FFE : INC : STA $702FFE
-    CMP $732FFE : BEQ .fail
-else
-    LDA $772FFE : INC : STA $702FFE
-    CMP $772FFE : BEQ .fail
-endif
-    RTL
-
-  .fail
-    ; disable savestate controls
-    LDA #$0000
-    STA !sram_ctrl_save_state : STA !sram_ctrl_load_state
     RTL
 }
 

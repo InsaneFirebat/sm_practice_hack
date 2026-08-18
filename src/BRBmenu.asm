@@ -189,7 +189,7 @@ cm_tilemap_brb:
     LDA #$2800|':' : STA !ram_tilemap_buffer+$35E
 
     ; Draw +/- after countdown expires
-table ../resources/header.tbl
+%table(header)
     LDA !ram_cm_brb_timer_mode : BEQ .draw_cycling_text
     DEC : BEQ .draw_countup
     LDA #$2800|'-' : STA !ram_tilemap_buffer+$358
@@ -420,7 +420,7 @@ BRB_screen_01:
 BRB_screen_02:
     db #$28, "Find the practice hack at", #$FF
 
-BRB_screen_04:
+BRB_screen_03:
     db #$28, " Community Control Schemes", #$FF
 
 BRB_screen_04:
