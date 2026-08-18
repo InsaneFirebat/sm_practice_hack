@@ -1,6 +1,33 @@
 
 ## Changelog since v2.2.7
 
+* [2.7.10]   Added Read-Only Locks for custom presets and savestates
+* [2.7.10]   Added submenu for Door Display Mode
+* [2.7.10]   Update many HUD modes and Room Strats
+* [2.7.10]   Fixed Ceres Elevator presets on PAL
+* [2.7.10]   Added option to show extra tiles in OoB Tile Viewer at X position zero
+* [2.7.10]   Updated Zeni menu palette profile
+* [2.7.10]   Added cutscene option for fast teleports
+* [2.7.10]   Support for 2x2 and scroll blocks in OoB Tile Viewer
+* [2.7.10]   Added D9Killdozer menu palette profile
+* [2.7.10]   Allow customizing BRB streamer name
+* [2.7.10]   Added Bastion menu palette profile
+* [2.7.10]   Moved Artificial Lag setting into Slowdown menu
+* [2.7.10]   Consolidated preset compression options to Custom Samus Skin
+* [2.7.10]   Added Kraid support for hitbox viewer
+* [2.7.10]   Fixed loading preset with Game Over cutscene skip
+* [2.7.10]   Fixed refill message box timing
+* [2.7.10]   Fixed hitbox viewer for frozen enemies with extended spritemaps
+* [2.7.10]   Improved Pseudo G-Mode option
+* [2.7.10]   Fixed SPC crash with quickboot
+* [2.7.10]   Fixed inverted shoulder buttons when saving controls from menu
+* [2.7.10]   Fixed Auto-Save Every Door option
+* [2.7.10]   Fixed intro cutscene demos
+* [2.7.10]   Fixed a crash when using Vanilla HUD with minimap enabled
+* [2.7.10]   Added elevator entry option for presets
+* [2.7.10]   Added options to set all door or item bits
+* [2.7.10]   Fixed some scroll issues when loading presets
+* [2.7.10]   Fixed headers in color editing menus
 * [2.6.2.5]  Added variance settings for energy and ammo when loading state
 * [2.6.2.4]  Fixed a crash with HUD font customization
 * [2.6.2.3]  Added EXAKT menu palette profile
