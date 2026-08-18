@@ -217,6 +217,9 @@
 !ram_cm_sfxlib2 = !WRAM_MENU_START+$56
 !ram_cm_sfxlib3 = !WRAM_MENU_START+$58
 
+!ram_cm_metroids = !WRAM_MENU_START+$5A
+!ram_cm_zebetites = !WRAM_MENU_START+$5C
+
 ; ^ FREE SPACE ^ up to +$76
 
 !ram_cm_preserved_timers = !WRAM_MENU_START+$88 ; 8 bytes
