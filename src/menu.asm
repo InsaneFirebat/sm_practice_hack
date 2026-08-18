@@ -702,7 +702,7 @@ draw_toggle:
     TXA : CLC : ADC #$002E : TAX
 
     ; grab the value at that memory address
-    LDA [!DP_Address] : CMP !DP_ToggleValue : BEQ .checked
+    LDA [!DP_Address] : AND #$00FF : CMP !DP_ToggleValue : BEQ .checked
 
     ; Off
     LDA #$244B : STA !ram_tilemap_buffer+0,X ; O
