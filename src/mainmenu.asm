@@ -1987,13 +1987,8 @@ EventsMenu:
     dw #events_chozoacid
     dw #events_shaktool
     dw #events_tourian
-    dw #events_metroid1
-    dw #events_metroid2
-    dw #events_metroid3
-    dw #events_metroid4
-    dw #events_zeb1
-    dw #events_zeb2
-    dw #events_zeb3
+    dw #events_metroids
+    dw #events_zebetites
     dw #events_mb1glass
     dw #events_zebesexploding
     dw #events_animals
@@ -2074,26 +2069,25 @@ events_chozoacid:
 events_tourian:
     %cm_toggle_bit("Tourian Open", $7ED820, #$0400, #0)
 
-events_metroid1:
-    %cm_toggle_bit("1st Metroids Cleared", $7ED822, #$0001, #0)
+events_metroids:
+    %cm_numfield("Metroid Rooms Cleared", !ram_cm_metroids, 0, 4, 1, 1, #.routine)
+  .routine
+    TAX : BEQ .done
+    DEC : ASL : TAX
+    LDA.l .table,X
+  .done
+    STA $C1
+    LDA $7ED822 : AND #$FFF0 : ORA $C1 : STA $7ED822
+    RTL
+  .table
+    dw $0001, $0003, $0007, $000F
 
-events_metroid2:
-    %cm_toggle_bit("2nd Metroids Cleared", $7ED822, #$0002, #0)
-
-events_metroid3:
-    %cm_toggle_bit("3rd Metroids Cleared", $7ED822, #$0004, #0)
-
-events_metroid4:
-    %cm_toggle_bit("4th Metroids Cleared", $7ED822, #$0008, #0)
-
-events_zeb1:
-    %cm_toggle_bit("Zebetite Bit 08", $7ED820, #$0008, #0)
-
-events_zeb2:
-    %cm_toggle_bit("Zebetite Bit 10", $7ED820, #$0010, #0)
-
-events_zeb3:
-    %cm_toggle_bit("Zebetite Bit 20", $7ED820, #$0020, #0)
+events_zebetites:
+    %cm_numfield("Zebetites Killed", !ram_cm_zebetites, 0, 4, 1, 1, #.routine)
+  .routine
+    ASL #3 : STA $C1
+    LDA $7ED820 : AND #$FFC7 : ORA $C1 : STA $7ED820
+    RTL
 
 events_mb1glass:
     %cm_toggle_bit("MB1 Glass Broken", $7ED820, #$0004, #0)

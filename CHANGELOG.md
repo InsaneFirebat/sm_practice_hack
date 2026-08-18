@@ -1,6 +1,7 @@
 
 ## Changelog since v2.2.7
 
+* [2.7.10]   Consolidated Metroid rooms and Zebetites killed events
 * [2.7.10]   Added Read-Only Locks for custom presets and savestates
 * [2.7.10]   Added submenu for Door Display Mode
 * [2.7.10]   Update many HUD modes and Room Strats

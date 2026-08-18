@@ -124,6 +124,15 @@ cm_init:
   .done_slowdown
     LDA #$0000 : STA !ram_slowdown_mode
 
+    ; setup menu variables
+    LDA $7ED822 : AND #$000F
+    LDX #$FFFF
+-   INX
+    LSR : BCS -
+    TXA : STA !ram_cm_metroids
+    LDA $7ED820 : AND #$0038 : LSR #3 : STA !ram_cm_zebetites
+
+    ; PPU/VRAM setup
     JSL initialize_ppu_long
     JSL cm_transfer_custom_tileset
     JSL cm_transfer_custom_cgram
