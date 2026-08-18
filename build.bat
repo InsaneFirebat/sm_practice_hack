@@ -1,3 +1,4 @@
+
 @echo off
 
 echo Building InsaneFirebat's SM Practice Hack
