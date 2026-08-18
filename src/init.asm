@@ -253,27 +253,51 @@ init_sram_long:
 
 validate_sram_for_savestates:
 {
-    ; check if required SRAM range is valid
-    ; writes to SRAM will mirror in other banks if not valid
-if !FEATURE_TINYSTATES
-    LDA $737FFE : INC : STA $707FFE
-    CMP $737FFE : BEQ .double_check
-else
-    LDA $777FFE : INC : STA $707FFE
-    CMP $777FFE : BEQ .double_check
-endif
-    RTL
+; check if required SRAM range is valid
+; writes to SRAM will mirror in other banks if not valid
 
-  .double_check
+if !FEATURE_SD2SNES
+    LDA $707FFE : PHA
+    LDA $737FFE : INC : STA $707FFE
+    CMP $737FFE : BNE .first128CheckPass
+
     ; double check
-if !FEATURE_TINYSTATES
+    LDA $702FFE : PHA
     LDA $732FFE : INC : STA $702FFE
-    CMP $732FFE : BEQ .fail
+    CMP $732FFE : BNE .second128CheckPass
+
+    ; 128kb check failed
+    PLA : STA $702FFE
+    PLA : STA $707FFE
+    BRA .fail
+
+  .second128CheckPass
+    PLA : STA $702FFE
+  .first128CheckPass
+    PLA : STA $707FFE
+
+if !FEATURE_TINYSTATES
 else
-    LDA $772FFE : INC : STA $702FFE
-    CMP $772FFE : BEQ .fail
+    LDA $737FFE : PHA
+    LDA $777FFE : INC : STA $737FFE
+    CMP $777FFE : BNE .first256CheckPass
+
+    ; double check
+    LDA $732FFE : PHA
+    LDA $772FFE : INC : STA $732FFE
+    CMP $772FFE : BNE .second256CheckPass
+
+    ; 256kb check failed
+    PLA : STA $732FFE
+    PLA : STA $737FFE
+    BRA .fail
+
+  .second256CheckPass
+    PLA : STA $732FFE
+  .first256CheckPass
+    PLA : STA $737FFE
 endif
-    RTL
+endif
 
   .fail
     ; disable savestate controls
