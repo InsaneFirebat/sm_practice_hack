@@ -2011,7 +2011,7 @@ events_resetdoors:
 -   STA $7ED800,X
     INX : CPX #$D0 : BNE -
     %ai16()
-    %sfxquake()
+    %sfxdooropen()
     RTL
 
 events_resetitems:
@@ -2022,8 +2022,8 @@ events_resetitems:
 -   STA $7ED800,X
     INX : CPX #$90 : BNE -
     %ai16()
-    %sfxquake()
-    RTL
+    ; unused SFX, sounds like a low squeek
+    LDA #$0054 : JML !SFX_LIB2
 
 events_setdoors:
     %cm_jsl("Set All Doors", .routine, #$0000)

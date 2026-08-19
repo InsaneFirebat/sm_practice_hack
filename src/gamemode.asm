@@ -243,7 +243,7 @@ endif
     LDA !sram_display_mode : CMP #$0012 : BEQ + : STA !ram_display_backup
     LDA #$0012 : STA !sram_display_mode
     JSL ForceCountDamage
-    %sfxdoor()
+    %sfxdoorclose()
     CLC : RTS
 
 +   LDA !ram_display_backup : STA !sram_display_mode
