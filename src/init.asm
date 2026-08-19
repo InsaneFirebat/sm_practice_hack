@@ -152,7 +152,7 @@ init_sram:
     LDA #$0000 : STA !sram_display_mode_reward
     LDA #$0000 : STA !sram_random_bubble_sfx
     LDA #$012C : STA !sram_demo_timer ; 300 frames
-    LDA #$0000 : STA !sram_fast_teleport
+    LDA #$0001 : STA !sram_fast_teleport
 
     LDA !PROFILE_Firebat : STA !sram_custompalette_profile
     LDA #$0A20 : STA !sram_palette_text
