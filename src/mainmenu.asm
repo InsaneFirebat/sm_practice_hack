@@ -2010,7 +2010,7 @@ events_resetdoors:
 -   STA $7ED800,X
     INX : CPX #$D0 : BNE -
     %ai16()
-    %sfxquake()
+    %sfxdooropen()
     RTL
 
 events_resetitems:
@@ -2021,8 +2021,8 @@ events_resetitems:
 -   STA $7ED800,X
     INX : CPX #$90 : BNE -
     %ai16()
-    %sfxquake()
-    RTL
+    ; unused SFX, sounds like a low squeek
+    LDA #$0054 : JML !SFX_LIB2
 
 events_setdoors:
     %cm_jsl("Set All Doors", .routine, #$0000)
@@ -3451,7 +3451,7 @@ kraid_skip_intro:
     %cm_toggle("Skip Kraid Intro", !sram_kraid_intro, #$0001, #0)
 
 kraid_death_camera:
-    %cm_toggle("Unlock Kraid Death Camera", !sram_cutscenes, !CUTSCENE_KRAID_DEATH_CAMERA, #.routine)
+    %cm_toggle("Unlock Kraid Death Cam", !sram_cutscenes, !CUTSCENE_KRAID_DEATH_CAMERA, #.routine)
   .routine
     LDA !ROOM_ID : CMP #ROOM_Kraid : BNE +
     LDA !ENEMY_HP : BNE +

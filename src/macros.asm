@@ -582,7 +582,11 @@ macro sfxgrapple() ; play grapple sound lib1
     LDA #$0005 : JSL !SFX_LIB1
 endmacro
 
-macro sfxdoor() ; play door close sound lib3
+macro sfxdooropen() ; play door open sound lib3
+    LDA #$0007 : JSL !SFX_LIB3
+endmacro
+
+macro sfxdoorclose() ; play door close sound lib3
     LDA #$0008 : JSL !SFX_LIB3
 endmacro
 
