@@ -3451,7 +3451,7 @@ kraid_skip_intro:
     %cm_toggle("Skip Kraid Intro", !sram_kraid_intro, #$0001, #0)
 
 kraid_death_camera:
-    %cm_toggle("Unlock Kraid Death Cam", !sram_cutscenes, !CUTSCENE_KRAID_DEATH_CAMERA, #.routine)
+    %cm_toggle_bit("Unlock Kraid Death Cam", !sram_cutscenes, !CUTSCENE_KRAID_DEATH_CAMERA, #.routine)
   .routine
     LDA !ROOM_ID : CMP #ROOM_Kraid : BNE +
     LDA !ENEMY_HP : BNE +
